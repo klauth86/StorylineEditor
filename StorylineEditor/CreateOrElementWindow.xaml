@@ -1,0 +1,35 @@
+﻿<!--
+Этот файл — часть StorylineEditor.
+
+StorylineEditor — свободная программа: вы можете перераспространять ее и/или изменять ее на условиях Стандартной общественной лицензии GNU в том виде, 
+в каком она была опубликована Фондом свободного программного обеспечения; либо версии 3 лицензии, либо (по вашему выбору) любой более поздней версии.
+
+StorylineEditor распространяется в надежде, что она будет полезной, но БЕЗО ВСЯКИХ ГАРАНТИЙ; даже без неявной гарантии ТОВАРНОГО ВИДА или ПРИГОДНОСТИ ДЛЯ 
+ОПРЕДЕЛЕННЫХ ЦЕЛЕЙ. Подробнее см. в Стандартной общественной лицензии GNU.
+
+Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
+-->
+
+<Window x:Class="StorylineEditor.CreateElementWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Create" AllowsTransparency="True" Background="Transparent"
+        SizeToContent="WidthAndHeight" WindowStyle="None" ResizeMode="NoResize" ShowInTaskbar="False">
+    <Border Background="LightGray" Padding="4">
+        <Grid MinWidth="320" MaxWidth="320">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.ColumnSpan="2" Name="tb_Title" TextAlignment="Center" Style="{StaticResource S_TextBlock_Header}" FontWeight="Bold"></TextBlock>
+            <ContentControl Margin="{StaticResource MarginPaddingThickness}" Grid.ColumnSpan="2" Grid.Row="1" Content="{Binding}"></ContentControl>
+            <Button Margin="{StaticResource MarginPaddingThickness}" Grid.Column="0" Grid.Row="2" IsEnabled="{Binding IsValid, UpdateSourceTrigger=PropertyChanged}" Click="btnOk_Click">Ok</Button>
+            <Button Margin="{StaticResource MarginPaddingThickness}" Grid.Column="1" Grid.Row="2" Click="btnCancel_Click">Cancel</Button>
+        </Grid>
+    </Border>
+</Window>

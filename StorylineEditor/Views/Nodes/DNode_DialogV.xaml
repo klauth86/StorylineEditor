@@ -1,0 +1,143 @@
+﻿<!--
+Этот файл — часть StorylineEditor.
+
+StorylineEditor — свободная программа: вы можете перераспространять ее и/или изменять ее на условиях Стандартной общественной лицензии GNU в том виде, 
+в каком она была опубликована Фондом свободного программного обеспечения; либо версии 3 лицензии, либо (по вашему выбору) любой более поздней версии.
+
+StorylineEditor распространяется в надежде, что она будет полезной, но БЕЗО ВСЯКИХ ГАРАНТИЙ; даже без неявной гарантии ТОВАРНОГО ВИДА или ПРИГОДНОСТИ ДЛЯ 
+ОПРЕДЕЛЕННЫХ ЦЕЛЕЙ. Подробнее см. в Стандартной общественной лицензии GNU.
+
+Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
+-->
+
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:StorylineEditor.ViewModels.Nodes"                    
+                    xmlns:viewModels="clr-namespace:StorylineEditor.ViewModels"
+                    xmlns:draw="clr-namespace:System.Drawing;assembly=System.Drawing"
+                    xmlns:nodes="clr-namespace:StorylineEditor.Views.Nodes">
+    <DataTemplate DataType="{x:Type local:DNode_DialogVm}">
+        <TabControl>
+            <TabItem Style="{StaticResource S_Header_TabItem}" Header="Основная">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="2*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <GroupBox Grid.Row="0" Header="Владелец" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
+                        <ComboBox ItemsSource="{Binding Parent.Parent.Parent.Characters}" 
+                                  SelectedValue="{Binding Owner, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name"></ComboBox>
+                    </GroupBox>
+
+                    <GroupBox Grid.Row="2" Header="Ссылка на аудио (google/yandex)" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
+                        <TextBox Text="{Binding AttachedFile, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
+                    </GroupBox>
+                    
+                    <GroupBox Grid.Row="3">
+                        <StackPanel Orientation="Vertical">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <CheckBox Grid.Column="1" Visibility="Hidden"></CheckBox>
+                                <TextBlock Grid.Column="1" Text="N" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource S_TextBlock_GNodeDescriptionShort}"></TextBlock>
+
+                                <CheckBox Grid.Column="3" Visibility="Hidden"></CheckBox>
+                                <Image Grid.Column="3" Width="12" Height="12" Source="{Binding Source={x:Static draw:SystemIcons.Error}, Converter={StaticResource IconToImageSourceConverter}, Mode=OneWay}" />
+
+                                <CheckBox Grid.Column="4" Visibility="Hidden"></CheckBox>
+                                <Image Grid.Column="4" Width="12" Height="12" Source="{Binding Source={x:Static draw:SystemIcons.Asterisk}, Converter={StaticResource IconToImageSourceConverter}, Mode=OneWay}" />
+                            </Grid>
+                            <ItemsControl ItemsSource="{Binding ParticipantStates}"></ItemsControl>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <CheckBox Grid.Row="4" Grid.ColumnSpan="2" IsChecked="{Binding IsNondialogNode , UpdateSourceTrigger=PropertyChanged}">НЕ Диалоговая вершина</CheckBox>
+
+                    <GroupBox Grid.Row="5">
+                        <GroupBox.Header><!--////// TODO Cant simply move it to HeaderTemplate because of RTBHelper logic-->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Описание" Style="{StaticResource S_TextBlock_GroupHeader}"></TextBlock>
+                                <Button Style="{StaticResource S_Button_UI_Bold}"></Button>
+                            </StackPanel>
+                        </GroupBox.Header>
+                        <RichTextBox nodes:RTBHelper.IsEditing="true"></RichTextBox>
+                    </GroupBox>
+
+                    <GroupBox x:Name="gb_ShortDescription" Grid.Row="6" Visibility="Collapsed" Header="Краткое описание" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
+                        <TextBox AcceptsReturn="True" MaxLength="256" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem Style="{StaticResource S_Header_TabItem}" Header="🔒 Предикаты">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <ItemsControl Grid.Row="0" Grid.ColumnSpan="2" ItemsSource="{Binding Predicates}" 
+                                  Style="{StaticResource S_ItemsControl_Virtualized}"
+                                  ItemTemplate="{StaticResource GamePredicateDT_Wrapper}"></ItemsControl>
+
+                    <ComboBox Grid.Row="1" Grid.Column="0" Name="selectedPredicateType" ItemsSource="{Binding PredicateTypes}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource typeToDescriptionConverter}}"></TextBlock>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    
+                    <Button Grid.Row="1" Grid.Column="1" CommandParameter="{Binding ElementName=selectedPredicateType, Path=SelectedValue}" 
+                            Style="{StaticResource S_Button_UI_Add}"></Button>
+                </Grid>
+            </TabItem>
+
+            <TabItem Style="{StaticResource S_Header_TabItem}" Header="🔔 События">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <ItemsControl Grid.Row="0" Grid.ColumnSpan="2" ItemsSource="{Binding GameEvents}" 
+                                  Style="{StaticResource S_ItemsControl_Virtualized}"
+                                  ItemTemplate="{StaticResource GameEventDT_Wrapper}"></ItemsControl>
+
+                    <ComboBox Grid.Row="1" Grid.Column="0" Name="selectedEventType" ItemsSource="{Binding EventTypes}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource typeToDescriptionConverter}}"></TextBlock>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    
+                    <Button Grid.Row="1" Grid.Column="1" CommandParameter="{Binding ElementName=selectedEventType, Path=SelectedValue}" 
+                            Style="{StaticResource S_Button_UI_Add}"></Button>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding OwnerId}" Value="{x:Static viewModels:CharacterVm.PlayerId}">
+                <Setter TargetName="gb_ShortDescription" Property="Visibility" Value="Visible"></Setter>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+</ResourceDictionary>

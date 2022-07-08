@@ -1,0 +1,24 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:StorylineEditor.ViewModels.GameEvents">
+    <DataTemplate DataType="{x:Type local:GE_SetIsActiveVm}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <GroupBox Header="Объект" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
+                <StackPanel Orientation="Vertical">
+                    <ComboBox ItemsSource="{Binding Parent.Parent.Parent.Parent.ObjectsWithActivation}"
+                              DisplayMemberPath="Name"
+                              SelectedValue="{Binding ObjectWithActivation, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
+                    <RadioButton IsChecked="{Binding SearchByName, UpdateSourceTrigger=PropertyChanged}" GroupName="{Binding Id}">Найти по имени</RadioButton>
+                    <RadioButton IsChecked="{Binding AffectAll, UpdateSourceTrigger=PropertyChanged}" GroupName="{Binding Id}">Все с таким классом</RadioButton>
+                </StackPanel>
+            </GroupBox>
+
+            <CheckBox Grid.Row="1" IsChecked="{Binding IsActive, UpdateSourceTrigger=PropertyChanged}">Активность</CheckBox>
+        </Grid>
+    </DataTemplate>
+</ResourceDictionary>

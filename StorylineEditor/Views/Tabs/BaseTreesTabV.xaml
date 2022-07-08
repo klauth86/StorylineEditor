@@ -1,0 +1,117 @@
+﻿<!--
+Этот файл — часть StorylineEditor.
+
+StorylineEditor — свободная программа: вы можете перераспространять ее и/или изменять ее на условиях Стандартной общественной лицензии GNU в том виде, 
+в каком она была опубликована Фондом свободного программного обеспечения; либо версии 3 лицензии, либо (по вашему выбору) любой более поздней версии.
+
+StorylineEditor распространяется в надежде, что она будет полезной, но БЕЗО ВСЯКИХ ГАРАНТИЙ; даже без неявной гарантии ТОВАРНОГО ВИДА или ПРИГОДНОСТИ ДЛЯ 
+ОПРЕДЕЛЕННЫХ ЦЕЛЕЙ. Подробнее см. в Стандартной общественной лицензии GNU.
+
+Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
+-->
+
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:StorylineEditor.ViewModels.Tabs" 
+                    xmlns:controls="clr-namespace:StorylineEditor.Views.Controls">
+    <DataTemplate DataType="{x:Type local:BaseTreesTabVm}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="7*"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <GroupBox Grid.Column="0" HeaderTemplate="{StaticResource DT_Header_GroupBox_ActionPanel_Dialogs}">
+                <TreeView AllowDrop="true" Background="White" Name="tv_Items" ItemsSource="{Binding Items}"></TreeView>
+            </GroupBox>
+
+            <GridSplitter Grid.Column="1"></GridSplitter>
+
+            <controls:TreeCanvas Snapping="20, 20" Grid.Column="2" ClipToBounds="True" Tree="{Binding ElementName=tv_Items, Path=SelectedValue, UpdateSourceTrigger=PropertyChanged}" Background="Gray"></controls:TreeCanvas>
+
+            <Grid Name="gr_Actions" Grid.Column="2" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <ItemsControl Name="ic_nodeTypes" ItemsSource="{Binding NodeTypes, UpdateSourceTrigger=PropertyChanged}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal" IsItemsHost="True"></WrapPanel>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Style="{StaticResource S_Button_CanvasPanel}" ToolTip="{Binding Converter={StaticResource typeToDescriptionConverter}}"
+                                Content="{Binding Converter={StaticResource typeToIconConverter}}"
+                                Command="{Binding ElementName=ic_nodeTypes, Path=DataContext.SelectNodeTypeCommand}" CommandParameter="{Binding}">
+                                <Button.Background>
+                                    <MultiBinding Converter="{StaticResource selectableToBrushConverter}">
+                                        <Binding RelativeSource="{RelativeSource self}" Path="DataContext" Mode="OneWay" />
+                                        <Binding ElementName="ic_nodeTypes" Path="DataContext.SelectedNodeType" Mode="OneWay"/>
+                                    </MultiBinding>
+                                </Button.Background>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <Rectangle Grid.Column="1" Fill="Black" Width="0.5" Margin="2 0 2 0" VerticalAlignment="Stretch"></Rectangle>
+
+                <Button Grid.Column="2" Style="{StaticResource S_Button_FindRoot}"></Button>
+
+                <Button Grid.Column="3" Style="{StaticResource S_Button_SetBackground}"></Button>
+
+                <TextBlock Text="{Binding SelectedNodeType, Converter={StaticResource typeToDescriptionConverter}}" Grid.Row="1" Grid.ColumnSpan="4" Style="{StaticResource S_TextBlock_GNodeDescriptionShort}"></TextBlock>
+                
+            </Grid>
+
+            <Grid Name="gr_Coords" Grid.Column="2" VerticalAlignment="Top" HorizontalAlignment="Right">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBox MinWidth="64" Grid.Column="0" Style="{StaticResource S_TextBox_Input}" Text="{Binding ElementName=tv_Items, Path=SelectedValue.Selected.PositionX, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBox>
+                <TextBox MinWidth="64" Grid.Column="1" Style="{StaticResource S_TextBox_Input}" Text="{Binding ElementName=tv_Items, Path=SelectedValue.Selected.PositionY, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBox>
+            </Grid>
+            
+            <StackPanel Grid.Column="2" VerticalAlignment="Bottom" HorizontalAlignment="Left" Orientation="Horizontal">
+                <Button Style="{StaticResource S_Button_PrevRoot}"></Button>
+                <Button Style="{StaticResource S_Button_NextRoot}"></Button>
+                <TextBlock VerticalAlignment="Center" Text="{Binding ElementName=tv_Items, Path=SelectedValue.RootNodesInfo, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_HeaderBold}"></TextBlock>
+                <ComboBox VerticalAlignment="Center" ItemsSource="{Binding ElementName=tv_Items, Path=SelectedValue.RootNodes}" Visibility="{Binding HasManyRoots, Converter={StaticResource hideFalseConverter}}"
+                      DisplayMemberPath="Label" SelectedValue="{Binding ElementName=tv_Items, Path=SelectedValue.RootNodeToView, UpdateSourceTrigger=PropertyChanged}">
+                </ComboBox>
+            </StackPanel>
+
+            <GridSplitter Grid.Column="3"></GridSplitter>
+
+            <ContentControl Grid.Column="4" Content="{Binding ElementName=tv_Items, Path=SelectedValue.Selected, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+        </Grid>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding ElementName=tv_Items, Path=SelectedValue.Selected}" Value="{x:Null}">
+                <Setter TargetName="gr_Coords" Property="Visibility" Value="Collapsed"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding ElementName=tv_Items, Path=SelectedValue}" Value="{x:Null}">
+                <Setter TargetName="gr_Actions" Property="Visibility" Value="Collapsed"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding ElementName=tv_Items, Path=SelectedValue.IsFolder}" Value="true">
+                <Setter TargetName="gr_Actions" Property="Visibility" Value="Collapsed"></Setter>
+            </DataTrigger>
+
+            <DataTrigger Binding="{Binding IsDragOver, UpdateSourceTrigger=PropertyChanged}" Value="true">
+                <Setter TargetName="tv_Items"  Property="Background" Value="LightGreen"></Setter>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+</ResourceDictionary>

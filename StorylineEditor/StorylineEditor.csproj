@@ -1,0 +1,437 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9AF226B7-3E00-43F1-9F6C-5EC8375F7658}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>StorylineEditor</RootNamespace>
+    <AssemblyName>StorylineEditor_1.2.6.0</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.1.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationFramework.Aero2" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=4.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>packages\Extended.Wpf.Toolkit.4.2.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=4.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>packages\Extended.Wpf.Toolkit.4.2.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=4.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>packages\Extended.Wpf.Toolkit.4.2.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=4.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>packages\Extended.Wpf.Toolkit.4.2.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=4.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>packages\Extended.Wpf.Toolkit.4.2.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Additive\Action_BaseVm.cs" />
+    <Compile Include="CopyPasteService\ICopyPasteService.cs" />
+    <Compile Include="Common\CustomByteConverter.cs" />
+    <Compile Include="Common\RelayCommand.cs" />
+    <Compile Include="FileDialog\DefaultDialogService.cs" />
+    <Compile Include="FileDialog\IDialogService.cs" />
+    <Compile Include="ViewModels\AbilityVm.cs" />
+    <Compile Include="ViewModels\FolderedVm.cs" />
+    <Compile Include="ViewModels\IDragOverable.cs" />
+    <Compile Include="ViewModels\ITagged.cs" />
+    <Compile Include="ViewModels\Nodes\JNode_AlternativeVm.cs" />
+    <Compile Include="ViewModels\Nodes\JNode_StepVm.cs" />
+    <Compile Include="ViewModels\CharacterVm.cs" />
+    <Compile Include="ViewModels\GameEvents\Characters\GE_CharacterBaseVm.cs" />
+    <Compile Include="ViewModels\GameEvents\Characters\GE_MoveToVm.cs" />
+    <Compile Include="ViewModels\GameEvents\GE_Storyline.cs" />
+    <Compile Include="ViewModels\GameEvents\GE_SpawnActor.cs" />
+    <Compile Include="ViewModels\GameEvents\Items\GE_ItemBaseVm.cs" />
+    <Compile Include="ViewModels\JournalTagStateVm.cs" />
+    <Compile Include="ViewModels\JournalTagVm.cs" />
+    <Compile Include="ViewModels\Nodes\DNode_DialogVm.cs" />
+    <Compile Include="ViewModels\Nodes\DNode_RandomVm.cs" />
+    <Compile Include="ViewModels\Nodes\DNode_CharacterVm.cs" />
+    <Compile Include="ViewModels\Nodes\DNode_TransitVm.cs" />
+    <Compile Include="ViewModels\Nodes\DNode_VirtualVm.cs" />
+    <Compile Include="ViewModels\Nodes\Node_InteractiveVm.cs" />
+    <Compile Include="ViewModels\Nodes\JNode_BaseVm.cs" />
+    <Compile Include="ViewModels\Nodes\Ownered.cs" />
+    <Compile Include="ViewModels\Predicates\P_HasJournalRecordNodeVm.cs" />
+    <Compile Include="ViewModels\Predicates\P_HasJournalRecordVm.cs" />
+    <Compile Include="ViewModels\Predicates\P_HasJournalTagsVm.cs" />
+    <Compile Include="ViewModels\Tabs\BaseTreesTab_CreateElementVm.cs" />
+    <Compile Include="ViewModels\Tabs\BaseTreesTabVm.cs" />
+    <Compile Include="CreateOrElementWindow.xaml.cs">
+      <DependentUpon>CreateOrElementWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\Tabs\FolderedTabVm.cs" />
+    <Compile Include="ViewModels\Tabs\GlobalTagsTabVm.cs" />
+    <Compile Include="ViewModels\Tabs\JournalRecordsTabVm.cs" />
+    <Compile Include="ViewModels\Tabs\PlayerDialogsTabVm.cs" />
+    <Compile Include="ViewModels\Tabs\ReplicasTabVm.cs" />
+    <Compile Include="ViewModels\TreeFolderVm.cs" />
+    <Compile Include="ViewModels\TreeVm.cs" />
+    <Compile Include="ViewModels\GameEvents\GE_DestroyActorVm.cs" />
+    <Compile Include="ViewModels\GameEvents\Items\GE_DropItemVm.cs" />
+    <Compile Include="ViewModels\GameEvents\Items\GE_PickUpItemVm.cs" />
+    <Compile Include="ViewModels\GameEvents\GE_SetIsActiveVm.cs" />
+    <Compile Include="ViewModels\GameEvents\Characters\GE_SetTargetActorVm.cs" />
+    <Compile Include="ViewModels\GameEvents\GE_StartDialogVm.cs" />
+    <Compile Include="ViewModels\GameEvents\MiniGames\GE_StartMiniGameVm.cs" />
+    <Compile Include="ViewModels\GameEvents\GE_StartReplicaVm.cs" />
+    <Compile Include="ViewModels\GameEvents\GE_BaseVm.cs" />
+    <Compile Include="ViewModels\ItemVm.cs" />
+    <Compile Include="ViewModels\Nodes\NodePairVm.cs" />
+    <Compile Include="ViewModels\Nodes\Node_BaseVm.cs" />
+    <Compile Include="ViewModels\Predicates\P_BaseVm.cs" />
+    <Compile Include="ViewModels\Predicates\P_CompositeVm.cs" />
+    <Compile Include="ViewModels\Predicates\P_HasDialogNodeVm.cs" />
+    <Compile Include="ViewModels\Predicates\P_HasDialogNodeMoreLessVm.cs" />
+    <Compile Include="ViewModels\Predicates\P_HasDialogVm.cs" />
+    <Compile Include="ViewModels\Predicates\P_HasItemVm.cs" />
+    <Compile Include="ViewModels\Tabs\AbilitiesTabVm.cs" />
+    <Compile Include="ViewModels\Tabs\CharactersTabVm.cs" />
+    <Compile Include="ViewModels\Tabs\ItemsTabVm.cs" />
+    <Compile Include="ViewModels\Tabs\BaseTabVm.cs" />
+    <Compile Include="ViewModels\Tabs\LocationObjectsTabVm.cs" />
+    <Compile Include="ViewModels\LocationObjectVm.cs" />
+    <Compile Include="Views\Adorners\DragOveredAdorner.cs" />
+    <Compile Include="Views\ComboBoxFilterHelper.cs" />
+    <Compile Include="Views\Controls\BaseLink.cs" />
+    <Compile Include="Views\Controls\SequenceLink.cs" />
+    <Compile Include="Views\Controls\GraphNode.cs" />
+    <Compile Include="Views\Controls\IndicatorLink.cs" />
+    <Compile Include="Views\Controls\TreeCanvas.cs" />
+    <Compile Include="Views\Converters\NodeToGenderDescriptionConverter.cs" />
+    <Compile Include="Views\Converters\ObjToVisConverters.cs" />
+    <Compile Include="Views\Converters\IntToVisConverters.cs" />
+    <Compile Include="Views\Converters\SelectableToBrushConverter.cs" />
+    <Compile Include="Views\Converters\ColorToBrushConverter.cs" />
+    <Compile Include="Views\Converters\NodeToBackgroundConverter.cs" />
+    <Compile Include="Views\Converters\BoolToVisConverters.cs" />
+    <Compile Include="Views\Converters\IconToImageSourceConverter.cs" />
+    <Compile Include="Views\Converters\NodeToGenderIconConverter.cs" />
+    <Compile Include="Views\Converters\TypeToIconConverter.cs" />
+    <Compile Include="Views\Converters\TypeToDescriptionConverter.cs" />
+    <Compile Include="Views\Controls\GraphLink.cs" />
+    <Compile Include="Views\Converters\ValidToBackgroundConverter.cs" />
+    <Compile Include="Views\DragDropHelper.cs" />
+    <Compile Include="Views\Nodes\RTBHelper_Description.cs" />
+    <Compile Include="Views\Nodes\RTBHelper.cs" />
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Common\BaseVm.cs" />
+    <Compile Include="ViewModels\FullContextVm.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="CreateOrElementWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GraphNodes\GJNode_AlternativeV.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\GraphNodes\GJNode_StepV.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\JournalTagStateV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\JournalTagV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Nodes\JNode_AlternativeV.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Nodes\JNode_StepV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GameEvents\Characters\GE_MoveToV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GameEvents\GE_SetIsActiveV.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\GameEvents\GE_SpawnActorV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GameEvents\GE_Storyline.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GameEvents\Items\GE_DropItemV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GraphNodes\GDNode_VirtualV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GraphNodes\GJNode_BaseV.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\CommonStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GameEvents\GE_BaseV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GameEvents\GE_DestroyActorV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GameEvents\Items\GE_PickUpItemV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GameEvents\MiniGames\GE_StartMiniGameV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GameEvents\GE_StartReplicaV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GameEvents\Characters\GE_SetTargetActorV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GameEvents\GE_StartDialogV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GraphNodes\GDNode_DialogV.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\GraphNodes\GDNode_CharacterV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GraphNodes\GDNode_TransitV.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\GraphNodes\GDNode_RandomV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GraphNodes\GraphNodeV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Nodes\DNode_CharacterV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Nodes\DNode_DialogV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Nodes\DNode_TransitV.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Nodes\DNode_RandomV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Nodes\JNode_BaseV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Nodes\DNode_VirtualV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Nodes\ParticipantStateV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Predicates\P_BaseV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Predicates\P_CompositeV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Predicates\P_HasDialogNodeMoreLessV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Predicates\P_HasJournalRecordNodeV.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Predicates\P_HasDialogNodeV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Predicates\P_HasJournalRecordV.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Predicates\P_HasDialogV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Predicates\P_HasItemV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Predicates\P_HasJournalTagsV.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Tabs\AbilitiesTabV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\GlobalTagsTabV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\CharactersTabV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\ItemsTabV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\LocationObjectsTabV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\BaseTreesTabV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wrappers.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\Notifier.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

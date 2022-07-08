@@ -1,0 +1,1153 @@
+﻿<!--
+Этот файл — часть StorylineEditor.
+
+StorylineEditor — свободная программа: вы можете перераспространять ее и/или изменять ее на условиях Стандартной общественной лицензии GNU в том виде, 
+в каком она была опубликована Фондом свободного программного обеспечения; либо версии 3 лицензии, либо (по вашему выбору) любой более поздней версии.
+
+StorylineEditor распространяется в надежде, что она будет полезной, но БЕЗО ВСЯКИХ ГАРАНТИЙ; даже без неявной гарантии ТОВАРНОГО ВИДА или ПРИГОДНОСТИ ДЛЯ 
+ОПРЕДЕЛЕННЫХ ЦЕЛЕЙ. Подробнее см. в Стандартной общественной лицензии GNU.
+
+Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
+-->
+
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:draw="clr-namespace:System.Drawing;assembly=System.Drawing"
+                    xmlns:converters="clr-namespace:StorylineEditor.Views.Converters"                                      
+                    xmlns:views="clr-namespace:StorylineEditor.Views"
+                    xmlns:viewModelsTabs="clr-namespace:StorylineEditor.ViewModels.Tabs"
+                    xmlns:viewModels="clr-namespace:StorylineEditor.ViewModels"
+                    xmlns:nodes="clr-namespace:StorylineEditor.Views.Nodes"
+                    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <Thickness x:Key="MarginPaddingThickness">2</Thickness>
+    
+    <sys:Double x:Key="CanvasButtonSize">30</sys:Double>
+    
+    <sys:Double x:Key="ToggleGenderSize">36</sys:Double>
+    <sys:Double x:Key="ToggleGenderHalfSize-">-18</sys:Double>
+
+    <sys:Double x:Key="NodeButtonSize">18</sys:Double>
+    <sys:Double x:Key="NodeButtonHalfSize+">9</sys:Double>
+    <sys:Double x:Key="NodeButtonHalfSize-">-9</sys:Double>
+    <sys:Double x:Key="NodeButtonHalfSize---">-27</sys:Double>
+
+    <converters:IconToImageSourceConverter x:Key="IconToImageSourceConverter"></converters:IconToImageSourceConverter>
+    <converters:ValidToBackgroundConverter x:Key="validToBackgroundConverter"></converters:ValidToBackgroundConverter>
+    <converters:TypeToDescriptionConverter x:Key="typeToDescriptionConverter"></converters:TypeToDescriptionConverter>
+    <converters:TypeToIconConverter x:Key="typeToIconConverter"></converters:TypeToIconConverter>
+    <converters:HideFalseConverter x:Key="hideFalseConverter"></converters:HideFalseConverter>
+    <converters:CollapseFalseConverter x:Key="collapseFalseConverter"></converters:CollapseFalseConverter>
+    <converters:HideZeroConverter x:Key="hideZeroConverter"></converters:HideZeroConverter>
+    <converters:CollapseNullConverter x:Key="collapseNullConverter"></converters:CollapseNullConverter>
+    <converters:NodeToBackgroundConverter x:Key="nodeToBackgroundConverter"></converters:NodeToBackgroundConverter>
+    <converters:ColorToBrushConverter x:Key="colorToBrushConverter"></converters:ColorToBrushConverter>
+    <converters:SelectableToBrushConverter x:Key="selectableToBrushConverter"></converters:SelectableToBrushConverter>
+    <converters:NodeToGenderIconConverter x:Key="nodeToGenderIconConverter"></converters:NodeToGenderIconConverter>
+    <converters:NodeToGenderDescriptionConverter x:Key="nodeToGenderDescriptionConverter"></converters:NodeToGenderDescriptionConverter>
+
+    <!--COLOR STYLES-->
+    
+    <!--Control colors.-->
+    <Color x:Key="WindowColor">#FFE8EDF9</Color>
+    <Color x:Key="ContentAreaColorLight">#FFC5CBF9</Color>
+    <Color x:Key="ContentAreaColorDark">#FF7381F9</Color>
+
+    <Color x:Key="DisabledControlLightColor">#FFE8EDF9</Color>
+    <Color x:Key="DisabledControlDarkColor">#FFC5CBF9</Color>
+    <Color x:Key="DisabledForegroundColor">#FF888888</Color>
+
+    <Color x:Key="SelectedBackgroundColor">#FFC5CBF9</Color>
+    <Color x:Key="SelectedUnfocusedColor">#FFDDDDDD</Color>
+
+    <Color x:Key="ControlLightColor">White</Color>
+    <Color x:Key="ControlMediumColor">#FF7381F9</Color>
+    <Color x:Key="ControlDarkColor">#FF211AA9</Color>
+
+    <Color x:Key="ControlMouseOverColor">#FF3843C4</Color>
+    <Color x:Key="ControlPressedColor">#FF211AA9</Color>
+
+
+    <Color x:Key="GlyphColor">#FF444444</Color>
+    <Color x:Key="GlyphMouseOver">sc#1, 0.004391443, 0.002428215, 0.242281124</Color>
+
+    <!--Border colors-->
+    <Color x:Key="BorderLightColor">#FFCCCCCC</Color>
+    <Color x:Key="BorderMediumColor">#FF888888</Color>
+    <Color x:Key="BorderDarkColor">#FF444444</Color>
+
+    <Color x:Key="PressedBorderLightColor">#FF888888</Color>
+    <Color x:Key="PressedBorderDarkColor">#FF444444</Color>
+
+    <Color x:Key="DisabledBorderLightColor">#FFAAAAAA</Color>
+    <Color x:Key="DisabledBorderDarkColor">#FF888888</Color>
+
+    <Color x:Key="DefaultBorderBrushDarkColor">Black</Color>
+
+    <!--Control-specific resources.-->
+    <Color x:Key="HeaderTopColor">#FFC5CBF9</Color>
+    <Color x:Key="DatagridCurrentCellBorderColor">Black</Color>
+    <Color x:Key="SliderTrackDarkColor">#FFC5CBF9</Color>
+
+    <Color x:Key="NavButtonFrameColor">#FF3843C4</Color>
+
+    <LinearGradientBrush x:Key="MenuPopupBrush" EndPoint="0.5,1" StartPoint="0.5,0">
+        <GradientStop Color="{DynamicResource ControlLightColor}" Offset="0"/>
+        <GradientStop Color="{DynamicResource ControlMediumColor}" Offset="0.5"/>
+        <GradientStop Color="{DynamicResource ControlLightColor}" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="ProgressBarIndicatorAnimatedFill" StartPoint="0,0" EndPoint="1,0">
+        <LinearGradientBrush.GradientStops>
+            <GradientStopCollection>
+                <GradientStop Color="#000000FF" Offset="0"/>
+                <GradientStop Color="#600000FF" Offset="0.4"/>
+                <GradientStop Color="#600000FF" Offset="0.6"/>
+                <GradientStop Color="#000000FF" Offset="1"/>
+            </GradientStopCollection>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    
+    <!--COLOR STYLES-->
+
+    
+
+    <!--COLLECTIONS STYLES-->
+    
+    <ControlTemplate TargetType="{x:Type ItemsControl}" x:Key="CT_ItemsControl_Virtualized">
+        <ScrollViewer Focusable="False"
+                      BorderThickness="{TemplateBinding Border.BorderThickness}"
+                      Padding="{TemplateBinding Control.Padding}"
+                      BorderBrush="{TemplateBinding Border.BorderBrush}"
+                      Background="{TemplateBinding Panel.Background}">
+            <ItemsPresenter/>
+        </ScrollViewer>
+    </ControlTemplate>
+
+    <Style TargetType="ItemsControl" x:Key="S_ItemsControl_Virtualized">
+        <Setter Property="Template" Value="{StaticResource CT_ItemsControl_Virtualized}"></Setter>
+        <Setter Property="VirtualizingStackPanel.IsVirtualizing" Value="true"></Setter>
+        <Setter Property="ScrollViewer.CanContentScroll" Value="true"></Setter>
+    </Style>
+
+    <!--COLLECTIONS STYLES-->
+    
+    
+    
+    <!--TEXT STYLES-->
+
+    <Style TargetType="TextBox" x:Key="S_TextBox_Input">
+        <Setter Property="Margin" Value="{StaticResource MarginPaddingThickness}"></Setter>
+        <Setter Property="Padding" Value="{StaticResource MarginPaddingThickness}"></Setter>
+        <Setter Property="FontSize" Value="12"></Setter>
+        <Setter Property="TextWrapping" Value="Wrap"></Setter>
+    </Style>
+
+    <Style TargetType="TextBox" x:Key="S_TextBox_Info" BasedOn="{StaticResource S_TextBox_Input}">
+        <Setter Property="IsReadOnly"  Value="true"></Setter>
+    </Style>
+
+    <Style TargetType="TextBlock" x:Key="S_TextBlock_Base">
+        <Setter Property="Margin" Value="{StaticResource MarginPaddingThickness}"></Setter>
+        <Setter Property="Padding" Value="{StaticResource MarginPaddingThickness}"></Setter>
+        <Setter Property="TextWrapping" Value="Wrap"></Setter>
+        <Setter Property="FontSize" Value="12"></Setter>
+    </Style>
+
+    <Style TargetType="TextBlock" x:Key="S_TextBlock_Header" BasedOn="{StaticResource S_TextBlock_Base}">
+        <Setter Property="FontSize" Value="14"></Setter>
+    </Style>
+
+    <Style TargetType="TextBlock" x:Key="S_TextBlock_HeaderBold" BasedOn="{StaticResource S_TextBlock_Header}">
+        <Setter Property="FontWeight" Value="Bold"></Setter>
+    </Style>
+
+    <Style TargetType="TextBlock" x:Key="S_TextBlock_GNodeHeader" BasedOn="{StaticResource S_TextBlock_HeaderBold}">
+        <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+    </Style>
+
+    <Style TargetType="TextBlock" x:Key="S_TextBlock_GNodeDescriptionShort" BasedOn="{StaticResource S_TextBlock_Base}">
+        <Setter Property="FontWeight" Value="Bold"></Setter>
+    </Style>
+
+    <Style TargetType="TextBlock" x:Key="S_TextBlock_GroupHeader" BasedOn="{StaticResource S_TextBlock_Header}">
+        <Setter Property="Margin" Value="{StaticResource MarginPaddingThickness}"></Setter>
+        <Setter Property="Text" Value="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+    </Style>
+
+    <!--TEXT STYLES-->
+    
+    
+    
+    <!--LABEL STYLES-->
+    
+    <Style TargetType="Label"  x:Key="S_Label_NodeType">
+        <Setter Property="Content" Value="{Binding Converter={StaticResource typeToIconConverter}}"></Setter>
+        <Setter Property="FontWeight" Value="Bold"></Setter>
+        <Setter Property="FontSize" Value="24"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+    </Style>
+
+    <Style TargetType="Label" x:Key="S_Label_IsNondialogNode">
+        <Setter Property="VerticalAlignment" Value="Bottom"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Left"></Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Label">
+                    <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <Ellipse Width="24" Height="24" Stroke="Lavender"  Fill="Green"></Ellipse>
+                        <TextBlock Style="{StaticResource S_TextBlock_GNodeDescriptionShort}" Foreground="White" Text="🏁"
+                           VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--LABEL STYLES-->
+    
+    
+
+    <!--CANVAS PANEL BUTTONS-->
+
+    <Style TargetType="Button" x:Key="S_Button_CanvasPanel">
+        <Setter Property="Padding" Value="{StaticResource MarginPaddingThickness}"></Setter>
+        <Setter Property="Margin" Value="{StaticResource MarginPaddingThickness}"></Setter>
+        <Setter Property="Width" Value="{StaticResource CanvasButtonSize}"></Setter>
+        <Setter Property="Height" Value="{StaticResource CanvasButtonSize}"></Setter>
+        <Setter Property="FontSize" Value="14"></Setter>
+        <Setter Property="Foreground" Value="Black"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+        <Setter Property="BorderBrush" Value="Black"></Setter>
+    </Style>
+
+    <Style TargetType="Button" x:Key="S_Button_FindRoot" BasedOn="{StaticResource S_Button_CanvasPanel}">
+        <Setter Property="Content" Value="🔎"></Setter>
+        <Setter Property="ToolTip" Value="Найти корневую вершину"></Setter>
+        <Setter Property="Command" Value="{Binding ElementName=tv_Items, Path=SelectedValue.FindRootCommand}"></Setter>
+    </Style>
+
+    <Style TargetType="Button" x:Key="S_Button_PrevRoot" BasedOn="{StaticResource S_Button_CanvasPanel}">
+        <Setter Property="Content" Value="⏪"></Setter>
+        <Setter Property="ToolTip" Value="Предудыщая корневая вершина"></Setter>
+        <Setter Property="Command" Value="{Binding ElementName=tv_Items, Path=SelectedValue.PrevRootCommand}"></Setter>
+    </Style>
+
+    <Style TargetType="Button" x:Key="S_Button_NextRoot" BasedOn="{StaticResource S_Button_CanvasPanel}">
+        <Setter Property="Content" Value="⏩"></Setter>
+        <Setter Property="ToolTip" Value="Следующая корневая вершина"></Setter>
+        <Setter Property="Command" Value="{Binding ElementName=tv_Items, Path=SelectedValue.NextRootCommand}"></Setter>
+    </Style>
+
+    <Style TargetType="Button" x:Key="S_Button_SetBackground" BasedOn="{StaticResource S_Button_CanvasPanel}">
+        <Setter Property="Content" Value="🖾"></Setter>
+        <Setter Property="ToolTip" Value="Установить фоновое изображение"></Setter>
+        <Setter Property="Command" Value="{Binding ElementName=tv_Items, Path=SelectedValue.SetBackgroundCommand}"></Setter>
+    </Style>
+
+    <!--CANVAS PANEL BUTTONS-->
+
+    
+    
+    <!--NODES BUTTONS-->
+
+    <Style TargetType="Button" x:Key="S_Button_Node">
+        <Setter Property="Padding" Value="{StaticResource MarginPaddingThickness}"></Setter>
+        <Setter Property="Margin" Value="{StaticResource MarginPaddingThickness}"></Setter>
+        <Setter Property="Width" Value="{StaticResource NodeButtonSize}"></Setter>
+        <Setter Property="Height" Value="{StaticResource NodeButtonSize}"></Setter>
+        <Setter Property="FontSize" Value="10"></Setter>
+        <Setter Property="BorderThickness" Value="0.5"></Setter>
+        <Setter Property="BorderBrush" Value="Black"></Setter>
+    </Style>
+
+    <Style TargetType="Button" x:Key="S_Button_Node_ToggleGender" BasedOn="{StaticResource S_Button_Node}">
+        <Setter Property="Width" Value="{StaticResource ToggleGenderSize}"></Setter>
+        <Setter Property="Height" Value="{StaticResource ToggleGenderSize}"></Setter>
+        <Setter Property="FontSize" Value="24"></Setter>
+        <Setter Property="Content" Value="{Binding Gender, Converter={StaticResource nodeToGenderIconConverter}}"></Setter>
+        <Setter Property="VerticalAlignment" Value="Top"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Left"></Setter>
+        <Setter Property="ToolTip" Value="{Binding Gender, Converter={StaticResource nodeToGenderDescriptionConverter}}"></Setter>
+        <Setter Property="Command" Value="{Binding Parent.ToggleGenderCommand}"></Setter>
+        <Setter Property="CommandParameter" Value="{Binding}"></Setter>
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <TranslateTransform X="{StaticResource ToggleGenderHalfSize-}" Y="{StaticResource ToggleGenderHalfSize-}"></TranslateTransform>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="Button" x:Key="S_Button_Node_Remove" BasedOn="{StaticResource S_Button_Node}">
+        <Setter Property="Background" Value="Red"></Setter>
+        <Setter Property="Foreground" Value="White"></Setter>
+        <Setter Property="Content" Value="❌"></Setter>
+        <Setter Property="VerticalAlignment" Value="Top"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Right"></Setter>
+        <Setter Property="ToolTip" Value="Удалить"></Setter>
+        <Setter Property="Command" Value="{Binding Parent.RemoveCommand}"></Setter>
+        <Setter Property="CommandParameter" Value="{Binding}"></Setter>
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <TranslateTransform X="{StaticResource NodeButtonHalfSize+}" Y="{StaticResource NodeButtonHalfSize-}"></TranslateTransform>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--NODES BUTTONS-->
+
+    
+    
+    <!--INTERACTION LABELS-->
+
+    <Style TargetType="ContentControl" x:Key="S_ContentControl_InteractionBase">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ContentControl">
+                    <Grid Visibility="{TemplateBinding Visibility}">
+                        <Ellipse Width="{StaticResource NodeButtonSize}" Height="{StaticResource NodeButtonSize}" Fill="Purple" Stroke="Lavender" StrokeThickness="1"></Ellipse>
+                        <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"></ContentPresenter>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="ContentControl" x:Key="S_ContentControl_P" BasedOn="{StaticResource S_ContentControl_InteractionBase}">
+        <Setter Property="ToolTip" Value="Есть предикаты"></Setter>
+        <Setter Property="FontSize" Value="10"></Setter>
+        <Setter Property="Content" Value="🔒"></Setter>
+        <Setter Property="VerticalAlignment" Value="Top"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Right"></Setter>
+        <Setter Property="Foreground" Value="Lavender"></Setter>
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <TranslateTransform X="{StaticResource NodeButtonHalfSize---}" Y="{StaticResource NodeButtonHalfSize-}"></TranslateTransform>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="ContentControl" x:Key="S_ContentControl_GE" BasedOn="{StaticResource S_ContentControl_InteractionBase}">
+        <Setter Property="ToolTip" Value="Есть события"></Setter>
+        <Setter Property="FontSize" Value="10"></Setter>
+        <Setter Property="Content" Value="🔔"></Setter>
+        <Setter Property="VerticalAlignment" Value="Top"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Right"></Setter>
+        <Setter Property="Foreground" Value="Lavender"></Setter>
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <TranslateTransform X="{StaticResource NodeButtonHalfSize-}" Y="{StaticResource NodeButtonHalfSize-}"></TranslateTransform>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--INTERACTION LABELS-->
+
+    
+    
+    <!--LINK BUTTONS-->
+
+    <Style TargetType="ContentControl" x:Key="S_ContentControl_GraphLink">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Button x:Name="btn_Remove" Style="{StaticResource S_Button_Node_Remove}" Visibility="{TemplateBinding Visibility}">
+                        <Button.RenderTransform>
+                            <TranslateTransform X="0" Y="0"></TranslateTransform>
+                        </Button.RenderTransform>
+                    </Button>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="ContentControl" x:Key="S_ContentControl_SequenceLink">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border Background="#bbffffff" BorderBrush="Silver" BorderThickness="1" Visibility="{TemplateBinding Visibility}">
+                        <Grid>
+                            <Grid x:Name="gr_Aftermath" MinWidth="64" MinHeight="64" MaxWidth="128">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                
+                                <TextBlock Style="{StaticResource S_TextBlock_GNodeHeader}">
+                                            <Run Text="{Binding To.Gender, Converter={StaticResource nodeToGenderIconConverter}, UpdateSourceTrigger=PropertyChanged}"></Run>
+                                            <Run Text="{Binding To.Name, UpdateSourceTrigger=PropertyChanged, TargetNullValue=Пусто}"></Run>
+                                </TextBlock>
+
+                                <TextBlock Grid.Row="1" Style="{StaticResource S_TextBlock_Base}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                            </Grid>
+                            <Button x:Name="btn_Remove" Style="{StaticResource S_Button_Node_Remove}"></Button>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                            <Setter TargetName="gr_Aftermath" Property="Visibility" Value="Collapsed"></Setter>
+                            <Setter TargetName="btn_Remove" Property="RenderTransform">
+                                <Setter.Value>
+                                    <TranslateTransform X="0" Y="0"></TranslateTransform>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Description.Length, UpdateSourceTrigger=PropertyChanged}" Value="0">
+                            <Setter TargetName="gr_Aftermath" Property="Visibility" Value="Collapsed"></Setter>
+                            <Setter TargetName="btn_Remove" Property="RenderTransform">
+                                <Setter.Value>
+                                    <TranslateTransform X="0" Y="0"></TranslateTransform>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--LINK BUTTONS-->
+
+    
+    
+    <!--COMMON UI BUTTONS-->
+
+    <Style TargetType="Button" x:Key="S_Button_UI_Edit" BasedOn="{StaticResource S_Button_Node}">
+        <Setter Property="Background" Value="Blue"></Setter>
+        <Setter Property="Foreground" Value="White"></Setter>
+        <Setter Property="Content" Value="✎"></Setter>
+        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+        <Setter Property="ToolTip" Value="Редактировать"></Setter>
+        <Setter Property="Command" Value="{Binding EditCommand}"></Setter>
+        <Setter Property="CommandParameter" Value="{Binding ElementName=tv_Items, Path=SelectedValue, UpdateSourceTrigger=PropertyChanged}"></Setter>
+    </Style>
+
+    <Style TargetType="Button" x:Key="S_Button_UI_Remove_TabItem" BasedOn="{StaticResource S_Button_Node}">
+        <Setter Property="Background" Value="Red"></Setter>
+        <Setter Property="Foreground" Value="White"></Setter>
+        <Setter Property="Content" Value="❌"></Setter>
+        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+        <Setter Property="ToolTip" Value="Удалить"></Setter>
+        <Setter Property="Command" Value="{Binding RemoveCommand}"></Setter>
+        <Setter Property="CommandParameter" Value="{Binding ElementName=tv_Items, Path=SelectedValue, UpdateSourceTrigger=PropertyChanged}"></Setter>
+    </Style>
+
+    <Style TargetType="Button" x:Key="S_Button_UI_Remove" BasedOn="{StaticResource S_Button_UI_Remove_TabItem}">
+        <Setter Property="VerticalAlignment" Value="Top"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Right"></Setter>
+        <Setter Property="Command" Value="{Binding Parent.RemoveCommand}"></Setter>
+        <Setter Property="CommandParameter" Value="{Binding}"></Setter>
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <TranslateTransform X="{StaticResource NodeButtonHalfSize+}" Y="{StaticResource NodeButtonHalfSize-}"></TranslateTransform>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="Button" x:Key="S_Button_UI_Reset" BasedOn="{StaticResource S_Button_Node}">
+        <Setter Property="Content" Value="⮌"></Setter>
+        <Setter Property="VerticalAlignment" Value="Top"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Right"></Setter>
+        <Setter Property="ToolTip" Value="Сбросить"></Setter>
+        <Setter Property="Command" Value="{Binding ResetCommand}"></Setter>
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <TranslateTransform X="{StaticResource NodeButtonHalfSize-}" Y="{StaticResource NodeButtonHalfSize-}"></TranslateTransform>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="Button" x:Key="S_Button_UI_Add" BasedOn="{StaticResource S_Button_Node}">
+        <Setter Property="Content" Value="✙"></Setter>
+        <Setter Property="Background" Value="Green"></Setter>
+        <Setter Property="Foreground" Value="White"></Setter>
+        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+        <Setter Property="ToolTip" Value="Создать"></Setter>
+        <Setter Property="Command" Value="{Binding AddCommand}"></Setter>
+    </Style>
+
+    <Style TargetType="Button" x:Key="S_Button_UI_AddFolder" BasedOn="{StaticResource S_Button_Node}">
+        <Setter Property="Content" Value="✙"></Setter>
+        <Setter Property="Background" Value="Goldenrod"></Setter>
+        <Setter Property="Foreground" Value="White"></Setter>
+        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+        <Setter Property="ToolTip" Value="Создать папку"></Setter>
+        <Setter Property="Command" Value="{Binding AddCommand}"></Setter>
+        <Setter Property="CommandParameter" Value="{x:Static viewModels:FolderedVm.FolderFlag}"></Setter>
+    </Style>
+
+    <Style TargetType="Button" x:Key="S_Button_UI_Bold" BasedOn="{StaticResource S_Button_Node}">
+        <Setter Property="Content" Value="𝐁"></Setter>
+        <Setter Property="Background" Value="Green"></Setter>
+        <Setter Property="Foreground" Value="White"></Setter>
+        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+        <Setter Property="ToolTip" Value="Применить"></Setter>
+    </Style>
+
+    <!--COMMON UI BUTTONS-->
+
+
+
+    <!--HEADERS STYLES-->
+
+    <DataTemplate x:Key="DT_Header_GroupBox">
+        <TextBlock Text="{Binding}" Style="{StaticResource S_TextBlock_GroupHeader}"></TextBlock>
+    </DataTemplate>
+
+    <Style x:Key="S_Header_TabItem" TargetType="TabItem">
+        <Setter Property="HeaderTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <TextBlock Margin="0" Padding="0" x:Name="tb_Name" Foreground="Gray" Text="{Binding}" Style="{StaticResource S_TextBlock_Header}"></TextBlock>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Mode=TemplatedParent}}" Value="true">
+                            <Setter TargetName="tb_Name" Property="FontWeight" Value="Bold"></Setter>
+                            <Setter TargetName="tb_Name" Property="Foreground" Value="Black"></Setter>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="S_Header_TabItem_Name" TargetType="TabItem" BasedOn="{StaticResource S_Header_TabItem}">
+        <Setter Property="Header" Value="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></Setter>
+    </Style>
+    
+    <DataTemplate x:Key="DT_Header_GroupBox_ActionPanel_Base">
+        <StackPanel Orientation="Horizontal" DataContext="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type GroupBox}}}">
+            <Button Style="{StaticResource S_Button_UI_Add}"></Button>
+            <Button Style="{StaticResource S_Button_UI_AddFolder}"></Button>
+            <Button Style="{StaticResource S_Button_UI_Remove_TabItem}"></Button>
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate x:Key="DT_Header_GroupBox_ActionPanel_Dialogs">
+        <StackPanel Orientation="Horizontal" DataContext="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type GroupBox}}}">
+            <Button Style="{StaticResource S_Button_UI_Add}"></Button>
+            <Button Style="{StaticResource S_Button_UI_AddFolder}"></Button>
+            <Button Style="{StaticResource S_Button_UI_Edit}"></Button>
+            <Button Style="{StaticResource S_Button_UI_Remove_TabItem}"></Button>
+        </StackPanel>
+    </DataTemplate>
+
+    <!--HEADERS STYLES-->
+
+
+    
+    <!--OTHERS-->
+
+    <DataTemplate x:Key="DT_ParticipantState">
+        <Grid HorizontalAlignment="Left" Visibility="{Binding IsSet, Converter={StaticResource collapseFalseConverter}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Image Margin="{StaticResource MarginPaddingThickness}" Visibility="{Binding IsLocked, Converter={StaticResource collapseFalseConverter}}" Width="12" Height="12" Source="{Binding Source={x:Static draw:SystemIcons.Error}, Converter={StaticResource IconToImageSourceConverter}, Mode=OneWay}"/>
+            <TextBlock VerticalAlignment="Center" Grid.Column="1" Text="{Binding Character.Name}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+            <Image Grid.Column="2" Margin="{StaticResource MarginPaddingThickness}" Visibility="{Binding IsUnlocked, Converter={StaticResource collapseFalseConverter}}" Width="12" Height="12" Source="{Binding Source={x:Static draw:SystemIcons.Asterisk}, Converter={StaticResource IconToImageSourceConverter}, Mode=OneWay}"/>
+        </Grid>
+    </DataTemplate>
+
+    <Style x:Key="S_Group" TargetType="{x:Type GroupItem}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Expander IsExpanded="True">
+                        <Expander.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="Gray" VerticalAlignment="Bottom" Style="{StaticResource S_TextBlock_Header}"/>
+                                <TextBlock Text="{Binding ItemCount}" FontWeight="Bold" Foreground="Green" FontStyle="Italic" Margin="10,0,0,0" VerticalAlignment="Bottom" Style="{StaticResource S_TextBlock_Header}"/>
+                                <TextBlock Text=" item(s)" Foreground="Silver" FontStyle="Italic" VerticalAlignment="Bottom" Style="{StaticResource S_TextBlock_Header}"/>
+                            </StackPanel>
+                        </Expander.Header>
+                        <ItemsPresenter/>
+                    </Expander>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <DataTemplate x:Key="DT_Selector_DNode">
+        <Grid ToolTip="{Binding Id}" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=ComboBox}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            
+            <Label FontSize="12" FontWeight="Normal" Style="{StaticResource S_Label_NodeType}"></Label>
+
+            <TextBlock Grid.Column="1" Grid.Row="0" FontWeight="Bold" Text="{Binding Owner.Name, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+
+            <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" nodes:RTBHelper.Document="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="DT_Selector_JNode">
+        <Grid ToolTip="{Binding Id}" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=ComboBox}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Label FontSize="12" FontWeight="Normal" Style="{StaticResource S_Label_NodeType}"></Label>
+
+            <TextBlock Grid.Column="1" Grid.Row="0" FontWeight="Bold" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+
+        </Grid>
+    </DataTemplate>
+    
+    <!--OTHERS-->
+
+
+
+    <!--CREATE AND EDIT-->
+
+    <DataTemplate DataType="{x:Type viewModelsTabs:BaseTreesTab_CreateElementVm}">
+        <Grid x:Name="gr_Folder">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <GroupBox Header="Имя" Grid.Row="0" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
+                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Input}"></TextBox>
+            </GroupBox>
+            <GroupBox Header="Описание" Grid.Row="1" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
+                <TextBox AcceptsReturn="True" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Input}"></TextBox>
+            </GroupBox>
+        </Grid>
+    </DataTemplate>
+
+    <!--CREATE AND EDIT-->
+    
+    
+    
+    <!--GLOBAL STYLES-->
+
+    <Style TargetType="CheckBox">
+        <Setter Property="Margin" Value="{StaticResource MarginPaddingThickness}"></Setter>
+        <Setter Property="Padding" Value="{StaticResource MarginPaddingThickness}"></Setter>
+        <Setter Property="FontSize" Value="12"></Setter>
+        <Setter Property="Foreground" Value="Black"></Setter>
+        <Setter Property="FontWeight" Value="Bold"></Setter>
+        <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+    </Style>
+
+    <Style TargetType="RadioButton">
+        <Setter Property="Margin" Value="{StaticResource MarginPaddingThickness}"></Setter>
+        <Setter Property="Padding" Value="{StaticResource MarginPaddingThickness}"></Setter>
+        <Setter Property="FontSize" Value="12"></Setter>
+        <Setter Property="Foreground" Value="Black"></Setter>
+        <Setter Property="FontWeight" Value="Bold"></Setter>
+        <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+    </Style>
+
+    <Style TargetType="Border">
+        <Setter Property="CornerRadius" Value="4"></Setter>
+    </Style>
+
+    <Style TargetType="GridSplitter">
+        <Setter Property="Width" Value="4"></Setter>
+        <Setter Property="VerticalAlignment" Value="Stretch"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+        <Setter Property="Background" Value="Goldenrod"></Setter>
+    </Style>
+    
+    <!--GLOBAL STYLES-->
+
+    <!--TREEVIEW STYLES-->
+
+    <Style TargetType="TreeView">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TreeView">
+                    <ScrollViewer AllowDrop="{TemplateBinding AllowDrop}" Background="{TemplateBinding Background}" Focusable="False" CanContentScroll="False" HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch">
+                        <ItemsPresenter/>
+                    </ScrollViewer>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ExpandCollapseToggleStyle" TargetType="ToggleButton">
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid Margin="{TemplateBinding Margin}" VerticalAlignment="{TemplateBinding VerticalAlignment}">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CheckStates">
+                                <VisualState x:Name="Checked">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="Collapsed">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Hidden}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="Expanded">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unchecked"/>
+                                <VisualState x:Name="Indeterminate"/>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <TextBlock FontWeight="Bold" x:Name="Collapsed" FontSize="16">🗀</TextBlock>
+                        <TextBlock FontWeight="Bold" x:Name="Expanded" FontSize="16" Visibility="Hidden">🗁</TextBlock>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style x:Key="TreeViewItemFocusVisual">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border>
+                        <Rectangle Margin="0" StrokeThickness="5" Stroke="Black" StrokeDashArray="1 2" Opacity="0"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style x:Key="{x:Type TreeViewItem}" TargetType="{x:Type TreeViewItem}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="HorizontalContentAlignment" Value="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+        <Setter Property="VerticalContentAlignment" Value="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource TreeViewItemFocusVisual}"/>
+        <Setter Property="IsSelected" Value="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}"></Setter>
+        <Setter Property="IsExpanded" Value="{Binding IsExpanded, UpdateSourceTrigger=PropertyChanged}"></Setter>
+        <Setter Property="ToolTip" Value="{Binding Stats, UpdateSourceTrigger=PropertyChanged}"></Setter>
+        <Setter Property="Visibility" Value="{Binding IsVisible, Converter={StaticResource collapseFalseConverter}}"></Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                    <Grid AllowDrop="true" Background="Transparent">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="SelectionStates">
+                                <VisualState x:Name="Selected">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Bd" Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="Goldenrod"/>
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unselected"/>
+                                <VisualState x:Name="SelectedInactive">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Bd" Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="PaleGoldenrod"/>
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="ExpansionStates">
+                                <VisualState x:Name="Expanded">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="ItemsHost">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Collapsed"/>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Border x:Name="Bd" Grid.Column="0" Grid.ColumnSpan="2" Background="White"
+                                VerticalAlignment="Stretch"
+                                HorizontalAlignment="Stretch"
+                                Margin="{StaticResource MarginPaddingThickness}"
+                                BorderThickness="3" BorderBrush="Silver"
+                                views:DragDropHelper.IsDraggable="True">
+                        </Border>
+                        
+                        <ToggleButton x:Name="Expander" Style="{StaticResource ExpandCollapseToggleStyle}" ClickMode="Press"
+                                      IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
+                                      VerticalAlignment="Center" Margin="4 4 0 4"/>
+
+                        <ContentPresenter x:Name="PART_Header" Grid.Column="1" ContentSource="Header" Margin="8 4 4 4"/>
+
+                        <ItemsPresenter x:Name="ItemsHost" Grid.Column="1" Grid.Row="1" Visibility="Collapsed"/>
+                        
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsValid, UpdateSourceTrigger=PropertyChanged}" Value="false"></Condition>
+                                <Condition Binding="{Binding IsDragOver, UpdateSourceTrigger=PropertyChanged}" Value="false"></Condition>
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter TargetName="Bd" Property="Background" Value="PaleVioletRed"></Setter>
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                        <DataTrigger Binding="{Binding IsFolder, Mode=OneTime}" Value="false">
+                            <Setter TargetName="Expander" Property="Visibility" Value="Hidden"/>
+                            <Setter TargetName="PART_Header" Property="Grid.Column" Value="0"/>
+                            <Setter TargetName="PART_Header" Property="Grid.ColumnSpan" Value="2"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsFolder, Mode=OneTime}" Value="true">
+                            <Setter TargetName="Bd" Property="Background" Value="LightYellow"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsDragOver, UpdateSourceTrigger=PropertyChanged}" Value="true">
+                            <Setter TargetName="Bd" Property="Background" Value="LightGreen"></Setter>
+                        </DataTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="HasHeader" Value="false"/>
+                                <Condition Property="Width" Value="Auto"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="PART_Header" Property="MinWidth" Value="75"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="HasHeader" Value="false"/>
+                                <Condition Property="Height" Value="Auto"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="PART_Header" Property="MinHeight" Value="19"/>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!--TREEVIEW STYLES-->
+
+    <!--COMBOBOX TEMPLATE-->
+
+    <LinearGradientBrush x:Key="ComboBox.Static.Background" EndPoint="0,1" StartPoint="0,0">
+        <GradientStop Color="#FFF0F0F0" Offset="0.0"/>
+        <GradientStop Color="#FFE5E5E5" Offset="1.0"/>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="ComboBox.Static.Border" Color="#FFACACAC"/>
+    <SolidColorBrush x:Key="ComboBox.Static.Glyph" Color="#FF606060"/>
+    <SolidColorBrush x:Key="ComboBox.Static.Editable.Background" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="ComboBox.Static.Editable.Border" Color="#FFABADB3"/>
+    <SolidColorBrush x:Key="ComboBox.Static.Editable.Button.Background" Color="Transparent"/>
+    <SolidColorBrush x:Key="ComboBox.Static.Editable.Button.Border" Color="Transparent"/>
+    <LinearGradientBrush x:Key="ComboBox.MouseOver.Background" EndPoint="0,1" StartPoint="0,0">
+        <GradientStop Color="#FFECF4FC" Offset="0.0"/>
+        <GradientStop Color="#FFDCECFC" Offset="1.0"/>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="ComboBox.MouseOver.Border" Color="#FF7EB4EA"/>
+    <SolidColorBrush x:Key="ComboBox.MouseOver.Glyph" Color="#FF000000"/>
+    <SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Background" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Border" Color="#FF7EB4EA"/>
+    <LinearGradientBrush x:Key="ComboBox.MouseOver.Editable.Button.Background" EndPoint="0,1" StartPoint="0,0">
+        <GradientStop Color="#FFEBF4FC" Offset="0.0"/>
+        <GradientStop Color="#FFDCECFC" Offset="1.0"/>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Button.Border" Color="#FF7EB4EA"/>
+    <LinearGradientBrush x:Key="ComboBox.Pressed.Background" EndPoint="0,1" StartPoint="0,0">
+        <GradientStop Color="#FFDAECFC" Offset="0.0"/>
+        <GradientStop Color="#FFC4E0FC" Offset="1.0"/>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="ComboBox.Pressed.Border" Color="#FF569DE5"/>
+    <SolidColorBrush x:Key="ComboBox.Pressed.Glyph" Color="#FF000000"/>
+    <SolidColorBrush x:Key="ComboBox.Pressed.Editable.Background" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="ComboBox.Pressed.Editable.Border" Color="#FF569DE5"/>
+    <LinearGradientBrush x:Key="ComboBox.Pressed.Editable.Button.Background" EndPoint="0,1" StartPoint="0,0">
+        <GradientStop Color="#FFDAEBFC" Offset="0.0"/>
+        <GradientStop Color="#FFC4E0FC" Offset="1.0"/>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="ComboBox.Pressed.Editable.Button.Border" Color="#FF569DE5"/>
+    <SolidColorBrush x:Key="ComboBox.Disabled.Background" Color="#FFF0F0F0"/>
+    <SolidColorBrush x:Key="ComboBox.Disabled.Border" Color="#FFD9D9D9"/>
+    <SolidColorBrush x:Key="ComboBox.Disabled.Glyph" Color="#FFBFBFBF"/>
+    <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Background" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Border" Color="#FFBFBFBF"/>
+    <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Button.Background" Color="Transparent"/>
+    <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Button.Border" Color="Transparent"/>
+    
+    <Style TargetType="ComboBox">
+        <Setter Property="Margin" Value="{StaticResource MarginPaddingThickness}"></Setter>
+        <Setter Property="Padding" Value="{StaticResource MarginPaddingThickness}"></Setter>
+        <Setter Property="FontSize" Value="12"></Setter>
+    </Style>
+
+    <Style TargetType="ComboBoxItem">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+    </Style>
+    
+    <ItemsPanelTemplate x:Key="IPT_WrapPanel">
+        <WrapPanel></WrapPanel>
+    </ItemsPanelTemplate>
+
+    <Style x:Key="S_ComboBox_Tags"  TargetType="{x:Type ComboBox}">
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="ScrollViewer.CanContentScroll" Value="true" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBox}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+                        <ToggleButton Grid.Column="0" Focusable="false" ClickMode="Press"
+                                      IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                      FontSize="8" Width="12" Height="12" VerticalAlignment="Bottom" HorizontalAlignment="Left"
+                                      Background="Transparent" Content="✙" BorderThickness="0.5" BorderBrush="Green">
+                        </ToggleButton>
+
+                        <ItemsControl Grid.Column="1" HorizontalAlignment="Stretch" ItemsSource="{Binding Tags}" ItemsPanel="{StaticResource IPT_WrapPanel}">
+                            <ItemsControl.Resources>
+                                <ResourceDictionary>
+                                    <DataTemplate DataType="{x:Type viewModels:JournalTagVm}">
+                                        <Border Margin="{StaticResource MarginPaddingThickness}" Background="{Binding TagColor, Converter={StaticResource colorToBrushConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                    BorderThickness="0.5" BorderBrush="Black">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock VerticalAlignment="Center" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+                                                <Button Grid.Column="1" Command="{Binding RelativeSource={RelativeSource AncestorType=WrapPanel}, Path=DataContext.RemoveTagCommand}"
+                                            CommandParameter="{Binding}" FontSize="8" Width="12" Height="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                                            VerticalAlignment="Center" Background="Transparent" Content="❌" BorderThickness="0">
+                                                </Button>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ResourceDictionary>
+                            </ItemsControl.Resources>
+                        </ItemsControl>
+
+                        <Popup Grid.ColumnSpan="2" x:Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True"
+                               Focusable="False" PopupAnimation="Slide">
+                            <Grid x:Name="DropDown" SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                <Border x:Name="DropDownBorder" BorderThickness="1">
+                                    <Border.BorderBrush>
+                                        <SolidColorBrush Color="{DynamicResource BorderMediumColor}" />
+                                    </Border.BorderBrush>
+                                    <Border.Background>
+                                        <SolidColorBrush Color="{DynamicResource ControlLightColor}" />
+                                    </Border.Background>
+                                </Border>
+                                <ScrollViewer SnapsToDevicePixels="True">
+                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                </ScrollViewer>
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="IsTabStop" Value="false"/>
+        <Setter Property="Focusable" Value="false"/>
+        <Setter Property="ClickMode" Value="Press"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border x:Name="templateRoot" Background="{StaticResource ComboBox.Static.Background}" BorderBrush="{StaticResource ComboBox.Static.Border}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                        <Border x:Name="splitBorder" BorderBrush="Transparent" BorderThickness="1" HorizontalAlignment="Right" Margin="0" SnapsToDevicePixels="true" Width="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}">
+                            <Path x:Name="arrow" Data="F1 M 0,0 L 2.667,2.66665 L 5.3334,0 L 5.3334,-1.78168 L 2.6667,0.88501 L0,-1.78168 L0,0 Z" Fill="{StaticResource ComboBox.Static.Glyph}" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center"/>
+                        </Border>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsEditable, RelativeSource={RelativeSource AncestorType={x:Type ComboBox}}}" Value="true"/>
+                                <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                <Condition Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="true"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource ComboBox.Static.Editable.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource ComboBox.Static.Editable.Border}"/>
+                            <Setter Property="Background" TargetName="splitBorder" Value="{StaticResource ComboBox.Static.Editable.Button.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="splitBorder" Value="{StaticResource ComboBox.Static.Editable.Button.Border}"/>
+                        </MultiDataTrigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Fill" TargetName="arrow" Value="{StaticResource ComboBox.MouseOver.Glyph}"/>
+                        </Trigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true"/>
+                                <Condition Binding="{Binding IsEditable, RelativeSource={RelativeSource AncestorType={x:Type ComboBox}}}" Value="false"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource ComboBox.MouseOver.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource ComboBox.MouseOver.Border}"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true"/>
+                                <Condition Binding="{Binding IsEditable, RelativeSource={RelativeSource AncestorType={x:Type ComboBox}}}" Value="true"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource ComboBox.MouseOver.Editable.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource ComboBox.MouseOver.Editable.Border}"/>
+                            <Setter Property="Background" TargetName="splitBorder" Value="{StaticResource ComboBox.MouseOver.Editable.Button.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="splitBorder" Value="{StaticResource ComboBox.MouseOver.Editable.Button.Border}"/>
+                        </MultiDataTrigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Fill" TargetName="arrow" Value="{StaticResource ComboBox.Pressed.Glyph}"/>
+                        </Trigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" Value="true"/>
+                                <Condition Binding="{Binding IsEditable, RelativeSource={RelativeSource AncestorType={x:Type ComboBox}}}" Value="false"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource ComboBox.Pressed.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource ComboBox.Pressed.Border}"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" Value="true"/>
+                                <Condition Binding="{Binding IsEditable, RelativeSource={RelativeSource AncestorType={x:Type ComboBox}}}" Value="true"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource ComboBox.Pressed.Editable.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource ComboBox.Pressed.Editable.Border}"/>
+                            <Setter Property="Background" TargetName="splitBorder" Value="{StaticResource ComboBox.Pressed.Editable.Button.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="splitBorder" Value="{StaticResource ComboBox.Pressed.Editable.Button.Border}"/>
+                        </MultiDataTrigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Fill" TargetName="arrow" Value="{StaticResource ComboBox.Disabled.Glyph}"/>
+                        </Trigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                <Condition Binding="{Binding IsEditable, RelativeSource={RelativeSource AncestorType={x:Type ComboBox}}}" Value="false"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource ComboBox.Disabled.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource ComboBox.Disabled.Border}"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false"/>
+                                <Condition Binding="{Binding IsEditable, RelativeSource={RelativeSource AncestorType={x:Type ComboBox}}}" Value="true"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource ComboBox.Disabled.Editable.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource ComboBox.Disabled.Editable.Border}"/>
+                            <Setter Property="Background" TargetName="splitBorder" Value="{StaticResource ComboBox.Disabled.Editable.Button.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="splitBorder" Value="{StaticResource ComboBox.Disabled.Editable.Button.Border}"/>
+                        </MultiDataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="S_ComboBox_AutoComplete" TargetType="{x:Type ComboBox}">
+        <Setter Property="Margin" Value="{StaticResource MarginPaddingThickness}"></Setter>
+        <Setter Property="Padding" Value="{StaticResource MarginPaddingThickness}"></Setter>
+        <Setter Property="FontSize" Value="12"></Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBox}">
+                    <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition MinWidth="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" Width="0"/>
+                        </Grid.ColumnDefinitions>
+                        <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Margin="{StaticResource MarginPaddingThickness}" Placement="Bottom" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}">
+                            <theme:SystemDropShadowChrome x:Name="shadow" Color="Transparent" MinWidth="{Binding ActualWidth, ElementName=templateRoot}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"></RowDefinition>
+                                        <RowDefinition Height="*"></RowDefinition>
+                                    </Grid.RowDefinitions>
+                                    <TextBox Background="LightGreen" Margin="0, 8, 0, 4" x:Name="tb_Filter" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding Path=(views:ComboBoxFilterHelper.Filter), UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ComboBox}}"></TextBox>
+                                    <TextBox Margin="0, 8, 0, 4" x:Name="tb_FilterPlaceholder" IsReadOnly="True" Background="Transparent" BorderBrush="Transparent" IsHitTestVisible="False" Text="Search by ..." Visibility="Collapsed"></TextBox>
+                                    <Border Grid.Row="1" x:Name="dropDownBorder" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" BorderThickness="1">
+                                        <ScrollViewer x:Name="DropDownScrollViewer">
+                                            <Grid x:Name="grid" RenderOptions.ClearTypeHint="Enabled">
+                                                <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
+                                                    <Rectangle x:Name="opaqueRect" Fill="{Binding Background, ElementName=dropDownBorder}" Height="{Binding ActualHeight, ElementName=dropDownBorder}" Width="{Binding ActualWidth, ElementName=dropDownBorder}"/>
+                                                </Canvas>
+                                                <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                            </Grid>
+                                        </ScrollViewer>
+                                    </Border>
+                                </Grid>
+                            </theme:SystemDropShadowChrome>
+                        </Popup>
+                        <ToggleButton x:Name="toggleButton" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Grid.ColumnSpan="2" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Style="{StaticResource ComboBoxToggleButton}"/>
+                        <ContentPresenter x:Name="contentPresenter" ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" Content="{TemplateBinding SelectionBoxItem}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" IsHitTestVisible="false" Margin="{TemplateBinding Margin}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger SourceName="tb_Filter" Property="Text" Value="{x:Null}">
+                            <Setter TargetName="tb_FilterPlaceholder" Property="Visibility" Value="Visible"></Setter>
+                        </Trigger>
+                        <Trigger SourceName="tb_Filter" Property="Text" Value="">
+                            <Setter TargetName="tb_FilterPlaceholder" Property="Visibility" Value="Visible"></Setter>
+                        </Trigger>
+                        <Trigger Property="HasDropShadow" SourceName="PART_Popup" Value="true">
+                            <Setter Property="Margin" TargetName="shadow" Value="0,0,5,5"/>
+                            <Setter Property="Color" TargetName="shadow" Value="#71000000"/>
+                        </Trigger>
+                        <Trigger Property="HasItems" Value="false">
+                            <Setter Property="Height" TargetName="dropDownBorder" Value="95"/>
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsGrouping" Value="true"/>
+                                <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                        </MultiTrigger>
+                        <Trigger Property="ScrollViewer.CanContentScroll" SourceName="DropDownScrollViewer" Value="false">
+                            <Setter Property="Canvas.Top" TargetName="opaqueRect" Value="{Binding VerticalOffset, ElementName=DropDownScrollViewer}"/>
+                            <Setter Property="Canvas.Left" TargetName="opaqueRect" Value="{Binding HorizontalOffset, ElementName=DropDownScrollViewer}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--COMBOBOX TEMPLATE-->
+
+    
+    
+    <!--TREES UI-->
+
+    <HierarchicalDataTemplate ItemsSource="{Binding Items}" DataType="{x:Type viewModels:TreeFolderVm}">
+        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Header}"></TextBlock>
+    </HierarchicalDataTemplate>
+
+    <HierarchicalDataTemplate DataType="{x:Type viewModels:NonFolderVm}">
+        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Header}"></TextBlock>
+        <!--<ComboBox Margin="0 0 1 1" Grid.Row="1" Style="{StaticResource S_ComboBox_Tags}" IsEditable="true" ItemsSource="{Binding TagsToAdd.View}" DisplayMemberPath="Name" SelectedValue="{Binding TagToAdd, UpdateSourceTrigger=PropertyChanged}"></ComboBox> ////// TODO -->
+    </HierarchicalDataTemplate>
+
+    <!--TREES UI-->
+    
+</ResourceDictionary>
