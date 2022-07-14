@@ -136,7 +136,7 @@ namespace StorylineEditor.ViewModels.Predicates
         public override string GenerateCode(string outerName)
         {
             return string.Format(
-                "{2}(dialogContext.History.Contains(\"{0}\") && dialogContext.History[\"{0}\"].ContainsNode(\"{1}\"))", DialogId, DialogNodeId, IsInversed ? "!" : "");
+                "{2}(dialogHistory.Dialogs.Contains(\"{0}\") && dialogHistory.Dialogs[\"{0}\"].ContainsNode(\"{1}\"))", DialogId, DialogNodeId, IsInversed ? "!" : "");
         }
     }
 }
