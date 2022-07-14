@@ -197,6 +197,6 @@ namespace StorylineEditor.ViewModels.Nodes
             return "GENDER ENUM BUG";
         }
 
-        public string GetSafeString(string str) { return str?.Replace("\"", "\\\"")?.Replace("\n", "\t"); }
+        public string GetSafeString(string str) { return str?.Replace("\"", "\\\"")?.Replace("\n", "...")?.Replace("\r", "..."); }
     }
 }

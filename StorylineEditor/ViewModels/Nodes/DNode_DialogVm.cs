@@ -71,12 +71,13 @@ namespace StorylineEditor.ViewModels.Nodes
 
             {
                 resultCode += string.Format("if (nodeId == \"{0}\"", Id);
-                if (Gender != UNISEX || Predicates.Count > 0) resultCode += " || " + Environment.NewLine;
+                if (Gender != UNISEX || Predicates.Count > 0) resultCode += " || ";
                 if (Gender != UNISEX)
                 {
                     resultCode += string.Format("gender == {0}", GetGenderEnum()); ////// TODO
                     if (Predicates.Count > 0) resultCode += "&& ";
                 }
+                if (Predicates.Count > 0) resultCode += Environment.NewLine;
                 resultCode += string.Join(string.Format("&& {0}", Environment.NewLine), Predicates.Select(predicate => predicate.GenerateCode(nodeName)));
                 resultCode += ") {" + Environment.NewLine;
             }
