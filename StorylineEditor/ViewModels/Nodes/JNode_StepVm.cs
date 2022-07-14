@@ -135,7 +135,7 @@ namespace StorylineEditor.ViewModels.Nodes
             }
         }
 
-        public override string GenerateCode(string nodeName, bool isPlayerDialog)
+        public override string GenerateCode(string nodeName, bool isInteractive)
         {
             var resultCode = string.Format("UJournalNode_Base* {0} = nullptr;", nodeName) + Environment.NewLine;
 

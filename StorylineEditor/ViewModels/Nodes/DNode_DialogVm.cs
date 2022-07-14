@@ -65,7 +65,7 @@ namespace StorylineEditor.ViewModels.Nodes
             }
         }
 
-        public override string GenerateCode(string nodeName, bool isPlayerDialog)
+        public override string GenerateCode(string nodeName, bool isInteractive)
         {
             var resultCode = string.Format("UDialogNode* {0} = nullptr;", nodeName) + Environment.NewLine;
 
@@ -108,7 +108,7 @@ namespace StorylineEditor.ViewModels.Nodes
                     focusPointString) + Environment.NewLine;
             }
 
-            if (isPlayerDialog && !isNondialogNode) resultCode += string.Format("{0}->IsInteractive = true;", nodeName) + Environment.NewLine;
+            if (isInteractive && !isNondialogNode) resultCode += string.Format("{0}->IsInteractive = true;", nodeName) + Environment.NewLine;
 
             ////// TODO
             //////if (GameEvents.Count > 0)

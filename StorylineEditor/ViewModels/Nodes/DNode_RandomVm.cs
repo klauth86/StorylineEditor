@@ -29,7 +29,7 @@ namespace StorylineEditor.ViewModels.Nodes
             GameEvents.All(gameEvent => gameEvent?.IsValid ?? false) &&
             Predicates.All(predicate => predicate?.IsValid ?? false);
 
-        public override string GenerateCode(string nodeName, bool isPlayerDialog)
+        public override string GenerateCode(string nodeName, bool isInteractive)
         {
             var resultCode = string.Format("UDialogNode* {0} = nullptr;", nodeName) + Environment.NewLine;
 
@@ -44,7 +44,7 @@ namespace StorylineEditor.ViewModels.Nodes
             resultCode += string.Format("{0}->DialogNodeType = EDialogNodeType::RANDOM;", nodeName) + Environment.NewLine;
             resultCode += string.Format("{0}->DialogId = \"{1}\";", nodeName, Parent.Id) + Environment.NewLine;
             resultCode += string.Format("{0}->NodeId = \"{1}\";", nodeName, Id) + Environment.NewLine;
-            if (isPlayerDialog) resultCode += string.Format("{0}->IsInteractive = true;", nodeName) + Environment.NewLine;
+            if (isInteractive) resultCode += string.Format("{0}->IsInteractive = true;", nodeName) + Environment.NewLine;
 
             ////// TODO
             //////if (GameEvents.Count > 0)
