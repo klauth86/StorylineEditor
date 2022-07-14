@@ -34,9 +34,14 @@ namespace StorylineEditor.ViewModels.Nodes
             var resultCode = string.Format("UDialogNode* {0} = nullptr;", nodeName) + Environment.NewLine;
 
             {
-                resultCode += string.Format("if (nodeId == \"{0}\" || ", Id) + Environment.NewLine;
-                resultCode += string.Format("gender & {0}", Gender == UNISEX ? 3 : Gender); ////// TODO
-                if (Predicates.Count > 0) resultCode += "&& " + string.Join(string.Format("&& {0}", Environment.NewLine), Predicates.Select(predicate => predicate.GenerateCode(nodeName)));
+                resultCode += string.Format("if (nodeId == \"{0}\"", Id);
+                if (Gender != UNISEX || Predicates.Count > 0) resultCode += " || " + Environment.NewLine;
+                if (Gender != UNISEX)
+                {
+                    resultCode += string.Format("gender == {0}", GetGenderEnum()); ////// TODO
+                    if (Predicates.Count > 0) resultCode += "&& ";
+                }
+                resultCode += string.Join(string.Format("&& {0}", Environment.NewLine), Predicates.Select(predicate => predicate.GenerateCode(nodeName)));
                 resultCode += ") {" + Environment.NewLine;
             }
 

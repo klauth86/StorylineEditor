@@ -187,5 +187,16 @@ namespace StorylineEditor.ViewModels.Nodes
         public const int FEMALE = 2;
 
         public void ToggleGender() => Gender = (Gender + 1) % 3;
+
+        public string GetGenderEnum()
+        {
+            if (gender == MALE) return "EGender::Male";
+
+            if (gender == FEMALE) return "EGender::Female";
+
+            return "GENDER ENUM BUG";
+        }
+
+        public string GetSafeString(string str) { return str?.Replace("\"", "\\\"")?.Replace("\n", "\t"); }
     }
 }
