@@ -67,14 +67,12 @@ namespace StorylineEditor.ViewModels.Nodes
 
         public override string GenerateCode(string nodeName, bool isPlayerDialog)
         {
-            bool hasPredicates = Predicates.Count > 0;
-
             var resultCode = string.Format("UDialogNode* {0} = nullptr;", nodeName) + Environment.NewLine;
 
-            if (hasPredicates)
             {
                 resultCode += string.Format("if (nodeId == \"{0}\" || ", Id) + Environment.NewLine;
-                resultCode += string.Join(string.Format("&& {0}", Environment.NewLine), Predicates.Select(predicate => predicate.GenerateCode(nodeName)));
+                resultCode += string.Format("gender & {0}", Gender == UNISEX ? 3 : Gender); ////// TODO
+                if (Predicates.Count > 0) resultCode += "&& " + string.Join(string.Format("&& {0}", Environment.NewLine), Predicates.Select(predicate => predicate.GenerateCode(nodeName)));
                 resultCode += ") {" + Environment.NewLine;
             }
 
@@ -83,7 +81,8 @@ namespace StorylineEditor.ViewModels.Nodes
             resultCode += string.Format("{0}->DialogId = \"{1}\";", nodeName, Parent.Id) + Environment.NewLine;
             resultCode += string.Format("{0}->NodeId = \"{1}\";", nodeName, Id) + Environment.NewLine;
             resultCode += string.Format("{0}->OwnerClassPath = \"{1}\";", nodeName, Owner?.ClassPathName ?? "") + Environment.NewLine;
-            //////resultCode += string.Format("{0}->Content = LOCTEXT(\"{1}\", \"{2}\");", nodeName, Id, RTBHelper.GetFlowDocumentContent(Name)) + Environment.NewLine;
+            resultCode += string.Format("{0}->Content = LOCTEXT(\"{1}\", \"{2}\");", nodeName, Id, RTBHelper.GetFlowDocumentContent(Name)) + Environment.NewLine;
+            resultCode += string.Format("{0}->Description = LOCTEXT(\"{1}\", \"{2}\");", nodeName, Id, Description) + Environment.NewLine;
 
             var allActors = Parent.Parent.Parent.AllActors.ToList();
 
@@ -128,7 +127,7 @@ namespace StorylineEditor.ViewModels.Nodes
             else
                 resultCode += string.Format("if (nodeId == \"{0}\") result = {1};", id, nodeName) + Environment.NewLine;
 
-            if (hasPredicates) resultCode += "}" + Environment.NewLine;
+            resultCode += "}" + Environment.NewLine;
 
             return resultCode;
         }
