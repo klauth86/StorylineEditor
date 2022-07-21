@@ -445,11 +445,23 @@ namespace StorylineEditor.ViewModels
             NotifyIsValidChanged();
         }
 
-        public void RefreshJournalLinks_To(Node_BaseVm to) { foreach (var link in Links) if (link.ToId == to.Id) RefreshJournalLinks_From(link.From, link.To); }
+        public void RefreshJournalLinks_To(Node_BaseVm to)
+        {
+            List<NodePairVm> links = new List<NodePairVm>(Links);
+            foreach (var link in links) if (link.ToId == to.Id) RefreshJournalLinks_From(link.From, link.To);
+        }
 
+        /// <summary>
+        /// Break some links depending on node Type (Step and Alternative) and node Gender
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
         public void RefreshJournalLinks_From(Node_BaseVm from, Node_BaseVm to)
         {
-            // Break existing links if linking to step
+            // If we add new link from Step node to Step node
+            // - all existing links to Alternative nodes will be broken (node Type rule)
+            // - all existing Step nodes of intersecting gender will be broken (node Gender rule)
+
             if (to is JNode_StepVm)
             {
                 List<NodePairVm> brokenLinks = new List<NodePairVm>();
@@ -457,8 +469,13 @@ namespace StorylineEditor.ViewModels
                 {
                     if (link.FromId == from.Id)
                     {
+                        // if it is called from AddLink, we have no such link
+                        // if it is called from RefreshJournalLinks_To, we prefer last changed node to all others
+                        if (link.ToId == to.Id) continue;
+
                         if (link.To is JNode_AlternativeVm ||
-                            link.To.Gender == from.Gender ||
+                            to.Gender == link.To.Gender ||
+                            to.Gender == Node_BaseVm.UNISEX ||
                             link.To.Gender == Node_BaseVm.UNISEX)
                             brokenLinks.Add(link);
                     }
@@ -466,7 +483,9 @@ namespace StorylineEditor.ViewModels
                 foreach (var link in brokenLinks) { RemoveLink_Internal(link); }
             }
 
-            // Break existing links to steps if linking to alternative
+            // If we add new link from Step node to Alternative node:
+            // - all existing links to Step nodes will be broken (node Type rule)
+
             if (from is JNode_StepVm && to is JNode_AlternativeVm)
             {
                 List<NodePairVm> brokenLinks = new List<NodePairVm>();
