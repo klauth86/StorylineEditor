@@ -343,18 +343,22 @@ namespace StorylineEditor.ViewModels.Nodes
         {
             var resultCode = string.Format("UDialogNode* {0} = nullptr;", nodeName) + Environment.NewLine;
 
+            bool hasPredicates = Gender != UNISEX || Predicates.Count > 0;
+
+            if (hasPredicates)
             {
-                resultCode += string.Format("if (nodeId == \"{0}\"", Id);
-                if (Gender != UNISEX || Predicates.Count > 0) resultCode += " || ";
+                resultCode += string.Format("if (nodeId == \"{0}\" ||", Id);
                 if (Gender != UNISEX)
                 {
                     resultCode += string.Format("gender == {0}", GetGenderEnum()); ////// TODO
-                    if (Predicates.Count > 0) resultCode += "&& ";
+                    if (Predicates.Count > 0) resultCode += " &&";
                 }
                 if (Predicates.Count > 0) resultCode += Environment.NewLine;
-                resultCode += string.Join(string.Format("&& {0}", Environment.NewLine), Predicates.Select(predicate => predicate.GenerateCode(nodeName)));
-                resultCode += ") {" + Environment.NewLine;
+                resultCode += string.Join(string.Format(" &&{0}", Environment.NewLine), Predicates.Select(predicate => predicate.GenerateCode(nodeName)));
+                resultCode += ")" + Environment.NewLine;
             }
+            
+            if (hasPredicates) resultCode += "{" + Environment.NewLine;
 
             resultCode += string.Format("{0} = NewObject<UDialogNode>(outer);", nodeName) + Environment.NewLine;
             resultCode += string.Format("{0}->DialogNodeType = EDialogNodeType::REGULAR;", nodeName) + Environment.NewLine;
@@ -362,7 +366,7 @@ namespace StorylineEditor.ViewModels.Nodes
             resultCode += string.Format("{0}->NodeId = \"{1}\";", nodeName, Id) + Environment.NewLine;
             resultCode += string.Format("{0}->OwnerClassPath = \"{1}\";", nodeName, Owner?.ClassPathName ?? "") + Environment.NewLine;
             resultCode += string.Format("{0}->Content = LOCTEXT(\"{1}\", \"{2}\");", nodeName, Id, GetSafeString(RTBHelper.GetFlowDocumentContent(Name))) + Environment.NewLine;
-            resultCode += string.Format("{0}->Description = LOCTEXT(\"{1}\", \"{2}\");", nodeName, Id, GetSafeString(Description)) + Environment.NewLine;
+            resultCode += string.Format("{0}->Description = LOCTEXT(\"{1}\", \"{2}\");", nodeName, Id + "_DESC", GetSafeString(Description)) + Environment.NewLine;
 
             var allActors = Parent.Parent.Parent.AllActors.ToList();
 
@@ -407,7 +411,7 @@ namespace StorylineEditor.ViewModels.Nodes
             else
                 resultCode += string.Format("if (nodeId == \"{0}\") result = {1};", id, nodeName) + Environment.NewLine;
 
-            resultCode += "}" + Environment.NewLine;
+            if (hasPredicates) resultCode += "}" + Environment.NewLine;
 
             return resultCode;
         }
