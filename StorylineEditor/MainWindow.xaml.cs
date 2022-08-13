@@ -51,8 +51,6 @@ namespace StorylineEditor
             timer.Start();
 
             DefaultDialogService.Init();
-
-            btn_Gen.IsEnabled = false;
         }
 
         ~MainWindow()
@@ -90,19 +88,6 @@ namespace StorylineEditor
 
         public static event Action<bool, Key> FacadeKeyEvent = delegate { };
 
-        private void Generate_Click(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is FullContextVm fullContext)
-            {
-                var fileInfo = new FileInfo(IDialogService.DialogService.Path);
-
-                foreach (var tab in fullContext.Tabs)
-                {
-                    (tab as BaseTreesTabVm)?.GenerateCode(fileInfo.Directory.FullName); ////// TODO Change logic with GenerateCode to just iterate through all tabs and generate only needed
-                }
-            }
-        }
-
         const string xmlFilter = "XML files (*.xml)|*.xml";
 
         private void OpenXML_Click(object sender, RoutedEventArgs e)
@@ -137,8 +122,6 @@ namespace StorylineEditor
 
             var assemblyName = Assembly.GetExecutingAssembly().GetName();
             Title = string.Format("{0} [{1}]", assemblyName.Name, path);
-
-            btn_Gen.IsEnabled = true;
         }
 
         private void SaveAsXml(string path)
@@ -149,8 +132,6 @@ namespace StorylineEditor
                 {
                     App.SerializeXml<FullContextVm>(fileStream, fullContext);
                 }
-
-                btn_Gen.IsEnabled = true;
             }
         }
 

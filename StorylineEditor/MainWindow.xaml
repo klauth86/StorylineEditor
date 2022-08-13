@@ -23,16 +23,11 @@ StorylineEditor распространяется в надежде, что он�
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"></ColumnDefinition>
                 <ColumnDefinition Width="auto"></ColumnDefinition>
-                <ColumnDefinition Width="auto"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="auto"></ColumnDefinition>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" Style="{StaticResource S_Button_CanvasPanel}" Name="btn_OpenXML" Content="🗀" ToolTip="Открыть XML" Click="OpenXML_Click"></Button>
             <Button Grid.Column="1" Style="{StaticResource S_Button_CanvasPanel}" Name="btn_SaveXML" Content="🖫" ToolTip="Сохранить XML" Click="SaveXML_Click"></Button>
-            <Button Grid.Column="2" Style="{StaticResource S_Button_CanvasPanel}" Name="btn_Gen" Content="🗲" ToolTip="Генерировать" Click="Generate_Click"></Button>
-            <TextBox Grid.Column="3" Style="{StaticResource S_TextBox_Input}" Text="{Binding SearchFilter, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            <Button Visibility="Collapsed" Grid.Column="4" Style="{StaticResource S_Button_CanvasPanel}" Content="🗲" ToolTip="Поиск" Command="{Binding SearchCommand}"></Button>
+            <TextBox Grid.Column="2" Style="{StaticResource S_TextBox_Input}" Text="{Binding SearchFilter, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         </Grid>
         <TabControl x:Name="tc_Worktabs" ItemsSource="{Binding Tabs}" ItemContainerStyle="{StaticResource S_Header_TabItem_Name}"></TabControl>
     </DockPanel>
