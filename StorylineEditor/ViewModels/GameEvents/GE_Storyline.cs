@@ -58,12 +58,5 @@ namespace StorylineEditor.ViewModels.GameEvents
                 casted.storyline = storyline;
             }
         }
-
-        public override string GenerateCode(string eventName, string outerName)
-        {
-            var resultCode = string.Format("auto {1} = NewObject<UGE_Storyline>({0});", outerName, eventName) + Environment.NewLine;
-            resultCode += string.Format("{0}->Storyline = \"{1}\";", eventName, storyline) + Environment.NewLine;
-            return resultCode;
-        }
     }
 }

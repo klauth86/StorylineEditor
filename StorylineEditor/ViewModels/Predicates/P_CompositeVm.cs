@@ -144,18 +144,5 @@ namespace StorylineEditor.ViewModels.Predicates
                 casted.itemB = itemB?.Clone<P_BaseVm>(Parent);
             }
         }
-
-        public override string GenerateCode(string outerName)
-        {
-            if (isInversed)
-            {
-                if (isOR) return string.Format("(!{0} && !{1})", itemA.GenerateCode(outerName), itemB.GenerateCode(outerName));
-                if (IsAND) return string.Format("(!{0} || !{1})", itemA.GenerateCode(outerName), itemB.GenerateCode(outerName));
-                return "false";
-            }
-            if (isOR) return string.Format("({0} || {1})", itemA.GenerateCode(outerName), itemB.GenerateCode(outerName));
-            if (IsAND) return string.Format("({0} && {1})", itemA.GenerateCode(outerName), itemB.GenerateCode(outerName));
-            return "true";
-        }
     }
 }

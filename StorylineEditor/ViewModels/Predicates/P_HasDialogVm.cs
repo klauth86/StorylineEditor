@@ -66,10 +66,5 @@ namespace StorylineEditor.ViewModels.Predicates
                 casted.DialogId = DialogId;
             }
         }
-
-        public override string GenerateCode(string outerName)
-        {
-            return string.Format("({1}dialogHistory.Dialogs.Contains(\"{0}\"))", DialogId, IsInversed ? "!" : "");
-        }
     }
 }

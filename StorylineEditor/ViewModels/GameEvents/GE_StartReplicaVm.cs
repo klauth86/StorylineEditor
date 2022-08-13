@@ -65,12 +65,5 @@ namespace StorylineEditor.ViewModels.GameEvents
                 casted.ReplicaId = ReplicaId;
             }
         }
-
-        public override string GenerateCode(string eventName, string outerName)
-        {
-            var resultCode = string.Format("auto {1} = NewObject<UGE_StartReplica>({0});", outerName, eventName) + Environment.NewLine;
-            resultCode += string.Format("{0}->Replica.Index = {1};", eventName, Parent.Parent.Parent.Parent.ReplicasTab.Items.IndexOf(Replica)) + Environment.NewLine;
-            return resultCode;
-        }
     }
 }

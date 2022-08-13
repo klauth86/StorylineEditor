@@ -84,14 +84,5 @@ namespace StorylineEditor.ViewModels.GameEvents
                 casted.searchByName = searchByName;
             }
         }
-
-        public override string GenerateCode(string eventName, string outerName)
-        {
-            var resultCode = string.Format("auto {1} = NewObject<UGE_StartMiniGame>({0});", outerName, eventName) + Environment.NewLine;
-            if (searchByName) resultCode += string.Format("{0}->MiniGameName = \"{1}\";", eventName, MiniGame?.ActorName ?? "") + Environment.NewLine;
-            if (!searchByName) resultCode += string.Format("{0}->MiniGameClassPtr = FSoftObjectPath(TEXT(\"{1}\"), \"\");", eventName, MiniGame?.ClassPathName ?? null) + Environment.NewLine;
-            if (searchByName) resultCode += string.Format("{0}->SearchByName = true;", eventName) + Environment.NewLine;
-            return resultCode;
-        }
     }
 }

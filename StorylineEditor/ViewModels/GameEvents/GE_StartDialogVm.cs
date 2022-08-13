@@ -91,13 +91,5 @@ namespace StorylineEditor.ViewModels.GameEvents
                 casted.CharacterBId = CharacterBId;
             }
         }
-
-        public override string GenerateCode(string eventName, string outerName)
-        {
-            var resultCode = string.Format("auto {1} = NewObject<UGE_StartDialog>({0});", outerName, eventName) + Environment.NewLine;
-            resultCode += string.Format("{0}->InterlocutorAClassPtr = FSoftObjectPath(TEXT(\"{1}\"), \"\");", eventName, CharacterA?.ClassPathName ?? null) + Environment.NewLine;
-            resultCode += string.Format("{0}->InterlocutorBClassPtr = FSoftObjectPath(TEXT(\"{1}\"), \"\");", eventName, CharacterB?.ClassPathName ?? null) + Environment.NewLine;
-            return resultCode;
-        }
     }
 }

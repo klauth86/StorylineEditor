@@ -135,42 +135,6 @@ namespace StorylineEditor.ViewModels.Nodes
             }
         }
 
-        public override string GenerateCode(string nodeName, bool isInteractive)
-        {
-            var resultCode = string.Format("UJournalNode_Base* {0} = nullptr;", nodeName) + Environment.NewLine;
-
-            var rootNodes = Parent.GetRootNodes(this);
-            if (rootNodes.Count > 1 || rootNodes.Count <= 0) throw new ArgumentOutOfRangeException();
-
-            resultCode += string.Format("{0} = NewObject<UJournalNode_Base>(outer);", nodeName) + Environment.NewLine;
-            resultCode += string.Format("{0}->NodeType = EDialogNodeType::REGULAR;", nodeName) + Environment.NewLine;
-            resultCode += string.Format("{0}->RootNodeId = \"{1}\";", nodeName, rootNodes[0].Id) + Environment.NewLine;
-            resultCode += string.Format("{0}->NodeId = \"{1}\";", nodeName, Id) + Environment.NewLine;
-            resultCode += string.Format("{0}->X = {1};", nodeName, (int)PositionX) + Environment.NewLine;
-            resultCode += string.Format("{0}->Y = {1};", nodeName, (int)PositionY) + Environment.NewLine;
-
-            var preContent = IsRoot ? Label : RTBHelper.GetFlowDocumentContent(Name);
-            if (!string.IsNullOrEmpty(preContent))
-                resultCode += string.Format("{0}->PreContent = LOCTEXT(\"{1}_Pre\", \"{2}\");", nodeName, Id, preContent?.Replace("\"", "\\\"")) + Environment.NewLine;
-            else
-                resultCode += string.Format("{0}->PreContent = FText::GetEmpty();", nodeName) + Environment.NewLine;
-
-            if (!string.IsNullOrEmpty(Description))
-                resultCode += string.Format("{0}->PostContent = LOCTEXT(\"{1}_Post\", \"{2}\");", nodeName, Id, Description) + Environment.NewLine;
-            else
-                resultCode += string.Format("{0}->PostContent = FText::GetEmpty();", nodeName) + Environment.NewLine;
-
-            if (IsRoot) resultCode += string.Format("{0}->IsRootNode = true;", nodeName) + Environment.NewLine;
-            if (IsLeaf) resultCode += string.Format("{0}->IsLeafNode = true;", nodeName) + Environment.NewLine;
-
-            if (IsRoot)
-                resultCode += string.Format("if (nodeId == \"{0}\" || nodeId == \"\") result = {1};", id, nodeName) + Environment.NewLine;
-            else
-                resultCode += string.Format("if (nodeId == \"{0}\") result = {1};", id, nodeName) + Environment.NewLine;
-
-            return resultCode;
-        }
-
         public override void SetupParenthood()
         {
             Parent.Links.CollectionChanged += OnLinksChanged;

@@ -98,19 +98,5 @@ namespace StorylineEditor.ViewModels.GameEvents
                 casted.interactionType = interactionType;
             }
         }
-
-        public override string GenerateCode(string eventName, string outerName)
-        {
-            var resultCode = string.Format("auto {1} = NewObject<UGE_SetTargetActor>({0});", outerName, eventName) + Environment.NewLine;
-            if (searchByName) resultCode += string.Format("{0}->CharacterName = \"{1}\";", eventName, Character?.ActorName ?? "") + Environment.NewLine;
-            if (!searchByName) resultCode += string.Format("{0}->CharacterClassPtr = FSoftObjectPath(TEXT(\"{1}\"), \"\");", eventName, Character?.ClassPathName ?? null) + Environment.NewLine;
-            if (searchByName) resultCode += string.Format("{0}->SearchByName = true;", eventName) + Environment.NewLine;
-            if (affectAll) resultCode += string.Format("{0}->AffectAll = true;", eventName) + Environment.NewLine;
-            if (searchTargetByName) resultCode += string.Format("{0}->TargetActorName = \"{1}\";", eventName, Target?.ActorName ?? "") + Environment.NewLine;
-            if (!searchTargetByName) resultCode += string.Format("{0}->TargetActorClassPtr = FSoftObjectPath(TEXT(\"{1}\"), \"\");", eventName, Target?.ClassPathName ?? null) + Environment.NewLine;
-            if (searchTargetByName) resultCode += string.Format("{0}->SearchTargetActorByName = true;", eventName) + Environment.NewLine;
-            resultCode += string.Format("{0}->InteractionType = {1};", eventName, interactionType) + Environment.NewLine;
-            return resultCode;
-        }
     }
 }

@@ -100,15 +100,5 @@ namespace StorylineEditor.ViewModels.GameEvents
                 casted.affectAll = affectAll;
             }
         }
-
-        public override string GenerateCode(string eventName, string outerName)
-        {
-            var resultCode = string.Format("auto {1} = NewObject<UGE_DestroyActor>({0});", outerName, eventName) + Environment.NewLine;
-            if (searchByName) resultCode += string.Format("{0}->ActorName = \"{1}\";", eventName, ActorToDestroy?.ActorName ?? "") + Environment.NewLine;
-            if (!searchByName) resultCode += string.Format("{0}->ActorClassPtr = FSoftObjectPath(TEXT(\"{1}\"), \"\");", eventName, ActorToDestroy?.ClassPathName ?? null) + Environment.NewLine;
-            if (searchByName) resultCode += string.Format("{0}->SearchByName = true;", eventName) + Environment.NewLine;
-            if (affectAll) resultCode += string.Format("{0}->AffectAll = true;", eventName) + Environment.NewLine;
-            return resultCode;
-        }
     }
 }

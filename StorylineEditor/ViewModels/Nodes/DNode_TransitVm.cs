@@ -30,54 +30,5 @@ namespace StorylineEditor.ViewModels.Nodes
             Predicates.All(predicate => predicate?.IsValid ?? false);
 
         public override bool AllowsManyChildren => false;
-
-        public override string GenerateCode(string nodeName, bool isInteractive)
-        {
-            var resultCode = string.Format("UDialogNode* {0} = nullptr;", nodeName) + Environment.NewLine;
-
-            bool hasPredicates = Gender != UNISEX || Predicates.Count > 0;
-
-            if (hasPredicates)
-            {
-                resultCode += string.Format("if (nodeId == \"{0}\" ||", Id);
-                if (Gender != UNISEX)
-                {
-                    resultCode += string.Format("gender == {0}", GetGenderEnum()); ////// TODO
-                    if (Predicates.Count > 0) resultCode += " &&";
-                }
-                if (Predicates.Count > 0) resultCode += Environment.NewLine;
-                resultCode += string.Join(string.Format(" &&{0}", Environment.NewLine), Predicates.Select(predicate => predicate.GenerateCode(nodeName)));
-                resultCode += ")" + Environment.NewLine;
-            }
-
-            if (hasPredicates) resultCode += "{" + Environment.NewLine;
-
-            resultCode += string.Format("{0} = NewObject<UDialogNode>(outer);", nodeName) + Environment.NewLine;
-            resultCode += string.Format("{0}->DialogNodeType = EDialogNodeType::TRANSIT;", nodeName) + Environment.NewLine;
-            resultCode += string.Format("{0}->DialogId = \"{1}\";", nodeName, Parent.Id) + Environment.NewLine;
-            resultCode += string.Format("{0}->NodeId = \"{1}\";", nodeName, Id) + Environment.NewLine;
-            if (isInteractive) resultCode += string.Format("{0}->IsInteractive = true;", nodeName) + Environment.NewLine;
-
-            ////// TODO
-            //////if (GameEvents.Count > 0)
-            //////{
-            //////    resultCode += Environment.NewLine + "{" + Environment.NewLine;
-            //////    resultCode += string.Join(
-            //////        Environment.NewLine, GameEvents.Select(gameEvent =>
-            //////        gameEvent.GenerateCode(string.Format("{0}_event{1}", nodeName, GameEvents.IndexOf(gameEvent)), nodeName) +
-            //////        string.Format("{0}->{1}.Add({2});", nodeName, gameEvent.ExecuteWhenLeaveDialogNode ? "LeaveGameEvents" : "EnterGameEvents", string.Format("{0}_event{1}", nodeName, GameEvents.IndexOf(gameEvent)), nodeName) +
-            //////        Environment.NewLine));
-            //////    resultCode += "}" + Environment.NewLine;
-            //////}
-
-            if (IsRoot)
-                resultCode += string.Format("if (nodeId == \"{0}\" || nodeId == \"\") result = {1};", id, nodeName) + Environment.NewLine;
-            else
-                resultCode += string.Format("if (nodeId == \"{0}\") result = {1};", id, nodeName) + Environment.NewLine;
-
-            if (hasPredicates) resultCode += "}" + Environment.NewLine;
-
-            return resultCode;
-        }
     }
 }

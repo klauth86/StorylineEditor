@@ -66,8 +66,6 @@ namespace StorylineEditor.ViewModels.Tabs
                 : null;
         }
 
-        public virtual void GenerateCode(string folderPath) { throw new NotImplementedException(); } // Nothing to generate
-
         protected Type selectedNodeType;
         [XmlIgnore]
         public Type SelectedNodeType

@@ -62,8 +62,6 @@ namespace StorylineEditor.ViewModels.Predicates
             }
         }
 
-        public virtual string GenerateCode(string outerName) { throw new NotImplementedException(); }
-
         public void ResetName()
         {
             if (string.IsNullOrEmpty(Name)) Name = (GetType().GetCustomAttributes(true)[0] as DescriptionAttribute).Description;

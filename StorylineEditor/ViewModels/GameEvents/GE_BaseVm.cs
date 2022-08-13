@@ -60,8 +60,6 @@ namespace StorylineEditor.ViewModels.GameEvents
             }
         }
 
-        public virtual string GenerateCode(string eventName, string outerName) { throw new NotImplementedException(); }
-
         public void ResetName()
         {
             if (string.IsNullOrEmpty(Name)) Name = (GetType().GetCustomAttributes(true)[0] as DescriptionAttribute).Description;

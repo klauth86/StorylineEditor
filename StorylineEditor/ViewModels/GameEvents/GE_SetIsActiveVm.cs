@@ -119,17 +119,5 @@ namespace StorylineEditor.ViewModels.GameEvents
                 casted.isActive = isActive;
             }
         }
-
-        public override string GenerateCode(string eventName, string outerName)
-        {
-            var resultCode = string.Format("auto {1} = NewObject<UGE_SetIsActive>({0});", outerName, eventName) + Environment.NewLine;
-            if (searchByName) resultCode += string.Format("{0}->ObjectWithActivationName = \"{1}\";", eventName, ObjectWithActivation?.ActorName ?? "") + Environment.NewLine;
-            if (!searchByName) resultCode += string.Format("FString {0} = \"{1}\";", eventName + "_cp", ObjectWithActivation?.ClassPathName ?? "") + Environment.NewLine;
-            if (!searchByName) resultCode += string.Format("{0}->ObjectWithActivationClass = FindObject<UClass>(NULL, *{1});", eventName, eventName + "_cp") + Environment.NewLine;
-            if (searchByName) resultCode += string.Format("{0}->SearchByName = true;", eventName) + Environment.NewLine;
-            if (affectAll) resultCode += string.Format("{0}->AffectAll = true;", eventName) + Environment.NewLine;
-            resultCode += string.Format("{0}->IsActive = {1};", eventName, isActive ? "true" : "false") + Environment.NewLine;
-            return resultCode;
-        }
     }
 }

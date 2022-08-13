@@ -64,11 +64,5 @@ namespace StorylineEditor.ViewModels.Predicates
                 casted.JournalRecordId = JournalRecordId;
             }
         }
-
-        public override string GenerateCode(string outerName)
-        {
-            return "";
-            ////// TODO return string.Format("({1}dialogContext.History.Contains(\"{0}\"))", DialogId, IsInversed ? "!" : "");
-        }
     }
 }

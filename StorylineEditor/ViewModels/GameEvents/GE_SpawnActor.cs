@@ -149,19 +149,5 @@ namespace StorylineEditor.ViewModels.GameEvents
                 casted.searchTargetByName = searchTargetByName;
             }
         }
-
-        public override string GenerateCode(string eventName, string outerName)
-        {
-            var resultCode = string.Format("auto {1} = NewObject<UGE_SpawnActor>({0});", outerName, eventName) + Environment.NewLine;
-            resultCode += string.Format("{0}->ActorToSpawnClassPtr = FSoftObjectPath(TEXT(\"{1}\"), \"\");", eventName, ActorToSpawn?.ClassPathName ?? "") + Environment.NewLine;
-            resultCode += string.Format("{0}->SpawnPointName = \"{1}\";", eventName, PointToSpawn?.ActorName ?? "") + Environment.NewLine;
-            resultCode += string.Format("{0}->Num = {1};", eventName, num) + Environment.NewLine;
-
-            if (searchTargetByName) resultCode += string.Format("{0}->TargetActorName = \"{1}\";", eventName, Target?.ActorName ?? "") + Environment.NewLine;
-            if (!searchTargetByName) resultCode += string.Format("{0}->TargetActorClassPtr = FSoftObjectPath(TEXT(\"{1}\"), \"\");", eventName, Target?.ClassPathName ?? null) + Environment.NewLine;
-            if (searchTargetByName) resultCode += string.Format("{0}->SearchTargetActorByName = true;", eventName) + Environment.NewLine;
-            
-            return resultCode;
-        }
     }
 }

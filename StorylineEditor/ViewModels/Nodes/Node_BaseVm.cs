@@ -164,8 +164,6 @@ namespace StorylineEditor.ViewModels.Nodes
             }
         }
 
-        public virtual string GenerateCode(string nodeName, bool isInteractive) { throw new NotImplementedException(); }
-
         protected int gender;
         public int Gender
         {

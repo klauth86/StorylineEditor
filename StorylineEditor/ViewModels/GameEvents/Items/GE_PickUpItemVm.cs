@@ -100,21 +100,5 @@ namespace StorylineEditor.ViewModels.GameEvents
             }
 
         }
-
-        public override string GenerateCode(string eventName, string outerName)
-        {
-            var resultCode = string.Format("auto {1} = NewObject<UGE_PickUpItem>({0});", outerName, eventName) + Environment.NewLine;
-            if (searchByName) resultCode += string.Format("{0}->ItemName = \"{1}\";", eventName, Item?.ActorName ?? "") + Environment.NewLine;
-            if (!searchByName) resultCode += string.Format("{0}->ItemClassPtr = FSoftObjectPath(TEXT(\"{1}\"), \"\");", eventName, Item?.ClassPathName ?? null) + Environment.NewLine;
-            if (searchByName) resultCode += string.Format("{0}->SearchByName = true;", eventName) + Environment.NewLine;
-            if (affectAll) resultCode += string.Format("{0}->AffectAll = true;", eventName) + Environment.NewLine;
-            resultCode += string.Format("{0}->CreateByClass = {1};", eventName, createByClass ? "true" : "false") + Environment.NewLine;
-
-            if (searchCharacterByName) resultCode += string.Format("{0}->CharacterName = \"{1}\";", eventName, Character?.ActorName ?? "") + Environment.NewLine;
-            if (!searchCharacterByName) resultCode += string.Format("{0}->CharacterClassPtr = FSoftObjectPath(TEXT(\"{1}\"), \"\");", eventName, Character?.ClassPathName ?? null) + Environment.NewLine;
-            if (searchCharacterByName) resultCode += string.Format("{0}->SearchByName = true;", eventName) + Environment.NewLine;
-
-            return resultCode;
-        }
     }
 }

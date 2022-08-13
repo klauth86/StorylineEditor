@@ -108,12 +108,6 @@ namespace StorylineEditor.ViewModels.Predicates
             }
         }
 
-        public override string GenerateCode(string outerName)
-        {
-           return string.Join("&& ", TagStates.Select((tagState) => 
-            string.Format("{1}journalContext.Tags.Contains(\"{0}\")", tagState.Tag.Id, tagState.HasTag ? "" : "!")));
-        }
-
         public override void SetupParenthood()
         {
             foreach (var tagState in TagStates)

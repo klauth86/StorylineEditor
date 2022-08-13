@@ -238,21 +238,5 @@ namespace StorylineEditor.ViewModels.Predicates
                 casted.isLess = isLess;
             }
         }
-
-        public override string GenerateCode(string outerName)
-        {
-            //////string compareOperator = null;
-            //////if (isMore) compareOperator = ">";
-            //////if (isMoreOrEqual) compareOperator = ">=";
-            //////if (isEqual) compareOperator = "==";
-            //////if (isLessOrEqual) compareOperator = "<=";
-            //////if (isLess) compareOperator = "<";
-            ////// TODO
-            //////return string.Format(
-            //////    "{3}(dialogContext.History.Contains(\"{0}\") && dialogContext.History[\"{0}\"].TreePaths.Num() {1} {2})", dialogId, compareOperator, num, IsInversed ? "!" : "");
-            //////return string.Format(
-            //////    "{2}(dialogContext.History.Contains(\"{0}\") && dialogContext.History[\"{0}\"].ContainsNode(\"{1}\"))", dialogId, dialogNodeId, IsInversed ? "!" : "");
-            return "";
-        }
     }
 }

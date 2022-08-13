@@ -83,13 +83,5 @@ namespace StorylineEditor.ViewModels.Predicates
                 casted.searchByName = searchByName;
             }
         }
-
-        public override string GenerateCode(string outerName)
-        {
-            return SearchByName
-                ? string.Format("(inventoryItems.FindByPredicate([](const AActor* item) {{ return item->GetName() == \"{0}\";}}) {1} nullptr)", Item.ActorName, IsInversed ? "==" : "!=")
-                : string.Format("(inventoryItems.FindByPredicate([](const AActor* item) {{ return item->GetClass()->GetPathName() == \"{0}\";}}) {1} nullptr)", Item.ClassPathName, IsInversed ? "==" : "!=");
-                
-        }
     }
 }
