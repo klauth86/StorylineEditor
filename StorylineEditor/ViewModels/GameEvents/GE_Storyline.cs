@@ -12,7 +12,6 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Common;
 using StorylineEditor.ViewModels.Nodes;
-using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
 

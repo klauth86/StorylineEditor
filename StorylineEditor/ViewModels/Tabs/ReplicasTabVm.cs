@@ -13,8 +13,6 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.ViewModels.Nodes;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Windows;
 using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.Tabs

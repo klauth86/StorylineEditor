@@ -11,7 +11,6 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Common;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
