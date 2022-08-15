@@ -10,8 +10,8 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Common;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.Tabs
@@ -22,8 +22,20 @@ namespace StorylineEditor.ViewModels.Tabs
 
         public FolderedTabVm() : this(null) { }
 
+        protected FolderedVm selectedItem;
+        
         [XmlIgnore]
-        public FolderedVm SelectedItem { get; set; }
+        public FolderedVm SelectedItem { 
+            get => selectedItem;
+            set
+            {
+                if (value != selectedItem)
+                {
+                    selectedItem = value;
+                    NotifyWithCallerPropName();
+                }
+            }
+        }
 
         public override void AddImpl(FolderedVm itemToAdd)
         {
@@ -50,18 +62,9 @@ namespace StorylineEditor.ViewModels.Tabs
 
         public override bool RemoveImpl(FolderedVm itemToRemove)
         {
-            ClearSelection();
+            SelectedItem.IsSelected = false;
 
             return itemToRemove.Folder != null ? itemToRemove.Folder.RemoveChild(itemToRemove) : base.RemoveImpl(itemToRemove);
-        }
-
-        public void ClearSelection()
-        {
-            if (SelectedItem != null)
-            {
-                SelectedItem.IsSelected = false;
-                SelectedItem = null;
-            }
         }
 
         protected bool isDragOver;
@@ -82,25 +85,111 @@ namespace StorylineEditor.ViewModels.Tabs
         protected static int Compare(FolderedVm a, FolderedVm b)
         {
             if (a.IsFolder && !b.IsFolder) return -1;
+            
             if (!a.IsFolder && b.IsFolder) return 1;
-            return string.Compare(a.Name, b.Name);
+            
+            int namesCompare =  string.Compare(a.Name, b.Name);
+            
+            if (namesCompare != 0) return namesCompare;
+            
+            return string.Compare(a.Id, b.Id);
         }
 
         public static void AddToCollection(ObservableCollection<FolderedVm> collection, FolderedVm foldered)
         {
-            if (collection.Count > 0 && Compare(foldered, collection.Last()) < 0)
+            if (collection.Count == 1)
             {
-                for (int i = 0; i < collection.Count; i++)
+                if (Compare(foldered, collection[0]) < 0)
                 {
-                    if (Compare(foldered, collection[i]) <= 0)
+                    collection.Insert(0, foldered);
+                }
+                else
+                {
+                    collection.Add(foldered);                
+                }
+            }
+            else if (collection.Count > 1)
+            {
+                int newIndex = FindNewIndex(collection, foldered, 0, collection.Count - 1);
+                if (collection.Count > newIndex)
+                {
+                    collection.Insert(newIndex, foldered);
+                }
+                else
+                {
+                    collection.Add(foldered);
+                }
+            }
+            else { collection.Add(foldered); }
+        }
+
+        public static int FindNewIndex(ObservableCollection<FolderedVm> collection, FolderedVm foldered, int left, int right)
+        {
+            if (Compare(foldered, collection[left]) < 0) return left;
+
+            if (Compare(collection[right], foldered) < 0) return right + 1;
+
+            if (right - left == 1) return right;
+
+            int center = (left + right) / 2;
+
+            return Compare(collection[center], foldered) < 0
+                ? FindNewIndex(collection, foldered, center, right)
+                : FindNewIndex(collection, foldered, left, center);
+        }
+
+        public static void RenameInCollection(FolderedTabVm folderedTab, ObservableCollection<FolderedVm> collection, FolderedVm foldered)
+        {
+            if (collection.Contains(foldered) && collection.Count > 1)
+            {
+                int oldIndex = collection.IndexOf(foldered);
+
+                if (collection.Count == 2 &&
+                    (
+                    Compare(foldered, collection[1 - oldIndex]) < 0 && 1 - oldIndex < oldIndex ||
+                    Compare(collection[1 - oldIndex], foldered) < 0 && oldIndex < 1 - oldIndex
+                    ))
+                {
+                    collection.Move(oldIndex, 1 - oldIndex);
+                    foldered.IsSelected = true;
+                }
+                else
+                {
+                    int newIndex = oldIndex;
+
+                    if (oldIndex - 1 == 0)
                     {
-                        collection.Insert(i, foldered);
-                        break;
+                        if (Compare(foldered, collection[0]) < 0) newIndex = 0;
+                    }
+                    else if (oldIndex - 1 > 0)
+                    {
+                        newIndex = FindNewIndex(collection, foldered, 0, oldIndex - 1);
+                    }
+
+                    if (oldIndex + 1 == collection.Count - 1)
+                    {
+                        if (Compare(collection[collection.Count - 1], foldered) < 0) newIndex = collection.Count - 1;
+                    }
+                    else if (oldIndex + 1 < collection.Count - 1)
+                    {
+                        newIndex = FindNewIndex(collection, foldered, oldIndex + 1, collection.Count - 1);
+                        if (newIndex == oldIndex + 1)
+                        {
+                            newIndex = oldIndex;
+                        }
+                        else 
+                        {
+                            newIndex--;
+                        }
+                    }
+
+                    if (newIndex != oldIndex)
+                    {
+                        collection.Move(oldIndex, newIndex);
+                        foldered.IsSelected = true;
                     }
                 }
             }
-            else
-                collection.Add(foldered);
         }
 
         public static void AddToItem(FolderedVm draggedFoldered, FolderedVm dragOveredFoldered)
@@ -128,5 +217,7 @@ namespace StorylineEditor.ViewModels.Tabs
             else
                 AddToCollection((draggedFoldered.Parent as FolderedTabVm)?.Items, draggedFoldered);
         }
+
+        public override void NotifyItemNameChanged(BaseVm renamedVm) { if (renamedVm is FolderedVm foldered) RenameInCollection(this, Items, foldered); }
     }
 }

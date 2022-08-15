@@ -56,6 +56,8 @@ namespace StorylineEditor.ViewModels
             }
         }
 
+        public override void NotifyItemNameChanged(BaseVm renamedVm) { if (Parent is FolderedTabVm folderedTab && renamedVm is FolderedVm foldered) FolderedTabVm.RenameInCollection(folderedTab, Items, foldered); }
+
         public override void SetupParenthood()
         {
             foreach (var item in Items)

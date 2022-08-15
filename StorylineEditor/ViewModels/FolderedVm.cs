@@ -57,9 +57,19 @@ namespace StorylineEditor.ViewModels
 
                     if (Parent is FolderedTabVm folderedTab)
                     {
-                        folderedTab.ClearSelection();
+                        if (value && folderedTab.SelectedItem != this)
+                        {
+                            if (folderedTab.SelectedItem != null)
+                            {
+                                folderedTab.SelectedItem.isSelected = false;
+                            }
 
-                        if (value) folderedTab.SelectedItem = this;
+                            folderedTab.SelectedItem = this;
+                        }
+                        else if (!value && folderedTab.SelectedItem == this)
+                        {
+                            folderedTab.SelectedItem = null;
+                        }
                     }
                 }
             }
@@ -89,6 +99,8 @@ namespace StorylineEditor.ViewModels
         public abstract bool IsContaining(FolderedVm foldered, bool checkSubs);
 
         public abstract IEnumerable<FolderedVm> FoldersTraversal();
+
+        public override void NotifyNameChanged() { base.NotifyNameChanged(); Folder?.NotifyItemNameChanged(this); }
     }
 
     public class NonFolderVm : FolderedVm

@@ -57,7 +57,7 @@ namespace StorylineEditor.Common
                 if (name != value)
                 {
                     name = value;
-                    NotifyWithCallerPropName();
+                    NotifyNameChanged();
                     NotifyIsValidChanged();
                 }
             }
@@ -127,6 +127,10 @@ namespace StorylineEditor.Common
 
         public virtual bool IsValid => !string.IsNullOrEmpty(id);
 
+        public virtual void NotifyNameChanged() { Notify(nameof(Name)); }
+
+        public virtual void NotifyItemNameChanged(BaseVm renamedVm) { }
+
         public virtual void NotifyIsValidChanged() { Notify(nameof(IsValid)); }
 
         public virtual bool PassFilter(string filter) => 
@@ -173,7 +177,9 @@ namespace StorylineEditor.Common
 
         public override bool IsValid => base.IsValid && Parent != null;
 
-        public override void NotifyIsValidChanged() { base.NotifyIsValidChanged(); if (Parent != null) Parent.NotifyIsValidChanged(); }
+        public override void NotifyIsValidChanged() { base.NotifyIsValidChanged(); Parent?.NotifyIsValidChanged(); }
+
+        public override void NotifyNameChanged() { base.NotifyNameChanged(); Parent?.NotifyItemNameChanged(this); }
     }
 
     public abstract class BaseNamedVm<T> : BaseVm<T> where T : BaseVm
