@@ -21,7 +21,7 @@ namespace StorylineEditor.ViewModels.Nodes
     {
         public DNode_DialogVm(TreeVm Parent) : base(Parent)
         {
-            isNondialogNode = false;
+            finInteractivePart = false;
         }
 
         public DNode_DialogVm() : this(null) { }
@@ -30,23 +30,23 @@ namespace StorylineEditor.ViewModels.Nodes
         {
             get
             {
-                return base.IsValid && (!IsNondialogNode ||
+                return base.IsValid && (!FinInteractivePart ||
                     Parent.NodesTraversal(this, false).ToList().TrueForAll(childNode => !(childNode is IOwnered ownered) || ownered.Owner.Id != CharacterVm.PlayerId));
             }
         }
 
-        protected bool isNondialogNode;
-        public bool IsNondialogNode
+        protected bool finInteractivePart;
+        public bool FinInteractivePart
         {
             get
             {
-                return isNondialogNode;
+                return finInteractivePart;
             }
             set
             {
-                if (value != isNondialogNode)
+                if (value != finInteractivePart)
                 {
-                    isNondialogNode = value;
+                    finInteractivePart = value;
                     NotifyWithCallerPropName();
                     NotifyIsValidChanged();
                 }
@@ -59,7 +59,7 @@ namespace StorylineEditor.ViewModels.Nodes
 
             if (destObj is DNode_DialogVm casted)
             {
-                casted.isNondialogNode = isNondialogNode;
+                casted.finInteractivePart = finInteractivePart;
             }
         }
     }

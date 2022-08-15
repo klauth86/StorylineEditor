@@ -7,7 +7,7 @@
     <ProjectGuid>{9AF226B7-3E00-43F1-9F6C-5EC8375F7658}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>StorylineEditor</RootNamespace>
-    <AssemblyName>StorylineEditor_1.2.7.0</AssemblyName>
+    <AssemblyName>StorylineEditor_1.2.7.1</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

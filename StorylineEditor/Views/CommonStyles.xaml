@@ -193,7 +193,7 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="VerticalAlignment" Value="Center"></Setter>
     </Style>
 
-    <Style TargetType="Label" x:Key="S_Label_IsNondialogNode">
+    <Style TargetType="Label" x:Key="S_Label_FinInteractivePart">
         <Setter Property="VerticalAlignment" Value="Bottom"></Setter>
         <Setter Property="HorizontalAlignment" Value="Left"></Setter>
         <Setter Property="Template">
