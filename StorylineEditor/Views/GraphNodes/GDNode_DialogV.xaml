@@ -33,7 +33,7 @@ StorylineEditor распространяется в надежде, что он�
 
             <TextBlock x:Name="tb_ShortDescription" Grid.Row="3" Style="{StaticResource S_TextBlock_GNodeDescriptionShort}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"></TextBlock>
 
-            <Label Grid.Row="4" Style="{StaticResource S_Label_FinInteractivePart}" Visibility="{Binding IsNondialogNode, Converter={StaticResource collapseFalseConverter}}"></Label>
+            <Label Grid.Row="4" Style="{StaticResource S_Label_FinInteractivePart}" Visibility="{Binding FinInteractivePart, Converter={StaticResource collapseFalseConverter}}"></Label>
 
             <ItemsControl Grid.Row="5" ItemsSource="{Binding ParticipantStates}" ItemTemplate="{StaticResource DT_ParticipantState}"></ItemsControl>
             
