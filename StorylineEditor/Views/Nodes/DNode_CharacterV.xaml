@@ -34,6 +34,10 @@ StorylineEditor распространяется в надежде, что он�
                                   SelectedValue="{Binding Owner, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name"></ComboBox>
                     </GroupBox>
 
+                    <GroupBox Grid.Row="1" Header="Иное отображаемое имя" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
+                        <TextBox Text="{Binding OverrideOwnerName, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
+                    </GroupBox>
+                    
                     <GroupBox Grid.Row="2" Header="Ссылка на аудио (google/yandex)" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
                         <TextBox Text="{Binding AttachedFile, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
                     </GroupBox>

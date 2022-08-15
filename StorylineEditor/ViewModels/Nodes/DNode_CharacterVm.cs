@@ -176,7 +176,28 @@ namespace StorylineEditor.ViewModels.Nodes
 
         public DNode_CharacterVm() : this(null) { }
 
+
         public string OwnerId { get; set; }
+
+
+        protected string overrideOwnerName;
+        public string OverrideOwnerName {
+            get => overrideOwnerName;
+            set
+            {
+                if (value != overrideOwnerName)
+                {
+                    overrideOwnerName = value;
+                    NotifyWithCallerPropName();
+
+                    Notify(nameof(OwnerName));
+                }
+            } 
+        }
+
+
+        public string OwnerName => string.IsNullOrEmpty(OverrideOwnerName) ? Owner?.Name : string.Format("{0} [{1}]", Owner?.Name, OverrideOwnerName);
+
 
         [XmlIgnore]
         public FolderedVm Owner
@@ -196,6 +217,7 @@ namespace StorylineEditor.ViewModels.Nodes
 
                     NotifyWithCallerPropName();
                     Notify(nameof(OwnerId));
+                    Notify(nameof(OwnerName));
                     NotifyIsValidChanged();
                 }
             }

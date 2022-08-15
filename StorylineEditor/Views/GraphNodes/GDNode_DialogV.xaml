@@ -25,7 +25,7 @@ StorylineEditor распространяется в надежде, что он�
                 <RowDefinition Height="auto"></RowDefinition>
                 <RowDefinition Height="auto"></RowDefinition>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Style="{StaticResource S_TextBlock_GNodeHeader}" Text="{Binding Owner.Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+            <TextBlock Grid.Row="0" Style="{StaticResource S_TextBlock_GNodeHeader}" Text="{Binding OwnerName, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
             <TextBlock Grid.Row="1" nodes:RTBHelper.Document="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
 
