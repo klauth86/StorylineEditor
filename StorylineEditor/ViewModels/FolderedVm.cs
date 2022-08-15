@@ -100,6 +100,8 @@ namespace StorylineEditor.ViewModels
 
         public abstract IEnumerable<FolderedVm> FoldersTraversal();
 
+        public abstract void SortItems();
+
         public override void NotifyNameChanged() { base.NotifyNameChanged(); Folder?.NotifyItemNameChanged(this); }
     }
 
@@ -116,5 +118,7 @@ namespace StorylineEditor.ViewModels
         public override bool IsContaining(FolderedVm foldered, bool checkSubs) => false;
 
         public override IEnumerable<FolderedVm> FoldersTraversal() { yield return this; }
+
+        public override void SortItems() { }
     }
 }

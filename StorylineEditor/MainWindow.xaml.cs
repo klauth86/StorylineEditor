@@ -118,6 +118,12 @@ namespace StorylineEditor
             }
             fullContext?.Init();
 
+            ////// TODO If ordering needed before load uncomment this
+            //////foreach (var tab in fullContext.Tabs)
+            //////{
+            //////    if (tab is FolderedTabVm folderedTab) { folderedTab.SortItems(); }
+            //////}
+
             DataContext = fullContext;
 
             var assemblyName = Assembly.GetExecutingAssembly().GetName();

@@ -56,6 +56,17 @@ namespace StorylineEditor.ViewModels
             }
         }
 
+        public override void SortItems()
+        {
+            var orderedItems = Items.OrderBy(foldered => foldered, FolderedComparer.Instance).ToList();
+            Items.Clear();
+            foreach (var item in orderedItems)
+            {
+                item.SortItems();
+                Items.Add(item);
+            }
+        }
+
         public override void NotifyItemNameChanged(BaseVm renamedVm) { if (Parent is FolderedTabVm folderedTab && renamedVm is FolderedVm foldered) FolderedTabVm.RenameInCollection(folderedTab, Items, foldered); }
 
         public override void SetupParenthood()

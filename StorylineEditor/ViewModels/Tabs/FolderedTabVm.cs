@@ -11,11 +11,31 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Common;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.Tabs
 {
+    public class FolderedComparer : IComparer<FolderedVm>
+    {
+        public static FolderedComparer Instance = new FolderedComparer();
+
+        public int Compare(FolderedVm a, FolderedVm b)
+        {
+            if (a.IsFolder && !b.IsFolder) return -1;
+
+            if (!a.IsFolder && b.IsFolder) return 1;
+
+            int namesCompare = string.Compare(a.Name, b.Name);
+
+            if (namesCompare != 0) return namesCompare;
+
+            return string.Compare(a.Id, b.Id);
+        }
+    }
+
     public abstract class FolderedTabVm : BaseTabVm<FolderedVm, FullContextVm>, IDragOverable
     {
         public FolderedTabVm(FullContextVm Parent) : base(Parent) { }
@@ -82,24 +102,26 @@ namespace StorylineEditor.ViewModels.Tabs
             }
         }
 
-        protected static int Compare(FolderedVm a, FolderedVm b)
+        public static int FindNewIndex(ObservableCollection<FolderedVm> collection, FolderedVm foldered, int left, int right)
         {
-            if (a.IsFolder && !b.IsFolder) return -1;
-            
-            if (!a.IsFolder && b.IsFolder) return 1;
-            
-            int namesCompare =  string.Compare(a.Name, b.Name);
-            
-            if (namesCompare != 0) return namesCompare;
-            
-            return string.Compare(a.Id, b.Id);
+            if (FolderedComparer.Instance.Compare(foldered, collection[left]) < 0) return left;
+
+            if (FolderedComparer.Instance.Compare(collection[right], foldered) < 0) return right + 1;
+
+            if (right - left == 1) return right;
+
+            int center = (left + right) / 2;
+
+            return FolderedComparer.Instance.Compare(collection[center], foldered) < 0
+                ? FindNewIndex(collection, foldered, center, right)
+                : FindNewIndex(collection, foldered, left, center);
         }
 
         public static void AddToCollection(ObservableCollection<FolderedVm> collection, FolderedVm foldered)
         {
             if (collection.Count == 1)
             {
-                if (Compare(foldered, collection[0]) < 0)
+                if (FolderedComparer.Instance.Compare(foldered, collection[0]) < 0)
                 {
                     collection.Insert(0, foldered);
                 }
@@ -123,21 +145,6 @@ namespace StorylineEditor.ViewModels.Tabs
             else { collection.Add(foldered); }
         }
 
-        public static int FindNewIndex(ObservableCollection<FolderedVm> collection, FolderedVm foldered, int left, int right)
-        {
-            if (Compare(foldered, collection[left]) < 0) return left;
-
-            if (Compare(collection[right], foldered) < 0) return right + 1;
-
-            if (right - left == 1) return right;
-
-            int center = (left + right) / 2;
-
-            return Compare(collection[center], foldered) < 0
-                ? FindNewIndex(collection, foldered, center, right)
-                : FindNewIndex(collection, foldered, left, center);
-        }
-
         public static void RenameInCollection(FolderedTabVm folderedTab, ObservableCollection<FolderedVm> collection, FolderedVm foldered)
         {
             if (collection.Contains(foldered) && collection.Count > 1)
@@ -146,8 +153,8 @@ namespace StorylineEditor.ViewModels.Tabs
 
                 if (collection.Count == 2 &&
                     (
-                    Compare(foldered, collection[1 - oldIndex]) < 0 && 1 - oldIndex < oldIndex ||
-                    Compare(collection[1 - oldIndex], foldered) < 0 && oldIndex < 1 - oldIndex
+                    FolderedComparer.Instance.Compare(foldered, collection[1 - oldIndex]) < 0 && 1 - oldIndex < oldIndex ||
+                    FolderedComparer.Instance.Compare(collection[1 - oldIndex], foldered) < 0 && oldIndex < 1 - oldIndex
                     ))
                 {
                     collection.Move(oldIndex, 1 - oldIndex);
@@ -159,7 +166,7 @@ namespace StorylineEditor.ViewModels.Tabs
 
                     if (oldIndex - 1 == 0)
                     {
-                        if (Compare(foldered, collection[0]) < 0) newIndex = 0;
+                        if (FolderedComparer.Instance.Compare(foldered, collection[0]) < 0) newIndex = 0;
                     }
                     else if (oldIndex - 1 > 0)
                     {
@@ -168,7 +175,7 @@ namespace StorylineEditor.ViewModels.Tabs
 
                     if (oldIndex + 1 == collection.Count - 1)
                     {
-                        if (Compare(collection[collection.Count - 1], foldered) < 0) newIndex = collection.Count - 1;
+                        if (FolderedComparer.Instance.Compare(collection[collection.Count - 1], foldered) < 0) newIndex = collection.Count - 1;
                     }
                     else if (oldIndex + 1 < collection.Count - 1)
                     {
@@ -219,5 +226,16 @@ namespace StorylineEditor.ViewModels.Tabs
         }
 
         public override void NotifyItemNameChanged(BaseVm renamedVm) { if (renamedVm is FolderedVm foldered) RenameInCollection(this, Items, foldered); }
+
+        public void SortItems()
+        {
+            var orderedItems = Items.OrderBy(foldered => foldered, FolderedComparer.Instance).ToList();
+            Items.Clear();
+            foreach (var item in orderedItems)
+            {
+                item.SortItems();
+                Items.Add(item);
+            }
+        }
     }
 }
