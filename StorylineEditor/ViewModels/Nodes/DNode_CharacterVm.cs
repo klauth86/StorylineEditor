@@ -329,8 +329,6 @@ namespace StorylineEditor.ViewModels.Nodes
                 
                 casted.attachedFile = attachedFile;
 
-                casted.LockedCharacterIds = LockedCharacterIds;
-
                 foreach (var lockedCharacter in LockedCharacterIds)
                 {
                     casted.LockedCharacterIds.Add(lockedCharacter);

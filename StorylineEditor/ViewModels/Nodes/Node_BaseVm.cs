@@ -159,6 +159,7 @@ namespace StorylineEditor.ViewModels.Nodes
             if (destObj is Node_BaseVm casted)
             {
                 casted.Position = Position;
+                casted.gender = gender;
                 casted.label = label;
             }
         }
