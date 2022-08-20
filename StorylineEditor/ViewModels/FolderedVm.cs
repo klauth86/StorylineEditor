@@ -23,7 +23,7 @@ namespace StorylineEditor.ViewModels
         protected static object folderedFlag;
         public static object FolderFlag => folderedFlag ?? (folderedFlag = new object());
 
-        public FolderedVm(BaseVm<FullContextVm> Parent) : base(Parent) { }
+        public FolderedVm(BaseVm<FullContextVm> Parent, long additionalTicks) : base(Parent, additionalTicks) { }
 
         [XmlIgnore]
         public FolderedVm Folder { get; set; }
@@ -107,7 +107,7 @@ namespace StorylineEditor.ViewModels
 
     public class NonFolderVm : FolderedVm
     {
-        public NonFolderVm(BaseVm<FullContextVm> Parent) : base(Parent) { }
+        public NonFolderVm(BaseVm<FullContextVm> Parent, long additionalTicks) : base(Parent, additionalTicks) { }
 
         public override bool IsFolder => false;
 

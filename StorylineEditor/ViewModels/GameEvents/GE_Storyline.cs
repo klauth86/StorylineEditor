@@ -21,9 +21,9 @@ namespace StorylineEditor.ViewModels.GameEvents
     [XmlRoot]
     public class GE_Storyline : GE_BaseVm
     {
-        public GE_Storyline(Node_BaseVm inParent) : base(inParent) { }
+        public GE_Storyline(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks) { }
         
-        public GE_Storyline() : this(null) { }
+        public GE_Storyline() : this(null, 0) { }
 
         public override bool IsValid => base.IsValid && !string.IsNullOrEmpty(storyline);
 

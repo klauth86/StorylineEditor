@@ -31,12 +31,12 @@ namespace StorylineEditor.ViewModels.Tabs
             }
         }
 
-        public PlayerDialogsTabVm(FullContextVm Parent) : base(Parent)
+        public PlayerDialogsTabVm(FullContextVm Parent, long additionalTicks) : base(Parent, additionalTicks)
         {
             selectedNodeType = typeof(DNode_DialogVm);
         }
 
-        public PlayerDialogsTabVm() : this(null) { }
+        public PlayerDialogsTabVm() : this(null, 0) { }
 
         protected override string GetElementTitle(bool isCreate) => isCreate ? "Создать диалог" : "Редактировать диалог";
 

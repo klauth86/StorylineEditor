@@ -22,9 +22,9 @@ namespace StorylineEditor.ViewModels.Tabs
     [XmlRoot]
     public abstract class BaseTreesTabVm : FolderedTabVm
     {
-        public BaseTreesTabVm(FullContextVm Parent) : base(Parent) { }
+        public BaseTreesTabVm(FullContextVm Parent, long additionalTicks) : base(Parent, additionalTicks) { }
 
-        public BaseTreesTabVm() : this(null) { }
+        public BaseTreesTabVm() : this(null, 0) { }
 
         protected abstract string GetElementTitle(bool isCreate);
 
@@ -35,12 +35,12 @@ namespace StorylineEditor.ViewModels.Tabs
             if (parameter == FolderedVm.FolderFlag)
             {
                 IDialogService.DialogService.CreateElement(createElement, "Создать папку");
-                if (createElement.IsValid) return new TreeFolderVm(this) { Name = createElement.Name, Description = createElement.Description };
+                if (createElement.IsValid) return new TreeFolderVm(this, 0) { Name = createElement.Name, Description = createElement.Description };
             }
             else
             {
                 IDialogService.DialogService.CreateElement(createElement, GetElementTitle(true));
-                if (createElement.IsValid) return new TreeVm(this) { Name = createElement.Name, Description = createElement.Description };
+                if (createElement.IsValid) return new TreeVm(this, 0) { Name = createElement.Name, Description = createElement.Description };
             }
 
             return null;
@@ -62,7 +62,7 @@ namespace StorylineEditor.ViewModels.Tabs
         public Node_BaseVm CreateNode(TreeVm tree)
         {
             return selectedNodeType != null
-                ? CustomByteConverter.CreateByName(selectedNodeType.Name, tree) as Node_BaseVm
+                ? CustomByteConverter.CreateByName(selectedNodeType.Name, tree, 0) as Node_BaseVm
                 : null;
         }
 

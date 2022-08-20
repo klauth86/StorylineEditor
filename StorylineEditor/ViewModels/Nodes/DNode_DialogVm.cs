@@ -19,12 +19,12 @@ namespace StorylineEditor.ViewModels.Nodes
     [XmlRoot]
     public class DNode_DialogVm : DNode_CharacterVm
     {
-        public DNode_DialogVm(TreeVm Parent) : base(Parent)
+        public DNode_DialogVm(TreeVm Parent, long additionalTicks) : base(Parent, additionalTicks)
         {
             finInteractivePart = false;
         }
 
-        public DNode_DialogVm() : this(null) { }
+        public DNode_DialogVm() : this(null, 0) { }
 
         public override bool IsValid
         {

@@ -161,7 +161,7 @@ namespace StorylineEditor.ViewModels.Nodes
     [XmlRoot]
     public class DNode_CharacterVm : Node_InteractiveVm, IOwnered
     {
-        public DNode_CharacterVm(TreeVm Parent) : base(Parent)
+        public DNode_CharacterVm(TreeVm Parent, long additionalTicks) : base(Parent, additionalTicks)
         {
             OwnerId = CharacterVm.PlayerId;
 
@@ -174,7 +174,7 @@ namespace StorylineEditor.ViewModels.Nodes
             ParticipantStates = new ObservableCollection<ParticipantStateVm>();
         }
 
-        public DNode_CharacterVm() : this(null) { }
+        public DNode_CharacterVm() : this(null, 0) { }
 
 
         public string OwnerId { get; set; }

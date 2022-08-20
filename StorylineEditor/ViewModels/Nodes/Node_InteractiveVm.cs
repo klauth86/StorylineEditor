@@ -31,7 +31,7 @@ namespace StorylineEditor.ViewModels.Nodes
         public IEnumerable<Type> PredicateTypes => AppDomain.CurrentDomain.GetAssemblies().SelectMany(assembly => assembly.GetTypes())
                     .Where(type => type.IsSubclassOf(typeof(P_BaseVm)));
 
-        public Node_InteractiveVm(TreeVm Parent) : base(Parent)
+        public Node_InteractiveVm(TreeVm Parent, long additionalTicks) : base(Parent, additionalTicks)
         {
             GameEvents = new ObservableCollection<GE_BaseVm>();
             Predicates = new ObservableCollection<P_BaseVm>();
@@ -40,7 +40,7 @@ namespace StorylineEditor.ViewModels.Nodes
             Predicates.CollectionChanged += OnCollectinChanged;
         }
 
-        public Node_InteractiveVm() : this(null) { }
+        public Node_InteractiveVm() : this(null, 0) { }
 
         ~Node_InteractiveVm()
         {
@@ -67,7 +67,7 @@ namespace StorylineEditor.ViewModels.Nodes
         ICommand addCommand;
         public ICommand AddCommand => addCommand ?? (addCommand = new RelayCommand<Type>((type) =>
                  {
-                     var newItem = CustomByteConverter.CreateByName(type.Name, this);
+                     var newItem = CustomByteConverter.CreateByName(type.Name, this, 0);
 
                      if (newItem is GE_BaseVm newEvent) GameEvents.Add(newEvent);
 

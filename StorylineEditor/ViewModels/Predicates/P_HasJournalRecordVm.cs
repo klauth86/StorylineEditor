@@ -22,12 +22,12 @@ namespace StorylineEditor.ViewModels.Predicates
     [XmlRoot]
     public class P_HasJournalRecordVm : P_BaseVm
     {
-        public P_HasJournalRecordVm(Node_BaseVm inParent) : base(inParent)
+        public P_HasJournalRecordVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks)
         {
             JournalRecordId = null;
         }
 
-        public P_HasJournalRecordVm() : this(null) { }
+        public P_HasJournalRecordVm() : this(null, 0) { }
 
         public override bool IsValid => base.IsValid && JournalRecord != null;
 

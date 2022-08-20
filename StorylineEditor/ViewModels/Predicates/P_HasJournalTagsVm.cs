@@ -26,12 +26,12 @@ namespace StorylineEditor.ViewModels.Predicates
     [XmlRoot]
     public class P_HasJournalTagsVm : P_BaseVm, ITagged
     {
-        public P_HasJournalTagsVm(Node_BaseVm inParent) : base(inParent)
+        public P_HasJournalTagsVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks)
         {
             TagStates = new ObservableCollection<JournalTagStateVm>();
         }
 
-        public P_HasJournalTagsVm() : this(null) { }
+        public P_HasJournalTagsVm() : this(null, 0) { }
 
         private bool PredicateFilter(object obj) => obj != null && TagStates.All((tagState) => tagState.Tag != obj);
 

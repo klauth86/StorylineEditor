@@ -21,12 +21,12 @@ namespace StorylineEditor.ViewModels.Nodes
     [XmlRoot]
     public class DNode_VirtualVm : Node_BaseVm, IOwnered
     {
-        public DNode_VirtualVm(TreeVm Parent) : base(Parent)
+        public DNode_VirtualVm(TreeVm Parent, long additionalTicks) : base(Parent, additionalTicks)
         {
             OwnerId = CharacterVm.PlayerId;
         }
 
-        public DNode_VirtualVm() : this(null) { }
+        public DNode_VirtualVm() : this(null, 0) { }
 
         public override bool IsValid => !string.IsNullOrEmpty(id) && Parent != null && Owner != null;
 

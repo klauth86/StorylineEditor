@@ -17,10 +17,10 @@ namespace StorylineEditor.ViewModels.Tabs
     [XmlRoot]
     public class AbilitiesTabVm : BaseTabVm<AbilityVm, FullContextVm>
     {
-        public AbilitiesTabVm(FullContextVm Parent) : base(Parent) { }
+        public AbilitiesTabVm(FullContextVm Parent, long additionalTicks) : base(Parent, additionalTicks) { }
 
-        public AbilitiesTabVm() : this(null) { }
+        public AbilitiesTabVm() : this(null, 0) { }
 
-        public override AbilityVm CreateItem(object parameter) => new AbilityVm(this);
+        public override AbilityVm CreateItem(object parameter) => new AbilityVm(this, 0);
     }
 }

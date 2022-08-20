@@ -22,14 +22,14 @@ namespace StorylineEditor.ViewModels
     [XmlRoot]
     public class TreeFolderVm : FolderedVm
     {
-        public TreeFolderVm(BaseVm<FullContextVm> Parent) : base(Parent)
+        public TreeFolderVm(BaseVm<FullContextVm> Parent, long additionalTicks) : base(Parent, additionalTicks)
         {
             Items = new ObservableCollection<FolderedVm>();
 
             FullContextVm.OnSearchFilterChangedEvent += OnSearchFilterChanged;
         }
 
-        public TreeFolderVm() : this(null) { }
+        public TreeFolderVm() : this(null, 0) { }
 
         ~TreeFolderVm() { FullContextVm.OnSearchFilterChangedEvent -= OnSearchFilterChanged; }
 

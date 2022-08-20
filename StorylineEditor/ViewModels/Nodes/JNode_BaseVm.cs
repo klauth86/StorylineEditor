@@ -20,9 +20,9 @@ namespace StorylineEditor.ViewModels.Nodes
     [XmlRoot]
     public class JNode_BaseVm : JNode_AlternativeVm
     {
-        public JNode_BaseVm(TreeVm Parent) : base(Parent) { }
+        public JNode_BaseVm(TreeVm Parent, long additionalTicks) : base(Parent, additionalTicks) { }
 
-        public JNode_BaseVm() : this(null) { }
+        public JNode_BaseVm() : this(null, 0) { }
 
         public override bool IsValid => !string.IsNullOrEmpty(id) &&
             GameEvents.All(gameEvent => gameEvent?.IsValid ?? false) &&

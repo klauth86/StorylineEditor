@@ -20,9 +20,9 @@ namespace StorylineEditor.ViewModels
     [XmlRoot]
     public class JournalTagVm : BaseNamedVm<BaseVm<FullContextVm>>
     {
-        public JournalTagVm(GlobalTagsTabVm inParent) : base(inParent) { tagCategory = "NONE"; }
+        public JournalTagVm(GlobalTagsTabVm inParent, long additionalTicks) : base(inParent, additionalTicks) { tagCategory = "NONE"; }
 
-        public JournalTagVm() : this(null) { }
+        public JournalTagVm() : this(null, 0) { }
 
         protected string tagCategory;
         public string TagCategory

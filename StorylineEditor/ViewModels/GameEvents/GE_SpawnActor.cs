@@ -22,7 +22,7 @@ namespace StorylineEditor.ViewModels.GameEvents
     [XmlRoot]
     public class GE_SpawnActor : GE_BaseVm
     {
-        public GE_SpawnActor(Node_BaseVm inParent) : base(inParent)
+        public GE_SpawnActor(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks)
         {
             ActorToSpawnId = null;
             PointToSpawnId = null;
@@ -31,7 +31,7 @@ namespace StorylineEditor.ViewModels.GameEvents
             searchTargetByName = false;
         }
 
-        public GE_SpawnActor() : this(null) { }
+        public GE_SpawnActor() : this(null, 0) { }
 
         public override bool IsValid => base.IsValid && ActorToSpawn != null && PointToSpawn != null && num >= 1;
 

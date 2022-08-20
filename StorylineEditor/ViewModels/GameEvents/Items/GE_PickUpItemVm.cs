@@ -22,11 +22,11 @@ namespace StorylineEditor.ViewModels.GameEvents
     [XmlRoot]
     public class GE_PickUpItemVm : GE_ItemBaseVm
     {
-        public GE_PickUpItemVm(Node_BaseVm inParent) : base(inParent) {
+        public GE_PickUpItemVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks) {
             createByClass = false;
         }
 
-        public GE_PickUpItemVm() : this(null) { }
+        public GE_PickUpItemVm() : this(null, 0) { }
 
         public override bool IsValid => base.IsValid && Character != null;
 

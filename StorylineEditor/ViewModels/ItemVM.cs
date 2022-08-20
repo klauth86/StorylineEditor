@@ -18,9 +18,9 @@ namespace StorylineEditor.ViewModels
     [XmlRoot]
     public class ItemVm : NonFolderVm
     {
-        public ItemVm(ItemsTabVm inParent) : base(inParent) { FullContextVm.OnSearchFilterChangedEvent += OnSearchFilterChanged; }
+        public ItemVm(ItemsTabVm inParent, long additionalTicks) : base(inParent, additionalTicks) { FullContextVm.OnSearchFilterChangedEvent += OnSearchFilterChanged; }
 
-        public ItemVm() : this(null) { }
+        public ItemVm() : this(null, 0) { }
 
         ~ItemVm() { FullContextVm.OnSearchFilterChangedEvent -= OnSearchFilterChanged; }
     }

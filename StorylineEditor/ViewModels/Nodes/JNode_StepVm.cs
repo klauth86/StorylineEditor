@@ -26,7 +26,7 @@ namespace StorylineEditor.ViewModels.Nodes
     [XmlRoot]
     public class JNode_StepVm : Node_BaseVm, ITagged
     {
-        public JNode_StepVm(TreeVm Parent) : base(Parent)
+        public JNode_StepVm(TreeVm Parent, long additionalTicks) : base(Parent, additionalTicks)
         {
             Outs = new ObservableCollection<NodePairVm>();
             if (Parent != null) Parent.Links.CollectionChanged += OnLinksChanged;
@@ -35,7 +35,7 @@ namespace StorylineEditor.ViewModels.Nodes
             JournalTagIds.CollectionChanged += OnCollectionChanged;
         }
 
-        public JNode_StepVm() : this(null) { }
+        public JNode_StepVm() : this(null, 0) { }
 
         ~JNode_StepVm()
         {

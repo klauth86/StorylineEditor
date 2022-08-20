@@ -146,7 +146,7 @@ namespace StorylineEditor.Common
 
         public BaseVm Clone(BaseVm Parent, long additionalTicks)
         {
-            var result = CustomByteConverter.CreateByName(GetType().Name, Parent);
+            var result = CustomByteConverter.CreateByName(GetType().Name, Parent, additionalTicks);
             CloneInternalData(result);
             return result;
         }

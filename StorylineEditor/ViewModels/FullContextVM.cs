@@ -193,21 +193,21 @@ namespace StorylineEditor.ViewModels
 
         public void AddWorkTabs()
         {
-            tabs.Add(new AbilitiesTabVm(this) { Name = "Характеристики" });
+            tabs.Add(new AbilitiesTabVm(this, 0) { Name = "Характеристики" });
 
-            var charactersTab = new CharactersTabVm(this) { Name = "Персонажи" };
+            var charactersTab = new CharactersTabVm(this, 0) { Name = "Персонажи" };
             CharacterVm.AddPlayerIfHasNoOne(charactersTab);
             tabs.Add(charactersTab);
 
-            tabs.Add(new ItemsTabVm(this) { Name = "Предметы" });
-            tabs.Add(new LocationObjectsTabVm(this) { Name = "Объекты локации" });
+            tabs.Add(new ItemsTabVm(this, 0) { Name = "Предметы" });
+            tabs.Add(new LocationObjectsTabVm(this, 0) { Name = "Объекты локации" });
 
-            tabs.Add(new GlobalTagsTabVm(this) { Name = "Глобальные тэги" });
+            tabs.Add(new GlobalTagsTabVm(this, 0) { Name = "Глобальные тэги" });
 
-            tabs.Add(new JournalRecordsTabVm(this) { Name = "Журнальные записи" });
+            tabs.Add(new JournalRecordsTabVm(this, 0) { Name = "Журнальные записи" });
             
-            tabs.Add(new PlayerDialogsTabVm(this) { Name = "Диалоги" });
-            tabs.Add(new ReplicasTabVm(this) { Name = "Реплики" });
+            tabs.Add(new PlayerDialogsTabVm(this, 0) { Name = "Диалоги" });
+            tabs.Add(new ReplicasTabVm(this, 0) { Name = "Реплики" });
         }
 
         public void Init()

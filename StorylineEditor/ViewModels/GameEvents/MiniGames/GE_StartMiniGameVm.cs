@@ -22,12 +22,12 @@ namespace StorylineEditor.ViewModels.GameEvents
     [XmlRoot]
     public class GE_StartMiniGameVm : GE_BaseVm
     {
-        public GE_StartMiniGameVm(Node_BaseVm inParent) : base(inParent) {
+        public GE_StartMiniGameVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks) {
             MiniGameId = null;
             searchByName = false;
         }
 
-        public GE_StartMiniGameVm() : this(null) { }
+        public GE_StartMiniGameVm() : this(null, 0) { }
 
         public override bool IsValid => base.IsValid && MiniGame != null;
 

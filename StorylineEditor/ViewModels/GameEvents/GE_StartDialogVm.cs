@@ -22,12 +22,12 @@ namespace StorylineEditor.ViewModels.GameEvents
     [XmlRoot]
     public class GE_StartDialogVm : GE_BaseVm
     {
-        public GE_StartDialogVm(Node_BaseVm inParent) : base(inParent) {
+        public GE_StartDialogVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks) {
             CharacterAId = null;
             CharacterBId = null;
         }
 
-        public GE_StartDialogVm() : this(null) { }
+        public GE_StartDialogVm() : this(null, 0) { }
 
         public override bool IsValid => base.IsValid && CharacterA != null && CharacterB != null;
 

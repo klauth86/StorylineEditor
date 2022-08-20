@@ -26,13 +26,13 @@ namespace StorylineEditor.ViewModels.Nodes
     [XmlRoot]
     public class JNode_AlternativeVm : Node_InteractiveVm, ITagged
     {
-        public JNode_AlternativeVm(TreeVm Parent) : base(Parent)
+        public JNode_AlternativeVm(TreeVm Parent, long additionalTicks) : base(Parent, additionalTicks)
         {
             JournalTagIds = new ObservableCollection<string>();
             JournalTagIds.CollectionChanged += OnCollectionChanged;
         }
 
-        public JNode_AlternativeVm() : this(null) { }
+        public JNode_AlternativeVm() : this(null, 0) { }
 
         ~JNode_AlternativeVm() => JournalTagIds.CollectionChanged -= OnCollectionChanged;
 

@@ -22,11 +22,11 @@ namespace StorylineEditor.ViewModels.GameEvents
     [XmlRoot]
     public class GE_StartReplicaVm : GE_BaseVm
     {
-        public GE_StartReplicaVm(Node_BaseVm inParent) : base(inParent) {
+        public GE_StartReplicaVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks) {
             ReplicaId = null;
         }
 
-        public GE_StartReplicaVm() : this(null) { }
+        public GE_StartReplicaVm() : this(null, 0) { }
 
         public override bool IsValid => base.IsValid && Replica != null;
 

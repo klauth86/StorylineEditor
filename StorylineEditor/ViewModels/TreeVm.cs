@@ -48,7 +48,7 @@ namespace StorylineEditor.ViewModels
 
         public void NodePositionChanged(Node_BaseVm node) { OnNodePositionChanged(node); }
 
-        public TreeVm(BaseVm<FullContextVm> Parent) : base(Parent)
+        public TreeVm(BaseVm<FullContextVm> Parent, long additionalTicks) : base(Parent, additionalTicks)
         {
             Nodes = new ObservableCollection<Node_BaseVm>();
             Links = new ObservableCollection<NodePairVm>();
@@ -63,7 +63,7 @@ namespace StorylineEditor.ViewModels
             FullContextVm.OnSearchFilterChangedEvent += OnSearchFilterChanged;
         }
 
-        public TreeVm() : this(null) { }
+        public TreeVm() : this(null, 0) { }
 
         ~TreeVm()
         {
@@ -668,7 +668,7 @@ namespace StorylineEditor.ViewModels
             // Only need to copy nodes and links
             // Other stuff will be generated in Paste
 
-            TreeVm copiedTree = new TreeVm(Parent);
+            TreeVm copiedTree = new TreeVm(Parent, 0);
 
             Dictionary<string, string> nodesMapping = new Dictionary<string, string>();
 

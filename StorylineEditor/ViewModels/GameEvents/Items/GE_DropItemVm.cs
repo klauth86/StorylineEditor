@@ -22,9 +22,9 @@ namespace StorylineEditor.ViewModels.GameEvents
     [XmlRoot]
     public class GE_DropItemVm : GE_ItemBaseVm
     {
-        public GE_DropItemVm(Node_BaseVm inParent) : base(inParent) { }
+        public GE_DropItemVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks) { }
 
-        public GE_DropItemVm() : this(null) { }
+        public GE_DropItemVm() : this(null, 0) { }
 
         public override bool IsValid => base.IsValid && Character != null;
 

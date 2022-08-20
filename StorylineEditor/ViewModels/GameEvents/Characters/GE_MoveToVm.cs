@@ -22,14 +22,14 @@ namespace StorylineEditor.ViewModels.GameEvents
     [XmlRoot]
     public class GE_MoveToVm : GE_CharacterBaseVm
     {
-        public GE_MoveToVm(Node_BaseVm inParent) : base(inParent) {
+        public GE_MoveToVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks) {
             TargetId = null;
             searchTargetByName = false;
             acceptanceRadius = 0.01f;
             endInteraction = false;
         }
 
-        public GE_MoveToVm() : this(null) { }
+        public GE_MoveToVm() : this(null, 0) { }
 
         public override bool IsValid => base.IsValid && Target != null && acceptanceRadius >= 0;
 

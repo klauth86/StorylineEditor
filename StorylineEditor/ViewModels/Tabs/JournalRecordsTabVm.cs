@@ -29,11 +29,11 @@ namespace StorylineEditor.ViewModels.Tabs
             }
         }
 
-        public JournalRecordsTabVm(FullContextVm Parent) : base(Parent) {
+        public JournalRecordsTabVm(FullContextVm Parent, long additionalTicks) : base(Parent, additionalTicks) {
             selectedNodeType = typeof(JNode_StepVm);
         }
 
-        public JournalRecordsTabVm() : this(null) { }
+        public JournalRecordsTabVm() : this(null, 0) { }
 
         protected override string GetElementTitle(bool isCreate) => isCreate ? "Создать квест" : "Редактировать квест";
 

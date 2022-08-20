@@ -21,14 +21,14 @@ namespace StorylineEditor.ViewModels.GameEvents
     [XmlRoot]
     public abstract class GE_BaseVm : BaseVm<Node_BaseVm>
     {
-        public GE_BaseVm(Node_BaseVm inParent) : base(inParent)
+        public GE_BaseVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks)
         {
             executeWhenLeaveDialogNode = false;
 
             ResetName();
         }
 
-        public GE_BaseVm() : this(null) { }
+        public GE_BaseVm() : this(null, 0) { }
 
         protected bool executeWhenLeaveDialogNode;
         public bool ExecuteWhenLeaveDialogNode

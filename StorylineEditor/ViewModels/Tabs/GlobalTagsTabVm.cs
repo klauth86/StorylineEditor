@@ -19,11 +19,11 @@ namespace StorylineEditor.ViewModels.Tabs
 {
     public class GlobalTagsTabVm : BaseTabVm<JournalTagVm, FullContextVm> ////// TODO CHECK CLASS NAMINGS FOR ITEM AND TAB
     {
-        public GlobalTagsTabVm(FullContextVm Parent) : base(Parent) { }
+        public GlobalTagsTabVm(FullContextVm Parent, long additionalTicks) : base(Parent, additionalTicks) { }
 
-        public GlobalTagsTabVm() : this(null) { CollectionViewSource.GetDefaultView(Items).Filter = OnFilter; }
+        public GlobalTagsTabVm() : this(null, 0) { CollectionViewSource.GetDefaultView(Items).Filter = OnFilter; }
 
-        public override JournalTagVm CreateItem(object parameter) => new JournalTagVm(this);
+        public override JournalTagVm CreateItem(object parameter) => new JournalTagVm(this, 0);
 
         public override bool RemoveImpl(JournalTagVm tagToRemove)
         {

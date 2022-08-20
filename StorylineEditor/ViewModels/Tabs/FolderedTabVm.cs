@@ -38,9 +38,9 @@ namespace StorylineEditor.ViewModels.Tabs
 
     public abstract class FolderedTabVm : BaseTabVm<FolderedVm, FullContextVm>, IDragOverable
     {
-        public FolderedTabVm(FullContextVm Parent) : base(Parent) { }
+        public FolderedTabVm(FullContextVm Parent, long additionalTicks) : base(Parent, additionalTicks) { }
 
-        public FolderedTabVm() : this(null) { }
+        public FolderedTabVm() : this(null, 0) { }
 
         protected FolderedVm selectedItem;
         

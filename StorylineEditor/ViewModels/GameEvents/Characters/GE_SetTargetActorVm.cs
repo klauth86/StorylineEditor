@@ -22,13 +22,13 @@ namespace StorylineEditor.ViewModels.GameEvents
     [XmlRoot]
     public class GE_SetTargetActorVm : GE_CharacterBaseVm
     {
-        public GE_SetTargetActorVm(Node_BaseVm inParent) : base(inParent) {
+        public GE_SetTargetActorVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, 0) {
             TargetId = null;
             searchTargetByName = false;
             interactionType = "EInteractionType::USE";
         }
 
-        public GE_SetTargetActorVm() : this(null) { }
+        public GE_SetTargetActorVm() : this(null, 0) { }
 
         public override bool IsValid => base.IsValid && Target != null;
 

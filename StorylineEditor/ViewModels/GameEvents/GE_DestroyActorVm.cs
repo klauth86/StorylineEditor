@@ -22,13 +22,13 @@ namespace StorylineEditor.ViewModels.GameEvents
     [XmlRoot]
     public class GE_DestroyActorVm : GE_BaseVm
     {
-        public GE_DestroyActorVm(Node_BaseVm inParent) : base(inParent) {
+        public GE_DestroyActorVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks) {
             ActorToDestroyId = null;
             searchByName = false;
             affectAll = false;
         }
 
-        public GE_DestroyActorVm() : this(null) { }
+        public GE_DestroyActorVm() : this(null, 0) { }
 
         public override bool IsValid => base.IsValid && ActorToDestroy != null;
 

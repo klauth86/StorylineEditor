@@ -21,16 +21,16 @@ namespace StorylineEditor.ViewModels
     {
         public static string PlayerId => "PLAYER";
 
-        public CharacterVm(CharactersTabVm inParent) : base(inParent) { FullContextVm.OnSearchFilterChangedEvent += OnSearchFilterChanged; }
+        public CharacterVm(CharactersTabVm inParent, long additionalTicks) : base(inParent, additionalTicks) { FullContextVm.OnSearchFilterChangedEvent += OnSearchFilterChanged; }
 
-        public CharacterVm() : this(null) { }
+        public CharacterVm() : this(null, 0) { }
 
         ~CharacterVm() { FullContextVm.OnSearchFilterChangedEvent -= OnSearchFilterChanged; }
 
         public static void AddPlayerIfHasNoOne(CharactersTabVm Parent)
         {
             if (!Parent.Items.Any(character => character.Id == PlayerId)) {
-                var playerCharacter = new CharacterVm(Parent)
+                var playerCharacter = new CharacterVm(Parent, 0)
                 {
                     id = PlayerId,
                     Name = "Основной персонаж"

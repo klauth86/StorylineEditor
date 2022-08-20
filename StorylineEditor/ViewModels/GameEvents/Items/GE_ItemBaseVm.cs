@@ -20,13 +20,13 @@ namespace StorylineEditor.ViewModels.GameEvents
     [XmlRoot]
     public abstract class GE_ItemBaseVm : GE_BaseVm
     {
-        public GE_ItemBaseVm(Node_BaseVm inParent) : base(inParent) {
+        public GE_ItemBaseVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks) {
             ItemId = null;
             searchByName = false;
             affectAll = false;
         }
 
-        public GE_ItemBaseVm() : this(null) { }
+        public GE_ItemBaseVm() : this(null, 0) { }
 
         public override bool IsValid => base.IsValid && Item != null;
 

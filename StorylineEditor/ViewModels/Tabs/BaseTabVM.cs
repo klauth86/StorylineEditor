@@ -22,9 +22,9 @@ namespace StorylineEditor.ViewModels.Tabs
         where T : BaseNamedVm<BaseVm<TParent>>
         where TParent : BaseVm
     {
-        public BaseTabVm(TParent inParent) : base(inParent) { items = new ObservableCollection<T>(); }
+        public BaseTabVm(TParent inParent, long additionalTicks) : base(inParent, additionalTicks) { items = new ObservableCollection<T>(); }
 
-        public BaseTabVm() : this(null) { }
+        public BaseTabVm() : this(null, 0) { }
 
         [XmlArray]
         protected ObservableCollection<T> items;

@@ -23,12 +23,12 @@ namespace StorylineEditor.ViewModels.Predicates
     [XmlRoot]
     public class P_HasDialogNodeVm : P_BaseVm
     {
-        public P_HasDialogNodeVm(Node_BaseVm inParent) : base(inParent) {
+        public P_HasDialogNodeVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks) {
             DialogId = null;
             DialogNodeId = null;
         }
 
-        public P_HasDialogNodeVm() : this(null) { }
+        public P_HasDialogNodeVm() : this(null, 0) { }
 
         public override bool IsValid => base.IsValid && Dialog != null && DialogNode != null;
 

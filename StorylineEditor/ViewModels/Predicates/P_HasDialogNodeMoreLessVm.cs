@@ -23,7 +23,7 @@ namespace StorylineEditor.ViewModels.Predicates
     [XmlRoot]
     public class P_HasDialogNodeMoreLessVm : P_BaseVm
     {
-        public P_HasDialogNodeMoreLessVm(Node_BaseVm inParent) : base(inParent) {
+        public P_HasDialogNodeMoreLessVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks) {
             DialogId = null;
             num = 0;
             isMore = false;
@@ -33,7 +33,7 @@ namespace StorylineEditor.ViewModels.Predicates
             isLess = false;
         }
 
-        public P_HasDialogNodeMoreLessVm() : this(null) { }
+        public P_HasDialogNodeMoreLessVm() : this(null, 0) { }
 
         public override bool IsValid=> base.IsValid && Dialog != null && DialogNode != null && (isMore || isMoreOrEqual || isEqual || isLessOrEqual || isLess);
 

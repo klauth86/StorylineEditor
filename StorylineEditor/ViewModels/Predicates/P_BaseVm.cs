@@ -21,14 +21,14 @@ namespace StorylineEditor.ViewModels.Predicates
     [XmlRoot]
     public abstract class P_BaseVm : BaseVm<Node_BaseVm>
     {
-        public P_BaseVm(Node_BaseVm inParent) : base(inParent)
+        public P_BaseVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks)
         {
             isInversed = false;
 
             ResetName();
         }
 
-        public P_BaseVm() : this(null) { }
+        public P_BaseVm() : this(null, 0) { }
 
         protected bool isInversed;
         public bool IsInversed

@@ -22,7 +22,7 @@ namespace StorylineEditor.ViewModels.Predicates
     [XmlRoot]
     public class P_CompositeVm : P_BaseVm
     {
-        public P_CompositeVm(Node_BaseVm inParent) : base(inParent)
+        public P_CompositeVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks)
         {
             isOR = false;
             isAND = false;
@@ -30,7 +30,7 @@ namespace StorylineEditor.ViewModels.Predicates
             TypeB = null;
         }
 
-        public P_CompositeVm() : this(null) { }
+        public P_CompositeVm() : this(null, 0) { }
 
         public override bool IsValid => base.IsValid && itemA != null && itemB != null && (isOR || isAND);
 
@@ -74,7 +74,7 @@ namespace StorylineEditor.ViewModels.Predicates
             set
             {
                 ItemA = null;
-                if (value != null) ItemA = CustomByteConverter.CreateByName(value.Name, Parent) as P_BaseVm;
+                if (value != null) ItemA = CustomByteConverter.CreateByName(value.Name, Parent, 0) as P_BaseVm;
                 NotifyWithCallerPropName();
             }
         }
@@ -103,7 +103,7 @@ namespace StorylineEditor.ViewModels.Predicates
             set
             {
                 ItemB = null;
-                if (value != null) ItemB = CustomByteConverter.CreateByName(value.Name, Parent) as P_BaseVm;
+                if (value != null) ItemB = CustomByteConverter.CreateByName(value.Name, Parent, 0) as P_BaseVm;
                 NotifyWithCallerPropName();
             }
         }

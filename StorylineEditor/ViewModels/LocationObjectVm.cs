@@ -19,14 +19,14 @@ namespace StorylineEditor.ViewModels
     [XmlRoot]
     public class LocationObjectVm : NonFolderVm
     {
-        public LocationObjectVm(LocationObjectsTabVm inParent) : base(inParent)
+        public LocationObjectVm(LocationObjectsTabVm inParent, long additionalTicks) : base(inParent, additionalTicks)
         {
             IsActor = true;
 
             FullContextVm.OnSearchFilterChangedEvent += OnSearchFilterChanged;
         }
 
-        public LocationObjectVm() : this(null) { }
+        public LocationObjectVm() : this(null, 0) { }
 
         ~LocationObjectVm() { FullContextVm.OnSearchFilterChangedEvent -= OnSearchFilterChanged; }
 

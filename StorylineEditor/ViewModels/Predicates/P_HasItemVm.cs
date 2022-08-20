@@ -21,12 +21,12 @@ namespace StorylineEditor.ViewModels.Predicates
     [Description("Имеет предмет")]
     public class P_HasItemVm : P_BaseVm
     {
-        public P_HasItemVm(Node_BaseVm inParent) : base(inParent) {
+        public P_HasItemVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks) {
             ItemId = null;
             searchByName = false;
         }
 
-        public P_HasItemVm() : this(null) { }
+        public P_HasItemVm() : this(null, 0) { }
 
         public override bool IsValid => base.IsValid && Item != null;
 

@@ -31,12 +31,12 @@ namespace StorylineEditor.ViewModels.Tabs
             }
         }
 
-        public ReplicasTabVm(FullContextVm Parent) : base(Parent)
+        public ReplicasTabVm(FullContextVm Parent, long additionalTicks) : base(Parent, additionalTicks)
         {
             selectedNodeType = typeof(DNode_CharacterVm);
         }
 
-        public ReplicasTabVm() : this(null) { }
+        public ReplicasTabVm() : this(null, 0) { }
 
         protected override string GetElementTitle(bool isCreate) => isCreate ? "Создать реплику" : "Редактировать реплику";
 

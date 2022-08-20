@@ -22,7 +22,7 @@ namespace StorylineEditor.ViewModels.GameEvents
     [XmlRoot]
     public class GE_SetIsActiveVm : GE_BaseVm
     {
-        public GE_SetIsActiveVm(Node_BaseVm inParent) : base(inParent)
+        public GE_SetIsActiveVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks)
         {
             ObjectWithActivationId = null;
             searchByName = false;
@@ -30,7 +30,7 @@ namespace StorylineEditor.ViewModels.GameEvents
             isActive = false;
         }
 
-        public GE_SetIsActiveVm() : this(null) { }
+        public GE_SetIsActiveVm() : this(null, 0) { }
 
         public override bool IsValid => base.IsValid && ObjectWithActivation != null;
 

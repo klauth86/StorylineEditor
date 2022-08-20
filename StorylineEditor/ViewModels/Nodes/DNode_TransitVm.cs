@@ -20,9 +20,9 @@ namespace StorylineEditor.ViewModels.Nodes
     [XmlRoot]
     public class DNode_TransitVm : Node_InteractiveVm
     {
-        public DNode_TransitVm(TreeVm Parent) : base(Parent) { }
+        public DNode_TransitVm(TreeVm Parent, long additionalTicks) : base(Parent, additionalTicks) { }
 
-        public DNode_TransitVm() : this(null) { }
+        public DNode_TransitVm() : this(null, 0) { }
 
         public override bool IsValid => !string.IsNullOrEmpty(id) &&
             GameEvents.All(gameEvent => gameEvent?.IsValid ?? false) &&

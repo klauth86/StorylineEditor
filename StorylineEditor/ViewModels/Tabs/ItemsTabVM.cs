@@ -17,10 +17,10 @@ namespace StorylineEditor.ViewModels.Tabs
     [XmlRoot]
     public class ItemsTabVm : FolderedTabVm
     {
-        public ItemsTabVm(FullContextVm Parent) : base(Parent) { }
+        public ItemsTabVm(FullContextVm Parent, long additionalTicks) : base(Parent, additionalTicks) { }
 
-        public ItemsTabVm() : this(null) { }
+        public ItemsTabVm() : this(null, 0) { }
 
-        public override FolderedVm CreateItem(object parameter) { if (parameter == FolderedVm.FolderFlag) return new TreeFolderVm(this); else return new ItemVm(this); }
+        public override FolderedVm CreateItem(object parameter) { if (parameter == FolderedVm.FolderFlag) return new TreeFolderVm(this, 0); else return new ItemVm(this, 0); }
     }
 }

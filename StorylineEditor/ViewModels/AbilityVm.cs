@@ -19,9 +19,9 @@ namespace StorylineEditor.ViewModels
     [XmlRoot]
     public class AbilityVm : BaseNamedVm<BaseVm<FullContextVm>>
     {
-        public AbilityVm(AbilitiesTabVm inParent) : base(inParent) { FullContextVm.OnSearchFilterChangedEvent += OnSearchFilterChanged; }
+        public AbilityVm(AbilitiesTabVm inParent, long additionalTicks) : base(inParent, additionalTicks) { FullContextVm.OnSearchFilterChangedEvent += OnSearchFilterChanged; }
 
-        public AbilityVm() : this(null) { }
+        public AbilityVm() : this(null, 0) { }
 
         ~AbilityVm() { FullContextVm.OnSearchFilterChangedEvent -= OnSearchFilterChanged; }
     }
