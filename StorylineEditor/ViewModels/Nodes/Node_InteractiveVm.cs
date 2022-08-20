@@ -90,14 +90,16 @@ namespace StorylineEditor.ViewModels.Nodes
 
             if (destObj is Node_InteractiveVm casted)
             {
+                long counter = 0;
+
                 foreach (var gameEvent in GameEvents)
                 {
-                    casted.GameEvents.Add(gameEvent.Clone<GE_BaseVm>(casted));
+                    casted.GameEvents.Add(gameEvent.Clone<GE_BaseVm>(casted, counter++));
                 }
 
                 foreach (var predicate in Predicates)
                 {
-                    casted.Predicates.Add(predicate.Clone<P_BaseVm>(casted));
+                    casted.Predicates.Add(predicate.Clone<P_BaseVm>(casted, counter++));
                 }
             }
         }

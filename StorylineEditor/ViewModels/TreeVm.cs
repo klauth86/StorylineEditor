@@ -672,9 +672,11 @@ namespace StorylineEditor.ViewModels
 
             Dictionary<string, string> nodesMapping = new Dictionary<string, string>();
 
+            long counter = 0;
+
             foreach (var node in Selection)
             {
-                var copiedNode = node.Clone<Node_BaseVm>(copiedTree);
+                var copiedNode = node.Clone<Node_BaseVm>(copiedTree, counter++);
                 copiedNode.PositionX += App.Offset.X;
                 copiedNode.PositionY += App.Offset.Y;
                 copiedTree.Nodes.Add(copiedNode);
@@ -706,9 +708,11 @@ namespace StorylineEditor.ViewModels
 
                 Dictionary<string, string> nodesMapping = new Dictionary<string, string>();
 
+                long counter = 0;
+
                 foreach (var node in copiedTree.Nodes)
                 {
-                    var copiedNode = node.Clone<Node_BaseVm>(this);
+                    var copiedNode = node.Clone<Node_BaseVm>(this, counter++);
                     copiedNode.PositionX -= App.Offset.X;
                     copiedNode.PositionY -= App.Offset.Y;
                     AddNode(copiedNode);

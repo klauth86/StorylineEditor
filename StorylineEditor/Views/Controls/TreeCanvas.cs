@@ -327,7 +327,7 @@ namespace StorylineEditor.Views.Controls
                         {
                             if (graphNode.DataContext is Node_BaseVm node)
                             {
-                                var newNode = node.Clone<Node_BaseVm>(node.Parent);
+                                var newNode = node.Clone<Node_BaseVm>(node.Parent, 0);
                                 Tree.AddNode(newNode);
 
                                 if (GraphNodes.ContainsKey(newNode))

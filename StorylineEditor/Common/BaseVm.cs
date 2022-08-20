@@ -18,9 +18,10 @@ namespace StorylineEditor.Common
     [XmlRoot]
     public class BaseVm : Notifier
     {
-        public BaseVm()
+        public BaseVm(long additionalTicks)
         {
-            id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss_fffffff}", GetType().Name, DateTime.Now);
+            DateTime now = DateTime.Now;
+            id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss}_{2}", GetType().Name, now, now.Ticks + additionalTicks);
             name = null;
             description = null;
             actorName = null;
@@ -28,6 +29,8 @@ namespace StorylineEditor.Common
 
             isVisible = true;
         }
+
+        public BaseVm() : this(0) { }
 
         #region PROPS
 
@@ -141,14 +144,14 @@ namespace StorylineEditor.Common
 
         protected void OnSearchFilterChanged(string filter) => IsVisible = string.IsNullOrEmpty(filter) || PassFilter(filter);
 
-        public BaseVm Clone(BaseVm Parent)
+        public BaseVm Clone(BaseVm Parent, long additionalTicks)
         {
             var result = CustomByteConverter.CreateByName(GetType().Name, Parent);
             CloneInternalData(result);
             return result;
         }
 
-        public T Clone<T>(BaseVm Parent) where T : BaseVm => Clone(Parent) as T;
+        public T Clone<T>(BaseVm Parent, long additionalTicks) where T : BaseVm => Clone(Parent, additionalTicks) as T;
 
         protected virtual void CloneInternalData(BaseVm destObj)
         {
@@ -173,6 +176,8 @@ namespace StorylineEditor.Common
 
         protected virtual void RefreshSubscribtions(T oldValue, T newValue) { }
 
+        public BaseVm(T inParent, long additionalTicks) : base(additionalTicks) { Parent = inParent; }
+
         public BaseVm(T inParent) : base() { Parent = inParent; }
 
         public override bool IsValid => base.IsValid && Parent != null;
@@ -184,6 +189,8 @@ namespace StorylineEditor.Common
 
     public abstract class BaseNamedVm<T> : BaseVm<T> where T : BaseVm
     {
+        public BaseNamedVm(T inParent, long additionalTicks) : base(inParent, additionalTicks) { }
+
         public BaseNamedVm(T inParent) : base(inParent) { }
 
         public override bool IsValid => base.IsValid && !string.IsNullOrEmpty(name);

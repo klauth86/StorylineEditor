@@ -140,8 +140,8 @@ namespace StorylineEditor.ViewModels.Predicates
             {
                 casted.isOR = isOR;
                 casted.isAND = isAND;
-                casted.itemA = itemA?.Clone<P_BaseVm>(Parent);
-                casted.itemB = itemB?.Clone<P_BaseVm>(Parent);
+                casted.itemA = itemA?.Clone<P_BaseVm>(Parent, 0);
+                casted.itemB = itemB?.Clone<P_BaseVm>(Parent, 1);
             }
         }
     }
