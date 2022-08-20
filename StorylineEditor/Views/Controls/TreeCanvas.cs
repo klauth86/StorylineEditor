@@ -370,10 +370,13 @@ namespace StorylineEditor.Views.Controls
                         {
                             prevPosition = (Vector)e.GetPosition(this);
 
+                            double scaleX = (LayoutTransform as ScaleTransform).ScaleX;
+
                             SelectionRectangle = new Rectangle
                             {
-                                StrokeDashArray = new DoubleCollection() { 4, 4 },
-                                Stroke = Brushes.DarkBlue
+                                StrokeDashArray = new DoubleCollection() { 4.0, 4.0 },
+                                Stroke = Brushes.DarkBlue,
+                                StrokeThickness = 1.5 / scaleX
                             };
 
                             Canvas.SetLeft(SelectionRectangle, prevPosition.X);

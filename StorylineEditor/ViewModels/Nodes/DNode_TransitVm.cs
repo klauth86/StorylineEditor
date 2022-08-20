@@ -27,7 +27,5 @@ namespace StorylineEditor.ViewModels.Nodes
         public override bool IsValid => !string.IsNullOrEmpty(id) &&
             GameEvents.All(gameEvent => gameEvent?.IsValid ?? false) &&
             Predicates.All(predicate => predicate?.IsValid ?? false);
-
-        public override bool AllowsManyChildren => false;
     }
 }
