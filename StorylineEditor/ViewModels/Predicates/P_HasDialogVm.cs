@@ -57,9 +57,9 @@ namespace StorylineEditor.ViewModels.Predicates
             Dialog = null;
         }
 
-        protected override void CloneInternalData(BaseVm destObj)
+        protected override void CloneInternalData(BaseVm destObj, long additionalTicks)
         {
-            base.CloneInternalData(destObj);
+            base.CloneInternalData(destObj, additionalTicks);
 
             if (destObj is P_HasDialogVm casted)
             {

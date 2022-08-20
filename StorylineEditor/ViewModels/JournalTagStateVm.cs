@@ -20,14 +20,14 @@ namespace StorylineEditor.ViewModels
     [XmlRoot]
     public class JournalTagStateVm : BaseVm<BaseVm>
     {
-        public JournalTagStateVm(BaseVm Parent, JournalTagVm tag) : base(Parent)
+        public JournalTagStateVm(BaseVm Parent, long additionalTicks, JournalTagVm tag) : base(Parent, additionalTicks)
         {
             TagId = tag?.Id;
             Tag = tag;
             HasTag = false;
         }
 
-        public JournalTagStateVm() : this(null, null) { }
+        public JournalTagStateVm() : this(null, 0, null) { }
 
         public string TagId { get; set; }
 

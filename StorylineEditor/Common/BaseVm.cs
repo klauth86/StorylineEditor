@@ -21,7 +21,7 @@ namespace StorylineEditor.Common
         public BaseVm(long additionalTicks)
         {
             DateTime now = DateTime.Now;
-            id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss}_{2}", GetType().Name, now, now.Ticks + additionalTicks);
+            id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss}_{2}_{3}", GetType().Name, now, now.Ticks, additionalTicks);
             name = null;
             description = null;
             actorName = null;
@@ -147,13 +147,13 @@ namespace StorylineEditor.Common
         public BaseVm Clone(BaseVm Parent, long additionalTicks)
         {
             var result = CustomByteConverter.CreateByName(GetType().Name, Parent, additionalTicks);
-            CloneInternalData(result);
+            CloneInternalData(result, additionalTicks);
             return result;
         }
 
         public T Clone<T>(BaseVm Parent, long additionalTicks) where T : BaseVm => Clone(Parent, additionalTicks) as T;
 
-        protected virtual void CloneInternalData(BaseVm destObj)
+        protected virtual void CloneInternalData(BaseVm destObj, long additionalTicks)
         {
             if (destObj != null)
             {

@@ -158,7 +158,7 @@ namespace StorylineEditor.ViewModels
                     {
                         if (node is DNode_CharacterVm dNode_Character)
                         {
-                            dNode_Character.ParticipantStates.Add(new ParticipantStateVm(dNode_Character, character));
+                            dNode_Character.ParticipantStates.Add(new ParticipantStateVm(dNode_Character, 0, character));
                         }
                     }
                 }
@@ -394,7 +394,7 @@ namespace StorylineEditor.ViewModels
                     foreach (var characterId in Participants)
                     {
                         var character = Parent.Parent.CharactersTab.Items.FirstOrDefault((participant) => participant.Id == characterId);
-                        if (characterNode.ParticipantStates.All(state => state.CharacterId != characterId)) characterNode.ParticipantStates.Add(new ParticipantStateVm(characterNode, character));
+                        if (characterNode.ParticipantStates.All(state => state.CharacterId != characterId)) characterNode.ParticipantStates.Add(new ParticipantStateVm(characterNode, 0, character));
                     }
                 }
 
@@ -508,9 +508,9 @@ namespace StorylineEditor.ViewModels
 
         public bool IsLeafNode(Node_BaseVm node) => Links.All(link => link?.FromId != node.Id);
 
-        protected override void CloneInternalData(BaseVm destObj)
+        protected override void CloneInternalData(BaseVm destObj, long additionalTicks)
         {
-            base.CloneInternalData(destObj);
+            base.CloneInternalData(destObj, additionalTicks);
 
             if (destObj is TreeVm casted)
             {

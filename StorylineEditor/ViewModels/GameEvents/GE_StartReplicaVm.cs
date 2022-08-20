@@ -54,9 +54,9 @@ namespace StorylineEditor.ViewModels.GameEvents
             Replica = null;
         }
 
-        protected override void CloneInternalData(BaseVm destObj)
+        protected override void CloneInternalData(BaseVm destObj, long additionalTicks)
         {
-            base.CloneInternalData(destObj);
+            base.CloneInternalData(destObj, additionalTicks);
 
             var casted = destObj as GE_StartReplicaVm;
             if (casted != null)

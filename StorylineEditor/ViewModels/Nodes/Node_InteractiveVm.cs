@@ -84,9 +84,9 @@ namespace StorylineEditor.ViewModels.Nodes
                         if (argument is P_BaseVm predicate) Predicates.Remove(predicate);
                     }, (argument) => argument != null));
 
-        protected override void CloneInternalData(BaseVm destObj)
+        protected override void CloneInternalData(BaseVm destObj, long additionalTicks)
         {
-            base.CloneInternalData(destObj);
+            base.CloneInternalData(destObj, additionalTicks);
 
             if (destObj is Node_InteractiveVm casted)
             {
@@ -94,12 +94,12 @@ namespace StorylineEditor.ViewModels.Nodes
 
                 foreach (var gameEvent in GameEvents)
                 {
-                    casted.GameEvents.Add(gameEvent.Clone<GE_BaseVm>(casted, counter++));
+                    casted.GameEvents.Add(gameEvent.Clone<GE_BaseVm>(casted, additionalTicks + counter++));
                 }
 
                 foreach (var predicate in Predicates)
                 {
-                    casted.Predicates.Add(predicate.Clone<P_BaseVm>(casted, counter++));
+                    casted.Predicates.Add(predicate.Clone<P_BaseVm>(casted, additionalTicks + counter++));
                 }
             }
         }

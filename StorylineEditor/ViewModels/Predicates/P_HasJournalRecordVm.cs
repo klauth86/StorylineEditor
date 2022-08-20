@@ -55,9 +55,9 @@ namespace StorylineEditor.ViewModels.Predicates
             JournalRecord = null;
         }
 
-        protected override void CloneInternalData(BaseVm destObj)
+        protected override void CloneInternalData(BaseVm destObj, long additionalTicks)
         {
-            base.CloneInternalData(destObj);
+            base.CloneInternalData(destObj, additionalTicks);
 
             if (destObj is P_HasJournalRecordVm casted)
             {

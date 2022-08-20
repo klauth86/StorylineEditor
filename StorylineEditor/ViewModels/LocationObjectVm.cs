@@ -93,9 +93,9 @@ namespace StorylineEditor.ViewModels
 
         public bool CanBeFoundByClass => !isActivationPoint;
 
-        protected override void CloneInternalData(BaseVm destObj)
+        protected override void CloneInternalData(BaseVm destObj, long additionalTicks)
         {
-            base.CloneInternalData(destObj);
+            base.CloneInternalData(destObj, additionalTicks);
 
             if (destObj is LocationObjectVm casted)
             {

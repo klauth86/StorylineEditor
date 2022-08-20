@@ -62,7 +62,7 @@ namespace StorylineEditor.ViewModels.Predicates
             {
                 if (value != null && TagStates.All((tagState) => tagState.Tag != value))
                 {
-                    TagStates.Add(new JournalTagStateVm(this, value));
+                    TagStates.Add(new JournalTagStateVm(this, 0, value));
                     JournalTagsToAdd.View.Refresh();
                     NotifyIsValidChanged();
                 }
@@ -91,15 +91,17 @@ namespace StorylineEditor.ViewModels.Predicates
             NotifyIsValidChanged();
         }
 
-        protected override void CloneInternalData(BaseVm destObj)
+        protected override void CloneInternalData(BaseVm destObj, long additionalTicks)
         {
-            base.CloneInternalData(destObj);
+            base.CloneInternalData(destObj, additionalTicks);
 
             if (destObj is P_HasJournalTagsVm casted)
             {
+                long counter = 0;
+
                 foreach (var tagState in TagStates)
                 {
-                    var newTagState = new JournalTagStateVm(this, tagState.Tag)
+                    var newTagState = new JournalTagStateVm(this, additionalTicks + counter++, tagState.Tag)
                     {
                         HasTag = tagState.HasTag
                     };

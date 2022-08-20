@@ -106,9 +106,9 @@ namespace StorylineEditor.ViewModels.GameEvents
             IsActive = false;
         }
 
-        protected override void CloneInternalData(BaseVm destObj)
+        protected override void CloneInternalData(BaseVm destObj, long additionalTicks)
         {
-            base.CloneInternalData(destObj);
+            base.CloneInternalData(destObj, additionalTicks);
 
             if (destObj is GE_SetIsActiveVm casted)
             {

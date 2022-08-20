@@ -132,16 +132,16 @@ namespace StorylineEditor.ViewModels.Predicates
             TypeB = null;
         }
 
-        protected override void CloneInternalData(BaseVm destObj)
+        protected override void CloneInternalData(BaseVm destObj, long additionalTicks)
         {
-            base.CloneInternalData(destObj);
+            base.CloneInternalData(destObj, additionalTicks);
 
             if (destObj is P_CompositeVm casted)
             {
                 casted.isOR = isOR;
                 casted.isAND = isAND;
-                casted.itemA = itemA?.Clone<P_BaseVm>(Parent, 0);
-                casted.itemB = itemB?.Clone<P_BaseVm>(Parent, 1);
+                casted.itemA = itemA?.Clone<P_BaseVm>(Parent, additionalTicks + 0);
+                casted.itemB = itemB?.Clone<P_BaseVm>(Parent, additionalTicks + 1);
             }
         }
     }

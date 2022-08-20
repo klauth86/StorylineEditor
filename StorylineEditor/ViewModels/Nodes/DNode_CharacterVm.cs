@@ -22,7 +22,7 @@ namespace StorylineEditor.ViewModels.Nodes
     [XmlRoot]
     public class ParticipantStateVm : BaseVm<DNode_CharacterVm>
     {
-        public ParticipantStateVm(DNode_CharacterVm Parent, FolderedVm inCharacter) : base(Parent)
+        public ParticipantStateVm(DNode_CharacterVm Parent, long additionalTicks, FolderedVm inCharacter) : base(Parent, additionalTicks)
         {
             character = inCharacter;
             CharacterId = character?.Id ?? null;
@@ -30,7 +30,7 @@ namespace StorylineEditor.ViewModels.Nodes
             SetupParenthood();
         }
 
-        public ParticipantStateVm() : this(null, null) { }
+        public ParticipantStateVm() : this(null, 0, null) { }
 
         public string CharacterId { get; set; }
 
@@ -319,9 +319,9 @@ namespace StorylineEditor.ViewModels.Nodes
         public void AddFocusByName(string characterId) { if (!FocusesByName.Contains(characterId)) FocusesByName.Add(characterId); }
         public void RemoveFocusByName(string characterId) { FocusesByName.Remove(characterId); }
 
-        protected override void CloneInternalData(BaseVm destObj)
+        protected override void CloneInternalData(BaseVm destObj, long additionalTicks)
         {
-            base.CloneInternalData(destObj);
+            base.CloneInternalData(destObj, additionalTicks);
 
             if (destObj is DNode_CharacterVm casted)
             {
@@ -352,9 +352,11 @@ namespace StorylineEditor.ViewModels.Nodes
                     casted.FocusesByName.Add(focusByName);
                 }
 
+                long counter = 0;
+
                 foreach (var participantState in ParticipantStates)
                 {
-                    casted.ParticipantStates.Add(new ParticipantStateVm(casted, participantState.Character));
+                    casted.ParticipantStates.Add(new ParticipantStateVm(casted, additionalTicks + counter++, participantState.Character));
                 }
             }
         }
