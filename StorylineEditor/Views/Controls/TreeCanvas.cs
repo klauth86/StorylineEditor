@@ -308,7 +308,7 @@ namespace StorylineEditor.Views.Controls
         protected bool linkMode = false;
         protected bool dragMode = false;
         protected bool dragAllMode = false;
-        protected Vector prevPosition = new Vector();
+        protected Point prevMousePosition = new Point();
         protected GraphNode ActiveGraphNode;
         protected Rectangle SelectionRectangle;
 
@@ -349,7 +349,8 @@ namespace StorylineEditor.Views.Controls
             linkMode = false;
             dragMode = false;
             dragAllMode = false;
-            prevPosition = new Vector();
+            prevMousePosition.X = 0;
+            prevMousePosition.Y = 0;
             ActiveGraphNode = null;
 
             IndicatorLink = null;
@@ -413,6 +414,7 @@ namespace StorylineEditor.Views.Controls
                         else if (ctrlMode)
                         {
                             ActiveGraphNode = graphNode;
+                            prevMousePosition = e.GetPosition(this);
                             dragMode = true;
 
                             e.Handled = true;
@@ -428,8 +430,9 @@ namespace StorylineEditor.Views.Controls
                     }
                     else if (ctrlMode)
                     {
-                        prevPosition = (Vector)e.GetPosition(this);
+                        prevMousePosition = e.GetPosition(this);
                         dragAllMode = true;
+
                         e.Handled = true;
                     }
                 }
@@ -440,7 +443,7 @@ namespace StorylineEditor.Views.Controls
                     {
                         if (shiftMode)
                         {
-                            prevPosition = (Vector)e.GetPosition(this);
+                            prevMousePosition = e.GetPosition(this);
 
                             SelectionRectangle = new Rectangle
                             {
@@ -449,8 +452,8 @@ namespace StorylineEditor.Views.Controls
                                 StrokeThickness = 1
                             };
 
-                            Canvas.SetLeft(SelectionRectangle, prevPosition.X);
-                            Canvas.SetTop(SelectionRectangle, prevPosition.Y);
+                            Canvas.SetLeft(SelectionRectangle, prevMousePosition.X);
+                            Canvas.SetTop(SelectionRectangle, prevMousePosition.Y);
 
                             SelectionRectangle.Width = 0;
                             SelectionRectangle.Height = 0;
@@ -568,36 +571,33 @@ namespace StorylineEditor.Views.Controls
             {
                 if (dragMode)
                 {
-                    Vector mousePosition = e.GetPosition(this) - ActiveGraphNode.RelativePosition;
-                    Point absolutePosition = new Point(mousePosition.X / Scale.X, mousePosition.Y / Scale.Y);
-
-                    if (Snapping.X * Snapping.Y > 1)
-                    {
-                        absolutePosition.X = ((int)absolutePosition.X / (int)Snapping.X) * Snapping.X;
-                        absolutePosition.Y = ((int)absolutePosition.Y / (int)Snapping.Y) * Snapping.Y;
-                    }
+                    var currentPosition = e.GetPosition(this);
+                    Vector offset = new Vector((currentPosition.X - prevMousePosition.X) / Scale.X, (currentPosition.Y - prevMousePosition.Y) / Scale.Y);
+                    prevMousePosition = currentPosition;
 
                     var node = (ActiveGraphNode?.DataContext as Node_BaseVm);
                     if (node != null)
                     {
-                        double deltaX = absolutePosition.X - node.PositionX;
-                        double deltaY = absolutePosition.Y - node.PositionY;
-
                         if (node.IsSelected)
                         {
                             foreach (var selected in node.Parent.Selection)
                             {
-                                selected.PositionX += deltaX;
-                                selected.PositionY += deltaY;
+                                selected.PositionX += offset.X;
+                                selected.PositionY += offset.Y;
                             }
+                        }
+                        else
+                        {
+                            node.PositionX += offset.X;
+                            node.PositionY += offset.Y;
                         }
                     }
                 }
                 else if (dragAllMode)
                 {
-                    var currentPosition = (Vector)e.GetPosition(this);
-                    Offset -= new Vector((currentPosition.X - prevPosition.X) / Scale.X, (currentPosition.Y - prevPosition.Y) / Scale.Y);
-                    prevPosition = currentPosition;
+                    var currentPosition = e.GetPosition(this);
+                    Offset -= new Vector((currentPosition.X - prevMousePosition.X) / Scale.X, (currentPosition.Y - prevMousePosition.Y) / Scale.Y);
+                    prevMousePosition = currentPosition;
                     
                     OnTransformChanged(Scale);
                 }
@@ -605,12 +605,12 @@ namespace StorylineEditor.Views.Controls
                 {
                     var currentPosition = (Vector)e.GetPosition(this);
 
-                    Canvas.SetLeft(SelectionRectangle, Math.Min(prevPosition.X, currentPosition.X));
-                    Canvas.SetTop(SelectionRectangle, Math.Min(prevPosition.Y, currentPosition.Y));
+                    Canvas.SetLeft(SelectionRectangle, Math.Min(prevMousePosition.X, currentPosition.X));
+                    Canvas.SetTop(SelectionRectangle, Math.Min(prevMousePosition.Y, currentPosition.Y));
 
-                    double width = prevPosition.X - currentPosition.X;
+                    double width = prevMousePosition.X - currentPosition.X;
                     if (width < 0) width = -width;
-                    double height = prevPosition.Y - currentPosition.Y;
+                    double height = prevMousePosition.Y - currentPosition.Y;
                     if (height < 0) height = -height;
 
                     SelectionRectangle.Width = width;
