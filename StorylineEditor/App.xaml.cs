@@ -31,8 +31,6 @@ namespace StorylineEditor
     /// </summary>
     public partial class App : Application
     {
-        public static Vector Offset;
-
         protected static List<Type> AddOnTypes = AppDomain.CurrentDomain.GetAssemblies().SelectMany(assembly => assembly.GetTypes())
             .Where(type =>
             type == typeof(CharacterVm) ||

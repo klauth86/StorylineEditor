@@ -25,7 +25,6 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml.Serialization;
 using System.Windows;
-using System.ComponentModel;
 
 namespace StorylineEditor.ViewModels
 {
@@ -38,6 +37,8 @@ namespace StorylineEditor.ViewModels
 
         public event Action<Node_BaseVm> OnNodeAdded = delegate { };
         public event Action<Node_BaseVm> OnNodeRemoved = delegate { };
+        public event Action<Node_BaseVm> OnNodeCopied = delegate { };
+        public event Action<Node_BaseVm> OnNodePasted = delegate { };
 
         public event Action<NodePairVm> OnLinkAdded = delegate { };
         public event Action<NodePairVm> OnLinkRemoved = delegate { };
@@ -692,8 +693,7 @@ namespace StorylineEditor.ViewModels
             foreach (var node in Selection)
             {
                 var copiedNode = node.Clone<Node_BaseVm>(copiedTree, counter++);
-                copiedNode.PositionX += App.Offset.X;
-                copiedNode.PositionY += App.Offset.Y;
+                OnNodeCopied(copiedNode);
                 copiedTree.Nodes.Add(copiedNode);
 
                 nodesMapping.Add(node.Id, copiedNode.Id);
@@ -728,8 +728,7 @@ namespace StorylineEditor.ViewModels
                 foreach (var node in copiedTree.Nodes)
                 {
                     var copiedNode = node.Clone<Node_BaseVm>(this, counter++);
-                    copiedNode.PositionX -= App.Offset.X;
-                    copiedNode.PositionY -= App.Offset.Y;
+                    OnNodePasted(copiedNode);
                     AddNode(copiedNode);
 
                     nodesMapping.Add(node.Id, copiedNode.Id);

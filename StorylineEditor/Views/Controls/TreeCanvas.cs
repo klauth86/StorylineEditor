@@ -15,13 +15,11 @@ using StorylineEditor.ViewModels.Nodes;
 using StorylineEditor.ViewModels.Tabs;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
@@ -43,11 +41,29 @@ namespace StorylineEditor.Views.Controls
             set { this.SetValue(TreeProperty, value); }
         }
 
+        public Vector Scale
+        {
+            get => (Vector)this.GetValue(ScaleProperty);
+            set { this.SetValue(ScaleProperty, value); }
+        }
+
+        public Vector Offset
+        {
+            get => (Vector)this.GetValue(OffsetProperty);
+            set { this.SetValue(OffsetProperty, value); }
+        }
+
         public static readonly DependencyProperty TreeProperty = DependencyProperty.Register(
             "Tree", typeof(TreeVm), typeof(TreeCanvas), new PropertyMetadata(null, OnTreeChanged));
 
         public static readonly DependencyProperty SnappingProperty = DependencyProperty.Register(
             "Snapping", typeof(Vector), typeof(TreeCanvas));
+
+        public static readonly DependencyProperty ScaleProperty = DependencyProperty.Register(
+            "Scale", typeof(Vector), typeof(TreeCanvas), new PropertyMetadata(new Vector(1, 1)));
+
+        public static readonly DependencyProperty OffsetProperty = DependencyProperty.Register(
+            "Offset", typeof(Vector), typeof(TreeCanvas), new PropertyMetadata(new Vector(0, 0)));
 
         private static void OnTreeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -59,6 +75,8 @@ namespace StorylineEditor.Views.Controls
                     oldTree.OnFoundRoot -= treeCanvas.OnFoundRoot;
                     oldTree.OnNodeRemoved -= treeCanvas.OnNodeRemoved;
                     oldTree.OnNodeAdded -= treeCanvas.OnNodeAdded;
+                    oldTree.OnNodeCopied -= treeCanvas.OnNodeCopied;
+                    oldTree.OnNodePasted -= treeCanvas.OnNodePasted;
                     oldTree.OnLinkRemoved -= treeCanvas.OnLinkRemoved;
                     oldTree.OnLinkAdded -= treeCanvas.OnLinkAdded;
                     oldTree.OnNodePositionChanged -= treeCanvas.OnNodePositionChanged;
@@ -78,6 +96,8 @@ namespace StorylineEditor.Views.Controls
                     newTree.OnFoundRoot += treeCanvas.OnFoundRoot;
                     newTree.OnNodeRemoved += treeCanvas.OnNodeRemoved;
                     newTree.OnNodeAdded += treeCanvas.OnNodeAdded;
+                    newTree.OnNodeCopied += treeCanvas.OnNodeCopied;
+                    newTree.OnNodePasted += treeCanvas.OnNodePasted;
                     newTree.OnLinkRemoved += treeCanvas.OnLinkRemoved;
                     newTree.OnLinkAdded += treeCanvas.OnLinkAdded;
                     newTree.OnNodePositionChanged += treeCanvas.OnNodePositionChanged;
@@ -89,35 +109,81 @@ namespace StorylineEditor.Views.Controls
 
         private void OnSetBackground(string path)
         {
-            if (File.Exists(path)) {
-                Image image = new Image { Source = new BitmapImage(new Uri(path)) };
+            ////// TODO
+        }
 
-                Canvas.SetLeft(image, App.Offset.X - image.Source.Width / 2);
-                Canvas.SetTop(image, App.Offset.Y - image.Source.Height / 2);
+        private void OnTransformChanged(Vector oldScale)
+        {
+            Rect canvasRect = new Rect(Offset.X, Offset.Y, ActualWidth / Scale.X, ActualHeight / Scale.Y);
 
-                Children.Insert(0, image);
+            List<GraphNode> removedNodes = new List<GraphNode>();
+            List<GraphNode> addedNodes = new List<GraphNode>();
+
+            foreach (var graphNodesEntry in GraphNodes)
+            {
+                Node_BaseVm node = graphNodesEntry.Key;
+                GraphNode graphNode = graphNodesEntry.Value;
+
+                Rect graphNodeRect = new Rect(node.Position.X, node.Position.Y,
+                    graphNode.ActualWidth * Scale.X / oldScale.X,
+                    graphNode.ActualHeight * Scale.Y / oldScale.Y);
+
+                Rect canvasRectCopy = canvasRect;
+                canvasRectCopy.Intersect(graphNodeRect);
+
+                if (canvasRectCopy.IsEmpty)
+                {
+                    if (Children.Contains(graphNode))
+                    {
+                        Children.Remove(graphNode);
+                        removedNodes.Add(graphNode);
+                    }
+                }
+                else
+                {
+                    if (!Children.Contains(graphNode))
+                    {
+                        Children.Add(graphNode);
+                        addedNodes.Add(graphNode);
+                    }
+
+                    RefreshNodePosition(node, graphNode);
+                    graphNode.RenderTransform = new ScaleTransform(Scale.X, Scale.Y);
+                }
             }
+
+            ////// TODO Update links
+        }
+
+        private void RefreshNodePosition(Node_BaseVm node, GraphNode graphNode)
+        {
+            Canvas.SetLeft(graphNode, (node.Position.X - Offset.X) * Scale.X);
+            Canvas.SetTop(graphNode, (node.Position.Y - Offset.Y) * Scale.Y);
         }
 
         private void OnFoundRoot(Node_BaseVm node)
         {
             if (GraphNodes.ContainsKey(node))
             {
-                var left = Canvas.GetLeft(GraphNodes[node]) + GraphNodes[node].ActualWidth / 2;
-                var top = Canvas.GetTop(GraphNodes[node]) + GraphNodes[node].ActualHeight / 2;
-                UpdateChildrenLayout(new Vector(ActualWidth / 2 - left, ActualHeight / 2 - top));
+                ////// TODO
+                //////var left = Canvas.GetLeft(GraphNodes[node]) + GraphNodes[node].ActualWidth / 2;
+                //////var top = Canvas.GetTop(GraphNodes[node]) + GraphNodes[node].ActualHeight / 2;
+                //////UpdateChildrenLayout(new Vector(ActualWidth / 2 - left, ActualHeight / 2 - top));
             }
         }
 
         private void OnNodeAdded(Node_BaseVm node) { AddGraphNode(node); }
 
+        private void OnNodeCopied(Node_BaseVm node) { node.PositionX -= Offset.X; node.PositionY -= Offset.Y; }
+
+        private void OnNodePasted(Node_BaseVm node) { node.PositionX += Offset.X; node.PositionY += Offset.Y; }
+
         private void OnLinkAdded(NodePairVm link) { AddGraphLink(link); }
         
         private void OnNodePositionChanged(Node_BaseVm node)
         {
-            if (GraphNodes.ContainsKey(node)) { 
-                Canvas.SetLeft(GraphNodes[node], node.Position.X + App.Offset.X);
-                Canvas.SetTop(GraphNodes[node], node.Position.Y + App.Offset.Y);
+            if (GraphNodes.ContainsKey(node)) {
+                RefreshNodePosition(node, GraphNodes[node]);
                 UpdateLinksLayout(GraphNodes[node]);
             }
         }
@@ -125,8 +191,9 @@ namespace StorylineEditor.Views.Controls
         private void AddGraphNode(Node_BaseVm node)
         {
             GraphNode graphNode = new GraphNode();
-            Canvas.SetLeft(graphNode, node.Position.X + App.Offset.X);
-            Canvas.SetTop(graphNode, node.Position.Y + App.Offset.Y);
+            RefreshNodePosition(node, graphNode);
+            graphNode.RenderTransform = new ScaleTransform(Scale.X, Scale.Y);
+            
             graphNode.DataContext = node;
             graphNode.SizeChanged += OnNodeSizeChanged;
 
@@ -221,7 +288,6 @@ namespace StorylineEditor.Views.Controls
 
         public TreeCanvas() : base()
         {
-            LayoutTransform = new ScaleTransform();
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
         }
@@ -289,6 +355,9 @@ namespace StorylineEditor.Views.Controls
             IndicatorLink = null;
 
             Children.Clear();
+
+            Scale = new Vector(1, 1);
+            Offset = new Vector(0, 0);
         }
 
         protected Dictionary<Node_BaseVm, GraphNode> GraphNodes = new Dictionary<Node_BaseVm, GraphNode>();
@@ -299,19 +368,22 @@ namespace StorylineEditor.Views.Controls
         {
             base.OnMouseWheel(e);
 
-            var layoutTransform = LayoutTransform as ScaleTransform;
+            Vector oldScale = Scale;
 
-            var prevXScale = layoutTransform.ScaleX;
-            var prevYScale = layoutTransform.ScaleY;
+            Scale = new Vector(
+                e.Delta > 0 ? Scale.X * 2 : Scale.X / 2,
+                e.Delta > 0 ? Scale.Y * 2 : Scale.Y / 2
+                );
 
-            var mousePosition = e.GetPosition(this);
+            Point mousePosition = e.GetPosition(this);
 
-            layoutTransform.ScaleX = e.Delta > 0 ? Math.Min(prevXScale + 0.05, 1) : Math.Max(prevXScale - 0.05, 0.025);
-            layoutTransform.ScaleY = e.Delta > 0 ? Math.Min(prevYScale + 0.05, 1) : Math.Max(prevYScale - 0.05, 0.025);
+            Point oldScaleMousePosition = new Point(mousePosition.X / oldScale.X, mousePosition.Y / oldScale.Y);
 
-            var newPosition = new Point(mousePosition.X * prevXScale / layoutTransform.ScaleX, mousePosition.Y * prevYScale / layoutTransform.ScaleY);
+            Point newScaleMousePosition = new Point(mousePosition.X / Scale.X, mousePosition.Y / Scale.Y);
 
-            UpdateChildrenLayout(newPosition - mousePosition);
+            Offset += oldScaleMousePosition - newScaleMousePosition;
+
+            OnTransformChanged(oldScale);
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
@@ -370,13 +442,11 @@ namespace StorylineEditor.Views.Controls
                         {
                             prevPosition = (Vector)e.GetPosition(this);
 
-                            double scaleX = (LayoutTransform as ScaleTransform).ScaleX;
-
                             SelectionRectangle = new Rectangle
                             {
                                 StrokeDashArray = new DoubleCollection() { 4.0, 4.0 },
                                 Stroke = Brushes.DarkBlue,
-                                StrokeThickness = 1.5 / scaleX
+                                StrokeThickness = 1
                             };
 
                             Canvas.SetLeft(SelectionRectangle, prevPosition.X);
@@ -394,12 +464,13 @@ namespace StorylineEditor.Views.Controls
                         }
                         else
                         {
-                            var position = e.GetPosition(this) - App.Offset;
+                            Point mousePosition = e.GetPosition(this);
+                            var absolutePosition = new Point(mousePosition.X / Scale.X, mousePosition.Y / Scale.Y) + Offset;
                             var tab = Tree.Parent as BaseTreesTabVm;
                             var newNode = tab.CreateNode(Tree);
                             if (newNode != null)
                             {
-                                newNode.Position = position;
+                                newNode.Position = absolutePosition;
                                 Tree.AddNode(newNode);
                             }
                             e.Handled = true;
@@ -497,38 +568,38 @@ namespace StorylineEditor.Views.Controls
             {
                 if (dragMode)
                 {
-                    var position = e.GetPosition(this) - ActiveGraphNode.RelativePosition - App.Offset;
+                    Vector mousePosition = e.GetPosition(this) - ActiveGraphNode.RelativePosition;
+                    Point absolutePosition = new Point(mousePosition.X / Scale.X, mousePosition.Y / Scale.Y);
 
                     if (Snapping.X * Snapping.Y > 1)
                     {
-                        position.X = ((int)position.X / (int)Snapping.X) * Snapping.X;
-                        position.Y = ((int)position.Y / (int)Snapping.Y) * Snapping.Y;
+                        absolutePosition.X = ((int)absolutePosition.X / (int)Snapping.X) * Snapping.X;
+                        absolutePosition.Y = ((int)absolutePosition.Y / (int)Snapping.Y) * Snapping.Y;
                     }
 
                     var node = (ActiveGraphNode?.DataContext as Node_BaseVm);
                     if (node != null)
                     {
+                        double deltaX = absolutePosition.X - node.PositionX;
+                        double deltaY = absolutePosition.Y - node.PositionY;
+
                         if (node.IsSelected)
                         {
                             foreach (var selected in node.Parent.Selection)
                             {
-                                if (node != selected)
-                                {
-                                    selected.PositionX = position.X + selected.PositionX - node.PositionX;
-                                    selected.PositionY = position.Y + selected.PositionY - node.PositionY;
-                                }
+                                selected.PositionX += deltaX;
+                                selected.PositionY += deltaY;
                             }
                         }
-
-                        node.PositionX = position.X;
-                        node.PositionY = position.Y;
                     }
                 }
                 else if (dragAllMode)
                 {
                     var currentPosition = (Vector)e.GetPosition(this);
-                    UpdateChildrenLayout(currentPosition - prevPosition);
+                    Offset -= new Vector((currentPosition.X - prevPosition.X) / Scale.X, (currentPosition.Y - prevPosition.Y) / Scale.Y);
                     prevPosition = currentPosition;
+                    
+                    OnTransformChanged(Scale);
                 }
                 else if (SelectionRectangle != null)
                 {
@@ -563,17 +634,6 @@ namespace StorylineEditor.Views.Controls
             }
 
             base.OnMouseMove(e);
-        }
-
-        private void UpdateChildrenLayout(Vector offset)
-        {
-            App.Offset += offset;
-            foreach (UIElement child in Children)
-            {
-                Canvas.SetLeft(child, offset.X + Canvas.GetLeft(child));
-                Canvas.SetTop(child, offset.Y + Canvas.GetTop(child));
-            }
-            UpdateLinksLayout(null);
         }
     }
 }
