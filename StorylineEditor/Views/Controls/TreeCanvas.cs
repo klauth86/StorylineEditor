@@ -10,6 +10,7 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Common;
 using StorylineEditor.ViewModels;
 using StorylineEditor.ViewModels.Nodes;
 using StorylineEditor.ViewModels.Tabs;
@@ -41,9 +42,9 @@ namespace StorylineEditor.Views.Controls
             set { this.SetValue(TreeProperty, value); }
         }
 
-        public Vector Scale
+        public double Scale
         {
-            get => (Vector)this.GetValue(ScaleProperty);
+            get => (double)this.GetValue(ScaleProperty);
             set { this.SetValue(ScaleProperty, value); }
         }
 
@@ -60,7 +61,7 @@ namespace StorylineEditor.Views.Controls
             "Snapping", typeof(Vector), typeof(TreeCanvas));
 
         public static readonly DependencyProperty ScaleProperty = DependencyProperty.Register(
-            "Scale", typeof(Vector), typeof(TreeCanvas), new PropertyMetadata(new Vector(1, 1)));
+            "Scale", typeof(double), typeof(TreeCanvas), new PropertyMetadata(1.0));
 
         public static readonly DependencyProperty OffsetProperty = DependencyProperty.Register(
             "Offset", typeof(Vector), typeof(TreeCanvas), new PropertyMetadata(new Vector(0, 0)));
@@ -117,8 +118,8 @@ namespace StorylineEditor.Views.Controls
             Rect canvasRect = new Rect(
                 Offset.X,
                 Offset.Y,
-                ActualWidth / Scale.X,
-                ActualHeight / Scale.Y);
+                ActualWidth / Scale,
+                ActualHeight / Scale);
 
             foreach (var graphNodesEntry in GraphNodes)
             {
@@ -130,16 +131,16 @@ namespace StorylineEditor.Views.Controls
                 Rect graphNodeRect = new Rect(
                     node.Position.X,
                     node.Position.Y,
-                    graphNode.ActualWidth * Scale.X,
-                    graphNode.ActualHeight * Scale.Y);
+                    graphNode.ActualWidth * Scale,
+                    graphNode.ActualHeight * Scale);
 
                 Rect canvasRectCopy = canvasRect;
                 canvasRectCopy.Intersect(graphNodeRect);
 
                 graphNode.IsOutOfView = canvasRectCopy.IsEmpty;
 
-                (graphNode.RenderTransform as ScaleTransform).ScaleX = Scale.X;
-                (graphNode.RenderTransform as ScaleTransform).ScaleY = Scale.Y;
+                (graphNode.RenderTransform as ScaleTransform).ScaleX = Scale;
+                (graphNode.RenderTransform as ScaleTransform).ScaleY = Scale;
             }
 
             UpdateLinksLayout(null);
@@ -147,8 +148,8 @@ namespace StorylineEditor.Views.Controls
 
         private void RefreshNodePosition(Node_BaseVm node, GraphNode graphNode)
         {
-            Canvas.SetLeft(graphNode, (node.Position.X - Offset.X) * Scale.X);
-            Canvas.SetTop(graphNode, (node.Position.Y - Offset.Y) * Scale.Y);
+            Canvas.SetLeft(graphNode, (node.Position.X - Offset.X) * Scale);
+            Canvas.SetTop(graphNode, (node.Position.Y - Offset.Y) * Scale);
         }
 
         private void OnFoundRoot(Node_BaseVm node)
@@ -182,7 +183,7 @@ namespace StorylineEditor.Views.Controls
         {
             GraphNode graphNode = new GraphNode();
             RefreshNodePosition(node, graphNode);
-            graphNode.RenderTransform = new ScaleTransform(Scale.X, Scale.Y);
+            graphNode.RenderTransform = new ScaleTransform(Scale, Scale);
             
             graphNode.DataContext = node;
             graphNode.SizeChanged += OnNodeSizeChanged;
@@ -347,8 +348,8 @@ namespace StorylineEditor.Views.Controls
 
             Children.Clear();
 
-            Scale = new Vector(1, 1);
-            Offset = new Vector(0, 0);
+            Scale = 1;
+            Offset *= 0;
         }
 
         protected Dictionary<Node_BaseVm, GraphNode> GraphNodes = new Dictionary<Node_BaseVm, GraphNode>();
@@ -359,18 +360,17 @@ namespace StorylineEditor.Views.Controls
         {
             base.OnMouseWheel(e);
 
-            Vector oldScale = Scale;
+            double oldScale = Scale;
 
-            Scale = new Vector(
-                e.Delta > 0 ? Scale.X * 2 : Scale.X / 2,
-                e.Delta > 0 ? Scale.Y * 2 : Scale.Y / 2
-                );
+            double goal = e.Delta > 0 ? 2 : 1.0 / 8;
+
+            Scale = Scale * 0.9 + goal * 0.1;
 
             Point mousePosition = e.GetPosition(this);
 
-            Point oldScaleMousePosition = new Point(mousePosition.X / oldScale.X, mousePosition.Y / oldScale.Y);
+            Point oldScaleMousePosition = new Point(mousePosition.X / oldScale, mousePosition.Y / oldScale);
 
-            Point newScaleMousePosition = new Point(mousePosition.X / Scale.X, mousePosition.Y / Scale.Y);
+            Point newScaleMousePosition = new Point(mousePosition.X / Scale, mousePosition.Y / Scale);
 
             Offset += oldScaleMousePosition - newScaleMousePosition;
 
@@ -459,7 +459,7 @@ namespace StorylineEditor.Views.Controls
                         else
                         {
                             Point mousePosition = e.GetPosition(this);
-                            var absoluteMousePosition = new Point(mousePosition.X / Scale.X, mousePosition.Y / Scale.Y) + Offset;
+                            var absoluteMousePosition = new Point(mousePosition.X / Scale, mousePosition.Y / Scale) + Offset;
 
                             if (Snapping.X * Snapping.Y >= 1)
                             {
@@ -521,10 +521,10 @@ namespace StorylineEditor.Views.Controls
                     if (SelectionRectangle != null)
                     {
                         Rect selectionRect = new Rect(
-                            Canvas.GetLeft(SelectionRectangle) / Scale.X + Offset.X,
-                            Canvas.GetTop(SelectionRectangle) / Scale.Y + Offset.Y,
-                            SelectionRectangle.ActualWidth / Scale.X,
-                            SelectionRectangle.ActualHeight / Scale.Y);
+                            Canvas.GetLeft(SelectionRectangle) / Scale + Offset.X,
+                            Canvas.GetTop(SelectionRectangle) / Scale + Offset.Y,
+                            SelectionRectangle.ActualWidth / Scale,
+                            SelectionRectangle.ActualHeight / Scale);
 
                         Queue<Node_BaseVm> nodesToSelect = new Queue<Node_BaseVm>();
 
@@ -536,8 +536,8 @@ namespace StorylineEditor.Views.Controls
                             Rect graphNodeRect = new Rect(
                                 node.Position.X, 
                                 node.Position.Y,
-                                graphNode.ActualWidth * Scale.X,
-                                graphNode.ActualHeight * Scale.Y);
+                                graphNode.ActualWidth * Scale,
+                                graphNode.ActualHeight * Scale);
 
                             Rect selectionRectCopy = selectionRect;
                             selectionRectCopy.Intersect(graphNodeRect);
@@ -575,7 +575,7 @@ namespace StorylineEditor.Views.Controls
                 if (dragMode)
                 {
                     var mousePosition = e.GetPosition(this);
-                    var absoluteMousePosition = new Point(mousePosition.X / Scale.X, mousePosition.Y / Scale.Y) - ActiveGraphNode.RelativePosition;
+                    var absoluteMousePosition = new Point(mousePosition.X / Scale, mousePosition.Y / Scale) - ActiveGraphNode.RelativePosition;
 
                     if (Snapping.X * Snapping.Y >= 1)
                     {
@@ -606,7 +606,7 @@ namespace StorylineEditor.Views.Controls
                 else if (dragAllMode)
                 {
                     var currentPosition = e.GetPosition(this);
-                    Offset -= new Vector((currentPosition.X - prevMousePosition.X) / Scale.X, (currentPosition.Y - prevMousePosition.Y) / Scale.Y);
+                    Offset -= new Vector((currentPosition.X - prevMousePosition.X) / Scale, (currentPosition.Y - prevMousePosition.Y) / Scale);
                     prevMousePosition = currentPosition;
                     
                     OnTransformChanged();
@@ -645,5 +645,17 @@ namespace StorylineEditor.Views.Controls
 
             base.OnMouseMove(e);
         }
+
+        protected ICommand resetScaleCommand;
+        public ICommand ResetScaleCommand => resetScaleCommand ?? (resetScaleCommand = new RelayCommand(() =>
+        {
+            double oldScale = Scale;
+
+            Scale = 1.0;
+
+            Offset += new Vector(ActualWidth / 2, ActualHeight / 2) * (1 / oldScale - 1 / Scale);
+
+            OnTransformChanged();
+        }));
     }
 }

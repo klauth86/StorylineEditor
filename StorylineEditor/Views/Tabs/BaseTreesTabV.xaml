@@ -30,7 +30,7 @@ StorylineEditor распространяется в надежде, что он�
 
             <GridSplitter Grid.Column="1"></GridSplitter>
 
-            <controls:TreeCanvas Snapping="10, 10" Grid.Column="2" ClipToBounds="True" Tree="{Binding ElementName=tv_Items, Path=SelectedValue, UpdateSourceTrigger=PropertyChanged}" Background="Gray"></controls:TreeCanvas>
+            <controls:TreeCanvas Name="tc" Snapping="10, 10" Grid.Column="2" ClipToBounds="True" Tree="{Binding ElementName=tv_Items, Path=SelectedValue, UpdateSourceTrigger=PropertyChanged}" Background="Gray"></controls:TreeCanvas>
 
             <Grid Name="gr_Actions" Grid.Column="2" VerticalAlignment="Top" HorizontalAlignment="Left">
                 <Grid.ColumnDefinitions>
@@ -78,11 +78,15 @@ StorylineEditor распространяется в надежде, что он�
 
             <Grid Name="gr_Coords" Grid.Column="2" VerticalAlignment="Top" HorizontalAlignment="Right">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <TextBox MinWidth="64" Grid.Column="0" Style="{StaticResource S_TextBox_Input}" Text="{Binding ElementName=tv_Items, Path=SelectedValue.Selected.PositionX, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBox>
-                <TextBox MinWidth="64" Grid.Column="1" Style="{StaticResource S_TextBox_Input}" Text="{Binding ElementName=tv_Items, Path=SelectedValue.Selected.PositionY, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBox>
+                <Button Style="{StaticResource S_Button_ResetScale}"></Button>
+                <TextBlock VerticalAlignment="Center" Grid.Column="1" Style="{StaticResource S_TextBlock_GNodeDescriptionShort}" Text="{Binding Scale, ElementName=tc, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBlock>
+                <TextBox VerticalAlignment="Center" MinWidth="64" Grid.Column="2" Style="{StaticResource S_TextBox_Input}" Text="{Binding ElementName=tv_Items, Path=SelectedValue.Selected.PositionX, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBox>
+                <TextBox VerticalAlignment="Center" MinWidth="64" Grid.Column="3" Style="{StaticResource S_TextBox_Input}" Text="{Binding ElementName=tv_Items, Path=SelectedValue.Selected.PositionY, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBox>
             </Grid>
             
             <StackPanel Grid.Column="2" VerticalAlignment="Bottom" HorizontalAlignment="Left" Orientation="Horizontal">
