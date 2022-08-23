@@ -30,7 +30,7 @@ StorylineEditor распространяется в надежде, что он�
 
             <GridSplitter Grid.Column="1"></GridSplitter>
 
-            <controls:TreeCanvas Snapping="20, 20" Grid.Column="2" ClipToBounds="True" Tree="{Binding ElementName=tv_Items, Path=SelectedValue, UpdateSourceTrigger=PropertyChanged}" Background="Gray"></controls:TreeCanvas>
+            <controls:TreeCanvas Snapping="10, 10" Grid.Column="2" ClipToBounds="True" Tree="{Binding ElementName=tv_Items, Path=SelectedValue, UpdateSourceTrigger=PropertyChanged}" Background="Gray"></controls:TreeCanvas>
 
             <Grid Name="gr_Actions" Grid.Column="2" VerticalAlignment="Top" HorizontalAlignment="Left">
                 <Grid.ColumnDefinitions>

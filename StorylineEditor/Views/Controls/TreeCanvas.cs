@@ -405,6 +405,7 @@ namespace StorylineEditor.Views.Controls
 
                                 if (GraphNodes.ContainsKey(newNode))
                                 {
+                                    GraphNodes[newNode].RelativePosition = graphNode.RelativePosition;
                                     ActiveGraphNode = GraphNodes[newNode];
                                     dragMode = true;
                                     e.Handled = true;
@@ -468,12 +469,19 @@ namespace StorylineEditor.Views.Controls
                         else
                         {
                             Point mousePosition = e.GetPosition(this);
-                            var absolutePosition = new Point(mousePosition.X / Scale.X, mousePosition.Y / Scale.Y) + Offset;
+                            var absoluteMousePosition = new Point(mousePosition.X / Scale.X, mousePosition.Y / Scale.Y) + Offset;
+
+                            if (Snapping.X * Snapping.Y >= 1)
+                            {
+                                absoluteMousePosition.X = Math.Round(absoluteMousePosition.X / Snapping.X) * Snapping.X;
+                                absoluteMousePosition.Y = Math.Round(absoluteMousePosition.Y / Snapping.Y) * Snapping.Y;
+                            }
+
                             var tab = Tree.Parent as BaseTreesTabVm;
                             var newNode = tab.CreateNode(Tree);
                             if (newNode != null)
                             {
-                                newNode.Position = absolutePosition;
+                                newNode.Position = absoluteMousePosition;
                                 Tree.AddNode(newNode);
                             }
                             e.Handled = true;
@@ -571,9 +579,16 @@ namespace StorylineEditor.Views.Controls
             {
                 if (dragMode)
                 {
-                    var currentPosition = e.GetPosition(this);
-                    Vector offset = new Vector((currentPosition.X - prevMousePosition.X) / Scale.X, (currentPosition.Y - prevMousePosition.Y) / Scale.Y);
-                    prevMousePosition = currentPosition;
+                    var mousePosition = e.GetPosition(this);
+                    var absoluteMousePosition = new Point(mousePosition.X / Scale.X, mousePosition.Y / Scale.Y) - ActiveGraphNode.RelativePosition;
+
+                    if (Snapping.X * Snapping.Y >= 1)
+                    {
+                        absoluteMousePosition.X = Math.Round(absoluteMousePosition.X / Snapping.X) * Snapping.X;
+                        absoluteMousePosition.Y = Math.Round(absoluteMousePosition.Y / Snapping.Y) * Snapping.Y;
+                    }
+
+                    var absolutePosition = Offset + absoluteMousePosition;
 
                     var node = (ActiveGraphNode?.DataContext as Node_BaseVm);
                     if (node != null)
@@ -582,15 +597,15 @@ namespace StorylineEditor.Views.Controls
                         {
                             foreach (var selected in node.Parent.Selection)
                             {
-                                selected.PositionX += offset.X;
-                                selected.PositionY += offset.Y;
+                                if (selected == node) continue;
+
+                                selected.PositionX = absolutePosition.X + selected.PositionX - node.PositionX;
+                                selected.PositionY = absolutePosition.Y + selected.PositionY - node.PositionY;
                             }
                         }
-                        else
-                        {
-                            node.PositionX += offset.X;
-                            node.PositionY += offset.Y;
-                        }
+
+                        node.PositionX = absolutePosition.X;
+                        node.PositionY = absolutePosition.Y;
                     }
                 }
                 else if (dragAllMode)
