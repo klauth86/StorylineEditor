@@ -69,7 +69,7 @@ StorylineEditor распространяется в надежде, что он�
                     </MultiBinding>
                 </Border.BorderBrush>
                 <ContentControl Margin="0, 16, 0, 0" Grid.Row="0" Content="{Binding}"></ContentControl>
-                <!--<ComboBox Margin="1" Grid.Row="1" Style="{StaticResource S_ComboBox_Tags}" IsEditable="true" ItemsSource="{Binding TagsToAdd.View}" DisplayMemberPath="Name" SelectedValue="{Binding TagToAdd, UpdateSourceTrigger=PropertyChanged}"></ComboBox> ////// TODO-->
+                <!--<ComboBox Margin="1" Grid.Row="1" Style="{StaticResource S_ComboBox_Tags}" IsEditable="true" ItemsSource="{Binding TagsToAdd.View}" DisplayMemberPath="Name" SelectedValue="{Binding TagToAdd, UpdateSourceTrigger=PropertyChanged}"></ComboBox> ////// TODO Tags are disabled-->
             </Border>
 
             <Button Style="{StaticResource S_Button_Node_ToggleGender}"></Button>
