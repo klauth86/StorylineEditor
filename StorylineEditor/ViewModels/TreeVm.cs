@@ -251,9 +251,6 @@ namespace StorylineEditor.ViewModels
                 node.NotifyIsSelectedChanged();
 
                 Notify(nameof(Selected));
-
-                ////// Clear root infos ////// TODO Remove after migration all quests to new format
-                rootNodeIndex = -1;
             }
         }
 
@@ -265,9 +262,6 @@ namespace StorylineEditor.ViewModels
                 node.NotifyIsSelectedChanged();
 
                 Notify(nameof(Selected));
-
-                ////// Clear root infos ////// TODO Remove after migration all quests to new format
-                rootNodeIndex = -1;
             }
         }
 
@@ -301,25 +295,28 @@ namespace StorylineEditor.ViewModels
             }
         }
 
-        ICommand findRootCommand;
-        public ICommand FindRootCommand => findRootCommand ?? (findRootCommand = new RelayCommand(() =>
-        {
-            rootNodeIndex = rootNodeIndex >= 0 ? rootNodeIndex : 0;
-            OnFoundRoot(Nodes.FirstOrDefault((node) => node.Id == RootNodeIds[rootNodeIndex]));
-        }, () => RootNodeIds.Count > 0));
-
         ICommand prevRootCommand;
         public ICommand PrevRootCommand => prevRootCommand ?? (prevRootCommand = new RelayCommand(() =>
         {
-            rootNodeIndex = ((rootNodeIndex >= 0 ? rootNodeIndex - 1 : rootNodeIndex) + RootNodeIds.Count) % RootNodeIds.Count;
-            OnFoundRoot(Nodes.FirstOrDefault((node) => node.Id == RootNodeIds[rootNodeIndex]));
+            rootNodeIndex = (rootNodeIndex - 1 + 2 * RootNodeIds.Count) % RootNodeIds.Count;
+            Node_BaseVm rootNode = Nodes.FirstOrDefault((node) => node.Id == RootNodeIds[rootNodeIndex]);
+            if (rootNode != null)
+            {
+                AddToSelection(rootNode, true);
+                OnFoundRoot(rootNode);
+            }
         }, () => RootNodeIds.Count > 0));
 
         ICommand nextRootCommand;
         public ICommand NextRootCommand => nextRootCommand ?? (nextRootCommand = new RelayCommand(() =>
         {
-            rootNodeIndex = (rootNodeIndex + 1) % RootNodeIds.Count;
-            OnFoundRoot(Nodes.FirstOrDefault((node) => node.Id == RootNodeIds[rootNodeIndex]));
+            rootNodeIndex = (rootNodeIndex + 1 + 2 * RootNodeIds.Count) % RootNodeIds.Count;
+            Node_BaseVm rootNode = Nodes.FirstOrDefault((node) => node.Id == RootNodeIds[rootNodeIndex]);
+            if (rootNode != null)
+            {
+                AddToSelection(rootNode, true);
+                OnFoundRoot(rootNode);
+            }
         }, () => RootNodeIds.Count > 0));
 
         const string imageFilter = "Image files (*.png;*.jpg;*.jpeg;*.tiff;*.bmp)|*.png;*.jpg;*.jpeg;*.tiff;*.bmp";

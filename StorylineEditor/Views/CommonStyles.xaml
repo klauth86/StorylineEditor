@@ -226,12 +226,6 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="BorderBrush" Value="Black"></Setter>
     </Style>
 
-    <Style TargetType="Button" x:Key="S_Button_FindRoot" BasedOn="{StaticResource S_Button_CanvasPanel}">
-        <Setter Property="Content" Value="🔎"></Setter>
-        <Setter Property="ToolTip" Value="Найти корневую вершину"></Setter>
-        <Setter Property="Command" Value="{Binding ElementName=tv_Items, Path=SelectedValue.FindRootCommand}"></Setter>
-    </Style>
-
     <Style TargetType="Button" x:Key="S_Button_PrevRoot" BasedOn="{StaticResource S_Button_CanvasPanel}">
         <Setter Property="Content" Value="⏪"></Setter>
         <Setter Property="ToolTip" Value="Предудыщая корневая вершина"></Setter>
