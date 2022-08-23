@@ -116,9 +116,6 @@ namespace StorylineEditor.Views.Controls
         {
             Rect canvasRect = new Rect(Offset.X, Offset.Y, ActualWidth / Scale.X, ActualHeight / Scale.Y);
 
-            List<GraphNode> removedNodes = new List<GraphNode>();
-            List<GraphNode> addedNodes = new List<GraphNode>();
-
             foreach (var graphNodesEntry in GraphNodes)
             {
                 Node_BaseVm node = graphNodesEntry.Key;
@@ -131,25 +128,10 @@ namespace StorylineEditor.Views.Controls
                 Rect canvasRectCopy = canvasRect;
                 canvasRectCopy.Intersect(graphNodeRect);
 
-                if (canvasRectCopy.IsEmpty)
-                {
-                    if (Children.Contains(graphNode))
-                    {
-                        Children.Remove(graphNode);
-                        removedNodes.Add(graphNode);
-                    }
-                }
-                else
-                {
-                    if (!Children.Contains(graphNode))
-                    {
-                        Children.Add(graphNode);
-                        addedNodes.Add(graphNode);
-                    }
+                RefreshNodePosition(node, graphNode);
 
-                    RefreshNodePosition(node, graphNode);
-                    graphNode.RenderTransform = new ScaleTransform(Scale.X, Scale.Y);
-                }
+                (graphNode.RenderTransform as ScaleTransform).ScaleX = Scale.X;
+                (graphNode.RenderTransform as ScaleTransform).ScaleY = Scale.Y;
             }
 
             UpdateLinksLayout(null);
