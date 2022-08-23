@@ -213,8 +213,6 @@ namespace StorylineEditor.ViewModels
             RootNodeIds.Add(node.Id);
             OnRootNodesChanged.Invoke();
 
-            Notify(nameof(RootNodesInfo));
-            Notify(nameof(RootNodeToView));
             Notify(nameof(RootNodes));
         }
 
@@ -227,31 +225,11 @@ namespace StorylineEditor.ViewModels
 
             if (rootNodeIndex >= RootNodeIds.Count) rootNodeIndex--;
 
-            Notify(nameof(RootNodesInfo));
-            Notify(nameof(RootNodeToView));
             Notify(nameof(RootNodes));
         }
 
         int rootNodeIndex = -1;
 
-        public string RootNodesInfo => rootNodeIndex >= 0 ? string.Format("{0}/{1}", rootNodeIndex + 1, RootNodeIds.Count) : "";
-
-
-        [XmlIgnore]
-        public Node_BaseVm RootNodeToView
-        {
-            get => Nodes.FirstOrDefault((node) => node.Id == (rootNodeIndex >= 0 && RootNodeIds.Count > rootNodeIndex ? RootNodeIds[rootNodeIndex] : null));
-            set
-            {
-                if (RootNodeIds.Contains(value?.Id) && RootNodeIds.IndexOf(value?.Id) != rootNodeIndex)
-                {
-                    rootNodeIndex = RootNodeIds.IndexOf(value?.Id);
-                    OnFoundRoot(value);
-                    Notify(nameof(RootNodesInfo));
-                    Notify(nameof(RootNodeToView));
-                }
-            }
-        }
 
         [XmlIgnore]
         public readonly List<Node_BaseVm> Selection;
@@ -276,8 +254,6 @@ namespace StorylineEditor.ViewModels
 
                 ////// Clear root infos ////// TODO Remove after migration all quests to new format
                 rootNodeIndex = -1;
-                Notify(nameof(RootNodesInfo));
-                Notify(nameof(RootNodeToView));
             }
         }
 
@@ -292,8 +268,6 @@ namespace StorylineEditor.ViewModels
 
                 ////// Clear root infos ////// TODO Remove after migration all quests to new format
                 rootNodeIndex = -1;
-                Notify(nameof(RootNodesInfo));
-                Notify(nameof(RootNodeToView));
             }
         }
 
@@ -332,8 +306,6 @@ namespace StorylineEditor.ViewModels
         {
             rootNodeIndex = rootNodeIndex >= 0 ? rootNodeIndex : 0;
             OnFoundRoot(Nodes.FirstOrDefault((node) => node.Id == RootNodeIds[rootNodeIndex]));
-            Notify(nameof(RootNodesInfo));
-            Notify(nameof(RootNodeToView));
         }, () => RootNodeIds.Count > 0));
 
         ICommand prevRootCommand;
@@ -341,8 +313,6 @@ namespace StorylineEditor.ViewModels
         {
             rootNodeIndex = ((rootNodeIndex >= 0 ? rootNodeIndex - 1 : rootNodeIndex) + RootNodeIds.Count) % RootNodeIds.Count;
             OnFoundRoot(Nodes.FirstOrDefault((node) => node.Id == RootNodeIds[rootNodeIndex]));
-            Notify(nameof(RootNodesInfo));
-            Notify(nameof(RootNodeToView));
         }, () => RootNodeIds.Count > 0));
 
         ICommand nextRootCommand;
@@ -350,8 +320,6 @@ namespace StorylineEditor.ViewModels
         {
             rootNodeIndex = (rootNodeIndex + 1) % RootNodeIds.Count;
             OnFoundRoot(Nodes.FirstOrDefault((node) => node.Id == RootNodeIds[rootNodeIndex]));
-            Notify(nameof(RootNodesInfo));
-            Notify(nameof(RootNodeToView));
         }, () => RootNodeIds.Count > 0));
 
         const string imageFilter = "Image files (*.png;*.jpg;*.jpeg;*.tiff;*.bmp)|*.png;*.jpg;*.jpeg;*.tiff;*.bmp";

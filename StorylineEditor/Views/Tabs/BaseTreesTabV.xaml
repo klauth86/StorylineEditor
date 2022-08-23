@@ -38,6 +38,9 @@ StorylineEditor распространяется в надежде, что он�
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition></RowDefinition>
@@ -68,11 +71,17 @@ StorylineEditor распространяется в надежде, что он�
 
                 <Rectangle Grid.Column="1" Fill="Black" Width="0.5" Margin="2 0 2 0" VerticalAlignment="Stretch"></Rectangle>
 
-                <Button Grid.Column="2" Style="{StaticResource S_Button_FindRoot}"></Button>
+                <Button Grid.Column="2" Style="{StaticResource S_Button_PrevRoot}"></Button>
 
-                <Button Grid.Column="3" Style="{StaticResource S_Button_SetBackground}"></Button>
+                <Button Grid.Column="3" Style="{StaticResource S_Button_FindRoot}"></Button>
 
-                <TextBlock Text="{Binding SelectedNodeType, Converter={StaticResource typeToDescriptionConverter}}" Grid.Row="1" Grid.ColumnSpan="4" Style="{StaticResource S_TextBlock_GNodeDescriptionShort}"></TextBlock>
+                <Button Grid.Column="4" Style="{StaticResource S_Button_NextRoot}"></Button>
+
+                <Rectangle Grid.Column="5" Fill="Black" Width="0.5" Margin="2 0 2 0" VerticalAlignment="Stretch"></Rectangle>
+                
+                <Button Grid.Column="6" Style="{StaticResource S_Button_SetBackground}"></Button>
+
+                <TextBlock Text="{Binding SelectedNodeType, Converter={StaticResource typeToDescriptionConverter}}" Grid.Row="1" Grid.ColumnSpan="7" Style="{StaticResource S_TextBlock_GNodeDescriptionShort}"></TextBlock>
                 
             </Grid>
 
@@ -88,15 +97,6 @@ StorylineEditor распространяется в надежде, что он�
                 <TextBox VerticalAlignment="Center" MinWidth="64" Grid.Column="2" Style="{StaticResource S_TextBox_Input}" Text="{Binding ElementName=tv_Items, Path=SelectedValue.Selected.PositionX, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBox>
                 <TextBox VerticalAlignment="Center" MinWidth="64" Grid.Column="3" Style="{StaticResource S_TextBox_Input}" Text="{Binding ElementName=tv_Items, Path=SelectedValue.Selected.PositionY, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBox>
             </Grid>
-            
-            <StackPanel Grid.Column="2" VerticalAlignment="Bottom" HorizontalAlignment="Left" Orientation="Horizontal">
-                <Button Style="{StaticResource S_Button_PrevRoot}"></Button>
-                <Button Style="{StaticResource S_Button_NextRoot}"></Button>
-                <TextBlock VerticalAlignment="Center" Text="{Binding ElementName=tv_Items, Path=SelectedValue.RootNodesInfo, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_HeaderBold}"></TextBlock>
-                <ComboBox VerticalAlignment="Center" ItemsSource="{Binding ElementName=tv_Items, Path=SelectedValue.RootNodes}" Visibility="{Binding HasManyRoots, Converter={StaticResource hideFalseConverter}}"
-                      DisplayMemberPath="Label" SelectedValue="{Binding ElementName=tv_Items, Path=SelectedValue.RootNodeToView, UpdateSourceTrigger=PropertyChanged}">
-                </ComboBox>
-            </StackPanel>
 
             <GridSplitter Grid.Column="3"></GridSplitter>
 
