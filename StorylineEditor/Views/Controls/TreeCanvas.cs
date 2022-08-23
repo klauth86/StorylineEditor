@@ -112,23 +112,31 @@ namespace StorylineEditor.Views.Controls
             ////// TODO
         }
 
-        private void OnTransformChanged(Vector oldScale)
+        private void OnTransformChanged()
         {
-            Rect canvasRect = new Rect(Offset.X, Offset.Y, ActualWidth / Scale.X, ActualHeight / Scale.Y);
+            Rect canvasRect = new Rect(
+                Offset.X,
+                Offset.Y,
+                ActualWidth / Scale.X,
+                ActualHeight / Scale.Y);
 
             foreach (var graphNodesEntry in GraphNodes)
             {
                 Node_BaseVm node = graphNodesEntry.Key;
                 GraphNode graphNode = graphNodesEntry.Value;
 
-                Rect graphNodeRect = new Rect(node.Position.X, node.Position.Y,
-                    graphNode.ActualWidth * Scale.X / oldScale.X,
-                    graphNode.ActualHeight * Scale.Y / oldScale.Y);
+                RefreshNodePosition(node, graphNode);
+
+                Rect graphNodeRect = new Rect(
+                    node.Position.X,
+                    node.Position.Y,
+                    graphNode.ActualWidth * Scale.X,
+                    graphNode.ActualHeight * Scale.Y);
 
                 Rect canvasRectCopy = canvasRect;
                 canvasRectCopy.Intersect(graphNodeRect);
 
-                RefreshNodePosition(node, graphNode);
+                graphNode.IsOutOfView = canvasRectCopy.IsEmpty;
 
                 (graphNode.RenderTransform as ScaleTransform).ScaleX = Scale.X;
                 (graphNode.RenderTransform as ScaleTransform).ScaleY = Scale.Y;
@@ -366,7 +374,7 @@ namespace StorylineEditor.Views.Controls
 
             Offset += oldScaleMousePosition - newScaleMousePosition;
 
-            OnTransformChanged(oldScale);
+            OnTransformChanged();
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
@@ -512,24 +520,29 @@ namespace StorylineEditor.Views.Controls
 
                     if (SelectionRectangle != null)
                     {
-                        var left = Canvas.GetLeft(SelectionRectangle);
-                        var top = Canvas.GetTop(SelectionRectangle);
-                        var right = left + SelectionRectangle.ActualWidth;
-                        var bottom = top + SelectionRectangle.ActualHeight;
+                        Rect selectionRect = new Rect(
+                            Canvas.GetLeft(SelectionRectangle) / Scale.X + Offset.X,
+                            Canvas.GetTop(SelectionRectangle) / Scale.Y + Offset.Y,
+                            SelectionRectangle.ActualWidth / Scale.X,
+                            SelectionRectangle.ActualHeight / Scale.Y);
 
                         Queue<Node_BaseVm> nodesToSelect = new Queue<Node_BaseVm>();
 
                         foreach (var graphNodesEntry in GraphNodes)
                         {
-                            var graphNodeLeft = Canvas.GetLeft(graphNodesEntry.Value);
-                            var graphNodeTop = Canvas.GetTop(graphNodesEntry.Value);
-                            var graphNodeRight = graphNodeLeft + graphNodesEntry.Value.ActualWidth;
-                            var graphNodeBottom = graphNodeTop + graphNodesEntry.Value.ActualHeight;
+                            Node_BaseVm node = graphNodesEntry.Key;
+                            GraphNode graphNode = graphNodesEntry.Value;
 
-                            if ((graphNodeLeft < right && graphNodeLeft > left ||
-                                graphNodeRight < right && graphNodeRight > left) &&
-                                (graphNodeTop < bottom && graphNodeTop > top ||
-                                graphNodeBottom < bottom && graphNodeBottom > top)) nodesToSelect.Enqueue(graphNodesEntry.Key);
+                            Rect graphNodeRect = new Rect(
+                                node.Position.X, 
+                                node.Position.Y,
+                                graphNode.ActualWidth * Scale.X,
+                                graphNode.ActualHeight * Scale.Y);
+
+                            Rect selectionRectCopy = selectionRect;
+                            selectionRectCopy.Intersect(graphNodeRect);
+
+                            if (!selectionRectCopy.IsEmpty) nodesToSelect.Enqueue(graphNodesEntry.Key);
                         }
 
                         if (nodesToSelect.Count > 0)
@@ -596,7 +609,7 @@ namespace StorylineEditor.Views.Controls
                     Offset -= new Vector((currentPosition.X - prevMousePosition.X) / Scale.X, (currentPosition.Y - prevMousePosition.Y) / Scale.Y);
                     prevMousePosition = currentPosition;
                     
-                    OnTransformChanged(Scale);
+                    OnTransformChanged();
                 }
                 else if (SelectionRectangle != null)
                 {

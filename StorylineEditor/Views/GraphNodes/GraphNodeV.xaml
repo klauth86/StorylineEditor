@@ -90,4 +90,48 @@ StorylineEditor распространяется в надежде, что он�
             </DataTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+
+    <ControlTemplate x:Key="GraphNodeDummy" TargetType="{x:Type local:GraphNode}">
+        <Grid Visibility="{Binding IsVisible, Converter={StaticResource collapseFalseConverter}}">
+            <Ellipse Fill="Silver"  Visibility="{Binding IsRoot, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource collapseFalseConverter}}"
+                      Height="32" Width="32" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <Ellipse.RenderTransform>
+                    <TranslateTransform X="-16" Y="-16"></TranslateTransform>
+                </Ellipse.RenderTransform>
+            </Ellipse>
+            <Ellipse Fill="Silver" Visibility="{Binding IsRoot, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource collapseFalseConverter}}"
+                      Height="32" Width="32" VerticalAlignment="Bottom" HorizontalAlignment="Left">
+                <Ellipse.RenderTransform>
+                    <TranslateTransform X="-16" Y="16"></TranslateTransform>
+                </Ellipse.RenderTransform>
+            </Ellipse>
+            <Ellipse Fill="Silver" Visibility="{Binding IsRoot, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource collapseFalseConverter}}"
+                      Height="32" Width="32" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                <Ellipse.RenderTransform>
+                    <TranslateTransform X="16" Y="16"></TranslateTransform>
+                </Ellipse.RenderTransform>
+            </Ellipse>
+            <Ellipse Fill="Silver" Visibility="{Binding IsRoot, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource collapseFalseConverter}}"
+                      Height="32" Width="32" VerticalAlignment="Top" HorizontalAlignment="Right">
+                <Ellipse.RenderTransform>
+                    <TranslateTransform X="16" Y="-16"></TranslateTransform>
+                </Ellipse.RenderTransform>
+            </Ellipse>
+
+            <Border MinHeight="64" MinWidth="96" MaxHeight="256" MaxWidth="256" 
+                    ToolTip="{Binding Id}" BorderThickness="3">
+                <Border.Background>
+                    <MultiBinding Converter="{StaticResource nodeToBackgroundConverter}">
+                        <Binding Path="IsValid" Mode="OneWay"/>
+                        <Binding Path="Owner" Mode="OneWay"/>
+                    </MultiBinding>
+                </Border.Background>
+                <Border.BorderBrush>
+                    <MultiBinding Converter="{StaticResource selectableToBrushConverter}">
+                        <Binding Path="IsSelected" Mode="OneWay"/>
+                    </MultiBinding>
+                </Border.BorderBrush>
+            </Border>
+        </Grid>
+    </ControlTemplate>
 </ResourceDictionary>
