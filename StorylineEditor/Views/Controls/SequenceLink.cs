@@ -10,7 +10,6 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using System;
 using System.Windows;
 
 namespace StorylineEditor.Views.Controls
@@ -27,9 +26,6 @@ namespace StorylineEditor.Views.Controls
             LinkContent.SizeChanged -= OnSizeChanged;
         }
 
-        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            UpdateLayout();
-        }
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e) { UpdateLayout(); }
     }
 }

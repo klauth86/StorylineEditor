@@ -152,7 +152,7 @@ namespace StorylineEditor.Views.Controls
                 }
             }
 
-            ////// TODO Update links
+            UpdateLinksLayout(null);
         }
 
         private void RefreshNodePosition(Node_BaseVm node, GraphNode graphNode)

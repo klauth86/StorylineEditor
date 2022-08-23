@@ -29,7 +29,6 @@ namespace StorylineEditor.Views.Controls
         {
             base.OnMouseDown(e);
             RelativePosition = e.GetPosition(this);
-            System.Diagnostics.Trace.WriteLine("!!! " + RelativePosition.ToString());
             e.Handled = false;
         }
 
