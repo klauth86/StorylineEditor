@@ -25,7 +25,6 @@ namespace StorylineEditor.Views.Controls
             To = to;
 
             LineAndArrow.Stroke = Brushes.Black;
-            LineAndArrow.StrokeThickness = 1;
             LineAndArrow.Fill = Brushes.Black;
 
             LinkContent.Style = App.Current.MainWindow.FindResource("S_ContentControl_GraphLink") as Style;
@@ -39,8 +38,8 @@ namespace StorylineEditor.Views.Controls
 
         protected override void PostUpdateLayout(Point fromPoint, Point toPoint)
         {
-            var cx = (fromPoint.X + toPoint.X - LinkContent.ActualWidth) / 2;
-            var cy = (fromPoint.Y + toPoint.Y - LinkContent.ActualHeight) / 2;
+            var cx = (fromPoint.X + toPoint.X - LinkContent.ActualWidth * GetScaleX()) / 2;
+            var cy = (fromPoint.Y + toPoint.Y - LinkContent.ActualHeight * GetScaleY()) / 2;
             Canvas.SetLeft(LinkContent, cx);
             Canvas.SetTop(LinkContent, cy);
         }

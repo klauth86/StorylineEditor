@@ -60,31 +60,45 @@ namespace StorylineEditor.Views.Controls
 
         public IndicatorLink(GraphNode from):base(from)
         {
-            LineAndArrow.StrokeThickness = 4;
+            LineAndArrowThickness = 4;
             CanLink = null;
 
             InfoImage = new Image();
             InfoImage.Width = 16;
             InfoImage.Height = 16;
             InfoImage.Visibility = Visibility.Collapsed;
+
+            InfoImage.RenderTransform = new MatrixTransform();
         }
 
         public void UpdateLayout(GraphNode to)
         {
             UpdateLayout(From.ActualWidth, From.ActualHeight, Canvas.GetLeft(From), Canvas.GetTop(From),
                 to.ActualWidth, to.ActualHeight, Canvas.GetLeft(to), Canvas.GetTop(to));
+
+            Matrix matrix = new Matrix();
+            matrix.M11 = GetScaleX();
+            matrix.M22 = GetScaleY();
+
+            (InfoImage.RenderTransform as MatrixTransform).Matrix = matrix;
         }
 
         public void UpdateLayout(Point toPoint)
         {
             UpdateLayout(From.ActualWidth, From.ActualHeight, Canvas.GetLeft(From), Canvas.GetTop(From),
                 0, 0, toPoint.X, toPoint.Y);
+
+            Matrix matrix = new Matrix();
+            matrix.M11 = GetScaleX();
+            matrix.M22 = GetScaleY();
+
+            (InfoImage.RenderTransform as MatrixTransform).Matrix = matrix;
         }
 
         protected override void PostUpdateLayout(Point fromPoint, Point toPoint)
         {
-            var cx = (fromPoint.X + toPoint.X - InfoImage.ActualWidth) / 2;
-            var cy = (fromPoint.Y + toPoint.Y - InfoImage.ActualHeight) / 2;
+            var cx = (fromPoint.X + toPoint.X - InfoImage.ActualWidth * GetScaleX()) / 2;
+            var cy = (fromPoint.Y + toPoint.Y - InfoImage.ActualHeight * GetScaleY()) / 2;
             Canvas.SetLeft(InfoImage, cx);
             Canvas.SetTop(InfoImage, cy);
         }
