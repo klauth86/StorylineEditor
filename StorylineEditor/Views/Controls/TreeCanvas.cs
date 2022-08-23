@@ -156,10 +156,11 @@ namespace StorylineEditor.Views.Controls
         {
             if (GraphNodes.ContainsKey(node))
             {
-                ////// TODO
-                //////var left = Canvas.GetLeft(GraphNodes[node]) + GraphNodes[node].ActualWidth / 2;
-                //////var top = Canvas.GetTop(GraphNodes[node]) + GraphNodes[node].ActualHeight / 2;
-                //////UpdateChildrenLayout(new Vector(ActualWidth / 2 - left, ActualHeight / 2 - top));
+                Vector leftTopPosition = node.Position - new Point(ActualWidth / 2 / Scale, ActualHeight / 2 / Scale);
+
+                Offset = leftTopPosition + new Vector(GraphNodes[node].ActualWidth / 2, GraphNodes[node].ActualHeight / 2);
+
+                OnTransformChanged();
             }
         }
 
