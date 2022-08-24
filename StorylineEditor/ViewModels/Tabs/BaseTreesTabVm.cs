@@ -59,5 +59,7 @@ namespace StorylineEditor.ViewModels.Tabs
         protected ICommand selectNodeTypeCommand;
         public ICommand SelectNodeTypeCommand => selectNodeTypeCommand ??
             (selectNodeTypeCommand = new RelayCommand<Type>((type) => SelectedNodeType = type, type => type != null));
+
+        public virtual bool EditItemInPlace => true;
     }
 }

@@ -42,7 +42,7 @@ namespace StorylineEditor.ViewModels.Tabs
         public ICommand RemoveCommand => removeCommand ?? (removeCommand = new RelayCommand<T>((item) => RemoveImpl(item), (item) => item != null));
         public virtual bool RemoveImpl(T itemToRemove) { return Items.Remove(itemToRemove); }
 
-
+        public virtual bool EditItemInPlace => false;
 
         public override void SetupParenthood()
         {
