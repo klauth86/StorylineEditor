@@ -98,6 +98,9 @@
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="FileDialog\DefaultDialogService.cs" />
     <Compile Include="FileDialog\IDialogService.cs" />
+    <Compile Include="InfoWindow.xaml.cs">
+      <DependentUpon>InfoWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\AbilityVm.cs" />
     <Compile Include="ViewModels\FolderedVm.cs" />
     <Compile Include="ViewModels\IDragOverable.cs" />
@@ -178,6 +181,10 @@
     <Compile Include="Views\DragDropHelper.cs" />
     <Compile Include="Views\Nodes\RTBHelper_Description.cs" />
     <Compile Include="Views\Nodes\RTBHelper.cs" />
+    <Page Include="InfoWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -757,7 +757,6 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="FocusVisualStyle" Value="{StaticResource TreeViewItemFocusVisual}"/>
         <Setter Property="IsSelected" Value="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}"></Setter>
         <Setter Property="IsExpanded" Value="{Binding IsExpanded, UpdateSourceTrigger=PropertyChanged}"></Setter>
-        <Setter Property="ToolTip" Value="{Binding Stats, UpdateSourceTrigger=PropertyChanged}"></Setter>
         <Setter Property="Visibility" Value="{Binding IsVisible, Converter={StaticResource collapseFalseConverter}}"></Setter>
         <Setter Property="Template">
             <Setter.Value>
@@ -1190,5 +1189,17 @@ StorylineEditor распространяется в надежде, что он�
     </HierarchicalDataTemplate>
 
     <!--TREES UI-->
+
+    
+    
+    <!--INFO UI-->
+
+    <DataTemplate x:Key="DT_TreeVm_Info" DataType="{x:Type viewModels:TreeVm}">
+        <ScrollViewer>
+            <TextBox Background="Transparent" Style="{StaticResource S_TextBox_Info}" Text="{Binding Stats, Mode=OneWay}"  FontFamily="Courier New"></TextBox>
+        </ScrollViewer>
+    </DataTemplate>
+    
+    <!--INFO UI-->
     
 </ResourceDictionary>

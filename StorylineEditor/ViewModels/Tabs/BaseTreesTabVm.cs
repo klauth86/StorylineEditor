@@ -60,6 +60,9 @@ namespace StorylineEditor.ViewModels.Tabs
         public ICommand SelectNodeTypeCommand => selectNodeTypeCommand ??
             (selectNodeTypeCommand = new RelayCommand<Type>((type) => SelectedNodeType = type, type => type != null));
 
-        public virtual bool EditItemInPlace => true;
+        public override bool EditItemInPlace => true;
+
+        protected ICommand infoCommand;
+        public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<FolderedVm>((item) => new InfoWindow("Статистика " + item.Name, "DT_" + item.GetType().Name + "_Info", item) { Owner = App.Current.MainWindow }.Show(), (item) => item != null && !item.IsFolder));
     }
 }

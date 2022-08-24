@@ -80,9 +80,11 @@ namespace StorylineEditor.ViewModels
             get
             {
                 string result = "";
-                result += id + Environment.NewLine;
+                result += string.Format("ID: {0}", id) + Environment.NewLine;
+                result += string.Format("NAME: {0}", Name) + Environment.NewLine;
+
+                // Delimiter
                 result += Environment.NewLine;
-                result += "Вершины: " + Nodes.Count + Environment.NewLine;
                 result += Environment.NewLine;
 
                 Dictionary<string, Dictionary<string, int>> countByCharacter = new Dictionary<string, Dictionary<string, int>>();
@@ -97,16 +99,18 @@ namespace StorylineEditor.ViewModels
                     {
                         owneredCount++;
 
-                        var characterName = owneredNode.Owner.Name;
+                        var characterName = owneredNode.Owner?.Name;
                         characterNameMaxLength = Math.Max(characterName?.Length ?? 0, characterNameMaxLength);
 
                         string gender = " ";
                         if (node.Gender == Node_BaseVm.MALE) gender = "👨";
                         if (node.Gender == Node_BaseVm.FEMALE) gender = "👩";
+                        
                         if (!countByCharacter.ContainsKey(characterName))
                         {
                             countByCharacter.Add(characterName, new Dictionary<string, int>() { { " ", 0 }, { "👨", 0 }, { "👩", 0 } });
                         }
+                        
                         countByCharacter[characterName][gender]++;
                     }
 
@@ -115,14 +119,23 @@ namespace StorylineEditor.ViewModels
                     countByTypeDescription[typeDescription]++;
                 }
 
+                result += "Вершины по персонажам: " + Nodes.Count + Environment.NewLine;
+                result += Environment.NewLine;
+
                 foreach (var entry in countByCharacter.OrderBy(pair => pair.Key))
                 {
-                    result += string.Format("{0, -" + (characterNameMaxLength + 3 + 4) + "}{1}", "- " + entry.Key + ":", string.Join("\t", entry.Value.Select(pair => string.Format("{0}{1, -4}", pair.Key, pair.Value)))) + Environment.NewLine;
+                    result += string.Format("{0, -" + (characterNameMaxLength + 6) + "}{1}", "- " + entry.Key + ":", string.Join("\t", entry.Value.Select(pair => string.Format("{0}{1, -6}", pair.Key, pair.Value)))) + Environment.NewLine;
                 }
 
-                result += string.Format("{0, -" + (characterNameMaxLength + 3 + 4) + "} {1}", "- N/A: ", (Nodes.Count - owneredCount)) + Environment.NewLine;
+                result += string.Format("{0, -" + (characterNameMaxLength + 6) + "} {1}", "- N/A: ", (Nodes.Count - owneredCount)) + Environment.NewLine;
 
+                // Delimiter
                 result += Environment.NewLine;
+                result += Environment.NewLine;
+
+                result += "Вершины по типам: " + Nodes.Count + Environment.NewLine;
+                result += Environment.NewLine;
+
                 foreach (var entry in countByTypeDescription) result += "- " + entry.Key + ": " + entry.Value + Environment.NewLine;
 
                 return result;
