@@ -38,7 +38,7 @@ namespace StorylineEditor.ViewModels.Tabs
 
         public ReplicasTabVm() : this(null, 0) { }
 
-        protected override string GetElementTitle(bool isCreate) => isCreate ? "Создать реплику" : "Редактировать реплику";
+        protected override string GetItemDefaultName() => "Новая реплика";
 
         [XmlIgnore]
         public bool HasManyRoots => false;

@@ -35,7 +35,7 @@ namespace StorylineEditor.ViewModels.Tabs
 
         public JournalRecordsTabVm() : this(null, 0) { }
 
-        protected override string GetElementTitle(bool isCreate) => isCreate ? "Создать квест" : "Редактировать квест";
+        protected override string GetItemDefaultName() => "Новый квест";
 
         [XmlIgnore]
         public bool HasManyRoots => true;

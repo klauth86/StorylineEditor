@@ -123,11 +123,7 @@
     <Compile Include="ViewModels\Predicates\P_HasJournalRecordNodeVm.cs" />
     <Compile Include="ViewModels\Predicates\P_HasJournalRecordVm.cs" />
     <Compile Include="ViewModels\Predicates\P_HasJournalTagsVm.cs" />
-    <Compile Include="ViewModels\Tabs\BaseTreesTab_CreateElementVm.cs" />
     <Compile Include="ViewModels\Tabs\BaseTreesTabVm.cs" />
-    <Compile Include="CreateOrElementWindow.xaml.cs">
-      <DependentUpon>CreateOrElementWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\Tabs\FolderedTabVm.cs" />
     <Compile Include="ViewModels\Tabs\GlobalTagsTabVm.cs" />
     <Compile Include="ViewModels\Tabs\JournalRecordsTabVm.cs" />
@@ -196,10 +192,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="CreateOrElementWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\GraphNodes\GJNode_AlternativeV.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

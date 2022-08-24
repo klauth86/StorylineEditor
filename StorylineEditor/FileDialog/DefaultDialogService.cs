@@ -43,11 +43,5 @@ namespace StorylineEditor.FileDialog
 
             return null;
         }
-
-        public override void CreateElement(ICreateElement createElement, string title)
-        {
-            var window = new CreateElementWindow(createElement, title);
-            window.ShowDialog();
-        }
     }
 }

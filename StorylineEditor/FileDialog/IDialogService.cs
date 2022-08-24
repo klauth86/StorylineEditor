@@ -12,11 +12,6 @@ StorylineEditor распространяется в надежде, что он�
 
 namespace StorylineEditor.FileDialog
 {
-    public interface ICreateElement
-    {
-        void Invalidate();
-    }
-
     public abstract class IDialogService
     {
         public static IDialogService DialogService { get; protected set; }
@@ -24,6 +19,5 @@ namespace StorylineEditor.FileDialog
         public string Path { get; protected set; }
         abstract public string OpenFileDialog(string filter, bool refreshPath); // открытие файла
         abstract public string SaveFileDialog(string filter, bool refreshPath);  // сохранение файла
-        abstract public void CreateElement(ICreateElement createElement, string title);
     }
 }

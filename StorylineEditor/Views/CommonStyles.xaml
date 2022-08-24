@@ -417,17 +417,6 @@ StorylineEditor распространяется в надежде, что он�
     
     <!--COMMON UI BUTTONS-->
 
-    <Style TargetType="Button" x:Key="S_Button_UI_Edit" BasedOn="{StaticResource S_Button_Node}">
-        <Setter Property="Background" Value="Blue"></Setter>
-        <Setter Property="Foreground" Value="White"></Setter>
-        <Setter Property="Content" Value="✎"></Setter>
-        <Setter Property="VerticalAlignment" Value="Center"></Setter>
-        <Setter Property="HorizontalAlignment" Value="Center"></Setter>
-        <Setter Property="ToolTip" Value="Редактировать"></Setter>
-        <Setter Property="Command" Value="{Binding EditCommand}"></Setter>
-        <Setter Property="CommandParameter" Value="{Binding ElementName=tv_Items, Path=SelectedValue, UpdateSourceTrigger=PropertyChanged}"></Setter>
-    </Style>
-
     <Style TargetType="Button" x:Key="S_Button_UI_Remove_TabItem" BasedOn="{StaticResource S_Button_Node}">
         <Setter Property="Background" Value="Red"></Setter>
         <Setter Property="Foreground" Value="White"></Setter>
@@ -504,6 +493,10 @@ StorylineEditor распространяется в надежде, что он�
         <TextBlock Text="{Binding}" Style="{StaticResource S_TextBlock_GroupHeader}"></TextBlock>
     </DataTemplate>
 
+    <DataTemplate x:Key="DT_Header_GroupBox_Mini">
+        <TextBlock FontSize="10" Text="{Binding}" Style="{StaticResource S_TextBlock_GroupHeader}"></TextBlock>
+    </DataTemplate>
+    
     <Style x:Key="S_Header_TabItem" TargetType="TabItem">
         <Setter Property="HeaderTemplate">
             <Setter.Value>
@@ -536,7 +529,6 @@ StorylineEditor распространяется в надежде, что он�
         <StackPanel Orientation="Horizontal" DataContext="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type GroupBox}}}">
             <Button Style="{StaticResource S_Button_UI_Add}"></Button>
             <Button Style="{StaticResource S_Button_UI_AddFolder}"></Button>
-            <Button Style="{StaticResource S_Button_UI_Edit}"></Button>
             <Button Style="{StaticResource S_Button_UI_Remove_TabItem}"></Button>
         </StackPanel>
     </DataTemplate>
@@ -613,27 +605,6 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
     
     <!--OTHERS-->
-
-
-
-    <!--CREATE AND EDIT-->
-
-    <DataTemplate DataType="{x:Type viewModelsTabs:BaseTreesTab_CreateElementVm}">
-        <Grid x:Name="gr_Folder">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-            </Grid.RowDefinitions>
-            <GroupBox Header="Имя" Grid.Row="0" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
-                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Input}"></TextBox>
-            </GroupBox>
-            <GroupBox Header="Описание" Grid.Row="1" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
-                <TextBox AcceptsReturn="True" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Input}"></TextBox>
-            </GroupBox>
-        </Grid>
-    </DataTemplate>
-
-    <!--CREATE AND EDIT-->
     
     
     
@@ -688,6 +659,37 @@ StorylineEditor распространяется в надежде, что он�
         </Setter>
     </Style>
 
+    <Style x:Key="ExpandCollapseDetailsToggleStyle" TargetType="ToggleButton">
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid Margin="{TemplateBinding Margin}" VerticalAlignment="{TemplateBinding VerticalAlignment}">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CheckStates">
+                                <VisualState x:Name="Checked">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="Collapsed">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Hidden}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="Expanded">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unchecked"/>
+                                <VisualState x:Name="Indeterminate"/>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Ellipse Width="14" Height="14" Fill="White" Stroke="Goldenrod" StrokeThickness="0.75"></Ellipse>
+                        <Path Width="14" Height="14" Data="M7,9 10,5 M7,9 4,5" x:Name="Collapsed" Stroke="Black" StrokeThickness="1"></Path>
+                        <Path Width="14" Height="14" Data="M7,5 10,9 M7,5 4,9" x:Name="Expanded" Stroke="Black" StrokeThickness="1" Visibility="Hidden"></Path>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
     <Style x:Key="ExpandCollapseToggleStyle" TargetType="ToggleButton">
         <Setter Property="Focusable" Value="False"/>
         <Setter Property="Template">
@@ -730,7 +732,7 @@ StorylineEditor распространяется в надежде, что он�
         </Setter>
     </Style>
     
-    <Style x:Key="{x:Type TreeViewItem}" TargetType="{x:Type TreeViewItem}">
+    <Style TargetType="{x:Type TreeViewItem}">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="HorizontalContentAlignment" Value="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
         <Setter Property="VerticalContentAlignment" Value="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
@@ -793,9 +795,9 @@ StorylineEditor распространяется в надежде, что он�
                         
                         <ToggleButton x:Name="Expander" Style="{StaticResource ExpandCollapseToggleStyle}" ClickMode="Press"
                                       IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
-                                      VerticalAlignment="Center" Margin="4 4 0 4"/>
+                                      VerticalAlignment="Top" Margin="4 4 0 4"/>
 
-                        <ContentPresenter x:Name="PART_Header" Grid.Column="1" ContentSource="Header" Margin="8 4 4 4"/>
+                        <ContentPresenter x:Name="PART_Header" Grid.Column="1" ContentSource="Header" Margin="4 4 4 4"/>
 
                         <ItemsPresenter x:Name="ItemsHost" Grid.Column="1" Grid.Row="1" Visibility="Collapsed"/>
                         
@@ -1139,8 +1141,46 @@ StorylineEditor распространяется в надежде, что он�
     
     <!--TREES UI-->
 
+    <HierarchicalDataTemplate ItemsSource="{Binding Items}" DataType="{x:Type viewModels:TreeVm}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="{Binding Name}" Style="{StaticResource S_TextBlock_Header}"></TextBlock>
+
+            <ToggleButton Panel.ZIndex="100" Grid.RowSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Center"
+                          x:Name="DetailsExpander" Style="{StaticResource ExpandCollapseDetailsToggleStyle}" ClickMode="Press">
+                <ToggleButton.RenderTransform>
+                    <TranslateTransform Y="7"></TranslateTransform>
+                </ToggleButton.RenderTransform>
+            </ToggleButton>
+
+            <TextBox Margin="4" Panel.ZIndex="90" Grid.Row="1" Visibility="{Binding IsChecked, ElementName=DetailsExpander, Converter={StaticResource collapseFalseConverter}, UpdateSourceTrigger=PropertyChanged}"
+                         FontSize="8" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Input}"></TextBox>
+        </Grid>
+    </HierarchicalDataTemplate>
+    
     <HierarchicalDataTemplate ItemsSource="{Binding Items}" DataType="{x:Type viewModels:TreeFolderVm}">
-        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Header}"></TextBlock>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="{Binding Name}" Style="{StaticResource S_TextBlock_Header}"></TextBlock>
+
+            <ToggleButton Panel.ZIndex="100" Grid.RowSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Center"
+                          x:Name="DetailsExpander" Style="{StaticResource ExpandCollapseDetailsToggleStyle}" ClickMode="Press">
+                <ToggleButton.RenderTransform>
+                    <TranslateTransform Y="7"></TranslateTransform>
+                </ToggleButton.RenderTransform>
+            </ToggleButton>
+
+            <TextBox Margin="4" Panel.ZIndex="90" Grid.Row="1" Visibility="{Binding IsChecked, ElementName=DetailsExpander, Converter={StaticResource collapseFalseConverter}, UpdateSourceTrigger=PropertyChanged}"
+                         FontSize="8" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Input}"></TextBox>
+        </Grid>
     </HierarchicalDataTemplate>
 
     <HierarchicalDataTemplate DataType="{x:Type viewModels:NonFolderVm}">

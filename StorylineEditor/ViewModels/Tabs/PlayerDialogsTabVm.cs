@@ -38,7 +38,7 @@ namespace StorylineEditor.ViewModels.Tabs
 
         public PlayerDialogsTabVm() : this(null, 0) { }
 
-        protected override string GetElementTitle(bool isCreate) => isCreate ? "Создать диалог" : "Редактировать диалог";
+        protected override string GetItemDefaultName() => "Новый диалог";
 
         [XmlIgnore]
         public bool HasManyRoots => false;

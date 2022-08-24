@@ -11,7 +11,6 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Common;
-using StorylineEditor.FileDialog;
 using StorylineEditor.ViewModels.Nodes;
 using System;
 using System.Windows.Input;
@@ -26,37 +25,13 @@ namespace StorylineEditor.ViewModels.Tabs
 
         public BaseTreesTabVm() : this(null, 0) { }
 
-        protected abstract string GetElementTitle(bool isCreate);
+        protected abstract string GetItemDefaultName();
 
         public override FolderedVm CreateItem(object parameter)
         {
-            BaseTreesTab_CreateElementVm createElement = new BaseTreesTab_CreateElementVm(Parent);
+            if (parameter == FolderedVm.FolderFlag) return new TreeFolderVm(this, 0) { Name = "Новая папка" };
 
-            if (parameter == FolderedVm.FolderFlag)
-            {
-                IDialogService.DialogService.CreateElement(createElement, "Создать папку");
-                if (createElement.IsValid) return new TreeFolderVm(this, 0) { Name = createElement.Name, Description = createElement.Description };
-            }
-            else
-            {
-                IDialogService.DialogService.CreateElement(createElement, GetElementTitle(true));
-                if (createElement.IsValid) return new TreeVm(this, 0) { Name = createElement.Name, Description = createElement.Description };
-            }
-
-            return null;
-        }
-
-        public override void EditItem(FolderedVm item)
-        {
-            BaseTreesTab_CreateElementVm editElement = new BaseTreesTab_CreateElementVm(Parent) { Name = item.Name, Description = item.Description };
-            
-            IDialogService.DialogService.CreateElement(editElement, item.IsFolder ? "Редактировать папку" : GetElementTitle(false));
-
-            if (editElement != null && editElement.IsValid)
-            {
-                item.Name = editElement.Name;
-                item.Description = editElement.Description;
-            }
+            return new TreeVm(this, 0) { Name = GetItemDefaultName() };
         }
 
         public Node_BaseVm CreateNode(TreeVm tree)
