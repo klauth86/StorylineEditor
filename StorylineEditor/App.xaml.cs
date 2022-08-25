@@ -38,7 +38,6 @@ namespace StorylineEditor
             type == typeof(LocationObjectVm) ||
             type == typeof(TreeVm) ||
             type == typeof(TreeFolderVm) ||
-            type == typeof(AbilitiesTabVm) ||
             type == typeof(CharactersTabVm) ||
             type == typeof(ItemsTabVm) ||
             type == typeof(LocationObjectsTabVm) ||

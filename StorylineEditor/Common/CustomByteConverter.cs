@@ -23,7 +23,6 @@ namespace StorylineEditor.Common
     {
         public static BaseVm CreateByName(string name, BaseVm Parent, long additionalTicks)
         {
-            if (name == typeof(AbilityVm).Name) return new AbilityVm(Parent as AbilitiesTabVm, additionalTicks);
             if (name == typeof(CharacterVm).Name) return new CharacterVm(Parent as CharactersTabVm, additionalTicks);
             if (name == typeof(ItemVm).Name) return new ItemVm(Parent as ItemsTabVm, additionalTicks);
             if (name == typeof(LocationObjectVm).Name) return new LocationObjectVm(Parent as LocationObjectsTabVm, additionalTicks);
@@ -62,7 +61,6 @@ namespace StorylineEditor.Common
             if (name == typeof(DNode_DialogVm).Name) return new DNode_DialogVm(Parent as TreeVm, additionalTicks);
             if (name == typeof(DNode_VirtualVm).Name) return new DNode_VirtualVm(Parent as TreeVm, additionalTicks);
 
-            if (name == typeof(AbilitiesTabVm).Name) return new AbilitiesTabVm(Parent as FullContextVm, additionalTicks);
             if (name == typeof(CharactersTabVm).Name) return new CharactersTabVm(Parent as FullContextVm, additionalTicks);
             if (name == typeof(ItemsTabVm).Name) return new ItemsTabVm(Parent as FullContextVm, additionalTicks);
             if (name == typeof(LocationObjectsTabVm).Name) return new LocationObjectsTabVm(Parent as FullContextVm, additionalTicks);

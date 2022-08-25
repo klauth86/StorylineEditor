@@ -101,7 +101,6 @@
     <Compile Include="InfoWindow.xaml.cs">
       <DependentUpon>InfoWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\AbilityVm.cs" />
     <Compile Include="ViewModels\FolderedVm.cs" />
     <Compile Include="ViewModels\IDragOverable.cs" />
     <Compile Include="ViewModels\ITagged.cs" />
@@ -152,7 +151,6 @@
     <Compile Include="ViewModels\Predicates\P_HasDialogNodeMoreLessVm.cs" />
     <Compile Include="ViewModels\Predicates\P_HasDialogVm.cs" />
     <Compile Include="ViewModels\Predicates\P_HasItemVm.cs" />
-    <Compile Include="ViewModels\Tabs\AbilitiesTabVm.cs" />
     <Compile Include="ViewModels\Tabs\CharactersTabVm.cs" />
     <Compile Include="ViewModels\Tabs\ItemsTabVm.cs" />
     <Compile Include="ViewModels\Tabs\BaseTabVm.cs" />
@@ -366,10 +364,6 @@
     <Page Include="Views\Predicates\P_HasJournalTagsV.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Tabs\AbilitiesTabV.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tabs\GlobalTagsTabV.xaml">
       <SubType>Designer</SubType>

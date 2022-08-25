@@ -38,7 +38,6 @@ namespace StorylineEditor.ViewModels
 
         public T GetTab<T>() where T : class => tabs.FirstOrDefault(item => item is T) as T;
 
-        public AbilitiesTabVm AbilitiesTab => GetTab<AbilitiesTabVm>();
         public CharactersTabVm CharactersTab => GetTab<CharactersTabVm>();
         public ItemsTabVm ItemsTab => GetTab<ItemsTabVm>();
         public LocationObjectsTabVm LocationObjectsTab => GetTab<LocationObjectsTabVm>();
@@ -182,7 +181,6 @@ namespace StorylineEditor.ViewModels
         public FullContextVm() : base() { Actions = new List<Action_BaseVm>(); tabs = new ObservableCollection<BaseVm<FullContextVm>>(); }
 
         public bool IsEmpty() =>
-            (null == AbilitiesTab || AbilitiesTab.Items.Count == 0) &&
             (null == CharactersTab || CharactersTab.Items.Count == 0 || CharactersTab.Items.All(item => item.Id == CharacterVm.PlayerId)) &&
             (null == ItemsTab || ItemsTab.Items.Count == 0) &&
             (null == LocationObjectsTab || LocationObjectsTab.Items.Count == 0) &&
@@ -193,8 +191,6 @@ namespace StorylineEditor.ViewModels
 
         public void AddWorkTabs()
         {
-            tabs.Add(new AbilitiesTabVm(this, 0) { Name = "Характеристики" });
-
             var charactersTab = new CharactersTabVm(this, 0) { Name = "Персонажи" };
             CharacterVm.AddPlayerIfHasNoOne(charactersTab);
             tabs.Add(charactersTab);
