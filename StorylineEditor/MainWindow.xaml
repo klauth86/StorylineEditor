@@ -23,13 +23,28 @@ StorylineEditor распространяется в надежде, что он�
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"></ColumnDefinition>
                 <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Style="{StaticResource S_Button_CanvasPanel}" Name="btn_OpenXML" Content="🗀" ToolTip="Открыть XML" Click="OpenXML_Click"></Button>
-            <Button Grid.Column="1" Style="{StaticResource S_Button_CanvasPanel}" Name="btn_SaveXML" Content="🖫" ToolTip="Сохранить XML" Click="SaveXML_Click"></Button>
-            <TextBox Grid.Column="2" Style="{StaticResource S_TextBox_Input}" Text="{Binding SearchFilter, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <Button Grid.Column="0" Style="{StaticResource S_Button_CanvasPanel_NoSize}" Name="btn_OpenXML" Content="🗀" ToolTip="Открыть XML" Click="OpenXML_Click"></Button>
+            <Button Grid.Column="1" Style="{StaticResource S_Button_CanvasPanel_NoSize}" Name="btn_SaveXML" Content="🖫" ToolTip="Сохранить XML" Click="SaveXML_Click"></Button>
+            <TabControl VerticalAlignment="Bottom" Grid.Column="2" x:Name="tc_Worktabs" ItemsSource="{Binding Tabs}" ItemContainerStyle="{StaticResource S_Header_TabItem_Name}">
+                <TabControl.Template>
+                    <ControlTemplate TargetType="{x:Type TabControl}">
+                        <Grid x:Name="templateRoot" ClipToBounds="true" SnapsToDevicePixels="true" KeyboardNavigation.TabNavigation="Local">
+                            <TabPanel x:Name="headerPanel" Background="Transparent" Grid.Column="0" IsItemsHost="true" Margin="2,2,2,0" Grid.Row="0" KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </TabControl.Template>
+            </TabControl>
+            <TextBox Grid.Column="3" Style="{StaticResource S_TextBox_Input}" Text="{Binding SearchFilter, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         </Grid>
-        <TabControl x:Name="tc_Worktabs" ItemsSource="{Binding Tabs}" ItemContainerStyle="{StaticResource S_Header_TabItem_Name}"></TabControl>
+        <ContentControl Content="{Binding SelectedContent, ElementName=tc_Worktabs, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
     </DockPanel>
     <Window.InputBindings>
         <KeyBinding Key="C" Modifiers="Ctrl" Command="{Binding CopyCommand}" CommandParameter="{Binding ElementName=tc_Worktabs, Path=SelectedValue}"></KeyBinding>

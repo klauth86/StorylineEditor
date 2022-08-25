@@ -27,8 +27,6 @@ namespace StorylineEditor.Common
             if (name == typeof(ItemVm).Name) return new ItemVm(Parent as ItemsTabVm, additionalTicks);
             if (name == typeof(LocationObjectVm).Name) return new LocationObjectVm(Parent as LocationObjectsTabVm, additionalTicks);
 
-            if (name == typeof(JournalTagVm).Name) return new JournalTagVm(Parent as GlobalTagsTabVm, additionalTicks);
-
             if (name == typeof(TreeVm).Name) return new TreeVm(Parent as BaseTreesTabVm, additionalTicks);
 
             if (name == typeof(GE_DropItemVm).Name) return new GE_DropItemVm(Parent as Node_BaseVm, additionalTicks);
@@ -63,8 +61,6 @@ namespace StorylineEditor.Common
             if (name == typeof(CharactersTabVm).Name) return new CharactersTabVm(Parent as FullContextVm, additionalTicks);
             if (name == typeof(ItemsTabVm).Name) return new ItemsTabVm(Parent as FullContextVm, additionalTicks);
             if (name == typeof(LocationObjectsTabVm).Name) return new LocationObjectsTabVm(Parent as FullContextVm, additionalTicks);
-
-            if (name == typeof(GlobalTagsTabVm).Name) return new GlobalTagsTabVm(Parent as FullContextVm, additionalTicks);
 
             if (name == typeof(PlayerDialogsTabVm).Name) return new PlayerDialogsTabVm(Parent as FullContextVm, additionalTicks);
             if (name == typeof(ReplicasTabVm).Name) return new ReplicasTabVm(Parent as FullContextVm, additionalTicks);

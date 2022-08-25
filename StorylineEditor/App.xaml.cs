@@ -41,7 +41,6 @@ namespace StorylineEditor
             type == typeof(CharactersTabVm) ||
             type == typeof(ItemsTabVm) ||
             type == typeof(LocationObjectsTabVm) ||
-            type == typeof(GlobalTagsTabVm) ||
             type == typeof(JournalRecordsTabVm) ||
             type == typeof(PlayerDialogsTabVm) ||
             type == typeof(ReplicasTabVm) ||

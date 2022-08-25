@@ -111,8 +111,6 @@
     <Compile Include="ViewModels\GameEvents\GE_Storyline.cs" />
     <Compile Include="ViewModels\GameEvents\GE_SpawnActor.cs" />
     <Compile Include="ViewModels\GameEvents\Items\GE_ItemBaseVm.cs" />
-    <Compile Include="ViewModels\JournalTagStateVm.cs" />
-    <Compile Include="ViewModels\JournalTagVm.cs" />
     <Compile Include="ViewModels\Nodes\DNode_DialogVm.cs" />
     <Compile Include="ViewModels\Nodes\DNode_RandomVm.cs" />
     <Compile Include="ViewModels\Nodes\DNode_CharacterVm.cs" />
@@ -125,7 +123,6 @@
     <Compile Include="ViewModels\Predicates\P_HasJournalRecordVm.cs" />
     <Compile Include="ViewModels\Tabs\BaseTreesTabVm.cs" />
     <Compile Include="ViewModels\Tabs\FolderedTabVm.cs" />
-    <Compile Include="ViewModels\Tabs\GlobalTagsTabVm.cs" />
     <Compile Include="ViewModels\Tabs\JournalRecordsTabVm.cs" />
     <Compile Include="ViewModels\Tabs\PlayerDialogsTabVm.cs" />
     <Compile Include="ViewModels\Tabs\ReplicasTabVm.cs" />
@@ -202,14 +199,6 @@
     <Page Include="Views\GraphNodes\GJNode_StepV.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\JournalTagStateV.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\JournalTagV.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Nodes\JNode_AlternativeV.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -352,10 +341,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Predicates\P_HasItemV.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Tabs\GlobalTagsTabV.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
