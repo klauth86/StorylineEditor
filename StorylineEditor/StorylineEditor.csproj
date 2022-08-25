@@ -323,10 +323,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Nodes\ParticipantStateV.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Predicates\P_BaseV.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

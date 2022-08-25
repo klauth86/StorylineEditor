@@ -201,7 +201,7 @@ namespace StorylineEditor.ViewModels
                     {
                         if (node is DNode_CharacterVm dNode_Character)
                         {
-                            dNode_Character.ParticipantStates.Add(new ParticipantStateVm(dNode_Character, 0, character));
+                            ////// TODO Here were Participant States
                         }
                     }
 
@@ -228,7 +228,7 @@ namespace StorylineEditor.ViewModels
                     {
                         if (node is DNode_CharacterVm dNode_Character)
                         {
-                            dNode_Character.RemoveParticipantState(character);
+                            ////// TODO Here were Participant States
                         }
                     }
                 }
@@ -397,7 +397,7 @@ namespace StorylineEditor.ViewModels
                     foreach (var characterId in Participants)
                     {
                         var character = Parent.Parent.CharactersTab.Items.FirstOrDefault((participant) => participant.Id == characterId);
-                        if (characterNode.ParticipantStates.All(state => state.CharacterId != characterId)) characterNode.ParticipantStates.Add(new ParticipantStateVm(characterNode, 0, character));
+                        ////// TODO Here were Participant States
                     }
                 }
 

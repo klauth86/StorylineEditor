@@ -11,8 +11,6 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Common;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
@@ -48,15 +46,6 @@ namespace StorylineEditor.ViewModels.Nodes
                     isLocked = value;
                     NotifyWithCallerPropName();
 
-                    if (isLocked)
-                    {
-                        Parent?.AddLockedCharacter(CharacterId);
-                    }
-                    else
-                    {
-                        Parent?.RemoveLockedCharacter(CharacterId);
-                    }
-
                     Notify(nameof(IsSet));
                 }
             }
@@ -73,15 +62,6 @@ namespace StorylineEditor.ViewModels.Nodes
                     isUnlocked = value;
                     NotifyWithCallerPropName();
 
-                    if (isUnlocked)
-                    {
-                        Parent?.AddUnlockedCharacter(CharacterId);
-                    }
-                    else
-                    {
-                        Parent?.RemoveUnlockedCharacter(CharacterId);
-                    }
-
                     Notify(nameof(IsSet));
                 }
             }
@@ -93,14 +73,7 @@ namespace StorylineEditor.ViewModels.Nodes
         public BaseVm FocusActor {
             get => Parent?.Parent.Parent.Parent.AllActors.FirstOrDefault(item=>item.Id == FocusActorId);
             set {
-                if (value != FocusActor) {
-                    if (FocusActorId != null) Parent?.RemoveFocusActor(CharacterId);
-
-                    FocusActorId = value?.Id;
-                    NotifyWithCallerPropName();
-
-                    if (FocusActorId != null) Parent?.AddFocusActor(CharacterId, FocusActorId);
-                }
+                if (value != FocusActor) {}
             }
         }
 
@@ -114,15 +87,6 @@ namespace StorylineEditor.ViewModels.Nodes
                 {
                     searchByName = value;
                     NotifyWithCallerPropName();
-
-                    if (searchByName)
-                    {
-                        Parent?.AddFocusByName(CharacterId);
-                    }
-                    else
-                    {
-                        Parent?.RemoveFocusByName(CharacterId);
-                    }
                 }
             }
         }
@@ -142,11 +106,6 @@ namespace StorylineEditor.ViewModels.Nodes
             if (Parent != null)
             {
                 character = Parent.Parent.Parent.Parent.CharactersTab.Items.FirstOrDefault((charac) => charac.Id == CharacterId);
-
-                isLocked = Parent.LockedCharacters.Contains(character);
-                isUnlocked = Parent.UnlockedCharacters.Contains(character);
-                FocusActorId = Parent.FocusActors.Contains(CharacterId) ? Parent.FocusTargets[Parent.FocusActors.IndexOf(CharacterId)] : null;
-                searchByName = Parent.FocusesByName.Contains(CharacterId);
             }
             else {
                 isLocked = false;
@@ -164,14 +123,6 @@ namespace StorylineEditor.ViewModels.Nodes
         public DNode_CharacterVm(TreeVm Parent, long additionalTicks) : base(Parent, additionalTicks)
         {
             OwnerId = CharacterVm.PlayerId;
-
-            LockedCharacterIds = new List<string>();
-            UnlockedCharacterIds = new List<string>();
-            FocusActors = new List<string>();
-            FocusTargets = new List<string>();
-            FocusesByName = new List<string>();
-
-            ParticipantStates = new ObservableCollection<ParticipantStateVm>();
         }
 
         public DNode_CharacterVm() : this(null, 0) { }
@@ -239,134 +190,14 @@ namespace StorylineEditor.ViewModels.Nodes
 
         public override bool IsValid => base.IsValid && Owner != null;
 
-        [XmlArray]
-        public ObservableCollection<ParticipantStateVm> ParticipantStates { get; }
-        public void RemoveParticipantState(FolderedVm character)
-        {
-            List<ParticipantStateVm> statesToRemove = new List<ParticipantStateVm>();
-            foreach (var participantState in ParticipantStates)
-            {
-                if (participantState.Character == character) {
-                    statesToRemove.Add(participantState);
-                }
-            }
-            foreach (var stateToRemove in statesToRemove)
-            {
-                stateToRemove.Reset();
-                ParticipantStates.Remove(stateToRemove);
-            }
-        }
-
-
-
-        public List<string> LockedCharacterIds { get; set; }
-        [XmlIgnore]
-        public List<FolderedVm> LockedCharacters {
-            get {
-                if (Parent != null) {
-                    var characters = Parent.Parent.Parent.CharactersTab.Items;
-                    return characters.Where((character) => LockedCharacterIds.Contains(character.Id)).ToList();
-                }
-                return null;
-            }
-        }
-        public void AddLockedCharacter(string characterId) { if (!LockedCharacterIds.Contains(characterId)) { LockedCharacterIds.Add(characterId); Notify(nameof(LockedCharacters)); } }
-        public void RemoveLockedCharacter(string characterId) { if (LockedCharacterIds.Contains(characterId)) { LockedCharacterIds.Remove(characterId); Notify(nameof(LockedCharacters)); } }
-
-
-
-        public List<string> UnlockedCharacterIds { get; set; }
-        [XmlIgnore]
-        public List<FolderedVm> UnlockedCharacters {
-            get
-            {
-                if (Parent != null)
-                {
-                    var characters = Parent.Parent.Parent.CharactersTab.Items;
-                    return characters.Where((character) => UnlockedCharacterIds.Contains(character.Id)).ToList();
-                }
-                return null;
-            }
-        }
-        public void AddUnlockedCharacter(string characterId) { if (!UnlockedCharacterIds.Contains(characterId)) { UnlockedCharacterIds.Add(characterId); Notify(nameof(UnlockedCharacters)); } }
-        public void RemoveUnlockedCharacter(string characterId) { if (UnlockedCharacterIds.Contains(characterId)) { UnlockedCharacterIds.Remove(characterId); Notify(nameof(UnlockedCharacters)); } }
-
-
-
-        public List<string> FocusActors { get; set; }
-        public List<string> FocusTargets { get; set; }
-        public void AddFocusActor(string characterId, string actorId) {
-            if (!FocusActors.Contains(characterId))
-            {
-                FocusActors.Add(characterId);
-                FocusTargets.Add(actorId);
-            }
-            else {
-                FocusTargets[FocusActors.IndexOf(characterId)] = actorId;
-            }
-        }
-        public void RemoveFocusActor(string characterId) {
-            if (!FocusActors.Contains(characterId))
-            {
-                FocusTargets.RemoveAt(FocusActors.IndexOf(characterId));
-                FocusActors.Remove(characterId);
-            }
-        }
-
-
-
-        public List<string> FocusesByName { get; set; }
-        public void AddFocusByName(string characterId) { if (!FocusesByName.Contains(characterId)) FocusesByName.Add(characterId); }
-        public void RemoveFocusByName(string characterId) { FocusesByName.Remove(characterId); }
-
         protected override void CloneInternalData(BaseVm destObj, long additionalTicks)
         {
             base.CloneInternalData(destObj, additionalTicks);
 
             if (destObj is DNode_CharacterVm casted)
             {
-                casted.OwnerId = OwnerId;
-                
+                casted.OwnerId = OwnerId;                
                 casted.attachedFile = attachedFile;
-
-                foreach (var lockedCharacter in LockedCharacterIds)
-                {
-                    casted.LockedCharacterIds.Add(lockedCharacter);
-                }
-
-                foreach (var unlockedCharacter in UnlockedCharacterIds)
-                {
-                    casted.UnlockedCharacterIds.Add(unlockedCharacter);
-                }
-
-                for (int i = 0; i < FocusActors.Count; i++)
-                {
-                    casted.FocusActors.Add(FocusActors[i]);
-                    casted.FocusTargets.Add(FocusTargets[i]);
-                }
-
-                foreach (var focusByName in FocusesByName)
-                {
-                    casted.FocusesByName.Add(focusByName);
-                }
-
-                long counter = 0;
-
-                foreach (var participantState in ParticipantStates)
-                {
-                    casted.ParticipantStates.Add(new ParticipantStateVm(casted, additionalTicks + counter++, participantState.Character));
-                }
-            }
-        }
-
-        public override void SetupParenthood()
-        {
-            base.SetupParenthood();
-
-            foreach (var participantState in ParticipantStates)
-            {
-                participantState.Parent = this;
-                participantState.SetupParenthood();
             }
         }
 

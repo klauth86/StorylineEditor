@@ -22,7 +22,6 @@ StorylineEditor распространяется в надежде, что он�
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="auto"></RowDefinition>
                 <RowDefinition Height="auto"></RowDefinition>
-                <RowDefinition Height="auto"></RowDefinition>
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0" Style="{StaticResource S_TextBlock_GNodeHeader}" Text="{Binding OwnerName, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
@@ -32,10 +31,8 @@ StorylineEditor распространяется в надежде, что он�
             <Separator x:Name="sep_ShortDescription" Grid.Row="2" Visibility="Collapsed"></Separator>
 
             <TextBlock x:Name="tb_ShortDescription" Grid.Row="3" Style="{StaticResource S_TextBlock_GNodeDescriptionShort}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"></TextBlock>
-            
-            <ItemsControl Grid.Row="4" ItemsSource="{Binding ParticipantStates}" ItemTemplate="{StaticResource DT_ParticipantState}"></ItemsControl>
 
-            <StackPanel Grid.RowSpan="5" VerticalAlignment="Bottom" HorizontalAlignment="Right"
+            <StackPanel Grid.RowSpan="4" VerticalAlignment="Bottom" HorizontalAlignment="Right"
                         Visibility="{Binding AttachedFile, Converter={StaticResource collapseNullConverter}}"
                         Orientation="Horizontal">
                 <TextBlock Text="🎵" VerticalAlignment="Bottom" FontWeight="Bold" Foreground="Purple" FontSize="8"></TextBlock>

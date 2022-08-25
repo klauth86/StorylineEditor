@@ -14,14 +14,12 @@ StorylineEditor распространяется в надежде, что он�
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:StorylineEditor.ViewModels.Nodes"                    
                     xmlns:viewModels="clr-namespace:StorylineEditor.ViewModels"
-                    xmlns:draw="clr-namespace:System.Drawing;assembly=System.Drawing"
                     xmlns:nodes="clr-namespace:StorylineEditor.Views.Nodes">
     <DataTemplate DataType="{x:Type local:DNode_DialogVm}">
         <TabControl>
             <TabItem Style="{StaticResource S_Header_TabItem}" Header="Основная">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"></RowDefinition>
                         <RowDefinition Height="auto"></RowDefinition>
                         <RowDefinition Height="auto"></RowDefinition>
                         <RowDefinition Height="auto"></RowDefinition>
@@ -38,37 +36,14 @@ StorylineEditor распространяется в надежде, что он�
                     <GroupBox Grid.Row="1" Header="Иное отображаемое имя" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
                         <TextBox Text="{Binding OverrideOwnerName, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
                     </GroupBox>
-                    
+
                     <GroupBox Grid.Row="2" Header="Ссылка на аудио (google/yandex)" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
                         <TextBox Text="{Binding AttachedFile, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
                     </GroupBox>
-                    
-                    <GroupBox Grid.Row="3">
-                        <StackPanel Orientation="Vertical">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <CheckBox Grid.Column="1" Visibility="Hidden"></CheckBox>
-                                <TextBlock Grid.Column="1" Text="N" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource S_TextBlock_GNodeDescriptionShort}"></TextBlock>
 
-                                <CheckBox Grid.Column="3" Visibility="Hidden"></CheckBox>
-                                <Image Grid.Column="3" Width="12" Height="12" Source="{Binding Source={x:Static draw:SystemIcons.Error}, Converter={StaticResource IconToImageSourceConverter}, Mode=OneWay}" />
+                    <CheckBox Grid.Row="3" Grid.ColumnSpan="2" IsChecked="{Binding FinInteractivePart , UpdateSourceTrigger=PropertyChanged}">Завершает интерактивный диалог</CheckBox>
 
-                                <CheckBox Grid.Column="4" Visibility="Hidden"></CheckBox>
-                                <Image Grid.Column="4" Width="12" Height="12" Source="{Binding Source={x:Static draw:SystemIcons.Asterisk}, Converter={StaticResource IconToImageSourceConverter}, Mode=OneWay}" />
-                            </Grid>
-                            <ItemsControl ItemsSource="{Binding ParticipantStates}"></ItemsControl>
-                        </StackPanel>
-                    </GroupBox>
-
-                    <CheckBox Grid.Row="4" Grid.ColumnSpan="2" IsChecked="{Binding FinInteractivePart , UpdateSourceTrigger=PropertyChanged}">Завершает интерактивный диалог</CheckBox>
-
-                    <GroupBox Grid.Row="5">
+                    <GroupBox Grid.Row="4">
                         <GroupBox.Header><!--////// TODO Cant simply move it to HeaderTemplate because of RTBHelper logic-->
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Описание" Style="{StaticResource S_TextBlock_GroupHeader}"></TextBlock>
@@ -78,7 +53,7 @@ StorylineEditor распространяется в надежде, что он�
                         <RichTextBox nodes:RTBHelper.IsEditing="true"></RichTextBox>
                     </GroupBox>
 
-                    <GroupBox x:Name="gb_ShortDescription" Grid.Row="6" Visibility="Collapsed" Header="Краткое описание" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
+                    <GroupBox x:Name="gb_ShortDescription" Grid.Row="5" Visibility="Collapsed" Header="Краткое описание" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
                         <TextBox AcceptsReturn="True" MaxLength="256" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
                     </GroupBox>
                 </Grid>
