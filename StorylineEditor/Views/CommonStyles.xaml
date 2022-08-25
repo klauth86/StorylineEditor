@@ -15,7 +15,6 @@ StorylineEditor распространяется в надежде, что он�
                     xmlns:draw="clr-namespace:System.Drawing;assembly=System.Drawing"
                     xmlns:converters="clr-namespace:StorylineEditor.Views.Converters"                                      
                     xmlns:views="clr-namespace:StorylineEditor.Views"
-                    xmlns:viewModelsTabs="clr-namespace:StorylineEditor.ViewModels.Tabs"
                     xmlns:viewModels="clr-namespace:StorylineEditor.ViewModels"
                     xmlns:nodes="clr-namespace:StorylineEditor.Views.Nodes"
                     xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
@@ -446,17 +445,16 @@ StorylineEditor распространяется в надежде, что он�
     </Style>
 
     <Style TargetType="Button" x:Key="S_Button_UI_ShowStats" BasedOn="{StaticResource S_Button_Node}">
-        <Setter Property="BorderBrush" Value="Transparent"></Setter>
-        <Setter Property="Background" Value="Transparent"></Setter>
-        <Setter Property="Padding" Value="0"></Setter>
+        <Setter Property="Background" Value="CornflowerBlue"></Setter>
+        <Setter Property="Foreground" Value="White"></Setter>
         <Setter Property="Content">
             <Setter.Value>
-                <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="{Binding Source={x:Static draw:SystemIcons.Asterisk}, Converter={StaticResource IconToImageSourceConverter}, Mode=OneWay}"/>
+                <Path HorizontalAlignment="Center" VerticalAlignment="Center" Width="18" Height="18" Data="M9,14 9,8 M9,6 9,4" Stroke="White" StrokeThickness="3"></Path>
             </Setter.Value>
         </Setter>
         <Setter Property="VerticalAlignment" Value="Center"></Setter>
         <Setter Property="HorizontalAlignment" Value="Center"></Setter>
-        <Setter Property="ToolTip" Value="Удалить"></Setter>
+        <Setter Property="ToolTip" Value="Посмотреть статистику"></Setter>
         <Setter Property="Command" Value="{Binding InfoCommand}"></Setter>
         <Setter Property="CommandParameter" Value="{Binding ElementName=tv_Items, Path=SelectedValue, UpdateSourceTrigger=PropertyChanged}"></Setter>
     </Style>
