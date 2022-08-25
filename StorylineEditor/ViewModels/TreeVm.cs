@@ -189,7 +189,7 @@ namespace StorylineEditor.ViewModels
                     Participants.Add(character.Id);
 
                     ////// TODO Think if we should refresh view
-                    if (Parent is BaseTabVm<BaseNamedVm<BaseVm<FullContextVm>>, FullContextVm> tabParent)
+                    if (Parent is FolderedTabVm tabParent)
                     {
                         CollectionViewSource.GetDefaultView(tabParent.Items).Refresh();
                     }
@@ -216,7 +216,7 @@ namespace StorylineEditor.ViewModels
                     Participants.Remove(character.Id);
 
                     ////// TODO Think if we should refresh view
-                    if (Parent is BaseTabVm<BaseNamedVm<BaseVm<FullContextVm>>, FullContextVm> tabParent)
+                    if (Parent is FolderedTabVm tabParent)
                     {
                         CollectionViewSource.GetDefaultView(tabParent.Items).Refresh();
                     }

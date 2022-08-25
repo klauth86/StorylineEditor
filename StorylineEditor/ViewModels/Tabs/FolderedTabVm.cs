@@ -14,6 +14,7 @@ using StorylineEditor.Common;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Input;
 using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.Tabs
@@ -36,11 +37,15 @@ namespace StorylineEditor.ViewModels.Tabs
         }
     }
 
-    public abstract class FolderedTabVm : BaseTabVm<FolderedVm, FullContextVm>, IDragOverable
+    public abstract class FolderedTabVm : BaseVm<FullContextVm>, IDragOverable
     {
-        public FolderedTabVm(FullContextVm Parent, long additionalTicks) : base(Parent, additionalTicks) { }
+        public FolderedTabVm(FullContextVm Parent, long additionalTicks) : base(Parent, additionalTicks) { items = new ObservableCollection<FolderedVm>(); }
 
         public FolderedTabVm() : this(null, 0) { }
+
+        [XmlArray]
+        protected ObservableCollection<FolderedVm> items;
+        public ObservableCollection<FolderedVm> Items => items;
 
         protected FolderedVm selectedItem;
         
@@ -57,7 +62,11 @@ namespace StorylineEditor.ViewModels.Tabs
             }
         }
 
-        public override void AddImpl(FolderedVm itemToAdd)
+        public abstract FolderedVm CreateItem(object parameter);
+
+        ICommand addCommand;
+        public ICommand AddCommand => addCommand ?? (addCommand = new RelayCommand<object>((parameter) => AddImpl(CreateItem(parameter))));
+        public virtual void AddImpl(FolderedVm itemToAdd)
         {
             if (itemToAdd != null)
             {
@@ -80,12 +89,16 @@ namespace StorylineEditor.ViewModels.Tabs
             }
         }
 
-        public override bool RemoveImpl(FolderedVm itemToRemove)
+        ICommand removeCommand;
+        public ICommand RemoveCommand => removeCommand ?? (removeCommand = new RelayCommand<FolderedVm>((item) => RemoveImpl(item), (item) => item != null));
+        public virtual bool RemoveImpl(FolderedVm itemToRemove)
         {
             SelectedItem.IsSelected = false;
 
-            return itemToRemove.Folder != null ? itemToRemove.Folder.RemoveChild(itemToRemove) : base.RemoveImpl(itemToRemove);
+            return itemToRemove.Folder != null ? itemToRemove.Folder.RemoveChild(itemToRemove) : Items.Remove(itemToRemove);
         }
+
+        public virtual bool EditItemInPlace => false;
 
         protected bool isDragOver;
         [XmlIgnore]
@@ -226,6 +239,15 @@ namespace StorylineEditor.ViewModels.Tabs
         }
 
         public override void NotifyItemNameChanged(BaseVm renamedVm) { if (renamedVm is FolderedVm foldered) RenameInCollection(this, Items, foldered); }
+
+        public override void SetupParenthood()
+        {
+            foreach (var item in Items)
+            {
+                item.Parent = this;
+                item.SetupParenthood();
+            }
+        }
 
         public void SortItems()
         {

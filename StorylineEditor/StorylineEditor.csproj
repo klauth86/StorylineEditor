@@ -148,7 +148,6 @@
     <Compile Include="ViewModels\Predicates\P_HasItemVm.cs" />
     <Compile Include="ViewModels\Tabs\CharactersTabVm.cs" />
     <Compile Include="ViewModels\Tabs\ItemsTabVm.cs" />
-    <Compile Include="ViewModels\Tabs\BaseTabVm.cs" />
     <Compile Include="ViewModels\Tabs\LocationObjectsTabVm.cs" />
     <Compile Include="ViewModels\LocationObjectVm.cs" />
     <Compile Include="Views\Adorners\DragOveredAdorner.cs" />
