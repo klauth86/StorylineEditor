@@ -19,7 +19,6 @@ using StorylineEditor.Views.Converters;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -183,6 +182,8 @@ namespace StorylineEditor.ViewModels
                             dNode_Character.ParticipantStates.Add(new ParticipantStateVm(dNode_Character, 0, character));
                         }
                     }
+
+                    Notify(nameof(Stats));
                 }
             }
         }
@@ -209,6 +210,8 @@ namespace StorylineEditor.ViewModels
                         }
                     }
                 }
+
+                Notify(nameof(Stats));
             }
         }
 
@@ -220,6 +223,7 @@ namespace StorylineEditor.ViewModels
             OnRootNodesChanged.Invoke();
 
             Notify(nameof(RootNodes));
+            Notify(nameof(Stats));
         }
 
         public void RemoveRootNode(Node_BaseVm node)
@@ -232,6 +236,7 @@ namespace StorylineEditor.ViewModels
             if (rootNodeIndex >= RootNodeIds.Count) rootNodeIndex--;
 
             Notify(nameof(RootNodes));
+            Notify(nameof(Stats));
         }
 
         int rootNodeIndex = -1;
@@ -275,31 +280,18 @@ namespace StorylineEditor.ViewModels
         public Node_BaseVm Selected => Selection.Count == 1 ? Selection[0] : null;
 
         ICommand toggleGenderCommand;
-        public ICommand ToggleGenderCommand
-        {
-            get
-            {
-                return toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand<Node_BaseVm>((node) =>
-                {
-                    node.ToggleGender();
-                }, (node) => node != null));
-            }
-        }
+        public ICommand ToggleGenderCommand => toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand<Node_BaseVm>((node) => 
+        { 
+            node.ToggleGender();
+            Notify(nameof(Stats));
+        }, (node) => node != null));
 
         ICommand removeCommand;
-        public ICommand RemoveCommand
+        public ICommand RemoveCommand => removeCommand ?? (removeCommand = new RelayCommand<object>((argument) =>
         {
-            get
-            {
-                return removeCommand ?? (removeCommand = new RelayCommand<object>((argument) =>
-                {
-                    if (argument is NodePairVm link) RemoveLink_Internal(link);
-
-                    if (argument is Node_BaseVm node) RemoveNode_Internal(node);
-
-                }, (argument) => argument != null));
-            }
-        }
+            if (argument is NodePairVm link) RemoveLink_Internal(link);
+            if (argument is Node_BaseVm node) RemoveNode_Internal(node);
+        }, (argument) => argument != null));
 
         ICommand prevRootCommand;
         public ICommand PrevRootCommand => prevRootCommand ?? (prevRootCommand = new RelayCommand(() =>
@@ -345,6 +337,7 @@ namespace StorylineEditor.ViewModels
             }
 
             NotifyIsValidChanged();
+            Notify(nameof(Stats));
         }
 
         private void RemoveNode_Internal(Node_BaseVm node)
@@ -363,6 +356,7 @@ namespace StorylineEditor.ViewModels
             if (node is IOwnered ownered) RemoveParticipant(ownered.Owner);
 
             NotifyIsValidChanged();
+            Notify(nameof(Stats));
         }
 
         public void AddNode(Node_BaseVm node) { if (node != null) AddNode_Internal(node); }
@@ -389,6 +383,7 @@ namespace StorylineEditor.ViewModels
             }
             AddToSelection(node, true);
             NotifyIsValidChanged();
+            Notify(nameof(Stats));
         }
 
         public bool CanLink(Node_BaseVm from, Node_BaseVm to)
@@ -532,7 +527,6 @@ namespace StorylineEditor.ViewModels
 
         public List<Node_BaseVm> GetRootNodes(Node_BaseVm node)
         {
-
             List<Node_BaseVm> layerNodes = new List<Node_BaseVm>() { node };
 
             if (node.IsRoot) return layerNodes;
