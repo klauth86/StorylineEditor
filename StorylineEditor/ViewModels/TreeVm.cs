@@ -75,10 +75,6 @@ namespace StorylineEditor.ViewModels
                 result += string.Format("ID: {0}", id) + Environment.NewLine;
                 result += string.Format("NAME: {0}", Name) + Environment.NewLine;
 
-                // Delimiter
-                result += Environment.NewLine;
-                result += Environment.NewLine;
-
                 Dictionary<string, Dictionary<string, int>> countByCharacter = new Dictionary<string, Dictionary<string, int>>();
                 Dictionary<string, int> countByTypeDescription = new Dictionary<string, int>();
 
@@ -111,24 +107,50 @@ namespace StorylineEditor.ViewModels
                     countByTypeDescription[typeDescription]++;
                 }
 
-                result += "Вершины по персонажам: " + Nodes.Count + Environment.NewLine;
-                result += Environment.NewLine;
-
-                foreach (var entry in countByCharacter.OrderBy(pair => pair.Key))
+                if (countByCharacter.Count > 0)
                 {
-                    result += string.Format("{0, -" + (characterNameMaxLength + 6) + "}{1}", "- " + entry.Key + ":", string.Join("\t", entry.Value.Select(pair => string.Format("{0}{1, -6}", pair.Key, pair.Value)))) + Environment.NewLine;
+                    // Delimiter
+                    result += Environment.NewLine;
+                    result += Environment.NewLine;
+
+                    result += "ВЕРШИНЫ ПО ПЕРСОНАЖАМ:" + Environment.NewLine;
+                    result += Environment.NewLine;
+
+                    foreach (var entry in countByCharacter.OrderBy(pair => pair.Key))
+                    {
+                        result += string.Format("{0, -" + (characterNameMaxLength + 6) + "}{1}", "- " + entry.Key + ":", string.Join("\t", entry.Value.Select(pair => string.Format("{0}{1, -6}", pair.Key, pair.Value)))) + Environment.NewLine;
+                    }
+
+                    result += string.Format("{0, -" + (characterNameMaxLength + 6) + "} {1}", "- N/A: ", (Nodes.Count - owneredCount)) + Environment.NewLine;
                 }
 
-                result += string.Format("{0, -" + (characterNameMaxLength + 6) + "} {1}", "- N/A: ", (Nodes.Count - owneredCount)) + Environment.NewLine;
+                if (countByTypeDescription.Count > 0)
+                {
+                    // Delimiter
+                    result += Environment.NewLine;
+                    result += Environment.NewLine;
+
+                    result += "ВЕРШИНЫ ПО ТИПАМ:" + Environment.NewLine;
+                    result += Environment.NewLine;
+
+                    foreach (var entry in countByTypeDescription) result += "- " + entry.Key + ": " + entry.Value + Environment.NewLine;
+                }
 
                 // Delimiter
                 result += Environment.NewLine;
                 result += Environment.NewLine;
 
-                result += "Вершины по типам: " + Nodes.Count + Environment.NewLine;
+                result += "ОШИБКИ:" + Environment.NewLine;
                 result += Environment.NewLine;
 
-                foreach (var entry in countByTypeDescription) result += "- " + entry.Key + ": " + entry.Value + Environment.NewLine;
+                if (RootNodeIds.Count == 0)
+                {
+                    result += string.Format("- ⚠ В дереве отсутствует корневая вершина. У дерева должна быть только ОДНА корневая вершина!") + Environment.NewLine;
+                }
+                else if (RootNodeIds.Count > 1)
+                {
+                    result += string.Format("- ⚠ В дереве несколько корневых вершин. У дерева должна быть только ОДНА корневая вершина!") + Environment.NewLine;
+                }
 
                 return result;
             }
