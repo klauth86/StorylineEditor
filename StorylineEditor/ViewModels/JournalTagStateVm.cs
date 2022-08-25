@@ -50,10 +50,6 @@ namespace StorylineEditor.ViewModels
 
         public override void SetupParenthood()
         {
-            if (Parent is BaseVm<Node_BaseVm> nodeChild)
-            {
-                Tag = nodeChild.Parent.Parent.Parent.Parent.GlobalTagsTab.Items.FirstOrDefault((tag) => tag.Id == TagId);
-            }
         }
     }
 }

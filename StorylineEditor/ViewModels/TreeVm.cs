@@ -29,7 +29,7 @@ using System.Windows;
 namespace StorylineEditor.ViewModels
 {
     [XmlRoot]
-    public class TreeVm : NonFolderVm, ICopyPaste, ITagged
+    public class TreeVm : NonFolderVm, ICopyPaste
     {
         public event Action<string> OnSetBackground = delegate { };
 
@@ -58,9 +58,6 @@ namespace StorylineEditor.ViewModels
             RootNodeIds = new List<string>();
             Participants = new List<string>();
 
-            globalTagIds = new ObservableCollection<string>();
-            globalTagIds.CollectionChanged += OnCollectionChanged;
-
             FullContextVm.OnSearchFilterChangedEvent += OnSearchFilterChanged;
         }
 
@@ -69,11 +66,7 @@ namespace StorylineEditor.ViewModels
         ~TreeVm()
         {
             FullContextVm.OnSearchFilterChangedEvent -= OnSearchFilterChanged;
-            
-            globalTagIds.CollectionChanged -= OnCollectionChanged;
         }
-
-        private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => Notify(nameof(Tags));
 
         public string Stats
         {
@@ -592,50 +585,6 @@ namespace StorylineEditor.ViewModels
                 link.Parent = this;
             }
         }
-
-        [XmlArray]
-        public ObservableCollection<string> globalTagIds { get; set; }
-
-
-
-        [XmlIgnore]
-        public List<JournalTagVm> Tags => Parent?.Parent?.GlobalTagsTab.Items.Where((tag) => globalTagIds.Contains(tag.Id)).ToList();
-
-        protected CollectionViewSource tagsToAdd;
-        [XmlIgnore]
-        public CollectionViewSource TagsToAdd
-        {
-            get
-            {
-                if (Parent != null && tagsToAdd == null)
-                {
-                    tagsToAdd = new CollectionViewSource() { Source = Parent.Parent.GlobalTagsTab.Items };
-                    tagsToAdd.View.Filter = (object obj) => obj is JournalTagVm tag && !globalTagIds.Contains(tag.Id);
-                    tagsToAdd.View.MoveCurrentTo(null);
-                }
-
-                return tagsToAdd;
-            }
-        }
-
-        [XmlIgnore]
-        public JournalTagVm TagToAdd
-        {
-            get => null;
-            set
-            {
-                if (value != null && !globalTagIds.Contains(value.Id))
-                {
-                    globalTagIds.Add(value.Id);
-                    TagsToAdd.View.Refresh();
-                }
-            }
-        }
-
-        ICommand removeTagCommand;
-        public ICommand RemoveTagCommand => removeTagCommand ?? (removeTagCommand = new RelayCommand<JournalTagVm>(tag => RemoveTag(tag.Id), tag => tag != null));
-
-        public void RemoveTag(string tagId) { globalTagIds.Remove(tagId); TagsToAdd.View.Refresh(); }
 
 
 

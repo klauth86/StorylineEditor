@@ -42,7 +42,6 @@ StorylineEditor распространяется в надежде, что он�
                 <ResourceDictionary Source="Views/Predicates/P_HasDialogNodeV.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Views/Predicates/P_HasDialogV.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Views/Predicates/P_HasItemV.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="Views/Predicates/P_HasJournalTagsV.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Views/Predicates/P_HasJournalRecordV.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Views/Predicates/P_HasJournalRecordNodeV.xaml"></ResourceDictionary>
 

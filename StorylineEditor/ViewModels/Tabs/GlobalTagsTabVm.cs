@@ -10,7 +10,6 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using StorylineEditor.ViewModels.Nodes;
 using System.Collections.Generic;
 using System.Windows.Data;
 using System.Xml.Serialization;
@@ -96,21 +95,6 @@ namespace StorylineEditor.ViewModels.Tabs
         {
             foreach (var item in collection)
             {
-                if (item is ITagged tagged) tagged.RemoveTag(tagToRemove.Id);
-
-                if (item is TreeVm tree)
-                {
-                    foreach (var node in tree.Nodes)
-                    {
-                        if (node is Node_InteractiveVm iNode)
-                        {
-                            foreach (var predicate in iNode.Predicates)
-                            {
-                                if (predicate is ITagged taggedPredicate) taggedPredicate.RemoveTag(tagToRemove.Id);
-                            }
-                        }
-                    }
-                }
             }
         }
     }

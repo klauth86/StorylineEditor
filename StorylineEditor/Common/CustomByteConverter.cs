@@ -47,7 +47,6 @@ namespace StorylineEditor.Common
             if (name == typeof(P_HasDialogNodeVm).Name) return new P_HasDialogNodeVm(Parent as Node_BaseVm, additionalTicks);
             if (name == typeof(P_HasDialogVm).Name) return new P_HasDialogVm(Parent as Node_BaseVm, additionalTicks);
             if (name == typeof(P_HasItemVm).Name) return new P_HasItemVm(Parent as Node_BaseVm, additionalTicks);
-            if (name == typeof(P_HasJournalTagsVm).Name) return new P_HasJournalTagsVm(Parent as Node_BaseVm, additionalTicks);
             if (name == typeof(P_HasJournalRecordVm).Name) return new P_HasJournalRecordVm(Parent as Node_BaseVm, additionalTicks);
             if (name == typeof(P_HasJournalRecordNodeVm).Name) return new P_HasJournalRecordNodeVm(Parent as Node_BaseVm, additionalTicks);
             if (name == typeof(P_CompositeVm).Name) return new P_CompositeVm(Parent as Node_BaseVm, additionalTicks);

@@ -41,7 +41,6 @@ namespace StorylineEditor.ViewModels
         public CharactersTabVm CharactersTab => GetTab<CharactersTabVm>();
         public ItemsTabVm ItemsTab => GetTab<ItemsTabVm>();
         public LocationObjectsTabVm LocationObjectsTab => GetTab<LocationObjectsTabVm>();
-        public GlobalTagsTabVm GlobalTagsTab => GetTab<GlobalTagsTabVm>();
         public JournalRecordsTabVm JournalRecordsTab => GetTab<JournalRecordsTabVm>();
         public PlayerDialogsTabVm PlayerDialogsTab => GetTab<PlayerDialogsTabVm>();
         public ReplicasTabVm ReplicasTab => GetTab<ReplicasTabVm>();
@@ -186,8 +185,7 @@ namespace StorylineEditor.ViewModels
             (null == LocationObjectsTab || LocationObjectsTab.Items.Count == 0) &&
             (null == PlayerDialogsTab || PlayerDialogsTab.Items.Count == 0) &&
             (null == ReplicasTab || ReplicasTab.Items.Count == 0) &&
-            (null == JournalRecordsTab || JournalRecordsTab.Items.Count == 0) &&
-            (null == GlobalTagsTab || GlobalTagsTab.Items.Count == 0);
+            (null == JournalRecordsTab || JournalRecordsTab.Items.Count == 0);
 
         public void AddWorkTabs()
         {
@@ -197,8 +195,6 @@ namespace StorylineEditor.ViewModels
 
             tabs.Add(new ItemsTabVm(this, 0) { Name = "Предметы" });
             tabs.Add(new LocationObjectsTabVm(this, 0) { Name = "Объекты локации" });
-
-            tabs.Add(new GlobalTagsTabVm(this, 0) { Name = "Глобальные тэги" });
 
             tabs.Add(new JournalRecordsTabVm(this, 0) { Name = "Журнальные записи" });
             

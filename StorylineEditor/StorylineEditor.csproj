@@ -103,7 +103,6 @@
     </Compile>
     <Compile Include="ViewModels\FolderedVm.cs" />
     <Compile Include="ViewModels\IDragOverable.cs" />
-    <Compile Include="ViewModels\ITagged.cs" />
     <Compile Include="ViewModels\Nodes\JNode_AlternativeVm.cs" />
     <Compile Include="ViewModels\Nodes\JNode_StepVm.cs" />
     <Compile Include="ViewModels\CharacterVm.cs" />
@@ -124,7 +123,6 @@
     <Compile Include="ViewModels\Nodes\Ownered.cs" />
     <Compile Include="ViewModels\Predicates\P_HasJournalRecordNodeVm.cs" />
     <Compile Include="ViewModels\Predicates\P_HasJournalRecordVm.cs" />
-    <Compile Include="ViewModels\Predicates\P_HasJournalTagsVm.cs" />
     <Compile Include="ViewModels\Tabs\BaseTreesTabVm.cs" />
     <Compile Include="ViewModels\Tabs\FolderedTabVm.cs" />
     <Compile Include="ViewModels\Tabs\GlobalTagsTabVm.cs" />
@@ -360,10 +358,6 @@
     <Page Include="Views\Predicates\P_HasItemV.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Predicates\P_HasJournalTagsV.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Tabs\GlobalTagsTabV.xaml">
       <SubType>Designer</SubType>
