@@ -78,29 +78,28 @@ namespace StorylineEditor.ViewModels
                 Dictionary<string, Dictionary<string, int>> countByCharacter = new Dictionary<string, Dictionary<string, int>>();
                 Dictionary<string, int> countByTypeDescription = new Dictionary<string, int>();
 
-                int owneredCount = 0;
                 int characterNameMaxLength = 0;
 
                 foreach (var node in Nodes)
                 {
+                    string characterName = "N/A";
+
                     if (node is IOwnered owneredNode)
                     {
-                        owneredCount++;
-
-                        var characterName = owneredNode.Owner?.Name;
+                        characterName = owneredNode.Owner?.Name;
                         characterNameMaxLength = Math.Max(characterName?.Length ?? 0, characterNameMaxLength);
-
-                        string gender = " ";
-                        if (node.Gender == Node_BaseVm.MALE) gender = "👨";
-                        if (node.Gender == Node_BaseVm.FEMALE) gender = "👩";
-                        
-                        if (!countByCharacter.ContainsKey(characterName))
-                        {
-                            countByCharacter.Add(characterName, new Dictionary<string, int>() { { " ", 0 }, { "👨", 0 }, { "👩", 0 } });
-                        }
-                        
-                        countByCharacter[characterName][gender]++;
                     }
+
+                    string gender = " ";
+                    if (node.Gender == Node_BaseVm.MALE) gender = "👨";
+                    if (node.Gender == Node_BaseVm.FEMALE) gender = "👩";
+
+                    if (!countByCharacter.ContainsKey(characterName))
+                    {
+                        countByCharacter.Add(characterName, new Dictionary<string, int>() { { " ", 0 }, { "👨", 0 }, { "👩", 0 } });
+                    }
+
+                    countByCharacter[characterName][gender]++;
 
                     var typeDescription = TypeToDescriptionConverter.GetTypeDescription(node.GetType());
                     if (!countByTypeDescription.ContainsKey(typeDescription)) countByTypeDescription.Add(typeDescription, 0);
@@ -120,8 +119,6 @@ namespace StorylineEditor.ViewModels
                     {
                         result += string.Format("{0, -" + (characterNameMaxLength + 6) + "}{1}", "- " + entry.Key + ":", string.Join("\t", entry.Value.Select(pair => string.Format("{0}{1, -6}", pair.Key, pair.Value)))) + Environment.NewLine;
                     }
-
-                    result += string.Format("{0, -" + (characterNameMaxLength + 6) + "} {1}", "- N/A: ", (Nodes.Count - owneredCount)) + Environment.NewLine;
                 }
 
                 if (countByTypeDescription.Count > 0)
@@ -133,7 +130,7 @@ namespace StorylineEditor.ViewModels
                     result += "ВЕРШИНЫ ПО ТИПАМ:" + Environment.NewLine;
                     result += Environment.NewLine;
 
-                    foreach (var entry in countByTypeDescription) result += "- " + entry.Key + ": " + entry.Value + Environment.NewLine;
+                    foreach (var entry in countByTypeDescription.OrderBy(pair => pair.Key)) result += "- " + entry.Key + ": " + entry.Value + Environment.NewLine;
                 }
 
                 // Delimiter
