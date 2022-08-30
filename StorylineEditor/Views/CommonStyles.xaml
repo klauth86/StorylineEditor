@@ -16,9 +16,11 @@ StorylineEditor распространяется в надежде, что он�
                     xmlns:converters="clr-namespace:StorylineEditor.Views.Converters"                                      
                     xmlns:views="clr-namespace:StorylineEditor.Views"
                     xmlns:viewModels="clr-namespace:StorylineEditor.ViewModels"
+                    xmlns:viewModelNodes="clr-namespace:StorylineEditor.ViewModels.Nodes"
                     xmlns:nodes="clr-namespace:StorylineEditor.Views.Nodes"
                     xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
-                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
 
     <Thickness x:Key="MarginPaddingThickness">2</Thickness>
     
@@ -268,6 +270,18 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="Content" Value="⮌"></Setter>
         <Setter Property="ToolTip" Value="Сбросить масштаб"></Setter>
         <Setter Property="Command" Value="{Binding ElementName=tc, Path=ResetScaleCommand}"></Setter>
+    </Style>
+
+    <Style TargetType="Button" x:Key="S_Button_Player_Play" BasedOn="{StaticResource S_Button_CanvasPanel}">
+        <Setter Property="Content" Value="▶"></Setter>
+        <Setter Property="ToolTip" Value="Воспроизвести"></Setter>
+        <Setter Property="Command" Value="{Binding TogglePlayCommand}"></Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsPlaying, UpdateSourceTrigger=PropertyChanged}" Value="true">
+                <Setter Property="Content" Value="⏸"></Setter>
+                <Setter Property="ToolTip" Value="Пауза"></Setter>
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
     <!--CANVAS PANEL BUTTONS-->
@@ -1153,5 +1167,35 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
     
     <!--INFO UI-->
-    
+
+    <!--PLAYER UI-->
+
+    <DataTemplate x:Key="DT_TreeVm_Player" DataType="{x:Type viewModels:TreeVm}">
+        <DataTemplate.Resources>
+            <ResourceDictionary>
+                <DataTemplate DataType="{x:Type viewModelNodes:DNode_RandomVm}">
+                    <TextBlock>Случайная</TextBlock>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewModelNodes:DNode_CharacterVm}">
+                    <TextBlock>Регулярная</TextBlock>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewModelNodes:DNode_DialogVm}">
+                    <TextBlock>Регулярная</TextBlock>
+                </DataTemplate>
+            </ResourceDictionary>
+        </DataTemplate.Resources>
+        <DockPanel>
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
+                <xctk:IntegerUpDown Minimum="1" Maximum="60" Value="{Binding NodeTime, UpdateSourceTrigger=PropertyChanged}" AllowTextInput="False"></xctk:IntegerUpDown>
+                <Button Style="{StaticResource S_Button_Player_Play}"></Button>
+            </StackPanel>
+            <ContentControl Content="{Binding NowPlaying, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+            <DockPanel.Resources>
+
+            </DockPanel.Resources>
+        </DockPanel>
+    </DataTemplate>
+
+    <!--INFO UI-->
+
 </ResourceDictionary>

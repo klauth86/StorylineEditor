@@ -13,11 +13,136 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Common;
 using StorylineEditor.ViewModels.Nodes;
 using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.Tabs
 {
+    public class PlayerVm : BaseVm<BaseTreesTabVm>
+    {
+        public PlayerVm(BaseTreesTabVm parent, long additionalTicks, TreeVm treeToPlay) : base(parent, additionalTicks)
+        {
+            TreeToPlay = treeToPlay;
+            isPlaying = false;
+            NodeTime = 4;
+
+            MainWindow.TickEvent += OnTick;
+        }
+
+        ~PlayerVm()
+        {
+            MainWindow.TickEvent -= OnTick;
+        }
+
+        private void OnTick(double millisec)
+        {
+            if (IsPlaying)
+            {
+                NodeTimeLeft -= millisec;
+                
+                if (NodeTimeLeft < 0)
+                {
+                    List<Node_BaseVm> childNodes = TreeToPlay.GetPrimaryChildNodes(NowPlaying);
+
+                    if (childNodes.Count == 1)
+                    {
+                        NowPlaying = childNodes[0];
+                    }
+                    if (childNodes.Count > 0)
+                    {
+                        if (NowPlaying is DNode_RandomVm randomNode)
+                        { 
+                        
+                        }
+                        else if (NowPlaying is DNode_TransitVm transitNode)
+                        {
+
+                        }
+                        else if (NowPlaying is DNode_CharacterVm characterNode)
+                        {
+
+                        }
+                    }
+                    else
+                    {
+                        IsPlaying = false;
+                        NowPlaying = null;
+                    }
+                }
+            }
+        }
+
+        readonly TreeVm TreeToPlay;
+
+        private bool isPlaying;
+        public bool IsPlaying
+        {
+            get => isPlaying;
+            set
+            {
+                if (value != isPlaying)
+                {
+                    if (value) NowPlaying = TreeToPlay.Selected;
+
+                    isPlaying = value;
+                    NotifyWithCallerPropName();
+                }
+            }
+        }
+
+        private double nodeTime;
+        public double NodeTime
+        {
+            get => nodeTime;
+            set
+            {
+                if (value != nodeTime)
+                {
+                    nodeTime = value;
+                    NotifyWithCallerPropName();
+                }
+            }
+        }
+
+        private double nodeTimeLeft;
+        public double NodeTimeLeft
+        {
+            get => nodeTimeLeft;
+            set
+            {
+                if (value != nodeTimeLeft)
+                {
+                    nodeTimeLeft = value;
+                    NotifyWithCallerPropName();
+                }
+            }
+        }
+
+        private Node_BaseVm nowPlaying;
+        public Node_BaseVm NowPlaying
+        { 
+            get => nowPlaying;
+            set 
+            {
+                if (value != nowPlaying)
+                {
+                    NodeTimeLeft = NodeTime;
+
+                    nowPlaying = value;
+                    NotifyWithCallerPropName();
+                }
+                
+
+            }
+        }
+
+        protected ICommand togglePlayCommand;
+
+        public ICommand TogglePlayCommand => togglePlayCommand ?? (togglePlayCommand = new RelayCommand
+                    (() => IsPlaying = !IsPlaying, () => TreeToPlay != null && TreeToPlay.Selected != null));
+    }
+
     [XmlRoot]
     public abstract class BaseTreesTabVm : FolderedTabVm
     {
@@ -72,8 +197,7 @@ namespace StorylineEditor.ViewModels.Tabs
         protected ICommand playCommand;
         public ICommand PlayCommand => playCommand ?? (playCommand = new RelayCommand
             (
-            () => new InfoWindow("Воспроивзедение " + SelectedItem.Name, "DT_" + SelectedItem.GetType().Name + "_Info", SelectedItem) { Owner = App.Current.MainWindow }.Show(),
-            () => SelectedItem != null && !SelectedItem.IsFolder
+            () => new InfoWindow("Воспроизведение " + SelectedItem.Name, "DT_" + SelectedItem.GetType().Name + "_Player", new PlayerVm(this, 0, SelectedItem as TreeVm)) { Owner = App.Current.MainWindow }.ShowDialog()
             ));
     }
 }

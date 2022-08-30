@@ -30,7 +30,15 @@ namespace StorylineEditor
     /// </summary>
     public partial class MainWindow : Window
     {
-        readonly DispatcherTimer timer;
+        public static event Action<double> TickEvent = delegate { };
+
+        public static event Action<bool, Key> FacadeKeyEvent = delegate { };
+
+        readonly DispatcherTimer tickTimer;
+
+        const int tickTimerMillisec = 100;
+
+        readonly DispatcherTimer autosaveTimer;
 
         public MainWindow()
         {
@@ -43,23 +51,35 @@ namespace StorylineEditor
             var assemblyName = Assembly.GetExecutingAssembly().GetName();
             Title = assemblyName.Name;
 
-            timer = new DispatcherTimer
+            tickTimer = new DispatcherTimer
+            {
+                Interval = new TimeSpan(0, 0, 0, 0, tickTimerMillisec)
+            };
+            tickTimer.Tick += OnTickTimer;
+            tickTimer.Start();
+
+            autosaveTimer = new DispatcherTimer
             {
                 Interval = new TimeSpan(0, 5, 0)
             };
-            timer.Tick += OnTimerTick;
-            timer.Start();
+            autosaveTimer.Tick += OnAutosaveTimer;
+            autosaveTimer.Start();
 
             DefaultDialogService.Init();
         }
 
         ~MainWindow()
         {
-            timer.Stop();
-            timer.Tick -= OnTimerTick;
+            autosaveTimer.Stop();
+            autosaveTimer.Tick -= OnAutosaveTimer;
+
+            tickTimer.Stop();
+            tickTimer.Tick -= OnTickTimer;
         }
 
-        private void OnTimerTick(object sender, EventArgs e)
+        private void OnTickTimer(object sender, EventArgs e) { TickEvent(1.0 * tickTimerMillisec / 1000.0); }
+
+        private void OnAutosaveTimer(object sender, EventArgs e)
         {
             ////// TODO
             //////if (ckb_AutoSave.IsChecked ?? false)
@@ -68,25 +88,11 @@ namespace StorylineEditor
             //////}
         }
 
-        protected override void OnPreviewKeyDown(KeyEventArgs e)
-        {
-            FacadeKeyEvent(true, e.Key);
-            base.OnPreviewKeyDown(e);
-        }
+        protected override void OnPreviewKeyDown(KeyEventArgs e) { FacadeKeyEvent(true, e.Key); base.OnPreviewKeyDown(e); }
 
-        protected override void OnPreviewKeyUp(KeyEventArgs e)
-        {
-            FacadeKeyEvent(false, e.Key);
-            base.OnPreviewKeyUp(e);
-        }
+        protected override void OnPreviewKeyUp(KeyEventArgs e) { FacadeKeyEvent(false, e.Key); base.OnPreviewKeyUp(e); }
 
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            (DataContext as FullContextVm)?.OnClosing();
-            base.OnClosing(e);
-        }
-
-        public static event Action<bool, Key> FacadeKeyEvent = delegate { };
+        protected override void OnClosing(CancelEventArgs e) { (DataContext as FullContextVm)?.OnClosing(); base.OnClosing(e); }
 
         const string xmlFilter = "XML files (*.xml)|*.xml";
 
@@ -102,10 +108,7 @@ namespace StorylineEditor
             else if (!string.IsNullOrEmpty(IDialogService.DialogService.SaveFileDialog(xmlFilter, true))) SaveAsXml(IDialogService.DialogService.Path);
         }
 
-        private void Exit_Click(object sender, RoutedEventArgs e)
-        {
-            App.Current.Shutdown();
-        }
+        private void Exit_Click(object sender, RoutedEventArgs e) { App.Current.Shutdown(); }
 
         private void OpenAsXml(string path)
         {
