@@ -258,6 +258,12 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="Command" Value="{Binding ElementName=tv_Items, Path=SelectedValue.SetBackgroundCommand}"></Setter>
     </Style>
 
+    <Style TargetType="Button" x:Key="S_Button_Play" BasedOn="{StaticResource S_Button_CanvasPanel}">
+        <Setter Property="Content" Value="▶"></Setter>
+        <Setter Property="ToolTip" Value="Воспроизвести"></Setter>
+        <Setter Property="Command" Value="{Binding ElementName=tv_Items, Path=SelectedValue.Parent.PlayCommand}"></Setter>
+    </Style>
+    
     <Style TargetType="Button" x:Key="S_Button_ResetScale" BasedOn="{StaticResource S_Button_CanvasPanel}">
         <Setter Property="Content" Value="⮌"></Setter>
         <Setter Property="ToolTip" Value="Сбросить масштаб"></Setter>

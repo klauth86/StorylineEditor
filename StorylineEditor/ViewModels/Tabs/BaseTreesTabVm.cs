@@ -63,6 +63,17 @@ namespace StorylineEditor.ViewModels.Tabs
         public override bool EditItemInPlace => true;
 
         protected ICommand infoCommand;
-        public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<FolderedVm>((item) => new InfoWindow("Статистика " + item.Name, "DT_" + item.GetType().Name + "_Info", item) { Owner = App.Current.MainWindow }.Show(), (item) => item != null && !item.IsFolder));
+        public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<FolderedVm>
+            (
+            (item) => new InfoWindow("Статистика " + item.Name, "DT_" + item.GetType().Name + "_Info", item) { Owner = App.Current.MainWindow }.Show(),
+            (item) => item != null && !item.IsFolder
+            ));
+
+        protected ICommand playCommand;
+        public ICommand PlayCommand => playCommand ?? (playCommand = new RelayCommand
+            (
+            () => new InfoWindow("Воспроивзедение " + SelectedItem.Name, "DT_" + SelectedItem.GetType().Name + "_Info", SelectedItem) { Owner = App.Current.MainWindow }.Show(),
+            () => SelectedItem != null && !SelectedItem.IsFolder
+            ));
     }
 }
