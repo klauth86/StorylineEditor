@@ -24,16 +24,16 @@ namespace StorylineEditor.ViewModels.Tabs
         public PlayerVm(BaseTreesTabVm parent, long additionalTicks, TreeVm treeToPlay) : base(parent, additionalTicks)
         {
             TreeToPlay = treeToPlay;
+            
             isPlaying = false;
+            ActiveNode = null;
+            
             NodeTime = 4;
 
             MainWindow.TickEvent += OnTick;
         }
 
-        ~PlayerVm()
-        {
-            MainWindow.TickEvent -= OnTick;
-        }
+        ~PlayerVm() { MainWindow.TickEvent -= OnTick; }
 
         private void OnTick(double millisec)
         {
@@ -41,25 +41,30 @@ namespace StorylineEditor.ViewModels.Tabs
             {
                 NodeTimeLeft -= millisec;
                 
-                if (NodeTimeLeft < 0)
+                if (NodeTimeLeft <= 0 && ActiveNode != null)
                 {
-                    List<Node_BaseVm> childNodes = TreeToPlay.GetPrimaryChildNodes(NowPlaying);
+                    List<Node_BaseVm> childNodes = TreeToPlay.GetChildNodes(ActiveNode);
 
                     if (childNodes.Count == 1)
                     {
-                        NowPlaying = childNodes[0];
+                        transitionTimeLeft = transitionTime;
+                        
+                        FromNode = ActiveNode;
+                        ToNode = childNodes[0];
+
+                        ActiveNode = null;
                     }
                     if (childNodes.Count > 0)
                     {
-                        if (NowPlaying is DNode_RandomVm randomNode)
+                        if (ActiveNode is DNode_RandomVm randomNode)
                         { 
-                        
+                            
                         }
-                        else if (NowPlaying is DNode_TransitVm transitNode)
+                        else if (ActiveNode is DNode_TransitVm transitNode)
                         {
 
                         }
-                        else if (NowPlaying is DNode_CharacterVm characterNode)
+                        else if (ActiveNode is DNode_CharacterVm characterNode)
                         {
 
                         }
@@ -67,13 +72,37 @@ namespace StorylineEditor.ViewModels.Tabs
                     else
                     {
                         IsPlaying = false;
-                        NowPlaying = null;
+                        ActiveNode = null;
+                    }
+                }
+
+                if (IsTransitioning())
+                {
+                    transitionTimeLeft -= millisec;
+
+                    TreeToPlay.OnTransition(FromNode, ToNode, 1 - transitionTimeLeft / transitionTime);
+
+                    if (transitionTimeLeft <= 0)
+                    {
+                        NodeTimeLeft = NodeTime;
+                        
+                        ActiveNode = ToNode;
+
+                        FromNode = null;
+                        ToNode = null;
                     }
                 }
             }
         }
 
         readonly TreeVm TreeToPlay;
+
+        private double transitionTime = 1;
+        private double transitionTimeLeft = 0;
+        protected Node_BaseVm FromNode = null;
+        protected Node_BaseVm ToNode = null;
+
+        public bool IsTransitioning() { return FromNode != null && ToNode != null; }
 
         private bool isPlaying;
         public bool IsPlaying
@@ -83,10 +112,10 @@ namespace StorylineEditor.ViewModels.Tabs
             {
                 if (value != isPlaying)
                 {
-                    if (value) NowPlaying = TreeToPlay.Selected;
-
                     isPlaying = value;
                     NotifyWithCallerPropName();
+
+                    TreeToPlay.OnIsPlayingChanged(isPlaying);
                 }
             }
         }
@@ -119,28 +148,51 @@ namespace StorylineEditor.ViewModels.Tabs
             }
         }
 
-        private Node_BaseVm nowPlaying;
-        public Node_BaseVm NowPlaying
+        private Node_BaseVm activeNode;
+        public Node_BaseVm ActiveNode
         { 
-            get => nowPlaying;
+            get => activeNode;
             set 
             {
-                if (value != nowPlaying)
+                if (value != activeNode)
                 {
-                    NodeTimeLeft = NodeTime;
-
-                    nowPlaying = value;
+                    activeNode = value;
                     NotifyWithCallerPropName();
+                    
+                    TreeToPlay.OnPlayerActiveNodeChanged(activeNode, IsTransitioning());
                 }
-                
-
             }
         }
 
         protected ICommand togglePlayCommand;
-
         public ICommand TogglePlayCommand => togglePlayCommand ?? (togglePlayCommand = new RelayCommand
-                    (() => IsPlaying = !IsPlaying, () => TreeToPlay != null && TreeToPlay.Selected != null));
+                    (() =>
+                    { 
+                        if (!IsPlaying)
+                        {
+                            if (ActiveNode == null && !IsTransitioning())
+                            {
+                                NodeTimeLeft = NodeTime;
+                                ActiveNode = TreeToPlay.Selected;
+                            }
+                        }
+
+                        IsPlaying = !IsPlaying;
+
+                    }, () => TreeToPlay != null && TreeToPlay.Selected != null));
+
+        protected ICommand stopCommand;
+        public ICommand StopCommand => stopCommand ?? (stopCommand = new RelayCommand
+                    (() => 
+                    { 
+                        IsPlaying = false;
+
+                        FromNode = null;
+                        ToNode = null;
+
+                        ActiveNode = null;
+
+                    }, () => ActiveNode != null));
     }
 
     [XmlRoot]

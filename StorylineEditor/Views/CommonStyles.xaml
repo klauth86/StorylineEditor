@@ -284,6 +284,12 @@ StorylineEditor распространяется в надежде, что он�
         </Style.Triggers>
     </Style>
 
+    <Style TargetType="Button" x:Key="S_Button_Player_Stop" BasedOn="{StaticResource S_Button_CanvasPanel}">
+        <Setter Property="Content" Value="■"></Setter>
+        <Setter Property="ToolTip" Value="Остановить"></Setter>
+        <Setter Property="Command" Value="{Binding StopCommand}"></Setter>
+    </Style>
+
     <!--CANVAS PANEL BUTTONS-->
 
     
@@ -1188,6 +1194,7 @@ StorylineEditor распространяется в надежде, что он�
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
                 <xctk:IntegerUpDown Minimum="1" Maximum="60" Value="{Binding NodeTime, UpdateSourceTrigger=PropertyChanged}" AllowTextInput="False"></xctk:IntegerUpDown>
                 <Button Style="{StaticResource S_Button_Player_Play}"></Button>
+                <Button Style="{StaticResource S_Button_Player_Stop}"></Button>
             </StackPanel>
             <ContentControl Content="{Binding NowPlaying, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
             <DockPanel.Resources>

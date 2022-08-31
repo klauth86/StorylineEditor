@@ -34,6 +34,15 @@ namespace StorylineEditor.ViewModels
 
         public event Action<Node_BaseVm> OnFoundRoot = delegate { };
 
+        public event Action<Node_BaseVm, Node_BaseVm, double> TransitionEvent = delegate { };
+        public void OnTransition(Node_BaseVm a, Node_BaseVm b, double alpha) { TransitionEvent(a, b, alpha); }
+
+        public event Action<Node_BaseVm, bool> PlayerActiveNodeChangedEvent = delegate { };
+        public void OnPlayerActiveNodeChanged(Node_BaseVm node, bool isTransitioning) { PlayerActiveNodeChangedEvent(node, isTransitioning); }
+
+        public event Action<bool> IsPlayingChangedEvent = delegate { };
+        public void OnIsPlayingChanged(bool isPlaying) { IsPlayingChangedEvent(isPlaying); }
+
         public event Action<Node_BaseVm> OnNodeAdded = delegate { };
         public event Action<Node_BaseVm> OnNodeRemoved = delegate { };
         public event Action<Node_BaseVm> OnNodeCopied = delegate { };
@@ -505,6 +514,21 @@ namespace StorylineEditor.ViewModels
         {
             var nodeIds = Links.Where(link => link.FromId == node.Id).Select(link => link.ToId).ToList();
             return Nodes.Where((otherNode) => nodeIds.Contains(otherNode.Id)).ToList();
+        }
+
+        public List<Node_BaseVm> GetChildNodes(Node_BaseVm node)
+        {
+            var nodeIds = Links.Where(link => link.FromId == node.Id).Select(link => link.ToId).ToList();
+            
+            List<Node_BaseVm> nonTransitNodes = Nodes.Where((otherNode) => nodeIds.Contains(otherNode.Id) && !(otherNode is DNode_TransitVm)).ToList();
+            
+            foreach(var transitChildNodes in 
+                Nodes.Where((otherNode) => nodeIds.Contains(otherNode.Id) && (otherNode is DNode_TransitVm)).Select((otherNode) => GetChildNodes(otherNode)))
+            {
+                nonTransitNodes.AddRange(transitChildNodes);
+            }
+
+            return nonTransitNodes;
         }
 
         public bool IsLeafNode(Node_BaseVm node) => Links.All(link => link?.FromId != node.Id);
