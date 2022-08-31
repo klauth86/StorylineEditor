@@ -1192,10 +1192,10 @@ StorylineEditor распространяется в надежде, что он�
         </DataTemplate.Resources>
         <DockPanel>
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
-                <xctk:IntegerUpDown Minimum="1" Maximum="60" Value="{Binding NodeTime, UpdateSourceTrigger=PropertyChanged}" AllowTextInput="False"></xctk:IntegerUpDown>
+                <xctk:IntegerUpDown Minimum="1" Maximum="60" Value="{Binding ActiveTime, UpdateSourceTrigger=PropertyChanged}" AllowTextInput="False"></xctk:IntegerUpDown>
                 <Button Style="{StaticResource S_Button_Player_Play}"></Button>
                 <Button Style="{StaticResource S_Button_Player_Stop}"></Button>
-                <TextBlock Style="{StaticResource S_TextBlock_Base}" Text="{Binding NodeTimeLeft, StringFormat=F2}"></TextBlock>
+                <TextBlock Style="{StaticResource S_TextBlock_Base}" Text="{Binding TreeToPlay.ActiveTimeLeft, StringFormat=F2}"></TextBlock>
             </StackPanel>
             <ContentControl Content="{Binding NowPlaying, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
             <DockPanel.Resources>

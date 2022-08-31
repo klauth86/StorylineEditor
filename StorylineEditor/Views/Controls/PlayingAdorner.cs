@@ -30,6 +30,8 @@ namespace StorylineEditor.Views.Controls
         FrameworkElement FromElement = null;
         FrameworkElement ToElement = null;
 
+        const double transitionTime = 1;
+
         public double TransitionAlpha
         {
             get => (double)GetValue(TransitionAlphaProperty);
@@ -39,23 +41,14 @@ namespace StorylineEditor.Views.Controls
         public static readonly DependencyProperty TransitionAlphaProperty = DependencyProperty.Register(
             "TransitionAlpha", typeof(double), typeof(PlayingAdorner), new PropertyMetadata(0.0, OnTransitionAlphaChanged));
 
-        public double ActiveTime
-        {
-            get => (double)GetValue(ActiveTimeProperty);
-            set { SetValue(ActiveTimeProperty, value); }
-        }
-
-        public static readonly DependencyProperty ActiveTimeProperty = DependencyProperty.Register(
-            "ActiveTime", typeof(double), typeof(PlayingAdorner), new PropertyMetadata(0.0));
-
         private static void OnTransitionAlphaChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is PlayingAdorner playingAdorner)
             {
                 if (playingAdorner.FromElement != null && playingAdorner.ToElement != null)
                 {
-                    double fromX = Canvas.GetLeft(playingAdorner.FromElement) + playingAdorner.FromElement.ActualWidth/2;
-                    double toX = Canvas.GetLeft(playingAdorner.ToElement) + playingAdorner.ToElement.ActualWidth/2;
+                    double fromX = Canvas.GetLeft(playingAdorner.FromElement) + playingAdorner.FromElement.ActualWidth / 2;
+                    double toX = Canvas.GetLeft(playingAdorner.ToElement) + playingAdorner.ToElement.ActualWidth / 2;
 
                     double fromY = Canvas.GetTop(playingAdorner.FromElement) + playingAdorner.FromElement.ActualHeight / 2;
                     double toY = Canvas.GetTop(playingAdorner.ToElement) + playingAdorner.ToElement.ActualHeight / 2;
@@ -66,7 +59,26 @@ namespace StorylineEditor.Views.Controls
 
                     Canvas.SetLeft(playingAdorner, x - playingAdorner.ActualWidth / 2);
                     Canvas.SetTop(playingAdorner, y - playingAdorner.ActualHeight / 2);
+
+                    playingAdorner.TreeToPlay.ActiveTimeLeft = (1 - alpha) * transitionTime;
                 }
+            }
+        }
+
+        public double ActiveTime
+        {
+            get => (double)GetValue(ActiveTimeProperty);
+            set { SetValue(ActiveTimeProperty, value); }
+        }
+
+        public static readonly DependencyProperty ActiveTimeProperty = DependencyProperty.Register(
+            "ActiveTime", typeof(double), typeof(PlayingAdorner), new PropertyMetadata(0.0, OnActiveTimeChanged));
+
+        private static void OnActiveTimeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is PlayingAdorner playingAdorner)
+            {
+                playingAdorner.TreeToPlay.ActiveTimeLeft = (double)e.NewValue;
             }
         }
 
@@ -98,14 +110,14 @@ namespace StorylineEditor.Views.Controls
                 Duration = TimeSpan.FromSeconds(activeTime)
             };
 
-            activeAnimation.Completed += activeAnimationCompleted;
+            activeAnimation.Completed += (o, e) => TreeToPlay?.OnEndActiveNode();
 
             Storyboard.SetTarget(activeAnimation, this);
             Storyboard.SetTargetProperty(activeAnimation, new PropertyPath("ActiveTime"));
 
             storyboard = new Storyboard();
             storyboard.Children.Add(activeAnimation);
-            storyboard.Begin();
+            Dispatcher.BeginInvoke(new Action(() => storyboard.Begin()));
         }
 
         public void StartTransition(FrameworkElement fromElement, FrameworkElement toElement)
@@ -117,48 +129,24 @@ namespace StorylineEditor.Views.Controls
             {
                 From = 0,
                 To = 1,
-                Duration = TimeSpan.FromMilliseconds(1000)
+                Duration = TimeSpan.FromSeconds(transitionTime)
             };
 
-            transitionAnimation.Completed += transitionAnimationCompleted;
+            transitionAnimation.Completed += (o, e) => TreeToPlay?.OnEndTransition();
 
             Storyboard.SetTarget(transitionAnimation, this);
             Storyboard.SetTargetProperty(transitionAnimation, new PropertyPath("TransitionAlpha"));
 
             storyboard = new Storyboard();
             storyboard.Children.Add(transitionAnimation);
-            storyboard.Begin();
+            Dispatcher.BeginInvoke(new Action(() => storyboard.Begin()));
         }
 
         public void PauseUnpause(bool isPaused)
         {
             if (storyboard != null)
             {
-                if (storyboard.GetIsPaused() != isPaused)
-                {
-                    if (isPaused)
-                        storyboard.Pause();
-                    else
-                        storyboard.Resume();
-                }
-            }
-        }
 
-        private void activeAnimationCompleted(object sender, EventArgs e)
-        {
-            if (sender is DoubleAnimation activeAnimation)
-            {
-                activeAnimation.Completed -= transitionAnimationCompleted;
-                TreeToPlay?.OnEndActiveNode();
-            }
-        }
-
-        private void transitionAnimationCompleted(object sender, EventArgs e)
-        {
-            if (sender is DoubleAnimation transitionAnimation)
-            {
-                transitionAnimation.Completed -= transitionAnimationCompleted;
-                TreeToPlay?.OnEndTransition();
             }
         }
     }

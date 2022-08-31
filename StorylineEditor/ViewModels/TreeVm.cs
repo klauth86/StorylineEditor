@@ -46,6 +46,21 @@ namespace StorylineEditor.ViewModels
         public void OnEndActiveNode() { EndActiveNodeEvent(); }
 
 
+        protected double activeTimeLeft;
+        [XmlIgnore]
+        public double ActiveTimeLeft
+        {
+            get => activeTimeLeft;
+            set
+            {
+                if (activeTimeLeft != value)
+                {
+                    activeTimeLeft = value;
+                    NotifyWithCallerPropName();
+                }
+            }
+        }
+
 
         public event Action<string> OnSetBackground = delegate { };
         public event Action<Node_BaseVm> OnFoundRoot = delegate { };

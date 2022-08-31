@@ -42,6 +42,7 @@ namespace StorylineEditor.ViewModels.Tabs
 
             isPlaying = false;
 
+            ActiveTime = 4;
             ActiveNode = null;
 
             TreeToPlay.EndTransitionEvent += OnEndTransition;
@@ -56,12 +57,14 @@ namespace StorylineEditor.ViewModels.Tabs
 
         private void OnEndTransition()
         {
+            var toNode = ToNode;
+
             isTransitioning = false;
 
             FromNode = null;
             ToNode = null;
 
-            ActiveNode = ToNode;
+            ActiveNode = toNode;
         }
 
         private void OnEndActiveNode()
@@ -101,7 +104,7 @@ namespace StorylineEditor.ViewModels.Tabs
             }
         }
 
-        readonly TreeVm TreeToPlay;
+        public TreeVm TreeToPlay { get; private set; }
 
         protected bool isTransitioning;
         protected Node_BaseVm FromNode = null;
