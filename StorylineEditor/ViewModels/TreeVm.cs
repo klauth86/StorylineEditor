@@ -30,29 +30,25 @@ namespace StorylineEditor.ViewModels
     [XmlRoot]
     public class TreeVm : NonFolderVm, ICopyPaste
     {
-        public event Action<string> OnSetBackground = delegate { };
-
-        public event Action<Node_BaseVm> OnFoundRoot = delegate { };
-
-
+        public event Action<bool> PauseUnpauseEvent = delegate { };
+        public void OnPauseUnpause(bool isPaused) { PauseUnpauseEvent(isPaused); }
 
         public event Action<Node_BaseVm, Node_BaseVm> StartTransitionEvent = delegate { };
         public void OnStartTransition(Node_BaseVm a, Node_BaseVm b) { StartTransitionEvent(a, b); }
 
-        public event Action<bool> PauseUnpauseTransitionEvent = delegate { };
-        public void OnPauseUnpauseTransition(bool isPlaying) { PauseUnpauseTransitionEvent(isPlaying); }
-
         public event Action EndTransitionEvent = delegate { };
         public void OnEndTransition() { EndTransitionEvent(); }
 
+        public event Action<Node_BaseVm, bool, double> StartActiveNodeEvent = delegate { };
+        public void OnStartActiveNode(Node_BaseVm node, bool isTransitioning, double activeTime) { StartActiveNodeEvent(node, isTransitioning, activeTime); }
+
+        public event Action EndActiveNodeEvent = delegate { };
+        public void OnEndActiveNode() { EndActiveNodeEvent(); }
 
 
-        public event Action<Node_BaseVm, bool> PlayerActiveNodeChangedEvent = delegate { };
-        public void OnPlayerActiveNodeChanged(Node_BaseVm node, bool isTransitioning) { PlayerActiveNodeChangedEvent(node, isTransitioning); }
 
-        public event Action<bool> IsPlayingChangedEvent = delegate { };
-        public void OnIsPlayingChanged(bool isPlaying) { IsPlayingChangedEvent(isPlaying); }
-
+        public event Action<string> OnSetBackground = delegate { };
+        public event Action<Node_BaseVm> OnFoundRoot = delegate { };
         public event Action<Node_BaseVm> OnNodeAdded = delegate { };
         public event Action<Node_BaseVm> OnNodeRemoved = delegate { };
         public event Action<Node_BaseVm> OnNodeCopied = delegate { };

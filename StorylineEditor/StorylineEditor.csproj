@@ -102,6 +102,7 @@
       <DependentUpon>InfoWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\FolderedVm.cs" />
+    <Compile Include="ViewModels\IDialogContext.cs" />
     <Compile Include="ViewModels\IDragOverable.cs" />
     <Compile Include="ViewModels\Nodes\JNode_AlternativeVm.cs" />
     <Compile Include="ViewModels\Nodes\JNode_StepVm.cs" />

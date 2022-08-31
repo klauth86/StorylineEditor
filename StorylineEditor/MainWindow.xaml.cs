@@ -34,10 +34,6 @@ namespace StorylineEditor
 
         public static event Action<bool, Key> FacadeKeyEvent = delegate { };
 
-        readonly DispatcherTimer tickTimer;
-
-        const int tickTimerMillisec = 100;
-
         readonly DispatcherTimer autosaveTimer;
 
         public MainWindow()
@@ -50,13 +46,6 @@ namespace StorylineEditor
 
             var assemblyName = Assembly.GetExecutingAssembly().GetName();
             Title = assemblyName.Name;
-
-            tickTimer = new DispatcherTimer
-            {
-                Interval = new TimeSpan(0, 0, 0, 0, tickTimerMillisec)
-            };
-            tickTimer.Tick += OnTickTimer;
-            tickTimer.Start();
 
             autosaveTimer = new DispatcherTimer
             {
@@ -72,12 +61,7 @@ namespace StorylineEditor
         {
             autosaveTimer.Stop();
             autosaveTimer.Tick -= OnAutosaveTimer;
-
-            tickTimer.Stop();
-            tickTimer.Tick -= OnTickTimer;
         }
-
-        private void OnTickTimer(object sender, EventArgs e) { TickEvent(1.0 * tickTimerMillisec / 1000.0); }
 
         private void OnAutosaveTimer(object sender, EventArgs e)
         {

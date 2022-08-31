@@ -82,9 +82,9 @@ namespace StorylineEditor.Views.Controls
                     oldTree.OnLinkAdded -= treeCanvas.OnLinkAdded;
                     oldTree.OnNodePositionChanged -= treeCanvas.OnNodePositionChanged;
 
-                    oldTree.IsPlayingChangedEvent -= treeCanvas.OnIsPlayingChanged;
-                    oldTree.PlayerActiveNodeChangedEvent -= treeCanvas.OnPlayerActiveNodeChanged;
-                    oldTree.StartTransitionEvent -= treeCanvas.StartTransitionEvent;
+                    oldTree.StartActiveNodeEvent -= treeCanvas.StartActiveNode;
+                    oldTree.StartTransitionEvent -= treeCanvas.StartTransition;
+                    oldTree.PauseUnpauseEvent -= treeCanvas.PauseUnpause;
 
                     foreach (var link in oldTree.Links) treeCanvas.OnLinkRemoved(link);
                     foreach (var item in oldTree.Nodes) treeCanvas.OnNodeRemoved(item);
@@ -107,9 +107,9 @@ namespace StorylineEditor.Views.Controls
                     newTree.OnLinkAdded += treeCanvas.OnLinkAdded;
                     newTree.OnNodePositionChanged += treeCanvas.OnNodePositionChanged;
 
-                    newTree.IsPlayingChangedEvent += treeCanvas.OnIsPlayingChanged;
-                    newTree.PlayerActiveNodeChangedEvent += treeCanvas.OnPlayerActiveNodeChanged;
-                    newTree.StartTransitionEvent += treeCanvas.StartTransitionEvent;
+                    newTree.StartActiveNodeEvent += treeCanvas.StartActiveNode;
+                    newTree.StartTransitionEvent += treeCanvas.StartTransition;
+                    newTree.PauseUnpauseEvent += treeCanvas.PauseUnpause;
                 }
             }
         }
@@ -188,12 +188,11 @@ namespace StorylineEditor.Views.Controls
             }
         }
 
-        private void StartTransitionEvent(Node_BaseVm nodeA, Node_BaseVm nodeB)
-        {
-            PlayingAdorner?.StartTransition(GraphNodes[nodeA], GraphNodes[nodeB]);
-        }
+        private void StartTransition(Node_BaseVm nodeA, Node_BaseVm nodeB) { PlayingAdorner?.StartTransition(GraphNodes[nodeA], GraphNodes[nodeB]); }
 
-        private void OnPlayerActiveNodeChanged(Node_BaseVm activeNode, bool isTransitioning)
+        private void PauseUnpause(bool isPaused) { PlayingAdorner?.PauseUnpause(isPaused); }
+
+        private void StartActiveNode(Node_BaseVm activeNode, bool isTransitioning, double activeTime)
         {
             if (activeNode != null)
             {
@@ -201,12 +200,12 @@ namespace StorylineEditor.Views.Controls
 
                 if (PlayingAdorner == null)
                 {
-                    PlayingAdorner = new PlayingAdorner();
+                    PlayingAdorner = new PlayingAdorner() { TreeToPlay = Tree };
                     Canvas.SetZIndex(PlayingAdorner, -ActiveZIndex);
                     wasCreated = true;
                 }
 
-                PlayingAdorner?.ToPlayForm(GraphNodes[activeNode]);
+                PlayingAdorner?.StartActiveNode(GraphNodes[activeNode], activeTime);
 
                 if (wasCreated) Children.Add(PlayingAdorner);
             }
@@ -214,19 +213,11 @@ namespace StorylineEditor.Views.Controls
             {
                 PlayingAdorner?.ToTransitionForm();
             }
-            else
+            else if(PlayingAdorner != null)
             {
-                if (PlayingAdorner != null)
-                {
-                    Children.Remove(PlayingAdorner);
-                    PlayingAdorner = null;
-                }
+                Children.Remove(PlayingAdorner);
+                PlayingAdorner = null;
             }
-        }
-
-        private void OnIsPlayingChanged(bool obj)
-        {
-
         }
 
         private void AddGraphNode(Node_BaseVm node)

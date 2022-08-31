@@ -1,4 +1,17 @@
-﻿using System;
+﻿/*
+Этот файл — часть StorylineEditor.
+
+StorylineEditor — свободная программа: вы можете перераспространять ее и/или изменять ее на условиях Стандартной общественной лицензии GNU в том виде, 
+в каком она была опубликована Фондом свободного программного обеспечения; либо версии 3 лицензии, либо (по вашему выбору) любой более поздней версии.
+
+StorylineEditor распространяется в надежде, что она будет полезной, но БЕЗО ВСЯКИХ ГАРАНТИЙ; даже без неявной гарантии ТОВАРНОГО ВИДА или ПРИГОДНОСТИ ДЛЯ 
+ОПРЕДЕЛЕННЫХ ЦЕЛЕЙ. Подробнее см. в Стандартной общественной лицензии GNU.
+
+Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
+*/
+
+using StorylineEditor.ViewModels;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -8,6 +21,12 @@ namespace StorylineEditor.Views.Controls
 {
     public class PlayingAdorner: ContentControl
     {
+        public TreeVm TreeToPlay { get; set; }
+
+        Storyboard storyboard = null;
+
+        FrameworkElement ActiveElement = null;
+
         FrameworkElement FromElement = null;
         FrameworkElement ToElement = null;
 
@@ -19,6 +38,15 @@ namespace StorylineEditor.Views.Controls
 
         public static readonly DependencyProperty TransitionAlphaProperty = DependencyProperty.Register(
             "TransitionAlpha", typeof(double), typeof(PlayingAdorner), new PropertyMetadata(0.0, OnTransitionAlphaChanged));
+
+        public double ActiveTime
+        {
+            get => (double)GetValue(ActiveTimeProperty);
+            set { SetValue(ActiveTimeProperty, value); }
+        }
+
+        public static readonly DependencyProperty ActiveTimeProperty = DependencyProperty.Register(
+            "ActiveTime", typeof(double), typeof(PlayingAdorner), new PropertyMetadata(0.0));
 
         private static void OnTransitionAlphaChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -57,9 +85,27 @@ namespace StorylineEditor.Views.Controls
             (Content as System.Windows.Shapes.Ellipse).Height = 64;
         }
 
-        public void ToPlayForm(FrameworkElement activeElement)
+        public void StartActiveNode(FrameworkElement activeElement, double activeTime)
         {
+            ActiveElement = activeElement;
 
+            ActiveTime = activeTime;
+
+            var activeAnimation = new DoubleAnimation
+            {
+                From = activeTime,
+                To = 0,
+                Duration = TimeSpan.FromSeconds(activeTime)
+            };
+
+            activeAnimation.Completed += activeAnimationCompleted;
+
+            Storyboard.SetTarget(activeAnimation, this);
+            Storyboard.SetTargetProperty(activeAnimation, new PropertyPath("ActiveTime"));
+
+            storyboard = new Storyboard();
+            storyboard.Children.Add(activeAnimation);
+            storyboard.Begin();
         }
 
         public void StartTransition(FrameworkElement fromElement, FrameworkElement toElement)
@@ -79,9 +125,32 @@ namespace StorylineEditor.Views.Controls
             Storyboard.SetTarget(transitionAnimation, this);
             Storyboard.SetTargetProperty(transitionAnimation, new PropertyPath("TransitionAlpha"));
 
-            var storyboard = new Storyboard();
+            storyboard = new Storyboard();
             storyboard.Children.Add(transitionAnimation);
             storyboard.Begin();
+        }
+
+        public void PauseUnpause(bool isPaused)
+        {
+            if (storyboard != null)
+            {
+                if (storyboard.GetIsPaused() != isPaused)
+                {
+                    if (isPaused)
+                        storyboard.Pause();
+                    else
+                        storyboard.Resume();
+                }
+            }
+        }
+
+        private void activeAnimationCompleted(object sender, EventArgs e)
+        {
+            if (sender is DoubleAnimation activeAnimation)
+            {
+                activeAnimation.Completed -= transitionAnimationCompleted;
+                TreeToPlay?.OnEndActiveNode();
+            }
         }
 
         private void transitionAnimationCompleted(object sender, EventArgs e)
@@ -89,6 +158,7 @@ namespace StorylineEditor.Views.Controls
             if (sender is DoubleAnimation transitionAnimation)
             {
                 transitionAnimation.Completed -= transitionAnimationCompleted;
+                TreeToPlay?.OnEndTransition();
             }
         }
     }

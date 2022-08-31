@@ -1,4 +1,4 @@
-﻿<!--
+﻿/*
 Этот файл — часть StorylineEditor.
 
 StorylineEditor — свободная программа: вы можете перераспространять ее и/или изменять ее на условиях Стандартной общественной лицензии GNU в том виде, 
@@ -8,14 +8,12 @@ StorylineEditor распространяется в надежде, что он�
 ОПРЕДЕЛЕННЫХ ЦЕЛЕЙ. Подробнее см. в Стандартной общественной лицензии GNU.
 
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
--->
+*/
 
-<Window x:Class="StorylineEditor.InfoWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        SizeToContent="WidthAndHeight"
-        WindowStyle="ToolWindow"
-        ShowInTaskbar="False" MinWidth="256" MaxWidth="512" MinHeight="128"
-        Background="LightGray" Closing="Window_Closing">
-    <ContentControl Content="{Binding}" Name="cc" Margin="{StaticResource MarginPaddingThickness}"></ContentControl>
-</Window>
+namespace StorylineEditor.ViewModels
+{
+    public interface IDialogContext
+    {
+        void OnClosing();
+    }
+}

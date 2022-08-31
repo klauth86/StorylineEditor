@@ -10,6 +10,7 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.ViewModels;
 using System.Windows;
 
 namespace StorylineEditor
@@ -29,5 +30,10 @@ namespace StorylineEditor
         }
 
         private void btnOk_Click(object sender, RoutedEventArgs e) { Close(); }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (DataContext is IDialogContext dialogContext) dialogContext.OnClosing();
+        }
     }
 }
