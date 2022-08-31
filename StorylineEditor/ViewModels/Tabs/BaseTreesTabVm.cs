@@ -23,8 +23,11 @@ namespace StorylineEditor.ViewModels.Tabs
     {
         public void OnClosing()
         {
+            TreeToPlay.OnStop();
+
             IsPlaying = false;
 
+            isTransitioning = false;
             FromNode = null;
             ToNode = null;
 
@@ -36,7 +39,6 @@ namespace StorylineEditor.ViewModels.Tabs
             TreeToPlay = treeToPlay;
 
             isTransitioning = false;
-
             FromNode = null;
             ToNode = null;
 
@@ -60,7 +62,6 @@ namespace StorylineEditor.ViewModels.Tabs
             var toNode = ToNode;
 
             isTransitioning = false;
-
             FromNode = null;
             ToNode = null;
 
@@ -107,8 +108,8 @@ namespace StorylineEditor.ViewModels.Tabs
         public TreeVm TreeToPlay { get; private set; }
 
         protected bool isTransitioning;
-        protected Node_BaseVm FromNode = null;
-        protected Node_BaseVm ToNode = null;
+        protected Node_BaseVm FromNode;
+        protected Node_BaseVm ToNode;
 
 
         private bool isPlaying;
@@ -162,23 +163,22 @@ namespace StorylineEditor.ViewModels.Tabs
         public ICommand TogglePlayCommand => togglePlayCommand ?? (togglePlayCommand = new RelayCommand
                     (() =>
                     {
-                        if (!IsPlaying)
-                        {
-                            if (ActiveNode == null && !isTransitioning)
-                            {
-                                ActiveNode = TreeToPlay.Selected;
-                            }
-                        }
-
                         IsPlaying = !IsPlaying;
 
-                        TreeToPlay.OnPauseUnpause(!IsPlaying);
+                        if (IsPlaying && ActiveNode == null && !isTransitioning)
+                        {
+                            ActiveNode = TreeToPlay.Selected;
+                        }
+                        else
+                        {
+                            TreeToPlay.OnPauseUnpause(!IsPlaying);
+                        }
 
-                    }, () => TreeToPlay != null && TreeToPlay.Selected != null));
+                    }, () => TreeToPlay?.Selected != null));
 
 
         protected ICommand stopCommand;
-        public ICommand StopCommand => stopCommand ?? (stopCommand = new RelayCommand(() => OnClosing(), () => ActiveNode != null));
+        public ICommand StopCommand => stopCommand ?? (stopCommand = new RelayCommand(() => OnClosing(), () => ActiveNode != null || isTransitioning));
     }
 
     [XmlRoot]

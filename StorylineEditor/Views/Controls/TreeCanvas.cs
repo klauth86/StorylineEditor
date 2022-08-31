@@ -85,6 +85,7 @@ namespace StorylineEditor.Views.Controls
                     oldTree.StartActiveNodeEvent -= treeCanvas.StartActiveNode;
                     oldTree.StartTransitionEvent -= treeCanvas.StartTransition;
                     oldTree.PauseUnpauseEvent -= treeCanvas.PauseUnpause;
+                    oldTree.StopEvent -= treeCanvas.Stop;
 
                     foreach (var link in oldTree.Links) treeCanvas.OnLinkRemoved(link);
                     foreach (var item in oldTree.Nodes) treeCanvas.OnNodeRemoved(item);
@@ -110,6 +111,7 @@ namespace StorylineEditor.Views.Controls
                     newTree.StartActiveNodeEvent += treeCanvas.StartActiveNode;
                     newTree.StartTransitionEvent += treeCanvas.StartTransition;
                     newTree.PauseUnpauseEvent += treeCanvas.PauseUnpause;
+                    newTree.StopEvent += treeCanvas.Stop;
                 }
             }
         }
@@ -192,6 +194,17 @@ namespace StorylineEditor.Views.Controls
 
         private void PauseUnpause(bool isPaused) { PlayingAdorner?.PauseUnpause(isPaused); }
 
+        private void Stop()
+        {
+            if (PlayingAdorner != null)
+            {
+                PlayingAdorner?.Stop();
+
+                Children.Remove(PlayingAdorner);
+                PlayingAdorner = null;
+            }
+        }
+
         private void StartActiveNode(Node_BaseVm activeNode, bool isTransitioning, double activeTime)
         {
             if (activeNode != null)
@@ -212,11 +225,6 @@ namespace StorylineEditor.Views.Controls
             else if (isTransitioning)
             {
                 PlayingAdorner?.ToTransitionForm();
-            }
-            else if(PlayingAdorner != null)
-            {
-                Children.Remove(PlayingAdorner);
-                PlayingAdorner = null;
             }
         }
 

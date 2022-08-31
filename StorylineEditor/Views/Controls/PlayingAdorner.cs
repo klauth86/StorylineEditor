@@ -93,13 +93,22 @@ namespace StorylineEditor.Views.Controls
 
         public void ToTransitionForm()
         {
-            (Content as System.Windows.Shapes.Ellipse).Width = 64;
-            (Content as System.Windows.Shapes.Ellipse).Height = 64;
+            Width = 64;
+            Height = 64;
         }
 
         public void StartActiveNode(FrameworkElement activeElement, double activeTime)
         {
             ActiveElement = activeElement;
+
+            double fromX = Canvas.GetLeft(ActiveElement) + ActiveElement.ActualWidth / 2;
+            double toX = Canvas.GetTop(ActiveElement) + ActiveElement.ActualHeight / 2;
+
+            Width = activeElement.ActualWidth * 1.25;
+            Height = activeElement.ActualWidth * 1.25;
+
+            Canvas.SetLeft(this, fromX - Width / 2);
+            Canvas.SetTop(this, toX - Height / 2);
 
             ActiveTime = activeTime;
 
@@ -146,7 +155,22 @@ namespace StorylineEditor.Views.Controls
         {
             if (storyboard != null)
             {
+                if (storyboard.GetIsPaused() != isPaused)
+                {
+                    if (isPaused)
+                        storyboard.Pause();
+                    else
+                        storyboard.Resume();
+                }
+            }
+        }
 
+        public void Stop()
+        {
+            if (storyboard != null)
+            {
+                storyboard.Stop();
+                storyboard = null;
             }
         }
     }

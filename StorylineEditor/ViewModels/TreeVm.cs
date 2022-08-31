@@ -45,6 +45,8 @@ namespace StorylineEditor.ViewModels
         public event Action EndActiveNodeEvent = delegate { };
         public void OnEndActiveNode() { EndActiveNodeEvent(); }
 
+        public event Action StopEvent = delegate { };
+        public void OnStop() { StopEvent(); }
 
         protected double activeTimeLeft;
         [XmlIgnore]
