@@ -34,8 +34,18 @@ namespace StorylineEditor.ViewModels
 
         public event Action<Node_BaseVm> OnFoundRoot = delegate { };
 
-        public event Action<Node_BaseVm, Node_BaseVm, double> TransitionEvent = delegate { };
-        public void OnTransition(Node_BaseVm a, Node_BaseVm b, double alpha) { TransitionEvent(a, b, alpha); }
+
+
+        public event Action<Node_BaseVm, Node_BaseVm> StartTransitionEvent = delegate { };
+        public void OnStartTransition(Node_BaseVm a, Node_BaseVm b) { StartTransitionEvent(a, b); }
+
+        public event Action<bool> PauseUnpauseTransitionEvent = delegate { };
+        public void OnPauseUnpauseTransition(bool isPlaying) { PauseUnpauseTransitionEvent(isPlaying); }
+
+        public event Action EndTransitionEvent = delegate { };
+        public void OnEndTransition() { EndTransitionEvent(); }
+
+
 
         public event Action<Node_BaseVm, bool> PlayerActiveNodeChangedEvent = delegate { };
         public void OnPlayerActiveNodeChanged(Node_BaseVm node, bool isTransitioning) { PlayerActiveNodeChangedEvent(node, isTransitioning); }

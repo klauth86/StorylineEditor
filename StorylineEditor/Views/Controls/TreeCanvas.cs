@@ -84,7 +84,7 @@ namespace StorylineEditor.Views.Controls
 
                     oldTree.IsPlayingChangedEvent -= treeCanvas.OnIsPlayingChanged;
                     oldTree.PlayerActiveNodeChangedEvent -= treeCanvas.OnPlayerActiveNodeChanged;
-                    oldTree.TransitionEvent -= treeCanvas.OnTransition;
+                    oldTree.StartTransitionEvent -= treeCanvas.StartTransitionEvent;
 
                     foreach (var link in oldTree.Links) treeCanvas.OnLinkRemoved(link);
                     foreach (var item in oldTree.Nodes) treeCanvas.OnNodeRemoved(item);
@@ -109,7 +109,7 @@ namespace StorylineEditor.Views.Controls
 
                     newTree.IsPlayingChangedEvent += treeCanvas.OnIsPlayingChanged;
                     newTree.PlayerActiveNodeChangedEvent += treeCanvas.OnPlayerActiveNodeChanged;
-                    newTree.TransitionEvent += treeCanvas.OnTransition;
+                    newTree.StartTransitionEvent += treeCanvas.StartTransitionEvent;
                 }
             }
         }
@@ -188,15 +188,9 @@ namespace StorylineEditor.Views.Controls
             }
         }
 
-        private void OnTransition(Node_BaseVm nodeA, Node_BaseVm nodeB, double alpha)
+        private void StartTransitionEvent(Node_BaseVm nodeA, Node_BaseVm nodeB)
         {
-            if (PlayingAdorner != null)
-            {
-                Canvas.SetLeft(PlayingAdorner,
-                    (1 - alpha) * (Canvas.GetLeft(GraphNodes[nodeA]) + GraphNodes[nodeA].ActualWidth / 2) + alpha * (Canvas.GetLeft(GraphNodes[nodeB]) + GraphNodes[nodeB].ActualWidth / 2) - PlayingAdorner.ActualWidth / 2);
-                Canvas.SetTop(PlayingAdorner,
-                    (1 - alpha) * (Canvas.GetTop(GraphNodes[nodeA]) + GraphNodes[nodeA].ActualHeight / 2) + alpha * (Canvas.GetTop(GraphNodes[nodeB]) + GraphNodes[nodeB].ActualHeight / 2) - PlayingAdorner.ActualHeight / 2);
-            }
+            PlayingAdorner?.StartTransition(GraphNodes[nodeA], GraphNodes[nodeB]);
         }
 
         private void OnPlayerActiveNodeChanged(Node_BaseVm activeNode, bool isTransitioning)
@@ -212,10 +206,7 @@ namespace StorylineEditor.Views.Controls
                     wasCreated = true;
                 }
 
-                Canvas.SetLeft(PlayingAdorner, Canvas.GetLeft(GraphNodes[activeNode]) + GraphNodes[activeNode].ActualWidth / 2 - PlayingAdorner.ActualWidth / 2);
-                Canvas.SetTop(PlayingAdorner, Canvas.GetTop(GraphNodes[activeNode]) + GraphNodes[activeNode].ActualHeight / 2 - PlayingAdorner.ActualHeight / 2);
-
-                PlayingAdorner?.ToPlayForm(activeNode);
+                PlayingAdorner?.ToPlayForm(GraphNodes[activeNode]);
 
                 if (wasCreated) Children.Add(PlayingAdorner);
             }
