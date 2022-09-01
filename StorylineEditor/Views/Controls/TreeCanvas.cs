@@ -213,7 +213,7 @@ namespace StorylineEditor.Views.Controls
 
                 if (PlayingAdorner == null)
                 {
-                    PlayingAdorner = new PlayingAdorner() { TreeToPlay = Tree };
+                    PlayingAdorner = new PlayingAdorner(Scale) { TreeToPlay = Tree };
                     Canvas.SetZIndex(PlayingAdorner, -ActiveZIndex);
                     wasCreated = true;
                 }

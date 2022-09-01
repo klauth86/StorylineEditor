@@ -47,18 +47,18 @@ namespace StorylineEditor.Views.Controls
             {
                 if (playingAdorner.FromElement != null && playingAdorner.ToElement != null)
                 {
-                    double fromX = Canvas.GetLeft(playingAdorner.FromElement) + playingAdorner.FromElement.ActualWidth / 2;
-                    double toX = Canvas.GetLeft(playingAdorner.ToElement) + playingAdorner.ToElement.ActualWidth / 2;
+                    double fromX = Canvas.GetLeft(playingAdorner.FromElement) + playingAdorner.FromElement.ActualWidth * playingAdorner.scale / 2;
+                    double toX = Canvas.GetLeft(playingAdorner.ToElement) + playingAdorner.ToElement.ActualWidth * playingAdorner.scale / 2;
 
-                    double fromY = Canvas.GetTop(playingAdorner.FromElement) + playingAdorner.FromElement.ActualHeight / 2;
-                    double toY = Canvas.GetTop(playingAdorner.ToElement) + playingAdorner.ToElement.ActualHeight / 2;
+                    double fromY = Canvas.GetTop(playingAdorner.FromElement) + playingAdorner.FromElement.ActualHeight * playingAdorner.scale / 2;
+                    double toY = Canvas.GetTop(playingAdorner.ToElement) + playingAdorner.ToElement.ActualHeight * playingAdorner.scale / 2;
 
                     double alpha = (double)e.NewValue;
                     double x = fromX * (1 - alpha) + toX * alpha;
                     double y = fromY * (1 - alpha) + toY * alpha;
 
-                    Canvas.SetLeft(playingAdorner, x - playingAdorner.ActualWidth / 2);
-                    Canvas.SetTop(playingAdorner, y - playingAdorner.ActualHeight / 2);
+                    Canvas.SetLeft(playingAdorner, x - playingAdorner.Width * playingAdorner.scale / 2);
+                    Canvas.SetTop(playingAdorner, y - playingAdorner.Height * playingAdorner.scale / 2);
 
                     playingAdorner.TreeToPlay.ActiveTimeLeft = (1 - alpha) * transitionTime;
                 }
@@ -82,33 +82,60 @@ namespace StorylineEditor.Views.Controls
             }
         }
 
-        public PlayingAdorner()
+        System.Windows.Shapes.Ellipse ellipse;
+
+        double scale;
+
+        public PlayingAdorner(double inScale)
         {
-            var ellipse = new System.Windows.Shapes.Ellipse();
+            scale = inScale;
+            RenderTransform = new ScaleTransform() { ScaleX = inScale, ScaleY = inScale };
+
+            Width = 32;
+            Height = 32;
+
+            ellipse = new System.Windows.Shapes.Ellipse();
 
             ellipse.Fill = Brushes.Gold;
+            ellipse.RenderTransform = new ScaleTransform() { CenterX = 16, CenterY = 16 };
 
             Content = ellipse;
+
+            ////var activeAnimation = new DoubleAnimation
+            ////{
+            ////    From = 1,
+            ////    To = 1.25,
+            ////    Duration = TimeSpan.FromSeconds(0.25),
+            ////    RepeatBehavior = RepeatBehavior.Forever,
+            ////    AutoReverse = true
+            ////};
+
+            ////Storyboard.SetTarget(activeAnimation, ellipse);
+            ////Storyboard.SetTargetProperty(activeAnimation, new PropertyPath("RenderTransform.ScaleX"));
+
+            ////var scaleStoryboard = new Storyboard();
+            ////scaleStoryboard.Children.Add(activeAnimation);
+            ////Dispatcher.BeginInvoke(new Action(() => scaleStoryboard.Begin()));
         }
 
         public void ToTransitionForm()
         {
-            Width = 64;
-            Height = 64;
+            AnimateWidthTo(64);
+            AnimateHeightTo(64);
         }
 
         public void StartActiveNode(FrameworkElement activeElement, double activeTime)
         {
             ActiveElement = activeElement;
 
-            double fromX = Canvas.GetLeft(ActiveElement) + ActiveElement.ActualWidth / 2;
-            double toX = Canvas.GetTop(ActiveElement) + ActiveElement.ActualHeight / 2;
+            double fromX = Canvas.GetLeft(ActiveElement) + ActiveElement.ActualWidth * scale / 2;
+            double toX = Canvas.GetTop(ActiveElement) + ActiveElement.ActualHeight * scale / 2;
 
-            Width = activeElement.ActualWidth * 1.25;
-            Height = activeElement.ActualWidth * 1.25;
+            AnimateWidthTo(activeElement.ActualWidth * 1.25);
+            AnimateHeightTo(activeElement.ActualWidth * 1.25);
 
-            Canvas.SetLeft(this, fromX - Width / 2);
-            Canvas.SetTop(this, toX - Height / 2);
+            Canvas.SetLeft(this, fromX - Width * scale / 2);
+            Canvas.SetTop(this, toX - Height * scale / 2);
 
             ActiveTime = activeTime;
 
@@ -172,6 +199,58 @@ namespace StorylineEditor.Views.Controls
                 storyboard.Stop();
                 storyboard = null;
             }
+        }
+
+        private void AnimateHeightTo(double width)
+        {
+            ((ScaleTransform)ellipse.RenderTransform).ScaleX = width / Width;
+
+            //if (GetValue(WidthProperty) == DependencyProperty.UnsetValue || double.IsNaN(Width))
+            //{
+            //    Width = width;
+            //}
+            //else
+            //{
+            //    var activeAnimation = new DoubleAnimation
+            //    {
+            //        From = Width,
+            //        To = width,
+            //        Duration = TimeSpan.FromSeconds(0.2),
+            //    };
+
+            //    Storyboard.SetTarget(activeAnimation, this);
+            //    Storyboard.SetTargetProperty(activeAnimation, new PropertyPath("Width"));
+
+            //    var widthStoryboard = new Storyboard();
+            //    widthStoryboard.Children.Add(activeAnimation);
+            //    Dispatcher.BeginInvoke(new Action(() => widthStoryboard.Begin()));
+            //}
+        }
+
+        private void AnimateWidthTo(double height)
+        {
+            ((ScaleTransform)ellipse.RenderTransform).ScaleY = height / Height;
+
+            //if (GetValue(HeightProperty) == DependencyProperty.UnsetValue || double.IsNaN(Height))
+            //{
+            //    Height = height;
+            //}
+            //else
+            //{
+            //    var activeAnimation = new DoubleAnimation
+            //    {
+            //        From = Height,
+            //        To = height,
+            //        Duration = TimeSpan.FromSeconds(0.2),
+            //    };
+
+            //    Storyboard.SetTarget(activeAnimation, this);
+            //    Storyboard.SetTargetProperty(activeAnimation, new PropertyPath("Height"));
+
+            //    var heightStoryboard = new Storyboard();
+            //    heightStoryboard.Children.Add(activeAnimation);
+            //    Dispatcher.BeginInvoke(new Action(() => heightStoryboard.Begin()));
+            //}
         }
     }
 }
