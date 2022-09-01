@@ -56,7 +56,6 @@ namespace StorylineEditor.Common
             if (name == typeof(DNode_RandomVm).Name) return new DNode_RandomVm(Parent as TreeVm, additionalTicks);
             if (name == typeof(DNode_TransitVm).Name) return new DNode_TransitVm(Parent as TreeVm, additionalTicks);
             if (name == typeof(DNode_DialogVm).Name) return new DNode_DialogVm(Parent as TreeVm, additionalTicks);
-            if (name == typeof(DNode_VirtualVm).Name) return new DNode_VirtualVm(Parent as TreeVm, additionalTicks);
 
             if (name == typeof(CharactersTabVm).Name) return new CharactersTabVm(Parent as FullContextVm, additionalTicks);
             if (name == typeof(ItemsTabVm).Name) return new ItemsTabVm(Parent as FullContextVm, additionalTicks);

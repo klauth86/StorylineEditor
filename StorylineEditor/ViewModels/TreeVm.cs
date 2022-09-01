@@ -283,8 +283,6 @@ namespace StorylineEditor.ViewModels
 
         public void AddRootNode(Node_BaseVm node)
         {
-            if (node is DNode_VirtualVm) return;
-
             RootNodeIds.Add(node.Id);
             OnRootNodesChanged.Invoke();
 
@@ -294,8 +292,6 @@ namespace StorylineEditor.ViewModels
 
         public void RemoveRootNode(Node_BaseVm node)
         {
-            if (node is DNode_VirtualVm) return;
-
             RootNodeIds.Remove(node.Id);
             OnRootNodesChanged.Invoke();
 
@@ -454,8 +450,6 @@ namespace StorylineEditor.ViewModels
 
         public bool CanLink(Node_BaseVm from, Node_BaseVm to)
         {
-            if (from is DNode_VirtualVm || to is DNode_VirtualVm) return false;
-
             if (from == to) return false;
 
             if (from is JNode_AlternativeVm && !(to is JNode_StepVm)) return false;

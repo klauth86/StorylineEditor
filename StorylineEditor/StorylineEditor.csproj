@@ -116,7 +116,6 @@
     <Compile Include="ViewModels\Nodes\DNode_RandomVm.cs" />
     <Compile Include="ViewModels\Nodes\DNode_CharacterVm.cs" />
     <Compile Include="ViewModels\Nodes\DNode_TransitVm.cs" />
-    <Compile Include="ViewModels\Nodes\DNode_VirtualVm.cs" />
     <Compile Include="ViewModels\Nodes\Node_InteractiveVm.cs" />
     <Compile Include="ViewModels\Nodes\JNode_BaseVm.cs" />
     <Compile Include="ViewModels\Nodes\Ownered.cs" />
@@ -229,10 +228,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\GraphNodes\GDNode_VirtualV.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\GraphNodes\GJNode_BaseV.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -306,10 +301,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Nodes\JNode_BaseV.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Nodes\DNode_VirtualV.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

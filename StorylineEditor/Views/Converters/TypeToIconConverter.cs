@@ -27,7 +27,6 @@ namespace StorylineEditor.Views.Converters
                 if ((Type)value == typeof(DNode_DialogVm)) return "💬";
                 if ((Type)value == typeof(DNode_RandomVm)) return "⇝";
                 if ((Type)value == typeof(DNode_TransitVm)) return "⇴";
-                if ((Type)value == typeof(DNode_VirtualVm)) return "👤";
 
                 if ((Type)value == typeof(JNode_AlternativeVm)) return "💡";
                 if ((Type)value == typeof(JNode_StepVm)) return "✔";
@@ -38,7 +37,6 @@ namespace StorylineEditor.Views.Converters
                 if (value.GetType() == typeof(DNode_DialogVm)) return "💬";
                 if (value.GetType() == typeof(DNode_RandomVm)) return "⇝";
                 if (value.GetType() == typeof(DNode_TransitVm)) return "⇴";
-                if (value.GetType() == typeof(DNode_VirtualVm)) return "👤";
 
                 if (value.GetType() == typeof(JNode_AlternativeVm)) return "💡";
                 if (value.GetType() == typeof(JNode_StepVm)) return "✔";

@@ -20,7 +20,6 @@ StorylineEditor распространяется в надежде, что он�
                     <ResourceDictionary Source="GJNode_AlternativeV.xaml"></ResourceDictionary>
                     <ResourceDictionary Source="GJNode_StepV.xaml"></ResourceDictionary>
                     <ResourceDictionary Source="GJNode_BaseV.xaml"></ResourceDictionary>
-                    <ResourceDictionary Source="GDNode_VirtualV.xaml"></ResourceDictionary>
                     <ResourceDictionary Source="GDNode_CharacterV.xaml"></ResourceDictionary>
                     <ResourceDictionary Source="GDNode_RandomV.xaml"></ResourceDictionary>
                     <ResourceDictionary Source="GDNode_TransitV.xaml"></ResourceDictionary>

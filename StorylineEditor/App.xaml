@@ -47,7 +47,6 @@ StorylineEditor распространяется в надежде, что он�
                 <ResourceDictionary Source="Views/Nodes/JNode_AlternativeV.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Views/Nodes/JNode_StepV.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Views/Nodes/JNode_BaseV.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="Views/Nodes/DNode_VirtualV.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Views/Nodes/DNode_CharacterV.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Views/Nodes/DNode_RandomV.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Views/Nodes/DNode_TransitV.xaml"></ResourceDictionary>

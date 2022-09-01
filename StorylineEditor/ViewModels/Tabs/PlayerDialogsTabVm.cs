@@ -27,7 +27,6 @@ namespace StorylineEditor.ViewModels.Tabs
                 yield return typeof(DNode_DialogVm);
                 yield return typeof(DNode_RandomVm);
                 yield return typeof(DNode_TransitVm);
-                yield return typeof(DNode_VirtualVm);
             }
         }
 
