@@ -151,8 +151,8 @@ namespace StorylineEditor.Views.Controls
             storyboard = new Storyboard();
             storyboard.Children.Add(activeAnimation);
             storyboard.Completed += OnCompleted_EndActiveNode;
-            
-            Dispatcher.BeginInvoke(new Action(() => storyboard.Begin()));
+
+            Dispatcher.BeginInvoke(new Action(() => { storyboard.Begin(); TreeToPlay.IsPlaying = true; }));
         }
 
         private void OnCompleted_EndActiveNode(object sender, EventArgs e)
@@ -180,7 +180,7 @@ namespace StorylineEditor.Views.Controls
             storyboard.Children.Add(transitionAnimation);
             storyboard.Completed += OnCompleted_EndTransition;
 
-            Dispatcher.BeginInvoke(new Action(() => storyboard.Begin()));
+            Dispatcher.BeginInvoke(new Action(() => { storyboard.Begin(); TreeToPlay.IsPlaying = true; }));
         }
 
         private void OnCompleted_EndTransition(object sender, EventArgs e)
@@ -189,16 +189,19 @@ namespace StorylineEditor.Views.Controls
             TreeToPlay?.OnEndTransition(ToElement.DataContext);
         }
 
-        public void PauseUnpause(bool isPaused)
+        public void PauseUnpause()
         {
             if (storyboard != null)
             {
-                if (storyboard.GetIsPaused() != isPaused)
+                if (!storyboard.GetIsPaused())
                 {
-                    if (isPaused)
-                        storyboard.Pause();
-                    else
-                        storyboard.Resume();
+                    storyboard.Pause();
+                    TreeToPlay.IsPlaying = false;
+                }
+                else
+                {
+                    storyboard.Resume();
+                    TreeToPlay.IsPlaying = true;
                 }
             }
         }

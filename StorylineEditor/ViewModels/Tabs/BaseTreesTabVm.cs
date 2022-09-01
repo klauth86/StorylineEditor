@@ -35,8 +35,6 @@ namespace StorylineEditor.ViewModels.Tabs
 
             isTransitioning = false;
 
-            isPlaying = false;
-
             ActiveTime = 4;
             ActiveNode = null;
 
@@ -47,7 +45,6 @@ namespace StorylineEditor.ViewModels.Tabs
         private void OnEndTransition(object toObject)
         {
             IsTransitioning = false;
-
             ActiveNode = toObject as Node_BaseVm;
         }
 
@@ -57,10 +54,9 @@ namespace StorylineEditor.ViewModels.Tabs
 
             if (childNodes.Count == 1)
             {
-                IsTransitioning = true;
-
                 TreeToPlay.OnStartTransition(ActiveNode, childNodes[0]);
 
+                IsTransitioning = true;
                 ActiveNode = null;
             }
             if (childNodes.Count > 0)
@@ -80,8 +76,7 @@ namespace StorylineEditor.ViewModels.Tabs
             }
             else
             {
-                IsPlaying = false;
-                ActiveNode = null;
+                Stop();
             }
         }
 
@@ -89,10 +84,7 @@ namespace StorylineEditor.ViewModels.Tabs
         {
             TreeToPlay.OnStop();
 
-            IsPlaying = false;
-
             isTransitioning = false;
-
             ActiveNode = null;
         }
 
@@ -108,21 +100,6 @@ namespace StorylineEditor.ViewModels.Tabs
                 if (value != isTransitioning)
                 {
                     isTransitioning = value;
-                    NotifyWithCallerPropName();
-                }
-            }
-        }
-
-
-        private bool isPlaying;
-        public bool IsPlaying
-        {
-            get => isPlaying;
-            set
-            {
-                if (value != isPlaying)
-                {
-                    isPlaying = value;
                     NotifyWithCallerPropName();
                 }
             }
@@ -165,15 +142,13 @@ namespace StorylineEditor.ViewModels.Tabs
         public ICommand TogglePlayCommand => togglePlayCommand ?? (togglePlayCommand = new RelayCommand
                     (() =>
                     {
-                        IsPlaying = !IsPlaying;
-
-                        if (IsPlaying && ActiveNode == null && !IsTransitioning)
+                        if (ActiveNode == null && !IsTransitioning)
                         {
                             ActiveNode = TreeToPlay.Selected;
                         }
                         else
                         {
-                            TreeToPlay.OnPauseUnpause(!IsPlaying);
+                            TreeToPlay.OnPauseUnpause();
                         }
 
                     }, () => TreeToPlay?.Selected != null));

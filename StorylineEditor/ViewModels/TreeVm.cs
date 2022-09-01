@@ -30,8 +30,8 @@ namespace StorylineEditor.ViewModels
     [XmlRoot]
     public class TreeVm : NonFolderVm, ICopyPaste
     {
-        public event Action<bool> PauseUnpauseEvent = delegate { };
-        public void OnPauseUnpause(bool isPaused) { PauseUnpauseEvent(isPaused); }
+        public event Action PauseUnpauseEvent = delegate { };
+        public void OnPauseUnpause() { PauseUnpauseEvent(); }
 
         public event Action<Node_BaseVm, Node_BaseVm> StartTransitionEvent = delegate { };
         public void OnStartTransition(Node_BaseVm a, Node_BaseVm b) { StartTransitionEvent(a, b); }
@@ -58,6 +58,21 @@ namespace StorylineEditor.ViewModels
                 if (activeTimeLeft != value)
                 {
                     activeTimeLeft = value;
+                    NotifyWithCallerPropName();
+                }
+            }
+        }
+
+        protected bool isPlaying;
+        [XmlIgnore]
+        public bool IsPlaying
+        {
+            get => isPlaying;
+            set
+            {
+                if (isPlaying != value)
+                {
+                    isPlaying = value;
                     NotifyWithCallerPropName();
                 }
             }

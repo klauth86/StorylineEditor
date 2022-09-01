@@ -192,7 +192,7 @@ namespace StorylineEditor.Views.Controls
 
         private void StartTransition(Node_BaseVm nodeA, Node_BaseVm nodeB) { PlayingAdorner?.StartTransition(GraphNodes[nodeA], GraphNodes[nodeB]); }
 
-        private void PauseUnpause(bool isPaused) { PlayingAdorner?.PauseUnpause(isPaused); }
+        private void PauseUnpause() { PlayingAdorner?.PauseUnpause(); }
 
         private void Stop()
         {
