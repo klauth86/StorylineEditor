@@ -26,7 +26,6 @@ namespace StorylineEditor.Views.Controls
         Storyboard storyboard = null;
 
         FrameworkElement ActiveElement = null;
-
         FrameworkElement FromElement = null;
         FrameworkElement ToElement = null;
 
@@ -158,7 +157,7 @@ namespace StorylineEditor.Views.Controls
         private void OnCompleted_EndActiveNode(object sender, EventArgs e)
         {
             storyboard.Completed -= OnCompleted_EndActiveNode;
-            TreeToPlay?.OnEndActiveNode();
+            TreeToPlay?.OnEndActiveNode(ActiveElement.DataContext);
         }
 
         public void StartTransition(FrameworkElement fromElement, FrameworkElement toElement)

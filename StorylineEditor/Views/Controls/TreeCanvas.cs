@@ -205,7 +205,7 @@ namespace StorylineEditor.Views.Controls
             }
         }
 
-        private void StartActiveNode(Node_BaseVm activeNode, bool isTransitioning, double activeTime)
+        private void StartActiveNode(Node_BaseVm activeNode, double activeTime)
         {
             if (activeNode != null)
             {
@@ -221,10 +221,6 @@ namespace StorylineEditor.Views.Controls
                 PlayingAdorner?.StartActiveNode(GraphNodes[activeNode], activeTime);
 
                 if (wasCreated) Children.Add(PlayingAdorner);
-            }
-            else if (isTransitioning)
-            {
-                PlayingAdorner?.ToTransitionForm();
             }
         }
 

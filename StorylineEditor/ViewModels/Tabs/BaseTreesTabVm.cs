@@ -25,16 +25,18 @@ namespace StorylineEditor.ViewModels.Tabs
 
     public class PlayerChoiceVm : BaseVm<PlayerVm>
     {
-        public PlayerChoiceVm(PlayerVm parent, List<Node_BaseVm> nodesToSelect) : base(parent, 0)
+        public PlayerChoiceVm(PlayerVm parent, Node_BaseVm activeNode, List<Node_BaseVm> nodesToSelect) : base(parent, 0)
         {
+            ActiveNode = activeNode;
             NodesToSelect = new List<Node_BaseVm>();
             NodesToSelect.AddRange(nodesToSelect); 
         }
 
+        public Node_BaseVm ActiveNode { get; set; }
         public List<Node_BaseVm> NodesToSelect { get; set; }
 
         protected ICommand selectNodeCommand;
-        public ICommand SelectNodeCommand => selectNodeCommand ?? (selectNodeCommand = new RelayCommand<Node_BaseVm>((node) => { Parent?.OnNodeSelected(node); }, (node) => node != null && NodesToSelect.Contains(node)));
+        public ICommand SelectNodeCommand => selectNodeCommand ?? (selectNodeCommand = new RelayCommand<Node_BaseVm>((node) => { Parent?.StartTransition(ActiveNode, node); }, (node) => node != null && NodesToSelect.Contains(node)));
     }
 
     public class PlayerVm : BaseVm<BaseTreesTabVm>, IDialogContext
@@ -49,10 +51,9 @@ namespace StorylineEditor.ViewModels.Tabs
 
         public PlayerVm(BaseTreesTabVm parent, long additionalTicks, TreeVm treeToPlay) : base(parent, additionalTicks)
         {
+            Random = new Random();
             TreeToPlay = treeToPlay;
 
-            activeNode = null;
-            isTransitioning = false;
             activeTime = 4;
 
             activeContext = null;
@@ -61,47 +62,40 @@ namespace StorylineEditor.ViewModels.Tabs
             TreeToPlay.EndActiveNodeEvent += OnEndActiveNode;
         }
 
-        private void OnEndTransition(object toObject)
+        private void OnEndTransition(object nodeObject)
         {
-            IsTransitioning = false;
-            ActiveNode = toObject as Node_BaseVm;
+            var node = nodeObject as Node_BaseVm;
+            
+            TreeToPlay.OnStartActiveNode(node, activeTime);
 
-            ActiveContext = ActiveNode;
+            ActiveContext = node;
         }
 
-        private void OnEndActiveNode()
+        private void OnEndActiveNode(object nodeObject)
         {
-            List<Node_BaseVm> childNodes = TreeToPlay.GetChildNodes(ActiveNode);
+            var activeNode = nodeObject as Node_BaseVm;
 
-            ////// TODO Execute predicates
+            List<Node_BaseVm> childNodes = TreeToPlay.GetChildNodes(activeNode);
+
+            ////// TODO Execute other predicates
 
             if (childNodes.Count == 1)
             {
-                TreeToPlay.OnStartTransition(ActiveNode, childNodes[0]);
-
-                IsTransitioning = true;
-                ActiveNode = null;
-
-                ActiveContext = new PlayerTransitionVm();
+                StartTransition(activeNode, childNodes[0]);
             }
             else if (childNodes.Count > 0)
             {
-                if (ActiveNode is DNode_RandomVm randomNode)
+                if (activeNode is DNode_RandomVm randomNode)
                 {
-                    int randomIndex = new Random().Next(childNodes.Count);
-                    
-                    TreeToPlay.OnStartTransition(ActiveNode, childNodes[randomIndex]);
-
-                    IsTransitioning = true;
-                    ActiveNode = null;
+                    StartTransition(activeNode, childNodes[Random.Next(childNodes.Count)]);
                 }
-                else if (childNodes.TrueForAll((node)=>(node is IOwnered owneredNode) && owneredNode.Owner != null && owneredNode.Owner.Id == CharacterVm.PlayerId))
+                else if (childNodes.TrueForAll((childNode) => (childNode is IOwnered owneredNode) && owneredNode.Owner != null && owneredNode.Owner.Id == CharacterVm.PlayerId))
                 {
-                    ActiveContext = new PlayerChoiceVm(this, childNodes);
+                    ActiveContext = new PlayerChoiceVm(this, activeNode, childNodes);
                 }
                 else
                 {
-                    ActiveContext = new PlayerErrorVm();
+                    ActiveContext = new PlayerErrorVm(); ////// TODO error description
                 }
             }
             else
@@ -110,48 +104,22 @@ namespace StorylineEditor.ViewModels.Tabs
             }
         }
 
+        public void StartTransition(Node_BaseVm fromNode, Node_BaseVm toNode)
+        {
+            TreeToPlay.OnStartTransition(fromNode, toNode);
+
+            ActiveContext = new PlayerTransitionVm();
+        }
+
         private void Stop()
         {
             TreeToPlay.OnStop();
 
-            isTransitioning = false;
-            ActiveNode = null;
+            ActiveContext = null;
         }
 
-
+        public Random Random { get; private set; }
         public TreeVm TreeToPlay { get; private set; }
-
-
-        private Node_BaseVm activeNode;
-        public Node_BaseVm ActiveNode
-        {
-            get => activeNode;
-            set
-            {
-                if (value != activeNode)
-                {
-                    activeNode = value;
-                    NotifyWithCallerPropName();
-
-                    TreeToPlay.OnStartActiveNode(activeNode, isTransitioning, activeTime);
-                }
-            }
-        }
-
-
-        protected bool isTransitioning;
-        public bool IsTransitioning
-        {
-            get => isTransitioning;
-            set
-            {
-                if (value != isTransitioning)
-                {
-                    isTransitioning = value;
-                    NotifyWithCallerPropName();
-                }
-            }
-        }
 
 
         private double activeTime;
@@ -184,11 +152,6 @@ namespace StorylineEditor.ViewModels.Tabs
         }
 
 
-        public void OnNodeSelected(Node_BaseVm node)
-        { 
-        
-        }
-
         protected int gender;
         public int Gender
         {
@@ -208,9 +171,9 @@ namespace StorylineEditor.ViewModels.Tabs
         public ICommand TogglePlayCommand => togglePlayCommand ?? (togglePlayCommand = new RelayCommand
                     (() =>
                     {
-                        if (ActiveNode == null && !IsTransitioning)
+                        if (ActiveContext == null)
                         {
-                            ActiveNode = TreeToPlay.Selected;
+                            OnEndTransition(TreeToPlay.Selected);
                         }
                         else
                         {
@@ -221,11 +184,11 @@ namespace StorylineEditor.ViewModels.Tabs
 
 
         protected ICommand stopCommand;
-        public ICommand StopCommand => stopCommand ?? (stopCommand = new RelayCommand(() => Stop(), () => ActiveNode != null || IsTransitioning));
+        public ICommand StopCommand => stopCommand ?? (stopCommand = new RelayCommand(() => Stop(), () => ActiveContext != null));
 
 
         ICommand toggleGenderCommand;
-        public ICommand ToggleGenderCommand => toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand(() => Gender = (Gender + 1) % 3, () => ActiveNode == null && !IsTransitioning));
+        public ICommand ToggleGenderCommand => toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand(() => Gender = (Gender + 1) % 3, () => ActiveContext == null));
     }
 
     [XmlRoot]
