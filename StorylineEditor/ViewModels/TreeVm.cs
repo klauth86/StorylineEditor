@@ -36,8 +36,8 @@ namespace StorylineEditor.ViewModels
         public event Action<Node_BaseVm, Node_BaseVm> StartTransitionEvent = delegate { };
         public void OnStartTransition(Node_BaseVm a, Node_BaseVm b) { StartTransitionEvent(a, b); }
 
-        public event Action EndTransitionEvent = delegate { };
-        public void OnEndTransition() { EndTransitionEvent(); }
+        public event Action<object> EndTransitionEvent = delegate { };
+        public void OnEndTransition(object bObj) { EndTransitionEvent(bObj); }
 
         public event Action<Node_BaseVm, bool, double> StartActiveNodeEvent = delegate { };
         public void OnStartActiveNode(Node_BaseVm node, bool isTransitioning, double activeTime) { StartActiveNodeEvent(node, isTransitioning, activeTime); }

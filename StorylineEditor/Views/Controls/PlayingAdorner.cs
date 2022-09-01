@@ -95,7 +95,6 @@ namespace StorylineEditor.Views.Controls
             Height = 32;
 
             ellipse = new System.Windows.Shapes.Ellipse();
-
             ellipse.Fill = Brushes.Gold;
             ellipse.RenderTransform = new ScaleTransform() { CenterX = 16, CenterY = 16 };
 
@@ -146,14 +145,20 @@ namespace StorylineEditor.Views.Controls
                 Duration = TimeSpan.FromSeconds(activeTime)
             };
 
-            activeAnimation.Completed += (o, e) => TreeToPlay?.OnEndActiveNode();
-
             Storyboard.SetTarget(activeAnimation, this);
             Storyboard.SetTargetProperty(activeAnimation, new PropertyPath("ActiveTime"));
 
             storyboard = new Storyboard();
             storyboard.Children.Add(activeAnimation);
+            storyboard.Completed += OnCompleted_EndActiveNode;
+            
             Dispatcher.BeginInvoke(new Action(() => storyboard.Begin()));
+        }
+
+        private void OnCompleted_EndActiveNode(object sender, EventArgs e)
+        {
+            storyboard.Completed -= OnCompleted_EndActiveNode;
+            TreeToPlay?.OnEndActiveNode();
         }
 
         public void StartTransition(FrameworkElement fromElement, FrameworkElement toElement)
@@ -168,14 +173,20 @@ namespace StorylineEditor.Views.Controls
                 Duration = TimeSpan.FromSeconds(transitionTime)
             };
 
-            transitionAnimation.Completed += (o, e) => TreeToPlay?.OnEndTransition();
-
             Storyboard.SetTarget(transitionAnimation, this);
             Storyboard.SetTargetProperty(transitionAnimation, new PropertyPath("TransitionAlpha"));
 
             storyboard = new Storyboard();
             storyboard.Children.Add(transitionAnimation);
+            storyboard.Completed += OnCompleted_EndTransition;
+
             Dispatcher.BeginInvoke(new Action(() => storyboard.Begin()));
+        }
+
+        private void OnCompleted_EndTransition(object sender, EventArgs e)
+        {
+            storyboard.Completed -= OnCompleted_EndTransition;
+            TreeToPlay?.OnEndTransition(ToElement.DataContext);
         }
 
         public void PauseUnpause(bool isPaused)
@@ -197,6 +208,9 @@ namespace StorylineEditor.Views.Controls
             if (storyboard != null)
             {
                 storyboard.Stop();
+                storyboard.Completed -= OnCompleted_EndActiveNode;
+                storyboard.Completed -= OnCompleted_EndTransition;
+                
                 storyboard = null;
             }
         }

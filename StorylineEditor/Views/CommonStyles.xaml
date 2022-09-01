@@ -1197,7 +1197,7 @@ StorylineEditor распространяется в надежде, что он�
                 <Button Style="{StaticResource S_Button_Player_Stop}"></Button>
                 <TextBlock Style="{StaticResource S_TextBlock_Base}" Text="{Binding TreeToPlay.ActiveTimeLeft, StringFormat=F2}"></TextBlock>
             </StackPanel>
-            <ContentControl Content="{Binding NowPlaying, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+            <ContentControl Content="{Binding ActiveNode, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
             <DockPanel.Resources>
 
             </DockPanel.Resources>

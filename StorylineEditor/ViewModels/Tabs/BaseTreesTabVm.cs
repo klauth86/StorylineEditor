@@ -23,15 +23,10 @@ namespace StorylineEditor.ViewModels.Tabs
     {
         public void OnClosing()
         {
-            TreeToPlay.OnStop();
+            Stop();
 
-            IsPlaying = false;
-
-            isTransitioning = false;
-            FromNode = null;
-            ToNode = null;
-
-            ActiveNode = null;
+            TreeToPlay.EndActiveNodeEvent -= OnEndActiveNode;
+            TreeToPlay.EndTransitionEvent -= OnEndTransition;
         }
 
         public PlayerVm(BaseTreesTabVm parent, long additionalTicks, TreeVm treeToPlay) : base(parent, additionalTicks)
@@ -39,8 +34,6 @@ namespace StorylineEditor.ViewModels.Tabs
             TreeToPlay = treeToPlay;
 
             isTransitioning = false;
-            FromNode = null;
-            ToNode = null;
 
             isPlaying = false;
 
@@ -51,21 +44,11 @@ namespace StorylineEditor.ViewModels.Tabs
             TreeToPlay.EndActiveNodeEvent += OnEndActiveNode;
         }
 
-        ~PlayerVm()
+        private void OnEndTransition(object toObject)
         {
-            TreeToPlay.EndActiveNodeEvent -= OnEndActiveNode;
-            TreeToPlay.EndTransitionEvent -= OnEndTransition;
-        }
+            IsTransitioning = false;
 
-        private void OnEndTransition()
-        {
-            var toNode = ToNode;
-
-            isTransitioning = false;
-            FromNode = null;
-            ToNode = null;
-
-            ActiveNode = toNode;
+            ActiveNode = toObject as Node_BaseVm;
         }
 
         private void OnEndActiveNode()
@@ -74,12 +57,9 @@ namespace StorylineEditor.ViewModels.Tabs
 
             if (childNodes.Count == 1)
             {
-                FromNode = ActiveNode;
-                ToNode = childNodes[0];
+                IsTransitioning = true;
 
-                isTransitioning = true;
-
-                TreeToPlay.OnStartTransition(FromNode, ToNode);
+                TreeToPlay.OnStartTransition(ActiveNode, childNodes[0]);
 
                 ActiveNode = null;
             }
@@ -105,11 +85,33 @@ namespace StorylineEditor.ViewModels.Tabs
             }
         }
 
+        private void Stop()
+        {
+            TreeToPlay.OnStop();
+
+            IsPlaying = false;
+
+            isTransitioning = false;
+
+            ActiveNode = null;
+        }
+
         public TreeVm TreeToPlay { get; private set; }
 
+
         protected bool isTransitioning;
-        protected Node_BaseVm FromNode;
-        protected Node_BaseVm ToNode;
+        public bool IsTransitioning
+        {
+            get => isTransitioning;
+            set
+            {
+                if (value != isTransitioning)
+                {
+                    isTransitioning = value;
+                    NotifyWithCallerPropName();
+                }
+            }
+        }
 
 
         private bool isPlaying;
@@ -165,7 +167,7 @@ namespace StorylineEditor.ViewModels.Tabs
                     {
                         IsPlaying = !IsPlaying;
 
-                        if (IsPlaying && ActiveNode == null && !isTransitioning)
+                        if (IsPlaying && ActiveNode == null && !IsTransitioning)
                         {
                             ActiveNode = TreeToPlay.Selected;
                         }
@@ -178,7 +180,7 @@ namespace StorylineEditor.ViewModels.Tabs
 
 
         protected ICommand stopCommand;
-        public ICommand StopCommand => stopCommand ?? (stopCommand = new RelayCommand(() => OnClosing(), () => ActiveNode != null || isTransitioning));
+        public ICommand StopCommand => stopCommand ?? (stopCommand = new RelayCommand(() => Stop(), () => ActiveNode != null || IsTransitioning));
     }
 
     [XmlRoot]
