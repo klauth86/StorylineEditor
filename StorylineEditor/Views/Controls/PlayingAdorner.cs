@@ -215,6 +215,8 @@ namespace StorylineEditor.Views.Controls
                 storyboard.Completed -= OnCompleted_EndTransition;
                 
                 storyboard = null;
+
+                TreeToPlay.IsPlaying = false;
             }
         }
 

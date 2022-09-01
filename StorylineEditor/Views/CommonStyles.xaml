@@ -277,7 +277,7 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="ToolTip" Value="Воспроизвести"></Setter>
         <Setter Property="Command" Value="{Binding TogglePlayCommand}"></Setter>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding TreeToPlay.IsPlaying, UpdateSourceTrigger=PropertyChanged}" Value="false">
+            <DataTrigger Binding="{Binding TreeToPlay.IsPlaying, UpdateSourceTrigger=PropertyChanged}" Value="true">
                 <Setter Property="Content" Value="⏸"></Setter>
                 <Setter Property="ToolTip" Value="Пауза"></Setter>
             </DataTrigger>
