@@ -290,6 +290,12 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="Command" Value="{Binding StopCommand}"></Setter>
     </Style>
 
+    <Style TargetType="Button" x:Key="S_Button_Player_ToggleGender" BasedOn="{StaticResource S_Button_CanvasPanel}">
+        <Setter Property="Content" Value="{Binding Gender, Converter={StaticResource nodeToGenderIconConverter}}"></Setter>
+        <Setter Property="ToolTip" Value="{Binding Gender, Converter={StaticResource nodeToGenderDescriptionConverter}}"></Setter>
+        <Setter Property="Command" Value="{Binding ToggleGenderCommand}"></Setter>
+    </Style>
+    
     <!--CANVAS PANEL BUTTONS-->
 
     
@@ -1195,7 +1201,8 @@ StorylineEditor распространяется в надежде, что он�
                 <xctk:IntegerUpDown Minimum="1" Maximum="60" Value="{Binding ActiveTime, UpdateSourceTrigger=PropertyChanged}" AllowTextInput="False"></xctk:IntegerUpDown>
                 <Button Style="{StaticResource S_Button_Player_Play}"></Button>
                 <Button Style="{StaticResource S_Button_Player_Stop}"></Button>
-                <TextBlock Style="{StaticResource S_TextBlock_Base}" Text="{Binding TreeToPlay.ActiveTimeLeft, StringFormat=F2}"></TextBlock>
+                <Button Style="{StaticResource S_Button_Player_ToggleGender}"></Button>
+                <TextBlock VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Base}" Text="{Binding TreeToPlay.ActiveTimeLeft, StringFormat=F2}"></TextBlock>
             </StackPanel>
             <ContentControl Content="{Binding ActiveNode, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
             <DockPanel.Resources>
