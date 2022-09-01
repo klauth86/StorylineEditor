@@ -58,6 +58,8 @@ namespace StorylineEditor.ViewModels.Tabs
 
             activeContext = null;
 
+            gender = 1;
+
             TreeToPlay.EndTransitionEvent += OnEndTransition;
             TreeToPlay.EndActiveNodeEvent += OnEndActiveNode;
         }
@@ -76,6 +78,8 @@ namespace StorylineEditor.ViewModels.Tabs
             var activeNode = nodeObject as Node_BaseVm;
 
             List<Node_BaseVm> childNodes = TreeToPlay.GetChildNodes(activeNode);
+
+            childNodes.RemoveAll((node) => node.Gender > 0 && node.Gender != Gender);
 
             ////// TODO Execute other predicates
 
@@ -188,7 +192,7 @@ namespace StorylineEditor.ViewModels.Tabs
 
 
         ICommand toggleGenderCommand;
-        public ICommand ToggleGenderCommand => toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand(() => Gender = (Gender + 1) % 3, () => ActiveContext == null));
+        public ICommand ToggleGenderCommand => toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand(() => Gender = 3 - gender, () => ActiveContext == null));
     }
 
     [XmlRoot]

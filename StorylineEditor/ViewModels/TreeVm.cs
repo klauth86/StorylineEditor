@@ -523,8 +523,8 @@ namespace StorylineEditor.ViewModels
 
                         if (link.To is JNode_AlternativeVm ||
                             to.Gender == link.To.Gender ||
-                            to.Gender == Node_BaseVm.UNISEX ||
-                            link.To.Gender == Node_BaseVm.UNISEX)
+                            to.Gender == 0 ||
+                            link.To.Gender == 0)
                             brokenLinks.Add(link);
                     }
                 }

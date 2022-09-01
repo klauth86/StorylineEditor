@@ -37,7 +37,7 @@ namespace StorylineEditor.ViewModels.Nodes
 
         public Node_BaseVm(TreeVm Parent, long additionalTicks) : base(Parent, additionalTicks) {
             Position = new Point(0, 0);
-            Gender = UNISEX;
+            Gender = 0;
 
             FullContextVm.OnSearchFilterChangedEvent += OnSearchFilterChanged;
         }
@@ -180,21 +180,9 @@ namespace StorylineEditor.ViewModels.Nodes
             }
         }
 
-        public const int UNISEX = 0;
         public const int MALE = 1;
         public const int FEMALE = 2;
 
         public void ToggleGender() => Gender = (Gender + 1) % 3;
-
-        public string GetGenderEnum()
-        {
-            if (gender == MALE) return "EGender::Male";
-
-            if (gender == FEMALE) return "EGender::Female";
-
-            return "GENDER ENUM BUG";
-        }
-
-        public string GetSafeString(string str) { return str?.Replace("\"", "\\\"")?.Replace("\n", "...")?.Replace("\r", "..."); }
     }
 }
