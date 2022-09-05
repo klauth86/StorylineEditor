@@ -25,7 +25,7 @@ namespace StorylineEditor.ViewModels
 
         public CharacterVm() : this(null, 0) { }
 
-        ~CharacterVm() { FullContextVm.OnSearchFilterChangedEvent -= OnSearchFilterChanged; }
+        public override bool OnRemoval() { FullContextVm.OnSearchFilterChangedEvent -= OnSearchFilterChanged; return base.OnRemoval(); }
 
         public static void AddPlayerIfHasNoOne(CharactersTabVm Parent)
         {

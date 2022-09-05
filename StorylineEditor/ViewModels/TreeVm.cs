@@ -109,11 +109,6 @@ namespace StorylineEditor.ViewModels
 
         public TreeVm() : this(null, 0) { }
 
-        ~TreeVm()
-        {
-            FullContextVm.OnSearchFilterChangedEvent -= OnSearchFilterChanged;
-        }
-
         public string Stats
         {
             get
@@ -391,6 +386,8 @@ namespace StorylineEditor.ViewModels
         private void RemoveLink_Internal(NodePairVm link)
         {
             Links.Remove(link);
+            link.OnRemoval();
+
             OnLinkRemoved(link);
 
             if (Links.All(remainingLink => remainingLink.ToId != link.ToId))
@@ -411,6 +408,8 @@ namespace StorylineEditor.ViewModels
             foreach (var link in brokenLinks) { RemoveLink_Internal(link); }
 
             Nodes.Remove(node);
+            node.OnRemoval();
+
             OnNodeRemoved(node);
 
             RemoveRootNode(node);
@@ -565,16 +564,6 @@ namespace StorylineEditor.ViewModels
 
         public bool IsLeafNode(Node_BaseVm node) => Links.All(link => link?.FromId != node.Id);
 
-        protected override void CloneInternalData(BaseVm destObj, long additionalTicks)
-        {
-            base.CloneInternalData(destObj, additionalTicks);
-
-            if (destObj is TreeVm casted)
-            {
-                ////// TODO MORE COMPLEX
-            }
-        }
-
         public List<Node_BaseVm> NodesTraversal() => NodesTraversal(Nodes.Where((node) => RootNodeIds.Contains(node.Id)).ToList());
 
         public List<Node_BaseVm> NodesTraversal(Node_BaseVm startNode, bool includeSelf) { var result = NodesTraversal(GetPrimaryChildNodes(startNode)); if (includeSelf) result.Insert(0, startNode); return result; }
@@ -708,6 +697,8 @@ namespace StorylineEditor.ViewModels
             }
 
             Clipboard.SetText(App.SerializeXmlToString<TreeVm>(copiedTree));
+
+            copiedTree.OnRemoval();
         }
 
         public void Paste()
@@ -747,6 +738,8 @@ namespace StorylineEditor.ViewModels
                 {
                     AddToSelection(Nodes.First(node => node.Id == nodeId), false);
                 }
+
+                copiedTree.OnRemoval();
             }
         }
 
@@ -754,5 +747,26 @@ namespace StorylineEditor.ViewModels
             base.PassFilter(filter) ||
             Nodes.Any(node => node.PassFilter(filter)) || 
             Links.Any(link => link.PassFilter(filter));
+
+        public override bool OnRemoval()
+        {
+            foreach (var link in Links) link.OnRemoval();
+
+            foreach (var node in Nodes) node.OnRemoval();
+
+            FullContextVm.OnSearchFilterChangedEvent -= OnSearchFilterChanged;
+
+            return base.OnRemoval(); 
+        }
+
+        protected override void CloneInternalData(BaseVm destObj, long additionalTicks)
+        {
+            base.CloneInternalData(destObj, additionalTicks);
+
+            if (destObj is TreeVm casted)
+            {
+                ////// TODO MORE COMPLEX
+            }
+        }
     }
 }

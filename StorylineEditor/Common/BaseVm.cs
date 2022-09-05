@@ -144,6 +144,8 @@ namespace StorylineEditor.Common
 
         protected void OnSearchFilterChanged(string filter) => IsVisible = string.IsNullOrEmpty(filter) || PassFilter(filter);
 
+        public virtual bool OnRemoval() { return true; }
+
         public BaseVm Clone(BaseVm Parent, long additionalTicks)
         {
             var result = CustomByteConverter.CreateByName(GetType().Name, Parent, additionalTicks);
@@ -185,6 +187,8 @@ namespace StorylineEditor.Common
         public override void NotifyIsValidChanged() { base.NotifyIsValidChanged(); Parent?.NotifyIsValidChanged(); }
 
         public override void NotifyNameChanged() { base.NotifyNameChanged(); Parent?.NotifyItemNameChanged(this); }
+
+        public override bool OnRemoval() { Parent = null; return base.OnRemoval(); }
     }
 
     public abstract class BaseNamedVm<T> : BaseVm<T> where T : BaseVm

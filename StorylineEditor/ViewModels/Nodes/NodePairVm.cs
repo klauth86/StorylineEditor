@@ -21,8 +21,6 @@ namespace StorylineEditor.ViewModels.Nodes
     {
         public NodePairVm() { isVisible = true; FullContextVm.OnSearchFilterChangedEvent += OnSearchFilterChanged; }
 
-        ~NodePairVm() { FullContextVm.OnSearchFilterChangedEvent -= OnSearchFilterChanged; }
-
         public string FromId { get; set; }
 
         public string ToId { get; set; }
@@ -72,6 +70,8 @@ namespace StorylineEditor.ViewModels.Nodes
             To != null && To.PassFilter(filter);
 
         protected void OnSearchFilterChanged(string filter) => IsVisible = string.IsNullOrEmpty(filter) || PassFilter(filter);
+
+        public bool OnRemoval() { FullContextVm.OnSearchFilterChangedEvent -= OnSearchFilterChanged; return true; }
 
         ////// TODO We dont have all BaseVm things here, however this dublicated code also is not good enough
     }

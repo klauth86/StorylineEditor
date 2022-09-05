@@ -31,8 +31,6 @@ namespace StorylineEditor.ViewModels
 
         public TreeFolderVm() : this(null, 0) { }
 
-        ~TreeFolderVm() { FullContextVm.OnSearchFilterChangedEvent -= OnSearchFilterChanged; }
-
         public ObservableCollection<FolderedVm> Items { get; }
 
         public override bool IsFolder => true;
@@ -82,5 +80,7 @@ namespace StorylineEditor.ViewModels
         public override bool PassFilter(string filter) => 
             base.PassFilter(filter) || 
             Items.Any(item => item.PassFilter(filter));
+
+        public override bool OnRemoval() { FullContextVm.OnSearchFilterChangedEvent -= OnSearchFilterChanged; return base.OnRemoval(); }
     }
 }

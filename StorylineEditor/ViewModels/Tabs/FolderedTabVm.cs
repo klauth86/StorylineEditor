@@ -95,7 +95,7 @@ namespace StorylineEditor.ViewModels.Tabs
         {
             SelectedItem.IsSelected = false;
 
-            return itemToRemove.Folder != null ? itemToRemove.Folder.RemoveChild(itemToRemove) : Items.Remove(itemToRemove);
+            return (itemToRemove.Folder != null ? itemToRemove.Folder.RemoveChild(itemToRemove) : Items.Remove(itemToRemove)) && itemToRemove.OnRemoval();
         }
 
         public virtual bool EditItemInPlace => false;

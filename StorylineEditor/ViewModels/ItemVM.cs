@@ -22,6 +22,6 @@ namespace StorylineEditor.ViewModels
 
         public ItemVm() : this(null, 0) { }
 
-        ~ItemVm() { FullContextVm.OnSearchFilterChangedEvent -= OnSearchFilterChanged; }
+        public override bool OnRemoval() { FullContextVm.OnSearchFilterChangedEvent -= OnSearchFilterChanged; return base.OnRemoval(); }
     }
 }

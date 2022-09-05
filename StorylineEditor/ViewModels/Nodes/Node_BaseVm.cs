@@ -44,8 +44,6 @@ namespace StorylineEditor.ViewModels.Nodes
 
         public Node_BaseVm() : this(null, 0) { }
 
-        ~Node_BaseVm() { FullContextVm.OnSearchFilterChangedEvent -= OnSearchFilterChanged; }
-
         private void OnRootNodesChanged() {
             Notify(nameof(IsRoot));
             Notify(nameof(Labels));
@@ -118,6 +116,26 @@ namespace StorylineEditor.ViewModels.Nodes
             }
         }
 
+        protected int gender;
+        public int Gender
+        {
+            get => gender;
+            set
+            {
+                if (value != gender)
+                {
+                    gender = value;
+                    NotifyWithCallerPropName();
+
+                    Parent?.RefreshJournalLinks_To(this);
+                }
+            }
+        }
+
+        public const int MALE = 1;
+        public const int FEMALE = 2;
+
+        public void ToggleGender() => Gender = (Gender + 1) % 3;
 
         protected string label;
         public string Label {
@@ -152,6 +170,8 @@ namespace StorylineEditor.ViewModels.Nodes
             }
         }
 
+        public override bool OnRemoval() { FullContextVm.OnSearchFilterChangedEvent -= OnSearchFilterChanged; return base.OnRemoval(); }
+
         protected override void CloneInternalData(BaseVm destObj, long additionalTicks)
         {
             base.CloneInternalData(destObj, additionalTicks);
@@ -163,26 +183,5 @@ namespace StorylineEditor.ViewModels.Nodes
                 casted.label = label;
             }
         }
-
-        protected int gender;
-        public int Gender
-        {
-            get => gender;
-            set
-            {
-                if (value != gender)
-                {
-                    gender = value;
-                    NotifyWithCallerPropName();
-
-                    Parent?.RefreshJournalLinks_To(this);
-                }
-            }
-        }
-
-        public const int MALE = 1;
-        public const int FEMALE = 2;
-
-        public void ToggleGender() => Gender = (Gender + 1) % 3;
     }
 }
