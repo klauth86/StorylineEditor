@@ -21,6 +21,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
@@ -54,6 +55,12 @@ namespace StorylineEditor.Views.Controls
             set { this.SetValue(OffsetProperty, value); }
         }
 
+        public double AnimAlpha
+        {
+            get => (double)this.GetValue(AnimAlphaProperty);
+            set { this.SetValue(AnimAlphaProperty, value); }
+        }
+
         public static readonly DependencyProperty TreeProperty = DependencyProperty.Register(
             "Tree", typeof(TreeVm), typeof(TreeCanvas), new PropertyMetadata(null, OnTreeChanged));
 
@@ -65,6 +72,9 @@ namespace StorylineEditor.Views.Controls
 
         public static readonly DependencyProperty OffsetProperty = DependencyProperty.Register(
             "Offset", typeof(Vector), typeof(TreeCanvas), new PropertyMetadata(new Vector(0, 0)));
+
+        public static readonly DependencyProperty AnimAlphaProperty = DependencyProperty.Register(
+            "AnimAlpha", typeof(double), typeof(TreeCanvas), new PropertyMetadata(0.0, OnAnimAlphaChanged));
 
         private static void OnTreeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -116,7 +126,38 @@ namespace StorylineEditor.Views.Controls
             }
         }
 
+        private static void OnAnimAlphaChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is TreeCanvas treeCanvas)
+            {
+                if (treeCanvas.FocusNode != null)
+                {
+                    if (treeCanvas.PrevFocusNode != null)
+                    {
+                        Vector leftTopPosA = treeCanvas.PrevFocusNode.Position - new Point(treeCanvas.ActualWidth / 2 / treeCanvas.Scale, treeCanvas.ActualHeight / 2 / treeCanvas.Scale);
+                        Vector offsetA = leftTopPosA + new Vector(treeCanvas.GraphNodes[treeCanvas.PrevFocusNode].ActualWidth / 2, treeCanvas.GraphNodes[treeCanvas.PrevFocusNode].ActualHeight / 2);
+
+                        Vector leftTopPosB = treeCanvas.FocusNode.Position - new Point(treeCanvas.ActualWidth / 2 / treeCanvas.Scale, treeCanvas.ActualHeight / 2 / treeCanvas.Scale);
+                        Vector offsetB = leftTopPosB + new Vector(treeCanvas.GraphNodes[treeCanvas.FocusNode].ActualWidth / 2, treeCanvas.GraphNodes[treeCanvas.FocusNode].ActualHeight / 2);
+
+                        treeCanvas.Offset = offsetA * (1 - treeCanvas.AnimAlpha) + offsetB * treeCanvas.AnimAlpha;
+                        treeCanvas.OnTransformChanged();
+                    }
+                    else
+                    {
+                        Vector leftTopPos = treeCanvas.FocusNode.Position - new Point(treeCanvas.ActualWidth / 2 / treeCanvas.Scale, treeCanvas.ActualHeight / 2 / treeCanvas.Scale);
+                        treeCanvas.Offset = treeCanvas.Offset * (1 - treeCanvas.AnimAlpha) + (leftTopPos + new Vector(treeCanvas.GraphNodes[treeCanvas.FocusNode].ActualWidth / 2, treeCanvas.GraphNodes[treeCanvas.FocusNode].ActualHeight / 2)) * treeCanvas.AnimAlpha;
+                        treeCanvas.OnTransformChanged();
+                    }
+                }
+            }
+        }
+
         #endregion
+
+        const double AnimAlphaDuration = 0.5;
+        
+        const double StateAlphaDuration = 0.05;
 
         private void OnSetBackground(string path)
         {
@@ -166,11 +207,9 @@ namespace StorylineEditor.Views.Controls
         {
             if (GraphNodes.ContainsKey(node))
             {
-                Vector leftTopPosition = node.Position - new Point(ActualWidth / 2 / Scale, ActualHeight / 2 / Scale);
-
-                Offset = leftTopPosition + new Vector(GraphNodes[node].ActualWidth / 2, GraphNodes[node].ActualHeight / 2);
-
-                OnTransformChanged();
+                FocusNode = null;
+                SetAnimAlphaStoryboard(node, AnimAlphaDuration);
+                Dispatcher.BeginInvoke(new Action(() => { AnimAlphaStoryboard?.Begin(); }));
             }
         }
 
@@ -190,22 +229,50 @@ namespace StorylineEditor.Views.Controls
             }
         }
 
-        private void StartTransition(Node_BaseVm nodeA, Node_BaseVm nodeB) { PlayingAdorner?.StartTransition(GraphNodes[nodeA], GraphNodes[nodeB]); }
-
-        private void PauseUnpause() { PlayingAdorner?.PauseUnpause(); }
-
-        private void Stop()
+        private void OnCompleted_EndActiveNode(object sender, EventArgs e)
         {
-            if (PlayingAdorner != null)
-            {
-                PlayingAdorner?.Stop();
+            AnimAlphaStoryboard.Completed -= OnCompleted_EndActiveNode;
+            Tree?.OnEndActiveNode(FocusNode);
+        }
 
-                Children.Remove(PlayingAdorner);
-                PlayingAdorner = null;
+        private void OnCompleted_EndTransition(object sender, EventArgs e)
+        {
+            AnimAlphaStoryboard.Completed -= OnCompleted_EndTransition;
+            Tree?.OnEndTransition(FocusNode);
+        }
+
+        private void SetAnimAlphaStoryboard(Node_BaseVm activeNode, double activeTime)
+        {
+            PrevFocusNode = FocusNode;
+            FocusNode = activeNode;
+
+            var focusAnimation = new DoubleAnimation
+            {
+                From = 0,
+                To = 1,
+                Duration = TimeSpan.FromSeconds(activeTime)
+            };
+
+            Storyboard.SetTarget(focusAnimation, this);
+            Storyboard.SetTargetProperty(focusAnimation, new PropertyPath("AnimAlpha"));
+
+            StopAnimAlphaStoryboard();
+
+            AnimAlphaStoryboard = new Storyboard();
+            AnimAlphaStoryboard.Children.Add(focusAnimation);
+        }
+
+        private void StopAnimAlphaStoryboard()
+        {
+            if (AnimAlphaStoryboard != null)
+            {
+                AnimAlphaStoryboard.Stop();
+                AnimAlphaStoryboard.Completed -= OnCompleted_EndActiveNode;
+                AnimAlphaStoryboard.Completed -= OnCompleted_EndTransition;
             }
         }
 
-        private void StartActiveNode(Node_BaseVm activeNode, double activeTime)
+        private void StartActiveNode(Node_BaseVm activeNode, double duration)
         {
             if (activeNode != null)
             {
@@ -213,14 +280,100 @@ namespace StorylineEditor.Views.Controls
 
                 if (PlayingAdorner == null)
                 {
-                    PlayingAdorner = new PlayingAdorner(Scale) { TreeToPlay = Tree };
+                    PlayingAdorner = new PlayingAdorner(Scale);
                     Canvas.SetZIndex(PlayingAdorner, -ActiveZIndex);
+
+                    double fromX = Canvas.GetLeft(GraphNodes[activeNode]) + GraphNodes[activeNode].ActualWidth * Scale / 2;
+                    double toX = Canvas.GetTop(GraphNodes[activeNode]) + GraphNodes[activeNode].ActualHeight * Scale / 2;
+
+                    Canvas.SetLeft(this, fromX - PlayingAdorner.Width * Scale / 2);
+                    Canvas.SetTop(this, toX - PlayingAdorner.Height * Scale / 2);
+
+                    Children.Add(PlayingAdorner);
+
                     wasCreated = true;
                 }
 
-                PlayingAdorner?.StartActiveNode(GraphNodes[activeNode], activeTime);
+                if (wasCreated)
+                {
+                    PlayingAdorner.ToActiveNodeState(GraphNodes[activeNode], 0.1);
 
-                if (wasCreated) Children.Add(PlayingAdorner);
+                    SetAnimAlphaStoryboard(activeNode, AnimAlphaDuration);
+                    
+                    EventHandler onCompleted_Callback = null;
+
+                    onCompleted_Callback = (o, e) =>
+                    {
+                        AnimAlphaStoryboard.Completed -= onCompleted_Callback;
+                        StartActiveNode(activeNode, duration);
+                    };
+
+                    AnimAlphaStoryboard.Completed += onCompleted_Callback;
+                    
+                    Dispatcher.BeginInvoke(new Action(() => AnimAlphaStoryboard?.Begin()));
+                }
+                else
+                {
+                    PlayingAdorner.ToActiveNodeState(GraphNodes[activeNode], StateAlphaDuration);
+
+                    SetAnimAlphaStoryboard(activeNode, duration);
+                    AnimAlphaStoryboard.Completed += OnCompleted_EndActiveNode;
+
+                    Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        AnimAlphaStoryboard?.Begin();
+                        Tree.IsPlaying = true;
+                    }));
+                }
+            }
+        }
+
+        private void StartTransition(Node_BaseVm nodeA, Node_BaseVm nodeB)
+        {
+            PlayingAdorner?.ToTransitionState(StateAlphaDuration);
+
+            FocusNode = nodeA;
+            SetAnimAlphaStoryboard(nodeB, AnimAlphaDuration);
+            AnimAlphaStoryboard.Completed += OnCompleted_EndTransition;
+
+            Dispatcher.BeginInvoke(new Action(() => AnimAlphaStoryboard?.Begin()));
+        }
+
+        private void PauseUnpause()
+        {
+            if (AnimAlphaStoryboard != null)
+            {
+                if (!AnimAlphaStoryboard.GetIsPaused())
+                {
+                    AnimAlphaStoryboard.Pause();
+                    Tree.IsPlaying = false;
+                }
+                else
+                {
+                    AnimAlphaStoryboard.Resume();
+                    Tree.IsPlaying = true;
+                }
+            }
+        }
+
+        private void Stop()
+        {
+            StopAnimAlphaStoryboard();
+
+            PrevFocusNode = null;
+            FocusNode = null;
+
+            if (PlayingAdorner != null)
+            {
+                Children.Remove(PlayingAdorner);
+                PlayingAdorner = null;
+            }
+
+            if (Tree.Selected != null)
+            {
+                FocusNode = null;
+                SetAnimAlphaStoryboard(Tree.Selected, AnimAlphaDuration);
+                Dispatcher.BeginInvoke(new Action(() => { AnimAlphaStoryboard?.Begin(); }));
             }
         }
 
@@ -347,7 +500,11 @@ namespace StorylineEditor.Views.Controls
         protected Point prevMousePosition = new Point();
         protected GraphNode ActiveGraphNode;
         protected Rectangle SelectionRectangle;
+        
         protected PlayingAdorner PlayingAdorner;
+        protected Node_BaseVm PrevFocusNode;
+        protected Node_BaseVm FocusNode;
+        Storyboard AnimAlphaStoryboard;
 
         protected IndicatorLink indicatorLink;
         public IndicatorLink IndicatorLink
