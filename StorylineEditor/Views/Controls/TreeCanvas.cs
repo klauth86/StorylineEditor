@@ -61,6 +61,12 @@ namespace StorylineEditor.Views.Controls
             set { this.SetValue(AnimAlphaProperty, value); }
         }
 
+        public double DurationAlpha
+        {
+            get => (double)this.GetValue(DurationAlphaProperty);
+            set { this.SetValue(DurationAlphaProperty, value); }
+        }
+
         public static readonly DependencyProperty TreeProperty = DependencyProperty.Register(
             "Tree", typeof(TreeVm), typeof(TreeCanvas), new PropertyMetadata(null, OnTreeChanged));
 
@@ -75,6 +81,9 @@ namespace StorylineEditor.Views.Controls
 
         public static readonly DependencyProperty AnimAlphaProperty = DependencyProperty.Register(
             "AnimAlpha", typeof(double), typeof(TreeCanvas), new PropertyMetadata(0.0, OnAnimAlphaChanged));
+
+        public static readonly DependencyProperty DurationAlphaProperty = DependencyProperty.Register(
+            "DurationAlpha", typeof(double), typeof(TreeCanvas), new PropertyMetadata(0.0, OnDurationAlphaChanged));
 
         private static void OnTreeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -130,27 +139,18 @@ namespace StorylineEditor.Views.Controls
         {
             if (d is TreeCanvas treeCanvas)
             {
-                if (treeCanvas.FocusNode != null)
+                if (treeCanvas.FocusNode != null && treeCanvas.AnimAlpha > 0)
                 {
-                    if (treeCanvas.PrevFocusNode != null)
-                    {
-                        Vector leftTopPosA = treeCanvas.PrevFocusNode.Position - new Point(treeCanvas.ActualWidth / 2 / treeCanvas.Scale, treeCanvas.ActualHeight / 2 / treeCanvas.Scale);
-                        Vector offsetA = leftTopPosA + new Vector(treeCanvas.GraphNodes[treeCanvas.PrevFocusNode].ActualWidth / 2, treeCanvas.GraphNodes[treeCanvas.PrevFocusNode].ActualHeight / 2);
-
-                        Vector leftTopPosB = treeCanvas.FocusNode.Position - new Point(treeCanvas.ActualWidth / 2 / treeCanvas.Scale, treeCanvas.ActualHeight / 2 / treeCanvas.Scale);
-                        Vector offsetB = leftTopPosB + new Vector(treeCanvas.GraphNodes[treeCanvas.FocusNode].ActualWidth / 2, treeCanvas.GraphNodes[treeCanvas.FocusNode].ActualHeight / 2);
-
-                        treeCanvas.Offset = offsetA * (1 - treeCanvas.AnimAlpha) + offsetB * treeCanvas.AnimAlpha;
-                        treeCanvas.OnTransformChanged();
-                    }
-                    else
-                    {
-                        Vector leftTopPos = treeCanvas.FocusNode.Position - new Point(treeCanvas.ActualWidth / 2 / treeCanvas.Scale, treeCanvas.ActualHeight / 2 / treeCanvas.Scale);
-                        treeCanvas.Offset = treeCanvas.Offset * (1 - treeCanvas.AnimAlpha) + (leftTopPos + new Vector(treeCanvas.GraphNodes[treeCanvas.FocusNode].ActualWidth / 2, treeCanvas.GraphNodes[treeCanvas.FocusNode].ActualHeight / 2)) * treeCanvas.AnimAlpha;
-                        treeCanvas.OnTransformChanged();
-                    }
+                    Vector leftTopPos = treeCanvas.FocusNode.Position - new Point(treeCanvas.ActualWidth / 2 / treeCanvas.Scale, treeCanvas.ActualHeight / 2 / treeCanvas.Scale);
+                    treeCanvas.Offset = treeCanvas.PrevOffset * (1 - treeCanvas.AnimAlpha) + (leftTopPos + new Vector(treeCanvas.GraphNodes[treeCanvas.FocusNode].ActualWidth / 2, treeCanvas.GraphNodes[treeCanvas.FocusNode].ActualHeight / 2)) * treeCanvas.AnimAlpha;
+                    treeCanvas.OnTransformChanged();
                 }
             }
+        }
+
+        private static void OnDurationAlphaChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is TreeCanvas treeCanvas) treeCanvas.Tree.OnDurationAlphaChanged(treeCanvas.DurationAlpha);
         }
 
         #endregion
@@ -219,8 +219,10 @@ namespace StorylineEditor.Views.Controls
         {
             if (GraphNodes.ContainsKey(node))
             {
-                FocusNode = null;
-                SetAnimAlphaStoryboard(node, AnimAlphaDuration);
+                PrevOffset.X = Offset.X;
+                PrevOffset.Y = Offset.Y;
+                FocusNode = node;
+                SetAnimAlphaStoryboard(AnimAlphaDuration, this, "AnimAlpha");                
                 
                 Dispatcher.BeginInvoke(new Action(() => { AnimAlphaStoryboard?.Begin(); }));
             }
@@ -254,22 +256,19 @@ namespace StorylineEditor.Views.Controls
             Tree?.OnEndTransition(FocusNode);
         }
 
-        private void SetAnimAlphaStoryboard(Node_BaseVm activeNode, double activeTime)
+        private void SetAnimAlphaStoryboard(double duration, DependencyObject animTarget, string animProperty)
         {
             StopAnimAlphaStoryboard(); // Stop existing anim, if there is one
-
-            PrevFocusNode = FocusNode;
-            FocusNode = activeNode;
 
             var focusAnimation = new DoubleAnimation
             {
                 From = 0,
                 To = 1,
-                Duration = TimeSpan.FromSeconds(activeTime)
+                Duration = TimeSpan.FromSeconds(duration)
             };
 
-            Storyboard.SetTarget(focusAnimation, this);
-            Storyboard.SetTargetProperty(focusAnimation, new PropertyPath("AnimAlpha"));
+            Storyboard.SetTarget(focusAnimation, animTarget);
+            Storyboard.SetTargetProperty(focusAnimation, new PropertyPath(animProperty));
 
             AnimAlphaStoryboard = new Storyboard();
             AnimAlphaStoryboard.Children.Add(focusAnimation);
@@ -296,7 +295,10 @@ namespace StorylineEditor.Views.Controls
 
                     if (!IsNearlyCentered(activeNode))
                     {
-                        SetAnimAlphaStoryboard(activeNode, AnimAlphaDuration);
+                        PrevOffset.X = Offset.X;
+                        PrevOffset.Y = Offset.Y;
+                        FocusNode = activeNode;
+                        SetAnimAlphaStoryboard(2 * AnimAlphaDuration, this, "AnimAlpha");
 
                         EventHandler onCompleted_Callback = null;
 
@@ -323,8 +325,9 @@ namespace StorylineEditor.Views.Controls
                 }
 
                 PlayingAdorner.ToActiveNodeState(GraphNodes[activeNode], StateAlphaDuration);
-                
-                SetAnimAlphaStoryboard(activeNode, duration);
+
+                FocusNode = activeNode;
+                SetAnimAlphaStoryboard(duration, this, "DurationAlpha");
                 AnimAlphaStoryboard.Completed += OnCompleted_EndActiveNode;
 
                 Dispatcher.BeginInvoke(new Action(() =>
@@ -339,8 +342,10 @@ namespace StorylineEditor.Views.Controls
         {
             PlayingAdorner?.ToTransitionState(StateAlphaDuration);
 
-            FocusNode = nodeA;
-            SetAnimAlphaStoryboard(nodeB, AnimAlphaDuration);
+            PrevOffset.X = Offset.X;
+            PrevOffset.Y = Offset.Y;
+            FocusNode = nodeB;
+            SetAnimAlphaStoryboard(2 * AnimAlphaDuration, this, "AnimAlpha");
             AnimAlphaStoryboard.Completed += OnCompleted_EndTransition;
 
             Dispatcher.BeginInvoke(new Action(() => AnimAlphaStoryboard?.Begin()));
@@ -367,7 +372,6 @@ namespace StorylineEditor.Views.Controls
         {
             StopAnimAlphaStoryboard();
 
-            PrevFocusNode = null;
             FocusNode = null;
 
             if (PlayingAdorner != null)
@@ -377,13 +381,6 @@ namespace StorylineEditor.Views.Controls
             }
 
             Tree.IsPlaying = false;
-
-            if (Tree.Selected != null)
-            {
-                FocusNode = null;
-                SetAnimAlphaStoryboard(Tree.Selected, AnimAlphaDuration);
-                Dispatcher.BeginInvoke(new Action(() => { AnimAlphaStoryboard?.Begin(); }));
-            }
         }
 
         private void AddGraphNode(Node_BaseVm node)
@@ -511,7 +508,7 @@ namespace StorylineEditor.Views.Controls
         protected Rectangle SelectionRectangle;
         
         protected PlayingAdorner PlayingAdorner;
-        protected Node_BaseVm PrevFocusNode;
+        protected Vector PrevOffset = new Vector();
         protected Node_BaseVm FocusNode;
         Storyboard AnimAlphaStoryboard;
 

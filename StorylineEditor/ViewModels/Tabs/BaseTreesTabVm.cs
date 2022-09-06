@@ -45,6 +45,7 @@ namespace StorylineEditor.ViewModels.Tabs
         {
             Stop();
 
+            TreeToPlay.DurationAlphaChangedEvent -= OnDurationAlphaChanged;
             TreeToPlay.EndActiveNodeEvent -= OnEndActiveNode;
             TreeToPlay.EndTransitionEvent -= OnEndTransition;
         }
@@ -62,6 +63,7 @@ namespace StorylineEditor.ViewModels.Tabs
 
             TreeToPlay.EndTransitionEvent += OnEndTransition;
             TreeToPlay.EndActiveNodeEvent += OnEndActiveNode;
+            TreeToPlay.DurationAlphaChangedEvent += OnDurationAlphaChanged;
         }
 
         private void OnEndTransition(object nodeObject)
@@ -108,6 +110,11 @@ namespace StorylineEditor.ViewModels.Tabs
             }
         }
 
+        private void OnDurationAlphaChanged(double alpha)
+        {
+            ActiveTimeLeft = ActiveTime * (1 - alpha);
+        }
+
         public void StartTransition(Node_BaseVm fromNode, Node_BaseVm toNode)
         {
             TreeToPlay.OnStartTransition(fromNode, toNode);
@@ -139,8 +146,22 @@ namespace StorylineEditor.ViewModels.Tabs
                 }
             }
         }
-        
-        
+
+        private double activeTimeLeft;
+        public double ActiveTimeLeft
+        {
+            get => activeTimeLeft;
+            set
+            {
+                if (value != activeTimeLeft)
+                {
+                    activeTimeLeft = value;
+                    NotifyWithCallerPropName();
+                }
+            }
+        }
+
+
         private BaseVm activeContext;
         public BaseVm ActiveContext
         {

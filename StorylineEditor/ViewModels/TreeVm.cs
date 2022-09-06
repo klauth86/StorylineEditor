@@ -48,20 +48,9 @@ namespace StorylineEditor.ViewModels
         public event Action StopEvent = delegate { };
         public void OnStop() { StopEvent(); }
 
-        protected double activeTimeLeft;
-        [XmlIgnore]
-        public double ActiveTimeLeft
-        {
-            get => activeTimeLeft;
-            set
-            {
-                if (activeTimeLeft != value)
-                {
-                    activeTimeLeft = value;
-                    NotifyWithCallerPropName();
-                }
-            }
-        }
+        public event Action<double> DurationAlphaChangedEvent = delegate { };
+        public void OnDurationAlphaChanged(double alpha) { DurationAlphaChangedEvent(alpha); }
+
 
         protected bool isPlaying;
         [XmlIgnore]
