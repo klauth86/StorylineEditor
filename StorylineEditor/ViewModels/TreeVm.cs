@@ -33,8 +33,8 @@ namespace StorylineEditor.ViewModels
         public event Action PauseUnpauseEvent = delegate { };
         public void OnPauseUnpause() { PauseUnpauseEvent(); }
 
-        public event Action<Node_BaseVm, Node_BaseVm> StartTransitionEvent = delegate { };
-        public void OnStartTransition(Node_BaseVm a, Node_BaseVm b) { StartTransitionEvent(a, b); }
+        public event Action<Node_BaseVm> StartTransitionEvent = delegate { };
+        public void OnStartTransition(Node_BaseVm nextNode) { StartTransitionEvent(nextNode); }
 
         public event Action<object> EndTransitionEvent = delegate { };
         public void OnEndTransition(object nodeObj) { EndTransitionEvent(nodeObj); }

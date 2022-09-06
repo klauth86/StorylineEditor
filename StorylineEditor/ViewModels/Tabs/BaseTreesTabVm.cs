@@ -36,7 +36,7 @@ namespace StorylineEditor.ViewModels.Tabs
         public List<Node_BaseVm> NodesToSelect { get; set; }
 
         protected ICommand selectNodeCommand;
-        public ICommand SelectNodeCommand => selectNodeCommand ?? (selectNodeCommand = new RelayCommand<Node_BaseVm>((node) => { Parent?.StartTransition(ActiveNode, node); }, (node) => node != null && NodesToSelect.Contains(node)));
+        public ICommand SelectNodeCommand => selectNodeCommand ?? (selectNodeCommand = new RelayCommand<Node_BaseVm>((node) => { Parent?.StartTransition(node); }, (node) => node != null && NodesToSelect.Contains(node)));
     }
 
     public class PlayerVm : BaseVm<BaseTreesTabVm>, IDialogContext
@@ -87,13 +87,13 @@ namespace StorylineEditor.ViewModels.Tabs
 
             if (childNodes.Count == 1)
             {
-                StartTransition(activeNode, childNodes[0]);
+                StartTransition(childNodes[0]);
             }
             else if (childNodes.Count > 0)
             {
                 if (activeNode is DNode_RandomVm randomNode)
                 {
-                    StartTransition(activeNode, childNodes[Random.Next(childNodes.Count)]);
+                    StartTransition(childNodes[Random.Next(childNodes.Count)]);
                 }
                 else if (childNodes.TrueForAll((childNode) => (childNode is IOwnered owneredNode) && owneredNode.Owner != null && owneredNode.Owner.Id == CharacterVm.PlayerId))
                 {
@@ -115,9 +115,9 @@ namespace StorylineEditor.ViewModels.Tabs
             ActiveTimeLeft = ActiveTime * (1 - alpha);
         }
 
-        public void StartTransition(Node_BaseVm fromNode, Node_BaseVm toNode)
+        public void StartTransition(Node_BaseVm nextNode)
         {
-            TreeToPlay.OnStartTransition(fromNode, toNode);
+            TreeToPlay.OnStartTransition(nextNode);
 
             ActiveContext = new PlayerTransitionVm();
         }

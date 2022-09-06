@@ -338,13 +338,13 @@ namespace StorylineEditor.Views.Controls
             }
         }
 
-        private void StartTransition(Node_BaseVm nodeA, Node_BaseVm nodeB)
+        private void StartTransition(Node_BaseVm nextNode)
         {
             PlayingAdorner?.ToTransitionState(StateAlphaDuration);
 
             PrevOffset.X = Offset.X;
             PrevOffset.Y = Offset.Y;
-            FocusNode = nodeB;
+            FocusNode = nextNode;
             SetAnimAlphaStoryboard(2 * AnimAlphaDuration, this, "AnimAlpha");
             AnimAlphaStoryboard.Completed += OnCompleted_EndTransition;
 
