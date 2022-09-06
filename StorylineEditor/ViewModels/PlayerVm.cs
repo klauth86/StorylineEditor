@@ -65,7 +65,7 @@ namespace StorylineEditor.ViewModels
                 }
                 else if (childNodes.TrueForAll((childNode) => (childNode is IOwnered owneredNode) && owneredNode.Owner != null && owneredNode.Owner.Id == CharacterVm.PlayerId))
                 {
-                    ActiveContext = new PlayerChoiceVm(this, activeNode, childNodes);
+                    ActiveContext = new PlayerChoiceVm(this, childNodes);
                 }
                 else
                 {
