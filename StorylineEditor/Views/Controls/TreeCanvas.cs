@@ -314,10 +314,13 @@ namespace StorylineEditor.Views.Controls
                     }
                 }
 
-                Canvas.SetLeft(PlayingAdorner, ActualWidth / 2 - PlayingAdorner.Width * Scale / 2);
-                Canvas.SetTop(PlayingAdorner, ActualHeight / 2 - PlayingAdorner.Height * Scale / 2);
+                if (!Children.Contains(PlayingAdorner))
+                {
+                    Canvas.SetLeft(PlayingAdorner, ActualWidth / 2 - PlayingAdorner.Width * Scale / 2);
+                    Canvas.SetTop(PlayingAdorner, ActualHeight / 2 - PlayingAdorner.Height * Scale / 2);
 
-                Children.Add(PlayingAdorner);
+                    Children.Add(PlayingAdorner);
+                }
 
                 PlayingAdorner.ToActiveNodeState(GraphNodes[activeNode], StateAlphaDuration);
                 
