@@ -203,12 +203,25 @@ namespace StorylineEditor.Views.Controls
             Canvas.SetTop(graphNode, (node.Position.Y - Offset.Y) * Scale);
         }
 
+        private bool IsNearlyCentered(Node_BaseVm node)
+        {
+            if (GraphNodes.ContainsKey(node))
+            {
+                return
+                    Math.Abs(Canvas.GetLeft(GraphNodes[node]) + GraphNodes[node].ActualWidth / 2 - ActualWidth / 2) < 5 &&
+                    Math.Abs(Canvas.GetTop(GraphNodes[node]) + GraphNodes[node].ActualHeight / 2 - ActualHeight / 2) < 5;
+            }
+
+            return true;
+        }
+
         private void OnFoundRoot(Node_BaseVm node)
         {
             if (GraphNodes.ContainsKey(node))
             {
                 FocusNode = null;
                 SetAnimAlphaStoryboard(node, AnimAlphaDuration);
+                
                 Dispatcher.BeginInvoke(new Action(() => { AnimAlphaStoryboard?.Begin(); }));
             }
         }
@@ -243,6 +256,8 @@ namespace StorylineEditor.Views.Controls
 
         private void SetAnimAlphaStoryboard(Node_BaseVm activeNode, double activeTime)
         {
+            StopAnimAlphaStoryboard(); // Stop existing anim, if there is one
+
             PrevFocusNode = FocusNode;
             FocusNode = activeNode;
 
@@ -255,8 +270,6 @@ namespace StorylineEditor.Views.Controls
 
             Storyboard.SetTarget(focusAnimation, this);
             Storyboard.SetTargetProperty(focusAnimation, new PropertyPath("AnimAlpha"));
-
-            StopAnimAlphaStoryboard();
 
             AnimAlphaStoryboard = new Storyboard();
             AnimAlphaStoryboard.Children.Add(focusAnimation);
@@ -276,55 +289,46 @@ namespace StorylineEditor.Views.Controls
         {
             if (activeNode != null)
             {
-                bool wasCreated = false;
-
                 if (PlayingAdorner == null)
                 {
                     PlayingAdorner = new PlayingAdorner(Scale);
                     Canvas.SetZIndex(PlayingAdorner, -ActiveZIndex);
 
-                    double fromX = Canvas.GetLeft(GraphNodes[activeNode]) + GraphNodes[activeNode].ActualWidth * Scale / 2;
-                    double toX = Canvas.GetTop(GraphNodes[activeNode]) + GraphNodes[activeNode].ActualHeight * Scale / 2;
-
-                    Canvas.SetLeft(this, fromX - PlayingAdorner.Width * Scale / 2);
-                    Canvas.SetTop(this, toX - PlayingAdorner.Height * Scale / 2);
-
-                    Children.Add(PlayingAdorner);
-
-                    wasCreated = true;
-                }
-
-                if (wasCreated)
-                {
-                    PlayingAdorner.ToActiveNodeState(GraphNodes[activeNode], 0.1);
-
-                    SetAnimAlphaStoryboard(activeNode, AnimAlphaDuration);
-                    
-                    EventHandler onCompleted_Callback = null;
-
-                    onCompleted_Callback = (o, e) =>
+                    if (!IsNearlyCentered(activeNode))
                     {
-                        AnimAlphaStoryboard.Completed -= onCompleted_Callback;
-                        StartActiveNode(activeNode, duration);
-                    };
+                        SetAnimAlphaStoryboard(activeNode, AnimAlphaDuration);
 
-                    AnimAlphaStoryboard.Completed += onCompleted_Callback;
-                    
-                    Dispatcher.BeginInvoke(new Action(() => AnimAlphaStoryboard?.Begin()));
+                        EventHandler onCompleted_Callback = null;
+
+                        onCompleted_Callback = (o, e) =>
+                        {
+                            AnimAlphaStoryboard.Completed -= onCompleted_Callback;
+                            StartActiveNode(activeNode, duration);
+                        };
+
+                        AnimAlphaStoryboard.Completed += onCompleted_Callback;
+
+                        Dispatcher.BeginInvoke(new Action(() => AnimAlphaStoryboard?.Begin()));
+
+                        return;
+                    }
                 }
-                else
+
+                Canvas.SetLeft(PlayingAdorner, ActualWidth / 2 - PlayingAdorner.Width * Scale / 2);
+                Canvas.SetTop(PlayingAdorner, ActualHeight / 2 - PlayingAdorner.Height * Scale / 2);
+
+                Children.Add(PlayingAdorner);
+
+                PlayingAdorner.ToActiveNodeState(GraphNodes[activeNode], StateAlphaDuration);
+                
+                SetAnimAlphaStoryboard(activeNode, duration);
+                AnimAlphaStoryboard.Completed += OnCompleted_EndActiveNode;
+
+                Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    PlayingAdorner.ToActiveNodeState(GraphNodes[activeNode], StateAlphaDuration);
-
-                    SetAnimAlphaStoryboard(activeNode, duration);
-                    AnimAlphaStoryboard.Completed += OnCompleted_EndActiveNode;
-
-                    Dispatcher.BeginInvoke(new Action(() =>
-                    {
-                        AnimAlphaStoryboard?.Begin();
-                        Tree.IsPlaying = true;
-                    }));
-                }
+                    AnimAlphaStoryboard?.Begin();
+                    Tree.IsPlaying = true;
+                }));
             }
         }
 
@@ -368,6 +372,8 @@ namespace StorylineEditor.Views.Controls
                 Children.Remove(PlayingAdorner);
                 PlayingAdorner = null;
             }
+
+            Tree.IsPlaying = false;
 
             if (Tree.Selected != null)
             {
