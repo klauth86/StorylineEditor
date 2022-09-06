@@ -209,11 +209,11 @@ namespace StorylineEditor.ViewModels.Tabs
 
 
         protected ICommand stopCommand;
-        public ICommand StopCommand => stopCommand ?? (stopCommand = new RelayCommand(() => Stop(), () => ActiveContext != null));
+        public ICommand StopCommand => stopCommand ?? (stopCommand = new RelayCommand(() => Stop()));
 
 
         ICommand toggleGenderCommand;
-        public ICommand ToggleGenderCommand => toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand(() => Gender = 3 - gender, () => ActiveContext == null));
+        public ICommand ToggleGenderCommand => toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand(() => Gender = 3 - gender));
     }
 
     [XmlRoot]
