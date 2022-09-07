@@ -72,7 +72,7 @@ namespace StorylineEditor.ViewModels.Tabs
         protected ICommand playCommand;
         public ICommand PlayCommand => playCommand ?? (playCommand = new RelayCommand
             (
-            () => new InfoWindow("Воспроизведение диалога", "DT_" + SelectedItem.GetType().Name + "_Player", new PlayerVm(this, 0, SelectedItem as TreeVm)) { Owner = App.Current.MainWindow }.ShowDialog()
+            () => new InfoWindow("▶ Воспроизведение", "DT_" + SelectedItem.GetType().Name + "_Player", new PlayerVm(this, 0, SelectedItem as TreeVm)) { Owner = App.Current.MainWindow }.ShowDialog()
             ));
     }
 }

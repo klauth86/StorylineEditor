@@ -36,8 +36,8 @@ namespace StorylineEditor.Views.Controls
             if (d is PlayingAdorner playingAdorner)
             {
                 ScaleTransform scaleTransform = (ScaleTransform)playingAdorner.ellipse.RenderTransform;
-                scaleTransform.ScaleX = (playingAdorner.ActiveElement.ActualWidth * 1.25 * (1 - playingAdorner.StateAlpha) + 64 * playingAdorner.StateAlpha) / playingAdorner.Width;
-                scaleTransform.ScaleY = (playingAdorner.ActiveElement.ActualHeight * 1.25 * (1 - playingAdorner.StateAlpha) + 64 * playingAdorner.StateAlpha) / playingAdorner.Height;
+                scaleTransform.ScaleX = (playingAdorner.ActiveElement.ActualWidth / playingAdorner.Width * (1 - playingAdorner.StateAlpha) + playingAdorner.StateAlpha) * 1.25;
+                scaleTransform.ScaleY = (playingAdorner.ActiveElement.ActualHeight / playingAdorner.Height * (1 - playingAdorner.StateAlpha) + playingAdorner.StateAlpha) * 1.25;
             }
         }
 
@@ -50,11 +50,49 @@ namespace StorylineEditor.Views.Controls
             Width = 32;
             Height = 32;
 
+            ContentControl internalContent = new ContentControl() { Width = 32, Height = 32 };
+            internalContent.RenderTransform = new ScaleTransform() { CenterX = 16, CenterY = 16 };
+            Content = internalContent;
+
             ellipse = new System.Windows.Shapes.Ellipse();
             ellipse.Fill = Brushes.Gold;
             ellipse.RenderTransform = new ScaleTransform() { CenterX = 16, CenterY = 16 };
 
-            Content = ellipse;
+            internalContent.Content = ellipse;
+            {
+                var scaleXAnimation = new DoubleAnimation
+                {
+                    From = 1,
+                    To = 1.5,
+                    Duration = TimeSpan.FromSeconds(0.5),
+                    RepeatBehavior = RepeatBehavior.Forever,
+                    AutoReverse = true
+                };
+
+                Storyboard.SetTarget(scaleXAnimation, internalContent);
+                Storyboard.SetTargetProperty(scaleXAnimation, new PropertyPath("RenderTransform.ScaleX"));
+
+                var storyboard = new Storyboard();
+                storyboard.Children.Add(scaleXAnimation);
+                Dispatcher.BeginInvoke(new Action(() => { storyboard.Begin(); }));
+            }
+            {
+                var scaleyAnimation = new DoubleAnimation
+                {
+                    From = 1.5,
+                    To = 1,
+                    Duration = TimeSpan.FromSeconds(0.5),
+                    RepeatBehavior = RepeatBehavior.Forever,
+                    AutoReverse = true
+                };
+
+                Storyboard.SetTarget(scaleyAnimation, internalContent);
+                Storyboard.SetTargetProperty(scaleyAnimation, new PropertyPath("RenderTransform.ScaleY"));
+
+                var storyboard = new Storyboard();
+                storyboard.Children.Add(scaleyAnimation);
+                Dispatcher.BeginInvoke(new Action(() => { storyboard.Begin(); }));
+            }
         }
 
         public void ToActiveNodeState(FrameworkElement activeElement, double duration)

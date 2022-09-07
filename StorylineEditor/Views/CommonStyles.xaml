@@ -1198,13 +1198,13 @@ StorylineEditor распространяется в надежде, что он�
             <ResourceDictionary>
                 <DataTemplate DataType="{x:Type viewModels:PlayerChoiceVm}">
                     <ScrollViewer x:Name="sv_Main">
-                        <ItemsControl ItemsSource="{Binding NodesToSelect}"
-                                      Margin="{StaticResource MarginPaddingThickness}"
-                                      Padding="{StaticResource MarginPaddingThickness}">
+                        <ItemsControl ItemsSource="{Binding NodesToSelect}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Button Command="{Binding ElementName=sv_Main, Path=DataContext.SelectNodeCommand}" CommandParameter="{Binding}">
-                                        <Grid ToolTip="{Binding Id}" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=ComboBox}}">
+                                    <Button Margin="{StaticResource MarginPaddingThickness}" Padding="{StaticResource MarginPaddingThickness}"
+                                            Command="{Binding ElementName=sv_Main, Path=DataContext.SelectNodeCommand}" CommandParameter="{Binding}"
+                                            HorizontalContentAlignment="Stretch">
+                                        <Grid ToolTip="{Binding Id}">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="auto"></ColumnDefinition>
                                                 <ColumnDefinition></ColumnDefinition>
@@ -1240,6 +1240,9 @@ StorylineEditor распространяется в надежде, что он�
                         </Grid.RowDefinitions>                        
                         <ProgressBar IsIndeterminate="true" Grid.Row="1" Grid.Column="1"></ProgressBar>
                     </Grid>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewModelNodes:DNode_TransitVm}">
+                    <Label HorizontalAlignment="Center" Style="{StaticResource S_Label_NodeType}"></Label>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type viewModelNodes:DNode_RandomVm}">
                     <Label HorizontalAlignment="Center" Style="{StaticResource S_Label_NodeType}"></Label>
@@ -1302,7 +1305,7 @@ StorylineEditor распространяется в надежде, что он�
                 <Button Style="{StaticResource S_Button_Player_ToggleGender}"></Button>
                 <TextBlock VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Base}" Text="{Binding ActiveTimeLeft, StringFormat=F2}"></TextBlock>
             </StackPanel>
-            <ContentControl Content="{Binding ActiveContext, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+            <ContentControl Padding="{StaticResource MarginPaddingThickness}" Margin="{StaticResource MarginPaddingThickness}" Content="{Binding ActiveContext, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
             <DockPanel.Resources>
 
             </DockPanel.Resources>
