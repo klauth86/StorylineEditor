@@ -1197,6 +1197,15 @@ StorylineEditor распространяется в надежде, что он�
     <DataTemplate x:Key="DT_TreeVm_Player" DataType="{x:Type viewModels:TreeVm}">
         <DataTemplate.Resources>
             <ResourceDictionary>
+                <DataTemplate DataType="{x:Type viewModels:PlayerErrorVm}">
+                    <StackPanel Margin="{StaticResource MarginPaddingThickness}">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Image VerticalAlignment="Center" Width="32" Height="32" Source="{Binding Source={x:Static draw:SystemIcons.Error}, Converter={StaticResource IconToImageSourceConverter}, Mode=OneWay}"/>
+                            <TextBlock VerticalAlignment="Center" Text="ОШИБКА" Style="{StaticResource S_TextBlock_HeaderBold}" Foreground="DarkRed"></TextBlock>
+                        </StackPanel>
+                        <TextBlock Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}" Foreground="DarkRed"></TextBlock>
+                    </StackPanel>
+                </DataTemplate>
                 <DataTemplate DataType="{x:Type viewModels:PlayerChoiceVm}">
                     <ScrollViewer x:Name="sv_Main">
                         <ItemsControl ItemsSource="{Binding NodesToSelect}">
