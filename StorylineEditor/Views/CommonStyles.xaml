@@ -20,7 +20,8 @@ StorylineEditor распространяется в надежде, что он�
                     xmlns:nodes="clr-namespace:StorylineEditor.Views.Nodes"
                     xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
+                    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+                    xmlns:fa="http://schemas.fontawesome.io/icons/">
 
     <Thickness x:Key="MarginPaddingThickness">2</Thickness>
     
@@ -1227,19 +1228,7 @@ StorylineEditor распространяется в надежде, что он�
                     </ScrollViewer>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type viewModels:PlayerTransitionVm}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition MinWidth="8" Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="4*"></ColumnDefinition>
-                            <ColumnDefinition MinWidth="8" Width="*"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition MaxHeight="16" Height="*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
-                        </Grid.RowDefinitions>                        
-                        <ProgressBar IsIndeterminate="true" Grid.Row="1" Grid.Column="1"></ProgressBar>
-                    </Grid>
+                    <fa:ImageAwesome Icon="Cog" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center" Spin="True" SpinDuration="4" />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type viewModelNodes:DNode_TransitVm}">
                     <Label HorizontalAlignment="Center" Style="{StaticResource S_Label_NodeType}"></Label>
