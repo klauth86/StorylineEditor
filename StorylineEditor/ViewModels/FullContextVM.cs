@@ -59,6 +59,20 @@ namespace StorylineEditor.ViewModels
             }
         }
 
+        public IEnumerable<FolderedVm> NPCharacters
+        {
+            get
+            {
+                foreach (FolderedVm foldered in CharactersTab.Items)
+                {
+                    foreach (var subFoldered in foldered.FoldersTraversal())
+                    {
+                        if (subFoldered.Id != CharacterVm.PlayerId) yield return subFoldered;
+                    }
+                }
+            }
+        }
+
         public IEnumerable<FolderedVm> Items
         {
             get

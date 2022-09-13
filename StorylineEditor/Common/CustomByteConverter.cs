@@ -40,6 +40,7 @@ namespace StorylineEditor.Common
             if (name == typeof(GE_StartMiniGameVm).Name) return new GE_StartMiniGameVm(Parent as Node_BaseVm, additionalTicks);
             if (name == typeof(GE_StartDialogVm).Name) return new GE_StartDialogVm(Parent as Node_BaseVm, additionalTicks);
             if (name == typeof(GE_StartReplicaVm).Name) return new GE_StartReplicaVm(Parent as Node_BaseVm, additionalTicks);
+            if (name == typeof(GE_ChangeRelationVm).Name) return new GE_ChangeRelationVm(Parent as Node_BaseVm, additionalTicks);
 
             if (name == typeof(P_HasDialogNodeMoreLessVm).Name) return new P_HasDialogNodeMoreLessVm(Parent as Node_BaseVm, additionalTicks);
             if (name == typeof(P_HasDialogNodeVm).Name) return new P_HasDialogNodeVm(Parent as Node_BaseVm, additionalTicks);
@@ -48,6 +49,7 @@ namespace StorylineEditor.Common
             if (name == typeof(P_HasJournalRecordVm).Name) return new P_HasJournalRecordVm(Parent as Node_BaseVm, additionalTicks);
             if (name == typeof(P_HasJournalRecordNodeVm).Name) return new P_HasJournalRecordNodeVm(Parent as Node_BaseVm, additionalTicks);
             if (name == typeof(P_CompositeVm).Name) return new P_CompositeVm(Parent as Node_BaseVm, additionalTicks);
+            if (name == typeof(P_HasRelationVm).Name) return new P_HasRelationVm(Parent as Node_BaseVm, additionalTicks);
 
             if (name == typeof(JNode_AlternativeVm).Name) return new JNode_AlternativeVm(Parent as TreeVm, additionalTicks);
             if (name == typeof(JNode_StepVm).Name) return new JNode_StepVm(Parent as TreeVm, additionalTicks);

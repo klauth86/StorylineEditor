@@ -11,97 +11,79 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Common;
+using StorylineEditor.ViewModels.Nodes;
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace StorylineEditor.ViewModels.Nodes
+namespace StorylineEditor.ViewModels.GameEvents
 {
-    [Description("Регулярная вершина")]
+    [Description("Изменить отношение")]
     [XmlRoot]
-    public class DNode_CharacterVm : Node_InteractiveVm, IOwnered
+    public class GE_ChangeRelationVm : GE_BaseVm
     {
-        public DNode_CharacterVm(TreeVm Parent, long additionalTicks) : base(Parent, additionalTicks)
+        public GE_ChangeRelationVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks)
         {
-            OwnerId = CharacterVm.PlayerId;
+            CharacterId = null;
+            deltaRelation = 0.25f;
         }
 
-        public DNode_CharacterVm() : this(null, 0) { }
+        public GE_ChangeRelationVm() : this(null, 0) { }
 
+        public override bool IsValid => base.IsValid && Character != null && deltaRelation != 0;
 
-        public string OwnerId { get; set; }
-
-
-        protected string overrideOwnerName;
-        public string OverrideOwnerName {
-            get => overrideOwnerName;
-            set
-            {
-                if (value != overrideOwnerName)
-                {
-                    overrideOwnerName = value;
-                    NotifyWithCallerPropName();
-
-                    Notify(nameof(OwnerName));
-                }
-            } 
-        }
-
-
-        public string OwnerName => string.IsNullOrEmpty(OverrideOwnerName) ? Owner?.Name : string.Format("{0} [{1}]", Owner?.Name, OverrideOwnerName);
-
+        public string CharacterId { get; set; }
 
         [XmlIgnore]
-        public FolderedVm Owner
+        public FolderedVm Character
         {
             get
             {
-                return Parent?.Parent.Parent.CharactersTab?.Items
-                    .FirstOrDefault(item => item?.Id == OwnerId);
+                return Parent.Parent.Parent.Parent.CharactersTab.Items
+                  .FirstOrDefault(item => item?.Id == CharacterId);
             }
             set
             {
-                if (OwnerId != value?.Id)
+                if (CharacterId != value?.Id)
                 {
-                    OwnerId = value?.Id;
-
+                    CharacterId = value?.Id;
                     NotifyWithCallerPropName();
-                    Notify(nameof(OwnerId));
-                    Notify(nameof(OwnerName));
                     NotifyIsValidChanged();
                 }
             }
         }
 
-        protected string attachedFile;
-        public string AttachedFile
+        protected float deltaRelation;
+        public float DeltaRelation
         {
-            get => string.IsNullOrEmpty(attachedFile) ? null : attachedFile;
+            get => deltaRelation;
             set
             {
-                if (value != attachedFile)
+                if (deltaRelation != value)
                 {
-                    attachedFile = value;
+                    deltaRelation = value == 0 ? -deltaRelation : value;
                     NotifyWithCallerPropName();
                 }
             }
         }
 
-        public override bool IsValid => base.IsValid && Owner != null;
+        protected override void ResetInternalData()
+        {
+            base.ResetInternalData();
+            Character = null;
+            DeltaRelation = 0.25f;
+        }
 
         protected override void CloneInternalData(BaseVm destObj, long additionalTicks)
         {
             base.CloneInternalData(destObj, additionalTicks);
 
-            if (destObj is DNode_CharacterVm casted)
+            if (destObj is GE_ChangeRelationVm casted)
             {
-                casted.OwnerId = OwnerId;                
-                casted.attachedFile = attachedFile;
+                casted.CharacterId = CharacterId;
+                casted.deltaRelation = deltaRelation;
             }
         }
-
-        public override bool PassFilter(string filter) => 
-            base.PassFilter(filter) ||
-            Owner != null && Owner.PassFilter(filter);
     }
 }

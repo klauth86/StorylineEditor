@@ -91,7 +91,6 @@ namespace StorylineEditor.ViewModels
             Selection = new List<Node_BaseVm>();
 
             RootNodeIds = new List<string>();
-            Participants = new List<string>();
 
             FullContextVm.OnSearchFilterChangedEvent += OnSearchFilterChanged;
         }
@@ -207,62 +206,6 @@ namespace StorylineEditor.ViewModels
             }
 
             return false;
-        }
-
-        public List<string> Participants { get; set; }
-
-        public void AddParticipant(FolderedVm character)
-        {
-            if (character != null)
-            {
-                if (!Participants.Contains(character.Id))
-                {
-                    Participants.Add(character.Id);
-
-                    ////// TODO Think if we should refresh view
-                    if (Parent is FolderedTabVm tabParent)
-                    {
-                        CollectionViewSource.GetDefaultView(tabParent.Items).Refresh();
-                    }
-
-                    foreach (var node in Nodes)
-                    {
-                        if (node is DNode_CharacterVm dNode_Character)
-                        {
-                            ////// TODO Here were Participant States
-                        }
-                    }
-
-                    Notify(nameof(Stats));
-                }
-            }
-        }
-
-        public void RemoveParticipant(FolderedVm character)
-        {
-            if (character != null && Participants.Contains(character.Id))
-            {
-                if (Nodes.All((node) => ((node as IOwnered)?.Owner ?? null) != character))
-                {
-                    Participants.Remove(character.Id);
-
-                    ////// TODO Think if we should refresh view
-                    if (Parent is FolderedTabVm tabParent)
-                    {
-                        CollectionViewSource.GetDefaultView(tabParent.Items).Refresh();
-                    }
-
-                    foreach (var node in Nodes)
-                    {
-                        if (node is DNode_CharacterVm dNode_Character)
-                        {
-                            ////// TODO Here were Participant States
-                        }
-                    }
-                }
-
-                Notify(nameof(Stats));
-            }
         }
 
         public void AddRootNode(Node_BaseVm node)
@@ -403,8 +346,6 @@ namespace StorylineEditor.ViewModels
 
             RemoveRootNode(node);
 
-            if (node is IOwnered ownered) RemoveParticipant(ownered.Owner);
-
             NotifyIsValidChanged();
             Notify(nameof(Stats));
         }
@@ -418,19 +359,6 @@ namespace StorylineEditor.ViewModels
 
             AddRootNode(node);
 
-            if (node is IOwnered ownered)
-            {
-                if (ownered is DNode_CharacterVm characterNode)
-                {
-                    foreach (var characterId in Participants)
-                    {
-                        var character = Parent.Parent.CharactersTab.Items.FirstOrDefault((participant) => participant.Id == characterId);
-                        ////// TODO Here were Participant States
-                    }
-                }
-
-                AddParticipant(ownered.Owner);
-            }
             AddToSelection(node, true);
             NotifyIsValidChanged();
             Notify(nameof(Stats));
@@ -614,8 +542,14 @@ namespace StorylineEditor.ViewModels
         {
             get
             {
-                var characters = Parent.Parent.CharactersTab.Items;
-                return (Participants.Count == 1 ? characters.FirstOrDefault((character) => character.Id == Participants[0])?.Name + ": " : "") + Name;
+                List<Node_BaseVm> nodes = NodesTraversal();
+
+                foreach (var node in nodes)
+                {
+                    if (node is IOwnered owneredNode) return string.Format("{0}: {1}", owneredNode.Owner.Name, Name);
+                }
+
+                return Name;
             }
         }
 

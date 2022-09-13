@@ -7,7 +7,7 @@
     <ProjectGuid>{9AF226B7-3E00-43F1-9F6C-5EC8375F7658}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>StorylineEditor</RootNamespace>
-    <AssemblyName>StorylineEditor_1.3.0.1</AssemblyName>
+    <AssemblyName>StorylineEditor_1.3.0.2</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -105,6 +105,7 @@
       <DependentUpon>InfoWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\FolderedVm.cs" />
+    <Compile Include="ViewModels\GameEvents\GE_ChangeRelationVm.cs" />
     <Compile Include="ViewModels\IDialogContext.cs" />
     <Compile Include="ViewModels\IDragOverable.cs" />
     <Compile Include="ViewModels\Nodes\JNode_AlternativeVm.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="ViewModels\PlayerVm.cs" />
     <Compile Include="ViewModels\Predicates\P_HasJournalRecordNodeVm.cs" />
     <Compile Include="ViewModels\Predicates\P_HasJournalRecordVm.cs" />
+    <Compile Include="ViewModels\Predicates\P_HasRelationVm.cs" />
     <Compile Include="ViewModels\Tabs\BaseTreesTabVm.cs" />
     <Compile Include="ViewModels\Tabs\FolderedTabVm.cs" />
     <Compile Include="ViewModels\Tabs\JournalRecordsTabVm.cs" />
@@ -199,6 +201,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\GameEvents\GE_ChangeRelationV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\GraphNodes\GJNode_AlternativeV.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -340,6 +346,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Predicates\P_HasItemV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Predicates\P_HasRelationV.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
