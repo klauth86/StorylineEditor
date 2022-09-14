@@ -42,10 +42,7 @@ namespace StorylineEditor.ViewModels.Predicates
         [XmlIgnore]
         public FolderedVm Dialog
         {
-            get
-            {
-                return Parent.Parent.Parent.Parent.DialogsAndReplicas.FirstOrDefault(item => item?.Id == DialogId);
-            }
+            get => Parent.Parent.Parent.Parent.DialogsAndReplicas.FirstOrDefault(item => item?.Id == DialogId);
             set
             {
                 if (DialogId != value?.Id)

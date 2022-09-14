@@ -19,7 +19,7 @@ StorylineEditor распространяется в надежде, что он�
             <GroupBox Header="Диалог и вершина" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
                 <StackPanel Orientation="Vertical">
                     <ComboBox ItemsSource="{Binding Parent.Parent.Parent.Parent.DialogsAndReplicas}" 
-                              DisplayMemberPath="Name"
+                              DisplayMemberPath="NameAndCharacter"
                               SelectedValue="{Binding Dialog, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
                     <ComboBox ItemsSource="{Binding ActualNodes}"
                               Visibility="{Binding Dialog, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource collapseNullConverter}}"

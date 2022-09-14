@@ -17,7 +17,7 @@ StorylineEditor распространяется в надежде, что он�
         <Grid>
             <GroupBox Header="Реплика" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
                 <ComboBox ItemsSource="{Binding Parent.Parent.Parent.Parent.Replicas}"
-                  DisplayMemberPath="NameOwnered"
+                  DisplayMemberPath="NameAndCharacter"
                   SelectedValue="{Binding Replica, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
             </GroupBox>
         </Grid>

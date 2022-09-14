@@ -20,7 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml.Serialization;
 using System.Windows;
@@ -50,6 +49,28 @@ namespace StorylineEditor.ViewModels
 
         public event Action<double> DurationAlphaChangedEvent = delegate { };
         public void OnDurationAlphaChanged(double alpha) { DurationAlphaChangedEvent(alpha); }
+
+
+        public string InterlocutorId { get; set; }
+
+        [XmlIgnore]
+        public FolderedVm Interlocutor
+        {
+            get => Parent?.Parent.NPCharacters.FirstOrDefault(item => item?.Id == InterlocutorId);
+            set
+            {
+                if (InterlocutorId != value?.Id)
+                {
+                    InterlocutorId = value?.Id;
+                    NotifyWithCallerPropName();
+
+                    Notify(nameof(NameAndCharacter));
+                }
+            }
+        }
+
+
+        public bool IsPlayerDialog => Parent is PlayerDialogsTabVm;
 
 
         protected bool isPlaying;
@@ -185,6 +206,22 @@ namespace StorylineEditor.ViewModels
         public override bool IsValid => base.IsValid && Nodes.All(node => node?.IsValid ?? false) &&
             Links.All(link => link != null && Nodes.Any((node) => node.Id == link.FromId) &&
             Nodes.Any((node) => node.Id == link.ToId) && link.FromId != link.ToId);
+
+        public override void NotifyNameChanged() { base.NotifyNameChanged(); Notify(nameof(NameAndCharacter)); }
+
+        public string NameAndCharacter
+        {
+            get
+            {
+                if (IsPlayerDialog) return Interlocutor == null ? string.Format("Диалог {0}", Name) : string.Format("{0} [{1}]", Name, Interlocutor.Name);
+
+                List<Node_BaseVm> nodes = NodesTraversal();
+
+                foreach (var node in nodes) if (node is IOwnered owneredNode) return string.Format("{0} [{1}]", Name, owneredNode.Owner.Name);
+
+                return Name;
+            }
+        }
 
         public ObservableCollection<Node_BaseVm> Nodes { get; set; }
 
@@ -536,21 +573,6 @@ namespace StorylineEditor.ViewModels
             }
 
             return result;
-        }
-
-        public string NameOwnered
-        {
-            get
-            {
-                List<Node_BaseVm> nodes = NodesTraversal();
-
-                foreach (var node in nodes)
-                {
-                    if (node is IOwnered owneredNode) return string.Format("{0}: {1}", owneredNode.Owner.Name, Name);
-                }
-
-                return Name;
-            }
         }
 
         public override void SetupParenthood()

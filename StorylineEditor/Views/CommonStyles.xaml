@@ -840,6 +840,7 @@ StorylineEditor распространяется в надежде, что он�
                             <RowDefinition/>
                             <RowDefinition/>
                             <RowDefinition/>
+                            <RowDefinition/>
                         </Grid.RowDefinitions>
                         
                         <VisualStateManager.VisualStateGroups>
@@ -872,7 +873,7 @@ StorylineEditor распространяется в надежде, что он�
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
 
-                        <Border x:Name="Bd" Grid.ColumnSpan="2" Grid.RowSpan="2" Background="White"
+                        <Border x:Name="Bd" Grid.ColumnSpan="2" Grid.RowSpan="3" Background="White"
                                 VerticalAlignment="Stretch"
                                 HorizontalAlignment="Stretch"
                                 Margin="3"
@@ -885,7 +886,7 @@ StorylineEditor распространяется в надежде, что он�
                                       IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
                                       VerticalAlignment="Top" Margin="4 4 0 4"/>
 
-                        <ToggleButton Panel.ZIndex="100" Grid.ColumnSpan="2" Grid.RowSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Center"
+                        <ToggleButton Panel.ZIndex="100" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Bottom" HorizontalAlignment="Center"
                                       Visibility="Hidden"
                                       x:Name="DetailsExpander" Style="{StaticResource ExpandCollapseDetailsToggleStyle}" ClickMode="Press">
                             <ToggleButton.RenderTransform>
@@ -895,15 +896,25 @@ StorylineEditor распространяется в надежде, что он�
                         
                         <ContentPresenter x:Name="PART_Header" Grid.Column="1" ContentSource="Header" Margin="4 4 4 4"/>
 
-                        <TextBox Panel.ZIndex="90" Margin="0, 0, 7, 7" Grid.Column="1" Grid.Row="1"
+                        <TextBox Panel.ZIndex="90" Margin="0, 0, 7, 0" Grid.Column="1" Grid.Row="1"
                                  Visibility="{Binding IsChecked, ElementName=DetailsExpander, Converter={StaticResource collapseFalseConverter}, UpdateSourceTrigger=PropertyChanged}"
                                  FontSize="8" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Input}"></TextBox>
-                        
-                        <ItemsPresenter x:Name="ItemsHost" Grid.Column="1" Grid.Row="2" Visibility="Collapsed"/>
+
+                        <ContentControl Padding="0" Panel.ZIndex="90" Margin="0, 0, 7, 7" Grid.Column="1" Grid.Row="2" Visibility="{Binding IsChecked, ElementName=DetailsExpander, Converter={StaticResource collapseFalseConverter}, UpdateSourceTrigger=PropertyChanged}">
+                            <ComboBox Margin="0" x:Name="cmb_Interlocutor" Visibility="Collapsed" FontSize="8"
+                                      ItemsSource="{Binding Parent.Parent.NPCharacters}"
+                                      DisplayMemberPath="Name"
+                                      SelectedValue="{Binding Interlocutor, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
+                        </ContentControl>
+
+                        <ItemsPresenter x:Name="ItemsHost" Grid.Column="1" Grid.Row="3" Visibility="Collapsed"/>
                         
                     </Grid>
 
                     <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding IsPlayerDialog, Mode=OneTime}" Value="true">
+                            <Setter TargetName="cmb_Interlocutor" Property="Visibility" Value="Visible"></Setter>
+                        </DataTrigger>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
                                 <Condition Binding="{Binding IsValid, UpdateSourceTrigger=PropertyChanged}" Value="false"></Condition>
@@ -1179,15 +1190,15 @@ StorylineEditor распространяется в надежде, что он�
     <!--TREES UI-->
 
     <HierarchicalDataTemplate ItemsSource="{Binding Items}" DataType="{x:Type viewModels:TreeVm}">
-        <TextBlock Text="{Binding Name}" Style="{StaticResource S_TextBlock_Header}"></TextBlock>
+        <TextBlock Text="{Binding NameAndCharacter}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
     </HierarchicalDataTemplate>
     
     <HierarchicalDataTemplate ItemsSource="{Binding Items}" DataType="{x:Type viewModels:TreeFolderVm}">
-        <TextBlock Text="{Binding Name}" Style="{StaticResource S_TextBlock_Header}"></TextBlock>
+        <TextBlock Text="{Binding Name}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
     </HierarchicalDataTemplate>
 
     <HierarchicalDataTemplate DataType="{x:Type viewModels:NonFolderVm}">
-        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Header}"></TextBlock>
+        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
     </HierarchicalDataTemplate>
 
     <!--TREES UI-->
