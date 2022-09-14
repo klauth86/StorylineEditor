@@ -24,15 +24,18 @@ StorylineEditor распространяется в надежде, что он�
 
             <GroupBox Header="Диалог и вершина" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
                 <StackPanel Orientation="Vertical">
-                    <ComboBox ItemsSource="{Binding Parent.Parent.Parent.Parent.DialogsAndReplicas}"
+                    <ComboBox ItemsSource="{Binding ActualTrees}"
                               DisplayMemberPath="NameAndCharacter"
-                              SelectedValue="{Binding Dialog, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
+                              SelectedValue="{Binding Dialog, UpdateSourceTrigger=PropertyChanged}"
+                              Style="{StaticResource S_ComboBox_AutoComplete}"
+                              views:ComboBoxFilterHelper.Filter="{Binding TreeFilter, UpdateSourceTrigger=PropertyChanged}">                        
+                    </ComboBox>
                     <ComboBox ItemsSource="{Binding ActualNodes}"
                               Visibility="{Binding Dialog, Converter={StaticResource collapseNullConverter}, UpdateSourceTrigger=PropertyChanged}"
                               SelectedValue="{Binding DialogNode, UpdateSourceTrigger=PropertyChanged}"
                               ItemTemplate="{StaticResource DT_Selector_DNode}"
                               Style="{StaticResource S_ComboBox_AutoComplete}"
-                              views:ComboBoxFilterHelper.Filter="{Binding Filter, UpdateSourceTrigger=PropertyChanged}">                        
+                              views:ComboBoxFilterHelper.Filter="{Binding Filter, UpdateSourceTrigger=PropertyChanged}">
                     </ComboBox>
                 </StackPanel>
             </GroupBox>

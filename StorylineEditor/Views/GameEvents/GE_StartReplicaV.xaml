@@ -12,14 +12,16 @@ StorylineEditor распространяется в надежде, что он�
     
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:StorylineEditor.ViewModels.GameEvents">
+                    xmlns:local="clr-namespace:StorylineEditor.ViewModels.GameEvents"
+                    xmlns:views="clr-namespace:StorylineEditor.Views">
     <DataTemplate DataType="{x:Type local:GE_StartReplicaVm}">
-        <Grid>
-            <GroupBox Header="Реплика" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
-                <ComboBox ItemsSource="{Binding Parent.Parent.Parent.Parent.Replicas}"
-                  DisplayMemberPath="NameAndCharacter"
-                  SelectedValue="{Binding Replica, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
-            </GroupBox>
-        </Grid>
+        <GroupBox Header="Реплика" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
+            <ComboBox ItemsSource="{Binding ActualTrees}"
+                      DisplayMemberPath="NameAndCharacter"
+                      SelectedValue="{Binding Replica, UpdateSourceTrigger=PropertyChanged}"
+                      Style="{StaticResource S_ComboBox_AutoComplete}"
+                      views:ComboBoxFilterHelper.Filter="{Binding TreeFilter, UpdateSourceTrigger=PropertyChanged}">
+            </ComboBox>
+        </GroupBox>
     </DataTemplate>
 </ResourceDictionary>

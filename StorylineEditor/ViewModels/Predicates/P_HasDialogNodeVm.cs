@@ -52,16 +52,48 @@ namespace StorylineEditor.ViewModels.Predicates
             }
         }
 
+        protected CollectionViewSource actualTreesSource;
+        [XmlIgnore]
+        public ICollectionView ActualTrees
+        {
+            get
+            {
+                if (actualTreesSource == null)
+                {
+                    actualTreesSource = new CollectionViewSource() { Source = Parent.Parent.Parent.Parent.DialogsAndReplicas };
+                }
+
+                if (actualTreesSource.View != null)
+                {
+                    actualTreesSource.View.Filter = (object obj) => string.IsNullOrEmpty(treeFilter) || obj != null && ((BaseVm)obj).PassFilter(treeFilter);
+                    actualTreesSource.View.MoveCurrentTo(null);
+                }
+
+                return actualTreesSource.View;
+            }
+        }
+
+        protected string treeFilter;
+        [XmlIgnore]
+        public string TreeFilter
+        {
+            get => treeFilter;
+            set
+            {
+                if (value != treeFilter)
+                {
+                    treeFilter = value;
+                    ActualTrees?.Refresh();
+                }
+            }
+        }
+
         public string DialogNodeId { get; set; }
         
         [XmlIgnore]
         public Node_BaseVm DialogNode
         {
-            get
-            {
-                return (Dialog as TreeVm)?.Nodes
-                  .FirstOrDefault(item => item?.Id == DialogNodeId);
-            }
+            get => (Dialog as TreeVm)?.Nodes.FirstOrDefault(item => item?.Id == DialogNodeId);
             set
             {
                 if (DialogNodeId != value?.Id)
@@ -85,6 +117,7 @@ namespace StorylineEditor.ViewModels.Predicates
                 }
 
                 actualNodesSource.Source = (Dialog as TreeVm)?.Nodes;
+                
                 if (actualNodesSource.View != null)
                 {
                     actualNodesSource.View.Filter = (object obj) => Parent.Parent.NodeFilter(obj) && (string.IsNullOrEmpty(filter) || ((BaseVm)obj).PassFilter(filter));
