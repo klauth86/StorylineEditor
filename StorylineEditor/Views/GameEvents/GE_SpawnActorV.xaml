@@ -30,7 +30,7 @@ StorylineEditor распространяется в надежде, что он�
 
             <GroupBox Grid.Row="1" Header="Количество и место создания" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
                 <StackPanel Orientation="Vertical">
-                    <xctk:IntegerUpDown Minimum="1" Maximum="255" Value="{Binding Num, UpdateSourceTrigger=PropertyChanged}" AllowTextInput="False"></xctk:IntegerUpDown>
+                    <xctk:IntegerUpDown HorizontalAlignment="Left" MinWidth="64" Minimum="1" Maximum="255" Value="{Binding Num, UpdateSourceTrigger=PropertyChanged}" AllowTextInput="False"></xctk:IntegerUpDown>
                     <ComboBox Grid.Row="2" ItemsSource="{Binding Parent.Parent.Parent.Parent.AllActors}"
                               DisplayMemberPath="Name"
                               SelectedValue="{Binding PointToSpawn, UpdateSourceTrigger=PropertyChanged}"></ComboBox>

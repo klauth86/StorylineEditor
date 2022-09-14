@@ -34,14 +34,14 @@ StorylineEditor распространяется в надежде, что он�
                         <ColumnDefinition Width="*"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <RadioButton Margin="0" Padding="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="{Binding IsMore, UpdateSourceTrigger=PropertyChanged}" GroupName="{Binding Id}" Content="&gt;"></RadioButton>
                     <RadioButton Margin="0" Padding="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="{Binding IsMoreOrEqual, UpdateSourceTrigger=PropertyChanged}" GroupName="{Binding Id}" Content="&gt;="></RadioButton>
                     <RadioButton Margin="0" Padding="0" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="{Binding IsEqual, UpdateSourceTrigger=PropertyChanged}" GroupName="{Binding Id}" Content="="></RadioButton>
                     <RadioButton Margin="0" Padding="0" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="{Binding IsLessOrEqual, UpdateSourceTrigger=PropertyChanged}" GroupName="{Binding Id}" Content="&lt;="></RadioButton>
                     <RadioButton Margin="0" Padding="0" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="{Binding IsLess, UpdateSourceTrigger=PropertyChanged}" GroupName="{Binding Id}" Content="&lt;"></RadioButton>
-                    <xctk:SingleUpDown Grid.Column="5" VerticalAlignment="Center" Increment="0.25" Minimum="-10" Maximum="10" Value="{Binding Relation, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" AllowTextInput="False"></xctk:SingleUpDown>
+                    <xctk:SingleUpDown Grid.Column="5" MinWidth="64" VerticalAlignment="Center" Increment="0.25" Minimum="-10" Maximum="10" Value="{Binding Relation, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" AllowTextInput="False"></xctk:SingleUpDown>
                 </Grid>
             </GroupBox>
         </Grid>

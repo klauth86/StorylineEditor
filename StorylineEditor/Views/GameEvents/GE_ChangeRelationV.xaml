@@ -27,8 +27,8 @@ StorylineEditor распространяется в надежде, что он�
                               SelectedValue="{Binding Character, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
             </GroupBox>
 
-            <GroupBox Grid.Row="1" Header="Изменение" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
-                <xctk:SingleUpDown Increment="0.25" Minimum="-10" Maximum="10" Value="{Binding DeltaRelation, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" AllowTextInput="False"></xctk:SingleUpDown>
+            <GroupBox Grid.Row="1" Header="Изменение отношения" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
+                <xctk:SingleUpDown HorizontalAlignment="Left" MinWidth="64" Increment="0.25" Minimum="-10" Maximum="10" Value="{Binding DeltaRelation, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" AllowTextInput="False"></xctk:SingleUpDown>
             </GroupBox>
         </Grid>
     </DataTemplate>

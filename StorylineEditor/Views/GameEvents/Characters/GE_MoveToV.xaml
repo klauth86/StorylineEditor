@@ -38,7 +38,7 @@ StorylineEditor распространяется в надежде, что он�
                               SelectedValue="{Binding Target, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
                     <CheckBox IsChecked="{Binding SearchTargetByName, UpdateSourceTrigger=PropertyChanged}">Найти цель по имени</CheckBox>
                     <GroupBox Header="Допустимое расстояние" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
-                        <xctk:DecimalUpDown FormatString="F2" Minimum="0.01" Maximum="255" Increment="1" Value="{Binding AcceptanceRadius, UpdateSourceTrigger=PropertyChanged}"></xctk:DecimalUpDown>
+                        <xctk:DecimalUpDown HorizontalAlignment="Left" MinWidth="64" FormatString="F2" Minimum="0.01" Maximum="255" Increment="1" Value="{Binding AcceptanceRadius, UpdateSourceTrigger=PropertyChanged}"></xctk:DecimalUpDown>
                     </GroupBox>
                     <CheckBox IsChecked="{Binding EndInteraction, UpdateSourceTrigger=PropertyChanged}">Завершить предыдущую интеракцию</CheckBox>
                 </StackPanel>
