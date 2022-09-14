@@ -571,7 +571,7 @@ namespace StorylineEditor.Views.Controls
 
             double oldScale = Scale;
 
-            double goal = e.Delta > 0 ? 2 : 1.0 / 8;
+            double goal = e.Delta > 0 ? 4 : 1.0 / 64;
 
             Scale = Scale * 0.9 + goal * 0.1;
 
