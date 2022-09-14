@@ -571,9 +571,7 @@ namespace StorylineEditor.Views.Controls
 
             double oldScale = Scale;
 
-            double goal = e.Delta > 0 ? 4 : 1.0 / 64;
-
-            Scale = Scale * 0.9 + goal * 0.1;
+            Scale = Math.Max(Math.Min(Scale + e.Delta * 0.0002, 4), 1.0 / 64);
 
             Point mousePosition = e.GetPosition(this);
 
