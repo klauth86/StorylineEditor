@@ -134,9 +134,11 @@ StorylineEditor распространяется в надежде, что он�
     </Style>
 
     <!--COLLECTIONS STYLES-->
-    
-    
-    
+
+    <Style TargetType="GroupBox">
+        <Setter Property="Margin" Value="{StaticResource MarginPaddingThickness}"></Setter>
+    </Style>
+
     <!--TEXT STYLES-->
 
     <Style TargetType="TextBox" x:Key="S_TextBox_Input">

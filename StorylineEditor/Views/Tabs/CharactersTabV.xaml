@@ -39,22 +39,14 @@ StorylineEditor распространяется в надежде, что он�
                                     <RowDefinition Height="auto"></RowDefinition>
                                     <RowDefinition Height="auto"></RowDefinition>
                                     <RowDefinition Height="auto"></RowDefinition>
-                                    <RowDefinition Height="*"></RowDefinition>
+                                    <RowDefinition Height="auto"></RowDefinition>
                                 </Grid.RowDefinitions>
 
                                 <GroupBox Header="Имя" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
                                     <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
                                 </GroupBox>
 
-                                <GroupBox Grid.Row="1" Header="ACTOR NAME" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
-                                    <TextBox Text="{Binding ActorName, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
-                                </GroupBox>
-
-                                <GroupBox Grid.Row="2" Header="CLASS PATH NAME" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
-                                    <TextBox Text="{Binding ClassPathName, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
-                                </GroupBox>
-
-                                <GroupBox x:Name="gb_InitialRelation" Visibility="Collapsed" Grid.Row="3" Header="Изначальное отношение" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
+                                <GroupBox Grid.Row="1" x:Name="gb_InitialRelation" Visibility="Collapsed" Header="Изначальное отношение" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
                                     <StackPanel Orientation="Horizontal">
                                         <Label Style="{StaticResource S_Label_Male}"></Label>
                                         <xctk:SingleUpDown VerticalAlignment="Center" MinWidth="64" Increment="0.25" Minimum="-10" Maximum="10" Value="{Binding InitialRelationMale, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" AllowTextInput="False"></xctk:SingleUpDown>
@@ -65,9 +57,17 @@ StorylineEditor распространяется в надежде, что он�
                                         <xctk:SingleUpDown VerticalAlignment="Center" MinWidth="64" Increment="0.25" Minimum="-10" Maximum="10" Value="{Binding InitialRelationFemale, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" AllowTextInput="False"></xctk:SingleUpDown>
                                     </StackPanel>
                                 </GroupBox>
-                                
-                                <GroupBox Grid.Row="4" Header="Описание" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
+
+                                <GroupBox Grid.Row="2" MinHeight="128" Header="Описание" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
                                     <TextBox AcceptsReturn="True" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
+                                </GroupBox>
+
+                                <GroupBox Grid.Row="3" Header="ACTOR NAME" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
+                                    <TextBox Text="{Binding ActorName, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
+                                </GroupBox>
+
+                                <GroupBox Grid.Row="4" Header="CLASS PATH NAME" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
+                                    <TextBox Text="{Binding ClassPathName, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
                                 </GroupBox>
                             </Grid>
                             <DataTemplate.Triggers>
