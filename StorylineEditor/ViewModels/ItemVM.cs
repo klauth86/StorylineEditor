@@ -10,6 +10,7 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Common;
 using StorylineEditor.ViewModels.Tabs;
 using System.Xml.Serialization;
 
@@ -18,10 +19,58 @@ namespace StorylineEditor.ViewModels
     [XmlRoot]
     public class ItemVm : NonFolderVm
     {
-        public ItemVm(ItemsTabVm inParent, long additionalTicks) : base(inParent, additionalTicks) { FullContextVm.OnSearchFilterChangedEvent += OnSearchFilterChanged; }
+        public ItemVm(ItemsTabVm inParent, long additionalTicks) : base(inParent, additionalTicks)
+        {
+            descriptionFemale = null;
+            descriptionInternal = null;
+            FullContextVm.OnSearchFilterChangedEvent += OnSearchFilterChanged;
+        }
 
         public ItemVm() : this(null, 0) { }
 
+
+        protected string descriptionFemale;
+        public string DescriptionFemale
+        {
+            get => descriptionFemale;
+            set
+            {
+                if (descriptionFemale != value)
+                {
+                    descriptionFemale = value;
+                    NotifyWithCallerPropName();
+                }
+            }
+        }
+
+
+        protected string descriptionInternal;
+        public string DescriptionInternal
+        {
+            get => descriptionInternal;
+            set
+            {
+                if (descriptionInternal != value)
+                {
+                    descriptionInternal = value;
+                    NotifyWithCallerPropName();
+                }
+            }
+        }
+
+
         public override bool OnRemoval() { FullContextVm.OnSearchFilterChangedEvent -= OnSearchFilterChanged; return base.OnRemoval(); }
+
+
+        protected override void CloneInternalData(BaseVm destObj, long additionalTicks)
+        {
+            base.CloneInternalData(destObj, additionalTicks);
+
+            if (destObj is ItemVm casted)
+            {
+                casted.descriptionFemale = descriptionFemale;
+                casted.descriptionInternal = descriptionInternal;
+            }
+        }
     }
 }

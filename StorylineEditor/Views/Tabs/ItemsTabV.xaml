@@ -37,25 +37,52 @@ StorylineEditor распространяется в надежде, что он�
                                     <RowDefinition Height="auto"></RowDefinition>
                                     <RowDefinition Height="auto"></RowDefinition>
                                     <RowDefinition Height="auto"></RowDefinition>
-                                    <RowDefinition Height="*"></RowDefinition>
+                                    <RowDefinition Height="auto"></RowDefinition>
+                                    <RowDefinition Height="auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
                                 </Grid.RowDefinitions>
 
                                 <GroupBox Header="Имя" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
                                     <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
                                 </GroupBox>
 
-                                <GroupBox Grid.Row="1" Header="ACTOR NAME" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
+                                <CheckBox Name="cb_HasFemaleDescriptions" Grid.Row="1">Описание зависит от пола персонажа</CheckBox>
+
+                                <Grid Grid.Row="2" MinHeight="128" Margin="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                        <ColumnDefinition Name="cd_FemaleDescription" Width="0"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <GroupBox Name="gb_DescriptionMain" Header="Описание" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
+                                        <TextBox AcceptsReturn="True" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
+                                    </GroupBox>
+                                    <GroupBox Grid.Column="1" Header="👩 Описание" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
+                                        <TextBox AcceptsReturn="True" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
+                                    </GroupBox>
+                                </Grid>
+
+                                <CheckBox Name="cb_HasInternalDescription" Grid.Row="3">Имеет внутреннее описание (книга, письмо, т.д.)</CheckBox>
+
+                                <GroupBox MinHeight="128" Grid.Row="4" Header="Внутреннее описание" HeaderTemplate="{StaticResource DT_Header_GroupBox}"
+                                          Visibility="{Binding ElementName=cb_HasInternalDescription, Path=IsChecked, Converter={StaticResource collapseFalseConverter}, UpdateSourceTrigger=PropertyChanged}">
+                                    <TextBox AcceptsReturn="True" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
+                                </GroupBox>
+                                
+                                <GroupBox Grid.Row="5" Header="ACTOR NAME" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
                                     <TextBox Text="{Binding ActorName, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
                                 </GroupBox>
 
-                                <GroupBox Grid.Row="2" Header="CLASS PATH NAME" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
+                                <GroupBox Grid.Row="6" Header="CLASS PATH NAME" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
                                     <TextBox Text="{Binding ClassPathName, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
                                 </GroupBox>
-
-                                <GroupBox Grid.Row="3" Header="Описание" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
-                                    <TextBox AcceptsReturn="True" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
-                                </GroupBox>
                             </Grid>
+                            <DataTemplate.Triggers>
+                                <Trigger SourceName="cb_HasFemaleDescriptions" Property="IsChecked" Value="true">
+                                    <Setter TargetName="gb_DescriptionMain" Property="Header" Value="👨 Описание"></Setter>
+                                    <Setter TargetName="cd_FemaleDescription" Property="Width" Value="*"></Setter>
+                                </Trigger>
+                            </DataTemplate.Triggers>
                         </DataTemplate>
                         <DataTemplate DataType="{x:Type viewModels:TreeFolderVm}">
                             <Grid>
