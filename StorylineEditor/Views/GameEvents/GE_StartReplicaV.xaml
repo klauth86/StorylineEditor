@@ -17,7 +17,7 @@ StorylineEditor распространяется в надежде, что он�
     <DataTemplate DataType="{x:Type local:GE_StartReplicaVm}">
         <GroupBox Header="Реплика" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
             <ComboBox ItemsSource="{Binding ActualTrees}"
-                      DisplayMemberPath="NameAndCharacter"
+                      DisplayMemberPath="PrefixedNameAndCharacter"
                       SelectedValue="{Binding Replica, UpdateSourceTrigger=PropertyChanged}"
                       Style="{StaticResource S_ComboBox_AutoComplete}"
                       views:ComboBoxFilterHelper.Filter="{Binding TreeFilter, UpdateSourceTrigger=PropertyChanged}">

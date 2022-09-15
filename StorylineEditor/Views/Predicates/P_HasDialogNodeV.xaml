@@ -19,7 +19,7 @@ StorylineEditor распространяется в надежде, что он�
             <GroupBox Header="Диалог и вершина" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
                 <StackPanel Orientation="Vertical">
                     <ComboBox ItemsSource="{Binding ActualTrees}"
-                              DisplayMemberPath="NameAndCharacter"
+                              DisplayMemberPath="PrefixedNameAndCharacter"
                               SelectedValue="{Binding Dialog, UpdateSourceTrigger=PropertyChanged}"
                               Style="{StaticResource S_ComboBox_AutoComplete}"
                               views:ComboBoxFilterHelper.Filter="{Binding TreeFilter, UpdateSourceTrigger=PropertyChanged}">                        

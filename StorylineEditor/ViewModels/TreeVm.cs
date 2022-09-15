@@ -213,7 +213,7 @@ namespace StorylineEditor.ViewModels
         {
             get
             {
-                if (IsPlayerDialog) return Interlocutor == null ? string.Format("Диалог {0}", Name) : string.Format("{0} [{1}]", Name, Interlocutor.Name);
+                if (IsPlayerDialog) return Interlocutor == null ? string.Format("{0}", Name) : string.Format("{0} [{1}]", Name, Interlocutor.Name);
 
                 List<Node_BaseVm> nodes = NodesTraversal();
 
@@ -222,6 +222,8 @@ namespace StorylineEditor.ViewModels
                 return Name;
             }
         }
+
+        public string PrefixedNameAndCharacter => String.Format(IsPlayerDialog ? "Диал. {0}" : "Репл. {0}", NameAndCharacter);
 
         public ObservableCollection<Node_BaseVm> Nodes { get; set; }
 
