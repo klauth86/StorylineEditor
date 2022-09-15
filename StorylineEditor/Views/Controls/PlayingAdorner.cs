@@ -20,7 +20,7 @@ namespace StorylineEditor.Views.Controls
 {
     public class PlayingAdorner: ContentControl
     {
-        FrameworkElement ActiveElement;
+        Vector ActiveElementSize = new Vector(0, 0);
 
         public double StateAlpha
         {
@@ -35,9 +35,12 @@ namespace StorylineEditor.Views.Controls
         {
             if (d is PlayingAdorner playingAdorner)
             {
+                double mAlpha = playingAdorner.StateAlpha * 1.25;
+                double mBetta = (1 - playingAdorner.StateAlpha) * 1.25;
+
                 ScaleTransform scaleTransform = (ScaleTransform)playingAdorner.ellipse.RenderTransform;
-                scaleTransform.ScaleX = (playingAdorner.ActiveElement.ActualWidth / playingAdorner.Width * (1 - playingAdorner.StateAlpha) + playingAdorner.StateAlpha) * 1.25;
-                scaleTransform.ScaleY = (playingAdorner.ActiveElement.ActualHeight / playingAdorner.Height * (1 - playingAdorner.StateAlpha) + playingAdorner.StateAlpha) * 1.25;
+                scaleTransform.ScaleX = playingAdorner.ActiveElementSize.X / playingAdorner.Width * mBetta + playingAdorner.StateAlpha * mAlpha;
+                scaleTransform.ScaleY = playingAdorner.ActiveElementSize.Y / playingAdorner.Height * mBetta + playingAdorner.StateAlpha * mAlpha;
             }
         }
 
@@ -97,7 +100,8 @@ namespace StorylineEditor.Views.Controls
 
         public void ToActiveNodeState(FrameworkElement activeElement, double duration)
         {
-            ActiveElement = activeElement;
+            ActiveElementSize.X = activeElement.ActualWidth;
+            ActiveElementSize.Y = activeElement.ActualHeight;
             ToState(1, 0, duration);
         }
 
