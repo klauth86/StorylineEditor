@@ -21,12 +21,29 @@ namespace StorylineEditor.ViewModels
     {
         public ItemVm(ItemsTabVm inParent, long additionalTicks) : base(inParent, additionalTicks)
         {
+            hasGenderDescription = false;
             descriptionFemale = null;
+            hasInternalDescription = false;
             descriptionInternal = null;
             FullContextVm.OnSearchFilterChangedEvent += OnSearchFilterChanged;
         }
 
         public ItemVm() : this(null, 0) { }
+
+
+        protected bool hasGenderDescription;
+        public bool HasGenderDescription
+        {
+            get => hasGenderDescription;
+            set
+            {
+                if (hasGenderDescription != value)
+                {
+                    hasGenderDescription = value;
+                    NotifyWithCallerPropName();
+                }
+            }
+        }
 
 
         protected string descriptionFemale;
@@ -38,6 +55,21 @@ namespace StorylineEditor.ViewModels
                 if (descriptionFemale != value)
                 {
                     descriptionFemale = value;
+                    NotifyWithCallerPropName();
+                }
+            }
+        }
+
+
+        protected bool hasInternalDescription;
+        public bool HasInternalDescription
+        {
+            get => hasInternalDescription;
+            set
+            {
+                if (hasInternalDescription != value)
+                {
+                    hasInternalDescription = value;
                     NotifyWithCallerPropName();
                 }
             }
@@ -68,7 +100,9 @@ namespace StorylineEditor.ViewModels
 
             if (destObj is ItemVm casted)
             {
+                casted.hasGenderDescription = hasGenderDescription;
                 casted.descriptionFemale = descriptionFemale;
+                casted.hasInternalDescription = hasInternalDescription;
                 casted.descriptionInternal = descriptionInternal;
             }
         }
