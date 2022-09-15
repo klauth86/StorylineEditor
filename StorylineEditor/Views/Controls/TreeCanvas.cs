@@ -586,12 +586,14 @@ namespace StorylineEditor.Views.Controls
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
+            bool isLockedByTreePlayer = (TreePlayerVm.TreePlayerInstance?.IsLocked ?? false) || ((TreePlayerVm.TreePlayerInstance?.ActiveContext ?? null) != null);
+
             if (Tree != null)
             {
                 if (e.LeftButton == MouseButtonState.Released &&
                     e.RightButton == MouseButtonState.Pressed)
                 {
-                    if (e.Source is GraphNode graphNode)
+                    if (e.Source is GraphNode graphNode && !isLockedByTreePlayer)
                     {
                         if (shiftMode)
                         {
@@ -637,7 +639,7 @@ namespace StorylineEditor.Views.Controls
                 else if (e.LeftButton == MouseButtonState.Pressed &&
                     e.RightButton == MouseButtonState.Released)
                 {
-                    if (e.OriginalSource is Canvas)
+                    if (e.OriginalSource is Canvas && !isLockedByTreePlayer)
                     {
                         if (shiftMode)
                         {

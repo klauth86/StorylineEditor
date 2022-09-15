@@ -319,7 +319,17 @@ StorylineEditor распространяется в надежде, что он�
             </DataTrigger>
         </Style.Triggers>
     </Style>
-    
+
+    <Style TargetType="Button" x:Key="S_Button_Player_ToggleLock" BasedOn="{StaticResource S_Button_CanvasPanel}">
+        <Setter Property="Content" Value="📝"></Setter>
+        <Setter Property="Command" Value="{Binding ToggleLockCommand}"></Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsLocked, UpdateSourceTrigger=PropertyChanged}" Value="true">
+                <Setter Property="Content" Value="🔑"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
     <!--CANVAS PANEL BUTTONS-->
 
     
@@ -1324,6 +1334,7 @@ StorylineEditor распространяется в надежде, что он�
                 <Button Style="{StaticResource S_Button_Player_Play}"></Button>
                 <Button Style="{StaticResource S_Button_Player_Stop}"></Button>
                 <Button Style="{StaticResource S_Button_Player_ToggleGender}"></Button>
+                <Button Style="{StaticResource S_Button_Player_ToggleLock}"></Button>
                 <TextBlock VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Base}" Text="{Binding ActiveTimeLeft, StringFormat=F2}"></TextBlock>
             </StackPanel>
             <ContentControl Padding="{StaticResource MarginPaddingThickness}" Margin="{StaticResource MarginPaddingThickness}" Content="{Binding ActiveContext, UpdateSourceTrigger=PropertyChanged}"></ContentControl>

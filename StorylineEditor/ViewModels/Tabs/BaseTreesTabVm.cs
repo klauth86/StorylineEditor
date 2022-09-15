@@ -71,8 +71,23 @@ namespace StorylineEditor.ViewModels.Tabs
 
         protected ICommand playCommand;
         public ICommand PlayCommand => playCommand ?? (playCommand = new RelayCommand
-            (
-            () => new InfoWindow("▶ Воспроизведение", "DT_" + SelectedItem.GetType().Name + "_Player", new TreePlayerVm(this, 0, SelectedItem as TreeVm)) { Owner = App.Current.MainWindow }.Show()
-            ));
+            (() =>
+            {
+                if (TreePlayerVm.TreePlayerInstance != null)
+                {
+                    foreach (var window in App.Current.Windows)
+                    {
+                        if (window is InfoWindow infoWindow && infoWindow.DataContext == TreePlayerVm.TreePlayerInstance)
+                        {
+                            infoWindow.Activate();
+                            return;
+                        }
+                    }
+                }
+                else
+                {
+                    new InfoWindow("▶ Воспроизведение", "DT_" + SelectedItem.GetType().Name + "_Player", new TreePlayerVm(this, 0, SelectedItem as TreeVm)) { Owner = App.Current.MainWindow }.Show();
+                }
+            }));
     }
 }

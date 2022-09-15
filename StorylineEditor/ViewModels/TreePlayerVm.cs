@@ -23,6 +23,8 @@ namespace StorylineEditor.ViewModels
     {
         public void OnClosing()
         {
+            TreePlayerInstance = null;
+            
             Stop();
 
             TreeToPlay.DurationAlphaChangedEvent -= OnDurationAlphaChanged;
@@ -41,9 +43,13 @@ namespace StorylineEditor.ViewModels
 
             gender = 1;
 
+            isLocked = false;
+
             TreeToPlay.EndTransitionEvent += OnEndTransition;
             TreeToPlay.EndActiveNodeEvent += OnEndActiveNode;
             TreeToPlay.DurationAlphaChangedEvent += OnDurationAlphaChanged;
+
+            TreePlayerInstance = this;
         }
 
         private void OnEndTransition(object nodeObject)
@@ -183,6 +189,23 @@ namespace StorylineEditor.ViewModels
             }
         }
 
+        protected bool isLocked;
+        public bool IsLocked
+        {
+            get => isLocked;
+            set
+            {
+                if (value != isLocked)
+                {
+                    isLocked = value;
+                    NotifyWithCallerPropName();
+                }
+            }
+        }
+
+
+        public static TreePlayerVm TreePlayerInstance = null;
+
 
         protected ICommand togglePlayCommand;
         public ICommand TogglePlayCommand => togglePlayCommand ?? (togglePlayCommand = new RelayCommand
@@ -206,5 +229,8 @@ namespace StorylineEditor.ViewModels
 
         ICommand toggleGenderCommand;
         public ICommand ToggleGenderCommand => toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand(() => Gender = 3 - gender));
+
+        ICommand toggleLockCommand;
+        public ICommand ToggleLockCommand => toggleLockCommand ?? (toggleLockCommand = new RelayCommand(() => IsLocked = !IsLocked));
     }
 }
