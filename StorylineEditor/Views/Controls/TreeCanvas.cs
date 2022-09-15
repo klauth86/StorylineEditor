@@ -141,7 +141,7 @@ namespace StorylineEditor.Views.Controls
             {
                 if (treeCanvas.FocusNode != null && treeCanvas.AnimAlpha > 0)
                 {
-                    Vector leftTopPos = treeCanvas.FocusNode.Position - new Point(treeCanvas.ActualWidth / 2 / treeCanvas.Scale, treeCanvas.ActualHeight / 2 / treeCanvas.Scale);
+                    Vector leftTopPos = treeCanvas.FocusNode.Position - new Vector(treeCanvas.ActualWidth / 2 / treeCanvas.Scale, treeCanvas.ActualHeight / 2 / treeCanvas.Scale);
                     treeCanvas.Offset = treeCanvas.PrevOffset * (1 - treeCanvas.AnimAlpha) + (leftTopPos + new Vector(treeCanvas.GraphNodes[treeCanvas.FocusNode].ActualWidth / 2, treeCanvas.GraphNodes[treeCanvas.FocusNode].ActualHeight / 2)) * treeCanvas.AnimAlpha;
                     treeCanvas.OnTransformChanged();
                 }
@@ -668,19 +668,21 @@ namespace StorylineEditor.Views.Controls
                         else
                         {
                             Point mousePosition = e.GetPosition(this);
-                            var absoluteMousePosition = new Point(mousePosition.X / Scale, mousePosition.Y / Scale) + Offset;
+                            var absoluteMousePositionX = mousePosition.X / Scale + Offset.X;
+                            var absoluteMousePositionY = mousePosition.Y / Scale + Offset.Y;
 
                             if (Snapping.X * Snapping.Y >= 1)
                             {
-                                absoluteMousePosition.X = Math.Round(absoluteMousePosition.X / Snapping.X) * Snapping.X;
-                                absoluteMousePosition.Y = Math.Round(absoluteMousePosition.Y / Snapping.Y) * Snapping.Y;
+                                absoluteMousePositionX = Math.Round(absoluteMousePositionX / Snapping.X) * Snapping.X;
+                                absoluteMousePositionY = Math.Round(absoluteMousePositionY / Snapping.Y) * Snapping.Y;
                             }
 
                             var tab = Tree.Parent as BaseTreesTabVm;
                             var newNode = tab.CreateNode(Tree);
                             if (newNode != null)
                             {
-                                newNode.Position = absoluteMousePosition;
+                                newNode.PositionX = absoluteMousePositionX;
+                                newNode.PositionY = absoluteMousePositionY;
                                 Tree.AddNode(newNode);
                             }
                             e.Handled = true;

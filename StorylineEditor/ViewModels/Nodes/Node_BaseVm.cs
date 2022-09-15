@@ -36,7 +36,7 @@ namespace StorylineEditor.ViewModels.Nodes
         }
 
         public Node_BaseVm(TreeVm Parent, long additionalTicks) : base(Parent, additionalTicks) {
-            Position = new Point(0, 0);
+            Position = new Vector(0, 0);
             Gender = 0;
 
             FullContextVm.OnSearchFilterChangedEvent += OnSearchFilterChanged;
@@ -66,8 +66,8 @@ namespace StorylineEditor.ViewModels.Nodes
         public virtual bool AllowsManyChildren => true;
 
 
-        protected Point position;
-        public Point Position
+        protected Vector position;
+        public Vector Position
         {
             get => position;
             set
