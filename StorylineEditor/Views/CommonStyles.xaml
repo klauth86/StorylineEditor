@@ -1220,7 +1220,7 @@ StorylineEditor распространяется в надежде, что он�
     <DataTemplate x:Key="DT_TreeVm_Player" DataType="{x:Type viewModels:TreeVm}">
         <DataTemplate.Resources>
             <ResourceDictionary>
-                <DataTemplate DataType="{x:Type viewModels:PlayerErrorVm}">
+                <DataTemplate DataType="{x:Type viewModels:TreePlayerContext_ErrorVm}">
                     <StackPanel Margin="{StaticResource MarginPaddingThickness}">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <Image VerticalAlignment="Center" Width="32" Height="32" Source="{Binding Source={x:Static draw:SystemIcons.Error}, Converter={StaticResource IconToImageSourceConverter}, Mode=OneWay}"/>
@@ -1229,7 +1229,7 @@ StorylineEditor распространяется в надежде, что он�
                         <TextBlock Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}" Foreground="DarkRed"></TextBlock>
                     </StackPanel>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type viewModels:PlayerChoiceVm}">
+                <DataTemplate DataType="{x:Type viewModels:TreePlayerContext_ChoiceVm}">
                     <ScrollViewer x:Name="sv_Main">
                         <ItemsControl ItemsSource="{Binding NodesToSelect}">
                             <ItemsControl.ItemTemplate>
@@ -1259,7 +1259,7 @@ StorylineEditor распространяется в надежде, что он�
                         </ItemsControl>
                     </ScrollViewer>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type viewModels:PlayerTransitionVm}">
+                <DataTemplate DataType="{x:Type viewModels:TreePlayerContext_TransitionVm}">
                     <fa:ImageAwesome Icon="Cog" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center" Spin="True" SpinDuration="4" />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type viewModelNodes:DNode_TransitVm}">

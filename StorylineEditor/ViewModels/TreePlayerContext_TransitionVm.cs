@@ -14,5 +14,5 @@ using StorylineEditor.Common;
 
 namespace StorylineEditor.ViewModels
 {
-    public class PlayerTransitionVm : BaseVm { }
+    public class TreePlayerContext_TransitionVm : BaseVm { }
 }

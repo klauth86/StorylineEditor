@@ -19,7 +19,7 @@ using System.Windows.Input;
 
 namespace StorylineEditor.ViewModels
 {
-    public class PlayerVm : BaseVm<BaseTreesTabVm>, IDialogContext
+    public class TreePlayerVm : BaseVm<BaseTreesTabVm>, IDialogContext
     {
         public void OnClosing()
         {
@@ -30,7 +30,7 @@ namespace StorylineEditor.ViewModels
             TreeToPlay.EndTransitionEvent -= OnEndTransition;
         }
 
-        public PlayerVm(BaseTreesTabVm parent, long additionalTicks, TreeVm treeToPlay) : base(parent, additionalTicks)
+        public TreePlayerVm(BaseTreesTabVm parent, long additionalTicks, TreeVm treeToPlay) : base(parent, additionalTicks)
         {
             Random = new Random();
             TreeToPlay = treeToPlay;
@@ -77,7 +77,7 @@ namespace StorylineEditor.ViewModels
                 }
                 else if (childNodes.TrueForAll((childNode) => (childNode is IOwnered owneredNode) && owneredNode.Owner != null && owneredNode.Owner.Id == CharacterVm.PlayerId))
                 {
-                    ActiveContext = new PlayerChoiceVm(this, childNodes);
+                    ActiveContext = new TreePlayerContext_ChoiceVm(this, childNodes);
                 }
                 else
                 {
@@ -93,7 +93,7 @@ namespace StorylineEditor.ViewModels
                     description += "- " + "Если НЕ Случайная вершина (💬, ⇴) имеет более одной актуальной (удовлетворяющей полу и своим предикатам) дочерней вершины, то эти вершины должны быть либо вершинами Основного персонажа (💬), либо Транзитом (⇴) на вершины Основного персонажа (💬) (ситуация ВЫБОР ИГРОКА)..." + Environment.NewLine;
                     description += Environment.NewLine;
 
-                    ActiveContext = new PlayerErrorVm() { Description = description };
+                    ActiveContext = new TreePlayerContext_ErrorVm() { Description = description };
                 }
             }
             else
@@ -111,7 +111,7 @@ namespace StorylineEditor.ViewModels
         {
             TreeToPlay.OnStartTransition(nextNode);
 
-            ActiveContext = new PlayerTransitionVm();
+            ActiveContext = new TreePlayerContext_TransitionVm();
         }
 
         private void Stop()

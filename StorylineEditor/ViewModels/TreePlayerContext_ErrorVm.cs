@@ -14,5 +14,5 @@ using StorylineEditor.Common;
 
 namespace StorylineEditor.ViewModels
 {
-    public class PlayerErrorVm : BaseVm { }
+    public class TreePlayerContext_ErrorVm : BaseVm { }
 }

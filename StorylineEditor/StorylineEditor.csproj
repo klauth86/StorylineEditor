@@ -123,10 +123,10 @@
     <Compile Include="ViewModels\Nodes\Node_InteractiveVm.cs" />
     <Compile Include="ViewModels\Nodes\JNode_BaseVm.cs" />
     <Compile Include="ViewModels\Nodes\Ownered.cs" />
-    <Compile Include="ViewModels\PlayerChoiceVm.cs" />
-    <Compile Include="ViewModels\PlayerErrorVm.cs" />
-    <Compile Include="ViewModels\PlayerTransitionVm.cs" />
-    <Compile Include="ViewModels\PlayerVm.cs" />
+    <Compile Include="ViewModels\TreePlayerContext_ChoiceVm.cs" />
+    <Compile Include="ViewModels\TreePlayerContext_ErrorVm.cs" />
+    <Compile Include="ViewModels\TreePlayerContext_TransitionVm.cs" />
+    <Compile Include="ViewModels\TreePlayerVm.cs" />
     <Compile Include="ViewModels\Predicates\P_HasJournalRecordNodeVm.cs" />
     <Compile Include="ViewModels\Predicates\P_HasJournalRecordVm.cs" />
     <Compile Include="ViewModels\Predicates\P_HasRelationVm.cs" />
