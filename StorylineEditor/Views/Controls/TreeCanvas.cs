@@ -49,10 +49,22 @@ namespace StorylineEditor.Views.Controls
             set { this.SetValue(ScaleProperty, value); }
         }
 
-        public Vector Offset
+        public double TranslationX
         {
-            get => (Vector)this.GetValue(OffsetProperty);
-            set { this.SetValue(OffsetProperty, value); }
+            get => (double)this.GetValue(TranslationXProperty);
+            set { this.SetValue(TranslationXProperty, value); }
+        }
+
+        public double TranslationY
+        {
+            get => (double)this.GetValue(TranslationYProperty);
+            set { this.SetValue(TranslationYProperty, value); }
+        }
+
+        public Vector TranslationAnimated
+        {
+            get => (Vector)this.GetValue(TranslationAnimatedProperty);
+            set { this.SetValue(TranslationAnimatedProperty, value); }
         }
 
         public double AnimAlpha
@@ -76,8 +88,14 @@ namespace StorylineEditor.Views.Controls
         public static readonly DependencyProperty ScaleProperty = DependencyProperty.Register(
             "Scale", typeof(double), typeof(TreeCanvas), new PropertyMetadata(1.0));
 
-        public static readonly DependencyProperty OffsetProperty = DependencyProperty.Register(
-            "Offset", typeof(Vector), typeof(TreeCanvas), new PropertyMetadata(new Vector(0, 0)));
+        public static readonly DependencyProperty TranslationXProperty = DependencyProperty.Register(
+            "TranslationX", typeof(double), typeof(TreeCanvas), new PropertyMetadata(0.0));
+
+        public static readonly DependencyProperty TranslationYProperty = DependencyProperty.Register(
+            "TranslationY", typeof(double), typeof(TreeCanvas), new PropertyMetadata(0.0));
+
+        public static readonly DependencyProperty TranslationAnimatedProperty = DependencyProperty.Register(
+            "TranslationAnimated", typeof(Vector), typeof(TreeCanvas), new PropertyMetadata(new Vector(0, 0), OnTranslationAnimatedChanged));
 
         public static readonly DependencyProperty AnimAlphaProperty = DependencyProperty.Register(
             "AnimAlpha", typeof(double), typeof(TreeCanvas), new PropertyMetadata(0.0, OnAnimAlphaChanged));
@@ -135,6 +153,17 @@ namespace StorylineEditor.Views.Controls
             }
         }
 
+        private static void OnTranslationAnimatedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is TreeCanvas treeCanvas)
+            {
+                treeCanvas.TranslationX = treeCanvas.TranslationAnimated.X;
+                treeCanvas.TranslationY = treeCanvas.TranslationAnimated.Y;
+
+                treeCanvas.OnTransformChanged();
+            }
+        }
+
         private static void OnAnimAlphaChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is TreeCanvas treeCanvas)
@@ -142,7 +171,7 @@ namespace StorylineEditor.Views.Controls
                 if (treeCanvas.FocusNode != null && treeCanvas.AnimAlpha > 0)
                 {
                     Vector leftTopPos = treeCanvas.FocusNode.Position - new Vector(treeCanvas.ActualWidth / 2 / treeCanvas.Scale, treeCanvas.ActualHeight / 2 / treeCanvas.Scale);
-                    treeCanvas.Offset = treeCanvas.PrevOffset * (1 - treeCanvas.AnimAlpha) + (leftTopPos + new Vector(treeCanvas.GraphNodes[treeCanvas.FocusNode].ActualWidth / 2, treeCanvas.GraphNodes[treeCanvas.FocusNode].ActualHeight / 2)) * treeCanvas.AnimAlpha;
+                    treeCanvas.TranslationAnimated = treeCanvas.PrevOffset * (1 - treeCanvas.AnimAlpha) + (leftTopPos + new Vector(treeCanvas.GraphNodes[treeCanvas.FocusNode].ActualWidth / 2, treeCanvas.GraphNodes[treeCanvas.FocusNode].ActualHeight / 2)) * treeCanvas.AnimAlpha;
                     treeCanvas.OnTransformChanged();
                 }
             }
@@ -167,8 +196,8 @@ namespace StorylineEditor.Views.Controls
         private void OnTransformChanged()
         {
             Rect canvasRect = new Rect(
-                Offset.X,
-                Offset.Y,
+                TranslationX,
+                TranslationY,
                 ActualWidth / Scale,
                 ActualHeight / Scale);
 
@@ -199,8 +228,8 @@ namespace StorylineEditor.Views.Controls
 
         private void RefreshNodePosition(Node_BaseVm node, GraphNode graphNode)
         {
-            Canvas.SetLeft(graphNode, (node.Position.X - Offset.X) * Scale);
-            Canvas.SetTop(graphNode, (node.Position.Y - Offset.Y) * Scale);
+            Canvas.SetLeft(graphNode, (node.Position.X - TranslationX) * Scale);
+            Canvas.SetTop(graphNode, (node.Position.Y - TranslationY) * Scale);
         }
 
         private bool IsNearlyCentered(Node_BaseVm node)
@@ -219,10 +248,9 @@ namespace StorylineEditor.Views.Controls
         {
             if (GraphNodes.ContainsKey(node))
             {
-                PrevOffset.X = Offset.X;
-                PrevOffset.Y = Offset.Y;
-                FocusNode = node;
-                SetAnimAlphaStoryboard(AnimAlphaDuration, this, "AnimAlpha");                
+                Vector nodeOffset = new Vector(node.PositionX + GraphNodes[node].ActualWidth / 2 - ActualWidth / 2 / Scale, node.PositionY + GraphNodes[node].ActualHeight / 2 - ActualHeight / 2 / Scale);
+
+                SetAnimVectorStoryboard(AnimAlphaDuration, this, "TranslationAnimated", new Vector(TranslationX, TranslationY), nodeOffset);            
                 
                 Dispatcher.BeginInvoke(new Action(() => { AnimAlphaStoryboard?.Begin(); }));
             }
@@ -230,9 +258,9 @@ namespace StorylineEditor.Views.Controls
 
         private void OnNodeAdded(Node_BaseVm node) { AddGraphNode(node); }
 
-        private void OnNodeCopied(Node_BaseVm node) { node.PositionX -= Offset.X; node.PositionY -= Offset.Y; }
+        private void OnNodeCopied(Node_BaseVm node) { node.PositionX -= TranslationX; node.PositionY -= TranslationY; }
 
-        private void OnNodePasted(Node_BaseVm node) { node.PositionX += Offset.X; node.PositionY += Offset.Y; }
+        private void OnNodePasted(Node_BaseVm node) { node.PositionX += TranslationX; node.PositionY += TranslationY; }
 
         private void OnLinkAdded(NodePairVm link) { AddGraphLink(link); }
         
@@ -274,6 +302,25 @@ namespace StorylineEditor.Views.Controls
             AnimAlphaStoryboard.Children.Add(focusAnimation);
         }
 
+        private void SetAnimVectorStoryboard(double duration, DependencyObject animTarget, string animProperty, Vector from, Vector to)
+        {
+            StopAnimAlphaStoryboard(); // Stop existing anim, if there is one
+
+            var focusAnimation = new VectorAnimation
+            {
+                From = from,
+                To = to,
+                Duration = TimeSpan.FromSeconds(duration),
+                FillBehavior = FillBehavior.HoldEnd,
+            };
+
+            Storyboard.SetTarget(focusAnimation, animTarget);
+            Storyboard.SetTargetProperty(focusAnimation, new PropertyPath(animProperty));
+
+            AnimAlphaStoryboard = new Storyboard();
+            AnimAlphaStoryboard.Children.Add(focusAnimation);
+        }
+
         private void StopAnimAlphaStoryboard()
         {
             if (AnimAlphaStoryboard != null)
@@ -295,8 +342,8 @@ namespace StorylineEditor.Views.Controls
 
                     if (!IsNearlyCentered(activeNode))
                     {
-                        PrevOffset.X = Offset.X;
-                        PrevOffset.Y = Offset.Y;
+                        PrevOffset.X = TranslationX;
+                        PrevOffset.Y = TranslationY;
                         FocusNode = activeNode;
                         SetAnimAlphaStoryboard(2 * AnimAlphaDuration, this, "AnimAlpha");
 
@@ -342,8 +389,8 @@ namespace StorylineEditor.Views.Controls
         {
             PlayingAdorner?.ToTransitionState(StateAlphaDuration);
 
-            PrevOffset.X = Offset.X;
-            PrevOffset.Y = Offset.Y;
+            PrevOffset.X = TranslationX;
+            PrevOffset.Y = TranslationY;
             FocusNode = nextNode;
             SetAnimAlphaStoryboard(2 * AnimAlphaDuration, this, "AnimAlpha");
             AnimAlphaStoryboard.Completed += OnCompleted_EndTransition;
@@ -506,7 +553,7 @@ namespace StorylineEditor.Views.Controls
         protected Point prevMousePosition = new Point();
         protected GraphNode ActiveGraphNode;
         protected Rectangle SelectionRectangle;
-        
+
         protected PlayingAdorner PlayingAdorner;
         protected Vector PrevOffset = new Vector();
         protected Node_BaseVm FocusNode;
@@ -558,7 +605,9 @@ namespace StorylineEditor.Views.Controls
             Children.Clear();
 
             Scale = 1;
-            Offset *= 0;
+
+            TranslationX = 0;
+            TranslationY = 0;
         }
 
         protected Dictionary<Node_BaseVm, GraphNode> GraphNodes = new Dictionary<Node_BaseVm, GraphNode>();
@@ -579,7 +628,9 @@ namespace StorylineEditor.Views.Controls
 
             Point newScaleMousePosition = new Point(mousePosition.X / Scale, mousePosition.Y / Scale);
 
-            Offset += oldScaleMousePosition - newScaleMousePosition;
+            TranslationX += oldScaleMousePosition.X - newScaleMousePosition.X;
+
+            TranslationY += oldScaleMousePosition.Y - newScaleMousePosition.Y;
 
             OnTransformChanged();
         }
@@ -668,8 +719,8 @@ namespace StorylineEditor.Views.Controls
                         else
                         {
                             Point mousePosition = e.GetPosition(this);
-                            var absoluteMousePositionX = mousePosition.X / Scale + Offset.X;
-                            var absoluteMousePositionY = mousePosition.Y / Scale + Offset.Y;
+                            var absoluteMousePositionX = mousePosition.X / Scale + TranslationX;
+                            var absoluteMousePositionY = mousePosition.Y / Scale + TranslationY;
 
                             if (Snapping.X * Snapping.Y >= 1)
                             {
@@ -732,8 +783,8 @@ namespace StorylineEditor.Views.Controls
                     if (SelectionRectangle != null)
                     {
                         Rect selectionRect = new Rect(
-                            Canvas.GetLeft(SelectionRectangle) / Scale + Offset.X,
-                            Canvas.GetTop(SelectionRectangle) / Scale + Offset.Y,
+                            Canvas.GetLeft(SelectionRectangle) / Scale + TranslationX,
+                            Canvas.GetTop(SelectionRectangle) / Scale + TranslationY,
                             SelectionRectangle.ActualWidth / Scale,
                             SelectionRectangle.ActualHeight / Scale);
 
@@ -794,7 +845,8 @@ namespace StorylineEditor.Views.Controls
                         absoluteMousePosition.Y = Math.Round(absoluteMousePosition.Y / Snapping.Y) * Snapping.Y;
                     }
 
-                    var absolutePosition = Offset + absoluteMousePosition;
+                    double absolutePositionX = TranslationX + absoluteMousePosition.X;
+                    double absolutePositionY = TranslationY + absoluteMousePosition.Y;
 
                     var node = (ActiveGraphNode?.DataContext as Node_BaseVm);
                     if (node != null)
@@ -805,19 +857,22 @@ namespace StorylineEditor.Views.Controls
                             {
                                 if (selected == node) continue;
 
-                                selected.PositionX = absolutePosition.X + selected.PositionX - node.PositionX;
-                                selected.PositionY = absolutePosition.Y + selected.PositionY - node.PositionY;
+                                selected.PositionX = absolutePositionX + selected.PositionX - node.PositionX;
+                                selected.PositionY = absolutePositionY + selected.PositionY - node.PositionY;
                             }
                         }
 
-                        node.PositionX = absolutePosition.X;
-                        node.PositionY = absolutePosition.Y;
+                        node.PositionX = absolutePositionX;
+                        node.PositionY = absolutePositionY;
                     }
                 }
                 else if (dragAllMode)
                 {
                     var currentPosition = e.GetPosition(this);
-                    Offset -= new Vector((currentPosition.X - prevMousePosition.X) / Scale, (currentPosition.Y - prevMousePosition.Y) / Scale);
+
+                    TranslationX -= (currentPosition.X - prevMousePosition.X) / Scale;
+                    TranslationY -= (currentPosition.Y - prevMousePosition.Y) / Scale;
+
                     prevMousePosition = currentPosition;
                     
                     OnTransformChanged();
@@ -864,7 +919,8 @@ namespace StorylineEditor.Views.Controls
 
             Scale = 1.0;
 
-            Offset += new Vector(ActualWidth / 2, ActualHeight / 2) * (1 / oldScale - 1 / Scale);
+            TranslationX += ActualWidth / 2 * (1 / oldScale - 1 / Scale);
+            TranslationY += ActualHeight / 2 * (1 / oldScale - 1 / Scale);
 
             OnTransformChanged();
         }));

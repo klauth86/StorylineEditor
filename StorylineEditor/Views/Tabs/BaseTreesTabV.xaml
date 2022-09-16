@@ -90,6 +90,11 @@ StorylineEditor распространяется в надежде, что он�
                 <TextBox VerticalAlignment="Center" MinWidth="64" Grid.Column="2" Style="{StaticResource S_TextBox_Input}" Text="{Binding ElementName=tv_Items, Path=SelectedValue.Selected.PositionY, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBox>
             </Grid>
 
+            <StackPanel Orientation="Horizontal" Grid.Column="2" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                <TextBlock VerticalAlignment="Center" Grid.Column="0" Style="{StaticResource S_TextBlock_GNodeDescriptionShort}" Text="{Binding ElementName=tc, Path=TranslationX, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBlock>
+                <TextBlock VerticalAlignment="Center" Grid.Column="1" Style="{StaticResource S_TextBlock_GNodeDescriptionShort}" Text="{Binding ElementName=tc, Path=TranslationY, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBlock>
+            </StackPanel>
+            
             <GridSplitter Grid.Column="3"></GridSplitter>
 
             <ContentControl Grid.Column="4" Content="{Binding ElementName=tv_Items, Path=SelectedValue.Selected, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
