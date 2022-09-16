@@ -22,6 +22,9 @@ namespace StorylineEditor.Views.Controls
     {
         Vector ActiveElementSize = new Vector(0, 0);
 
+        public double PositionX { get; set; }
+        public double PositionY { get; set; }
+
         public double StateAlpha
         {
             get => (double)GetValue(StateAlphaProperty);

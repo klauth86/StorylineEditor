@@ -31,6 +31,20 @@ namespace StorylineEditor.Views.Controls
     {
         #region TreeVm DP
 
+        const double LoopDuration = 1;
+
+        const int TicksInLoopNum = 1000;
+
+        const double TickDuration = LoopDuration / TicksInLoopNum;
+
+        int prevTick = 0;
+
+        public int Tick
+        {
+            get => (int)this.GetValue(TickProperty);
+            set { this.SetValue(TickProperty, value); }
+        }
+
         public Vector Snapping
         {
             get => (Vector)this.GetValue(SnappingProperty);
@@ -61,23 +75,8 @@ namespace StorylineEditor.Views.Controls
             set { this.SetValue(TranslationYProperty, value); }
         }
 
-        public Vector TranslationAnimated
-        {
-            get => (Vector)this.GetValue(TranslationAnimatedProperty);
-            set { this.SetValue(TranslationAnimatedProperty, value); }
-        }
-
-        public double AnimAlpha
-        {
-            get => (double)this.GetValue(AnimAlphaProperty);
-            set { this.SetValue(AnimAlphaProperty, value); }
-        }
-
-        public double DurationAlpha
-        {
-            get => (double)this.GetValue(DurationAlphaProperty);
-            set { this.SetValue(DurationAlphaProperty, value); }
-        }
+        public static readonly DependencyProperty TickProperty = DependencyProperty.Register(
+            "Tick", typeof(int), typeof(TreeCanvas), new PropertyMetadata(0, OnTickChanged));
 
         public static readonly DependencyProperty TreeProperty = DependencyProperty.Register(
             "Tree", typeof(TreeVm), typeof(TreeCanvas), new PropertyMetadata(null, OnTreeChanged));
@@ -94,14 +93,56 @@ namespace StorylineEditor.Views.Controls
         public static readonly DependencyProperty TranslationYProperty = DependencyProperty.Register(
             "TranslationY", typeof(double), typeof(TreeCanvas), new PropertyMetadata(0.0));
 
-        public static readonly DependencyProperty TranslationAnimatedProperty = DependencyProperty.Register(
-            "TranslationAnimated", typeof(Vector), typeof(TreeCanvas), new PropertyMetadata(new Vector(0, 0), OnTranslationAnimatedChanged));
+        private static void OnTickChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is TreeCanvas treeCanvas)
+            {
+                int deltaTick = Math.Abs(treeCanvas.Tick - treeCanvas.prevTick);
+                treeCanvas.prevTick = treeCanvas.Tick;
+                double deltaTime = deltaTick * TickDuration;
 
-        public static readonly DependencyProperty AnimAlphaProperty = DependencyProperty.Register(
-            "AnimAlpha", typeof(double), typeof(TreeCanvas), new PropertyMetadata(0.0, OnAnimAlphaChanged));
+                if (treeCanvas.translationDurationLeft > 0)
+                {
+                    treeCanvas.translationDurationLeft -= deltaTime;
 
-        public static readonly DependencyProperty DurationAlphaProperty = DependencyProperty.Register(
-            "DurationAlpha", typeof(double), typeof(TreeCanvas), new PropertyMetadata(0.0, OnDurationAlphaChanged));
+                    if (treeCanvas.translationDurationLeft < 0)
+                    {
+                        treeCanvas.TranslationX = treeCanvas.translationTarget.X;
+                        treeCanvas.TranslationY = treeCanvas.translationTarget.Y;
+
+                        treeCanvas.OnTransformChanged();
+
+                        treeCanvas.onTransitionComplete?.Invoke();
+                    }
+                    else
+                    {
+                        double alpha = treeCanvas.translationDurationLeft / treeCanvas.translationDuration;
+                        double betta = 1 - alpha;
+
+                        treeCanvas.TranslationX = treeCanvas.translationTarget.X * betta + treeCanvas.TranslationX * alpha;
+                        treeCanvas.TranslationY = treeCanvas.translationTarget.Y * betta + treeCanvas.TranslationY * alpha;
+
+                        treeCanvas.OnTransformChanged();
+                    }
+                }
+
+                if (treeCanvas.waitDurationLeft > 0)
+                {
+                    treeCanvas.waitDurationLeft -= deltaTime;
+
+                    if (treeCanvas.translationDurationLeft < 0)
+                    {
+                        treeCanvas.Tree?.OnDurationAlphaChanged(1);
+
+                        treeCanvas.onWaitComplete?.Invoke();
+                    }
+                    else
+                    {
+                        treeCanvas.Tree?.OnDurationAlphaChanged(1 - treeCanvas.waitDurationLeft / treeCanvas.waitDuration);
+                    }
+                }
+            }
+        }
 
         private static void OnTreeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -153,39 +194,10 @@ namespace StorylineEditor.Views.Controls
             }
         }
 
-        private static void OnTranslationAnimatedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (d is TreeCanvas treeCanvas)
-            {
-                treeCanvas.TranslationX = treeCanvas.TranslationAnimated.X;
-                treeCanvas.TranslationY = treeCanvas.TranslationAnimated.Y;
-
-                treeCanvas.OnTransformChanged();
-            }
-        }
-
-        private static void OnAnimAlphaChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (d is TreeCanvas treeCanvas)
-            {
-                if (treeCanvas.FocusNode != null && treeCanvas.AnimAlpha > 0)
-                {
-                    Vector leftTopPos = treeCanvas.FocusNode.Position - new Vector(treeCanvas.ActualWidth / 2 / treeCanvas.Scale, treeCanvas.ActualHeight / 2 / treeCanvas.Scale);
-                    treeCanvas.TranslationAnimated = treeCanvas.PrevOffset * (1 - treeCanvas.AnimAlpha) + (leftTopPos + new Vector(treeCanvas.GraphNodes[treeCanvas.FocusNode].ActualWidth / 2, treeCanvas.GraphNodes[treeCanvas.FocusNode].ActualHeight / 2)) * treeCanvas.AnimAlpha;
-                    treeCanvas.OnTransformChanged();
-                }
-            }
-        }
-
-        private static void OnDurationAlphaChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (d is TreeCanvas treeCanvas) treeCanvas.Tree.OnDurationAlphaChanged(treeCanvas.DurationAlpha);
-        }
-
         #endregion
 
         const double AnimAlphaDuration = 0.5;
-        
+
         const double StateAlphaDuration = 0.05;
 
         private void OnSetBackground(string path)
@@ -248,11 +260,11 @@ namespace StorylineEditor.Views.Controls
         {
             if (GraphNodes.ContainsKey(node))
             {
-                Vector nodeOffset = new Vector(node.PositionX + GraphNodes[node].ActualWidth / 2 - ActualWidth / 2 / Scale, node.PositionY + GraphNodes[node].ActualHeight / 2 - ActualHeight / 2 / Scale);
+                translationTarget.X = node.PositionX + GraphNodes[node].ActualWidth / 2 - ActualWidth / 2 / Scale;
+                translationTarget.Y = node.PositionY + GraphNodes[node].ActualHeight / 2 - ActualHeight / 2 / Scale;
 
-                SetAnimVectorStoryboard(AnimAlphaDuration, this, "TranslationAnimated", new Vector(TranslationX, TranslationY), nodeOffset);            
-                
-                Dispatcher.BeginInvoke(new Action(() => { AnimAlphaStoryboard?.Begin(); }));
+                translationDuration = AnimAlphaDuration;
+                translationDurationLeft = translationDuration;
             }
         }
 
@@ -263,164 +275,71 @@ namespace StorylineEditor.Views.Controls
         private void OnNodePasted(Node_BaseVm node) { node.PositionX += TranslationX; node.PositionY += TranslationY; }
 
         private void OnLinkAdded(NodePairVm link) { AddGraphLink(link); }
-        
+
         private void OnNodePositionChanged(Node_BaseVm node)
         {
-            if (GraphNodes.ContainsKey(node)) {
+            if (GraphNodes.ContainsKey(node))
+            {
                 RefreshPosition(GraphNodes[node], (node.PositionX - TranslationX) * Scale, (node.PositionY - TranslationY) * Scale);
                 UpdateLinksLayout(GraphNodes[node]);
             }
         }
 
-        private void OnCompleted_EndActiveNode(object sender, EventArgs e)
+        private void StartActiveNode(Node_BaseVm node, double duration)
         {
-            AnimAlphaStoryboard.Completed -= OnCompleted_EndActiveNode;
-            Tree?.OnEndActiveNode(FocusNode);
-        }
-
-        private void OnCompleted_EndTransition(object sender, EventArgs e)
-        {
-            AnimAlphaStoryboard.Completed -= OnCompleted_EndTransition;
-            Tree?.OnEndTransition(FocusNode);
-        }
-
-        private void SetAnimAlphaStoryboard(double duration, DependencyObject animTarget, string animProperty)
-        {
-            StopAnimAlphaStoryboard(); // Stop existing anim, if there is one
-
-            var focusAnimation = new DoubleAnimation
-            {
-                From = 0,
-                To = 1,
-                Duration = TimeSpan.FromSeconds(duration)
-            };
-
-            Storyboard.SetTarget(focusAnimation, animTarget);
-            Storyboard.SetTargetProperty(focusAnimation, new PropertyPath(animProperty));
-
-            AnimAlphaStoryboard = new Storyboard();
-            AnimAlphaStoryboard.Children.Add(focusAnimation);
-        }
-
-        private void SetAnimVectorStoryboard(double duration, DependencyObject animTarget, string animProperty, Vector from, Vector to)
-        {
-            StopAnimAlphaStoryboard(); // Stop existing anim, if there is one
-
-            var focusAnimation = new VectorAnimation
-            {
-                From = from,
-                To = to,
-                Duration = TimeSpan.FromSeconds(duration),
-                FillBehavior = FillBehavior.HoldEnd,
-            };
-
-            Storyboard.SetTarget(focusAnimation, animTarget);
-            Storyboard.SetTargetProperty(focusAnimation, new PropertyPath(animProperty));
-
-            AnimAlphaStoryboard = new Storyboard();
-            AnimAlphaStoryboard.Children.Add(focusAnimation);
-        }
-
-        private void StopAnimAlphaStoryboard()
-        {
-            if (AnimAlphaStoryboard != null)
-            {
-                AnimAlphaStoryboard.Stop();
-                AnimAlphaStoryboard.Completed -= OnCompleted_EndActiveNode;
-                AnimAlphaStoryboard.Completed -= OnCompleted_EndTransition;
-            }
-        }
-
-        private void StartActiveNode(Node_BaseVm activeNode, double duration)
-        {
-            if (activeNode != null)
+            if (node != null)
             {
                 if (PlayingAdorner == null)
                 {
                     PlayingAdorner = new PlayingAdorner(Scale);
                     Canvas.SetZIndex(PlayingAdorner, -ActiveZIndex);
 
-                    if (!IsNearlyCentered(activeNode))
+                    if (!IsNearlyCentered(node))
                     {
-                        PrevOffset.X = TranslationX;
-                        PrevOffset.Y = TranslationY;
-                        FocusNode = activeNode;
-                        SetAnimAlphaStoryboard(2 * AnimAlphaDuration, this, "AnimAlpha");
+                        translationTarget.X = node.PositionX + GraphNodes[node].ActualWidth / 2 - ActualWidth / 2 / Scale;
+                        translationTarget.Y = node.PositionY + GraphNodes[node].ActualHeight / 2 - ActualHeight / 2 / Scale;
 
-                        EventHandler onCompleted_Callback = null;
+                        translationDuration = AnimAlphaDuration;
+                        translationDurationLeft = translationDuration;
 
-                        onCompleted_Callback = (o, e) =>
-                        {
-                            AnimAlphaStoryboard.Completed -= onCompleted_Callback;
-                            StartActiveNode(activeNode, duration);
-                        };
-
-                        AnimAlphaStoryboard.Completed += onCompleted_Callback;
-
-                        Dispatcher.BeginInvoke(new Action(() => AnimAlphaStoryboard?.Begin()));
-
-                        return;
+                        onTransitionComplete = () => StartActiveNode(node, duration);
                     }
                 }
 
                 if (!Children.Contains(PlayingAdorner))
                 {
-                    Canvas.SetLeft(PlayingAdorner, ActualWidth / 2 - PlayingAdorner.Width * Scale / 2);
-                    Canvas.SetTop(PlayingAdorner, ActualHeight / 2 - PlayingAdorner.Height * Scale / 2);
+                    PlayingAdorner.PositionX = node.PositionX;
+                    PlayingAdorner.PositionY = node.PositionX;
+
+                    RefreshPosition(PlayingAdorner, (PlayingAdorner.PositionX - TranslationX) / Scale, (PlayingAdorner.PositionY - TranslationY) / Scale);
 
                     Children.Add(PlayingAdorner);
                 }
 
-                PlayingAdorner.ToActiveNodeState(GraphNodes[activeNode], StateAlphaDuration);
+                PlayingAdorner.ToActiveNodeState(GraphNodes[node], StateAlphaDuration);
 
-                FocusNode = activeNode;
-                SetAnimAlphaStoryboard(duration, this, "DurationAlpha");
-                AnimAlphaStoryboard.Completed += OnCompleted_EndActiveNode;
+                waitDuration = duration;
+                waitDurationLeft = waitDuration;
 
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    AnimAlphaStoryboard?.Begin();
-                    Tree.IsPlaying = true;
-                }));
+                onWaitComplete = () => { Tree?.OnEndActiveNode(node); };
             }
         }
 
-        private void StartTransition(Node_BaseVm nextNode)
+        private void StartTransition(Node_BaseVm node)
         {
-            PlayingAdorner?.ToTransitionState(StateAlphaDuration);
+            translationTarget.X = node.PositionX + GraphNodes[node].ActualWidth / 2 - ActualWidth / 2 / Scale;
+            translationTarget.Y = node.PositionY + GraphNodes[node].ActualHeight / 2 - ActualHeight / 2 / Scale;
 
-            PrevOffset.X = TranslationX;
-            PrevOffset.Y = TranslationY;
-            FocusNode = nextNode;
-            SetAnimAlphaStoryboard(2 * AnimAlphaDuration, this, "AnimAlpha");
-            AnimAlphaStoryboard.Completed += OnCompleted_EndTransition;
+            translationDuration = 2 * AnimAlphaDuration;
+            translationDurationLeft = 2 * AnimAlphaDuration;
 
-            Dispatcher.BeginInvoke(new Action(() => AnimAlphaStoryboard?.Begin()));
+            onTransitionComplete = () => Tree?.OnEndTransition(node);
         }
 
-        private void PauseUnpause()
-        {
-            if (AnimAlphaStoryboard != null)
-            {
-                if (!AnimAlphaStoryboard.GetIsPaused())
-                {
-                    AnimAlphaStoryboard.Pause();
-                    Tree.IsPlaying = false;
-                }
-                else
-                {
-                    AnimAlphaStoryboard.Resume();
-                    Tree.IsPlaying = true;
-                }
-            }
-        }
+        private void PauseUnpause() { if (Tree != null) { Tree.IsPlaying = !Tree.IsPlaying; } }
 
         private void Stop()
         {
-            StopAnimAlphaStoryboard();
-
-            FocusNode = null;
-
             if (PlayingAdorner != null)
             {
                 Children.Remove(PlayingAdorner);
@@ -435,7 +354,7 @@ namespace StorylineEditor.Views.Controls
             GraphNode graphNode = new GraphNode();
             RefreshPosition(graphNode, (node.PositionX - TranslationX) * Scale, (node.PositionY - TranslationY) * Scale);
             graphNode.RenderTransform = new ScaleTransform(Scale, Scale);
-            
+
             graphNode.DataContext = node;
             graphNode.SizeChanged += OnNodeSizeChanged;
 
@@ -510,7 +429,7 @@ namespace StorylineEditor.Views.Controls
 
                 Children.Remove(GraphLinks[link].LineAndArrow);
                 Children.Remove(GraphLinks[link].LinkContent);
-                
+
                 GraphLinks.Remove(link);
             }
         }
@@ -523,7 +442,7 @@ namespace StorylineEditor.Views.Controls
                 GraphNodes[node].DataContext = null;
 
                 Children.Remove(GraphNodes[node]);
-                
+
                 GraphNodes.Remove(node);
             }
         }
@@ -534,15 +453,41 @@ namespace StorylineEditor.Views.Controls
             Unloaded += OnUnloaded;
         }
 
-        private void OnLoaded(object sender, RoutedEventArgs e) { MainWindow.FacadeKeyEvent += OnFacadeKeyEvent; }
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            var animation = new Int32Animation()
+            {
+                From = 1,
+                To = TicksInLoopNum,
+                Duration = TimeSpan.FromSeconds(LoopDuration),
+                AutoReverse = true,
+                RepeatBehavior = RepeatBehavior.Forever
+            };
 
-        private void OnUnloaded(object sender, RoutedEventArgs e) { MainWindow.FacadeKeyEvent -= OnFacadeKeyEvent; }
+            BeginAnimation(TickProperty, animation);
+            MainWindow.FacadeKeyEvent += OnFacadeKeyEvent;
+        }
+
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            BeginAnimation(TickProperty, null);
+            MainWindow.FacadeKeyEvent -= OnFacadeKeyEvent;
+        }
 
         private void OnFacadeKeyEvent(bool isDown, Key key)
         {
             shiftMode = isDown && (key == Key.LeftShift || key == Key.RightShift);
             ctrlMode = isDown && (key == Key.LeftCtrl || key == Key.RightCtrl);
         }
+
+        protected double translationDuration = 0;
+        protected double translationDurationLeft = 0;
+        protected Vector translationTarget = new Vector();
+        protected Action onTransitionComplete = null;
+
+        protected double waitDuration = 0;
+        protected double waitDurationLeft = 0;
+        protected Action onWaitComplete = null;
 
         protected bool shiftMode = false;
         protected bool ctrlMode = false;
@@ -555,9 +500,6 @@ namespace StorylineEditor.Views.Controls
         protected Rectangle SelectionRectangle;
 
         protected PlayingAdorner PlayingAdorner;
-        protected Vector PrevOffset = new Vector();
-        protected Node_BaseVm FocusNode;
-        Storyboard AnimAlphaStoryboard;
 
         protected IndicatorLink indicatorLink;
         public IndicatorLink IndicatorLink
@@ -591,6 +533,16 @@ namespace StorylineEditor.Views.Controls
 
         protected void Reset()
         {
+            translationDuration = 0;
+            translationDurationLeft = 0;
+            translationTarget.X = 0;
+            translationTarget.Y = 0;
+            onTransitionComplete = null;
+
+            waitDuration = 0;
+            waitDurationLeft = 0;
+            onWaitComplete = null;
+
             shiftMode = false;
             ctrlMode = false;
             linkMode = false;
