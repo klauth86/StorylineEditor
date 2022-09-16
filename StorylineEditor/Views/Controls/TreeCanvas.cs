@@ -206,7 +206,7 @@ namespace StorylineEditor.Views.Controls
                 Node_BaseVm node = graphNodesEntry.Key;
                 GraphNode graphNode = graphNodesEntry.Value;
 
-                RefreshNodePosition(node, graphNode);
+                RefreshPosition(graphNode, (node.PositionX - TranslationX) * Scale, (node.PositionY - TranslationY) * Scale);
 
                 Rect graphNodeRect = new Rect(
                     node.Position.X,
@@ -226,10 +226,10 @@ namespace StorylineEditor.Views.Controls
             UpdateLinksLayout(null);
         }
 
-        private void RefreshNodePosition(Node_BaseVm node, GraphNode graphNode)
+        private void RefreshPosition(FrameworkElement frameworkElement, double positionX, double positionY)
         {
-            Canvas.SetLeft(graphNode, (node.Position.X - TranslationX) * Scale);
-            Canvas.SetTop(graphNode, (node.Position.Y - TranslationY) * Scale);
+            Canvas.SetLeft(frameworkElement, positionX);
+            Canvas.SetTop(frameworkElement, positionY);
         }
 
         private bool IsNearlyCentered(Node_BaseVm node)
@@ -267,7 +267,7 @@ namespace StorylineEditor.Views.Controls
         private void OnNodePositionChanged(Node_BaseVm node)
         {
             if (GraphNodes.ContainsKey(node)) {
-                RefreshNodePosition(node, GraphNodes[node]);
+                RefreshPosition(GraphNodes[node], (node.PositionX - TranslationX) * Scale, (node.PositionY - TranslationY) * Scale);
                 UpdateLinksLayout(GraphNodes[node]);
             }
         }
@@ -433,7 +433,7 @@ namespace StorylineEditor.Views.Controls
         private void AddGraphNode(Node_BaseVm node)
         {
             GraphNode graphNode = new GraphNode();
-            RefreshNodePosition(node, graphNode);
+            RefreshPosition(graphNode, (node.PositionX - TranslationX) * Scale, (node.PositionY - TranslationY) * Scale);
             graphNode.RenderTransform = new ScaleTransform(Scale, Scale);
             
             graphNode.DataContext = node;
