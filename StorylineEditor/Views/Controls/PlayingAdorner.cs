@@ -10,11 +10,9 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 
 namespace StorylineEditor.Views.Controls
 {
@@ -25,33 +23,39 @@ namespace StorylineEditor.Views.Controls
         public double PositionX { get; set; }
         public double PositionY { get; set; }
 
-        public double StateAlpha
+        public void Tick(long deltaTicks)
         {
-            get => (double)GetValue(StateAlphaProperty);
-            set { SetValue(StateAlphaProperty, value); }
-        }
-
-        public static readonly DependencyProperty StateAlphaProperty = DependencyProperty.Register(
-            "StateAlpha", typeof(double), typeof(PlayingAdorner), new PropertyMetadata(0.0, OnStateAlphaChanged));
-
-        private static void OnStateAlphaChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (d is PlayingAdorner playingAdorner)
+            if (multiplier != 0)
             {
-                double mAlpha = playingAdorner.StateAlpha * 1.25;
-                double mBetta = (1 - playingAdorner.StateAlpha) * 1.25;
+                stateTicks += multiplier * deltaTicks;
 
-                ScaleTransform scaleTransform = (ScaleTransform)playingAdorner.ellipse.RenderTransform;
-                scaleTransform.ScaleX = playingAdorner.ActiveElementSize.X / playingAdorner.Width * mBetta + playingAdorner.StateAlpha * mAlpha;
-                scaleTransform.ScaleY = playingAdorner.ActiveElementSize.Y / playingAdorner.Height * mBetta + playingAdorner.StateAlpha * mAlpha;
+                if (multiplier < 0 && stateTicks < 0)
+                {
+                    multiplier = 0;
+                    stateTicks = 0;
+                }
+                else if (multiplier > 0 && stateTicks > durationTicks)
+                {
+                    multiplier = 0;
+                    stateTicks = durationTicks;
+                }
+
+                double stateAlpha = 1 - 1.0 * stateTicks / durationTicks;
+                double mAlpha = stateAlpha * 1.25;
+                double mBetta = (1 - stateAlpha) * 1.25;
+
+                ellipseScaleTransform.ScaleX = ActiveElementSize.X / Width * mBetta + mAlpha;
+                ellipseScaleTransform.ScaleY = ActiveElementSize.Y / Height * mBetta + mAlpha;
             }
         }
 
-        System.Windows.Shapes.Ellipse ellipse;
+        System.Windows.Shapes.Ellipse ellipse = null;
 
-        public PlayingAdorner(double inScale)
+        ScaleTransform ellipseScaleTransform = null;
+
+        public PlayingAdorner(long inDurationTicks)
         {
-            RenderTransform = new ScaleTransform() { ScaleX = inScale, ScaleY = inScale };
+            durationTicks = inDurationTicks;
 
             Width = 32;
             Height = 32;
@@ -62,69 +66,22 @@ namespace StorylineEditor.Views.Controls
 
             ellipse = new System.Windows.Shapes.Ellipse();
             ellipse.Fill = Brushes.Gold;
-            ellipse.RenderTransform = new ScaleTransform() { CenterX = 16, CenterY = 16 };
+            ellipse.RenderTransform = ellipseScaleTransform = new ScaleTransform() { CenterX = 16, CenterY = 16 };
 
             internalContent.Content = ellipse;
-            {
-                var scaleXAnimation = new DoubleAnimation
-                {
-                    From = 1,
-                    To = 1.5,
-                    Duration = TimeSpan.FromSeconds(0.5),
-                    RepeatBehavior = RepeatBehavior.Forever,
-                    AutoReverse = true
-                };
-
-                Storyboard.SetTarget(scaleXAnimation, internalContent);
-                Storyboard.SetTargetProperty(scaleXAnimation, new PropertyPath("RenderTransform.ScaleX"));
-
-                var storyboard = new Storyboard();
-                storyboard.Children.Add(scaleXAnimation);
-                Dispatcher.BeginInvoke(new Action(() => { storyboard.Begin(); }));
-            }
-            {
-                var scaleyAnimation = new DoubleAnimation
-                {
-                    From = 1.5,
-                    To = 1,
-                    Duration = TimeSpan.FromSeconds(0.5),
-                    RepeatBehavior = RepeatBehavior.Forever,
-                    AutoReverse = true
-                };
-
-                Storyboard.SetTarget(scaleyAnimation, internalContent);
-                Storyboard.SetTargetProperty(scaleyAnimation, new PropertyPath("RenderTransform.ScaleY"));
-
-                var storyboard = new Storyboard();
-                storyboard.Children.Add(scaleyAnimation);
-                Dispatcher.BeginInvoke(new Action(() => { storyboard.Begin(); }));
-            }
         }
 
-        public void ToActiveNodeState(FrameworkElement activeElement, double duration)
+        long durationTicks = 0;
+        long stateTicks = 0;
+        long multiplier = 0;
+
+        public void ToActiveNodeState(FrameworkElement activeElement)
         {
             ActiveElementSize.X = activeElement.ActualWidth;
             ActiveElementSize.Y = activeElement.ActualHeight;
-            ToState(1, 0, duration);
+            multiplier = 1;
         }
 
-        public void ToTransitionState(double duration) { ToState(0, 1, duration); }
-
-        private void ToState(double from, double to, double duration)
-        {
-            var stateTransitionAnimation = new DoubleAnimation
-            {
-                From = from,
-                To = to,
-                Duration = TimeSpan.FromSeconds(duration)
-            };
-
-            Storyboard.SetTarget(stateTransitionAnimation, this);
-            Storyboard.SetTargetProperty(stateTransitionAnimation, new PropertyPath("StateAlpha"));
-
-            var storyboard = new Storyboard();
-            storyboard.Children.Add(stateTransitionAnimation);
-            Dispatcher.BeginInvoke(new Action(() => { storyboard.Begin(); }));
-        }
+        public void ToTransitionState() { multiplier = -1; }
     }
 }
