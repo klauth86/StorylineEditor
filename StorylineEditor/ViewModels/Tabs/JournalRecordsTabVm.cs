@@ -41,8 +41,5 @@ namespace StorylineEditor.ViewModels.Tabs
 
             return new TreeVm(this, 0) { Name = "Новый квест" };
         }
-
-        [XmlIgnore]
-        public bool HasManyRoots => true;
     }
 }

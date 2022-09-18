@@ -43,8 +43,5 @@ namespace StorylineEditor.ViewModels.Tabs
 
             return new TreeVm(this, 0) { Name = "Новая реплика" };
         }
-
-        [XmlIgnore]
-        public bool HasManyRoots => false;
     }
 }
