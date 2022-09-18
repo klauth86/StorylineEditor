@@ -276,9 +276,17 @@ namespace StorylineEditor.Views.Controls
 
         private void OnNodeAdded(Node_BaseVm node) { AddGraphNode(node); }
 
-        private void OnNodeCopied(Node_BaseVm node) { node.PositionX -= TranslationX; node.PositionY -= TranslationY; }
+        private void OnNodeCopied(Node_BaseVm node)
+        {
+            node.PositionX = (node.PositionX - TranslationX) * Scale;
+            node.PositionY = (node.PositionY - TranslationY) * Scale;
+        }
 
-        private void OnNodePasted(Node_BaseVm node) { node.PositionX += TranslationX; node.PositionY += TranslationY; }
+        private void OnNodePasted(Node_BaseVm node)
+        {
+            node.PositionX = node.PositionX / Scale + TranslationX;
+            node.PositionY = node.PositionY / Scale + TranslationY;
+        }
 
         private void OnLinkAdded(NodePairVm link) { AddGraphLink(link); }
 
