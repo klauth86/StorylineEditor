@@ -190,13 +190,4 @@ namespace StorylineEditor.Common
 
         public override bool OnRemoval() { Parent = null; return base.OnRemoval(); }
     }
-
-    public abstract class BaseNamedVm<T> : BaseVm<T> where T : BaseVm
-    {
-        public BaseNamedVm(T inParent, long additionalTicks) : base(inParent, additionalTicks) { }
-
-        public BaseNamedVm(T inParent) : base(inParent) { }
-
-        public override bool IsValid => base.IsValid && !string.IsNullOrEmpty(name);
-    }
 }

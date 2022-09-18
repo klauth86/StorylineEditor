@@ -18,12 +18,16 @@ using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels
 {
-    public abstract class FolderedVm : BaseNamedVm<BaseVm<FullContextVm>>, IDragOverable
+    public abstract class FolderedVm : BaseVm<BaseVm<FullContextVm>>, IDragOverable
     {
         protected static object folderedFlag;
         public static object FolderFlag => folderedFlag ?? (folderedFlag = new object());
 
         public FolderedVm(BaseVm<FullContextVm> Parent, long additionalTicks) : base(Parent, additionalTicks) { }
+
+        public override bool IsValid => base.IsValid && !string.IsNullOrEmpty(name);
+
+        public override void NotifyNameChanged() { base.NotifyNameChanged(); Folder?.NotifyItemNameChanged(this); }
 
         [XmlIgnore]
         public FolderedVm Folder { get; set; }
@@ -101,8 +105,6 @@ namespace StorylineEditor.ViewModels
         public abstract IEnumerable<FolderedVm> FoldersTraversal();
 
         public abstract void SortItems();
-
-        public override void NotifyNameChanged() { base.NotifyNameChanged(); Folder?.NotifyItemNameChanged(this); }
     }
 
     public class NonFolderVm : FolderedVm

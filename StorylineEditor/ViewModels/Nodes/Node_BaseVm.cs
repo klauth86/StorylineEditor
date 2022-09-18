@@ -19,7 +19,7 @@ using System.Xml.Serialization;
 namespace StorylineEditor.ViewModels.Nodes
 {
     [XmlRoot]
-    public abstract class Node_BaseVm : BaseNamedVm<TreeVm>
+    public abstract class Node_BaseVm : BaseVm<TreeVm>
     {
         protected override void RefreshSubscribtions(TreeVm oldValue, TreeVm newValue)
         {
@@ -43,6 +43,8 @@ namespace StorylineEditor.ViewModels.Nodes
         }
 
         public Node_BaseVm() : this(null, 0) { }
+
+        public override bool IsValid => base.IsValid && !string.IsNullOrEmpty(name);
 
         private void OnRootNodesChanged() {
             Notify(nameof(IsRoot));
