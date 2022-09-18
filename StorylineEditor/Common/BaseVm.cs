@@ -35,7 +35,6 @@ namespace StorylineEditor.Common
         #region PROPS
 
         protected string id;
-
         public string Id
         {
             get => id;
@@ -50,8 +49,8 @@ namespace StorylineEditor.Common
             }
         }
 
-        protected string name;
 
+        protected string name;
         public string Name
         {
             get => name;
@@ -66,8 +65,8 @@ namespace StorylineEditor.Common
             }
         }
 
-        protected string description;
 
+        protected string description;
         public string Description
         {
             get => description;
@@ -81,8 +80,8 @@ namespace StorylineEditor.Common
             }
         }
 
-        protected string actorName;
 
+        protected string actorName;
         public string ActorName
         {
             get => actorName;
@@ -96,8 +95,8 @@ namespace StorylineEditor.Common
             }
         }
 
-        protected string classPathName;
 
+        protected string classPathName;
         public string ClassPathName
         {
             get => classPathName;
@@ -110,6 +109,7 @@ namespace StorylineEditor.Common
                 }
             }
         }
+
 
         protected bool isVisible;
         [XmlIgnore]
