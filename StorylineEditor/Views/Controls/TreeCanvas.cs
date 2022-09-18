@@ -469,6 +469,8 @@ namespace StorylineEditor.Views.Controls
 
         public TreeCanvas() : base()
         {
+            Focusable = true;
+
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
         }
@@ -613,6 +615,8 @@ namespace StorylineEditor.Views.Controls
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
+            Focus();
+
             bool isLockedByTreePlayer = (TreePlayerVm.TreePlayerInstance?.IsLocked ?? false) || ((TreePlayerVm.TreePlayerInstance?.ActiveContext ?? null) != null);
 
             if (Tree != null)
