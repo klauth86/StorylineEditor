@@ -1200,15 +1200,15 @@ StorylineEditor распространяется в надежде, что он�
     <!--TREES UI-->
 
     <HierarchicalDataTemplate ItemsSource="{Binding Items}" DataType="{x:Type viewModels:TreeVm}">
-        <TextBlock Text="{Binding NameAndCharacter}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+        <TextBlock Text="{Binding NameAndCharacter}" Style="{StaticResource S_TextBlock_Header}"></TextBlock>
     </HierarchicalDataTemplate>
     
     <HierarchicalDataTemplate ItemsSource="{Binding Items}" DataType="{x:Type viewModels:TreeFolderVm}">
-        <TextBlock Text="{Binding Name}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+        <TextBlock Text="{Binding Name}" Style="{StaticResource S_TextBlock_Header}"></TextBlock>
     </HierarchicalDataTemplate>
 
     <HierarchicalDataTemplate DataType="{x:Type viewModels:NonFolderVm}">
-        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Header}"></TextBlock>
     </HierarchicalDataTemplate>
 
     <!--TREES UI-->
