@@ -24,6 +24,8 @@ namespace StorylineEditor.ViewModels
     {
         public TreeFolderVm(BaseVm<FullContextVm> Parent, long additionalTicks) : base(Parent, additionalTicks)
         {
+            Name = "Новая папка";
+
             Items = new ObservableCollection<FolderedVm>();
 
             FullContextVm.OnSearchFilterChangedEvent += OnSearchFilterChanged;

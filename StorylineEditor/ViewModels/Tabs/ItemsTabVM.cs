@@ -21,6 +21,11 @@ namespace StorylineEditor.ViewModels.Tabs
 
         public ItemsTabVm() : this(null, 0) { }
 
-        public override FolderedVm CreateItem(object parameter) { if (parameter == FolderedVm.FolderFlag) return new TreeFolderVm(this, 0); else return new ItemVm(this, 0); }
+        public override FolderedVm CreateItem(object parameter)
+        {
+            if (parameter == FolderedVm.FolderFlag) return new TreeFolderVm(this, 0);
+            
+            return new ItemVm(this, 0);
+        }
     }
 }

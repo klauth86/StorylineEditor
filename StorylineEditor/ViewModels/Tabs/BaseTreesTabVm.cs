@@ -29,7 +29,7 @@ namespace StorylineEditor.ViewModels.Tabs
 
         public override FolderedVm CreateItem(object parameter)
         {
-            if (parameter == FolderedVm.FolderFlag) return new TreeFolderVm(this, 0) { Name = "Новая папка" };
+            if (parameter == FolderedVm.FolderFlag) return new TreeFolderVm(this, 0);
 
             return new TreeVm(this, 0) { Name = GetItemDefaultName() };
         }
