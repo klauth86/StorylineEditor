@@ -25,15 +25,6 @@ namespace StorylineEditor.ViewModels.Tabs
 
         public BaseTreesTabVm() : this(null, 0) { }
 
-        protected abstract string GetItemDefaultName();
-
-        public override FolderedVm CreateItem(object parameter)
-        {
-            if (parameter == FolderedVm.FolderFlag) return new TreeFolderVm(this, 0);
-
-            return new TreeVm(this, 0) { Name = GetItemDefaultName() };
-        }
-
         public Node_BaseVm CreateNode(TreeVm tree)
         {
             return selectedNodeType != null

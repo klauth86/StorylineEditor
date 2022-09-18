@@ -35,7 +35,12 @@ namespace StorylineEditor.ViewModels.Tabs
 
         public JournalRecordsTabVm() : this(null, 0) { }
 
-        protected override string GetItemDefaultName() => "Новый квест";
+        public override FolderedVm CreateItem(object parameter)
+        {
+            if (parameter == FolderedVm.FolderFlag) return new TreeFolderVm(this, 0);
+
+            return new TreeVm(this, 0) { Name = "Новый квест" };
+        }
 
         [XmlIgnore]
         public bool HasManyRoots => true;

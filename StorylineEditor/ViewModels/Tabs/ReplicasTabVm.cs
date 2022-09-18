@@ -37,7 +37,12 @@ namespace StorylineEditor.ViewModels.Tabs
 
         public ReplicasTabVm() : this(null, 0) { }
 
-        protected override string GetItemDefaultName() => "Новая реплика";
+        public override FolderedVm CreateItem(object parameter)
+        {
+            if (parameter == FolderedVm.FolderFlag) return new TreeFolderVm(this, 0);
+
+            return new TreeVm(this, 0) { Name = "Новая реплика" };
+        }
 
         [XmlIgnore]
         public bool HasManyRoots => false;

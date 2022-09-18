@@ -37,7 +37,12 @@ namespace StorylineEditor.ViewModels.Tabs
 
         public PlayerDialogsTabVm() : this(null, 0) { }
 
-        protected override string GetItemDefaultName() => "Новый диалог";
+        public override FolderedVm CreateItem(object parameter)
+        {
+            if (parameter == FolderedVm.FolderFlag) return new TreeFolderVm(this, 0);
+
+            return new TreeVm(this, 0) { Name = "Новый диалог" };
+        }
 
         [XmlIgnore]
         public bool HasManyRoots => false;
