@@ -653,40 +653,47 @@ namespace StorylineEditor.ViewModels
             string xmlString = Clipboard.GetText();
             if (!string.IsNullOrEmpty(xmlString))
             {
-                TreeVm copiedTree = App.DeserializeXmlFromString<TreeVm>(xmlString);
-
-                Dictionary<string, string> nodesMapping = new Dictionary<string, string>();
-
-                long counter = 0;
-
-                foreach (var node in copiedTree.Nodes)
+                try
                 {
-                    var copiedNode = node.Clone<Node_BaseVm>(this, counter++);
-                    OnNodePasted(copiedNode);
-                    AddNode(copiedNode);
+                    TreeVm copiedTree = App.DeserializeXmlFromString<TreeVm>(xmlString);
 
-                    nodesMapping.Add(node.Id, copiedNode.Id);
+                    Dictionary<string, string> nodesMapping = new Dictionary<string, string>();
 
-                    copiedNode.SetupParenthood();
-                }
+                    long counter = 0;
 
-                foreach (var link in copiedTree.Links)
-                {
-                    if (nodesMapping.ContainsKey(link.FromId) && nodesMapping.ContainsKey(link.ToId))
+                    foreach (var node in copiedTree.Nodes)
                     {
-                        AddLink(
-                        Nodes.First(node => node.Id == nodesMapping[link.FromId]),
-                        Nodes.First(node => node.Id == nodesMapping[link.ToId])
-                        );
+                        var copiedNode = node.Clone<Node_BaseVm>(this, counter++);
+                        OnNodePasted(copiedNode);
+                        AddNode(copiedNode);
+
+                        nodesMapping.Add(node.Id, copiedNode.Id);
+
+                        copiedNode.SetupParenthood();
                     }
-                }
 
-                foreach (var nodeId in nodesMapping.Values)
+                    foreach (var link in copiedTree.Links)
+                    {
+                        if (nodesMapping.ContainsKey(link.FromId) && nodesMapping.ContainsKey(link.ToId))
+                        {
+                            AddLink(
+                            Nodes.First(node => node.Id == nodesMapping[link.FromId]),
+                            Nodes.First(node => node.Id == nodesMapping[link.ToId])
+                            );
+                        }
+                    }
+
+                    foreach (var nodeId in nodesMapping.Values)
+                    {
+                        AddToSelection(Nodes.First(node => node.Id == nodeId), false);
+                    }
+
+                    copiedTree.OnRemoval();
+                }
+                catch (Exception)
                 {
-                    AddToSelection(Nodes.First(node => node.Id == nodeId), false);
-                }
 
-                copiedTree.OnRemoval();
+                }
             }
         }
 
