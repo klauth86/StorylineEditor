@@ -10,9 +10,10 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using StorylineEditor.Common;
+using System;
 using System.Linq;
 using System.Xml.Serialization;
+using StorylineEditor.Common;
 
 namespace StorylineEditor.ViewModels.Nodes
 {
@@ -34,7 +35,7 @@ namespace StorylineEditor.ViewModels.Nodes
         public Node_BaseVm To => Parent?.Nodes.FirstOrDefault(node => node.Id == ToId);
 
         public override bool PassFilter(string filter) =>
-            Description != null && Description.Contains(filter) ||
+            Description != null && Description.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0 ||
             From != null && From.PassFilter(filter) &&
             To != null && To.PassFilter(filter);
     }
