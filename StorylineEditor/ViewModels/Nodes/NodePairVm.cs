@@ -17,31 +17,15 @@ using System.Xml.Serialization;
 namespace StorylineEditor.ViewModels.Nodes
 {
     [XmlRoot]
-    public class NodePairVm : Notifier
+    public class NodePairVm : BaseVm<TreeVm>
     {
-        public NodePairVm() { }
+        public NodePairVm(TreeVm Parent, long additionalTicks) : base(Parent, additionalTicks) { }
+
+        public NodePairVm() : this(null, 0) { }
 
         public string FromId { get; set; }
 
         public string ToId { get; set; }
-
-
-        protected string description;
-        public string Description
-        {
-            get => description;
-            set
-            {
-                if (description != value)
-                {
-                    description = value;
-                    NotifyWithCallerPropName();
-                }
-            }
-        }
-
-        [XmlIgnore]
-        public TreeVm Parent { get; set; }
 
         [XmlIgnore]
         public Node_BaseVm From => Parent?.Nodes.FirstOrDefault(node => node.Id == FromId);
@@ -49,26 +33,9 @@ namespace StorylineEditor.ViewModels.Nodes
         [XmlIgnore]
         public Node_BaseVm To => Parent?.Nodes.FirstOrDefault(node => node.Id == ToId);
 
-        protected bool isVisible;
-        [XmlIgnore]
-        public bool IsVisible
-        {
-            get => isVisible;
-            set
-            {
-                if (value != isVisible)
-                {
-                    isVisible = value;
-                    NotifyWithCallerPropName();
-                }
-            }
-        }
-
-        public bool PassFilter(string filter) => 
+        public override bool PassFilter(string filter) =>
             Description != null && Description.Contains(filter) ||
-            From != null && From.PassFilter(filter) && 
+            From != null && From.PassFilter(filter) &&
             To != null && To.PassFilter(filter);
-
-        ////// TODO We dont have all BaseVm things here, however this dublicated code also is not good enough
     }
 }

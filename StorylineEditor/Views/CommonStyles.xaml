@@ -17,7 +17,6 @@ StorylineEditor распространяется в надежде, что он�
                     xmlns:views="clr-namespace:StorylineEditor.Views"
                     xmlns:viewModels="clr-namespace:StorylineEditor.ViewModels"
                     xmlns:viewModelNodes="clr-namespace:StorylineEditor.ViewModels.Nodes"
-                    xmlns:local="clr-namespace:StorylineEditor.Views.Controls"
                     xmlns:nodes="clr-namespace:StorylineEditor.Views.Nodes"
                     xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
@@ -840,7 +839,7 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TreeViewItem}">                    
-                    <local:InstancedGrid AllowDrop="true" Background="Transparent">
+                    <Grid AllowDrop="true" Background="Transparent" views:GlobalFilterHelper.IsFiltered="true">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
@@ -918,8 +917,7 @@ StorylineEditor распространяется в надежде, что он�
 
                         <ItemsPresenter x:Name="ItemsHost" Grid.Column="1" Grid.Row="3" Visibility="Collapsed"/>
                         
-                    </local:InstancedGrid>
-
+                    </Grid>
                     <ControlTemplate.Triggers>
                         <DataTrigger Binding="{Binding IsPlayerDialog, Mode=OneTime}" Value="true">
                             <Setter TargetName="cmb_Interlocutor" Property="Visibility" Value="Visible"></Setter>

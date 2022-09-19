@@ -13,7 +13,6 @@ StorylineEditor распространяется в надежде, что он�
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -45,26 +44,10 @@ namespace StorylineEditor.Views.Controls
             From = from;
 
             LineAndArrow = new Polygon();
-            {
-                Binding myBinding = new Binding("DataContext.IsVisible")
-                {
-                    Converter = App.Current.FindResource("collapseFalseConverter") as IValueConverter,
-                    Source = LineAndArrow
-                };
-
-                LineAndArrow.SetBinding(UIElement.VisibilityProperty, myBinding);
-            }
+            GlobalFilterHelper.SetIsFiltered(LineAndArrow, true);
 
             LinkContent = new ContentControl();
-            {
-                Binding myBinding = new Binding("DataContext.IsVisible")
-                {
-                    Converter = App.Current.FindResource("collapseFalseConverter") as IValueConverter,
-                    Source = LinkContent
-                };
-
-                LinkContent.SetBinding(UIElement.VisibilityProperty, myBinding);
-            }
+            GlobalFilterHelper.SetIsFiltered(LinkContent, true);
 
             LinkContent.RenderTransform = new MatrixTransform();
         }

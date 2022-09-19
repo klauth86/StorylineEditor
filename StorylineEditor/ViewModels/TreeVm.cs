@@ -584,6 +584,7 @@ namespace StorylineEditor.ViewModels
             foreach (var link in Links)
             {
                 link.Parent = this;
+                link.SetupParenthood();
             }
         }
 

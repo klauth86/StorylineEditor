@@ -162,7 +162,6 @@
     <Compile Include="Views\Adorners\DragOveredAdorner.cs" />
     <Compile Include="Views\ComboBoxFilterHelper.cs" />
     <Compile Include="Views\Controls\BaseLink.cs" />
-    <Compile Include="Views\Controls\InstancedGrid.cs" />
     <Compile Include="Views\Controls\PlayingAdorner.cs" />
     <Compile Include="Views\Controls\SequenceLink.cs" />
     <Compile Include="Views\Controls\GraphNode.cs" />
@@ -182,6 +181,7 @@
     <Compile Include="Views\Controls\GraphLink.cs" />
     <Compile Include="Views\Converters\ValidToBackgroundConverter.cs" />
     <Compile Include="Views\DragDropHelper.cs" />
+    <Compile Include="Views\GlobalFilterHelper.cs" />
     <Compile Include="Views\Nodes\RTBHelper_Description.cs" />
     <Compile Include="Views\Nodes\RTBHelper.cs" />
     <Page Include="InfoWindow.xaml">

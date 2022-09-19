@@ -23,7 +23,7 @@ using StorylineEditor.Common;
 using StorylineEditor.FileDialog;
 using StorylineEditor.ViewModels;
 using StorylineEditor.ViewModels.Tabs;
-using StorylineEditor.Views.Controls;
+using StorylineEditor.Views;
 
 namespace StorylineEditor
 {
@@ -260,14 +260,14 @@ namespace StorylineEditor
         {
             if (string.IsNullOrEmpty(tb_Filter.Text))
             {
-                foreach (var instancedGrid in InstancedGrid.Instances)
+                foreach (var instancedGrid in GlobalFilterHelper.Instances)
                 {
                     instancedGrid.Visibility = Visibility.Visible;
                 }
             }
             else
             {
-                foreach (var instancedGrid in InstancedGrid.Instances)
+                foreach (var instancedGrid in GlobalFilterHelper.Instances)
                 {
                     if (instancedGrid.DataContext is BaseVm dataContext)
                     {
