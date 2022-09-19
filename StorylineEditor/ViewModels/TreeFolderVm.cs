@@ -27,8 +27,6 @@ namespace StorylineEditor.ViewModels
             Name = "Новая папка";
 
             Items = new ObservableCollection<FolderedVm>();
-
-            FullContextVm.OnSearchFilterChangedEvent += OnSearchFilterChanged;
         }
 
         public TreeFolderVm() : this(null, 0) { }
@@ -82,7 +80,5 @@ namespace StorylineEditor.ViewModels
         public override bool PassFilter(string filter) => 
             base.PassFilter(filter) || 
             Items.Any(item => item.PassFilter(filter));
-
-        public override bool OnRemoval() { FullContextVm.OnSearchFilterChangedEvent -= OnSearchFilterChanged; return base.OnRemoval(); }
     }
 }

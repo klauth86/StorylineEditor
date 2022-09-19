@@ -28,7 +28,7 @@ StorylineEditor распространяется в надежде, что он�
             </ResourceDictionary>
         </ControlTemplate.Resources>
 
-        <Grid Visibility="{Binding IsVisible, Converter={StaticResource collapseFalseConverter}}">
+        <local:InstancedGrid>
             <Ellipse Fill="Silver"  Visibility="{Binding IsRoot, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource collapseFalseConverter}}"
                       Height="32" Width="32" VerticalAlignment="Top" HorizontalAlignment="Left">
                 <Ellipse.RenderTransform>
@@ -77,7 +77,7 @@ StorylineEditor распространяется в надежде, что он�
             <ContentControl Name="cc_HasPredicates" Visibility="Collapsed" Style="{StaticResource S_ContentControl_P}"></ContentControl>
 
             <ContentControl Name="cc_HasEvents" Visibility="Collapsed" Style="{StaticResource S_ContentControl_GE}"></ContentControl>
-        </Grid>
+        </local:InstancedGrid>
 
         <ControlTemplate.Triggers>
             <DataTrigger Binding="{Binding HasPredicates, UpdateSourceTrigger=PropertyChanged}" Value="true">
@@ -90,7 +90,7 @@ StorylineEditor распространяется в надежде, что он�
     </ControlTemplate>
 
     <ControlTemplate x:Key="GraphNodeDummy" TargetType="{x:Type local:GraphNode}">
-        <Grid Visibility="{Binding IsVisible, Converter={StaticResource collapseFalseConverter}}">
+        <local:InstancedGrid>
             <Ellipse Fill="Silver"  Visibility="{Binding IsRoot, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource collapseFalseConverter}}"
                       Height="32" Width="32" VerticalAlignment="Top" HorizontalAlignment="Left">
                 <Ellipse.RenderTransform>
@@ -130,6 +130,6 @@ StorylineEditor распространяется в надежде, что он�
                     </MultiBinding>
                 </Border.BorderBrush>
             </Border>
-        </Grid>
+        </local:InstancedGrid>
     </ControlTemplate>
 </ResourceDictionary>

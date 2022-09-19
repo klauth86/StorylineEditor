@@ -26,8 +26,6 @@ namespace StorylineEditor.ViewModels
         {
             initialRelationMale = 0;
             initialRelationFemale = 0;
-
-            FullContextVm.OnSearchFilterChangedEvent += OnSearchFilterChanged;
         }
 
         public CharacterVm() : this(null, 0) { }
@@ -63,8 +61,6 @@ namespace StorylineEditor.ViewModels
                 }
             }
         }
-
-        public override bool OnRemoval() { FullContextVm.OnSearchFilterChangedEvent -= OnSearchFilterChanged; return base.OnRemoval(); }
 
         protected override void CloneInternalData(BaseVm destObj, long additionalTicks)
         {

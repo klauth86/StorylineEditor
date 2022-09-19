@@ -38,8 +38,6 @@ namespace StorylineEditor.ViewModels.Nodes
         public Node_BaseVm(TreeVm Parent, long additionalTicks) : base(Parent, additionalTicks) {
             Position = new Vector(0, 0);
             Gender = 0;
-
-            FullContextVm.OnSearchFilterChangedEvent += OnSearchFilterChanged;
         }
 
         public Node_BaseVm() : this(null, 0) { }
@@ -171,8 +169,6 @@ namespace StorylineEditor.ViewModels.Nodes
                 return null;
             }
         }
-
-        public override bool OnRemoval() { FullContextVm.OnSearchFilterChangedEvent -= OnSearchFilterChanged; return base.OnRemoval(); }
 
         protected override void CloneInternalData(BaseVm destObj, long additionalTicks)
         {

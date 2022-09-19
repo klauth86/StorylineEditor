@@ -230,9 +230,5 @@ namespace StorylineEditor.ViewModels
 
         protected ICommand pasteCommand;
         public ICommand PasteCommand => pasteCommand ?? (pasteCommand = new RelayCommand(() => ICopyPasteService.Context?.Paste()));
-
-
-        public static event Action<string> OnSearchFilterChangedEvent = delegate { };
-        public string SearchFilter { set => OnSearchFilterChangedEvent(value?.ToLower()); }
     }
 }

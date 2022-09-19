@@ -79,32 +79,14 @@ namespace StorylineEditor.ViewModels.Nodes
         public ICommand RemoveCommand => removeCommand ?? (removeCommand = new RelayCommand<object>(
                     (argument) =>
                     {
-                        if (argument is GE_BaseVm gameEvent)
-                        {
-                            GameEvents.Remove(gameEvent);
-                            gameEvent.OnRemoval();
-                        }
-
-                        if (argument is P_BaseVm predicate)
-                        {
-                            Predicates.Remove(predicate);
-                            predicate.OnRemoval();
-                        }
+                        if (argument is GE_BaseVm gameEvent) GameEvents.Remove(gameEvent);
+                        if (argument is P_BaseVm predicate) Predicates.Remove(predicate);
                     }, (argument) => argument != null));
 
         public override bool PassFilter(string filter) =>
             base.PassFilter(filter) ||
             Predicates.Any(predicate => predicate.PassFilter(filter)) ||
             GameEvents.Any(gameEvent => gameEvent.PassFilter(filter)); 
-        
-        public override bool OnRemoval()
-        {
-            foreach (var predicate in Predicates) predicate.OnRemoval();
-
-            foreach (var gameEvent in GameEvents) gameEvent.OnRemoval();
-
-            return base.OnRemoval();
-        }
 
         protected override void CloneInternalData(BaseVm destObj, long additionalTicks)
         {

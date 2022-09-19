@@ -42,7 +42,7 @@ StorylineEditor распространяется в надежде, что он�
                     </ControlTemplate>
                 </TabControl.Template>
             </TabControl>
-            <TextBox Grid.Column="3" Style="{StaticResource S_TextBox_Input}" Text="{Binding SearchFilter, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <TextBox Name="tb_Filter" Grid.Column="3" Style="{StaticResource S_TextBox_Input}" TextChanged="TextBox_TextChanged"></TextBox>
         </Grid>
         <ContentControl Content="{Binding SelectedContent, ElementName=tc_Worktabs, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
     </DockPanel>

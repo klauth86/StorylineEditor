@@ -112,8 +112,6 @@ namespace StorylineEditor.ViewModels
             Selection = new List<Node_BaseVm>();
 
             RootNodeIds = new List<string>();
-
-            FullContextVm.OnSearchFilterChangedEvent += OnSearchFilterChanged;
         }
 
         public TreeVm() : this(null, 0) { }
@@ -357,7 +355,6 @@ namespace StorylineEditor.ViewModels
         private void RemoveLink_Internal(NodePairVm link)
         {
             Links.Remove(link);
-            link.OnRemoval();
 
             OnLinkRemoved(link);
 
@@ -379,7 +376,6 @@ namespace StorylineEditor.ViewModels
             foreach (var link in brokenLinks) { RemoveLink_Internal(link); }
 
             Nodes.Remove(node);
-            node.OnRemoval();
 
             OnNodeRemoved(node);
 
@@ -644,8 +640,6 @@ namespace StorylineEditor.ViewModels
             }
 
             Clipboard.SetText(App.SerializeXmlToString<TreeVm>(copiedTree));
-
-            copiedTree.OnRemoval();
         }
 
         public void Paste()
@@ -687,8 +681,6 @@ namespace StorylineEditor.ViewModels
                     {
                         AddToSelection(Nodes.First(node => node.Id == nodeId), false);
                     }
-
-                    copiedTree.OnRemoval();
                 }
                 catch (Exception)
                 {
@@ -701,17 +693,6 @@ namespace StorylineEditor.ViewModels
             base.PassFilter(filter) ||
             Nodes.Any(node => node.PassFilter(filter)) || 
             Links.Any(link => link.PassFilter(filter));
-
-        public override bool OnRemoval()
-        {
-            foreach (var link in Links) link.OnRemoval();
-
-            foreach (var node in Nodes) node.OnRemoval();
-
-            FullContextVm.OnSearchFilterChangedEvent -= OnSearchFilterChanged;
-
-            return base.OnRemoval(); 
-        }
 
         protected override void CloneInternalData(BaseVm destObj, long additionalTicks)
         {

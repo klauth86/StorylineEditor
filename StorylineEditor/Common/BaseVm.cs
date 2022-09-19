@@ -26,8 +26,6 @@ namespace StorylineEditor.Common
             description = null;
             actorName = null;
             classPathName = null;
-
-            isVisible = true;
         }
 
         public BaseVm() : this(0) { }
@@ -110,22 +108,6 @@ namespace StorylineEditor.Common
             }
         }
 
-
-        protected bool isVisible;
-        [XmlIgnore]
-        public bool IsVisible
-        {
-            get => isVisible;
-            set
-            {
-                if (value != isVisible)
-                {
-                    isVisible = value;
-                    NotifyWithCallerPropName();
-                }
-            }
-        }
-
         #endregion
 
         public virtual bool IsValid => !string.IsNullOrEmpty(id);
@@ -141,10 +123,6 @@ namespace StorylineEditor.Common
             description != null && description.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0 ||
             actorName != null && actorName.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0 ||
             classPathName != null && classPathName.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0;
-
-        protected void OnSearchFilterChanged(string filter) => IsVisible = string.IsNullOrEmpty(filter) || PassFilter(filter);
-
-        public virtual bool OnRemoval() { return true; }
 
         public BaseVm Clone(BaseVm Parent, long additionalTicks)
         {
@@ -187,7 +165,5 @@ namespace StorylineEditor.Common
         public override void NotifyIsValidChanged() { base.NotifyIsValidChanged(); Parent?.NotifyIsValidChanged(); }
 
         public override void NotifyNameChanged() { base.NotifyNameChanged(); Parent?.NotifyItemNameChanged(this); }
-
-        public override bool OnRemoval() { Parent = null; return base.OnRemoval(); }
     }
 }

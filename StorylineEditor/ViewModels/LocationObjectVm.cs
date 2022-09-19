@@ -22,8 +22,6 @@ namespace StorylineEditor.ViewModels
         public LocationObjectVm(LocationObjectsTabVm inParent, long additionalTicks) : base(inParent, additionalTicks)
         {
             IsActor = true;
-
-            FullContextVm.OnSearchFilterChangedEvent += OnSearchFilterChanged;
         }
 
         public LocationObjectVm() : this(null, 0) { }
@@ -90,8 +88,6 @@ namespace StorylineEditor.ViewModels
         }
 
         public bool CanBeFoundByClass => !isActivationPoint;
-
-        public override bool OnRemoval() { FullContextVm.OnSearchFilterChangedEvent -= OnSearchFilterChanged; return base.OnRemoval(); }
 
         protected override void CloneInternalData(BaseVm destObj, long additionalTicks)
         {

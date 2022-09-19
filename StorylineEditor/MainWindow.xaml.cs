@@ -10,18 +10,20 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using StorylineEditor.ViewModels;
-using System.Windows;
-using System.Windows.Input;
 using System;
 using System.ComponentModel;
-using System.Windows.Threading;
-using System.Reflection;
 using System.IO;
-using StorylineEditor.FileDialog;
-using StorylineEditor.ViewModels.Tabs;
+using System.Reflection;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
+using System.Windows.Threading;
+using StorylineEditor.Common;
+using StorylineEditor.FileDialog;
+using StorylineEditor.ViewModels;
+using StorylineEditor.ViewModels.Tabs;
+using StorylineEditor.Views.Controls;
 
 namespace StorylineEditor
 {
@@ -251,6 +253,31 @@ namespace StorylineEditor
                 var ratio = mousePosition.Y / scrollViewer.ActualHeight;
                 if (ratio < 0.2) scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - 0.01 * scrollViewer.ActualHeight);
                 if (ratio > 0.8) scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset + 0.01 * scrollViewer.ActualHeight);
+            }
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(tb_Filter.Text))
+            {
+                foreach (var instancedGrid in InstancedGrid.Instances)
+                {
+                    instancedGrid.Visibility = Visibility.Visible;
+                }
+            }
+            else
+            {
+                foreach (var instancedGrid in InstancedGrid.Instances)
+                {
+                    if (instancedGrid.DataContext is BaseVm dataContext)
+                    {
+                        instancedGrid.Visibility = dataContext.PassFilter(tb_Filter.Text) ? Visibility.Visible : Visibility.Collapsed;
+                    }
+                    else
+                    {
+                        instancedGrid.Visibility = Visibility.Visible;
+                    }
+                }
             }
         }
     }

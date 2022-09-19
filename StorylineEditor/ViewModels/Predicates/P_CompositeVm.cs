@@ -132,8 +132,6 @@ namespace StorylineEditor.ViewModels.Predicates
             TypeB = null;
         }
 
-        public override bool OnRemoval() { itemA?.OnRemoval(); itemB?.OnRemoval(); return base.OnRemoval(); }
-
         protected override void CloneInternalData(BaseVm destObj, long additionalTicks)
         {
             base.CloneInternalData(destObj, additionalTicks);

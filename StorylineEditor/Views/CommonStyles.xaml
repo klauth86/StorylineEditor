@@ -17,6 +17,7 @@ StorylineEditor распространяется в надежде, что он�
                     xmlns:views="clr-namespace:StorylineEditor.Views"
                     xmlns:viewModels="clr-namespace:StorylineEditor.ViewModels"
                     xmlns:viewModelNodes="clr-namespace:StorylineEditor.ViewModels.Nodes"
+                    xmlns:local="clr-namespace:StorylineEditor.Views.Controls"
                     xmlns:nodes="clr-namespace:StorylineEditor.Views.Nodes"
                     xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
@@ -836,12 +837,10 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="FocusVisualStyle" Value="{StaticResource TreeViewItemFocusVisual}"/>
         <Setter Property="IsSelected" Value="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}"></Setter>
         <Setter Property="IsExpanded" Value="{Binding IsExpanded, UpdateSourceTrigger=PropertyChanged}"></Setter>
-        <Setter Property="Visibility" Value="{Binding IsVisible, Converter={StaticResource collapseFalseConverter}}"></Setter>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type TreeViewItem}">
-                    
-                    <Grid AllowDrop="true" Background="Transparent">
+                <ControlTemplate TargetType="{x:Type TreeViewItem}">                    
+                    <local:InstancedGrid AllowDrop="true" Background="Transparent">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
@@ -919,7 +918,7 @@ StorylineEditor распространяется в надежде, что он�
 
                         <ItemsPresenter x:Name="ItemsHost" Grid.Column="1" Grid.Row="3" Visibility="Collapsed"/>
                         
-                    </Grid>
+                    </local:InstancedGrid>
 
                     <ControlTemplate.Triggers>
                         <DataTrigger Binding="{Binding IsPlayerDialog, Mode=OneTime}" Value="true">
