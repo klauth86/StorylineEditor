@@ -99,8 +99,6 @@ namespace StorylineEditor.ViewModels
         public event Action<NodePairVm> OnLinkAdded = delegate { };
         public event Action<NodePairVm> OnLinkRemoved = delegate { };
 
-        public event Action OnRootNodesChanged = delegate { };
-
         public event Action<Node_BaseVm> OnNodePositionChanged = delegate { };
 
         public void NodePositionChanged(Node_BaseVm node) { OnNodePositionChanged(node); }
@@ -247,8 +245,8 @@ namespace StorylineEditor.ViewModels
 
         public void AddRootNode(Node_BaseVm node)
         {
+            node.IsRoot = true;
             RootNodeIds.Add(node.Id);
-            OnRootNodesChanged.Invoke();
 
             Notify(nameof(RootNodes));
             Notify(nameof(Stats));
@@ -257,7 +255,7 @@ namespace StorylineEditor.ViewModels
         public void RemoveRootNode(Node_BaseVm node)
         {
             RootNodeIds.Remove(node.Id);
-            OnRootNodesChanged.Invoke();
+            node.IsRoot = false;
 
             if (rootNodeIndex >= RootNodeIds.Count) rootNodeIndex--;
 
@@ -577,6 +575,7 @@ namespace StorylineEditor.ViewModels
         {
             foreach (var node in Nodes)
             {
+                node.IsRoot = RootNodeIds.Contains(node.Id);
                 node.Parent = this;
                 node.SetupParenthood();
             }

@@ -25,12 +25,10 @@ namespace StorylineEditor.ViewModels.Nodes
         {
             if (oldValue != null)
             {
-                oldValue.OnRootNodesChanged -= OnRootNodesChanged;
                 oldValue.OnLinkRemoved -= OnLinkRemoved;
             }
             if (newValue != null)
             {
-                newValue.OnRootNodesChanged += OnRootNodesChanged;
                 newValue.OnLinkRemoved += OnLinkRemoved;
             }
         }
@@ -56,7 +54,20 @@ namespace StorylineEditor.ViewModels.Nodes
             }
         }
 
-        public bool IsRoot => Parent != null && Parent.RootNodeIds.Contains(Id);
+        protected bool isRoot;
+        [XmlIgnore]
+        public bool IsRoot
+        {
+            get => isRoot;
+            set
+            {
+                if (value != isRoot)
+                {
+                    isRoot = value;
+                    NotifyWithCallerPropName();                
+                }            
+            }
+        }
 
         public bool IsLeaf => Parent != null && Parent.IsLeafNode(this);
 
