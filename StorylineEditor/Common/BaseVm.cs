@@ -147,14 +147,10 @@ namespace StorylineEditor.Common
 
     public abstract class BaseVm<T> : BaseVm where T : BaseVm
     {
-        private T parent;
-
         [XmlIgnore]
-        public T Parent { get => parent; set { var oldValue = parent; parent = value; RefreshSubscribtions(oldValue, value); } }
+        public T Parent { get; set; }
 
         public virtual void SetupParenthood() { }
-
-        protected virtual void RefreshSubscribtions(T oldValue, T newValue) { }
 
         public BaseVm(T inParent, long additionalTicks) : base(additionalTicks) { Parent = inParent; }
 

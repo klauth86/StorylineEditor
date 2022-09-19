@@ -21,18 +21,6 @@ namespace StorylineEditor.ViewModels.Nodes
     [XmlRoot]
     public abstract class Node_BaseVm : BaseVm<TreeVm>
     {
-        protected override void RefreshSubscribtions(TreeVm oldValue, TreeVm newValue)
-        {
-            if (oldValue != null)
-            {
-                oldValue.OnLinkRemoved -= OnLinkRemoved;
-            }
-            if (newValue != null)
-            {
-                newValue.OnLinkRemoved += OnLinkRemoved;
-            }
-        }
-
         public Node_BaseVm(TreeVm Parent, long additionalTicks) : base(Parent, additionalTicks) {
             Position = new Vector(0, 0);
             Gender = 0;
@@ -41,18 +29,6 @@ namespace StorylineEditor.ViewModels.Nodes
         public Node_BaseVm() : this(null, 0) { }
 
         public override bool IsValid => base.IsValid && !string.IsNullOrEmpty(name);
-
-        private void OnRootNodesChanged() {
-            Notify(nameof(IsRoot));
-            Notify(nameof(Labels));
-        }
-
-        private void OnLinkRemoved(NodePairVm nodePair)
-        {
-            if (nodePair.ToId == this?.Id) {
-                Notify(nameof(Labels));
-            }
-        }
 
         protected bool isRoot;
         [XmlIgnore]
