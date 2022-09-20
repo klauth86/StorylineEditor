@@ -19,7 +19,6 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Threading;
-using StorylineEditor.Common;
 using StorylineEditor.FileDialog;
 using StorylineEditor.ViewModels;
 using StorylineEditor.ViewModels.Tabs;
@@ -256,29 +255,6 @@ namespace StorylineEditor
             }
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (string.IsNullOrEmpty(tb_Filter.Text))
-            {
-                foreach (var instancedGrid in GlobalFilterHelper.Instances)
-                {
-                    instancedGrid.Visibility = Visibility.Visible;
-                }
-            }
-            else
-            {
-                foreach (var instancedGrid in GlobalFilterHelper.Instances)
-                {
-                    if (instancedGrid.DataContext is BaseVm dataContext)
-                    {
-                        instancedGrid.Visibility = dataContext.PassFilter(tb_Filter.Text) ? Visibility.Visible : Visibility.Collapsed;
-                    }
-                    else
-                    {
-                        instancedGrid.Visibility = Visibility.Visible;
-                    }
-                }
-            }
-        }
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e) { GlobalFilterHelper.Filter = tb_Filter.Text; }
     }
 }

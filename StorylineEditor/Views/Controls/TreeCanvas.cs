@@ -221,13 +221,28 @@ namespace StorylineEditor.Views.Controls
                 Rect graphNodeRect = new Rect(
                     node.Position.X,
                     node.Position.Y,
-                    graphNode.ActualWidth * Scale,
-                    graphNode.ActualHeight * Scale);
+                    graphNode.ActualWidth,
+                    graphNode.ActualHeight);
 
                 Rect canvasRectCopy = canvasRect;
                 canvasRectCopy.Intersect(graphNodeRect);
 
-                graphNode.IsOutOfView = canvasRectCopy.IsEmpty;
+                if (canvasRectCopy.IsEmpty)
+                {
+                    if (viewedUIElements.Contains(graphNode))
+                    {
+                        graphNode.Visibility = Visibility.Collapsed;
+                        viewedUIElements.Remove(graphNode);
+                    }
+                }
+                else
+                {
+                    if (!viewedUIElements.Contains(graphNode))
+                    {
+                        viewedUIElements.Add(graphNode);
+                        graphNode.Visibility = Visibility.Visible;
+                    }
+                }
 
                 (graphNode.RenderTransform as ScaleTransform).ScaleX = Scale;
                 (graphNode.RenderTransform as ScaleTransform).ScaleY = Scale;
@@ -379,7 +394,11 @@ namespace StorylineEditor.Views.Controls
             graphNode.SizeChanged += OnNodeSizeChanged;
 
             Canvas.SetZIndex(graphNode, ActiveZIndex);
-            Children.Add(graphNode);
+            if (!viewedUIElements.Contains(graphNode))
+            {
+                viewedUIElements.Add(graphNode);
+                Children.Add(graphNode);
+            }
 
             GraphNodes.Add(node, graphNode);
         }
@@ -461,7 +480,11 @@ namespace StorylineEditor.Views.Controls
                 GraphNodes[node].SizeChanged -= OnNodeSizeChanged;
                 GraphNodes[node].DataContext = null;
 
-                Children.Remove(GraphNodes[node]);
+                if (viewedUIElements.Contains(GraphNodes[node]))
+                {
+                    viewedUIElements.Remove(GraphNodes[node]);
+                    Children.Remove(GraphNodes[node]);
+                }
 
                 GraphNodes.Remove(node);
             }
@@ -505,6 +528,8 @@ namespace StorylineEditor.Views.Controls
             shiftMode = isDown && (key == Key.LeftShift || key == Key.RightShift);
             ctrlMode = isDown && (key == Key.LeftCtrl || key == Key.RightCtrl);
         }
+
+        protected HashSet<UIElement> viewedUIElements = new HashSet<UIElement>();
 
         protected long translationDuration = 0;
         protected long translationDurationLeft = 0;
@@ -559,6 +584,8 @@ namespace StorylineEditor.Views.Controls
 
         protected void Reset()
         {
+            viewedUIElements.Clear();
+
             translationDuration = 0;
             translationDurationLeft = 0;
             translationTarget.X = 0;

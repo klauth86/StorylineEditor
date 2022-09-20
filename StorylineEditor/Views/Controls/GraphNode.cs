@@ -37,31 +37,5 @@ namespace StorylineEditor.Views.Controls
             base.OnMouseUp(e);
             e.Handled = false;
         }
-
-        protected bool isOutOfView;
-        public bool IsOutOfView
-        {
-            get => isOutOfView;
-            set
-            {
-                if (value != isOutOfView)
-                {
-                    isOutOfView = value;
-
-                    if (value)
-                    {
-                        SetValue(WidthProperty, ActualWidth);
-                        SetValue(HeightProperty, ActualHeight); ;
-                        Template = FindResource("GraphNodeDummy") as ControlTemplate;
-                    }
-                    else
-                    {
-                        SetValue(WidthProperty, DependencyProperty.UnsetValue);
-                        SetValue(HeightProperty, DependencyProperty.UnsetValue);
-                        Template = FindResource("GraphNode") as ControlTemplate;
-                    }
-                }
-            }
-        }
     }
 }

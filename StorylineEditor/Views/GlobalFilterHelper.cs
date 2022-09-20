@@ -12,12 +12,48 @@ StorylineEditor распространяется в надежде, что он�
 
 using System.Collections.Generic;
 using System.Windows;
+using StorylineEditor.Common;
 
 namespace StorylineEditor.Views
 {
     public static class GlobalFilterHelper
     {
         public static HashSet<FrameworkElement> Instances = new HashSet<FrameworkElement>();
+        
+        private static string filter;
+        public static string Filter
+        {
+            get => filter;
+            set
+            {
+                if (value != filter)
+                {
+                    filter = value;
+
+                    if (string.IsNullOrEmpty(filter))
+                    {
+                        foreach (var instance in Instances)
+                        {
+                            instance.Visibility = Visibility.Visible;
+                        }
+                    }
+                    else
+                    {
+                        foreach (var instance in Instances)
+                        {
+                            if (instance.DataContext is BaseVm dataContext)
+                            {
+                                instance.Visibility = dataContext.PassFilter(filter) ? Visibility.Visible : Visibility.Collapsed;
+                            }
+                            else
+                            {
+                                instance.Visibility = Visibility.Visible;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         public static bool GetIsFiltered(DependencyObject obj) => (bool)obj.GetValue(IsFilteredProperty);
         public static void SetIsFiltered(DependencyObject obj, bool value) { obj.SetValue(IsFilteredProperty, value); }
@@ -43,20 +79,39 @@ namespace StorylineEditor.Views
 
         private static void OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (sender is FrameworkElement filteredElement)
+            if (sender is FrameworkElement instance)
             {
-                if (!Instances.Contains(filteredElement)) Instances.Add(filteredElement);
+                if (!Instances.Contains(instance))
+                {
+                    Instances.Add(instance);
+
+                    if (string.IsNullOrEmpty(filter))
+                    {
+                        instance.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        if (instance.DataContext is BaseVm dataContext)
+                        {
+                            instance.Visibility = dataContext.PassFilter(filter) ? Visibility.Visible : Visibility.Collapsed;
+                        }
+                        else
+                        {
+                            instance.Visibility = Visibility.Visible;
+                        }
+                    }
+                }
             }
         }
 
         private static void OnUnloaded(object sender, RoutedEventArgs e)
         {
-            if (sender is FrameworkElement filteredElement)
+            if (sender is FrameworkElement instance)
             {
-                if (Instances.Contains(filteredElement)) Instances.Remove(filteredElement);
+                if (Instances.Contains(instance)) Instances.Remove(instance);
 
-                filteredElement.Loaded -= OnLoaded;
-                filteredElement.Unloaded -= OnUnloaded;
+                instance.Loaded -= OnLoaded;
+                instance.Unloaded -= OnUnloaded;
             }
         }
     }
