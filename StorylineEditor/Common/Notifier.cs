@@ -19,12 +19,8 @@ namespace StorylineEditor.Common {
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void Notify(string propName) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
-        }
+        protected void Notify(string propName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
 
-        protected void NotifyWithCallerPropName([CallerMemberName] string propName = "") {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
-        }
+        protected void NotifyWithCallerPropName([CallerMemberName] string propName = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
     }
 }

@@ -15,9 +15,7 @@ using System.Windows.Input;
 
 namespace StorylineEditor.Common {
     public class RelayCommand<T> : ICommand {
-        private static bool CanExecute(T parameter) {
-            return true;
-        }
+        private static bool CanExecute(T parameter) => true;
 
         readonly Action<T> _execute;
         readonly Func<T, bool> _canExecute;
@@ -26,9 +24,8 @@ namespace StorylineEditor.Common {
             _execute = execute ?? throw new ArgumentNullException("execute");
             _canExecute = canExecute ?? CanExecute;
         }
-        public bool CanExecute(object parameter) {
-            return _canExecute(TranslateParameter(parameter));
-        }
+        public bool CanExecute(object parameter) => _canExecute(TranslateParameter(parameter));
+
         public event EventHandler CanExecuteChanged {
             add {
                 if (_canExecute != null)
@@ -39,9 +36,7 @@ namespace StorylineEditor.Common {
                     CommandManager.RequerySuggested -= value;
             }
         }
-        public void Execute(object parameter) {
-            _execute(TranslateParameter(parameter));
-        }
+        public void Execute(object parameter) => _execute(TranslateParameter(parameter));
         private T TranslateParameter(object parameter) {
             T value;
             if (parameter != null && typeof(T).IsEnum)

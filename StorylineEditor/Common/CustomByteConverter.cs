@@ -10,12 +10,12 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using System;
 using StorylineEditor.ViewModels;
 using StorylineEditor.ViewModels.GameEvents;
 using StorylineEditor.ViewModels.Nodes;
 using StorylineEditor.ViewModels.Predicates;
 using StorylineEditor.ViewModels.Tabs;
-using System;
 
 namespace StorylineEditor.Common
 {

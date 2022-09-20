@@ -147,14 +147,14 @@ namespace StorylineEditor.Common
 
     public abstract class BaseVm<T> : BaseVm where T : BaseVm
     {
+        public BaseVm(T inParent, long additionalTicks) : base(additionalTicks) { Parent = inParent; }
+
+        public BaseVm(T inParent) : base() { Parent = inParent; }
+
         [XmlIgnore]
         public T Parent { get; set; }
 
         public virtual void SetupParenthood() { }
-
-        public BaseVm(T inParent, long additionalTicks) : base(additionalTicks) { Parent = inParent; }
-
-        public BaseVm(T inParent) : base() { Parent = inParent; }
 
         public override bool IsValid => base.IsValid && Parent != null;
 
