@@ -46,6 +46,7 @@ namespace StorylineEditor.ViewModels.Predicates
                     NotifyWithCallerPropName();
                     NotifyIsValidChanged();
 
+                    actualNodesSource = null;
                     Notify(nameof(ActualNodes));
                     JournalRecordNode = null;
                 }
@@ -77,14 +78,17 @@ namespace StorylineEditor.ViewModels.Predicates
             {
                 if (actualNodesSource == null)
                 {
-                    actualNodesSource = new CollectionViewSource();
+                    actualNodesSource = new CollectionViewSource() { Source = (JournalRecord as TreeVm)?.Nodes };
+
+                    if (actualNodesSource.View != null)
+                    {
+                        actualNodesSource.View.MoveCurrentTo(null);
+                    }
                 }
 
-                actualNodesSource.Source = (JournalRecord as TreeVm)?.Nodes;
                 if (actualNodesSource.View != null)
                 {
                     actualNodesSource.View.Filter = (object obj) => Parent.Parent.NodeFilter(obj) && (string.IsNullOrEmpty(filter) || ((BaseVm)obj).PassFilter(filter));
-                    actualNodesSource.View.MoveCurrentTo(null);
                 }
 
                 return actualNodesSource.View;

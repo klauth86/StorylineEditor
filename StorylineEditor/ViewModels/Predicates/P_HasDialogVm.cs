@@ -57,12 +57,16 @@ namespace StorylineEditor.ViewModels.Predicates
                 if (actualTreesSource == null)
                 {
                     actualTreesSource = new CollectionViewSource() { Source = Parent.Parent.Parent.Parent.DialogsAndReplicas };
+
+                    if (actualTreesSource.View != null)
+                    {
+                        actualTreesSource.View.MoveCurrentTo(null);
+                    }
                 }
 
                 if (actualTreesSource.View != null)
                 {
                     actualTreesSource.View.Filter = (object obj) => string.IsNullOrEmpty(treeFilter) || obj != null && ((BaseVm)obj).PassFilter(treeFilter);
-                    actualTreesSource.View.MoveCurrentTo(null);
                 }
 
                 return actualTreesSource.View;
