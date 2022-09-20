@@ -54,11 +54,7 @@ namespace StorylineEditor.ViewModels.Nodes
         [XmlIgnore]
         public FolderedVm Owner
         {
-            get
-            {
-                return Parent?.Parent.Parent.CharactersTab?.Items
-                    .FirstOrDefault(item => item?.Id == OwnerId);
-            }
+            get => Parent?.Parent?.Parent?.Characters.FirstOrDefault(item => item?.Id == OwnerId);
             set
             {
                 if (OwnerId != value?.Id)

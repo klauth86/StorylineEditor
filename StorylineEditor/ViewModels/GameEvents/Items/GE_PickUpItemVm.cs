@@ -35,11 +35,7 @@ namespace StorylineEditor.ViewModels.GameEvents
         [XmlIgnore]
         public FolderedVm Character
         {
-            get
-            {
-                return Parent.Parent.Parent.Parent.CharactersTab.Items
-                  .FirstOrDefault(item => item?.Id == CharacterId);
-            }
+            get => Parent?.Parent?.Parent?.Parent?.Characters.FirstOrDefault(item => item?.Id == CharacterId);
             set
             {
                 if (CharacterId != value?.Id)

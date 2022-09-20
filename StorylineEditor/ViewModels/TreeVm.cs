@@ -56,7 +56,7 @@ namespace StorylineEditor.ViewModels
         [XmlIgnore]
         public FolderedVm Interlocutor
         {
-            get => Parent?.Parent.NPCharacters.FirstOrDefault(item => item?.Id == InterlocutorId);
+            get => Parent?.Parent?.NPCharacters.FirstOrDefault(item => item?.Id == InterlocutorId);
             set
             {
                 if (InterlocutorId != value?.Id)

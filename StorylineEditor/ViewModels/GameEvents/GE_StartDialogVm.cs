@@ -36,11 +36,7 @@ namespace StorylineEditor.ViewModels.GameEvents
         [XmlIgnore]
         public FolderedVm CharacterA
         {
-            get
-            {
-                return Parent.Parent.Parent.Parent.CharactersTab.Items
-                  .FirstOrDefault(item => item?.Id == CharacterAId);
-            }
+            get => Parent?.Parent?.Parent?.Parent?.Characters.FirstOrDefault(item => item?.Id == CharacterAId);
             set
             {
                 if (CharacterAId != value?.Id)
@@ -57,11 +53,7 @@ namespace StorylineEditor.ViewModels.GameEvents
         [XmlIgnore]
         public FolderedVm CharacterB
         {
-            get
-            {
-                return Parent.Parent.Parent.Parent.CharactersTab.Items
-                  .FirstOrDefault(item => item?.Id == CharacterBId);
-            }
+            get => Parent?.Parent?.Parent?.Parent?.Characters.FirstOrDefault(item => item?.Id == CharacterBId);
             set
             {
                 if (CharacterBId != value?.Id)
