@@ -39,6 +39,8 @@ StorylineEditor распространяется в надежде, что он�
                                     <RowDefinition Height="auto"></RowDefinition>
                                     <RowDefinition Height="auto"></RowDefinition>
                                     <RowDefinition Height="auto"></RowDefinition>
+                                    <RowDefinition Height="auto"></RowDefinition>
+                                    <RowDefinition Height="auto"></RowDefinition>
                                     <RowDefinition Height="Auto"></RowDefinition>
                                     <RowDefinition Height="Auto"></RowDefinition>
                                 </Grid.RowDefinitions>
@@ -64,16 +66,27 @@ StorylineEditor распространяется в надежде, что он�
 
                                 <CheckBox IsChecked="{Binding HasInternalDescription, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3">Имеет внутреннее описание (книга, письмо, т.д.)</CheckBox>
 
-                                <GroupBox MinHeight="128" Grid.Row="4" Header="Внутреннее описание" HeaderTemplate="{StaticResource DT_Header_GroupBox}"
-                                          Visibility="{Binding HasInternalDescription, Converter={StaticResource collapseFalseConverter}, UpdateSourceTrigger=PropertyChanged}">
-                                    <TextBox AcceptsReturn="True" Text="{Binding DescriptionInternal, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
-                                </GroupBox>
-                                
-                                <GroupBox Grid.Row="5" Header="ACTOR NAME" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
+                                <CheckBox IsChecked="{Binding HasGenderInternalDescription, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4"
+                                          Visibility="{Binding HasInternalDescription, Converter={StaticResource collapseFalseConverter}, UpdateSourceTrigger=PropertyChanged}">Внутреннее зависит от пола персонажа</CheckBox>
+
+                                <Grid Grid.Row="5" MinHeight="128" Margin="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                        <ColumnDefinition Name="cd_FemaleIntDescription" Width="0"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <GroupBox Name="gb_IntDescriptionMain" Header="Внутреннее описание" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
+                                        <TextBox AcceptsReturn="True" Text="{Binding DescriptionInternal, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
+                                    </GroupBox>
+                                    <GroupBox Grid.Column="1" Header="👩 Внутреннее описание" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
+                                        <TextBox AcceptsReturn="True" Text="{Binding DescriptionInternalFemale, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
+                                    </GroupBox>
+                                </Grid>
+
+                                <GroupBox Grid.Row="6" Header="ACTOR NAME" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
                                     <TextBox Text="{Binding ActorName, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
                                 </GroupBox>
 
-                                <GroupBox Grid.Row="6" Header="CLASS PATH NAME" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
+                                <GroupBox Grid.Row="7" Header="CLASS PATH NAME" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
                                     <TextBox Text="{Binding ClassPathName, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
                                 </GroupBox>
                             </Grid>
@@ -81,6 +94,10 @@ StorylineEditor распространяется в надежде, что он�
                                 <DataTrigger Binding="{Binding HasGenderDescription}" Value="true">
                                     <Setter TargetName="gb_DescriptionMain" Property="Header" Value="👨 Описание"></Setter>
                                     <Setter TargetName="cd_FemaleDescription" Property="Width" Value="*"></Setter>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding HasGenderInternalDescription}" Value="true">
+                                    <Setter TargetName="gb_IntDescriptionMain" Property="Header" Value="👨 Внутреннее описание"></Setter>
+                                    <Setter TargetName="cd_FemaleIntDescription" Property="Width" Value="*"></Setter>
                                 </DataTrigger>
                             </DataTemplate.Triggers>
                         </DataTemplate>

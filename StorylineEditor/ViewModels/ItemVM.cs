@@ -25,6 +25,8 @@ namespace StorylineEditor.ViewModels
             descriptionFemale = null;
             hasInternalDescription = false;
             descriptionInternal = null;
+            hasGenderInternalDescription = false;
+            descriptionInternalFemale = null;
         }
 
         public ItemVm() : this(null, 0) { }
@@ -74,7 +76,6 @@ namespace StorylineEditor.ViewModels
             }
         }
 
-
         protected string descriptionInternal;
         public string DescriptionInternal
         {
@@ -89,6 +90,33 @@ namespace StorylineEditor.ViewModels
             }
         }
 
+        protected bool hasGenderInternalDescription;
+        public bool HasGenderInternalDescription
+        {
+            get => hasGenderInternalDescription;
+            set
+            {
+                if (hasGenderInternalDescription != value)
+                {
+                    hasGenderInternalDescription = value;
+                    NotifyWithCallerPropName();
+                }
+            }
+        }
+
+        protected string descriptionInternalFemale;
+        public string DescriptionInternalFemale
+        {
+            get => descriptionInternalFemale;
+            set
+            {
+                if (descriptionInternalFemale != value)
+                {
+                    descriptionInternalFemale = value;
+                    NotifyWithCallerPropName();
+                }
+            }
+        }
 
         protected override void CloneInternalData(BaseVm destObj, long additionalTicks)
         {
@@ -100,6 +128,8 @@ namespace StorylineEditor.ViewModels
                 casted.descriptionFemale = descriptionFemale;
                 casted.hasInternalDescription = hasInternalDescription;
                 casted.descriptionInternal = descriptionInternal;
+                casted.hasGenderInternalDescription = hasGenderInternalDescription;
+                casted.descriptionInternalFemale = descriptionInternalFemale;
             }
         }
     }
