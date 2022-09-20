@@ -23,6 +23,8 @@ using System.Linq;
 using System.Windows.Input;
 using System.Xml.Serialization;
 using System.Windows;
+using System.Windows.Data;
+using System.ComponentModel;
 
 namespace StorylineEditor.ViewModels
 {
@@ -69,6 +71,41 @@ namespace StorylineEditor.ViewModels
             }
         }
 
+        protected CollectionViewSource actualCharactersSource;
+        [XmlIgnore]
+        public ICollectionView ActualCharacters
+        {
+            get
+            {
+                if (actualCharactersSource == null)
+                {
+                    actualCharactersSource = new CollectionViewSource() { Source = Parent?.Parent?.NPCharacters };
+                }
+
+                if (actualCharactersSource.View != null)
+                {
+                    actualCharactersSource.View.Filter = (object obj) => string.IsNullOrEmpty(characterFilter) || obj != null && ((BaseVm)obj).PassFilter(characterFilter);
+                    actualCharactersSource.View.MoveCurrentTo(null);
+                }
+
+                return actualCharactersSource.View;
+            }
+        }
+
+        protected string characterFilter;
+        [XmlIgnore]
+        public string CharacterFilter
+        {
+            get => characterFilter;
+            set
+            {
+                if (value != characterFilter)
+                {
+                    characterFilter = value;
+                    ActualCharacters?.Refresh();
+                }
+            }
+        }
 
         public bool IsPlayerDialog => Parent is PlayerDialogsTabVm;
 

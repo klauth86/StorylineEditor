@@ -13,6 +13,7 @@ StorylineEditor распространяется в надежде, что он�
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"                   
                     xmlns:local="clr-namespace:StorylineEditor.ViewModels.GameEvents"
+                    xmlns:views="clr-namespace:StorylineEditor.Views"
                     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
     <DataTemplate DataType="{x:Type local:GE_ChangeRelationVm}">
         <Grid>
@@ -22,9 +23,11 @@ StorylineEditor распространяется в надежде, что он�
             </Grid.RowDefinitions>
 
             <GroupBox Header="Персонаж" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
-                <ComboBox ItemsSource="{Binding Parent.Parent.Parent.Parent.NPCharacters}"
-                              DisplayMemberPath="Name"
-                              SelectedValue="{Binding Character, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
+                <ComboBox ItemsSource="{Binding ActualCharacters}"
+                          DisplayMemberPath="Name"
+                          SelectedValue="{Binding Character, UpdateSourceTrigger=PropertyChanged}"
+                          Style="{StaticResource S_ComboBox_AutoComplete}"
+                          views:ComboBoxFilterHelper.Filter="{Binding CharacterFilter, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
             </GroupBox>
 
             <GroupBox Grid.Row="1" Header="Изменение отношения" HeaderTemplate="{StaticResource DT_Header_GroupBox}">

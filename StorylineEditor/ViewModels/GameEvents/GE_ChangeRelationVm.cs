@@ -15,6 +15,7 @@ using StorylineEditor.ViewModels.Nodes;
 using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Data;
 using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.GameEvents
@@ -38,7 +39,7 @@ namespace StorylineEditor.ViewModels.GameEvents
         [XmlIgnore]
         public FolderedVm Character
         {
-            get => Parent?.Parent?.Parent?.Parent?.Characters.FirstOrDefault(item => item?.Id == CharacterId);
+            get => Parent?.Parent?.Parent?.Parent?.NPCharacters.FirstOrDefault(item => item?.Id == CharacterId);
             set
             {
                 if (CharacterId != value?.Id)
@@ -60,6 +61,42 @@ namespace StorylineEditor.ViewModels.GameEvents
                 {
                     deltaRelation = value == 0 ? -deltaRelation : value;
                     NotifyWithCallerPropName();
+                }
+            }
+        }
+
+        protected CollectionViewSource actualCharactersSource;
+        [XmlIgnore]
+        public ICollectionView ActualCharacters
+        {
+            get
+            {
+                if (actualCharactersSource == null)
+                {
+                    actualCharactersSource = new CollectionViewSource() { Source = Parent?.Parent?.Parent?.Parent?.NPCharacters };
+                }
+
+                if (actualCharactersSource.View != null)
+                {
+                    actualCharactersSource.View.Filter = (object obj) => string.IsNullOrEmpty(characterFilter) || obj != null && ((BaseVm)obj).PassFilter(characterFilter);
+                    actualCharactersSource.View.MoveCurrentTo(null);
+                }
+
+                return actualCharactersSource.View;
+            }
+        }
+
+        protected string characterFilter;
+        [XmlIgnore]
+        public string CharacterFilter
+        {
+            get => characterFilter;
+            set
+            {
+                if (value != characterFilter)
+                {
+                    characterFilter = value;
+                    ActualCharacters?.Refresh();
                 }
             }
         }
