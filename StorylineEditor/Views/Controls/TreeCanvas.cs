@@ -104,6 +104,12 @@ namespace StorylineEditor.Views.Controls
                         treeCanvas.TranslationX = treeCanvas.translationTarget.X;
                         treeCanvas.TranslationY = treeCanvas.translationTarget.Y;
 
+                        if (treeCanvas.PlayingAdorner != null)
+                        {
+                            treeCanvas.PlayingAdorner.PositionX = treeCanvas.TranslationX + treeCanvas.ActualWidth / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Width / 2;
+                            treeCanvas.PlayingAdorner.PositionY = treeCanvas.TranslationY + treeCanvas.ActualHeight / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Height / 2;
+                        }
+
                         treeCanvas.OnTransformChanged();
 
                         treeCanvas.onTransitionComplete?.Invoke();
@@ -115,6 +121,12 @@ namespace StorylineEditor.Views.Controls
 
                         treeCanvas.TranslationX = treeCanvas.translationTarget.X * betta + treeCanvas.TranslationX * alpha;
                         treeCanvas.TranslationY = treeCanvas.translationTarget.Y * betta + treeCanvas.TranslationY * alpha;
+
+                        if (treeCanvas.PlayingAdorner != null)
+                        {
+                            treeCanvas.PlayingAdorner.PositionX = treeCanvas.TranslationX + treeCanvas.ActualWidth / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Width / 2;
+                            treeCanvas.PlayingAdorner.PositionY = treeCanvas.TranslationY + treeCanvas.ActualHeight / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Height / 2;
+                        }
 
                         treeCanvas.OnTransformChanged();
                     }
@@ -329,7 +341,7 @@ namespace StorylineEditor.Views.Controls
                     PlayingAdorner.PositionX = node.PositionX + GraphNodes[node].ActualWidth / 2 - PlayingAdorner.Width / 2;
                     PlayingAdorner.PositionY = node.PositionY + GraphNodes[node].ActualHeight / 2 - PlayingAdorner.Height / 2;
 
-                    RefreshPosition(PlayingAdorner, (PlayingAdorner.PositionX - TranslationX) / Scale, (PlayingAdorner.PositionY - TranslationY) / Scale);
+                    RefreshPosition(PlayingAdorner, (PlayingAdorner.PositionX - TranslationX) * Scale, (PlayingAdorner.PositionY - TranslationY) * Scale);
 
                     Children.Add(PlayingAdorner);
                 }
