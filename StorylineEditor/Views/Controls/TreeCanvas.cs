@@ -95,56 +95,59 @@ namespace StorylineEditor.Views.Controls
 
                 long deltaTicks = ticks - treeCanvas.prevTicks;
 
-                if (treeCanvas.translationDurationLeft > 0)
+                if (treeCanvas.Tree != null && treeCanvas.Tree.IsPlaying)
                 {
-                    treeCanvas.translationDurationLeft -= deltaTicks;
-
-                    if (treeCanvas.translationDurationLeft < 0)
+                    if (treeCanvas.translationDurationLeft > 0)
                     {
-                        treeCanvas.TranslationX = treeCanvas.translationTarget.X;
-                        treeCanvas.TranslationY = treeCanvas.translationTarget.Y;
+                        treeCanvas.translationDurationLeft -= deltaTicks;
 
-                        if (treeCanvas.PlayingAdorner != null)
+                        if (treeCanvas.translationDurationLeft < 0)
                         {
-                            treeCanvas.PlayingAdorner.PositionX = treeCanvas.TranslationX + treeCanvas.ActualWidth / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Width / 2;
-                            treeCanvas.PlayingAdorner.PositionY = treeCanvas.TranslationY + treeCanvas.ActualHeight / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Height / 2;
+                            treeCanvas.TranslationX = treeCanvas.translationTarget.X;
+                            treeCanvas.TranslationY = treeCanvas.translationTarget.Y;
+
+                            if (treeCanvas.PlayingAdorner != null)
+                            {
+                                treeCanvas.PlayingAdorner.PositionX = treeCanvas.TranslationX + treeCanvas.ActualWidth / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Width / 2;
+                                treeCanvas.PlayingAdorner.PositionY = treeCanvas.TranslationY + treeCanvas.ActualHeight / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Height / 2;
+                            }
+
+                            treeCanvas.OnTransformChanged();
+
+                            treeCanvas.onTransitionComplete?.Invoke();
                         }
-
-                        treeCanvas.OnTransformChanged();
-
-                        treeCanvas.onTransitionComplete?.Invoke();
-                    }
-                    else
-                    {
-                        double alpha = 1.0 * treeCanvas.translationDurationLeft / treeCanvas.translationDuration;
-                        double betta = 1 - alpha;
-
-                        treeCanvas.TranslationX = treeCanvas.translationTarget.X * betta + treeCanvas.TranslationX * alpha;
-                        treeCanvas.TranslationY = treeCanvas.translationTarget.Y * betta + treeCanvas.TranslationY * alpha;
-
-                        if (treeCanvas.PlayingAdorner != null)
+                        else
                         {
-                            treeCanvas.PlayingAdorner.PositionX = treeCanvas.TranslationX + treeCanvas.ActualWidth / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Width / 2;
-                            treeCanvas.PlayingAdorner.PositionY = treeCanvas.TranslationY + treeCanvas.ActualHeight / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Height / 2;
+                            double alpha = 1.0 * treeCanvas.translationDurationLeft / treeCanvas.translationDuration;
+                            double betta = 1 - alpha;
+
+                            treeCanvas.TranslationX = treeCanvas.translationTarget.X * betta + treeCanvas.TranslationX * alpha;
+                            treeCanvas.TranslationY = treeCanvas.translationTarget.Y * betta + treeCanvas.TranslationY * alpha;
+
+                            if (treeCanvas.PlayingAdorner != null)
+                            {
+                                treeCanvas.PlayingAdorner.PositionX = treeCanvas.TranslationX + treeCanvas.ActualWidth / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Width / 2;
+                                treeCanvas.PlayingAdorner.PositionY = treeCanvas.TranslationY + treeCanvas.ActualHeight / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Height / 2;
+                            }
+
+                            treeCanvas.OnTransformChanged();
                         }
-
-                        treeCanvas.OnTransformChanged();
                     }
-                }
 
-                if (treeCanvas.waitDurationLeft > 0)
-                {
-                    treeCanvas.waitDurationLeft -= deltaTicks;
-
-                    if (treeCanvas.waitDurationLeft < 0)
+                    if (treeCanvas.waitDurationLeft > 0)
                     {
-                        treeCanvas.Tree?.OnDurationAlphaChanged(1);
+                        treeCanvas.waitDurationLeft -= deltaTicks;
 
-                        treeCanvas.onWaitComplete?.Invoke();
-                    }
-                    else
-                    {
-                        treeCanvas.Tree?.OnDurationAlphaChanged(1.0 - 1.0 * treeCanvas.waitDurationLeft / treeCanvas.waitDuration);
+                        if (treeCanvas.waitDurationLeft < 0)
+                        {
+                            treeCanvas.Tree?.OnDurationAlphaChanged(1);
+
+                            treeCanvas.onWaitComplete?.Invoke();
+                        }
+                        else
+                        {
+                            treeCanvas.Tree?.OnDurationAlphaChanged(1.0 - 1.0 * treeCanvas.waitDurationLeft / treeCanvas.waitDuration);
+                        }
                     }
                 }
 
@@ -172,7 +175,6 @@ namespace StorylineEditor.Views.Controls
 
                     oldTree.StartActiveNodeEvent -= treeCanvas.StartActiveNode;
                     oldTree.StartTransitionEvent -= treeCanvas.StartTransition;
-                    oldTree.PauseUnpauseEvent -= treeCanvas.PauseUnpause;
                     oldTree.StopEvent -= treeCanvas.Stop;
 
                     foreach (var link in oldTree.Links) treeCanvas.OnLinkRemoved(link);
@@ -198,7 +200,6 @@ namespace StorylineEditor.Views.Controls
 
                     newTree.StartActiveNodeEvent += treeCanvas.StartActiveNode;
                     newTree.StartTransitionEvent += treeCanvas.StartTransition;
-                    newTree.PauseUnpauseEvent += treeCanvas.PauseUnpause;
                     newTree.StopEvent += treeCanvas.Stop;
                 }
             }
@@ -367,8 +368,6 @@ namespace StorylineEditor.Views.Controls
 
             onTransitionComplete = () => Tree?.OnEndTransition(node);
         }
-
-        private void PauseUnpause() { if (Tree != null) { Tree.IsPlaying = !Tree.IsPlaying; } }
 
         private void Stop()
         {

@@ -214,12 +214,12 @@ namespace StorylineEditor.ViewModels
                         if (ActiveContext == null)
                         {
                             OnEndTransition(TreeToPlay.Selected);
+                            TreeToPlay.IsPlaying = true;
                         }
                         else
                         {
-                            TreeToPlay.OnPauseUnpause();
+                            TreeToPlay.IsPlaying = !TreeToPlay.IsPlaying;
                         }
-
                     }, () => TreeToPlay?.Selected != null));
 
 

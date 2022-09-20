@@ -31,9 +31,6 @@ namespace StorylineEditor.ViewModels
     [XmlRoot]
     public class TreeVm : NonFolderVm, ICopyPaste
     {
-        public event Action PauseUnpauseEvent = delegate { };
-        public void OnPauseUnpause() { PauseUnpauseEvent(); }
-
         public event Action<Node_BaseVm> StartTransitionEvent = delegate { };
         public void OnStartTransition(Node_BaseVm nextNode) { StartTransitionEvent(nextNode); }
 
