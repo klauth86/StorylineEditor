@@ -95,12 +95,16 @@ namespace StorylineEditor.ViewModels.Nodes
                 if (actualCharactersSource == null)
                 {
                     actualCharactersSource = new CollectionViewSource() { Source = Parent?.Parent?.Parent?.Characters };
+
+                    if (actualCharactersSource.View != null)
+                    {
+                        actualCharactersSource.View.MoveCurrentTo(null);
+                    }
                 }
 
                 if (actualCharactersSource.View != null)
                 {
                     actualCharactersSource.View.Filter = (object obj) => string.IsNullOrEmpty(characterFilter) || obj != null && ((BaseVm)obj).PassFilter(characterFilter);
-                    actualCharactersSource.View.MoveCurrentTo(null);
                 }
 
                 return actualCharactersSource.View;
