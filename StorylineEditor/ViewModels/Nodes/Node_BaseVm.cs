@@ -45,8 +45,6 @@ namespace StorylineEditor.ViewModels.Nodes
             }
         }
 
-        public bool IsLeaf => Parent != null && Parent.IsLeafNode(this);
-
         [XmlIgnore]
         public List<Node_BaseVm> ChildNodes => Parent.NodesTraversal(this, true);
 

@@ -512,8 +512,6 @@ namespace StorylineEditor.ViewModels
             return nonTransitNodes;
         }
 
-        public bool IsLeafNode(Node_BaseVm node) => Links.All(link => link?.FromId != node.Id);
-
         public List<Node_BaseVm> NodesTraversal() => NodesTraversal(Nodes.Where((node) => RootNodeIds.Contains(node.Id)).ToList());
 
         public List<Node_BaseVm> NodesTraversal(Node_BaseVm startNode, bool includeSelf) { var result = NodesTraversal(GetPrimaryChildNodes(startNode)); if (includeSelf) result.Insert(0, startNode); return result; }
