@@ -26,22 +26,29 @@ using System.Windows;
 using System.Windows.Data;
 using System.ComponentModel;
 
+public enum EPlayerState
+{
+    NONE,
+    NODE,
+    TRANSITION
+};
+
 namespace StorylineEditor.ViewModels
 {
     [XmlRoot]
     public class TreeVm : NonFolderVm, ICopyPaste
     {
         public event Action<Node_BaseVm> StartTransitionEvent = delegate { };
-        public void OnStartTransition(Node_BaseVm nextNode) { StartTransitionEvent(nextNode); }
+        public void OnStartTransition(Node_BaseVm nextNode) { PlayerState = EPlayerState.TRANSITION; StartTransitionEvent(nextNode); }
 
         public event Action<object> EndTransitionEvent = delegate { };
-        public void OnEndTransition(object nodeObj) { EndTransitionEvent(nodeObj); }
+        public void OnEndTransition(object nodeObj) { PlayerState = EPlayerState.NONE; EndTransitionEvent(nodeObj); }
 
         public event Action<Node_BaseVm, double> StartActiveNodeEvent = delegate { };
-        public void OnStartActiveNode(Node_BaseVm node, double activeTime) { StartActiveNodeEvent(node, activeTime); }
+        public void OnStartActiveNode(Node_BaseVm node, double activeTime) { PlayerState = EPlayerState.NODE; StartActiveNodeEvent(node, activeTime); }
 
         public event Action<object> EndActiveNodeEvent = delegate { };
-        public void OnEndActiveNode(object nodeObj) { EndActiveNodeEvent(nodeObj); }
+        public void OnEndActiveNode(object nodeObj) { PlayerState = EPlayerState.NONE; EndActiveNodeEvent(nodeObj); }
 
         public event Action StopEvent = delegate { };
         public void OnStop() { StopEvent(); }
@@ -126,6 +133,7 @@ namespace StorylineEditor.ViewModels
             }
         }
 
+        public EPlayerState PlayerState { get; protected set; }
 
         public event Action<string> OnSetBackground = delegate { };
         public event Action<Node_BaseVm> OnFoundRoot = delegate { };
