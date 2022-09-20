@@ -133,6 +133,7 @@ namespace StorylineEditor.ViewModels
             }
         }
 
+        [XmlIgnore]
         public EPlayerState PlayerState { get; protected set; }
 
         public event Action<string> OnSetBackground = delegate { };

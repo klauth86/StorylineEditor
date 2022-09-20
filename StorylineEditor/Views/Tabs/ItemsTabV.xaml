@@ -49,12 +49,12 @@ StorylineEditor распространяется в надежде, что он�
                                     <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
                                 </GroupBox>
 
-                                <CheckBox IsChecked="{Binding HasGenderDescription, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1">Описание зависит от пола персонажа</CheckBox>
+                                <CheckBox IsChecked="{Binding HasDescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1">Описание зависит от пола персонажа</CheckBox>
 
                                 <Grid Grid.Row="2" MinHeight="128" Margin="0">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"></ColumnDefinition>
-                                        <ColumnDefinition Name="cd_FemaleDescription" Width="0"></ColumnDefinition>
+                                        <ColumnDefinition Name="cd_DescriptionFemale" Width="0"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
                                     <GroupBox Name="gb_DescriptionMain" Header="Описание" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
                                         <TextBox AcceptsReturn="True" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
@@ -66,19 +66,19 @@ StorylineEditor распространяется в надежде, что он�
 
                                 <CheckBox IsChecked="{Binding HasInternalDescription, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3">Имеет внутреннее описание (книга, письмо, т.д.)</CheckBox>
 
-                                <CheckBox IsChecked="{Binding HasGenderInternalDescription, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4"
+                                <CheckBox IsChecked="{Binding HasInternalDescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4"
                                           Visibility="{Binding HasInternalDescription, Converter={StaticResource collapseFalseConverter}, UpdateSourceTrigger=PropertyChanged}">Внутреннее зависит от пола персонажа</CheckBox>
 
-                                <Grid Grid.Row="5" MinHeight="128" Margin="0">
+                                <Grid Grid.Row="5" MinHeight="128" Margin="0" Visibility="{Binding HasInternalDescription, Converter={StaticResource collapseFalseConverter}, UpdateSourceTrigger=PropertyChanged}">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"></ColumnDefinition>
-                                        <ColumnDefinition Name="cd_FemaleIntDescription" Width="0"></ColumnDefinition>
+                                        <ColumnDefinition Name="cd_IntDescriptionFemale" Width="0"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
                                     <GroupBox Name="gb_IntDescriptionMain" Header="Внутреннее описание" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
-                                        <TextBox AcceptsReturn="True" Text="{Binding DescriptionInternal, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
+                                        <TextBox AcceptsReturn="True" Text="{Binding InternalDescription, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
                                     </GroupBox>
                                     <GroupBox Grid.Column="1" Header="👩 Внутреннее описание" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
-                                        <TextBox AcceptsReturn="True" Text="{Binding DescriptionInternalFemale, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
+                                        <TextBox AcceptsReturn="True" Text="{Binding InternalDescriptionFemale, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"></TextBox>
                                     </GroupBox>
                                 </Grid>
 
@@ -91,13 +91,13 @@ StorylineEditor распространяется в надежде, что он�
                                 </GroupBox>
                             </Grid>
                             <DataTemplate.Triggers>
-                                <DataTrigger Binding="{Binding HasGenderDescription}" Value="true">
+                                <DataTrigger Binding="{Binding HasDescriptionFemale}" Value="true">
                                     <Setter TargetName="gb_DescriptionMain" Property="Header" Value="👨 Описание"></Setter>
-                                    <Setter TargetName="cd_FemaleDescription" Property="Width" Value="*"></Setter>
+                                    <Setter TargetName="cd_DescriptionFemale" Property="Width" Value="*"></Setter>
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding HasGenderInternalDescription}" Value="true">
+                                <DataTrigger Binding="{Binding HasInternalDescriptionFemale}" Value="true">
                                     <Setter TargetName="gb_IntDescriptionMain" Property="Header" Value="👨 Внутреннее описание"></Setter>
-                                    <Setter TargetName="cd_FemaleIntDescription" Property="Width" Value="*"></Setter>
+                                    <Setter TargetName="cd_IntDescriptionFemale" Property="Width" Value="*"></Setter>
                                 </DataTrigger>
                             </DataTemplate.Triggers>
                         </DataTemplate>

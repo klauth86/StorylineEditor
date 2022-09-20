@@ -21,26 +21,26 @@ namespace StorylineEditor.ViewModels
     {
         public ItemVm(ItemsTabVm inParent, long additionalTicks) : base(inParent, additionalTicks)
         {
-            hasGenderDescription = false;
+            hasDescriptionFemale = false;
             descriptionFemale = null;
             hasInternalDescription = false;
-            descriptionInternal = null;
-            hasGenderInternalDescription = false;
-            descriptionInternalFemale = null;
+            internalDescription = null;
+            hasInternalDescriptionFemale = false;
+            internalDescriptionFemale = null;
         }
 
         public ItemVm() : this(null, 0) { }
 
 
-        protected bool hasGenderDescription;
-        public bool HasGenderDescription
+        protected bool hasDescriptionFemale;
+        public bool HasDescriptionFemale
         {
-            get => hasGenderDescription;
+            get => hasDescriptionFemale;
             set
             {
-                if (hasGenderDescription != value)
+                if (hasDescriptionFemale != value)
                 {
-                    hasGenderDescription = value;
+                    hasDescriptionFemale = value;
                     NotifyWithCallerPropName();
                 }
             }
@@ -76,43 +76,43 @@ namespace StorylineEditor.ViewModels
             }
         }
 
-        protected string descriptionInternal;
-        public string DescriptionInternal
+        protected string internalDescription;
+        public string InternalDescription
         {
-            get => descriptionInternal;
+            get => internalDescription;
             set
             {
-                if (descriptionInternal != value)
+                if (internalDescription != value)
                 {
-                    descriptionInternal = value;
+                    internalDescription = value;
                     NotifyWithCallerPropName();
                 }
             }
         }
 
-        protected bool hasGenderInternalDescription;
-        public bool HasGenderInternalDescription
+        protected bool hasInternalDescriptionFemale;
+        public bool HasInternalDescriptionFemale
         {
-            get => hasGenderInternalDescription;
+            get => hasInternalDescriptionFemale;
             set
             {
-                if (hasGenderInternalDescription != value)
+                if (hasInternalDescriptionFemale != value)
                 {
-                    hasGenderInternalDescription = value;
+                    hasInternalDescriptionFemale = value;
                     NotifyWithCallerPropName();
                 }
             }
         }
 
-        protected string descriptionInternalFemale;
-        public string DescriptionInternalFemale
+        protected string internalDescriptionFemale;
+        public string InternalDescriptionFemale
         {
-            get => descriptionInternalFemale;
+            get => internalDescriptionFemale;
             set
             {
-                if (descriptionInternalFemale != value)
+                if (internalDescriptionFemale != value)
                 {
-                    descriptionInternalFemale = value;
+                    internalDescriptionFemale = value;
                     NotifyWithCallerPropName();
                 }
             }
@@ -124,12 +124,12 @@ namespace StorylineEditor.ViewModels
 
             if (destObj is ItemVm casted)
             {
-                casted.hasGenderDescription = hasGenderDescription;
+                casted.hasDescriptionFemale = hasDescriptionFemale;
                 casted.descriptionFemale = descriptionFemale;
                 casted.hasInternalDescription = hasInternalDescription;
-                casted.descriptionInternal = descriptionInternal;
-                casted.hasGenderInternalDescription = hasGenderInternalDescription;
-                casted.descriptionInternalFemale = descriptionInternalFemale;
+                casted.internalDescription = internalDescription;
+                casted.hasInternalDescriptionFemale = hasInternalDescriptionFemale;
+                casted.internalDescriptionFemale = internalDescriptionFemale;
             }
         }
     }
