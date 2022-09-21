@@ -95,7 +95,34 @@ namespace StorylineEditor.Views.Controls
 
                 long deltaTicks = ticks - treeCanvas.prevTicks;
 
-                if (treeCanvas.Tree != null && treeCanvas.Tree.IsPlaying)
+                if (treeCanvas.IsMovingToNode)
+                {
+                    if (treeCanvas.TimeLeft > 0)
+                    {
+                        treeCanvas.TimeLeft -= deltaTicks;
+
+                        if (treeCanvas.TimeLeft < 0)
+                        {
+                            treeCanvas.TranslationX = treeCanvas.translationTarget.X;
+                            treeCanvas.TranslationY = treeCanvas.translationTarget.Y;
+
+                            treeCanvas.OnTransformChanged();
+
+                            treeCanvas.IsMovingToNode = false;
+                        }
+                        else
+                        {
+                            double alpha = 1.0 * treeCanvas.TimeLeft / treeCanvas.Duration;
+                            double betta = 1 - alpha;
+
+                            treeCanvas.TranslationX = treeCanvas.translationTarget.X * betta + treeCanvas.TranslationX * alpha;
+                            treeCanvas.TranslationY = treeCanvas.translationTarget.Y * betta + treeCanvas.TranslationY * alpha;
+
+                            treeCanvas.OnTransformChanged();
+                        }
+                    }
+                }
+                else if (treeCanvas.Tree != null && treeCanvas.Tree.IsPlaying)
                 {
                     if (treeCanvas.TimeLeft > 0)
                     {
@@ -282,6 +309,8 @@ namespace StorylineEditor.Views.Controls
 
                 Duration = TimeSpan.FromSeconds(AnimAlphaDuration).Ticks;
                 TimeLeft = TimeSpan.FromSeconds(AnimAlphaDuration).Ticks;
+
+                IsMovingToNode = true;
             }
         }
 
@@ -515,6 +544,7 @@ namespace StorylineEditor.Views.Controls
             ctrlMode = isDown && (key == Key.LeftCtrl || key == Key.RightCtrl);
         }
 
+        protected bool IsMovingToNode = false;
         protected long Duration = 0;
         protected long TimeLeft = 0;
         protected Vector translationTarget = new Vector();
@@ -564,6 +594,7 @@ namespace StorylineEditor.Views.Controls
 
         protected void Reset()
         {
+            IsMovingToNode = false;
             Duration = 0;
             TimeLeft = 0;
             translationTarget.X = 0;
@@ -849,6 +880,8 @@ namespace StorylineEditor.Views.Controls
                 }
                 else if (dragAllMode)
                 {
+                    IsMovingToNode = false;
+
                     var currentPosition = e.GetPosition(this);
 
                     TranslationX -= (currentPosition.X - prevMousePosition.X) / Scale;
