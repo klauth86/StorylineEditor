@@ -13,7 +13,8 @@ StorylineEditor распространяется в надежде, что он�
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:StorylineEditor.ViewModels.Tabs" 
-                    xmlns:controls="clr-namespace:StorylineEditor.Views.Controls">
+                    xmlns:controls="clr-namespace:StorylineEditor.Views.Controls"
+                    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
     <DataTemplate DataType="{x:Type local:BaseTreesTabVm}">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -24,10 +25,30 @@ StorylineEditor распространяется в надежде, что он�
                 <ColumnDefinition Width="3*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <GroupBox Grid.Column="0" HeaderTemplate="{StaticResource DT_Header_GroupBox_ActionPanel_Dialogs}">
-                <TreeView AllowDrop="true" Background="White" Name="tv_Items" ItemsSource="{Binding Items}"></TreeView>
-            </GroupBox>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                </Grid.RowDefinitions>
 
+                <GroupBox HeaderTemplate="{StaticResource DT_Header_GroupBox_ActionPanel_Dialogs}">
+                    <TreeView AllowDrop="true" Background="White" Name="tv_Items" ItemsSource="{Binding Items}"></TreeView>
+                </GroupBox>
+
+                <ContentControl Grid.Row="1" Padding="{StaticResource MarginPaddingThickness}" Margin="{StaticResource MarginPaddingThickness}" Content="{Binding ActiveContext, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+
+                <StackPanel Grid.Row="2" Orientation="Horizontal" DockPanel.Dock="Bottom">
+                    <xctk:IntegerUpDown Padding="{StaticResource MarginPaddingThickness}" Margin="{StaticResource MarginPaddingThickness}" FontSize="10" Minimum="1" MinWidth="64" Maximum="60" Value="{Binding ActiveTime, UpdateSourceTrigger=PropertyChanged}" AllowTextInput="False"></xctk:IntegerUpDown>
+                    <Button Style="{StaticResource S_Button_Player_Play}"></Button>
+                    <Button Style="{StaticResource S_Button_Player_Stop}"></Button>
+                    <Button Style="{StaticResource S_Button_Player_ToggleGender}"></Button>
+                    <Button Style="{StaticResource S_Button_Player_ToggleLock}"></Button>
+                    <TextBlock VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Base}" Text="{Binding ActiveTimeLeft, StringFormat=F2}"></TextBlock>
+                </StackPanel>
+                
+            </Grid>
+            
             <GridSplitter Grid.Column="1"></GridSplitter>
 
             <controls:TreeCanvas Name="tc" Snapping="10, 10" Grid.Column="2" ClipToBounds="True" Tree="{Binding ElementName=tv_Items, Path=SelectedValue, UpdateSourceTrigger=PropertyChanged}" Background="Gray"></controls:TreeCanvas>
@@ -81,13 +102,11 @@ StorylineEditor распространяется в надежде, что он�
 
             <Grid Name="gr_Coords" Grid.Column="2" VerticalAlignment="Top" HorizontalAlignment="Right">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button Style="{StaticResource S_Button_Play}"></Button>
-                <TextBox VerticalAlignment="Center" MinWidth="64" Grid.Column="1" Style="{StaticResource S_TextBox_Input}" Text="{Binding ElementName=tv_Items, Path=SelectedValue.Selected.PositionX, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBox>
-                <TextBox VerticalAlignment="Center" MinWidth="64" Grid.Column="2" Style="{StaticResource S_TextBox_Input}" Text="{Binding ElementName=tv_Items, Path=SelectedValue.Selected.PositionY, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBox>
+                <TextBox VerticalAlignment="Center" MinWidth="64" Grid.Column="0" Style="{StaticResource S_TextBox_Input}" Text="{Binding ElementName=tv_Items, Path=SelectedValue.Selected.PositionX, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBox>
+                <TextBox VerticalAlignment="Center" MinWidth="64" Grid.Column="1" Style="{StaticResource S_TextBox_Input}" Text="{Binding ElementName=tv_Items, Path=SelectedValue.Selected.PositionY, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBox>
             </Grid>
 
             <StackPanel Orientation="Horizontal" Grid.Column="2" VerticalAlignment="Bottom" HorizontalAlignment="Right">

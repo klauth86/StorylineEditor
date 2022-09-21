@@ -126,7 +126,6 @@
     <Compile Include="ViewModels\TreePlayerContext_ChoiceVm.cs" />
     <Compile Include="ViewModels\TreePlayerContext_ErrorVm.cs" />
     <Compile Include="ViewModels\TreePlayerContext_TransitionVm.cs" />
-    <Compile Include="ViewModels\TreePlayerVm.cs" />
     <Compile Include="ViewModels\Predicates\P_HasJournalRecordNodeVm.cs" />
     <Compile Include="ViewModels\Predicates\P_HasJournalRecordVm.cs" />
     <Compile Include="ViewModels\Predicates\P_HasRelationVm.cs" />

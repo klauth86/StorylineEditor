@@ -649,7 +649,8 @@ namespace StorylineEditor.Views.Controls
         {
             Focus();
 
-            bool isLockedByTreePlayer = (TreePlayerVm.TreePlayerInstance?.IsLocked ?? false) || ((TreePlayerVm.TreePlayerInstance?.ActiveContext ?? null) != null);
+            bool isLockedByTreePlayer = false;
+            // bool isLockedByTreePlayer = (TreePlayerVm.TreePlayerInstance?.IsLocked ?? false) || ((TreePlayerVm.TreePlayerInstance?.ActiveContext ?? null) != null);
 
             if (Tree != null)
             {

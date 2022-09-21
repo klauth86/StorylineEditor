@@ -59,26 +59,5 @@ namespace StorylineEditor.ViewModels.Tabs
             (item) => new InfoWindow("Статистика " + item.Name, "DT_" + item.GetType().Name + "_Info", item) { Owner = App.Current.MainWindow }.Show(),
             (item) => item != null && !item.IsFolder
             ));
-
-        protected ICommand playCommand;
-        public ICommand PlayCommand => playCommand ?? (playCommand = new RelayCommand
-            (() =>
-            {
-                if (TreePlayerVm.TreePlayerInstance != null)
-                {
-                    foreach (var window in App.Current.Windows)
-                    {
-                        if (window is InfoWindow infoWindow && infoWindow.DataContext == TreePlayerVm.TreePlayerInstance)
-                        {
-                            infoWindow.Activate();
-                            return;
-                        }
-                    }
-                }
-                else
-                {
-                    new InfoWindow("▶ Воспроизведение", "DT_" + SelectedItem.GetType().Name + "_Player", new TreePlayerVm(this, 0, SelectedItem as TreeVm)) { Owner = App.Current.MainWindow }.Show();
-                }
-            }));
     }
 }

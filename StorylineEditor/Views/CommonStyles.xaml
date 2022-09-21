@@ -20,7 +20,6 @@ StorylineEditor распространяется в надежде, что он�
                     xmlns:nodes="clr-namespace:StorylineEditor.Views.Nodes"
                     xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
                     xmlns:fa="http://schemas.fontawesome.io/icons/">
 
     <Thickness x:Key="MarginPaddingThickness">2</Thickness>
@@ -500,61 +499,10 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="Command" Value="{Binding ElementName=tv_Items, Path=SelectedValue.SetBackgroundCommand}"></Setter>
     </Style>
 
-    <Style TargetType="Button" x:Key="S_Button_Play" BasedOn="{StaticResource S_Button_CanvasPanel}">
-        <Setter Property="Content" Value="▶"></Setter>
-        <Setter Property="ToolTip" Value="Воспроизвести"></Setter>
-        <Setter Property="Command" Value="{Binding ElementName=tv_Items, Path=SelectedValue.Parent.PlayCommand}"></Setter>
-    </Style>
-    
     <Style TargetType="Button" x:Key="S_Button_ResetScale" BasedOn="{StaticResource S_Button_CanvasPanel}">
         <Setter Property="Content" Value="⮌"></Setter>
         <Setter Property="ToolTip" Value="Сбросить масштаб"></Setter>
         <Setter Property="Command" Value="{Binding ElementName=tc, Path=ResetScaleCommand}"></Setter>
-    </Style>
-
-    <Style TargetType="Button" x:Key="S_Button_Player_Play" BasedOn="{StaticResource S_Button_CanvasPanel}">
-        <Setter Property="Content" Value="▶"></Setter>
-        <Setter Property="ToolTip" Value="Воспроизвести"></Setter>
-        <Setter Property="Command" Value="{Binding TogglePlayCommand}"></Setter>
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding TreeToPlay.IsPlaying, UpdateSourceTrigger=PropertyChanged}" Value="true">
-                <Setter Property="Content" Value="⏸"></Setter>
-                <Setter Property="ToolTip" Value="Пауза"></Setter>
-            </DataTrigger>
-        </Style.Triggers>
-    </Style>
-
-    <Style TargetType="Button" x:Key="S_Button_Player_Stop" BasedOn="{StaticResource S_Button_CanvasPanel}">
-        <Setter Property="Content" Value="■"></Setter>
-        <Setter Property="ToolTip" Value="Остановить"></Setter>
-        <Setter Property="Command" Value="{Binding StopCommand}"></Setter>
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding ActiveContext, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
-                <Setter Property="IsEnabled" Value="false"></Setter>
-            </DataTrigger>
-        </Style.Triggers>
-    </Style>
-
-    <Style TargetType="Button" x:Key="S_Button_Player_ToggleGender" BasedOn="{StaticResource S_Button_CanvasPanel}">
-        <Setter Property="Content" Value="{Binding Gender, Converter={StaticResource nodeToGenderIconConverter}}"></Setter>
-        <Setter Property="ToolTip" Value="{Binding Gender, Converter={StaticResource nodeToGenderDescriptionConverter}}"></Setter>
-        <Setter Property="Command" Value="{Binding ToggleGenderCommand}"></Setter>
-        <Setter Property="IsEnabled" Value="false"></Setter>
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding ActiveContext, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
-                <Setter Property="IsEnabled" Value="true"></Setter>
-            </DataTrigger>
-        </Style.Triggers>
-    </Style>
-
-    <Style TargetType="Button" x:Key="S_Button_Player_ToggleLock" BasedOn="{StaticResource S_Button_CanvasPanel}">
-        <Setter Property="Content" Value="📝"></Setter>
-        <Setter Property="Command" Value="{Binding ToggleLockCommand}"></Setter>
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding IsLocked, UpdateSourceTrigger=PropertyChanged}" Value="true">
-                <Setter Property="Content" Value="🔑"/>
-            </DataTrigger>
-        </Style.Triggers>
     </Style>
 
     <!--CANVAS PANEL BUTTONS-->
@@ -724,6 +672,51 @@ StorylineEditor распространяется в надежде, что он�
     
     <!--COMMON UI BUTTONS-->
 
+    <Style TargetType="Button" x:Key="S_Button_Player_Play" BasedOn="{StaticResource S_Button_Node}">
+        <Setter Property="Content" Value="▶"></Setter>
+        <Setter Property="ToolTip" Value="Воспроизвести"></Setter>
+        <Setter Property="Command" Value="{Binding TogglePlayCommand}"></Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding TreeToPlay.IsPlaying, UpdateSourceTrigger=PropertyChanged}" Value="true">
+                <Setter Property="Content" Value="⏸"></Setter>
+                <Setter Property="ToolTip" Value="Пауза"></Setter>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="Button" x:Key="S_Button_Player_Stop" BasedOn="{StaticResource S_Button_Node}">
+        <Setter Property="Content" Value="■"></Setter>
+        <Setter Property="ToolTip" Value="Остановить"></Setter>
+        <Setter Property="Command" Value="{Binding StopCommand}"></Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ActiveContext, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                <Setter Property="IsEnabled" Value="false"></Setter>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="Button" x:Key="S_Button_Player_ToggleGender" BasedOn="{StaticResource S_Button_Node}">
+        <Setter Property="Content" Value="{Binding Gender, Converter={StaticResource nodeToGenderIconConverter}}"></Setter>
+        <Setter Property="ToolTip" Value="{Binding Gender, Converter={StaticResource nodeToGenderDescriptionConverter}}"></Setter>
+        <Setter Property="Command" Value="{Binding ToggleGenderCommand}"></Setter>
+        <Setter Property="IsEnabled" Value="false"></Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ActiveContext, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                <Setter Property="IsEnabled" Value="true"></Setter>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="Button" x:Key="S_Button_Player_ToggleLock" BasedOn="{StaticResource S_Button_Node}">
+        <Setter Property="Content" Value="📝"></Setter>
+        <Setter Property="Command" Value="{Binding ToggleLockCommand}"></Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsLocked, UpdateSourceTrigger=PropertyChanged}" Value="true">
+                <Setter Property="Content" Value="🔑"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    
     <Style TargetType="Button" x:Key="S_Button_UI_Remove_TabItem" BasedOn="{StaticResource S_Button_Node}">
         <Setter Property="Background" Value="Red"></Setter>
         <Setter Property="Foreground" Value="White"></Setter>
@@ -1330,14 +1323,6 @@ StorylineEditor распространяется в надежде, что он�
             </ResourceDictionary>
         </DataTemplate.Resources>
         <DockPanel>
-            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
-                <xctk:IntegerUpDown Minimum="1" MinWidth="64" Maximum="60" Value="{Binding ActiveTime, UpdateSourceTrigger=PropertyChanged}" AllowTextInput="False"></xctk:IntegerUpDown>
-                <Button Style="{StaticResource S_Button_Player_Play}"></Button>
-                <Button Style="{StaticResource S_Button_Player_Stop}"></Button>
-                <Button Style="{StaticResource S_Button_Player_ToggleGender}"></Button>
-                <Button Style="{StaticResource S_Button_Player_ToggleLock}"></Button>
-                <TextBlock VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Base}" Text="{Binding ActiveTimeLeft, StringFormat=F2}"></TextBlock>
-            </StackPanel>
             <ContentControl Padding="{StaticResource MarginPaddingThickness}" Margin="{StaticResource MarginPaddingThickness}" Content="{Binding ActiveContext, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
             <DockPanel.Resources>
 

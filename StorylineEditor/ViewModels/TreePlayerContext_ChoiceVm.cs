@@ -17,9 +17,9 @@ using System.Windows.Input;
 
 namespace StorylineEditor.ViewModels
 {
-    public class TreePlayerContext_ChoiceVm : BaseVm<TreePlayerVm>
+    public class TreePlayerContext_ChoiceVm : BaseVm
     {
-        public TreePlayerContext_ChoiceVm(TreePlayerVm parent, List<Node_BaseVm> nodesToSelect) : base(parent, 0)
+        public TreePlayerContext_ChoiceVm(List<Node_BaseVm> nodesToSelect) : base(0)
         {
             NodesToSelect = new List<Node_BaseVm>();
             NodesToSelect.AddRange(nodesToSelect);
@@ -27,6 +27,6 @@ namespace StorylineEditor.ViewModels
         public List<Node_BaseVm> NodesToSelect { get; set; }
 
         protected ICommand selectNodeCommand;
-        public ICommand SelectNodeCommand => selectNodeCommand ?? (selectNodeCommand = new RelayCommand<Node_BaseVm>((node) => { Parent?.StartTransition(node); }, (node) => node != null && NodesToSelect.Contains(node)));
+        public ICommand SelectNodeCommand => selectNodeCommand ?? (selectNodeCommand = new RelayCommand<Node_BaseVm>((node) => { }, (node) => node != null && NodesToSelect.Contains(node)));
     }
 }
