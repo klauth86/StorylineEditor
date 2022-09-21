@@ -66,10 +66,6 @@ namespace StorylineEditor.ViewModels.Nodes
         }
 
         [XmlIgnore]
-        public bool IsSelected => Parent?.Selection.Contains(this) ?? false;
-        public void NotifyIsSelectedChanged() { Notify(nameof(IsSelected)); }
-
-        [XmlIgnore]
         public double PositionX
         {
             get => position.X;

@@ -18,6 +18,15 @@ namespace StorylineEditor.Views.Controls
 {
     public class GraphNode : ContentControl
     {
+        public bool IsSelected
+        {
+            get => (bool)this.GetValue(IsSelectedProperty);
+            set { this.SetValue(IsSelectedProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.Register(
+            "IsSelected", typeof(bool), typeof(GraphNode), new PropertyMetadata(false));
+
         public GraphNode() : base()
         {
             Template = FindResource("GraphNode") as ControlTemplate;

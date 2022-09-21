@@ -49,7 +49,7 @@ namespace StorylineEditor.ViewModels
 
         protected bool isSelected;
         [XmlIgnore]
-        public virtual bool IsSelected
+        public bool IsSelected
         {
             get => isSelected;
             set

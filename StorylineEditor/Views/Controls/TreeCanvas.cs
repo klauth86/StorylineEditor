@@ -10,12 +10,9 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using StorylineEditor.Common;
-using StorylineEditor.ViewModels;
-using StorylineEditor.ViewModels.Nodes;
-using StorylineEditor.ViewModels.Tabs;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,6 +21,11 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using StorylineEditor.Common;
+using StorylineEditor.FileDialog;
+using StorylineEditor.ViewModels;
+using StorylineEditor.ViewModels.Nodes;
+using StorylineEditor.ViewModels.Tabs;
 
 namespace StorylineEditor.Views.Controls
 {
@@ -39,11 +41,17 @@ namespace StorylineEditor.Views.Controls
             set { this.SetValue(TickProperty, value); }
         }
 
+        public static readonly DependencyProperty TickProperty = DependencyProperty.Register(
+            "Tick", typeof(byte), typeof(TreeCanvas), new PropertyMetadata((byte)0, OnTickChanged));
+
         public Vector Snapping
         {
             get => (Vector)this.GetValue(SnappingProperty);
             set { this.SetValue(SnappingProperty, value); }
         }
+
+        public static readonly DependencyProperty SnappingProperty = DependencyProperty.Register(
+            "Snapping", typeof(Vector), typeof(TreeCanvas));
 
         public TreeVm Tree
         {
@@ -51,11 +59,26 @@ namespace StorylineEditor.Views.Controls
             set { this.SetValue(TreeProperty, value); }
         }
 
+        public static readonly DependencyProperty TreeProperty = DependencyProperty.Register(
+            "Tree", typeof(TreeVm), typeof(TreeCanvas), new PropertyMetadata(null, OnTreeChanged));
+
+        public Node_BaseVm SelectedValue
+        {
+            get => (Node_BaseVm)this.GetValue(SelectedValueProperty);
+            set { this.SetValue(SelectedValueProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectedValueProperty = DependencyProperty.Register(
+            "SelectedValue", typeof(Node_BaseVm), typeof(TreeCanvas), new PropertyMetadata(null));
+
         public double Scale
         {
             get => (double)this.GetValue(ScaleProperty);
             set { this.SetValue(ScaleProperty, value); }
         }
+
+        public static readonly DependencyProperty ScaleProperty = DependencyProperty.Register(
+            "Scale", typeof(double), typeof(TreeCanvas), new PropertyMetadata(1.0));
 
         public double TranslationX
         {
@@ -63,26 +86,14 @@ namespace StorylineEditor.Views.Controls
             set { this.SetValue(TranslationXProperty, value); }
         }
 
+        public static readonly DependencyProperty TranslationXProperty = DependencyProperty.Register(
+            "TranslationX", typeof(double), typeof(TreeCanvas), new PropertyMetadata(0.0));
+
         public double TranslationY
         {
             get => (double)this.GetValue(TranslationYProperty);
             set { this.SetValue(TranslationYProperty, value); }
         }
-
-        public static readonly DependencyProperty TickProperty = DependencyProperty.Register(
-            "Tick", typeof(byte), typeof(TreeCanvas), new PropertyMetadata((byte)0, OnTickChanged));
-
-        public static readonly DependencyProperty TreeProperty = DependencyProperty.Register(
-            "Tree", typeof(TreeVm), typeof(TreeCanvas), new PropertyMetadata(null, OnTreeChanged));
-
-        public static readonly DependencyProperty SnappingProperty = DependencyProperty.Register(
-            "Snapping", typeof(Vector), typeof(TreeCanvas));
-
-        public static readonly DependencyProperty ScaleProperty = DependencyProperty.Register(
-            "Scale", typeof(double), typeof(TreeCanvas), new PropertyMetadata(1.0));
-
-        public static readonly DependencyProperty TranslationXProperty = DependencyProperty.Register(
-            "TranslationX", typeof(double), typeof(TreeCanvas), new PropertyMetadata(0.0));
 
         public static readonly DependencyProperty TranslationYProperty = DependencyProperty.Register(
             "TranslationY", typeof(double), typeof(TreeCanvas), new PropertyMetadata(0.0));
@@ -122,59 +133,59 @@ namespace StorylineEditor.Views.Controls
                         }
                     }
                 }
-                else if (treeCanvas.Tree != null && treeCanvas.Tree.IsPlaying)
-                {
-                    if (treeCanvas.TimeLeft > 0)
-                    {
-                        treeCanvas.TimeLeft -= deltaTicks;
+                //else if (treeCanvas.Tree != null && treeCanvas.Tree.IsPlaying)
+                //{
+                //    if (treeCanvas.TimeLeft > 0)
+                //    {
+                //        treeCanvas.TimeLeft -= deltaTicks;
 
-                        if (treeCanvas.TimeLeft < 0)
-                        {
-                            if (treeCanvas.Tree.PlayerState == EPlayerState.NODE)
-                            {
-                                treeCanvas.Tree?.OnDurationAlphaChanged(1);
-                            }
-                            else if (treeCanvas.Tree.PlayerState == EPlayerState.TRANSITION)
-                            {
-                                treeCanvas.TranslationX = treeCanvas.translationTarget.X;
-                                treeCanvas.TranslationY = treeCanvas.translationTarget.Y;
+                //        if (treeCanvas.TimeLeft < 0)
+                //        {
+                //            if (treeCanvas.Tree.PlayerState == EPlayerState.NODE)
+                //            {
+                //                //////treeCanvas.Tree?.OnDurationAlphaChanged(1);
+                //            }
+                //            else if (treeCanvas.Tree.PlayerState == EPlayerState.TRANSITION)
+                //            {
+                //                treeCanvas.TranslationX = treeCanvas.translationTarget.X;
+                //                treeCanvas.TranslationY = treeCanvas.translationTarget.Y;
 
-                                if (treeCanvas.PlayingAdorner != null)
-                                {
-                                    treeCanvas.PlayingAdorner.PositionX = treeCanvas.TranslationX + treeCanvas.ActualWidth / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Width / 2;
-                                    treeCanvas.PlayingAdorner.PositionY = treeCanvas.TranslationY + treeCanvas.ActualHeight / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Height / 2;
-                                }
+                //                if (treeCanvas.PlayingAdorner != null)
+                //                {
+                //                    treeCanvas.PlayingAdorner.PositionX = treeCanvas.TranslationX + treeCanvas.ActualWidth / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Width / 2;
+                //                    treeCanvas.PlayingAdorner.PositionY = treeCanvas.TranslationY + treeCanvas.ActualHeight / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Height / 2;
+                //                }
 
-                                treeCanvas.OnTransformChanged();
-                            }
+                //                treeCanvas.OnTransformChanged();
+                //            }
 
-                            treeCanvas.onStepComplete?.Invoke();
-                        }
-                        else
-                        {
-                            if (treeCanvas.Tree.PlayerState == EPlayerState.NODE)
-                            {
-                                treeCanvas.Tree?.OnDurationAlphaChanged(1.0 - 1.0 * treeCanvas.TimeLeft / treeCanvas.Duration);
-                            }
-                            else if (treeCanvas.Tree.PlayerState == EPlayerState.TRANSITION)
-                            {
-                                double alpha = 1.0 * treeCanvas.TimeLeft / treeCanvas.Duration;
-                                double betta = 1 - alpha;
+                //            treeCanvas.onStepComplete?.Invoke();
+                //        }
+                //        else
+                //        {
+                //            if (treeCanvas.Tree.PlayerState == EPlayerState.NODE)
+                //            {
+                //                //////treeCanvas.Tree?.OnDurationAlphaChanged(1.0 - 1.0 * treeCanvas.TimeLeft / treeCanvas.Duration);
+                //            }
+                //            else if (treeCanvas.Tree.PlayerState == EPlayerState.TRANSITION)
+                //            {
+                //                double alpha = 1.0 * treeCanvas.TimeLeft / treeCanvas.Duration;
+                //                double betta = 1 - alpha;
 
-                                treeCanvas.TranslationX = treeCanvas.translationTarget.X * betta + treeCanvas.TranslationX * alpha;
-                                treeCanvas.TranslationY = treeCanvas.translationTarget.Y * betta + treeCanvas.TranslationY * alpha;
+                //                treeCanvas.TranslationX = treeCanvas.translationTarget.X * betta + treeCanvas.TranslationX * alpha;
+                //                treeCanvas.TranslationY = treeCanvas.translationTarget.Y * betta + treeCanvas.TranslationY * alpha;
 
-                                if (treeCanvas.PlayingAdorner != null)
-                                {
-                                    treeCanvas.PlayingAdorner.PositionX = treeCanvas.TranslationX + treeCanvas.ActualWidth / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Width / 2;
-                                    treeCanvas.PlayingAdorner.PositionY = treeCanvas.TranslationY + treeCanvas.ActualHeight / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Height / 2;
-                                }
+                //                if (treeCanvas.PlayingAdorner != null)
+                //                {
+                //                    treeCanvas.PlayingAdorner.PositionX = treeCanvas.TranslationX + treeCanvas.ActualWidth / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Width / 2;
+                //                    treeCanvas.PlayingAdorner.PositionY = treeCanvas.TranslationY + treeCanvas.ActualHeight / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Height / 2;
+                //                }
 
-                                treeCanvas.OnTransformChanged();
-                            }
-                        }
-                    }
-                }
+                //                treeCanvas.OnTransformChanged();
+                //            }
+                //        }
+                //    }
+                //}
 
                 treeCanvas.PlayingAdorner?.Tick(deltaTicks);
 
@@ -188,19 +199,9 @@ namespace StorylineEditor.Views.Controls
             {
                 if (e.OldValue is TreeVm oldTree)
                 {
-                    oldTree.OnSetBackground -= treeCanvas.OnSetBackground;
-                    oldTree.OnFoundRoot -= treeCanvas.OnFoundRoot;
                     oldTree.OnNodeRemoved -= treeCanvas.OnNodeRemoved;
-                    oldTree.OnNodeAdded -= treeCanvas.OnNodeAdded;
-                    oldTree.OnNodeCopied -= treeCanvas.OnNodeCopied;
-                    oldTree.OnNodePasted -= treeCanvas.OnNodePasted;
                     oldTree.OnLinkRemoved -= treeCanvas.OnLinkRemoved;
-                    oldTree.OnLinkAdded -= treeCanvas.OnLinkAdded;
                     oldTree.OnNodePositionChanged -= treeCanvas.OnNodePositionChanged;
-
-                    oldTree.StartActiveNodeEvent -= treeCanvas.StartActiveNode;
-                    oldTree.StartTransitionEvent -= treeCanvas.StartTransition;
-                    oldTree.StopEvent -= treeCanvas.Stop;
 
                     foreach (var link in oldTree.Links) treeCanvas.OnLinkRemoved(link);
                     foreach (var item in oldTree.Nodes) treeCanvas.OnNodeRemoved(item);
@@ -213,19 +214,9 @@ namespace StorylineEditor.Views.Controls
                     foreach (var node in newTree.Nodes) treeCanvas.AddGraphNode(node);
                     foreach (var link in newTree.Links) treeCanvas.AddGraphLink(link);
 
-                    newTree.OnSetBackground += treeCanvas.OnSetBackground;
-                    newTree.OnFoundRoot += treeCanvas.OnFoundRoot;
                     newTree.OnNodeRemoved += treeCanvas.OnNodeRemoved;
-                    newTree.OnNodeAdded += treeCanvas.OnNodeAdded;
-                    newTree.OnNodeCopied += treeCanvas.OnNodeCopied;
-                    newTree.OnNodePasted += treeCanvas.OnNodePasted;
                     newTree.OnLinkRemoved += treeCanvas.OnLinkRemoved;
-                    newTree.OnLinkAdded += treeCanvas.OnLinkAdded;
                     newTree.OnNodePositionChanged += treeCanvas.OnNodePositionChanged;
-
-                    newTree.StartActiveNodeEvent += treeCanvas.StartActiveNode;
-                    newTree.StartTransitionEvent += treeCanvas.StartTransition;
-                    newTree.StopEvent += treeCanvas.Stop;
                 }
             }
         }
@@ -235,11 +226,6 @@ namespace StorylineEditor.Views.Controls
         const double AnimAlphaDuration = 1;
 
         const double StateAlphaDuration = 0.2;
-
-        private void OnSetBackground(string path)
-        {
-            ////// TODO
-        }
 
         private void OnTransformChanged()
         {
@@ -302,7 +288,7 @@ namespace StorylineEditor.Views.Controls
 
         private void OnFoundRoot(Node_BaseVm node)
         {
-            if (GraphNodes.ContainsKey(node))
+            if (node != null && GraphNodes.ContainsKey(node))
             {
                 translationTarget.X = node.PositionX + GraphNodes[node].ActualWidth / 2 - ActualWidth / 2 / Scale;
                 translationTarget.Y = node.PositionY + GraphNodes[node].ActualHeight / 2 - ActualHeight / 2 / Scale;
@@ -311,10 +297,9 @@ namespace StorylineEditor.Views.Controls
                 TimeLeft = TimeSpan.FromSeconds(AnimAlphaDuration).Ticks;
 
                 IsMovingToNode = true;
+                AddToSelection(node, true);
             }
         }
-
-        private void OnNodeAdded(Node_BaseVm node) { AddGraphNode(node); }
 
         private void OnNodeCopied(Node_BaseVm node)
         {
@@ -328,16 +313,7 @@ namespace StorylineEditor.Views.Controls
             node.PositionY = node.PositionY / Scale + TranslationY;
         }
 
-        private void OnLinkAdded(NodePairVm link) { AddGraphLink(link); }
 
-        private void OnNodePositionChanged(Node_BaseVm node)
-        {
-            if (GraphNodes.ContainsKey(node))
-            {
-                RefreshPosition(GraphNodes[node], (node.PositionX - TranslationX) * Scale, (node.PositionY - TranslationY) * Scale);
-                UpdateLinksLayout(GraphNodes[node]);
-            }
-        }
 
         private void StartActiveNode(Node_BaseVm node, double duration)
         {
@@ -359,7 +335,7 @@ namespace StorylineEditor.Views.Controls
                         TimeLeft = TimeSpan.FromSeconds(AnimAlphaDuration).Ticks;
 
                         onStepComplete = () => StartActiveNode(node, duration);
-                        
+
                         return;
                     }
                 }
@@ -379,7 +355,7 @@ namespace StorylineEditor.Views.Controls
                 Duration = TimeSpan.FromSeconds(duration).Ticks;
                 TimeLeft = TimeSpan.FromSeconds(duration).Ticks;
 
-                onStepComplete = () => { Tree?.OnEndActiveNode(node); };
+                //////onStepComplete = () => { Tree?.OnEndActiveNode(node); };
             }
         }
 
@@ -393,13 +369,11 @@ namespace StorylineEditor.Views.Controls
             Duration = TimeSpan.FromSeconds(2 * AnimAlphaDuration).Ticks;
             TimeLeft = TimeSpan.FromSeconds(2 * AnimAlphaDuration).Ticks;
 
-            onStepComplete = () => Tree?.OnEndTransition(node);
+            //////onStepComplete = () => Tree?.OnEndTransition(node);
         }
 
         private void Stop()
         {
-            Tree.IsPlaying = false;
-
             if (PlayingAdorner != null)
             {
                 Children.Remove(PlayingAdorner);
@@ -407,22 +381,102 @@ namespace StorylineEditor.Views.Controls
             }
         }
 
+
+
+
         private void AddGraphNode(Node_BaseVm node)
         {
-            GraphNode graphNode = new GraphNode();
-            RefreshPosition(graphNode, (node.PositionX - TranslationX) * Scale, (node.PositionY - TranslationY) * Scale);
-            graphNode.RenderTransform = new ScaleTransform(Scale, Scale);
+            if (node != null)
+            {
+                GraphNode graphNode = new GraphNode();
+                RefreshPosition(graphNode, (node.PositionX - TranslationX) * Scale, (node.PositionY - TranslationY) * Scale);
+                graphNode.RenderTransform = new ScaleTransform(Scale, Scale);
 
-            graphNode.DataContext = node;
-            graphNode.SizeChanged += OnNodeSizeChanged;
+                graphNode.DataContext = node;
+                graphNode.SizeChanged += OnNodeSizeChanged;
 
-            Canvas.SetZIndex(graphNode, ActiveZIndex);
-            Children.Add(graphNode);
+                Canvas.SetZIndex(graphNode, ActiveZIndex);
+                Children.Add(graphNode);
 
-            GraphNodes.Add(node, graphNode);
+                GraphNodes.Add(node, graphNode);
+            }
         }
 
         private void OnNodeSizeChanged(object sender, SizeChangedEventArgs e) { UpdateLinksLayout(sender as GraphNode); }
+
+        private void OnNodeRemoved(Node_BaseVm node)
+        {
+            if (node != null && GraphNodes.ContainsKey(node))
+            {
+                GraphNodes[node].SizeChanged -= OnNodeSizeChanged;
+                GraphNodes[node].DataContext = null;
+
+                Children.Remove(GraphNodes[node]);
+
+                GraphNodes.Remove(node);
+            }
+        }
+
+
+
+        private void AddGraphLink(NodePairVm link)
+        {
+            if (link != null)
+            {
+                var fromPair = GraphNodes.FirstOrDefault((gnodePair) => gnodePair.Key.Id == link.FromId);
+                var fromVertice = fromPair.Value;
+                
+                var toPair = GraphNodes.FirstOrDefault((gnodePair) => gnodePair.Key.Id == link.ToId);
+                var toVertice = toPair.Value;
+                
+                if (fromVertice != null && toVertice != null)
+                {
+                    var newGraphLink = fromVertice.DataContext is JNode_StepVm
+                        ? new SequenceLink(fromVertice, toVertice)
+                        : new GraphLink(fromVertice, toVertice);
+
+                    GraphLinks.Add(link, newGraphLink);
+
+                    newGraphLink.LineAndArrow.DataContext = link;
+                    newGraphLink.LinkContent.DataContext = link;
+
+                    Children.Add(newGraphLink.LineAndArrow);
+
+                    Canvas.SetZIndex(newGraphLink.LinkContent, ActiveZIndex + 1);
+                    Children.Add(newGraphLink.LinkContent);
+
+                    // Update layout after Loaded
+                    Dispatcher.BeginInvoke(new Action(() => { newGraphLink.UpdateLayout(); }), DispatcherPriority.Loaded);
+                }
+            }
+        }
+
+        private void OnLinkRemoved(NodePairVm link)
+        {
+            if (link != null && GraphLinks.ContainsKey(link))
+            {
+                GraphLinks[link].LinkContent.DataContext = null;
+                GraphLinks[link].LineAndArrow.DataContext = null;
+
+                Children.Remove(GraphLinks[link].LineAndArrow);
+                Children.Remove(GraphLinks[link].LinkContent);
+
+                GraphLinks.Remove(link);
+            }
+        }
+
+
+
+        private void OnNodePositionChanged(Node_BaseVm node)
+        {
+            if (node != null && GraphNodes.ContainsKey(node))
+            {
+                RefreshPosition(GraphNodes[node], (node.PositionX - TranslationX) * Scale, (node.PositionY - TranslationY) * Scale);
+                UpdateLinksLayout(GraphNodes[node]);
+            }
+        }
+
+
 
         private void UpdateLinksLayout(GraphNode graphNode)
         {
@@ -442,72 +496,13 @@ namespace StorylineEditor.Views.Controls
             }
         }
 
-        private void AddGraphLink(NodePairVm link)
-        {
-            if (Tree != null)
-            {
-                var fromPair = GraphNodes.FirstOrDefault((gnodePair) => gnodePair.Key.Id == link.FromId);
-                var fromVertice = fromPair.Value;
-                var toPair = GraphNodes.First((gnodePair) => gnodePair.Key.Id == link.ToId);
-                var toVertice = toPair.Value;
-                if (fromVertice != null && toVertice != null)
-                {
-                    var newGraphLink = CreateGraphLink(fromVertice, toVertice);
-                    newGraphLink.LineAndArrow.DataContext = link;
-                    newGraphLink.LinkContent.DataContext = link;
 
-                    Children.Add(newGraphLink.LineAndArrow);
-
-                    Canvas.SetZIndex(newGraphLink.LinkContent, ActiveZIndex + 1);
-                    Children.Add(newGraphLink.LinkContent);
-
-                    GraphLinks.Add(link, newGraphLink);
-
-                    // Update layout after Loaded
-                    Dispatcher.BeginInvoke(new Action(() => { newGraphLink.UpdateLayout(); }), DispatcherPriority.Loaded);
-                }
-            }
-        }
-
-        private GraphLink CreateGraphLink(GraphNode fromVertice, GraphNode toVertice)
-        {
-            var from = fromVertice?.DataContext;
-
-            return from is JNode_StepVm
-            ? new SequenceLink(fromVertice, toVertice)
-            : new GraphLink(fromVertice, toVertice);
-        }
-
-        private void OnLinkRemoved(NodePairVm link)
-        {
-            if (GraphLinks.ContainsKey(link))
-            {
-                GraphLinks[link].LinkContent.DataContext = null;
-                GraphLinks[link].LineAndArrow.DataContext = null;
-
-                Children.Remove(GraphLinks[link].LineAndArrow);
-                Children.Remove(GraphLinks[link].LinkContent);
-
-                GraphLinks.Remove(link);
-            }
-        }
-
-        private void OnNodeRemoved(Node_BaseVm node)
-        {
-            if (GraphNodes.ContainsKey(node))
-            {
-                GraphNodes[node].SizeChanged -= OnNodeSizeChanged;
-                GraphNodes[node].DataContext = null;
-
-                Children.Remove(GraphNodes[node]);
-
-                GraphNodes.Remove(node);
-            }
-        }
 
         public TreeCanvas() : base()
         {
             Focusable = true;
+
+            Selection = new ObservableCollection<Node_BaseVm>();
 
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
@@ -527,7 +522,7 @@ namespace StorylineEditor.Views.Controls
             };
 
             BeginAnimation(TickProperty, animation);
-            
+
             MainWindow.FacadeKeyEvent += OnFacadeKeyEvent;
         }
 
@@ -543,6 +538,14 @@ namespace StorylineEditor.Views.Controls
             shiftMode = isDown && (key == Key.LeftShift || key == Key.RightShift);
             ctrlMode = isDown && (key == Key.LeftCtrl || key == Key.RightCtrl);
         }
+
+
+
+        protected Dictionary<Node_BaseVm, GraphNode> GraphNodes = new Dictionary<Node_BaseVm, GraphNode>();
+        protected Dictionary<NodePairVm, GraphLink> GraphLinks = new Dictionary<NodePairVm, GraphLink>();
+
+        protected int rootNodeIndex = -1;
+        public ObservableCollection<Node_BaseVm> Selection { get; }
 
         protected bool IsMovingToNode = false;
         protected long Duration = 0;
@@ -592,8 +595,13 @@ namespace StorylineEditor.Views.Controls
 
         const int ActiveZIndex = 20;
 
+
+
         protected void Reset()
         {
+            rootNodeIndex = -1;
+            Selection.Clear();
+
             IsMovingToNode = false;
             Duration = 0;
             TimeLeft = 0;
@@ -619,10 +627,6 @@ namespace StorylineEditor.Views.Controls
             TranslationX = 0;
             TranslationY = 0;
         }
-
-        protected Dictionary<Node_BaseVm, GraphNode> GraphNodes = new Dictionary<Node_BaseVm, GraphNode>();
-
-        protected Dictionary<NodePairVm, GraphLink> GraphLinks = new Dictionary<NodePairVm, GraphLink>();
 
         protected override void OnMouseWheel(MouseWheelEventArgs e)
         {
@@ -665,14 +669,14 @@ namespace StorylineEditor.Views.Controls
                             {
                                 var newNode = node.Clone<Node_BaseVm>(node.Parent, 0);
                                 Tree.AddNode(newNode);
+                                AddGraphNode(newNode);
 
-                                if (GraphNodes.ContainsKey(newNode))
-                                {
-                                    GraphNodes[newNode].RelativePosition = graphNode.RelativePosition;
-                                    ActiveGraphNode = GraphNodes[newNode];
-                                    dragMode = true;
-                                    e.Handled = true;
-                                }
+                                AddToSelection(newNode, true);
+
+                                GraphNodes[newNode].RelativePosition = graphNode.RelativePosition;
+                                ActiveGraphNode = GraphNodes[newNode];
+                                dragMode = true;
+                                e.Handled = true;
                             }
                         }
                         else if (ctrlMode)
@@ -748,6 +752,9 @@ namespace StorylineEditor.Views.Controls
                                 newNode.PositionX = absoluteMousePositionX;
                                 newNode.PositionY = absoluteMousePositionY;
                                 Tree.AddNode(newNode);
+                                AddGraphNode(newNode);
+
+                                AddToSelection(newNode, true);
                             }
                             e.Handled = true;
                         }
@@ -757,7 +764,7 @@ namespace StorylineEditor.Views.Controls
                         if (e.Source is GraphNode graphNode)
                         {
                             var node = graphNode.DataContext as Node_BaseVm;
-                            node.Parent.AddToSelection(node, !shiftMode);
+                            AddToSelection(node, !shiftMode);
                         }
                     }
                 }
@@ -783,7 +790,8 @@ namespace StorylineEditor.Views.Controls
                     {
                         if (e.Source is GraphNode graphNodeTo && IndicatorLink != null && indicatorLink.CanLink == true)
                         {
-                            Tree.AddLink(ActiveGraphNode.DataContext as Node_BaseVm, graphNodeTo.DataContext as Node_BaseVm);
+                            var link = Tree.AddLink(ActiveGraphNode.DataContext as Node_BaseVm, graphNodeTo.DataContext as Node_BaseVm);
+                            AddGraphLink(link);
                         }
 
                         IndicatorLink = null;
@@ -809,7 +817,7 @@ namespace StorylineEditor.Views.Controls
                             GraphNode graphNode = graphNodesEntry.Value;
 
                             Rect graphNodeRect = new Rect(
-                                node.Position.X, 
+                                node.Position.X,
                                 node.Position.Y,
                                 graphNode.ActualWidth * Scale,
                                 graphNode.ActualHeight * Scale);
@@ -820,16 +828,13 @@ namespace StorylineEditor.Views.Controls
                             if (!selectionRectCopy.IsEmpty) nodesToSelect.Enqueue(graphNodesEntry.Key);
                         }
 
-                        if (nodesToSelect.Count > 0)
-                        {
-                            var firstNode = nodesToSelect.Dequeue();
-                            firstNode.Parent.AddToSelection(firstNode, true);
+                        bool isFirst = true;
 
-                            while (nodesToSelect.Count > 0)
-                            {
-                                var node = nodesToSelect.Dequeue();
-                                node.Parent.AddToSelection(node, false);
-                            }
+                        while (nodesToSelect.Count > 0)
+                        {
+                            var node = nodesToSelect.Dequeue();
+                            AddToSelection(node, isFirst);
+                            isFirst = false;
                         }
 
                         Children.Remove(SelectionRectangle);
@@ -864,9 +869,9 @@ namespace StorylineEditor.Views.Controls
                     var node = (ActiveGraphNode?.DataContext as Node_BaseVm);
                     if (node != null)
                     {
-                        if (node.IsSelected)
+                        if (Selection.Contains(node))
                         {
-                            foreach (var selected in node.Parent.Selection)
+                            foreach (var selected in Selection)
                             {
                                 if (selected == node) continue;
 
@@ -889,7 +894,7 @@ namespace StorylineEditor.Views.Controls
                     TranslationY -= (currentPosition.Y - prevMousePosition.Y) / Scale;
 
                     prevMousePosition = currentPosition;
-                    
+
                     OnTransformChanged();
                 }
                 else if (SelectionRectangle != null)
@@ -927,6 +932,76 @@ namespace StorylineEditor.Views.Controls
             base.OnMouseMove(e);
         }
 
+        public void AddToSelection(Node_BaseVm node, bool withClean)
+        {
+            if (withClean)
+            {
+                foreach (var selectedNode in Selection)
+                {
+                    if (selectedNode != null && GraphNodes.ContainsKey(selectedNode))
+                    {
+                        GraphNodes[selectedNode].IsSelected = false;
+                    }
+                }
+
+                Selection.Clear();
+            }
+
+            if (!Selection.Contains(node))
+            {
+                Selection.Add(node);
+                
+                if (node != null && GraphNodes.ContainsKey(node))
+                {
+                    GraphNodes[node].IsSelected = true;
+                }
+
+                SelectedValue = Selection.Count == 1 ? Selection[0] : null;
+            }
+        }
+
+        protected void RemoveFromSelection(Node_BaseVm node)
+        {
+            if (Selection.Contains(node))
+            {
+                if (node != null && GraphNodes.ContainsKey(node))
+                {
+                    GraphNodes[node].IsSelected = false;
+                }
+
+                Selection.Remove(node);
+
+                SelectedValue = Selection.Count == 1 ? Selection[0] : null;
+            }
+        }
+
+
+        ICommand prevRootCommand;
+        public ICommand PrevRootCommand => prevRootCommand ?? (prevRootCommand = new RelayCommand(() =>
+        {
+            rootNodeIndex = (rootNodeIndex - 1 + 2 * Tree.RootNodeIds.Count) % Tree.RootNodeIds.Count;
+            OnFoundRoot(Tree.Nodes.FirstOrDefault((node) => node.Id == Tree.RootNodeIds[rootNodeIndex]));
+        }, () => Tree != null && Tree.RootNodeIds.Count > 0));
+
+
+        ICommand nextRootCommand;
+        public ICommand NextRootCommand => nextRootCommand ?? (nextRootCommand = new RelayCommand(() =>
+        {
+            rootNodeIndex = (rootNodeIndex + 1 + 2 * Tree.RootNodeIds.Count) % Tree.RootNodeIds.Count;
+            OnFoundRoot(Tree.Nodes.FirstOrDefault((node) => node.Id == Tree.RootNodeIds[rootNodeIndex]));
+        }, () => Tree != null && Tree.RootNodeIds.Count > 0));
+
+
+        const string imageFilter = "Image files (*.png;*.jpg;*.jpeg;*.tiff;*.bmp)|*.png;*.jpg;*.jpeg;*.tiff;*.bmp";
+
+        ICommand setBackgroundCommand;
+        public ICommand SetBackgroundCommand => setBackgroundCommand ?? (setBackgroundCommand = new RelayCommand(() =>
+        {
+            string path = IDialogService.DialogService.OpenFileDialog(imageFilter, false);
+            if (!string.IsNullOrEmpty(path)) { } ////// TODO
+        }));
+
+
         protected ICommand resetScaleCommand;
         public ICommand ResetScaleCommand => resetScaleCommand ?? (resetScaleCommand = new RelayCommand(() =>
         {
@@ -939,5 +1014,18 @@ namespace StorylineEditor.Views.Controls
 
             OnTransformChanged();
         }));
+
+        ICommand toggleGenderCommand;
+        public ICommand ToggleGenderCommand => toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand<Node_BaseVm>((node) =>
+        {
+            node.ToggleGender();
+        }, (node) => node != null));
+
+        ICommand removeCommand;
+        public ICommand RemoveCommand => removeCommand ?? (removeCommand = new RelayCommand<object>((obj) =>
+        {
+            if (obj is NodePairVm link) Tree.RemoveLink(link);
+            if (obj is Node_BaseVm node) Tree.RemoveNode(node);
+        }, (obj) => obj != null));
     }
 }

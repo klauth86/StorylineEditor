@@ -10,53 +10,24 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using StorylineEditor.CopyPasteService;
-using StorylineEditor.Common;
-using StorylineEditor.FileDialog;
-using StorylineEditor.ViewModels.Nodes;
-using StorylineEditor.ViewModels.Tabs;
-using StorylineEditor.Views.Converters;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using System.Xml.Serialization;
-using System.Windows;
 using System.Windows.Data;
 using System.ComponentModel;
-
-public enum EPlayerState
-{
-    NONE,
-    NODE,
-    TRANSITION
-};
+using StorylineEditor.Common;
+using StorylineEditor.ViewModels.Nodes;
+using StorylineEditor.ViewModels.Tabs;
+using StorylineEditor.Views.Converters;
 
 namespace StorylineEditor.ViewModels
 {
     [XmlRoot]
-    public class TreeVm : NonFolderVm, ICopyPaste
+    public class TreeVm : NonFolderVm
     {
-        public event Action<Node_BaseVm> StartTransitionEvent = delegate { };
-        public void OnStartTransition(Node_BaseVm nextNode) { PlayerState = EPlayerState.TRANSITION; StartTransitionEvent(nextNode); }
-
-        public event Action<object> EndTransitionEvent = delegate { };
-        public void OnEndTransition(object nodeObj) { PlayerState = EPlayerState.NONE; EndTransitionEvent(nodeObj); }
-
-        public event Action<Node_BaseVm, double> StartActiveNodeEvent = delegate { };
-        public void OnStartActiveNode(Node_BaseVm node, double activeTime) { PlayerState = EPlayerState.NODE; StartActiveNodeEvent(node, activeTime); }
-
-        public event Action<object> EndActiveNodeEvent = delegate { };
-        public void OnEndActiveNode(object nodeObj) { PlayerState = EPlayerState.NONE; EndActiveNodeEvent(nodeObj); }
-
-        public event Action StopEvent = delegate { };
-        public void OnStop() { StopEvent(); }
-
-        public event Action<double> DurationAlphaChangedEvent = delegate { };
-        public void OnDurationAlphaChanged(double alpha) { DurationAlphaChangedEvent(alpha); }
-
-
         public string InterlocutorId { get; set; }
 
         [XmlIgnore]
@@ -117,33 +88,8 @@ namespace StorylineEditor.ViewModels
 
         public bool IsPlayerDialog => Parent is PlayerDialogsTabVm;
 
-
-        protected bool isPlaying;
-        [XmlIgnore]
-        public bool IsPlaying
-        {
-            get => isPlaying;
-            set
-            {
-                if (isPlaying != value)
-                {
-                    isPlaying = value;
-                    NotifyWithCallerPropName();
-                }
-            }
-        }
-
-        [XmlIgnore]
-        public EPlayerState PlayerState { get; protected set; }
-
-        public event Action<string> OnSetBackground = delegate { };
-        public event Action<Node_BaseVm> OnFoundRoot = delegate { };
-        public event Action<Node_BaseVm> OnNodeAdded = delegate { };
         public event Action<Node_BaseVm> OnNodeRemoved = delegate { };
-        public event Action<Node_BaseVm> OnNodeCopied = delegate { };
-        public event Action<Node_BaseVm> OnNodePasted = delegate { };
 
-        public event Action<NodePairVm> OnLinkAdded = delegate { };
         public event Action<NodePairVm> OnLinkRemoved = delegate { };
 
         public event Action<Node_BaseVm> OnNodePositionChanged = delegate { };
@@ -154,7 +100,6 @@ namespace StorylineEditor.ViewModels
         {
             Nodes = new ObservableCollection<Node_BaseVm>();
             Links = new ObservableCollection<NodePairVm>();
-            Selection = new List<Node_BaseVm>();
 
             RootNodeIds = new List<string>();
         }
@@ -304,100 +249,11 @@ namespace StorylineEditor.ViewModels
             RootNodeIds.Remove(node.Id);
             node.IsRoot = false;
 
-            if (rootNodeIndex >= RootNodeIds.Count) rootNodeIndex--;
-
             Notify(nameof(RootNodes));
             Notify(nameof(Stats));
         }
 
-        int rootNodeIndex = -1;
-
-
-        [XmlIgnore]
-        public readonly List<Node_BaseVm> Selection;
-
-        public void AddToSelection(Node_BaseVm node, bool withClean)
-        {
-            if (withClean)
-            {
-                List<Node_BaseVm> removedFromSelection = new List<Node_BaseVm>(Selection);
-
-                Selection.Clear();
-
-                foreach (var removed in removedFromSelection) removed.NotifyIsSelectedChanged();
-            }
-
-            if (!Selection.Contains(node))
-            {
-                Selection.Add(node);
-                node.NotifyIsSelectedChanged();
-
-                Notify(nameof(Selected));
-            }
-        }
-
-        protected void RemoveFromSelection(Node_BaseVm node)
-        {
-            if (Selection.Contains(node))
-            {
-                Selection.Remove(node);
-                node.NotifyIsSelectedChanged();
-
-                Notify(nameof(Selected));
-            }
-        }
-
-        [XmlIgnore]
-        public Node_BaseVm Selected => Selection.Count == 1 ? Selection[0] : null;
-
-        ICommand toggleGenderCommand;
-        public ICommand ToggleGenderCommand => toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand<Node_BaseVm>((node) => 
-        { 
-            node.ToggleGender();
-            Notify(nameof(Stats));
-        }, (node) => node != null));
-
-        ICommand removeCommand;
-        public ICommand RemoveCommand => removeCommand ?? (removeCommand = new RelayCommand<object>((argument) =>
-        {
-            if (argument is NodePairVm link) RemoveLink_Internal(link);
-            if (argument is Node_BaseVm node) RemoveNode_Internal(node);
-        }, (argument) => argument != null));
-
-        ICommand prevRootCommand;
-        public ICommand PrevRootCommand => prevRootCommand ?? (prevRootCommand = new RelayCommand(() =>
-        {
-            rootNodeIndex = (rootNodeIndex - 1 + 2 * RootNodeIds.Count) % RootNodeIds.Count;
-            Node_BaseVm rootNode = Nodes.FirstOrDefault((node) => node.Id == RootNodeIds[rootNodeIndex]);
-            if (rootNode != null)
-            {
-                AddToSelection(rootNode, true);
-                OnFoundRoot(rootNode);
-            }
-        }, () => RootNodeIds.Count > 0));
-
-        ICommand nextRootCommand;
-        public ICommand NextRootCommand => nextRootCommand ?? (nextRootCommand = new RelayCommand(() =>
-        {
-            rootNodeIndex = (rootNodeIndex + 1 + 2 * RootNodeIds.Count) % RootNodeIds.Count;
-            Node_BaseVm rootNode = Nodes.FirstOrDefault((node) => node.Id == RootNodeIds[rootNodeIndex]);
-            if (rootNode != null)
-            {
-                AddToSelection(rootNode, true);
-                OnFoundRoot(rootNode);
-            }
-        }, () => RootNodeIds.Count > 0));
-
-        const string imageFilter = "Image files (*.png;*.jpg;*.jpeg;*.tiff;*.bmp)|*.png;*.jpg;*.jpeg;*.tiff;*.bmp";
-
-        ICommand setBackgroundCommand;
-        public ICommand SetBackgroundCommand => setBackgroundCommand ?? (setBackgroundCommand = new RelayCommand(() =>
-        {
-            string path = IDialogService.DialogService.OpenFileDialog(imageFilter, false);
-            if (!string.IsNullOrEmpty(path)) OnSetBackground(path);
-        }));
-
-        private void RemoveLink_Internal(NodePairVm link)
+        public void RemoveLink(NodePairVm link)
         {
             Links.Remove(link);
 
@@ -412,13 +268,11 @@ namespace StorylineEditor.ViewModels
             Notify(nameof(Stats));
         }
 
-        private void RemoveNode_Internal(Node_BaseVm node)
+        public void RemoveNode(Node_BaseVm node)
         {
-            RemoveFromSelection(node);
-
             List<NodePairVm> brokenLinks = new List<NodePairVm>();
             foreach (var link in Links) { if (link.FromId == node.Id || link.ToId == node.Id) brokenLinks.Add(link); }
-            foreach (var link in brokenLinks) { RemoveLink_Internal(link); }
+            foreach (var link in brokenLinks) { RemoveLink(link); }
 
             Nodes.Remove(node);
 
@@ -430,18 +284,17 @@ namespace StorylineEditor.ViewModels
             Notify(nameof(Stats));
         }
 
-        public void AddNode(Node_BaseVm node) { if (node != null) AddNode_Internal(node); }
-
-        private void AddNode_Internal(Node_BaseVm node)
+        public void AddNode(Node_BaseVm node)
         {
-            Nodes.Add(node);
-            OnNodeAdded(node);
+            if (node != null)
+            {
+                Nodes.Add(node);
 
-            AddRootNode(node);
+                AddRootNode(node);
 
-            AddToSelection(node, true);
-            NotifyIsValidChanged();
-            Notify(nameof(Stats));
+                NotifyIsValidChanged();
+                Notify(nameof(Stats));
+            }
         }
 
         public bool CanLink(Node_BaseVm from, Node_BaseVm to)
@@ -462,25 +315,26 @@ namespace StorylineEditor.ViewModels
             return true;
         }
 
-        public void AddLink(Node_BaseVm from, Node_BaseVm to)
+        public NodePairVm AddLink(Node_BaseVm from, Node_BaseVm to)
         {
             // Break existing links
             if (!from.AllowsManyChildren)
             {
                 List<NodePairVm> brokenLinks = new List<NodePairVm>();
                 foreach (var link in Links) { if (link.FromId == from.Id) brokenLinks.Add(link); }
-                foreach (var link in brokenLinks) { RemoveLink_Internal(link); }
+                foreach (var link in brokenLinks) { RemoveLink(link); }
             }
 
             RefreshJournalLinks_From(from, to);
             
             var newLink = new NodePairVm() { FromId = from?.Id, ToId = to?.Id, Parent = this };
             Links.Add(newLink);
-            OnLinkAdded(newLink);
 
             RemoveRootNode(to);
 
             NotifyIsValidChanged();
+
+            return newLink;
         }
 
         public void RefreshJournalLinks_To(Node_BaseVm to)
@@ -518,7 +372,7 @@ namespace StorylineEditor.ViewModels
                             brokenLinks.Add(link);
                     }
                 }
-                foreach (var link in brokenLinks) { RemoveLink_Internal(link); }
+                foreach (var link in brokenLinks) { RemoveLink(link); }
             }
 
             // If we add new link from Step node to Alternative node:
@@ -528,7 +382,7 @@ namespace StorylineEditor.ViewModels
             {
                 List<NodePairVm> brokenLinks = new List<NodePairVm>();
                 foreach (var link in Links) { if (link.FromId == from.Id && Nodes.First(node => node.Id == link.ToId) is JNode_StepVm) brokenLinks.Add(link); }
-                foreach (var link in brokenLinks) { RemoveLink_Internal(link); }
+                foreach (var link in brokenLinks) { RemoveLink(link); }
             }
         }
 
@@ -629,108 +483,6 @@ namespace StorylineEditor.ViewModels
             {
                 link.Parent = this;
                 link.SetupParenthood();
-            }
-        }
-
-
-
-        [XmlIgnore]
-        public override bool IsSelected
-        {
-            get => base.IsSelected;
-            set
-            {
-                if (value != isSelected)
-                {
-                    base.IsSelected = value;
-
-                    if (value)
-                    {
-                        ICopyPasteService.Context = this;
-                    }
-                }
-            }
-        }
-
-        public void Copy()
-        {
-            // Only need to copy nodes and links
-            // Other stuff will be generated in Paste
-
-            TreeVm copiedTree = new TreeVm(Parent, 0);
-
-            Dictionary<string, string> nodesMapping = new Dictionary<string, string>();
-
-            long counter = 0;
-
-            foreach (var node in Selection)
-            {
-                var copiedNode = node.Clone<Node_BaseVm>(copiedTree, counter++);
-                OnNodeCopied(copiedNode);
-                copiedTree.Nodes.Add(copiedNode);
-
-                nodesMapping.Add(node.Id, copiedNode.Id);
-
-                System.Diagnostics.Trace.WriteLine(string.Format("{0}|{1}", node.Id, copiedNode.Id));
-            }
-
-            foreach (var link in Links)
-            {
-                if (nodesMapping.ContainsKey(link.FromId) && nodesMapping.ContainsKey(link.ToId))
-                {
-                    copiedTree.Links.Add(new NodePairVm() { FromId = nodesMapping[link.FromId], ToId = nodesMapping[link.ToId] });
-
-                    System.Diagnostics.Trace.WriteLine(string.Format("{0}|{1} => {2}|{3}", link.FromId, link.ToId, nodesMapping[link.FromId], nodesMapping[link.ToId]));
-                }
-            }
-
-            Clipboard.SetText(App.SerializeXmlToString<TreeVm>(copiedTree));
-        }
-
-        public void Paste()
-        {
-            string xmlString = Clipboard.GetText();
-            if (!string.IsNullOrEmpty(xmlString))
-            {
-                try
-                {
-                    TreeVm copiedTree = App.DeserializeXmlFromString<TreeVm>(xmlString);
-
-                    Dictionary<string, string> nodesMapping = new Dictionary<string, string>();
-
-                    long counter = 0;
-
-                    foreach (var node in copiedTree.Nodes)
-                    {
-                        var copiedNode = node.Clone<Node_BaseVm>(this, counter++);
-                        OnNodePasted(copiedNode);
-                        AddNode(copiedNode);
-
-                        nodesMapping.Add(node.Id, copiedNode.Id);
-
-                        copiedNode.SetupParenthood();
-                    }
-
-                    foreach (var link in copiedTree.Links)
-                    {
-                        if (nodesMapping.ContainsKey(link.FromId) && nodesMapping.ContainsKey(link.ToId))
-                        {
-                            AddLink(
-                            Nodes.First(node => node.Id == nodesMapping[link.FromId]),
-                            Nodes.First(node => node.Id == nodesMapping[link.ToId])
-                            );
-                        }
-                    }
-
-                    foreach (var nodeId in nodesMapping.Values)
-                    {
-                        AddToSelection(Nodes.First(node => node.Id == nodeId), false);
-                    }
-                }
-                catch (Exception)
-                {
-
-                }
             }
         }
 
