@@ -14,7 +14,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Input;
 using System.Xml.Serialization;
 using System.Windows.Data;
 using System.ComponentModel;
@@ -219,9 +218,6 @@ namespace StorylineEditor.ViewModels
 
         public List<string> RootNodeIds { get; set; }
 
-        [XmlIgnore]
-        public List<Node_BaseVm> RootNodes => Nodes.Where((node) => RootNodeIds.Contains(node.Id)).ToList();
-
         public bool NodeFilter(object obj)
         {
             if (obj is DNode_CharacterVm ||
@@ -240,7 +236,6 @@ namespace StorylineEditor.ViewModels
             node.IsRoot = true;
             RootNodeIds.Add(node.Id);
 
-            Notify(nameof(RootNodes));
             Notify(nameof(Stats));
         }
 
@@ -249,23 +244,20 @@ namespace StorylineEditor.ViewModels
             RootNodeIds.Remove(node.Id);
             node.IsRoot = false;
 
-            Notify(nameof(RootNodes));
             Notify(nameof(Stats));
         }
 
-        public void RemoveLink(NodePairVm link)
+        public void AddNode(Node_BaseVm node)
         {
-            Links.Remove(link);
-
-            OnLinkRemoved(link);
-
-            if (Links.All(remainingLink => remainingLink.ToId != link.ToId))
+            if (node != null)
             {
-                AddRootNode(Nodes.FirstOrDefault((node) => node.Id == link.ToId));
-            }
+                Nodes.Add(node);
 
-            NotifyIsValidChanged();
-            Notify(nameof(Stats));
+                AddRootNode(node);
+
+                NotifyIsValidChanged();
+                Notify(nameof(Stats));
+            }
         }
 
         public void RemoveNode(Node_BaseVm node)
@@ -282,19 +274,6 @@ namespace StorylineEditor.ViewModels
 
             NotifyIsValidChanged();
             Notify(nameof(Stats));
-        }
-
-        public void AddNode(Node_BaseVm node)
-        {
-            if (node != null)
-            {
-                Nodes.Add(node);
-
-                AddRootNode(node);
-
-                NotifyIsValidChanged();
-                Notify(nameof(Stats));
-            }
         }
 
         public bool CanLink(Node_BaseVm from, Node_BaseVm to)
@@ -317,24 +296,47 @@ namespace StorylineEditor.ViewModels
 
         public NodePairVm AddLink(Node_BaseVm from, Node_BaseVm to)
         {
-            // Break existing links
-            if (!from.AllowsManyChildren)
+            if (from != null && to != null && Nodes.Contains(from) && Nodes.Contains(to))
             {
-                List<NodePairVm> brokenLinks = new List<NodePairVm>();
-                foreach (var link in Links) { if (link.FromId == from.Id) brokenLinks.Add(link); }
-                foreach (var link in brokenLinks) { RemoveLink(link); }
+                // Break existing links
+                if (!from.AllowsManyChildren)
+                {
+                    List<NodePairVm> brokenLinks = new List<NodePairVm>();
+                    foreach (var link in Links) { if (link.FromId == from.Id) brokenLinks.Add(link); }
+                    foreach (var link in brokenLinks) { RemoveLink(link); }
+                }
+
+                RefreshJournalLinks_From(from, to);
+
+                var newLink = new NodePairVm() { FromId = from?.Id, ToId = to?.Id, Parent = this };
+                Links.Add(newLink);
+
+                RemoveRootNode(to);
+
+                NotifyIsValidChanged();
+
+                return newLink;
             }
 
-            RefreshJournalLinks_From(from, to);
-            
-            var newLink = new NodePairVm() { FromId = from?.Id, ToId = to?.Id, Parent = this };
-            Links.Add(newLink);
+            return null;
+        }
 
-            RemoveRootNode(to);
+        public void RemoveLink(NodePairVm link)
+        {
+            if (link != null && Links.Contains(link))
+            {
+                Links.Remove(link);
 
-            NotifyIsValidChanged();
+                OnLinkRemoved(link);
 
-            return newLink;
+                if (Links.All(remainingLink => remainingLink.ToId != link.ToId))
+                {
+                    AddRootNode(Nodes.FirstOrDefault((node) => node.Id == link.ToId));
+                }
+
+                NotifyIsValidChanged();
+                Notify(nameof(Stats));
+            }
         }
 
         public void RefreshJournalLinks_To(Node_BaseVm to)

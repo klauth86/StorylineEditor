@@ -243,8 +243,8 @@ namespace StorylineEditor.Views.Controls
                 RefreshPosition(graphNode, (node.PositionX - TranslationX) * Scale, (node.PositionY - TranslationY) * Scale);
 
                 Rect graphNodeRect = new Rect(
-                    node.Position.X,
-                    node.Position.Y,
+                    node.PositionX,
+                    node.PositionY,
                     graphNode.ActualWidth,
                     graphNode.ActualHeight);
 
@@ -817,8 +817,8 @@ namespace StorylineEditor.Views.Controls
                             GraphNode graphNode = graphNodesEntry.Value;
 
                             Rect graphNodeRect = new Rect(
-                                node.Position.X,
-                                node.Position.Y,
+                                node.PositionX,
+                                node.PositionY,
                                 graphNode.ActualWidth * Scale,
                                 graphNode.ActualHeight * Scale);
 

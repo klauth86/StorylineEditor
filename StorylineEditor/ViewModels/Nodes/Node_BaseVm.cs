@@ -22,7 +22,7 @@ namespace StorylineEditor.ViewModels.Nodes
     public abstract class Node_BaseVm : BaseVm<TreeVm>
     {
         public Node_BaseVm(TreeVm Parent, long additionalTicks) : base(Parent, additionalTicks) {
-            Position = new Vector(0, 0);
+            position = new Vector(0, 0);
             Gender = 0;
         }
 
@@ -65,7 +65,6 @@ namespace StorylineEditor.ViewModels.Nodes
             }
         }
 
-        [XmlIgnore]
         public double PositionX
         {
             get => position.X;
@@ -75,13 +74,11 @@ namespace StorylineEditor.ViewModels.Nodes
                 {
                     position.X = value;
                     NotifyWithCallerPropName();
-                    Notify(nameof(position));
                     Parent?.NodePositionChanged(this);
                 }
             }
         }
 
-        [XmlIgnore]
         public double PositionY
         {
             get => position.Y;
@@ -91,7 +88,6 @@ namespace StorylineEditor.ViewModels.Nodes
                 {
                     position.Y = value;
                     NotifyWithCallerPropName();
-                    Notify(nameof(position));
                     Parent?.NodePositionChanged(this);
                 }
             }
@@ -157,7 +153,7 @@ namespace StorylineEditor.ViewModels.Nodes
 
             if (destObj is Node_BaseVm casted)
             {
-                casted.Position = Position;
+                casted.position = position;
                 casted.gender = gender;
                 casted.label = label;
             }
