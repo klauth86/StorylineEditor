@@ -32,6 +32,8 @@ namespace StorylineEditor.Views.Controls
 {
     class TreeCanvas : Canvas, ICopyPaste
     {
+        const double TransitionDuration = 0.75;
+
         #region TreeVm DP
 
         public Vector Snapping
@@ -301,7 +303,7 @@ namespace StorylineEditor.Views.Controls
 
                 if (PlayingAdorner == null)
                 {
-                    PlayingAdorner = new PlayingAdorner(TimeSpan.FromSeconds(0.2).Ticks);
+                    PlayingAdorner = new PlayingAdorner();
                     PlayingAdorner.RenderTransform = new ScaleTransform() { ScaleX = Scale, ScaleY = Scale };
 
                     Canvas.SetZIndex(PlayingAdorner, -ActiveZIndex);
@@ -314,7 +316,7 @@ namespace StorylineEditor.Views.Controls
                     Children.Add(PlayingAdorner);
                 }
 
-                PlayingAdorner.ToActiveNodeState(GraphNodes[node]);
+                PlayingAdorner.ToStateView(GraphNodes[node], TransitionDuration / 4);
 
                 StopStoryboard();
 
@@ -359,17 +361,15 @@ namespace StorylineEditor.Views.Controls
             {
                 ActiveContext = new TreePlayerContext_TransitionVm();
 
-                PlayingAdorner?.ToTransitionState();
+                PlayingAdorner?.ToTransitionView(TransitionDuration / 4);
 
                 StopStoryboard();
-
-                double duration = 0.75;
 
                 var xAnimation = new DoubleAnimation
                 {
                     From = TranslationX + ActualWidth / 2 / Scale,
                     To = node.PositionX + GraphNodes[node].ActualWidth / 2,
-                    Duration = TimeSpan.FromSeconds(duration),
+                    Duration = TimeSpan.FromSeconds(TransitionDuration),
                     FillBehavior = FillBehavior.HoldEnd
                 };
 
@@ -379,7 +379,7 @@ namespace StorylineEditor.Views.Controls
                 {
                     From = TranslationY + ActualHeight / 2 / Scale,
                     To = node.PositionY + GraphNodes[node].ActualHeight / 2,
-                    Duration = TimeSpan.FromSeconds(duration),
+                    Duration = TimeSpan.FromSeconds(TransitionDuration),
                     FillBehavior = FillBehavior.HoldEnd
                 };
 
@@ -469,15 +469,15 @@ namespace StorylineEditor.Views.Controls
 
         private void PauseUnpause()
         {
-            if (Storyboard.GetIsPaused())
+            if (Storyboard.GetIsPaused(this))
             {
-                Storyboard.Resume();
+                Storyboard.Resume(this);
                 IsPlaying = true;
             }
             else
             {
                 IsPlaying = false;
-                Storyboard.Pause();
+                Storyboard.Pause(this);
             }
         }
 
