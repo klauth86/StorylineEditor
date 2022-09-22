@@ -22,6 +22,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using StorylineEditor.Common;
+using StorylineEditor.CopyPasteService;
 using StorylineEditor.FileDialog;
 using StorylineEditor.ViewModels;
 using StorylineEditor.ViewModels.Nodes;
@@ -29,7 +30,7 @@ using StorylineEditor.ViewModels.Tabs;
 
 namespace StorylineEditor.Views.Controls
 {
-    class TreeCanvas : Canvas
+    class TreeCanvas : Canvas, ICopyPaste
     {
         #region TreeVm DP
 
@@ -281,15 +282,16 @@ namespace StorylineEditor.Views.Controls
                 AddToSelection(node, true);
             }
         }
+        
 
 
-
+        public void Copy() { }
         private void OnNodeCopied(Node_BaseVm node)
         {
             node.PositionX = (node.PositionX - TranslationX) * Scale;
             node.PositionY = (node.PositionY - TranslationY) * Scale;
         }
-
+        public void Paste() { }
         private void OnNodePasted(Node_BaseVm node)
         {
             node.PositionX = node.PositionX / Scale + TranslationX;
@@ -552,6 +554,26 @@ namespace StorylineEditor.Views.Controls
 
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
+        }
+
+        protected override void OnGotFocus(RoutedEventArgs e)
+        {
+            base.OnGotFocus(e);
+
+            if (ICopyPasteService.Context != this)
+            {
+                ICopyPasteService.Context = this;
+            }
+        }
+
+        protected override void OnLostFocus(RoutedEventArgs e)
+        {
+            if (ICopyPasteService.Context == this)
+            {
+                ICopyPasteService.Context = null;
+            }
+
+            base.OnLostFocus(e);
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -1030,6 +1052,7 @@ namespace StorylineEditor.Views.Controls
                 SelectedValue = Selection.Count == 1 ? Selection[0] : null;
             }
         }
+
 
 
         ICommand prevRootCommand;
