@@ -144,7 +144,15 @@ namespace StorylineEditor.Views.Controls
                             treeCanvas.TranslationX = treeCanvas.translationTarget.X;
                             treeCanvas.TranslationY = treeCanvas.translationTarget.Y;
 
+                            if (treeCanvas.PlayingAdorner != null)
+                            {
+                                treeCanvas.PlayingAdorner.PositionX = treeCanvas.TranslationX + treeCanvas.ActualWidth / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Width / 2;
+                                treeCanvas.PlayingAdorner.PositionY = treeCanvas.TranslationY + treeCanvas.ActualHeight / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Height / 2;
+                            }
+
                             treeCanvas.OnTransformChanged();
+
+                            treeCanvas.onStepComplete?.Invoke();
 
                             treeCanvas.IsMovingToNode = false;
                         }
@@ -156,63 +164,16 @@ namespace StorylineEditor.Views.Controls
                             treeCanvas.TranslationX = treeCanvas.translationTarget.X * betta + treeCanvas.TranslationX * alpha;
                             treeCanvas.TranslationY = treeCanvas.translationTarget.Y * betta + treeCanvas.TranslationY * alpha;
 
+                            if (treeCanvas.PlayingAdorner != null)
+                            {
+                                treeCanvas.PlayingAdorner.PositionX = treeCanvas.TranslationX + treeCanvas.ActualWidth / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Width / 2;
+                                treeCanvas.PlayingAdorner.PositionY = treeCanvas.TranslationY + treeCanvas.ActualHeight / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Height / 2;
+                            }
+
                             treeCanvas.OnTransformChanged();
                         }
                     }
                 }
-                //else if (treeCanvas.Tree != null && treeCanvas.Tree.IsPlaying)
-                //{
-                //    if (treeCanvas.TimeLeft > 0)
-                //    {
-                //        treeCanvas.TimeLeft -= deltaTicks;
-
-                //        if (treeCanvas.TimeLeft < 0)
-                //        {
-                //            if (treeCanvas.Tree.PlayerState == EPlayerState.NODE)
-                //            {
-                //                //////treeCanvas.Tree?.OnDurationAlphaChanged(1);
-                //            }
-                //            else if (treeCanvas.Tree.PlayerState == EPlayerState.TRANSITION)
-                //            {
-                //                treeCanvas.TranslationX = treeCanvas.translationTarget.X;
-                //                treeCanvas.TranslationY = treeCanvas.translationTarget.Y;
-
-                //                if (treeCanvas.PlayingAdorner != null)
-                //                {
-                //                    treeCanvas.PlayingAdorner.PositionX = treeCanvas.TranslationX + treeCanvas.ActualWidth / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Width / 2;
-                //                    treeCanvas.PlayingAdorner.PositionY = treeCanvas.TranslationY + treeCanvas.ActualHeight / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Height / 2;
-                //                }
-
-                //                treeCanvas.OnTransformChanged();
-                //            }
-
-                //            treeCanvas.onStepComplete?.Invoke();
-                //        }
-                //        else
-                //        {
-                //            if (treeCanvas.Tree.PlayerState == EPlayerState.NODE)
-                //            {
-                //                //////treeCanvas.Tree?.OnDurationAlphaChanged(1.0 - 1.0 * treeCanvas.TimeLeft / treeCanvas.Duration);
-                //            }
-                //            else if (treeCanvas.Tree.PlayerState == EPlayerState.TRANSITION)
-                //            {
-                //                double alpha = 1.0 * treeCanvas.TimeLeft / treeCanvas.Duration;
-                //                double betta = 1 - alpha;
-
-                //                treeCanvas.TranslationX = treeCanvas.translationTarget.X * betta + treeCanvas.TranslationX * alpha;
-                //                treeCanvas.TranslationY = treeCanvas.translationTarget.Y * betta + treeCanvas.TranslationY * alpha;
-
-                //                if (treeCanvas.PlayingAdorner != null)
-                //                {
-                //                    treeCanvas.PlayingAdorner.PositionX = treeCanvas.TranslationX + treeCanvas.ActualWidth / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Width / 2;
-                //                    treeCanvas.PlayingAdorner.PositionY = treeCanvas.TranslationY + treeCanvas.ActualHeight / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Height / 2;
-                //                }
-
-                //                treeCanvas.OnTransformChanged();
-                //            }
-                //        }
-                //    }
-                //}
 
                 treeCanvas.PlayingAdorner?.Tick(deltaTicks);
 
