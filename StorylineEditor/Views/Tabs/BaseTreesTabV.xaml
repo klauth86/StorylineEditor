@@ -45,20 +45,14 @@ StorylineEditor распространяется в надежде, что он�
                     <Button Style="{StaticResource S_Button_Player_ToggleGender}"></Button>
                     <Button Style="{StaticResource S_Button_Player_ToggleLock}"></Button>
                     <TextBlock VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Base}" Text="{Binding ActiveTimeLeft, StringFormat=F2}"></TextBlock>
-                </StackPanel>
-                
+                </StackPanel>                
             </Grid>
             
             <GridSplitter Grid.Column="1"></GridSplitter>
 
-            <controls:TreeCanvas Name="tc" Snapping="10, 10" Grid.Column="2" ClipToBounds="True" Tree="{Binding ElementName=tv_Items, Path=SelectedValue, UpdateSourceTrigger=PropertyChanged}" Background="Gray"></controls:TreeCanvas>
+            <controls:TreeCanvas x:Name="tc" Snapping="10, 10" Grid.Column="2" ClipToBounds="True" Tree="{Binding ElementName=tv_Items, Path=SelectedValue, UpdateSourceTrigger=PropertyChanged}" Background="Gray"></controls:TreeCanvas>
 
-            <Grid Name="gr_Actions" Grid.Column="2" VerticalAlignment="Top" HorizontalAlignment="Left">
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-
+            <StackPanel Name="sp_Actions" Grid.Column="2" VerticalAlignment="Top" HorizontalAlignment="Left">
                 <StackPanel Orientation="Horizontal">
                     <ItemsControl Name="ic_nodeTypes" ItemsSource="{Binding NodeTypes, UpdateSourceTrigger=PropertyChanged}">
                         <ItemsControl.ItemsPanel>
@@ -92,41 +86,39 @@ StorylineEditor распространяется в надежде, что он�
 
                     <Button Style="{StaticResource S_Button_ResetScale}"></Button>
 
-                    <TextBlock VerticalAlignment="Center" MinWidth="64" Style="{StaticResource S_TextBlock_GNodeDescriptionShort}" Text="{Binding Scale, ElementName=tc, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBlock>
+                    <TextBlock VerticalAlignment="Top" MinWidth="64" Style="{StaticResource S_TextBlock_GNodeDescriptionShort}">
+                        <Run Text="{Binding Scale, ElementName=tc, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></Run>
+                        <Run> (</Run>
+                        <Run Text="{Binding ElementName=tc, Path=TranslationX, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></Run>
+                        <Run>, </Run>
+                        <Run Text="{Binding ElementName=tc, Path=TranslationY, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></Run>
+                        <Run>)</Run>
+                    </TextBlock>
                     
                 </StackPanel>
-
-                <TextBlock Text="{Binding SelectedNodeType, Converter={StaticResource typeToDescriptionConverter}}" Grid.Row="1" Style="{StaticResource S_TextBlock_GNodeDescriptionShort}"></TextBlock>
-                
-            </Grid>
-
-            <Grid Name="gr_Coords" Grid.Column="2" VerticalAlignment="Top" HorizontalAlignment="Right">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <TextBox VerticalAlignment="Center" MinWidth="64" Grid.Column="0" Style="{StaticResource S_TextBox_Input}" Text="{Binding ElementName=tv_Items, Path=SelectedValue.Selected.PositionX, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBox>
-                <TextBox VerticalAlignment="Center" MinWidth="64" Grid.Column="1" Style="{StaticResource S_TextBox_Input}" Text="{Binding ElementName=tv_Items, Path=SelectedValue.Selected.PositionY, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBox>
-            </Grid>
-
-            <StackPanel Orientation="Horizontal" Grid.Column="2" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-                <TextBlock VerticalAlignment="Center" Grid.Column="0" Style="{StaticResource S_TextBlock_GNodeDescriptionShort}" Text="{Binding ElementName=tc, Path=TranslationX, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBlock>
-                <TextBlock VerticalAlignment="Center" Grid.Column="1" Style="{StaticResource S_TextBlock_GNodeDescriptionShort}" Text="{Binding ElementName=tc, Path=TranslationY, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBlock>
+                <TextBlock Text="{Binding SelectedNodeType, Converter={StaticResource typeToDescriptionConverter}}" Style="{StaticResource S_TextBlock_GNodeDescriptionShort}"></TextBlock>                
             </StackPanel>
-            
+
+            <StackPanel Name="sp_Coords" Orientation="Horizontal" Grid.Column="2" VerticalAlignment="Top" HorizontalAlignment="Right">
+                <TextBox MinWidth="64" Style="{StaticResource S_TextBox_Input}" Text="{Binding ElementName=tc, Path=SelectedValue.PositionX, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBox>
+                <TextBox MinWidth="64" Style="{StaticResource S_TextBox_Input}" Text="{Binding ElementName=tc, Path=SelectedValue.PositionY, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBox>
+            </StackPanel>
+
             <GridSplitter Grid.Column="3"></GridSplitter>
 
             <ContentControl Grid.Column="4" Content="{Binding ElementName=tc, Path=SelectedValue, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
         </Grid>
         <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding ElementName=tv_Items, Path=SelectedValue.Selected}" Value="{x:Null}">
-                <Setter TargetName="gr_Coords" Property="Visibility" Value="Collapsed"></Setter>
+            <DataTrigger Binding="{Binding ElementName=tc, Path=SelectedValue, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                <Setter TargetName="sp_Coords" Property="Visibility" Value="Collapsed"></Setter>
             </DataTrigger>
-            <DataTrigger Binding="{Binding ElementName=tv_Items, Path=SelectedValue}" Value="{x:Null}">
-                <Setter TargetName="gr_Actions" Property="Visibility" Value="Collapsed"></Setter>
+            
+            <DataTrigger Binding="{Binding ElementName=tv_Items, Path=SelectedValue, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                <Setter TargetName="sp_Actions" Property="Visibility" Value="Collapsed"></Setter>
             </DataTrigger>
-            <DataTrigger Binding="{Binding ElementName=tv_Items, Path=SelectedValue.IsFolder}" Value="true">
-                <Setter TargetName="gr_Actions" Property="Visibility" Value="Collapsed"></Setter>
+            
+            <DataTrigger Binding="{Binding ElementName=tv_Items, Path=SelectedValue.IsFolder, UpdateSourceTrigger=PropertyChanged}" Value="true">
+                <Setter TargetName="sp_Actions" Property="Visibility" Value="Collapsed"></Setter>
             </DataTrigger>
 
             <DataTrigger Binding="{Binding IsDragOver, UpdateSourceTrigger=PropertyChanged}" Value="true">

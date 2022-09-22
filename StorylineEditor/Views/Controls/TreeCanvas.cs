@@ -383,7 +383,6 @@ namespace StorylineEditor.Views.Controls
 
 
 
-
         private void AddGraphNode(Node_BaseVm node)
         {
             if (node != null)
@@ -406,6 +405,8 @@ namespace StorylineEditor.Views.Controls
 
         private void OnNodeRemoved(Node_BaseVm node)
         {
+            RemoveFromSelection(node);
+
             if (node != null && GraphNodes.ContainsKey(node))
             {
                 GraphNodes[node].SizeChanged -= OnNodeSizeChanged;
@@ -854,34 +855,36 @@ namespace StorylineEditor.Views.Controls
             {
                 if (dragMode)
                 {
-                    var mousePosition = e.GetPosition(this);
-                    var absoluteMousePosition = new Point(mousePosition.X / Scale, mousePosition.Y / Scale) - ActiveGraphNode.RelativePosition;
-
-                    if (Snapping.X * Snapping.Y >= 1)
-                    {
-                        absoluteMousePosition.X = Math.Round(absoluteMousePosition.X / Snapping.X) * Snapping.X;
-                        absoluteMousePosition.Y = Math.Round(absoluteMousePosition.Y / Snapping.Y) * Snapping.Y;
-                    }
-
-                    double absolutePositionX = TranslationX + absoluteMousePosition.X;
-                    double absolutePositionY = TranslationY + absoluteMousePosition.Y;
-
                     var node = (ActiveGraphNode?.DataContext as Node_BaseVm);
                     if (node != null)
                     {
-                        if (Selection.Contains(node))
-                        {
-                            foreach (var selected in Selection)
-                            {
-                                if (selected == node) continue;
+                        var mousePosition = e.GetPosition(this);
 
-                                selected.PositionX = absolutePositionX + selected.PositionX - node.PositionX;
-                                selected.PositionY = absolutePositionY + selected.PositionY - node.PositionY;
-                            }
+                        double absolutePositionX = TranslationX + mousePosition.X / Scale - ActiveGraphNode.RelativePosition.X;
+                        double absolutePositionY = TranslationY + mousePosition.Y / Scale - ActiveGraphNode.RelativePosition.Y;
+
+                        if (Snapping.X * Snapping.Y >= 1)
+                        {
+                            absolutePositionX = Math.Round(absolutePositionX / Snapping.X) * Snapping.X;
+                            absolutePositionY = Math.Round(absolutePositionY / Snapping.Y) * Snapping.Y;
                         }
 
-                        node.PositionX = absolutePositionX;
-                        node.PositionY = absolutePositionY;
+                        if (absolutePositionX != 0 || absolutePositionY != 0)
+                        {
+                            if (Selection.Contains(node))
+                            {
+                                foreach (var selected in Selection)
+                                {
+                                    if (selected == node) continue;
+
+                                    selected.PositionX = absolutePositionX + selected.PositionX - node.PositionX;
+                                    selected.PositionY = absolutePositionY + selected.PositionY - node.PositionY;
+                                }
+                            }
+
+                            node.PositionX = absolutePositionX;
+                            node.PositionY = absolutePositionY;
+                        }
                     }
                 }
                 else if (dragAllMode)
@@ -1015,11 +1018,13 @@ namespace StorylineEditor.Views.Controls
             OnTransformChanged();
         }));
 
+
         ICommand toggleGenderCommand;
         public ICommand ToggleGenderCommand => toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand<Node_BaseVm>((node) =>
         {
             node.ToggleGender();
         }, (node) => node != null));
+
 
         ICommand removeCommand;
         public ICommand RemoveCommand => removeCommand ?? (removeCommand = new RelayCommand<object>((obj) =>
