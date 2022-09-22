@@ -674,12 +674,12 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="Content" Value="▶"></Setter>
         <Setter Property="ToolTip" Value="Воспроизвести"></Setter>
         <Setter Property="Command" Value="{Binding ElementName=tc, Path=TogglePlayCommand}"></Setter>
-        <!--<Style.Triggers>
-            <DataTrigger Binding="{Binding TreeToPlay.IsPlaying, UpdateSourceTrigger=PropertyChanged}" Value="true">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ElementName=tc, Path=IsPlaying, UpdateSourceTrigger=PropertyChanged}" Value="true">
                 <Setter Property="Content" Value="⏸"></Setter>
                 <Setter Property="ToolTip" Value="Пауза"></Setter>
             </DataTrigger>
-        </Style.Triggers>-->
+        </Style.Triggers>
     </Style>
 
     <Style TargetType="Button" x:Key="S_Button_Player_Stop" BasedOn="{StaticResource S_Button_Node}">

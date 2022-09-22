@@ -125,6 +125,15 @@ namespace StorylineEditor.Views.Controls
         public static readonly DependencyProperty GenderToPlayProperty = DependencyProperty.Register(
             "GenderToPlay", typeof(int), typeof(TreeCanvas), new PropertyMetadata(1));
 
+        public bool IsPlaying
+        {
+            get => (bool)this.GetValue(IsPlayingProperty);
+            set { this.SetValue(IsPlayingProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsPlayingProperty = DependencyProperty.Register(
+            "IsPlaying", typeof(bool), typeof(TreeCanvas), new PropertyMetadata(false));
+
         private static void OnTickChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is TreeCanvas treeCanvas)
@@ -133,7 +142,7 @@ namespace StorylineEditor.Views.Controls
 
                 long deltaTicks = ticks - treeCanvas.prevTicks;
 
-                if (treeCanvas.IsMovingToNode)
+                if (treeCanvas.IsPlaying || treeCanvas.IsMovingToNode)
                 {
                     if (treeCanvas.TimeLeft > 0)
                     {
@@ -173,11 +182,11 @@ namespace StorylineEditor.Views.Controls
                             treeCanvas.OnTransformChanged();
                         }
                     }
+
+                    treeCanvas.PlayingAdorner?.Tick(deltaTicks);
+
+                    treeCanvas.prevTicks = ticks;
                 }
-
-                treeCanvas.PlayingAdorner?.Tick(deltaTicks);
-
-                treeCanvas.prevTicks = ticks;
             }
         }
 
@@ -272,6 +281,8 @@ namespace StorylineEditor.Views.Controls
                 AddToSelection(node, true);
             }
         }
+
+
 
         private void OnNodeCopied(Node_BaseVm node)
         {
@@ -408,13 +419,12 @@ namespace StorylineEditor.Views.Controls
                 PlayingAdorner = null;
             }
 
+            IsPlaying = false;
+
             ActiveContext = null;
         }
 
-        private void PauseUnpause()
-        {
-
-        }
+        private void PauseUnpause() { IsPlaying = !IsPlaying; }
 
 
 
@@ -1062,7 +1072,7 @@ namespace StorylineEditor.Views.Controls
 
         ICommand toggleGenderCommand;
         public ICommand ToggleGenderCommand =>
-            toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand<Node_BaseVm>((node) => { node.ToggleGender(); }, (node) => node != null));
+            toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand<Node_BaseVm>((node) => node.ToggleGender(), (node) => node != null));
 
 
         ICommand removeCommand;
@@ -1075,12 +1085,12 @@ namespace StorylineEditor.Views.Controls
 
         ICommand togglePlayCommand;
         public ICommand TogglePlayCommand =>
-            togglePlayCommand ?? (togglePlayCommand = new RelayCommand(() => { if (ActiveContext != null) PauseUnpause(); else StartTransition(SelectedValue); }, () => SelectedValue != null));
+            togglePlayCommand ?? (togglePlayCommand = new RelayCommand(() => { if (ActiveContext != null) PauseUnpause(); else { StartTransition(SelectedValue); IsPlaying = ActiveContext != null; } }, () => SelectedValue != null));
 
 
         ICommand stopCommand;
         public ICommand StopCommand =>
-            stopCommand ?? (stopCommand = new RelayCommand(() => { Stop(); }, () => ActiveContext != null));
+            stopCommand ?? (stopCommand = new RelayCommand(() => Stop(), () => ActiveContext != null));
 
 
         ICommand toggleGenderToPlayCommand;
