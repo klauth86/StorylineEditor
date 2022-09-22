@@ -98,6 +98,15 @@ namespace StorylineEditor.Views.Controls
         public static readonly DependencyProperty TranslationYProperty = DependencyProperty.Register(
             "TranslationY", typeof(double), typeof(TreeCanvas), new PropertyMetadata(0.0));
 
+        public int StateDuration
+        {
+            get => (int)this.GetValue(StateDurationProperty);
+            set { this.SetValue(StateDurationProperty, value); }
+        }
+
+        public static readonly DependencyProperty StateDurationProperty = DependencyProperty.Register(
+            "StateDuration", typeof(int), typeof(TreeCanvas), new PropertyMetadata(4));
+
         private static void OnTickChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is TreeCanvas treeCanvas)
