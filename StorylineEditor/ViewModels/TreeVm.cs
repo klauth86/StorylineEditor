@@ -92,7 +92,6 @@ namespace StorylineEditor.ViewModels
         public event Action<NodePairVm> OnLinkRemoved = delegate { };
 
         public event Action<Node_BaseVm> OnNodePositionChanged = delegate { };
-
         public void NodePositionChanged(Node_BaseVm node) { OnNodePositionChanged(node); }
 
         public TreeVm(BaseVm<FullContextVm> Parent, long additionalTicks) : base(Parent, additionalTicks)
@@ -256,7 +255,6 @@ namespace StorylineEditor.ViewModels
                 AddRootNode(node);
 
                 NotifyIsValidChanged();
-                Notify(nameof(Stats));
             }
         }
 
@@ -273,7 +271,6 @@ namespace StorylineEditor.ViewModels
             RemoveRootNode(node);
 
             NotifyIsValidChanged();
-            Notify(nameof(Stats));
         }
 
         public bool CanLink(Node_BaseVm from, Node_BaseVm to)

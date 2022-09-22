@@ -855,6 +855,8 @@ namespace StorylineEditor.Views.Controls
             {
                 if (dragMode)
                 {
+                    IsMovingToNode = false;
+
                     var node = (ActiveGraphNode?.DataContext as Node_BaseVm);
                     if (node != null)
                     {
@@ -902,6 +904,8 @@ namespace StorylineEditor.Views.Controls
                 }
                 else if (SelectionRectangle != null)
                 {
+                    IsMovingToNode = false;
+
                     var currentPosition = (Vector)e.GetPosition(this);
 
                     Canvas.SetLeft(SelectionRectangle, Math.Min(prevMousePosition.X, currentPosition.X));
@@ -919,6 +923,8 @@ namespace StorylineEditor.Views.Controls
                 }
                 else if (linkMode)
                 {
+                    IsMovingToNode = false;
+
                     if (e.Source is GraphNode graphNodeTo)
                     {
                         IndicatorLink.CanLink = Tree.CanLink(ActiveGraphNode.DataContext as Node_BaseVm, graphNodeTo.DataContext as Node_BaseVm);
