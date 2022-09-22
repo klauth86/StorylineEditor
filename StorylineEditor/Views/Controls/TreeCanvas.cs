@@ -34,17 +34,6 @@ namespace StorylineEditor.Views.Controls
     {
         #region TreeVm DP
 
-        long prevTicks = 0;
-
-        public byte Tick
-        {
-            get => (byte)this.GetValue(TickProperty);
-            set { this.SetValue(TickProperty, value); }
-        }
-
-        public static readonly DependencyProperty TickProperty = DependencyProperty.Register(
-            "Tick", typeof(byte), typeof(TreeCanvas), new PropertyMetadata((byte)0, OnTickChanged));
-
         public Vector Snapping
         {
             get => (Vector)this.GetValue(SnappingProperty);
@@ -80,6 +69,24 @@ namespace StorylineEditor.Views.Controls
 
         public static readonly DependencyProperty ScaleProperty = DependencyProperty.Register(
             "Scale", typeof(double), typeof(TreeCanvas), new PropertyMetadata(1.0));
+
+        public double AnimTranslationX
+        {
+            get => (double)this.GetValue(AnimTranslationXProperty);
+            set { this.SetValue(AnimTranslationXProperty, value); }
+        }
+
+        public static readonly DependencyProperty AnimTranslationXProperty = DependencyProperty.Register(
+            "AnimTranslationX", typeof(double), typeof(TreeCanvas), new PropertyMetadata(0.0, OnAnimTranslationChanged));
+
+        public double AnimTranslationY
+        {
+            get => (double)this.GetValue(AnimTranslationYProperty);
+            set { this.SetValue(AnimTranslationYProperty, value); }
+        }
+
+        public static readonly DependencyProperty AnimTranslationYProperty = DependencyProperty.Register(
+            "AnimTranslationY", typeof(double), typeof(TreeCanvas), new PropertyMetadata(0.0, OnAnimTranslationChanged));
 
         public double TranslationX
         {
@@ -135,62 +142,6 @@ namespace StorylineEditor.Views.Controls
         public static readonly DependencyProperty IsPlayingProperty = DependencyProperty.Register(
             "IsPlaying", typeof(bool), typeof(TreeCanvas), new PropertyMetadata(false));
 
-        private static void OnTickChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (d is TreeCanvas treeCanvas)
-            {
-                long ticks = DateTime.Now.Ticks;
-
-                long deltaTicks = ticks - treeCanvas.prevTicks;
-
-                if (treeCanvas.IsPlaying || treeCanvas.IsMovingToNode)
-                {
-                    if (treeCanvas.TimeLeft > 0)
-                    {
-                        treeCanvas.TimeLeft -= deltaTicks;
-
-                        if (treeCanvas.TimeLeft < 0)
-                        {
-                            treeCanvas.TranslationX = treeCanvas.translationTarget.X;
-                            treeCanvas.TranslationY = treeCanvas.translationTarget.Y;
-
-                            if (treeCanvas.PlayingAdorner != null)
-                            {
-                                treeCanvas.PlayingAdorner.PositionX = treeCanvas.TranslationX + treeCanvas.ActualWidth / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Width / 2;
-                                treeCanvas.PlayingAdorner.PositionY = treeCanvas.TranslationY + treeCanvas.ActualHeight / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Height / 2;
-                            }
-
-                            treeCanvas.OnTransformChanged();
-
-                            treeCanvas.onStepComplete?.Invoke();
-
-                            treeCanvas.IsMovingToNode = false;
-                        }
-                        else
-                        {
-                            double alpha = 1.0 * treeCanvas.TimeLeft / treeCanvas.Duration;
-                            double betta = 1 - alpha;
-
-                            treeCanvas.TranslationX = treeCanvas.translationTarget.X * betta + treeCanvas.TranslationX * alpha;
-                            treeCanvas.TranslationY = treeCanvas.translationTarget.Y * betta + treeCanvas.TranslationY * alpha;
-
-                            if (treeCanvas.PlayingAdorner != null)
-                            {
-                                treeCanvas.PlayingAdorner.PositionX = treeCanvas.TranslationX + treeCanvas.ActualWidth / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Width / 2;
-                                treeCanvas.PlayingAdorner.PositionY = treeCanvas.TranslationY + treeCanvas.ActualHeight / 2 / treeCanvas.Scale - treeCanvas.PlayingAdorner.Height / 2;
-                            }
-
-                            treeCanvas.OnTransformChanged();
-                        }
-                    }
-
-                    treeCanvas.PlayingAdorner?.Tick(deltaTicks);
-
-                    treeCanvas.prevTicks = ticks;
-                }
-            }
-        }
-
         private static void OnTreeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is TreeCanvas treeCanvas)
@@ -216,6 +167,17 @@ namespace StorylineEditor.Views.Controls
                     newTree.OnLinkRemoved += treeCanvas.OnLinkRemoved;
                     newTree.OnNodePositionChanged += treeCanvas.OnNodePositionChanged;
                 }
+            }
+        }
+
+        private static void OnAnimTranslationChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is TreeCanvas treeCanvas)
+            {
+                treeCanvas.TranslationX = treeCanvas.AnimTranslationX - treeCanvas.ActualWidth / 2 / treeCanvas.Scale;
+                treeCanvas.TranslationY = treeCanvas.AnimTranslationY - treeCanvas.ActualHeight / 2 / treeCanvas.Scale;
+
+                treeCanvas.OnTransformChanged();
             }
         }
 
@@ -272,13 +234,42 @@ namespace StorylineEditor.Views.Controls
         {
             if (node != null && GraphNodes.ContainsKey(node))
             {
-                translationTarget.X = node.PositionX + GraphNodes[node].ActualWidth / 2 - ActualWidth / 2 / Scale;
-                translationTarget.Y = node.PositionY + GraphNodes[node].ActualHeight / 2 - ActualHeight / 2 / Scale;
+                foreach (var animation in Storyboard.Children)
+                {
+                    Storyboard.SetTarget(animation, null);
+                }
 
-                Duration = TimeSpan.FromSeconds(1).Ticks;
-                TimeLeft = Duration;
+                Storyboard.Children.Clear();
 
-                IsMovingToNode = true;
+                double duration = 0.25;
+
+                var xAnimation = new DoubleAnimation
+                {
+                    From = TranslationX + ActualWidth / 2 / Scale,
+                    To = node.PositionX + GraphNodes[node].ActualWidth / 2,
+                    Duration = TimeSpan.FromSeconds(duration),
+                    FillBehavior = FillBehavior.HoldEnd
+                };
+
+                Storyboard.SetTarget(xAnimation, this);
+                Storyboard.SetTargetProperty(xAnimation, new PropertyPath("AnimTranslationX"));
+
+                var yAnimation = new DoubleAnimation
+                {
+                    From = TranslationY + ActualHeight / 2 / Scale,
+                    To = node.PositionY + GraphNodes[node].ActualHeight / 2,
+                    Duration = TimeSpan.FromSeconds(duration),
+                    FillBehavior = FillBehavior.HoldEnd
+                };
+
+                Storyboard.SetTarget(yAnimation, this);
+                Storyboard.SetTargetProperty(yAnimation, new PropertyPath("AnimTranslationY"));
+
+                Storyboard.Children.Add(xAnimation);
+                Storyboard.Children.Add(yAnimation);
+
+                Dispatcher.BeginInvoke(new Action(() => Storyboard.Begin()));
+
                 AddToSelection(node, true);
             }
         }
@@ -576,30 +567,9 @@ namespace StorylineEditor.Views.Controls
             base.OnLostFocus(e);
         }
 
-        private void OnLoaded(object sender, RoutedEventArgs e)
-        {
-            prevTicks = DateTime.Now.Ticks;
+        private void OnLoaded(object sender, RoutedEventArgs e) { MainWindow.FacadeKeyEvent += OnFacadeKeyEvent; }
 
-            var animation = new ByteAnimation()
-            {
-                From = 0,
-                To = 63,
-                Duration = TimeSpan.FromSeconds(1),
-                AutoReverse = true,
-                RepeatBehavior = RepeatBehavior.Forever
-            };
-
-            BeginAnimation(TickProperty, animation);
-
-            MainWindow.FacadeKeyEvent += OnFacadeKeyEvent;
-        }
-
-        private void OnUnloaded(object sender, RoutedEventArgs e)
-        {
-            MainWindow.FacadeKeyEvent -= OnFacadeKeyEvent;
-
-            BeginAnimation(TickProperty, null);
-        }
+        private void OnUnloaded(object sender, RoutedEventArgs e) { MainWindow.FacadeKeyEvent -= OnFacadeKeyEvent; }
 
         private void OnFacadeKeyEvent(bool isDown, Key key)
         {
@@ -607,7 +577,7 @@ namespace StorylineEditor.Views.Controls
             ctrlMode = isDown && (key == Key.LeftCtrl || key == Key.RightCtrl);
         }
 
-
+        Storyboard Storyboard = new Storyboard();
         Random Random = new Random();
         protected Dictionary<Node_BaseVm, GraphNode> GraphNodes = new Dictionary<Node_BaseVm, GraphNode>();
         protected Dictionary<NodePairVm, GraphLink> GraphLinks = new Dictionary<NodePairVm, GraphLink>();
