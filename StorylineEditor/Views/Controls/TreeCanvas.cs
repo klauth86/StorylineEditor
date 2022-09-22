@@ -174,10 +174,13 @@ namespace StorylineEditor.Views.Controls
         {
             if (d is TreeCanvas treeCanvas)
             {
-                treeCanvas.TranslationX = treeCanvas.AnimTranslationX - treeCanvas.ActualWidth / 2 / treeCanvas.Scale;
-                treeCanvas.TranslationY = treeCanvas.AnimTranslationY - treeCanvas.ActualHeight / 2 / treeCanvas.Scale;
+                if (treeCanvas.Storyboard.GetCurrentState(treeCanvas) != ClockState.Stopped)
+                {
+                    treeCanvas.TranslationX = treeCanvas.AnimTranslationX - treeCanvas.ActualWidth / 2 / treeCanvas.Scale;
+                    treeCanvas.TranslationY = treeCanvas.AnimTranslationY - treeCanvas.ActualHeight / 2 / treeCanvas.Scale;
 
-                treeCanvas.OnTransformChanged();
+                    treeCanvas.OnTransformChanged();
+                }
             }
         }
 
@@ -234,12 +237,7 @@ namespace StorylineEditor.Views.Controls
         {
             if (node != null && GraphNodes.ContainsKey(node))
             {
-                foreach (var animation in Storyboard.Children)
-                {
-                    Storyboard.SetTarget(animation, null);
-                }
-
-                Storyboard.Children.Clear();
+                Storyboard.Stop(this);
 
                 double duration = 0.25;
 
@@ -251,7 +249,6 @@ namespace StorylineEditor.Views.Controls
                     FillBehavior = FillBehavior.HoldEnd
                 };
 
-                Storyboard.SetTarget(xAnimation, this);
                 Storyboard.SetTargetProperty(xAnimation, new PropertyPath("AnimTranslationX"));
 
                 var yAnimation = new DoubleAnimation
@@ -262,18 +259,17 @@ namespace StorylineEditor.Views.Controls
                     FillBehavior = FillBehavior.HoldEnd
                 };
 
-                Storyboard.SetTarget(yAnimation, this);
                 Storyboard.SetTargetProperty(yAnimation, new PropertyPath("AnimTranslationY"));
 
                 Storyboard.Children.Add(xAnimation);
                 Storyboard.Children.Add(yAnimation);
 
-                Dispatcher.BeginInvoke(new Action(() => Storyboard.Begin()));
+                Dispatcher.BeginInvoke(new Action(() => Storyboard.Begin(this, true)));
 
                 AddToSelection(node, true);
             }
         }
-        
+
 
 
         public void Copy() { }
@@ -585,7 +581,6 @@ namespace StorylineEditor.Views.Controls
         protected int rootNodeIndex = -1;
         public ObservableCollection<Node_BaseVm> Selection { get; }
 
-        protected bool IsMovingToNode = false;
         protected long Duration = 0;
         protected long TimeLeft = 0;
         protected Vector translationTarget = new Vector();
@@ -637,12 +632,13 @@ namespace StorylineEditor.Views.Controls
 
         protected void Reset()
         {
+            Storyboard.Stop(this);
+
             Stop();
 
             rootNodeIndex = -1;
             Selection.Clear();
 
-            IsMovingToNode = false;
             Duration = 0;
             TimeLeft = 0;
             translationTarget.X = 0;
@@ -894,7 +890,7 @@ namespace StorylineEditor.Views.Controls
             {
                 if (dragMode)
                 {
-                    IsMovingToNode = false;
+                    Storyboard.Stop(this);
 
                     var node = (ActiveGraphNode?.DataContext as Node_BaseVm);
                     if (node != null)
@@ -930,7 +926,7 @@ namespace StorylineEditor.Views.Controls
                 }
                 else if (dragAllMode)
                 {
-                    IsMovingToNode = false;
+                    Storyboard.Stop(this);
 
                     var currentPosition = e.GetPosition(this);
 
@@ -943,7 +939,7 @@ namespace StorylineEditor.Views.Controls
                 }
                 else if (SelectionRectangle != null)
                 {
-                    IsMovingToNode = false;
+                    Storyboard.Stop(this);
 
                     var currentPosition = (Vector)e.GetPosition(this);
 
@@ -962,7 +958,7 @@ namespace StorylineEditor.Views.Controls
                 }
                 else if (linkMode)
                 {
-                    IsMovingToNode = false;
+                    Storyboard.Stop(this);
 
                     if (e.Source is GraphNode graphNodeTo)
                     {
