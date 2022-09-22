@@ -36,13 +36,13 @@ StorylineEditor распространяется в надежде, что он�
                     <TreeView AllowDrop="true" Background="White" Name="tv_Items" ItemsSource="{Binding Items}"></TreeView>
                 </GroupBox>
 
-                <ContentControl Grid.Row="1" Padding="{StaticResource MarginPaddingThickness}" Margin="{StaticResource MarginPaddingThickness}" Content="{Binding ActiveContext, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+                <ContentControl Grid.Row="1" Padding="{StaticResource MarginPaddingThickness}" Margin="{StaticResource MarginPaddingThickness}" Content="{Binding ElementName=tc, Path=ActiveContext, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
 
                 <StackPanel Grid.Row="2" Orientation="Horizontal" DockPanel.Dock="Bottom">
                     <xctk:IntegerUpDown Padding="{StaticResource MarginPaddingThickness}" Margin="{StaticResource MarginPaddingThickness}" FontSize="10" Minimum="1" MinWidth="64" Maximum="60" Value="{Binding ElementName=tc, Path=StateDuration, UpdateSourceTrigger=PropertyChanged}" AllowTextInput="False"></xctk:IntegerUpDown>
                     <Button Style="{StaticResource S_Button_Player_Play}"></Button>
                     <Button Style="{StaticResource S_Button_Player_Stop}"></Button>
-                    <Button Style="{StaticResource S_Button_Player_ToggleGender}"></Button>
+                    <Button Style="{StaticResource S_Button_Player_ToggleGenderToPlay}"></Button>
                     <Button Style="{StaticResource S_Button_Player_ToggleLock}"></Button>
                 </StackPanel>                
             </Grid>

@@ -675,33 +675,33 @@ StorylineEditor распространяется в надежде, что он�
     <Style TargetType="Button" x:Key="S_Button_Player_Play" BasedOn="{StaticResource S_Button_Node}">
         <Setter Property="Content" Value="▶"></Setter>
         <Setter Property="ToolTip" Value="Воспроизвести"></Setter>
-        <Setter Property="Command" Value="{Binding TogglePlayCommand}"></Setter>
-        <Style.Triggers>
+        <Setter Property="Command" Value="{Binding ElementName=tc, Path=TogglePlayCommand}"></Setter>
+        <!--<Style.Triggers>
             <DataTrigger Binding="{Binding TreeToPlay.IsPlaying, UpdateSourceTrigger=PropertyChanged}" Value="true">
                 <Setter Property="Content" Value="⏸"></Setter>
                 <Setter Property="ToolTip" Value="Пауза"></Setter>
             </DataTrigger>
-        </Style.Triggers>
+        </Style.Triggers>-->
     </Style>
 
     <Style TargetType="Button" x:Key="S_Button_Player_Stop" BasedOn="{StaticResource S_Button_Node}">
         <Setter Property="Content" Value="■"></Setter>
         <Setter Property="ToolTip" Value="Остановить"></Setter>
-        <Setter Property="Command" Value="{Binding StopCommand}"></Setter>
+        <Setter Property="Command" Value="{Binding ElementName=tc, Path=StopCommand}"></Setter>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding ActiveContext, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+            <DataTrigger Binding="{Binding ElementName=tc, Path=ActiveContext, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
                 <Setter Property="IsEnabled" Value="false"></Setter>
             </DataTrigger>
         </Style.Triggers>
     </Style>
 
-    <Style TargetType="Button" x:Key="S_Button_Player_ToggleGender" BasedOn="{StaticResource S_Button_Node}">
-        <Setter Property="Content" Value="{Binding Gender, Converter={StaticResource nodeToGenderIconConverter}}"></Setter>
-        <Setter Property="ToolTip" Value="{Binding Gender, Converter={StaticResource nodeToGenderDescriptionConverter}}"></Setter>
-        <Setter Property="Command" Value="{Binding ToggleGenderCommand}"></Setter>
+    <Style TargetType="Button" x:Key="S_Button_Player_ToggleGenderToPlay" BasedOn="{StaticResource S_Button_Node}">
+        <Setter Property="Content" Value="{Binding ElementName=tc, Path=GenderToPlay, Converter={StaticResource nodeToGenderIconConverter}, UpdateSourceTrigger=PropertyChanged}"></Setter>
+        <Setter Property="ToolTip" Value="{Binding ElementName=tc, Path=GenderToPlay, Converter={StaticResource nodeToGenderDescriptionConverter}, UpdateSourceTrigger=PropertyChanged}"></Setter>
+        <Setter Property="Command" Value="{Binding ElementName=tc, Path=ToggleGenderToPlayCommand}"></Setter>
         <Setter Property="IsEnabled" Value="false"></Setter>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding ActiveContext, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+            <DataTrigger Binding="{Binding ElementName=tc, Path=ActiveContext, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
                 <Setter Property="IsEnabled" Value="true"></Setter>
             </DataTrigger>
         </Style.Triggers>
@@ -709,9 +709,9 @@ StorylineEditor распространяется в надежде, что он�
 
     <Style TargetType="Button" x:Key="S_Button_Player_ToggleLock" BasedOn="{StaticResource S_Button_Node}">
         <Setter Property="Content" Value="📝"></Setter>
-        <Setter Property="Command" Value="{Binding ToggleLockCommand}"></Setter>
+        <Setter Property="Command" Value="{Binding ElementName=tc, Path=ToggleLockCommand}"></Setter>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding IsLocked, UpdateSourceTrigger=PropertyChanged}" Value="true">
+            <DataTrigger Binding="{Binding ElementName=tc, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" Value="false">
                 <Setter Property="Content" Value="🔑"/>
             </DataTrigger>
         </Style.Triggers>

@@ -107,6 +107,24 @@ namespace StorylineEditor.Views.Controls
         public static readonly DependencyProperty StateDurationProperty = DependencyProperty.Register(
             "StateDuration", typeof(int), typeof(TreeCanvas), new PropertyMetadata(4));
 
+        public BaseVm ActiveContext
+        {
+            get => (BaseVm)this.GetValue(ActiveContextProperty);
+            set { this.SetValue(ActiveContextProperty, value); }
+        }
+
+        public static readonly DependencyProperty ActiveContextProperty = DependencyProperty.Register(
+            "ActiveContext", typeof(BaseVm), typeof(TreeCanvas), new PropertyMetadata(null));
+
+        public int GenderToPlay
+        {
+            get => (int)this.GetValue(GenderToPlayProperty);
+            set { this.SetValue(GenderToPlayProperty, value); }
+        }
+
+        public static readonly DependencyProperty GenderToPlayProperty = DependencyProperty.Register(
+            "GenderToPlay", typeof(int), typeof(TreeCanvas), new PropertyMetadata(1));
+
         private static void OnTickChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is TreeCanvas treeCanvas)
@@ -370,7 +388,7 @@ namespace StorylineEditor.Views.Controls
 
         private void StartTransition(Node_BaseVm node)
         {
-            PlayingAdorner.ToTransitionState();
+            PlayingAdorner?.ToTransitionState();
 
             translationTarget.X = node.PositionX + GraphNodes[node].ActualWidth / 2 - ActualWidth / 2 / Scale;
             translationTarget.Y = node.PositionY + GraphNodes[node].ActualHeight / 2 - ActualHeight / 2 / Scale;
@@ -1047,5 +1065,35 @@ namespace StorylineEditor.Views.Controls
             if (obj is NodePairVm link) Tree.RemoveLink(link);
             if (obj is Node_BaseVm node) Tree.RemoveNode(node);
         }, (obj) => obj != null));
+
+
+        ICommand togglePlayCommand;
+        public ICommand TogglePlayCommand => togglePlayCommand ?? (togglePlayCommand = new RelayCommand(() =>
+        {
+            if (ActiveContext != null)
+            {
+                // TODO PAUSE
+            }
+            else
+            {
+                ActiveContext = new TreePlayerContext_TransitionVm();
+                StartTransition(SelectedValue);                
+            }
+        }, () => SelectedValue != null));
+
+
+        ICommand stopCommand;
+        public ICommand StopCommand => stopCommand ?? (stopCommand = new RelayCommand(() =>
+        {
+            Stop();
+            ActiveContext = null;
+        }, () => ActiveContext != null));
+
+
+        ICommand toggleGenderToPlayCommand;
+        public ICommand ToggleGenderToPlayCommand => toggleGenderToPlayCommand ?? (toggleGenderToPlayCommand = new RelayCommand(() =>
+        {
+            GenderToPlay = 3 - GenderToPlay;
+        }, () => ActiveContext == null));
     }
 }
