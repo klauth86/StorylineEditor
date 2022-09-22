@@ -89,7 +89,7 @@ namespace StorylineEditor.Views.Controls
             var storyboard = new Storyboard();
             storyboard.Children.Add(scaleXAnimation);
             storyboard.Children.Add(scaleYAnimation);
-            Dispatcher.BeginInvoke(new Action(() => { storyboard.Begin(internalContent); }));
+            storyboard.Begin(internalContent, true);
         }
 
         public void ToStateView(FrameworkElement activeElement, double duration)
@@ -114,7 +114,7 @@ namespace StorylineEditor.Views.Controls
 
             var storyboard = new Storyboard();
             storyboard.Children.Add(stateTransitionAnimation);
-            Dispatcher.BeginInvoke(new Action(() => { storyboard.Begin(this); }));
+            storyboard.Begin(this, true);
         }
     }
 }

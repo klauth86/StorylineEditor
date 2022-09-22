@@ -186,7 +186,7 @@ namespace StorylineEditor.Views.Controls
                         treeCanvas.PlayingAdorner.PositionX = treeCanvas.AnimTranslationX - treeCanvas.PlayingAdorner.Width / 2;
                         treeCanvas.PlayingAdorner.PositionY = treeCanvas.AnimTranslationY - treeCanvas.PlayingAdorner.Height / 2;
                     }
-
+                    
                     treeCanvas.OnTransformChanged();
                 }
             }
@@ -272,7 +272,7 @@ namespace StorylineEditor.Views.Controls
                 Storyboard.Children.Add(xAnimation);
                 Storyboard.Children.Add(yAnimation);
 
-                Dispatcher.BeginInvoke(new Action(() => Storyboard.Begin(this, true)));
+                Storyboard.Begin(this, true);
 
                 AddToSelection(node, true);
             }
@@ -347,7 +347,7 @@ namespace StorylineEditor.Views.Controls
 
                 nextNode = node;
 
-                Dispatcher.BeginInvoke(new Action(() => Storyboard.Begin(this, true)));
+                Storyboard.Begin(this, true);
             }
             else
             {
@@ -392,7 +392,7 @@ namespace StorylineEditor.Views.Controls
 
                 nextNode = node;
 
-                Dispatcher.BeginInvoke(new Action(() => Storyboard.Begin(this, true)));
+                Storyboard.Begin(this, true);
             }
             else
             {
@@ -490,7 +490,9 @@ namespace StorylineEditor.Views.Controls
             Storyboard.Completed -= OnCompletedTransition;
             Storyboard.Completed -= OnCompletedState;
 
-            Storyboard.Stop();
+            Storyboard.Stop(this);
+
+            Storyboard.Children.Clear();
         }
 
         private void AddGraphNode(Node_BaseVm node)
