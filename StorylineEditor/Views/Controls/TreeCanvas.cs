@@ -645,6 +645,8 @@ namespace StorylineEditor.Views.Controls
 
         protected void Reset()
         {
+            Stop();
+
             rootNodeIndex = -1;
             Selection.Clear();
 
