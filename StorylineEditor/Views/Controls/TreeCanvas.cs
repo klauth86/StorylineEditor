@@ -250,10 +250,6 @@ namespace StorylineEditor.Views.Controls
 
         #endregion
 
-        const double AnimAlphaDuration = 1;
-
-        const double StateAlphaDuration = 0.2;
-
         private void OnTransformChanged()
         {
             Rect canvasRect = new Rect(
@@ -301,18 +297,6 @@ namespace StorylineEditor.Views.Controls
             Canvas.SetTop(frameworkElement, positionY);
         }
 
-        private bool IsNearlyCentered(Node_BaseVm node)
-        {
-            if (GraphNodes.ContainsKey(node))
-            {
-                return
-                    Math.Abs(Canvas.GetLeft(GraphNodes[node]) + GraphNodes[node].ActualWidth / 2 - ActualWidth / 2) < 5 &&
-                    Math.Abs(Canvas.GetTop(GraphNodes[node]) + GraphNodes[node].ActualHeight / 2 - ActualHeight / 2) < 5;
-            }
-
-            return true;
-        }
-
         private void OnFoundRoot(Node_BaseVm node)
         {
             if (node != null && GraphNodes.ContainsKey(node))
@@ -320,8 +304,8 @@ namespace StorylineEditor.Views.Controls
                 translationTarget.X = node.PositionX + GraphNodes[node].ActualWidth / 2 - ActualWidth / 2 / Scale;
                 translationTarget.Y = node.PositionY + GraphNodes[node].ActualHeight / 2 - ActualHeight / 2 / Scale;
 
-                Duration = TimeSpan.FromSeconds(AnimAlphaDuration).Ticks;
-                TimeLeft = TimeSpan.FromSeconds(AnimAlphaDuration).Ticks;
+                Duration = TimeSpan.FromSeconds(1).Ticks;
+                TimeLeft = Duration;
 
                 IsMovingToNode = true;
                 AddToSelection(node, true);
@@ -342,29 +326,18 @@ namespace StorylineEditor.Views.Controls
 
 
 
-        private void StartActiveNode(Node_BaseVm node, double duration)
+        private void StartState(Node_BaseVm node, double duration)
         {
             if (node != null)
             {
+                ActiveContext = node;
+
                 if (PlayingAdorner == null)
                 {
-                    PlayingAdorner = new PlayingAdorner(TimeSpan.FromSeconds(StateAlphaDuration).Ticks);
+                    PlayingAdorner = new PlayingAdorner(TimeSpan.FromSeconds(0.2).Ticks);
                     PlayingAdorner.RenderTransform = new ScaleTransform() { ScaleX = Scale, ScaleY = Scale };
 
                     Canvas.SetZIndex(PlayingAdorner, -ActiveZIndex);
-
-                    if (!IsNearlyCentered(node))
-                    {
-                        translationTarget.X = node.PositionX + GraphNodes[node].ActualWidth / 2 - ActualWidth / 2 / Scale;
-                        translationTarget.Y = node.PositionY + GraphNodes[node].ActualHeight / 2 - ActualHeight / 2 / Scale;
-
-                        Duration = TimeSpan.FromSeconds(AnimAlphaDuration).Ticks;
-                        TimeLeft = TimeSpan.FromSeconds(AnimAlphaDuration).Ticks;
-
-                        onStepComplete = () => StartActiveNode(node, duration);
-
-                        return;
-                    }
                 }
 
                 if (!Children.Contains(PlayingAdorner))
@@ -382,21 +355,88 @@ namespace StorylineEditor.Views.Controls
                 Duration = TimeSpan.FromSeconds(duration).Ticks;
                 TimeLeft = TimeSpan.FromSeconds(duration).Ticks;
 
-                //////onStepComplete = () => { Tree?.OnEndActiveNode(node); };
+                onStepComplete = () => { GoToNextStep(node); };
+            }
+            else
+            {
+                Stop();
             }
         }
 
         private void StartTransition(Node_BaseVm node)
         {
-            PlayingAdorner?.ToTransitionState();
+            if (node != null)
+            {
+                ActiveContext = new TreePlayerContext_TransitionVm();
 
-            translationTarget.X = node.PositionX + GraphNodes[node].ActualWidth / 2 - ActualWidth / 2 / Scale;
-            translationTarget.Y = node.PositionY + GraphNodes[node].ActualHeight / 2 - ActualHeight / 2 / Scale;
+                PlayingAdorner?.ToTransitionState();
 
-            Duration = TimeSpan.FromSeconds(2 * AnimAlphaDuration).Ticks;
-            TimeLeft = TimeSpan.FromSeconds(2 * AnimAlphaDuration).Ticks;
+                translationTarget.X = node.PositionX + GraphNodes[node].ActualWidth / 2 - ActualWidth / 2 / Scale;
+                translationTarget.Y = node.PositionY + GraphNodes[node].ActualHeight / 2 - ActualHeight / 2 / Scale;
 
-            //////onStepComplete = () => Tree?.OnEndTransition(node);
+                Duration = TimeSpan.FromSeconds(2).Ticks;
+                TimeLeft = Duration;
+
+
+
+                onStepComplete = () => StartState(node, StateDuration);
+            }
+            else
+            {
+                Stop();
+            }
+        }
+
+        private void GoToNextStep(Node_BaseVm node)
+        {
+            if (node != null)
+            {
+                List<Node_BaseVm> childNodes = Tree.GetChildNodes(node);
+
+                childNodes.RemoveAll((childNode) => childNode.Gender > 0 && childNode.Gender != GenderToPlay);
+
+                ////// TODO Execute other predicates
+
+                if (childNodes.Count == 1)
+                {
+                    StartTransition(childNodes[0]);
+                }
+                else if (childNodes.Count > 0)
+                {
+                    if (node is DNode_RandomVm randomNode)
+                    {
+                        StartTransition(childNodes[Random.Next(childNodes.Count)]);
+                    }
+                    else if (childNodes.TrueForAll((childNode) => (childNode is IOwnered owneredNode) && owneredNode.Owner != null && owneredNode.Owner.Id == CharacterVm.PlayerId))
+                    {
+                        ActiveContext = new TreePlayerContext_ChoiceVm(childNodes);
+                    }
+                    else
+                    {
+                        string description = "Дочерние вершины не подходят ни под одну из ситуаций:" + Environment.NewLine;
+                        description += Environment.NewLine;
+
+                        description += "- " + "После Случайной вершины (⇝) возможен любой состав дочерних вершин..." + Environment.NewLine;
+                        description += Environment.NewLine;
+
+                        description += "- " + "Если НЕ Случайная вершина (💬, ⇴) имеет одну актуальную (удовлетворяющую полу и своим предикатам) дочернюю вершину, то этой вершиной может быть любая вершина кроме вершины Транзит (⇴) с несколькими актуальными (удовлетворяющие полу и своим предикатам) дочерними вершинами..." + Environment.NewLine;
+                        description += Environment.NewLine;
+
+                        description += "- " + "Если НЕ Случайная вершина (💬, ⇴) имеет более одной актуальной (удовлетворяющей полу и своим предикатам) дочерней вершины, то эти вершины должны быть либо вершинами Основного персонажа (💬), либо Транзитом (⇴) на вершины Основного персонажа (💬) (ситуация ВЫБОР ИГРОКА)..." + Environment.NewLine;
+                        description += Environment.NewLine;
+
+                        ActiveContext = new TreePlayerContext_ErrorVm() { Description = description };
+                    }
+                }
+                else
+                {
+                    Stop();
+                }
+            }
+            else
+            {
+                Stop();
+            }
         }
 
         private void Stop()
@@ -406,6 +446,13 @@ namespace StorylineEditor.Views.Controls
                 Children.Remove(PlayingAdorner);
                 PlayingAdorner = null;
             }
+
+            ActiveContext = null;
+        }
+
+        private void PauseUnpause()
+        {
+
         }
 
 
@@ -453,10 +500,10 @@ namespace StorylineEditor.Views.Controls
             {
                 var fromPair = GraphNodes.FirstOrDefault((gnodePair) => gnodePair.Key.Id == link.FromId);
                 var fromVertice = fromPair.Value;
-                
+
                 var toPair = GraphNodes.FirstOrDefault((gnodePair) => gnodePair.Key.Id == link.ToId);
                 var toVertice = toPair.Value;
-                
+
                 if (fromVertice != null && toVertice != null)
                 {
                     var newGraphLink = fromVertice.DataContext is JNode_StepVm
@@ -568,7 +615,7 @@ namespace StorylineEditor.Views.Controls
         }
 
 
-
+        Random Random = new Random();
         protected Dictionary<Node_BaseVm, GraphNode> GraphNodes = new Dictionary<Node_BaseVm, GraphNode>();
         protected Dictionary<NodePairVm, GraphLink> GraphLinks = new Dictionary<NodePairVm, GraphLink>();
 
@@ -986,7 +1033,7 @@ namespace StorylineEditor.Views.Controls
             if (!Selection.Contains(node))
             {
                 Selection.Add(node);
-                
+
                 if (node != null && GraphNodes.ContainsKey(node))
                 {
                     GraphNodes[node].IsSelected = true;
@@ -1053,10 +1100,8 @@ namespace StorylineEditor.Views.Controls
 
 
         ICommand toggleGenderCommand;
-        public ICommand ToggleGenderCommand => toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand<Node_BaseVm>((node) =>
-        {
-            node.ToggleGender();
-        }, (node) => node != null));
+        public ICommand ToggleGenderCommand =>
+            toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand<Node_BaseVm>((node) => { node.ToggleGender(); }, (node) => node != null));
 
 
         ICommand removeCommand;
@@ -1068,32 +1113,17 @@ namespace StorylineEditor.Views.Controls
 
 
         ICommand togglePlayCommand;
-        public ICommand TogglePlayCommand => togglePlayCommand ?? (togglePlayCommand = new RelayCommand(() =>
-        {
-            if (ActiveContext != null)
-            {
-                // TODO PAUSE
-            }
-            else
-            {
-                ActiveContext = new TreePlayerContext_TransitionVm();
-                StartTransition(SelectedValue);                
-            }
-        }, () => SelectedValue != null));
+        public ICommand TogglePlayCommand =>
+            togglePlayCommand ?? (togglePlayCommand = new RelayCommand(() => { if (ActiveContext != null) PauseUnpause(); else StartTransition(SelectedValue); }, () => SelectedValue != null));
 
 
         ICommand stopCommand;
-        public ICommand StopCommand => stopCommand ?? (stopCommand = new RelayCommand(() =>
-        {
-            Stop();
-            ActiveContext = null;
-        }, () => ActiveContext != null));
+        public ICommand StopCommand =>
+            stopCommand ?? (stopCommand = new RelayCommand(() => { Stop(); }, () => ActiveContext != null));
 
 
         ICommand toggleGenderToPlayCommand;
-        public ICommand ToggleGenderToPlayCommand => toggleGenderToPlayCommand ?? (toggleGenderToPlayCommand = new RelayCommand(() =>
-        {
-            GenderToPlay = 3 - GenderToPlay;
-        }, () => ActiveContext == null));
+        public ICommand ToggleGenderToPlayCommand =>
+            toggleGenderToPlayCommand ?? (toggleGenderToPlayCommand = new RelayCommand(() => { GenderToPlay = 3 - GenderToPlay; }, () => ActiveContext == null));
     }
 }
