@@ -179,6 +179,12 @@ namespace StorylineEditor.Views.Controls
                     treeCanvas.TranslationX = treeCanvas.AnimTranslationX - treeCanvas.ActualWidth / 2 / treeCanvas.Scale;
                     treeCanvas.TranslationY = treeCanvas.AnimTranslationY - treeCanvas.ActualHeight / 2 / treeCanvas.Scale;
 
+                    if (treeCanvas.PlayingAdorner != null)
+                    {
+                        treeCanvas.PlayingAdorner.PositionX = treeCanvas.AnimTranslationX - treeCanvas.PlayingAdorner.Width / 2;
+                        treeCanvas.PlayingAdorner.PositionY = treeCanvas.AnimTranslationY - treeCanvas.PlayingAdorner.Height / 2;
+                    }
+
                     treeCanvas.OnTransformChanged();
                 }
             }
@@ -357,7 +363,7 @@ namespace StorylineEditor.Views.Controls
 
                 StopStoryboard();
 
-                double duration = 0.25;
+                double duration = 0.75;
 
                 var xAnimation = new DoubleAnimation
                 {
@@ -461,7 +467,19 @@ namespace StorylineEditor.Views.Controls
             ActiveContext = null;
         }
 
-        private void PauseUnpause() { IsPlaying = !IsPlaying; }
+        private void PauseUnpause()
+        {
+            if (Storyboard.GetIsPaused())
+            {
+                Storyboard.Resume();
+                IsPlaying = true;
+            }
+            else
+            {
+                IsPlaying = false;
+                Storyboard.Pause();
+            }
+        }
 
         private void OnCompletedTransition(object sender, EventArgs e) { StartState(nextNode, StateDuration); }
 
