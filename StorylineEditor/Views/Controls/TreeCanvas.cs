@@ -237,7 +237,7 @@ namespace StorylineEditor.Views.Controls
         {
             if (node != null && GraphNodes.ContainsKey(node))
             {
-                Storyboard.Stop(this);
+                StopStoryboard();
 
                 double duration = 0.25;
 
@@ -299,10 +299,7 @@ namespace StorylineEditor.Views.Controls
                     PlayingAdorner.RenderTransform = new ScaleTransform() { ScaleX = Scale, ScaleY = Scale };
 
                     Canvas.SetZIndex(PlayingAdorner, -ActiveZIndex);
-                }
 
-                if (!Children.Contains(PlayingAdorner))
-                {
                     PlayingAdorner.PositionX = node.PositionX + GraphNodes[node].ActualWidth / 2 - PlayingAdorner.Width / 2;
                     PlayingAdorner.PositionY = node.PositionY + GraphNodes[node].ActualHeight / 2 - PlayingAdorner.Height / 2;
 
@@ -313,10 +310,36 @@ namespace StorylineEditor.Views.Controls
 
                 PlayingAdorner.ToActiveNodeState(GraphNodes[node]);
 
-                Duration = TimeSpan.FromSeconds(duration).Ticks;
-                TimeLeft = TimeSpan.FromSeconds(duration).Ticks;
+                StopStoryboard();
 
-                onStepComplete = () => { GoToNextStep(node); };
+                var xAnimation = new DoubleAnimation
+                {
+                    From = TranslationX + ActualWidth / 2 / Scale,
+                    To = node.PositionX + GraphNodes[node].ActualWidth / 2,
+                    Duration = TimeSpan.FromSeconds(duration),
+                    FillBehavior = FillBehavior.HoldEnd
+                };
+
+                Storyboard.SetTargetProperty(xAnimation, new PropertyPath("AnimTranslationX"));
+
+                var yAnimation = new DoubleAnimation
+                {
+                    From = TranslationY + ActualHeight / 2 / Scale,
+                    To = node.PositionY + GraphNodes[node].ActualHeight / 2,
+                    Duration = TimeSpan.FromSeconds(duration),
+                    FillBehavior = FillBehavior.HoldEnd
+                };
+
+                Storyboard.SetTargetProperty(yAnimation, new PropertyPath("AnimTranslationY"));
+
+                Storyboard.Children.Add(xAnimation);
+                Storyboard.Children.Add(yAnimation);
+
+                Storyboard.Completed += OnCompletedState;
+
+                nextNode = node;
+
+                Dispatcher.BeginInvoke(new Action(() => Storyboard.Begin(this, true)));
             }
             else
             {
@@ -332,15 +355,38 @@ namespace StorylineEditor.Views.Controls
 
                 PlayingAdorner?.ToTransitionState();
 
-                translationTarget.X = node.PositionX + GraphNodes[node].ActualWidth / 2 - ActualWidth / 2 / Scale;
-                translationTarget.Y = node.PositionY + GraphNodes[node].ActualHeight / 2 - ActualHeight / 2 / Scale;
+                StopStoryboard();
 
-                Duration = TimeSpan.FromSeconds(2).Ticks;
-                TimeLeft = Duration;
+                double duration = 0.25;
 
+                var xAnimation = new DoubleAnimation
+                {
+                    From = TranslationX + ActualWidth / 2 / Scale,
+                    To = node.PositionX + GraphNodes[node].ActualWidth / 2,
+                    Duration = TimeSpan.FromSeconds(duration),
+                    FillBehavior = FillBehavior.HoldEnd
+                };
 
+                Storyboard.SetTargetProperty(xAnimation, new PropertyPath("AnimTranslationX"));
 
-                onStepComplete = () => StartState(node, StateDuration);
+                var yAnimation = new DoubleAnimation
+                {
+                    From = TranslationY + ActualHeight / 2 / Scale,
+                    To = node.PositionY + GraphNodes[node].ActualHeight / 2,
+                    Duration = TimeSpan.FromSeconds(duration),
+                    FillBehavior = FillBehavior.HoldEnd
+                };
+
+                Storyboard.SetTargetProperty(yAnimation, new PropertyPath("AnimTranslationY"));
+
+                Storyboard.Children.Add(xAnimation);
+                Storyboard.Children.Add(yAnimation);
+
+                Storyboard.Completed += OnCompletedTransition;
+
+                nextNode = node;
+
+                Dispatcher.BeginInvoke(new Action(() => Storyboard.Begin(this, true)));
             }
             else
             {
@@ -402,6 +448,8 @@ namespace StorylineEditor.Views.Controls
 
         private void Stop()
         {
+            StopStoryboard();
+
             if (PlayingAdorner != null)
             {
                 Children.Remove(PlayingAdorner);
@@ -415,7 +463,17 @@ namespace StorylineEditor.Views.Controls
 
         private void PauseUnpause() { IsPlaying = !IsPlaying; }
 
+        private void OnCompletedTransition(object sender, EventArgs e) { StartState(nextNode, StateDuration); }
 
+        private void OnCompletedState(object sender, EventArgs e) { GoToNextStep(nextNode); }
+
+        void StopStoryboard()
+        {
+            Storyboard.Completed -= OnCompletedTransition;
+            Storyboard.Completed -= OnCompletedState;
+
+            Storyboard.Stop();
+        }
 
         private void AddGraphNode(Node_BaseVm node)
         {
@@ -565,13 +623,15 @@ namespace StorylineEditor.Views.Controls
 
         private void OnLoaded(object sender, RoutedEventArgs e) { MainWindow.FacadeKeyEvent += OnFacadeKeyEvent; }
 
-        private void OnUnloaded(object sender, RoutedEventArgs e) { MainWindow.FacadeKeyEvent -= OnFacadeKeyEvent; }
+        private void OnUnloaded(object sender, RoutedEventArgs e) { Stop(); MainWindow.FacadeKeyEvent -= OnFacadeKeyEvent; }
 
         private void OnFacadeKeyEvent(bool isDown, Key key)
         {
             shiftMode = isDown && (key == Key.LeftShift || key == Key.RightShift);
             ctrlMode = isDown && (key == Key.LeftCtrl || key == Key.RightCtrl);
         }
+
+        Node_BaseVm nextNode = null;
 
         Storyboard Storyboard = new Storyboard();
         Random Random = new Random();
@@ -632,8 +692,6 @@ namespace StorylineEditor.Views.Controls
 
         protected void Reset()
         {
-            Storyboard.Stop(this);
-
             Stop();
 
             rootNodeIndex = -1;
@@ -890,7 +948,7 @@ namespace StorylineEditor.Views.Controls
             {
                 if (dragMode)
                 {
-                    Storyboard.Stop(this);
+                    StopStoryboard();
 
                     var node = (ActiveGraphNode?.DataContext as Node_BaseVm);
                     if (node != null)
@@ -926,7 +984,7 @@ namespace StorylineEditor.Views.Controls
                 }
                 else if (dragAllMode)
                 {
-                    Storyboard.Stop(this);
+                    StopStoryboard();
 
                     var currentPosition = e.GetPosition(this);
 
@@ -939,7 +997,7 @@ namespace StorylineEditor.Views.Controls
                 }
                 else if (SelectionRectangle != null)
                 {
-                    Storyboard.Stop(this);
+                    StopStoryboard();
 
                     var currentPosition = (Vector)e.GetPosition(this);
 
@@ -958,7 +1016,7 @@ namespace StorylineEditor.Views.Controls
                 }
                 else if (linkMode)
                 {
-                    Storyboard.Stop(this);
+                    StopStoryboard();
 
                     if (e.Source is GraphNode graphNodeTo)
                     {
