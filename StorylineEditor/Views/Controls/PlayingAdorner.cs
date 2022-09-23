@@ -18,9 +18,15 @@ using System.Windows.Media.Animation;
 
 namespace StorylineEditor.Views.Controls
 {
-    public class PlayingAdorner: ContentControl
+    public class PlayingAdorner : ContentControl
     {
         Vector ActiveElementSize = new Vector(0, 0);
+
+        Storyboard StateStoryboard = new Storyboard();
+
+        Storyboard IndicateStoryboard = new Storyboard();
+
+        bool IsGrowing = true;
 
         public double PositionX { get; set; }
         public double PositionY { get; set; }
@@ -42,8 +48,14 @@ namespace StorylineEditor.Views.Controls
                 double mBetta = (1 - playingAdorner.StateAlpha) * 1.25;
 
                 ScaleTransform scaleTransform = (ScaleTransform)playingAdorner.ellipse.RenderTransform;
-                scaleTransform.ScaleX = playingAdorner.ActiveElementSize.X / playingAdorner.Width * mBetta + playingAdorner.StateAlpha * mAlpha;
-                scaleTransform.ScaleY = playingAdorner.ActiveElementSize.Y / playingAdorner.Height * mBetta + playingAdorner.StateAlpha * mAlpha;
+                scaleTransform.ScaleX = playingAdorner.ActiveElementSize.X / playingAdorner.Width * mAlpha + mBetta;
+                scaleTransform.ScaleY = playingAdorner.ActiveElementSize.Y / playingAdorner.Height * mAlpha + mBetta;
+
+                if (playingAdorner.StateAlpha < 0.05 && !playingAdorner.IsGrowing ||
+                    playingAdorner.StateAlpha > 0.95 && playingAdorner.IsGrowing)
+                {
+                    playingAdorner.StateStoryboard.Pause(playingAdorner);
+                }
             }
         }
 
@@ -63,6 +75,8 @@ namespace StorylineEditor.Views.Controls
             ellipse.RenderTransform = new ScaleTransform() { CenterX = 16, CenterY = 16 };
 
             internalContent.Content = ellipse;
+
+            // Indicate anim
 
             var scaleXAnimation = new DoubleAnimation
             {
@@ -86,35 +100,64 @@ namespace StorylineEditor.Views.Controls
 
             Storyboard.SetTargetProperty(scaleYAnimation, new PropertyPath("RenderTransform.ScaleY"));
 
-            var storyboard = new Storyboard();
-            storyboard.Children.Add(scaleXAnimation);
-            storyboard.Children.Add(scaleYAnimation);
-            storyboard.Begin(internalContent, true);
+            IndicateStoryboard.Children.Add(scaleXAnimation);
+            IndicateStoryboard.Children.Add(scaleYAnimation);
+            
+            IndicateStoryboard.Begin(internalContent, true);
+
+            // State anim
+
+            var stateTransitionAnimation = new DoubleAnimation
+            {
+                From = 0,
+                To = 1,
+                Duration = TimeSpan.FromSeconds(1),
+                RepeatBehavior = RepeatBehavior.Forever,
+                AutoReverse = true,
+                FillBehavior = FillBehavior.HoldEnd
+            };
+
+            Storyboard.SetTargetProperty(stateTransitionAnimation, new PropertyPath("StateAlpha"));
+
+            StateStoryboard.Children.Add(stateTransitionAnimation);
+
+            StateStoryboard.Begin(this, true);
+            StateStoryboard.Pause(this);
+
+            Unloaded += OnUnloaded;
+        }
+
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            Unloaded -= OnUnloaded;
+
+            StateStoryboard.Stop(this);
+            StateStoryboard.Remove(this);
+
+            if (Content is FrameworkElement frameworkElement)
+            {
+                IndicateStoryboard.Stop(frameworkElement);
+                IndicateStoryboard.Remove(frameworkElement);
+            }
         }
 
         public void ToStateView(FrameworkElement activeElement, double duration)
         {
             ActiveElementSize.X = activeElement.ActualWidth;
             ActiveElementSize.Y = activeElement.ActualHeight;
-            AnimateView(1, 0, duration);
+
+            IsGrowing = true;
+
+            StateStoryboard.SetSpeedRatio(this, 1 / duration);
+            StateStoryboard.Resume(this);
         }
 
-        public void ToTransitionView(double duration) { AnimateView(0, 1, duration); }
-
-        private void AnimateView(double from, double to, double duration)
+        public void ToTransitionView(double duration)
         {
-            var stateTransitionAnimation = new DoubleAnimation
-            {
-                From = from,
-                To = to,
-                Duration = TimeSpan.FromSeconds(duration)
-            };
+            IsGrowing = false;
 
-            Storyboard.SetTargetProperty(stateTransitionAnimation, new PropertyPath("StateAlpha"));
-
-            var storyboard = new Storyboard();
-            storyboard.Children.Add(stateTransitionAnimation);
-            storyboard.Begin(this, true);
+            StateStoryboard.SetSpeedRatio(this, 1 / duration);
+            StateStoryboard.Resume(this);
         }
     }
 }
