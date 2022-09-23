@@ -30,7 +30,7 @@ using StorylineEditor.ViewModels.Tabs;
 
 namespace StorylineEditor.Views.Controls
 {
-    class TreeCanvas : Canvas, ICopyPaste
+    public class TreeCanvas : Canvas, ICopyPaste
     {
         const double TransitionDuration = 0.75;
 
@@ -355,7 +355,7 @@ namespace StorylineEditor.Views.Controls
             }
         }
 
-        private void StartTransition(Node_BaseVm node)
+        public void StartTransition(Node_BaseVm node)
         {
             if (node != null)
             {
@@ -422,7 +422,7 @@ namespace StorylineEditor.Views.Controls
                     }
                     else if (childNodes.TrueForAll((childNode) => (childNode is IOwnered owneredNode) && owneredNode.Owner != null && owneredNode.Owner.Id == CharacterVm.PlayerId))
                     {
-                        ActiveContext = new TreePlayerContext_ChoiceVm(childNodes);
+                        ActiveContext = new TreePlayerContext_ChoiceVm(this, childNodes);
                     }
                     else
                     {

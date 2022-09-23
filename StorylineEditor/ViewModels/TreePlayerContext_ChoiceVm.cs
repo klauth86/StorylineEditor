@@ -12,6 +12,7 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Common;
 using StorylineEditor.ViewModels.Nodes;
+using StorylineEditor.Views.Controls;
 using System.Collections.Generic;
 using System.Windows.Input;
 
@@ -19,14 +20,18 @@ namespace StorylineEditor.ViewModels
 {
     public class TreePlayerContext_ChoiceVm : BaseVm
     {
-        public TreePlayerContext_ChoiceVm(List<Node_BaseVm> nodesToSelect) : base(0)
+        public readonly TreeCanvas TreeCanvas;
+
+        public TreePlayerContext_ChoiceVm(TreeCanvas treeCanvas, List<Node_BaseVm> nodesToSelect) : base(0)
         {
+            TreeCanvas = treeCanvas;
+
             NodesToSelect = new List<Node_BaseVm>();
             NodesToSelect.AddRange(nodesToSelect);
         }
         public List<Node_BaseVm> NodesToSelect { get; set; }
 
         protected ICommand selectNodeCommand;
-        public ICommand SelectNodeCommand => selectNodeCommand ?? (selectNodeCommand = new RelayCommand<Node_BaseVm>((node) => { }, (node) => node != null && NodesToSelect.Contains(node)));
+        public ICommand SelectNodeCommand => selectNodeCommand ?? (selectNodeCommand = new RelayCommand<Node_BaseVm>((node) => { TreeCanvas?.StartTransition(node); }, (node) => node != null && NodesToSelect.Contains(node)));
     }
 }
