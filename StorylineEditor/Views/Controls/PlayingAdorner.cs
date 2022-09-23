@@ -20,6 +20,10 @@ namespace StorylineEditor.Views.Controls
 {
     public class PlayingAdorner : ContentControl
     {
+        double TargetWidth = 0;
+
+        double TargetHeight = 0;
+
         readonly Storyboard StateStoryboard = new Storyboard();
 
         readonly Storyboard IndicateStoryboard = new Storyboard();
@@ -46,8 +50,8 @@ namespace StorylineEditor.Views.Controls
                 double mBetta = (1 - playingAdorner.StateAlpha) * 1.25;
 
                 ScaleTransform scaleTransform = (ScaleTransform)playingAdorner.ellipse.RenderTransform;
-                scaleTransform.ScaleX = playingAdorner.Width / 32 * mAlpha + mBetta;
-                scaleTransform.ScaleY = playingAdorner.Height / 32 * mAlpha + mBetta;
+                scaleTransform.ScaleX = playingAdorner.TargetWidth / 32 * mAlpha + mBetta;
+                scaleTransform.ScaleY = playingAdorner.TargetHeight / 32 * mAlpha + mBetta;
 
                 if (playingAdorner.StateAlpha < 0.05 && !playingAdorner.IsGrowing ||
                     playingAdorner.StateAlpha > 0.95 && playingAdorner.IsGrowing)
@@ -141,8 +145,8 @@ namespace StorylineEditor.Views.Controls
 
         public void ToStateView(FrameworkElement activeElement, double duration)
         {
-            Width = activeElement.ActualWidth * 1.4;
-            Height = activeElement.ActualHeight * 1.4;
+            TargetWidth = activeElement.ActualWidth * 1.25;
+            TargetHeight = activeElement.ActualHeight * 1.25;
 
             IsGrowing = true;
 
@@ -152,9 +156,6 @@ namespace StorylineEditor.Views.Controls
 
         public void ToTransitionView(double duration)
         {
-            Width = 32;
-            Height = 32;
-
             IsGrowing = false;
 
             StateStoryboard.SetSpeedRatio(this, 1 / duration);
