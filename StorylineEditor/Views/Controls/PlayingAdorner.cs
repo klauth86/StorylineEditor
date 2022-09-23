@@ -20,11 +20,9 @@ namespace StorylineEditor.Views.Controls
 {
     public class PlayingAdorner : ContentControl
     {
-        Vector ActiveElementSize = new Vector(0, 0);
+        readonly Storyboard StateStoryboard = new Storyboard();
 
-        Storyboard StateStoryboard = new Storyboard();
-
-        Storyboard IndicateStoryboard = new Storyboard();
+        readonly Storyboard IndicateStoryboard = new Storyboard();
 
         bool IsGrowing = true;
 
@@ -48,8 +46,8 @@ namespace StorylineEditor.Views.Controls
                 double mBetta = (1 - playingAdorner.StateAlpha) * 1.25;
 
                 ScaleTransform scaleTransform = (ScaleTransform)playingAdorner.ellipse.RenderTransform;
-                scaleTransform.ScaleX = playingAdorner.ActiveElementSize.X / playingAdorner.Width * mAlpha + mBetta;
-                scaleTransform.ScaleY = playingAdorner.ActiveElementSize.Y / playingAdorner.Height * mAlpha + mBetta;
+                scaleTransform.ScaleX = playingAdorner.Width / 32 * mAlpha + mBetta;
+                scaleTransform.ScaleY = playingAdorner.Height / 32 * mAlpha + mBetta;
 
                 if (playingAdorner.StateAlpha < 0.05 && !playingAdorner.IsGrowing ||
                     playingAdorner.StateAlpha > 0.95 && playingAdorner.IsGrowing)
@@ -102,7 +100,7 @@ namespace StorylineEditor.Views.Controls
 
             IndicateStoryboard.Children.Add(scaleXAnimation);
             IndicateStoryboard.Children.Add(scaleYAnimation);
-            
+
             IndicateStoryboard.Begin(internalContent, true);
 
             // State anim
@@ -143,8 +141,8 @@ namespace StorylineEditor.Views.Controls
 
         public void ToStateView(FrameworkElement activeElement, double duration)
         {
-            ActiveElementSize.X = activeElement.ActualWidth;
-            ActiveElementSize.Y = activeElement.ActualHeight;
+            Width = activeElement.ActualWidth * 1.4;
+            Height = activeElement.ActualHeight * 1.4;
 
             IsGrowing = true;
 
@@ -154,6 +152,9 @@ namespace StorylineEditor.Views.Controls
 
         public void ToTransitionView(double duration)
         {
+            Width = 32;
+            Height = 32;
+
             IsGrowing = false;
 
             StateStoryboard.SetSpeedRatio(this, 1 / duration);

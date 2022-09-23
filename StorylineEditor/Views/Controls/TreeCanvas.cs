@@ -117,6 +117,15 @@ namespace StorylineEditor.Views.Controls
         public static readonly DependencyProperty StateDurationProperty = DependencyProperty.Register(
             "StateDuration", typeof(int), typeof(TreeCanvas), new PropertyMetadata(4));
 
+        public double StateTimeLeft
+        {
+            get => (double)this.GetValue(StateTimeLeftProperty);
+            set { this.SetValue(StateTimeLeftProperty, value); }
+        }
+
+        public static readonly DependencyProperty StateTimeLeftProperty = DependencyProperty.Register(
+            "StateTimeLeft", typeof(double), typeof(TreeCanvas), new PropertyMetadata(0.0));
+
         public BaseVm ActiveContext
         {
             get => (BaseVm)this.GetValue(ActiveContextProperty);
@@ -180,6 +189,11 @@ namespace StorylineEditor.Views.Controls
                 {
                     treeCanvas.TranslationX = treeCanvas.AnimTranslationX - treeCanvas.ActualWidth / 2 / treeCanvas.Scale;
                     treeCanvas.TranslationY = treeCanvas.AnimTranslationY - treeCanvas.ActualHeight / 2 / treeCanvas.Scale;
+
+                    if (treeCanvas.StateTimeLeft > 0)
+                    {
+                        treeCanvas.StateTimeLeft = treeCanvas.StateDuration * (1.0 - treeCanvas.Storyboard.GetCurrentProgress(treeCanvas) ?? 1);
+                    }
 
                     if (treeCanvas.PlayingAdorner != null)
                     {
@@ -345,6 +359,7 @@ namespace StorylineEditor.Views.Controls
 
                 Storyboard.Completed += OnCompletedState;
 
+                StateTimeLeft = duration;
                 nextNode = node;
 
                 Storyboard.Begin(this, true);
@@ -390,6 +405,7 @@ namespace StorylineEditor.Views.Controls
 
                 Storyboard.Completed += OnCompletedTransition;
 
+                StateTimeLeft = 0;
                 nextNode = node;
 
                 Storyboard.Begin(this, true);
@@ -661,11 +677,6 @@ namespace StorylineEditor.Views.Controls
         protected int rootNodeIndex = -1;
         public ObservableCollection<Node_BaseVm> Selection { get; }
 
-        protected long Duration = 0;
-        protected long TimeLeft = 0;
-        protected Vector translationTarget = new Vector();
-        protected Action onStepComplete = null;
-
         protected bool shiftMode = false;
         protected bool ctrlMode = false;
 
@@ -716,12 +727,6 @@ namespace StorylineEditor.Views.Controls
 
             rootNodeIndex = -1;
             Selection.Clear();
-
-            Duration = 0;
-            TimeLeft = 0;
-            translationTarget.X = 0;
-            translationTarget.Y = 0;
-            onStepComplete = null;
 
             shiftMode = false;
             ctrlMode = false;
@@ -1138,6 +1143,12 @@ namespace StorylineEditor.Views.Controls
             OnTransformChanged();
         }));
 
+        protected ICommand openPlayerCommand;
+        public ICommand OpenPlayerCommand => openPlayerCommand ?? (openPlayerCommand = new RelayCommand(() =>
+        {
+            new InfoWindow("▶ Воспроизведение", "DT_ContentControl_TreePlayer", this) { Owner = App.Current.MainWindow }.ShowDialog();
+            Stop();
+        }));
 
         ICommand toggleGenderCommand;
         public ICommand ToggleGenderCommand =>

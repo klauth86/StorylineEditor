@@ -12,13 +12,16 @@ StorylineEditor распространяется в надежде, что он�
 
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
                     xmlns:draw="clr-namespace:System.Drawing;assembly=System.Drawing"
-                    xmlns:converters="clr-namespace:StorylineEditor.Views.Converters"                                      
-                    xmlns:views="clr-namespace:StorylineEditor.Views"
+                    xmlns:converters="clr-namespace:StorylineEditor.Views.Converters"                   
                     xmlns:viewModels="clr-namespace:StorylineEditor.ViewModels"
+                    xmlns:viewModelsNodes="clr-namespace:StorylineEditor.ViewModels.Nodes"
+                    xmlns:views="clr-namespace:StorylineEditor.Views"
                     xmlns:nodes="clr-namespace:StorylineEditor.Views.Nodes"
                     xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
-                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+                    xmlns:fa="http://schemas.fontawesome.io/icons/">
 
     <Thickness x:Key="MarginPaddingThickness">2</Thickness>
     
@@ -503,6 +506,12 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="Command" Value="{Binding ElementName=tc, Path=ResetScaleCommand}"></Setter>
     </Style>
 
+    <Style TargetType="Button" x:Key="S_Button_OpenPlayer" BasedOn="{StaticResource S_Button_CanvasPanel}">
+        <Setter Property="Content" Value="▶"></Setter>
+        <Setter Property="ToolTip" Value="Открыть проигрыватель"></Setter>
+        <Setter Property="Command" Value="{Binding ElementName=tc, Path=OpenPlayerCommand}"></Setter>
+    </Style>
+
     <!--CANVAS PANEL BUTTONS-->
 
     
@@ -670,46 +679,46 @@ StorylineEditor распространяется в надежде, что он�
     
     <!--COMMON UI BUTTONS-->
 
-    <Style TargetType="Button" x:Key="S_Button_Player_Play" BasedOn="{StaticResource S_Button_Node}">
+    <Style TargetType="Button" x:Key="S_Button_Player_Play" BasedOn="{StaticResource S_Button_CanvasPanel}">
         <Setter Property="Content" Value="▶"></Setter>
         <Setter Property="ToolTip" Value="Воспроизвести"></Setter>
-        <Setter Property="Command" Value="{Binding ElementName=tc, Path=TogglePlayCommand}"></Setter>
+        <Setter Property="Command" Value="{Binding TogglePlayCommand}"></Setter>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding ElementName=tc, Path=IsPlaying, UpdateSourceTrigger=PropertyChanged}" Value="true">
+            <DataTrigger Binding="{Binding IsPlaying, UpdateSourceTrigger=PropertyChanged}" Value="true">
                 <Setter Property="Content" Value="⏸"></Setter>
                 <Setter Property="ToolTip" Value="Пауза"></Setter>
             </DataTrigger>
         </Style.Triggers>
     </Style>
 
-    <Style TargetType="Button" x:Key="S_Button_Player_Stop" BasedOn="{StaticResource S_Button_Node}">
+    <Style TargetType="Button" x:Key="S_Button_Player_Stop" BasedOn="{StaticResource S_Button_CanvasPanel}">
         <Setter Property="Content" Value="■"></Setter>
         <Setter Property="ToolTip" Value="Остановить"></Setter>
-        <Setter Property="Command" Value="{Binding ElementName=tc, Path=StopCommand}"></Setter>
+        <Setter Property="Command" Value="{Binding StopCommand}"></Setter>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding ElementName=tc, Path=ActiveContext, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+            <DataTrigger Binding="{Binding ActiveContext, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
                 <Setter Property="IsEnabled" Value="false"></Setter>
             </DataTrigger>
         </Style.Triggers>
     </Style>
 
-    <Style TargetType="Button" x:Key="S_Button_Player_ToggleGenderToPlay" BasedOn="{StaticResource S_Button_Node}">
-        <Setter Property="Content" Value="{Binding ElementName=tc, Path=GenderToPlay, Converter={StaticResource nodeToGenderIconConverter}, UpdateSourceTrigger=PropertyChanged}"></Setter>
-        <Setter Property="ToolTip" Value="{Binding ElementName=tc, Path=GenderToPlay, Converter={StaticResource nodeToGenderDescriptionConverter}, UpdateSourceTrigger=PropertyChanged}"></Setter>
-        <Setter Property="Command" Value="{Binding ElementName=tc, Path=ToggleGenderToPlayCommand}"></Setter>
+    <Style TargetType="Button" x:Key="S_Button_Player_ToggleGenderToPlay" BasedOn="{StaticResource S_Button_CanvasPanel}">
+        <Setter Property="Content" Value="{Binding GenderToPlay, Converter={StaticResource nodeToGenderIconConverter}, UpdateSourceTrigger=PropertyChanged}"></Setter>
+        <Setter Property="ToolTip" Value="{Binding GenderToPlay, Converter={StaticResource nodeToGenderDescriptionConverter}, UpdateSourceTrigger=PropertyChanged}"></Setter>
+        <Setter Property="Command" Value="{Binding ToggleGenderToPlayCommand}"></Setter>
         <Setter Property="IsEnabled" Value="false"></Setter>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding ElementName=tc, Path=ActiveContext, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+            <DataTrigger Binding="{Binding ActiveContext, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
                 <Setter Property="IsEnabled" Value="true"></Setter>
             </DataTrigger>
         </Style.Triggers>
     </Style>
 
-    <Style TargetType="Button" x:Key="S_Button_Player_ToggleLock" BasedOn="{StaticResource S_Button_Node}">
+    <Style TargetType="Button" x:Key="S_Button_Player_ToggleLock" BasedOn="{StaticResource S_Button_CanvasPanel}">
         <Setter Property="Content" Value="📝"></Setter>
-        <Setter Property="Command" Value="{Binding ElementName=tc, Path=ToggleLockCommand}"></Setter>
+        <Setter Property="Command" Value="{Binding ToggleLockCommand}"></Setter>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding ElementName=tc, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}" Value="false">
+            <DataTrigger Binding="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged}" Value="false">
                 <Setter Property="Content" Value="🔑"/>
             </DataTrigger>
         </Style.Triggers>
@@ -1216,5 +1225,123 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
     
     <!--INFO UI-->
+
+    <!--TREE PLAYER UI-->
+    
+    <DataTemplate x:Key="DT_ContentControl_TreePlayer">
+        <DockPanel>
+            <StackPanel DockPanel.Dock="Top" Grid.Row="2" Orientation="Horizontal">
+                <xctk:IntegerUpDown Padding="{StaticResource MarginPaddingThickness}" Margin="{StaticResource MarginPaddingThickness}" Minimum="1" MinWidth="64" Maximum="60" Value="{Binding StateDuration, UpdateSourceTrigger=PropertyChanged}" AllowTextInput="False" CultureInfo="ru-RU"></xctk:IntegerUpDown>
+                <Button Style="{StaticResource S_Button_Player_Play}"></Button>
+                <Button Style="{StaticResource S_Button_Player_Stop}"></Button>
+                <Button Style="{StaticResource S_Button_Player_ToggleGenderToPlay}"></Button>
+                <Button Style="{StaticResource S_Button_Player_ToggleLock}"></Button>
+                <TextBlock Style="{StaticResource S_TextBlock_Header}" Text="{Binding StateTimeLeft, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+            </StackPanel>
+            
+            <ContentControl Grid.Row="1" Padding="{StaticResource MarginPaddingThickness}" Margin="{StaticResource MarginPaddingThickness}" Content="{Binding ActiveContext, UpdateSourceTrigger=PropertyChanged}">
+                <ContentControl.Resources>
+                    <DataTemplate DataType="{x:Type viewModels:TreePlayerContext_ErrorVm}">
+                        <StackPanel Margin="{StaticResource MarginPaddingThickness}">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Image VerticalAlignment="Center" Width="32" Height="32" Source="{Binding Source={x:Static draw:SystemIcons.Error}, Converter={StaticResource IconToImageSourceConverter}, Mode=OneWay}"/>
+                                <TextBlock VerticalAlignment="Center" Text="ОШИБКА" Style="{StaticResource S_TextBlock_HeaderBold}" Foreground="DarkRed"></TextBlock>
+                            </StackPanel>
+                            <TextBlock Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}" Foreground="DarkRed"></TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewModels:TreePlayerContext_ChoiceVm}">
+                        <ScrollViewer x:Name="sv_Main">
+                            <ItemsControl ItemsSource="{Binding NodesToSelect}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button Margin="{StaticResource MarginPaddingThickness}" Padding="{StaticResource MarginPaddingThickness}"
+                                            Command="{Binding ElementName=sv_Main, Path=DataContext.SelectNodeCommand}" CommandParameter="{Binding}"
+                                            HorizontalContentAlignment="Stretch">
+                                            <Grid ToolTip="{Binding Id}">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                                                    <ColumnDefinition></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="auto"></RowDefinition>
+                                                    <RowDefinition Height="auto"></RowDefinition>
+                                                </Grid.RowDefinitions>
+
+                                                <Label FontSize="12" FontWeight="Normal" Style="{StaticResource S_Label_NodeType}"></Label>
+
+                                                <TextBlock Grid.Column="1" Grid.Row="0" FontWeight="Bold" Text="{Binding OwnerName, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+
+                                                <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" nodes:RTBHelper.Document="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+                                            </Grid>
+                                        </Button>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewModels:TreePlayerContext_TransitionVm}">
+                        <fa:ImageAwesome Icon="Cog" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center" Spin="True" SpinDuration="4" />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewModelsNodes:DNode_TransitVm}">
+                        <Label HorizontalAlignment="Center" Style="{StaticResource S_Label_NodeType}"></Label>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewModelsNodes:DNode_RandomVm}">
+                        <Label HorizontalAlignment="Center" Style="{StaticResource S_Label_NodeType}"></Label>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewModelsNodes:DNode_CharacterVm}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                                <RowDefinition Height="auto"></RowDefinition>
+                                <RowDefinition Height="auto"></RowDefinition>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Style="{StaticResource S_TextBlock_GNodeHeader}" Text="{Binding OwnerName, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+
+                            <TextBlock Grid.Row="1" nodes:RTBHelper.Document="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+
+                            <Separator x:Name="sep_ShortDescription" Grid.Row="2" Visibility="Collapsed"></Separator>
+
+                            <TextBlock x:Name="tb_ShortDescription" Grid.Row="3" Style="{StaticResource S_TextBlock_GNodeDescriptionShort}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"></TextBlock>
+                        </Grid>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding OwnerId}" Value="{x:Static viewModels:CharacterVm.PlayerId}">
+                                <Setter TargetName="sep_ShortDescription" Property="Visibility" Value="Visible"></Setter>
+                                <Setter TargetName="tb_ShortDescription" Property="Visibility" Value="Visible"></Setter>
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewModelsNodes:DNode_DialogVm}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                                <RowDefinition Height="auto"></RowDefinition>
+                                <RowDefinition Height="auto"></RowDefinition>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Style="{StaticResource S_TextBlock_GNodeHeader}" Text="{Binding OwnerName, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+
+                            <TextBlock Grid.Row="1" nodes:RTBHelper.Document="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+
+                            <Separator x:Name="sep_ShortDescription" Grid.Row="2" Visibility="Collapsed"></Separator>
+
+                            <TextBlock x:Name="tb_ShortDescription" Grid.Row="3" Style="{StaticResource S_TextBlock_GNodeDescriptionShort}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"></TextBlock>
+                        </Grid>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding OwnerId}" Value="{x:Static viewModels:CharacterVm.PlayerId}">
+                                <Setter TargetName="sep_ShortDescription" Property="Visibility" Value="Visible"></Setter>
+                                <Setter TargetName="tb_ShortDescription" Property="Visibility" Value="Visible"></Setter>
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ContentControl.Resources>
+            </ContentControl>
+        </DockPanel>
+    </DataTemplate>
+    
+    <!--TREE PLAYER UI-->
 
 </ResourceDictionary>
