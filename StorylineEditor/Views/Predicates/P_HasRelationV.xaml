@@ -14,19 +14,18 @@ StorylineEditor распространяется в надежде, что он�
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:StorylineEditor.ViewModels.Predicates"
                     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-                    xmlns:views="clr-namespace:StorylineEditor.Views">
+                    xmlns:controls="clr-namespace:StorylineEditor.Views.Controls">
     <DataTemplate DataType="{x:Type local:P_HasRelationVm}">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <GroupBox Header="Персонаж" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
-                <ComboBox ItemsSource="{Binding ActualCharacters}"
+                <controls:FilteredComboBox FilteredItemsSource="{Binding Parent.Parent.Parent.Parent.NPCharacters}"
                           DisplayMemberPath="Name"
-                          SelectedValue="{Binding Character, UpdateSourceTrigger=PropertyChanged}"
-                          Style="{StaticResource S_ComboBox_AutoComplete}"
-                          views:ComboBoxFilterHelper.Filter="{Binding CharacterFilter, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
+                          SelectedValue="{Binding Character, UpdateSourceTrigger=PropertyChanged}">                    
+                </controls:FilteredComboBox>
             </GroupBox>
 
             <GroupBox Grid.Row="1" Header="Условие" HeaderTemplate="{StaticResource DT_Header_GroupBox}">

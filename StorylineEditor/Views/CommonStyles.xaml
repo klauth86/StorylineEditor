@@ -18,6 +18,7 @@ StorylineEditor распространяется в надежде, что он�
                     xmlns:viewModels="clr-namespace:StorylineEditor.ViewModels"
                     xmlns:viewModelsNodes="clr-namespace:StorylineEditor.ViewModels.Nodes"
                     xmlns:views="clr-namespace:StorylineEditor.Views"
+                    xmlns:controls="clr-namespace:StorylineEditor.Views.Controls"
                     xmlns:nodes="clr-namespace:StorylineEditor.Views.Nodes"
                     xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
                     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
@@ -270,7 +271,7 @@ StorylineEditor распространяется в надежде, что он�
         </Setter>
     </Style>
 
-    <Style x:Key="S_ComboBox_AutoComplete" TargetType="{x:Type ComboBox}">
+    <Style TargetType="{x:Type controls:FilteredComboBox}">
         <Setter Property="Margin" Value="{StaticResource MarginPaddingThickness}"></Setter>
         <Setter Property="Padding" Value="{StaticResource MarginPaddingThickness}"></Setter>
         <Setter Property="FontSize" Value="12"></Setter>
@@ -289,7 +290,7 @@ StorylineEditor распространяется в надежде, что он�
                                         <RowDefinition Height="auto"></RowDefinition>
                                         <RowDefinition Height="*"></RowDefinition>
                                     </Grid.RowDefinitions>
-                                    <TextBox Background="LightGreen" Margin="0, 8, 0, 4" x:Name="tb_Filter" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding Path=(views:ComboBoxFilterHelper.Filter), UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ComboBox}}"></TextBox>
+                                    <TextBox Background="LightGreen" Margin="0, 8, 0, 4" x:Name="tb_Filter" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ComboBox}}"></TextBox>
                                     <TextBox Margin="0, 8, 0, 4" x:Name="tb_FilterPlaceholder" IsReadOnly="True" Background="Transparent" BorderBrush="Transparent" IsHitTestVisible="False" Text="Search by ..." Visibility="Collapsed"></TextBox>
                                     <Border Grid.Row="1" x:Name="dropDownBorder" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" BorderThickness="1">
                                         <ScrollViewer x:Name="DropDownScrollViewer">
@@ -1136,12 +1137,10 @@ StorylineEditor распространяется в надежде, что он�
                                  FontSize="10" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Input}"></TextBox>
 
                         <ContentControl Padding="0" Panel.ZIndex="90" Margin="0, 0, 7, 7" Grid.Column="1" Grid.Row="2" Visibility="{Binding IsChecked, ElementName=DetailsExpander, Converter={StaticResource collapseFalseConverter}, UpdateSourceTrigger=PropertyChanged}">
-                            <ComboBox Margin="0" x:Name="cmb_Interlocutor" Visibility="Collapsed" FontSize="10"
-                                      ItemsSource="{Binding ActualCharacters}"
+                            <controls:FilteredComboBox Margin="0" x:Name="cmb_Interlocutor" Visibility="Collapsed" FontSize="10"
+                                      FilteredItemsSource="{Binding Parent.Parent.NPCharacters}"
                                       DisplayMemberPath="Name"
-                                      SelectedValue="{Binding Interlocutor, UpdateSourceTrigger=PropertyChanged}"
-                                      Style="{StaticResource S_ComboBox_AutoComplete}"
-                                      views:ComboBoxFilterHelper.Filter="{Binding CharacterFilter, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
+                                      SelectedValue="{Binding Interlocutor, UpdateSourceTrigger=PropertyChanged}"></controls:FilteredComboBox>
                         </ContentControl>
 
                         <ItemsPresenter x:Name="ItemsHost" Grid.Column="1" Grid.Row="3" Visibility="Collapsed"/>

@@ -14,7 +14,6 @@ using StorylineEditor.Common;
 using StorylineEditor.ViewModels.Nodes;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Data;
 using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.GameEvents
@@ -24,84 +23,26 @@ namespace StorylineEditor.ViewModels.GameEvents
     public class GE_StartDialogVm : GE_BaseVm
     {
         public GE_StartDialogVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks) {
-            CharacterAId = null;
-            CharacterBId = null;
+            CharacterId = null;
         }
 
         public GE_StartDialogVm() : this(null, 0) { }
 
-        public override bool IsValid => base.IsValid && CharacterA != null && CharacterB != null;
+        public override bool IsValid => base.IsValid && Character != null;
 
-        public string CharacterAId { get; set; }
-
-        [XmlIgnore]
-        public FolderedVm CharacterA
-        {
-            get => Parent?.Parent?.Parent?.Parent?.NPCharacters.FirstOrDefault(item => item?.Id == CharacterAId);
-            set
-            {
-                if (CharacterAId != value?.Id)
-                {
-                    CharacterAId = value?.Id;
-                    NotifyWithCallerPropName();
-                    NotifyIsValidChanged();
-                }
-            }
-        }
-
-        public string CharacterBId { get; set; }
+        public string CharacterId { get; set; }
         
         [XmlIgnore]
-        public FolderedVm CharacterB
+        public FolderedVm Character
         {
-            get => Parent?.Parent?.Parent?.Parent?.Characters.FirstOrDefault(item => item?.Id == CharacterBId);
+            get => Parent?.Parent?.Parent?.Parent?.NPCharacters.FirstOrDefault(item => item?.Id == CharacterId);
             set
             {
-                if (CharacterBId != value?.Id)
+                if (CharacterId != value?.Id)
                 {
-                    CharacterBId = value?.Id;
+                    CharacterId = value?.Id;
                     NotifyWithCallerPropName();
                     NotifyIsValidChanged();
-                }
-            }
-        }
-
-        protected CollectionViewSource actualCharactersSource;
-        [XmlIgnore]
-        public ICollectionView ActualCharacters
-        {
-            get
-            {
-                if (actualCharactersSource == null)
-                {
-                    actualCharactersSource = new CollectionViewSource() { Source = Parent?.Parent?.Parent?.Parent?.NPCharacters };
-
-                    if (actualCharactersSource.View != null)
-                    {
-                        actualCharactersSource.View.MoveCurrentTo(null);
-                    }
-                }
-
-                if (actualCharactersSource.View != null)
-                {
-                    actualCharactersSource.View.Filter = (object obj) => string.IsNullOrEmpty(characterFilter) || obj != null && ((BaseVm)obj).PassFilter(characterFilter);
-                }
-
-                return actualCharactersSource.View;
-            }
-        }
-
-        protected string characterFilter;
-        [XmlIgnore]
-        public string CharacterFilter
-        {
-            get => characterFilter;
-            set
-            {
-                if (value != characterFilter)
-                {
-                    characterFilter = value;
-                    ActualCharacters?.Refresh();
                 }
             }
         }
@@ -109,8 +50,8 @@ namespace StorylineEditor.ViewModels.GameEvents
         protected override void ResetInternalData()
         {
             base.ResetInternalData();
-            CharacterA = null;
-            CharacterB = null;
+            
+            Character = null;
         }
 
         protected override void CloneInternalData(BaseVm destObj, long additionalTicks)
@@ -119,8 +60,7 @@ namespace StorylineEditor.ViewModels.GameEvents
 
             if (destObj is GE_StartDialogVm casted)
             {
-                casted.CharacterAId = CharacterAId;
-                casted.CharacterBId = CharacterBId;
+                casted.CharacterId = CharacterId;
             }
         }
     }

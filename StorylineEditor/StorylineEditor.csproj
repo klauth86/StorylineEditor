@@ -160,8 +160,8 @@
     <Compile Include="ViewModels\Tabs\LocationObjectsTabVm.cs" />
     <Compile Include="ViewModels\LocationObjectVm.cs" />
     <Compile Include="Views\Adorners\DragOveredAdorner.cs" />
-    <Compile Include="Views\ComboBoxFilterHelper.cs" />
     <Compile Include="Views\Controls\BaseLink.cs" />
+    <Compile Include="Views\Controls\FilteredComboBox.cs" />
     <Compile Include="Views\Controls\PlayingAdorner.cs" />
     <Compile Include="Views\Controls\SequenceLink.cs" />
     <Compile Include="Views\Controls\GraphNode.cs" />

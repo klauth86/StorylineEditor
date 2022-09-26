@@ -14,7 +14,6 @@ using StorylineEditor.Common;
 using StorylineEditor.ViewModels.Nodes;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Data;
 using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.Predicates
@@ -42,7 +41,7 @@ namespace StorylineEditor.ViewModels.Predicates
         [XmlIgnore]
         public FolderedVm Dialog
         {
-            get => Parent.Parent.Parent.Parent.DialogsAndReplicas.FirstOrDefault(item => item?.Id == DialogId);
+            get => Parent?.Parent?.Parent?.Parent?.DialogsAndReplicas.FirstOrDefault(item => item?.Id == DialogId);
             set
             {
                 if (DialogId != value?.Id)
@@ -50,50 +49,6 @@ namespace StorylineEditor.ViewModels.Predicates
                     DialogId = value?.Id;
                     NotifyWithCallerPropName();
                     NotifyIsValidChanged();
-
-                    actualNodesSource = null;
-                    Notify(nameof(ActualNodes));
-                    DialogNode = null;
-                }
-            }
-        }
-
-        protected CollectionViewSource actualTreesSource;
-        [XmlIgnore]
-        public ICollectionView ActualTrees
-        {
-            get
-            {
-                if (actualTreesSource == null)
-                {
-                    actualTreesSource = new CollectionViewSource() { Source = Parent.Parent.Parent.Parent.DialogsAndReplicas };
-
-                    if (actualTreesSource.View != null)
-                    {
-                        actualTreesSource.View.MoveCurrentTo(null);
-                    }
-                }
-
-                if (actualTreesSource.View != null)
-                {
-                    actualTreesSource.View.Filter = (object obj) => string.IsNullOrEmpty(treeFilter) || obj != null && ((BaseVm)obj).PassFilter(treeFilter);
-                }
-
-                return actualTreesSource.View;
-            }
-        }
-
-        protected string treeFilter;
-        [XmlIgnore]
-        public string TreeFilter
-        {
-            get => treeFilter;
-            set
-            {
-                if (value != treeFilter)
-                {
-                    treeFilter = value;
-                    ActualTrees?.Refresh();
                 }
             }
         }
@@ -201,46 +156,6 @@ namespace StorylineEditor.ViewModels.Predicates
                     isLess = value;
                     NotifyWithCallerPropName();
                     NotifyIsValidChanged();
-                }
-            }
-        }
-
-        protected CollectionViewSource actualNodesSource;
-        [XmlIgnore]
-        public ICollectionView ActualNodes
-        {
-            get
-            {
-                if (actualNodesSource == null)
-                {
-                    actualNodesSource = new CollectionViewSource() { Source = (Dialog as TreeVm)?.Nodes };
-                    
-                    if (actualNodesSource.View != null)
-                    {
-                        actualNodesSource.View.MoveCurrentTo(null);
-                    }
-                }
-
-                if (actualNodesSource.View != null)
-                {
-                    actualNodesSource.View.Filter = (object obj) => Parent.Parent.NodeFilter(obj) && (string.IsNullOrEmpty(filter) || ((BaseVm)obj).PassFilter(filter));
-                }
-
-                return actualNodesSource.View;
-            }
-        }
-
-        protected string filter;
-        [XmlIgnore]
-        public string Filter
-        {
-            get => filter;
-            set
-            {
-                if (value != filter)
-                {
-                    filter = value;
-                    ActualNodes?.Refresh();
                 }
             }
         }

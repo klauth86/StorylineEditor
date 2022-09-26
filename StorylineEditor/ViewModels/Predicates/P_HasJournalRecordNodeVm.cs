@@ -14,7 +14,6 @@ using StorylineEditor.Common;
 using StorylineEditor.ViewModels.Nodes;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Data;
 using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.Predicates
@@ -37,7 +36,7 @@ namespace StorylineEditor.ViewModels.Predicates
         [XmlIgnore]
         public FolderedVm JournalRecord
         {
-            get => Parent.Parent.Parent.Parent.JournalRecords.FirstOrDefault(item => item?.Id == JournalRecordId);
+            get => Parent?.Parent?.Parent?.Parent?.JournalRecords.FirstOrDefault(item => item?.Id == JournalRecordId);
             set
             {
                 if (JournalRecordId != value?.Id)
@@ -45,10 +44,6 @@ namespace StorylineEditor.ViewModels.Predicates
                     JournalRecordId = value?.Id;
                     NotifyWithCallerPropName();
                     NotifyIsValidChanged();
-
-                    actualNodesSource = null;
-                    Notify(nameof(ActualNodes));
-                    JournalRecordNode = null;
                 }
             }
         }
@@ -66,46 +61,6 @@ namespace StorylineEditor.ViewModels.Predicates
                     JournalRecordNodeId = value?.Id;
                     NotifyWithCallerPropName();
                     NotifyIsValidChanged();
-                }
-            }
-        }
-
-        protected CollectionViewSource actualNodesSource;
-        [XmlIgnore]
-        public ICollectionView ActualNodes
-        {
-            get
-            {
-                if (actualNodesSource == null)
-                {
-                    actualNodesSource = new CollectionViewSource() { Source = (JournalRecord as TreeVm)?.Nodes };
-
-                    if (actualNodesSource.View != null)
-                    {
-                        actualNodesSource.View.MoveCurrentTo(null);
-                    }
-                }
-
-                if (actualNodesSource.View != null)
-                {
-                    actualNodesSource.View.Filter = (object obj) => Parent.Parent.NodeFilter(obj) && (string.IsNullOrEmpty(filter) || ((BaseVm)obj).PassFilter(filter));
-                }
-
-                return actualNodesSource.View;
-            }
-        }
-
-        protected string filter;
-        [XmlIgnore]
-        public string Filter
-        {
-            get => filter;
-            set
-            {
-                if (value != filter)
-                {
-                    filter = value;
-                    ActualNodes?.Refresh();
                 }
             }
         }

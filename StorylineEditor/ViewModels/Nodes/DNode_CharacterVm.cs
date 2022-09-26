@@ -13,7 +13,6 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Common;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Data;
 using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.Nodes
@@ -85,46 +84,6 @@ namespace StorylineEditor.ViewModels.Nodes
         }
 
         public override bool IsValid => base.IsValid && Owner != null;
-
-        protected CollectionViewSource actualCharactersSource;
-        [XmlIgnore]
-        public ICollectionView ActualCharacters
-        {
-            get
-            {
-                if (actualCharactersSource == null)
-                {
-                    actualCharactersSource = new CollectionViewSource() { Source = Parent?.Parent?.Parent?.Characters };
-
-                    if (actualCharactersSource.View != null)
-                    {
-                        actualCharactersSource.View.MoveCurrentTo(null);
-                    }
-                }
-
-                if (actualCharactersSource.View != null)
-                {
-                    actualCharactersSource.View.Filter = (object obj) => string.IsNullOrEmpty(characterFilter) || obj != null && ((BaseVm)obj).PassFilter(characterFilter);
-                }
-
-                return actualCharactersSource.View;
-            }
-        }
-
-        protected string characterFilter;
-        [XmlIgnore]
-        public string CharacterFilter
-        {
-            get => characterFilter;
-            set
-            {
-                if (value != characterFilter)
-                {
-                    characterFilter = value;
-                    ActualCharacters?.Refresh();
-                }
-            }
-        }
 
         protected override void CloneInternalData(BaseVm destObj, long additionalTicks)
         {

@@ -14,7 +14,6 @@ using StorylineEditor.Common;
 using StorylineEditor.ViewModels.Nodes;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Data;
 using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.GameEvents
@@ -36,7 +35,7 @@ namespace StorylineEditor.ViewModels.GameEvents
         [XmlIgnore]
         public FolderedVm Replica
         {
-            get => Parent.Parent.Parent.Parent.Replicas.FirstOrDefault(item => item?.Id == ReplicaId);
+            get => Parent?.Parent?.Parent?.Parent?.Replicas.FirstOrDefault(item => item?.Id == ReplicaId);
             set
             {
                 if (ReplicaId != value?.Id)
@@ -44,46 +43,6 @@ namespace StorylineEditor.ViewModels.GameEvents
                     ReplicaId = value?.Id;
                     NotifyWithCallerPropName();
                     NotifyIsValidChanged();
-                }
-            }
-        }
-
-        protected CollectionViewSource actualTreesSource;
-        [XmlIgnore]
-        public ICollectionView ActualTrees
-        {
-            get
-            {
-                if (actualTreesSource == null)
-                {
-                    actualTreesSource = new CollectionViewSource() { Source = Parent.Parent.Parent.Parent.Replicas };
-
-                    if (actualTreesSource.View != null)
-                    {
-                        actualTreesSource.View.MoveCurrentTo(null);
-                    }
-                }
-
-                if (actualTreesSource.View != null)
-                {
-                    actualTreesSource.View.Filter = (object obj) => string.IsNullOrEmpty(treeFilter) || obj != null && ((BaseVm)obj).PassFilter(treeFilter);
-                }
-
-                return actualTreesSource.View;
-            }
-        }
-
-        protected string treeFilter;
-        [XmlIgnore]
-        public string TreeFilter
-        {
-            get => treeFilter;
-            set
-            {
-                if (value != treeFilter)
-                {
-                    treeFilter = value;
-                    ActualTrees?.Refresh();
                 }
             }
         }
