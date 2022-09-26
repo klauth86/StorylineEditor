@@ -30,6 +30,8 @@ using StorylineEditor.ViewModels.Tabs;
 
 namespace StorylineEditor.Views.Controls
 {
+    public class TreeCanvasProxy { public TreeCanvas TreeCanvas { get; set; } }
+
     public class TreeCanvas : Canvas, ICopyPaste
     {
         const double TransitionDuration = 0.75;
@@ -294,17 +296,97 @@ namespace StorylineEditor.Views.Controls
 
 
 
-        public void Copy() { }
-        private void OnNodeCopied(Node_BaseVm node)
+        public void Copy()
         {
-            node.PositionX = (node.PositionX - TranslationX) * Scale;
-            node.PositionY = (node.PositionY - TranslationY) * Scale;
+            // Only need to copy nodes and links
+            // Other stuff will be generated in Paste
+
+            if (Tree != null)
+            {
+                TreeVm copiedTree = new TreeVm(Tree.Parent, 0);
+
+                Dictionary<string, string> nodesMapping = new Dictionary<string, string>();
+
+                long counter = 0;
+
+                foreach (var node in Selection)
+                {
+                    var copiedNode = node.Clone<Node_BaseVm>(copiedTree, counter++);
+
+                    copiedNode.PositionX = (copiedNode.PositionX - TranslationX) * Scale;
+                    copiedNode.PositionY = (copiedNode.PositionY - TranslationY) * Scale;
+
+                    copiedTree.Nodes.Add(copiedNode);
+
+                    nodesMapping.Add(node.Id, copiedNode.Id);
+
+                    System.Diagnostics.Trace.WriteLine(string.Format("{0}|{1}", node.Id, copiedNode.Id));
+                }
+
+                foreach (var link in Tree.Links)
+                {
+                    if (nodesMapping.ContainsKey(link.FromId) && nodesMapping.ContainsKey(link.ToId))
+                    {
+                        copiedTree.Links.Add(new NodePairVm() { FromId = nodesMapping[link.FromId], ToId = nodesMapping[link.ToId] });
+
+                        System.Diagnostics.Trace.WriteLine(string.Format("{0}|{1} => {2}|{3}", link.FromId, link.ToId, nodesMapping[link.FromId], nodesMapping[link.ToId]));
+                    }
+                }
+
+                Clipboard.SetText(App.SerializeXmlToString<TreeVm>(copiedTree));
+            }
         }
-        public void Paste() { }
-        private void OnNodePasted(Node_BaseVm node)
+
+        public void Paste()
         {
-            node.PositionX = node.PositionX / Scale + TranslationX;
-            node.PositionY = node.PositionY / Scale + TranslationY;
+            string xmlString = Clipboard.GetText();
+            if (!string.IsNullOrEmpty(xmlString))
+            {
+                try
+                {
+                    TreeVm copiedTree = App.DeserializeXmlFromString<TreeVm>(xmlString);
+
+                    Dictionary<string, string> nodesMapping = new Dictionary<string, string>();
+
+                    long counter = 0;
+
+                    foreach (var node in copiedTree.Nodes)
+                    {
+                        var copiedNode = node.Clone<Node_BaseVm>(Tree, counter++);
+
+                        copiedNode.PositionX = copiedNode.PositionX / Scale + TranslationX;
+                        copiedNode.PositionY = copiedNode.PositionY / Scale + TranslationY;
+
+                        Tree.AddNode(copiedNode);
+                        AddGraphNode(copiedNode);
+
+                        nodesMapping.Add(node.Id, copiedNode.Id);
+
+                        copiedNode.SetupParenthood();
+                    }
+
+                    foreach (var link in copiedTree.Links)
+                    {
+                        if (nodesMapping.ContainsKey(link.FromId) && nodesMapping.ContainsKey(link.ToId))
+                        {
+                            NodePairVm copiedLink = Tree.AddLink(
+                            Tree.Nodes.First(node => node.Id == nodesMapping[link.FromId]),
+                            Tree.Nodes.First(node => node.Id == nodesMapping[link.ToId])
+                            );
+                            AddGraphLink(copiedLink);
+                        }
+                    }
+
+                    foreach (var nodeId in nodesMapping.Values)
+                    {
+                        AddToSelection(Tree.Nodes.First(node => node.Id == nodeId), false);
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+            }
         }
 
 
@@ -637,9 +719,9 @@ namespace StorylineEditor.Views.Controls
             Unloaded += OnUnloaded;
         }
 
-        protected override void OnGotFocus(RoutedEventArgs e)
+        protected override void OnMouseEnter(MouseEventArgs e)
         {
-            base.OnGotFocus(e);
+            base.OnMouseEnter(e);
 
             if (ICopyPasteService.Context != this)
             {
@@ -647,14 +729,14 @@ namespace StorylineEditor.Views.Controls
             }
         }
 
-        protected override void OnLostFocus(RoutedEventArgs e)
+        protected override void OnMouseLeave(MouseEventArgs e)
         {
             if (ICopyPasteService.Context == this)
             {
                 ICopyPasteService.Context = null;
             }
 
-            base.OnLostFocus(e);
+            base.OnMouseLeave(e);
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e) { MainWindow.FacadeKeyEvent += OnFacadeKeyEvent; }
@@ -1146,7 +1228,7 @@ namespace StorylineEditor.Views.Controls
         protected ICommand openPlayerCommand;
         public ICommand OpenPlayerCommand => openPlayerCommand ?? (openPlayerCommand = new RelayCommand(() =>
         {
-            new InfoWindow("▶ Воспроизведение", "DT_ContentControl_TreePlayer", this) { Owner = App.Current.MainWindow }.ShowDialog();
+            new InfoWindow("▶ Воспроизведение", "DT_ContentControl_TreePlayer", new TreeCanvasProxy { TreeCanvas = this }) { Owner = App.Current.MainWindow }.ShowDialog();
             Stop();
         }));
 

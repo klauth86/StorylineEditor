@@ -135,6 +135,7 @@
     <Compile Include="ViewModels\Tabs\PlayerDialogsTabVm.cs" />
     <Compile Include="ViewModels\Tabs\ReplicasTabVm.cs" />
     <Compile Include="ViewModels\TreeFolderVm.cs" />
+    <Compile Include="ViewModels\TreePlayerHistoryVm.cs" />
     <Compile Include="ViewModels\TreeVm.cs" />
     <Compile Include="ViewModels\GameEvents\GE_DestroyActorVm.cs" />
     <Compile Include="ViewModels\GameEvents\Items\GE_DropItemVm.cs" />

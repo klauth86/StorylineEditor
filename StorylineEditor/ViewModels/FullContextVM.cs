@@ -191,7 +191,7 @@ namespace StorylineEditor.ViewModels
             }
         }
 
-        public FullContextVm() : base() { Actions = new List<Action_BaseVm>(); tabs = new ObservableCollection<BaseVm<FullContextVm>>(); }
+        public FullContextVm() : base() { Actions = new List<Action_BaseVm>(); tabs = new ObservableCollection<BaseVm<FullContextVm>>(); TreePlayerHistory = new TreePlayerHistoryVm(this, 0); }
 
         public bool IsEmpty() =>
             (null == CharactersTab || CharactersTab.Items.Count == 0 || CharactersTab.Items.All(item => item.Id == CharacterVm.PlayerId)) &&
@@ -230,5 +230,8 @@ namespace StorylineEditor.ViewModels
 
         protected ICommand pasteCommand;
         public ICommand PasteCommand => pasteCommand ?? (pasteCommand = new RelayCommand(() => ICopyPasteService.Context?.Paste()));
+
+        [XmlIgnore]
+        TreePlayerHistoryVm TreePlayerHistory { get; set; }
     }
 }

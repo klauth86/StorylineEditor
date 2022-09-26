@@ -679,46 +679,46 @@ StorylineEditor распространяется в надежде, что он�
     
     <!--COMMON UI BUTTONS-->
 
-    <Style TargetType="Button" x:Key="S_Button_Player_Play" BasedOn="{StaticResource S_Button_CanvasPanel}">
+    <Style TargetType="Button" x:Key="S_Button_TreePlayer_Play" BasedOn="{StaticResource S_Button_CanvasPanel}">
         <Setter Property="Content" Value="▶"></Setter>
         <Setter Property="ToolTip" Value="Воспроизвести"></Setter>
-        <Setter Property="Command" Value="{Binding TogglePlayCommand}"></Setter>
+        <Setter Property="Command" Value="{Binding TreeCanvas.TogglePlayCommand}"></Setter>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding IsPlaying, UpdateSourceTrigger=PropertyChanged}" Value="true">
+            <DataTrigger Binding="{Binding TreeCanvas.IsPlaying, UpdateSourceTrigger=PropertyChanged}" Value="true">
                 <Setter Property="Content" Value="⏸"></Setter>
                 <Setter Property="ToolTip" Value="Пауза"></Setter>
             </DataTrigger>
         </Style.Triggers>
     </Style>
 
-    <Style TargetType="Button" x:Key="S_Button_Player_Stop" BasedOn="{StaticResource S_Button_CanvasPanel}">
+    <Style TargetType="Button" x:Key="S_Button_TreePlayer_Stop" BasedOn="{StaticResource S_Button_CanvasPanel}">
         <Setter Property="Content" Value="■"></Setter>
         <Setter Property="ToolTip" Value="Остановить"></Setter>
-        <Setter Property="Command" Value="{Binding StopCommand}"></Setter>
+        <Setter Property="Command" Value="{Binding TreeCanvas.StopCommand}"></Setter>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding ActiveContext, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+            <DataTrigger Binding="{Binding TreeCanvas.ActiveContext, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
                 <Setter Property="IsEnabled" Value="false"></Setter>
             </DataTrigger>
         </Style.Triggers>
     </Style>
 
-    <Style TargetType="Button" x:Key="S_Button_Player_ToggleGenderToPlay" BasedOn="{StaticResource S_Button_CanvasPanel}">
-        <Setter Property="Content" Value="{Binding GenderToPlay, Converter={StaticResource nodeToGenderIconConverter}, UpdateSourceTrigger=PropertyChanged}"></Setter>
-        <Setter Property="ToolTip" Value="{Binding GenderToPlay, Converter={StaticResource nodeToGenderDescriptionConverter}, UpdateSourceTrigger=PropertyChanged}"></Setter>
-        <Setter Property="Command" Value="{Binding ToggleGenderToPlayCommand}"></Setter>
+    <Style TargetType="Button" x:Key="S_Button_TreePlayer_ToggleGenderToPlay" BasedOn="{StaticResource S_Button_CanvasPanel}">
+        <Setter Property="Content" Value="{Binding TreeCanvas.GenderToPlay, Converter={StaticResource nodeToGenderIconConverter}, UpdateSourceTrigger=PropertyChanged}"></Setter>
+        <Setter Property="ToolTip" Value="{Binding TreeCanvas.GenderToPlay, Converter={StaticResource nodeToGenderDescriptionConverter}, UpdateSourceTrigger=PropertyChanged}"></Setter>
+        <Setter Property="Command" Value="{Binding TreeCanvas.ToggleGenderToPlayCommand}"></Setter>
         <Setter Property="IsEnabled" Value="false"></Setter>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding ActiveContext, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+            <DataTrigger Binding="{Binding TreeCanvas.ActiveContext, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
                 <Setter Property="IsEnabled" Value="true"></Setter>
             </DataTrigger>
         </Style.Triggers>
     </Style>
 
-    <Style TargetType="Button" x:Key="S_Button_Player_ToggleLock" BasedOn="{StaticResource S_Button_CanvasPanel}">
+    <Style TargetType="Button" x:Key="S_Button_TreePlayer_ToggleLock" BasedOn="{StaticResource S_Button_CanvasPanel}">
         <Setter Property="Content" Value="📝"></Setter>
-        <Setter Property="Command" Value="{Binding ToggleLockCommand}"></Setter>
+        <Setter Property="Command" Value="{Binding TreeCanvas.ToggleLockCommand}"></Setter>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged}" Value="false">
+            <DataTrigger Binding="{Binding TreeCanvas.IsEnabled, UpdateSourceTrigger=PropertyChanged}" Value="false">
                 <Setter Property="Content" Value="🔑"/>
             </DataTrigger>
         </Style.Triggers>
@@ -1133,10 +1133,10 @@ StorylineEditor распространяется в надежде, что он�
 
                         <TextBox Panel.ZIndex="90" Margin="0, 0, 7, 0" Grid.Column="1" Grid.Row="1"
                                  Visibility="{Binding IsChecked, ElementName=DetailsExpander, Converter={StaticResource collapseFalseConverter}, UpdateSourceTrigger=PropertyChanged}"
-                                 FontSize="8" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Input}"></TextBox>
+                                 FontSize="10" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Input}"></TextBox>
 
                         <ContentControl Padding="0" Panel.ZIndex="90" Margin="0, 0, 7, 7" Grid.Column="1" Grid.Row="2" Visibility="{Binding IsChecked, ElementName=DetailsExpander, Converter={StaticResource collapseFalseConverter}, UpdateSourceTrigger=PropertyChanged}">
-                            <ComboBox Margin="0" x:Name="cmb_Interlocutor" Visibility="Collapsed" FontSize="8"
+                            <ComboBox Margin="0" x:Name="cmb_Interlocutor" Visibility="Collapsed" FontSize="10"
                                       ItemsSource="{Binding ActualCharacters}"
                                       DisplayMemberPath="Name"
                                       SelectedValue="{Binding Interlocutor, UpdateSourceTrigger=PropertyChanged}"
@@ -1231,15 +1231,15 @@ StorylineEditor распространяется в надежде, что он�
     <DataTemplate x:Key="DT_ContentControl_TreePlayer">
         <DockPanel>
             <StackPanel DockPanel.Dock="Top" Grid.Row="2" Orientation="Horizontal">
-                <xctk:IntegerUpDown Padding="{StaticResource MarginPaddingThickness}" Margin="{StaticResource MarginPaddingThickness}" Minimum="1" MinWidth="64" Maximum="60" Value="{Binding StateDuration, UpdateSourceTrigger=PropertyChanged}" AllowTextInput="False" CultureInfo="ru-RU"></xctk:IntegerUpDown>
-                <Button Style="{StaticResource S_Button_Player_Play}"></Button>
-                <Button Style="{StaticResource S_Button_Player_Stop}"></Button>
-                <Button Style="{StaticResource S_Button_Player_ToggleGenderToPlay}"></Button>
-                <Button Style="{StaticResource S_Button_Player_ToggleLock}"></Button>
-                <TextBlock Style="{StaticResource S_TextBlock_Header}" Text="{Binding StateTimeLeft, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                <xctk:IntegerUpDown Padding="{StaticResource MarginPaddingThickness}" Margin="{StaticResource MarginPaddingThickness}" Minimum="1" MinWidth="64" Maximum="60" Value="{Binding TreeCanvas.StateDuration, UpdateSourceTrigger=PropertyChanged}" AllowTextInput="False" CultureInfo="ru-RU"></xctk:IntegerUpDown>
+                <Button Style="{StaticResource S_Button_TreePlayer_Play}"></Button>
+                <Button Style="{StaticResource S_Button_TreePlayer_Stop}"></Button>
+                <Button Style="{StaticResource S_Button_TreePlayer_ToggleGenderToPlay}"></Button>
+                <Button Style="{StaticResource S_Button_TreePlayer_ToggleLock}"></Button>
+                <TextBlock Style="{StaticResource S_TextBlock_Header}" Text="{Binding TreeCanvas.StateTimeLeft, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
             </StackPanel>
             
-            <ContentControl Grid.Row="1" Padding="{StaticResource MarginPaddingThickness}" Margin="{StaticResource MarginPaddingThickness}" Content="{Binding ActiveContext, UpdateSourceTrigger=PropertyChanged}">
+            <ContentControl Grid.Row="1" Padding="{StaticResource MarginPaddingThickness}" Margin="{StaticResource MarginPaddingThickness}" Content="{Binding TreeCanvas.ActiveContext, UpdateSourceTrigger=PropertyChanged}">
                 <ContentControl.Resources>
                     <DataTemplate DataType="{x:Type viewModels:TreePlayerContext_ErrorVm}">
                         <StackPanel Margin="{StaticResource MarginPaddingThickness}">
