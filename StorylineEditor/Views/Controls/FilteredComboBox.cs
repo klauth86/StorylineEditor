@@ -54,11 +54,7 @@ namespace StorylineEditor.Views.Controls
                 if (e.NewValue != null)
                 {
                     comboBox.filteredCVS = new CollectionViewSource() { Source = e.NewValue };
-                    if (comboBox.filteredCVS.View != null)
-                    {
-                        comboBox.filteredCVS.View.Filter = (o) => comboBox.FilterItem(o);
-                        comboBox.filteredCVS.View.MoveCurrentTo(comboBox.SelectedValue);
-                    }
+                    if (comboBox.filteredCVS.View != null) comboBox.filteredCVS.View.Filter = (o) => comboBox.FilterItem(o);
                 }
                 
                 d.SetValue(ItemsSourceProperty, comboBox.filteredCVS?.View);
