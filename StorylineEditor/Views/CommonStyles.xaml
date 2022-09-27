@@ -162,12 +162,6 @@ StorylineEditor распространяется в надежде, что он�
     <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Button.Background" Color="Transparent"/>
     <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Button.Border" Color="Transparent"/>
 
-    <Style TargetType="ComboBox">
-        <Setter Property="Margin" Value="{StaticResource MarginPaddingThickness}"></Setter>
-        <Setter Property="Padding" Value="{StaticResource MarginPaddingThickness}"></Setter>
-        <Setter Property="FontSize" Value="12"></Setter>
-    </Style>
-
     <Style TargetType="ComboBoxItem">
         <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
     </Style>
@@ -271,23 +265,29 @@ StorylineEditor распространяется в надежде, что он�
         </Setter>
     </Style>
 
+    <Style TargetType="{x:Type ComboBox}">
+        <Setter Property="Margin" Value="{StaticResource MarginPaddingThickness}"></Setter>
+        <Setter Property="Padding" Value="{StaticResource MarginPaddingThickness}"></Setter>
+        <Setter Property="FontSize" Value="12"></Setter>
+    </Style>
+    
     <Style TargetType="{x:Type controls:FilteredComboBox}">
         <Setter Property="Margin" Value="{StaticResource MarginPaddingThickness}"></Setter>
         <Setter Property="Padding" Value="{StaticResource MarginPaddingThickness}"></Setter>
         <Setter Property="FontSize" Value="12"></Setter>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ComboBox}">
+                <ControlTemplate TargetType="{x:Type controls:FilteredComboBox}">
                     <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition MinWidth="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" Width="0"/>
                         </Grid.ColumnDefinitions>
-                        <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Margin="{StaticResource MarginPaddingThickness}" Placement="Bottom" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}">
+                        <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Margin="1" Placement="Bottom" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}">
                             <theme:SystemDropShadowChrome x:Name="shadow" Color="Transparent" MinWidth="{Binding ActualWidth, ElementName=templateRoot}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
                                 <Grid>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"></RowDefinition>
+                                        <RowDefinition Height="Auto"></RowDefinition>
                                         <RowDefinition Height="*"></RowDefinition>
                                     </Grid.RowDefinitions>
                                     <TextBox Background="LightGreen" Margin="0, 8, 0, 4" x:Name="tb_Filter" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ComboBox}}"></TextBox>
@@ -306,7 +306,7 @@ StorylineEditor распространяется в надежде, что он�
                             </theme:SystemDropShadowChrome>
                         </Popup>
                         <ToggleButton x:Name="toggleButton" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Grid.ColumnSpan="2" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Style="{StaticResource ComboBoxToggleButton}"/>
-                        <ContentPresenter x:Name="contentPresenter" ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" Content="{TemplateBinding SelectionBoxItem}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" IsHitTestVisible="false" Margin="{TemplateBinding Margin}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        <ContentPresenter x:Name="contentPresenter" ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" Content="{TemplateBinding SelectionBoxItem}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" IsHitTestVisible="false" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger SourceName="tb_Filter" Property="Text" Value="{x:Null}">
