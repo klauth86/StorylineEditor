@@ -717,11 +717,6 @@ StorylineEditor распространяется в надежде, что он�
         </Style.Triggers>
     </Style>
 
-    <Style TargetType="Button" x:Key="S_Button_TreePlayer_ToggleLock" BasedOn="{StaticResource S_Button_CanvasPanel}">
-        <Setter Property="Content" Value="📝"></Setter>
-        <Setter Property="Command" Value="{Binding TreeCanvas.OpenTreePlayerHistoryCommand}"></Setter>
-    </Style>
-    
     <Style TargetType="Button" x:Key="S_Button_UI_Remove_TabItem" BasedOn="{StaticResource S_Button_Node}">
         <Setter Property="Background" Value="Red"></Setter>
         <Setter Property="Foreground" Value="White"></Setter>
@@ -1229,15 +1224,22 @@ StorylineEditor распространяется в надежде, что он�
             
             <TabItem Header="Воспроизведение">
                 <DockPanel>
-                    <StackPanel DockPanel.Dock="Top" Grid.Row="2" Orientation="Horizontal">
-                        <CheckBox IsChecked="{Binding TreeCanvas.FullMode}">Полный режим</CheckBox>                        
-                        <xctk:IntegerUpDown Padding="{StaticResource MarginPaddingThickness}" Margin="{StaticResource MarginPaddingThickness}" Minimum="1" MinWidth="64" Maximum="60" Value="{Binding TreeCanvas.StateDuration, UpdateSourceTrigger=PropertyChanged}" AllowTextInput="False" CultureInfo="ru-RU"></xctk:IntegerUpDown>
-                        <Button Style="{StaticResource S_Button_TreePlayer_Play}"></Button>
-                        <Button Style="{StaticResource S_Button_TreePlayer_Stop}"></Button>
-                        <Button Style="{StaticResource S_Button_TreePlayer_ToggleGenderToPlay}"></Button>
-                        <Button Style="{StaticResource S_Button_TreePlayer_ToggleLock}"></Button>
-                        <TextBlock Style="{StaticResource S_TextBlock_Header}" Text="{Binding TreeCanvas.StateTimeLeft, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-                    </StackPanel>
+                    <Grid DockPanel.Dock="Top" Grid.Row="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <CheckBox IsChecked="{Binding TreeCanvas.FullMode}">Полный режим</CheckBox>
+
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <Button Style="{StaticResource S_Button_TreePlayer_Play}"></Button>
+                            <Button Style="{StaticResource S_Button_TreePlayer_Stop}"></Button>
+                            <Button Style="{StaticResource S_Button_TreePlayer_ToggleGenderToPlay}"></Button>
+                            <xctk:IntegerUpDown Padding="{StaticResource MarginPaddingThickness}" Margin="{StaticResource MarginPaddingThickness}" Minimum="1" MinWidth="64" Maximum="60" Value="{Binding TreeCanvas.StateDuration, UpdateSourceTrigger=PropertyChanged}" AllowTextInput="False" CultureInfo="ru-RU"></xctk:IntegerUpDown>
+                            <TextBlock Style="{StaticResource S_TextBlock_Header}" Text="{Binding TreeCanvas.StateTimeLeft, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                        </StackPanel>
+                    </Grid>
                     <ContentControl Grid.Row="1" Padding="{StaticResource MarginPaddingThickness}" Margin="{StaticResource MarginPaddingThickness}" Content="{Binding TreeCanvas.ActiveContext, UpdateSourceTrigger=PropertyChanged}">
                         <ContentControl.Resources>
                             <DataTemplate DataType="{x:Type viewModels:TreePlayerContext_ErrorVm}">

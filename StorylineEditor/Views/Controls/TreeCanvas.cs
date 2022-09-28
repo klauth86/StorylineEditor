@@ -1283,12 +1283,5 @@ namespace StorylineEditor.Views.Controls
         ICommand toggleGenderToPlayCommand;
         public ICommand ToggleGenderToPlayCommand =>
             toggleGenderToPlayCommand ?? (toggleGenderToPlayCommand = new RelayCommand(() => { GenderToPlay = 3 - GenderToPlay; }, () => ActiveContext == null));
-
-
-        protected ICommand openTreePlayerHistoryCommand;
-        public ICommand OpenTreePlayerHistoryCommand => openTreePlayerHistoryCommand ?? (openTreePlayerHistoryCommand = new RelayCommand(() =>
-        {
-            new InfoWindow("Контекст воспроизведения", null, Tree.Parent.Parent.TreePlayerHistory) { Owner = App.Current.MainWindow }.ShowDialog();
-        }, () => Tree != null && !IsPlaying));
     }
 }
