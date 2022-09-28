@@ -156,6 +156,15 @@ namespace StorylineEditor.Views.Controls
         public static readonly DependencyProperty IsPlayingProperty = DependencyProperty.Register(
             "IsPlaying", typeof(bool), typeof(TreeCanvas), new PropertyMetadata(false));
 
+        public bool FullMode
+        {
+            get => (bool)this.GetValue(FullModeProperty);
+            set { this.SetValue(FullModeProperty, value); }
+        }
+
+        public static readonly DependencyProperty FullModeProperty = DependencyProperty.Register(
+            "FullMode", typeof(bool), typeof(TreeCanvas), new PropertyMetadata(false));
+
         private static void OnTreeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is TreeCanvas treeCanvas)
