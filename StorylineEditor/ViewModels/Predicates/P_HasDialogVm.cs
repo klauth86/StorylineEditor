@@ -30,7 +30,9 @@ namespace StorylineEditor.ViewModels.Predicates
 
         public override bool IsValid => base.IsValid && Dialog != null;
 
-        public override bool IsOk => throw new System.Exception(); ////// TODO
+        public override bool IsOk => !IsValid ||
+            !isInversed && Parent.Parent.Parent.Parent.TreePlayerHistory.PassedDialogsAndReplicas.Any((path) => path?.Tree?.Id == DialogId) ||
+            isInversed && !Parent.Parent.Parent.Parent.TreePlayerHistory.PassedDialogsAndReplicas.Any((path) => path?.Tree?.Id == DialogId);
 
         public string DialogId { get; set; }
 

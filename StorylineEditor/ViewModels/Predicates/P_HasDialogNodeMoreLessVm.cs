@@ -12,6 +12,7 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Common;
 using StorylineEditor.ViewModels.Nodes;
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
@@ -36,7 +37,20 @@ namespace StorylineEditor.ViewModels.Predicates
 
         public override bool IsValid=> base.IsValid && Dialog != null && DialogNode != null && (isMore || isMoreOrEqual || isEqual || isLessOrEqual || isLess);
 
-        public override bool IsOk => throw new System.Exception(); ////// TODO
+        public override bool IsOk => !IsValid ||
+            !isInversed && NumericCondition(Parent.Parent.Parent.Parent.TreePlayerHistory.PassedDialogsAndReplicas.Sum((path) => path?.Tree?.Id == DialogId ? path.PassedNodes.Count((node)=> node == DialogNode) : 0)) ||
+            isInversed && !NumericCondition(Parent.Parent.Parent.Parent.TreePlayerHistory.PassedDialogsAndReplicas.Sum((path) => path?.Tree?.Id == DialogId ? path.PassedNodes.Count((node) => node == DialogNode) : 0));
+
+        private bool NumericCondition(int count)
+        {
+            if (IsMore) return count > Num;
+            if (IsMoreOrEqual) return count >= Num;
+            if (IsEqual) return count == Num;
+            if (IsLessOrEqual) return count <= Num;
+            if (IsLess) return count < Num;
+
+            return false;
+        }
 
         public string DialogId { get; set; }
 

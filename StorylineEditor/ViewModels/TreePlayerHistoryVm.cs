@@ -13,19 +13,46 @@ StorylineEditor распространяется в надежде, что он�
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using StorylineEditor.Common;
+using StorylineEditor.ViewModels.Nodes;
 
 namespace StorylineEditor.ViewModels
 {
+    public class TreePathVm : BaseVm<TreePlayerHistoryVm>
+    {
+        public TreePathVm(TreePlayerHistoryVm parent, long additionalTicks) : base(parent, additionalTicks)
+        {
+            PassedNodes = new ObservableCollection<Node_BaseVm>();
+        }
+
+        public TreePathVm() : this(null, 0) { }
+
+        public TreeVm Tree { get; set; }
+
+        public ObservableCollection<Node_BaseVm> PassedNodes { get; set; }
+
+        protected ICommand removePassedNodeCommand;
+        public ICommand RemovePassedNodeCommand =>
+            removePassedNodeCommand ?? (removePassedNodeCommand = new RelayCommand<Node_BaseVm>((node) => { PassedNodes.Remove(node); }, (node) => node != null));
+
+        protected ICommand addPassedNodeCommand;
+        public ICommand AddPassedNodeCommand =>
+            addPassedNodeCommand ?? (addPassedNodeCommand = new RelayCommand<Node_BaseVm>((node) => { PassedNodes.Add(node); }, (node) => node != null));
+    }
+
     public class TreePlayerHistoryVm : BaseVm<FullContextVm>
     {
         public TreePlayerHistoryVm(FullContextVm parent, long additionalTicks) : base(parent, additionalTicks)
         {
             Inventory = new ObservableCollection<ItemVm>();
+
+            PassedDialogsAndReplicas = new ObservableCollection<TreePathVm>();
+
+
         }
 
         public TreePlayerHistoryVm() : this(null, 0) { }
 
-        public ObservableCollection<ItemVm> Inventory { get; set; }
+        public ObservableCollection<ItemVm> Inventory { get; private set; }
 
         protected ICommand removeItemCommand;
         public ICommand RemoveItemCommand =>
@@ -36,5 +63,15 @@ namespace StorylineEditor.ViewModels
             addItemCommand ?? (addItemCommand = new RelayCommand<ItemVm>((item) => { Inventory.Add(item); }, (item) => item != null));
 
         public bool HasItem(ItemVm item) => Inventory.Contains(item);
+
+        public ObservableCollection<TreePathVm> PassedDialogsAndReplicas { get; private set; }
+
+        protected ICommand removeDialogsAndReplicasCommand;
+        public ICommand RemoveDialogsAndReplicasCommand =>
+            removeDialogsAndReplicasCommand ?? (removeDialogsAndReplicasCommand = new RelayCommand<TreePathVm>((item) => { PassedDialogsAndReplicas.Remove(item); }, (item) => item != null));
+
+        protected ICommand addDialogsAndReplicasCommand;
+        public ICommand AddDialogsAndReplicasCommand =>
+            addDialogsAndReplicasCommand ?? (addDialogsAndReplicasCommand = new RelayCommand<FolderedVm>((item) => { PassedDialogsAndReplicas.Add(new TreePathVm() { Tree = (TreeVm)item }); }, (item) => item != null));
     }
 }
