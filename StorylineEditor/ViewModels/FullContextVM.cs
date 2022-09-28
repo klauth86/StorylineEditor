@@ -232,6 +232,6 @@ namespace StorylineEditor.ViewModels
         public ICommand PasteCommand => pasteCommand ?? (pasteCommand = new RelayCommand(() => ICopyPasteService.Context?.Paste()));
 
         [XmlIgnore]
-        TreePlayerHistoryVm TreePlayerHistory { get; set; }
+        public TreePlayerHistoryVm TreePlayerHistory { get; set; }
     }
 }

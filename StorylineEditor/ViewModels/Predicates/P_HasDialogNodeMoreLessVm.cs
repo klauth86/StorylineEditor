@@ -36,6 +36,8 @@ namespace StorylineEditor.ViewModels.Predicates
 
         public override bool IsValid=> base.IsValid && Dialog != null && DialogNode != null && (isMore || isMoreOrEqual || isEqual || isLessOrEqual || isLess);
 
+        public override bool IsOk => throw new System.Exception(); ////// TODO
+
         public string DialogId { get; set; }
 
         [XmlIgnore]

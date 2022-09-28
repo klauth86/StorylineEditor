@@ -25,7 +25,7 @@ namespace StorylineEditor
             InitializeComponent();
 
             Title = title;
-            cc.ContentTemplate = App.Current.FindResource(dataTemplateKey) as DataTemplate;
+            if (!string.IsNullOrEmpty(dataTemplateKey)) cc.ContentTemplate = App.Current.FindResource(dataTemplateKey) as DataTemplate;
             DataContext = dataContext;
         }
 

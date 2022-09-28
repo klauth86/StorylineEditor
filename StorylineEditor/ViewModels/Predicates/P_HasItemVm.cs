@@ -30,6 +30,8 @@ namespace StorylineEditor.ViewModels.Predicates
 
         public override bool IsValid => base.IsValid && Item != null;
 
+        public override bool IsOk => !IsValid || Parent.Parent.Parent.Parent.TreePlayerHistory.Inventory.Contains(Item);
+        
         public string ItemId { get; set; }
         
         [XmlIgnore]

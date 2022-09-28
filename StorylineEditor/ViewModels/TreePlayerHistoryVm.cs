@@ -33,7 +33,7 @@ namespace StorylineEditor.ViewModels
 
         protected ICommand addItemCommand;
         public ICommand AddItemCommand =>
-            addItemCommand ?? (addItemCommand = new RelayCommand<ItemVm>((item) => { Inventory.Remove(item); }, (item) => item != null));
+            addItemCommand ?? (addItemCommand = new RelayCommand<ItemVm>((item) => { Inventory.Add(item); }, (item) => item != null));
 
         public bool HasItem(ItemVm item) => Inventory.Contains(item);
     }

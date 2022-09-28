@@ -719,12 +719,7 @@ StorylineEditor распространяется в надежде, что он�
 
     <Style TargetType="Button" x:Key="S_Button_TreePlayer_ToggleLock" BasedOn="{StaticResource S_Button_CanvasPanel}">
         <Setter Property="Content" Value="📝"></Setter>
-        <Setter Property="Command" Value="{Binding TreeCanvas.ToggleLockCommand}"></Setter>
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding TreeCanvas.IsEnabled, UpdateSourceTrigger=PropertyChanged}" Value="false">
-                <Setter Property="Content" Value="🔑"/>
-            </DataTrigger>
-        </Style.Triggers>
+        <Setter Property="Command" Value="{Binding TreeCanvas.OpenTreePlayerHistoryCommand}"></Setter>
     </Style>
     
     <Style TargetType="Button" x:Key="S_Button_UI_Remove_TabItem" BasedOn="{StaticResource S_Button_Node}">
@@ -1345,4 +1340,38 @@ StorylineEditor распространяется в надежде, что он�
     
     <!--TREE PLAYER UI-->
 
+    <DataTemplate DataType="{x:Type viewModels:TreePlayerHistoryVm}">
+        <TabControl x:Name="tc_Main">
+            <TabItem Header="Инвеетарь">
+                <DockPanel>
+                    <Grid DockPanel.Dock="Top">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <controls:FilteredComboBox x:Name="fcmb_Items" FontSize="10" Grid.Column="0" ItemsSource="{Binding Parent.Items, UpdateSourceTrigger=PropertyChanged}"
+                                               SelectedValue="{Binding ItemToAdd, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"></controls:FilteredComboBox>
+                        <Button Grid.Column="1" Style="{StaticResource S_Button_UI_Add}" Command="{Binding ElementName=tc_Main, Path=DataContext.AddItemCommand, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding ElementName=fcmb_Items, Path=SelectedValue, UpdateSourceTrigger=PropertyChanged}"></Button>
+                    </Grid>
+                    <ScrollViewer>
+                        <ItemsControl ItemsSource="{Binding Inventory}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Style="{StaticResource S_TextBlock_Base}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                                        <Button Grid.Column="1" Style="{StaticResource S_Button_UI_Remove_TabItem}" Command="{Binding ElementName=tc_Main, Path=DataContext.RemoveItemCommand, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding}"></Button>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </DockPanel>
+            </TabItem>
+        </TabControl>
+    </DataTemplate>   
+    
 </ResourceDictionary>

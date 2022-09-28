@@ -26,6 +26,7 @@ using StorylineEditor.CopyPasteService;
 using StorylineEditor.FileDialog;
 using StorylineEditor.ViewModels;
 using StorylineEditor.ViewModels.Nodes;
+using StorylineEditor.ViewModels.Predicates;
 using StorylineEditor.ViewModels.Tabs;
 
 namespace StorylineEditor.Views.Controls
@@ -202,7 +203,7 @@ namespace StorylineEditor.Views.Controls
                         treeCanvas.PlayingAdorner.PositionX = treeCanvas.AnimTranslationX - treeCanvas.PlayingAdorner.Width / 2;
                         treeCanvas.PlayingAdorner.PositionY = treeCanvas.AnimTranslationY - treeCanvas.PlayingAdorner.Height / 2;
                     }
-                    
+
                     treeCanvas.OnTransformChanged();
                 }
             }
@@ -506,7 +507,20 @@ namespace StorylineEditor.Views.Controls
 
                 childNodes.RemoveAll((childNode) => childNode.Gender > 0 && childNode.Gender != GenderToPlay);
 
-                ////// TODO Execute other predicates
+                List<Node_BaseVm> nodesToRemove = new List<Node_BaseVm>();
+
+                foreach (var childNode in childNodes)
+                {
+                    if (childNode is Node_InteractiveVm interactiveNode)
+                    {
+                        foreach (var predicate in interactiveNode.Predicates)
+                        {
+                            if (!predicate.IsOk) { nodesToRemove.Add(childNode); }
+                        }
+                    }
+                }
+
+                childNodes.RemoveAll((childNode) => nodesToRemove.Contains(childNode));
 
                 if (childNodes.Count == 1)
                 {
@@ -1225,12 +1239,14 @@ namespace StorylineEditor.Views.Controls
             OnTransformChanged();
         }));
 
+
         protected ICommand openPlayerCommand;
         public ICommand OpenPlayerCommand => openPlayerCommand ?? (openPlayerCommand = new RelayCommand(() =>
         {
             new InfoWindow("▶ Воспроизведение", "DT_ContentControl_TreePlayer", new TreeCanvasProxy { TreeCanvas = this }) { Owner = App.Current.MainWindow }.ShowDialog();
             Stop();
         }));
+
 
         ICommand toggleGenderCommand;
         public ICommand ToggleGenderCommand =>
@@ -1258,5 +1274,12 @@ namespace StorylineEditor.Views.Controls
         ICommand toggleGenderToPlayCommand;
         public ICommand ToggleGenderToPlayCommand =>
             toggleGenderToPlayCommand ?? (toggleGenderToPlayCommand = new RelayCommand(() => { GenderToPlay = 3 - GenderToPlay; }, () => ActiveContext == null));
+
+
+        protected ICommand openTreePlayerHistoryCommand;
+        public ICommand OpenTreePlayerHistoryCommand => openTreePlayerHistoryCommand ?? (openTreePlayerHistoryCommand = new RelayCommand(() =>
+        {
+            new InfoWindow("Контекст воспроизведения", null, Tree.Parent.Parent.TreePlayerHistory) { Owner = App.Current.MainWindow }.ShowDialog();
+        }, () => Tree != null && !IsPlaying));
     }
 }

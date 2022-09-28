@@ -32,7 +32,9 @@ namespace StorylineEditor.ViewModels.Predicates
 
         public P_CompositeVm() : this(null, 0) { }
 
-        public override bool IsValid => base.IsValid && itemA != null && itemB != null && (isOR || isAND);
+        public override bool IsValid => base.IsValid && itemA != null && itemA.IsValid && itemB != null && itemB.IsValid && (isOR || isAND);
+
+        public override bool IsOk => !IsValid || (itemA.IsOk && itemB.IsOk && isAND) || (itemA.IsOk && isOR) || (itemB.IsOk && isOR); 
 
         public bool isOR;
         public bool IsOR
