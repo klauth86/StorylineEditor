@@ -39,6 +39,61 @@ namespace StorylineEditor.ViewModels
             addPassedNodeCommand ?? (addPassedNodeCommand = new RelayCommand<Node_BaseVm>((node) => { PassedNodes.Add(node); }, (node) => node != null));
     }
 
+    public class JournalNodeStateVm : BaseVm<JournalPathVm>
+    {
+        public JournalNodeStateVm(JournalPathVm parent, long additionalTicks) : base(parent, additionalTicks) { }
+
+        public JournalNodeStateVm() : this(null, 0) { }
+
+        public bool IsChecked { get; set; }
+    }
+
+    public class JournalPathVm : BaseVm<TreePlayerHistoryVm>
+    {
+        public JournalPathVm(TreePlayerHistoryVm parent, long additionalTicks) : base(parent, additionalTicks)
+        {
+            JournalNodesStates = new ObservableCollection<JournalNodeStateVm>();
+        }
+
+        public JournalPathVm() : this(null, 0) { }
+
+        public override bool PassFilter(string filter)
+        {
+            if (!base.PassFilter(filter)) return false;
+
+            if (Parent != null)
+            {
+                foreach (var journalPath in Parent.Journal)
+                {
+                    if (journalPath?.Tree == Tree) return false;
+                }
+            }
+
+            return true;
+        }
+
+        private TreeVm tree;
+        public TreeVm Tree
+        {
+            get => tree;
+            set
+            {
+                if (value != tree)
+                {
+                    tree = value;
+                    NotifyWithCallerPropName();
+
+                    foreach (var node in tree.NodesTraversal())
+                    {
+                        if (node != null) JournalNodesStates.Add(new JournalNodeStateVm(this, 0) { Name = node.Name });
+                    }
+                }
+            }
+        }
+
+        public ObservableCollection<JournalNodeStateVm> JournalNodesStates { get; set; }
+    }
+
     public class TreePlayerHistoryVm : BaseVm<FullContextVm>
     {
         public TreePlayerHistoryVm(FullContextVm parent, long additionalTicks) : base(parent, additionalTicks)
@@ -47,7 +102,7 @@ namespace StorylineEditor.ViewModels
 
             PassedDialogsAndReplicas = new ObservableCollection<TreePathVm>();
 
-
+            Journal = new ObservableCollection<JournalPathVm>();
         }
 
         public TreePlayerHistoryVm() : this(null, 0) { }
@@ -72,6 +127,16 @@ namespace StorylineEditor.ViewModels
 
         protected ICommand addDialogsAndReplicasCommand;
         public ICommand AddDialogsAndReplicasCommand =>
-            addDialogsAndReplicasCommand ?? (addDialogsAndReplicasCommand = new RelayCommand<FolderedVm>((item) => { PassedDialogsAndReplicas.Add(new TreePathVm() { Tree = (TreeVm)item }); }, (item) => item != null));
+            addDialogsAndReplicasCommand ?? (addDialogsAndReplicasCommand = new RelayCommand<FolderedVm>((item) => { PassedDialogsAndReplicas.Add(new TreePathVm(this, 0) { Tree = (TreeVm)item }); }, (item) => item != null));
+
+        public ObservableCollection<JournalPathVm> Journal { get; private set; }
+
+        protected ICommand removeJournalCommand;
+        public ICommand RemoveJournalCommand =>
+            removeJournalCommand ?? (removeJournalCommand = new RelayCommand<JournalPathVm>((item) => { Journal.Remove(item); }, (item) => item != null));
+
+        protected ICommand addJournalCommand;
+        public ICommand AddJournalCommand =>
+            addJournalCommand ?? (addJournalCommand = new RelayCommand<FolderedVm>((item) => { Journal.Add(new JournalPathVm(this, 0) { Tree = (TreeVm)item }); }, (item) => item != null));
     }
 }
