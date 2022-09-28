@@ -98,7 +98,7 @@ namespace StorylineEditor.ViewModels
     {
         public TreePlayerHistoryVm(FullContextVm parent, long additionalTicks) : base(parent, additionalTicks)
         {
-            Inventory = new ObservableCollection<ItemVm>();
+            Inventory = new ObservableCollection<FolderedVm>();
 
             PassedDialogsAndReplicas = new ObservableCollection<TreePathVm>();
 
@@ -107,15 +107,15 @@ namespace StorylineEditor.ViewModels
 
         public TreePlayerHistoryVm() : this(null, 0) { }
 
-        public ObservableCollection<ItemVm> Inventory { get; private set; }
+        public ObservableCollection<FolderedVm> Inventory { get; private set; }
 
         protected ICommand removeItemCommand;
         public ICommand RemoveItemCommand =>
-            removeItemCommand ?? (removeItemCommand = new RelayCommand<ItemVm>((item) => { Inventory.Remove(item); }, (item) => item != null));
+            removeItemCommand ?? (removeItemCommand = new RelayCommand<FolderedVm>((item) => { Inventory.Remove(item); }, (item) => item != null));
 
         protected ICommand addItemCommand;
         public ICommand AddItemCommand =>
-            addItemCommand ?? (addItemCommand = new RelayCommand<ItemVm>((item) => { Inventory.Add(item); }, (item) => item != null));
+            addItemCommand ?? (addItemCommand = new RelayCommand<FolderedVm>((item) => { Inventory.Add(item); }, (item) => item != null));
 
         public bool HasItem(ItemVm item) => Inventory.Contains(item);
 

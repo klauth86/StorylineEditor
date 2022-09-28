@@ -30,6 +30,14 @@ namespace StorylineEditor.ViewModels.GameEvents
 
         public override bool IsValid => base.IsValid && Character != null;
 
+        public override void Execute()
+        {
+            if (IsValid)
+            {
+                if (CharacterId == CharacterVm.PlayerId) Parent.Parent.Parent.Parent.TreePlayerHistory.Inventory.Add(Item);
+            }
+        }
+
         public string CharacterId { get; set; }
 
         [XmlIgnore]

@@ -407,6 +407,17 @@ namespace StorylineEditor.Views.Controls
             {
                 ActiveContext = node;
 
+                if (FullMode)
+                {
+                    if (node is Node_InteractiveVm interactiveNode)
+                    {
+                        foreach (var gameEvent in interactiveNode.GameEvents)
+                        {
+                            if (!gameEvent.ExecuteWhenLeaveDialogNode) gameEvent.Execute();
+                        }
+                    }
+                }
+                  
                 if (PlayingAdorner == null)
                 {
                     PlayingAdorner = new PlayingAdorner();
@@ -516,20 +527,31 @@ namespace StorylineEditor.Views.Controls
 
                 childNodes.RemoveAll((childNode) => childNode.Gender > 0 && childNode.Gender != GenderToPlay);
 
-                List<Node_BaseVm> nodesToRemove = new List<Node_BaseVm>();
-
-                foreach (var childNode in childNodes)
+                if (FullMode)
                 {
-                    if (childNode is Node_InteractiveVm interactiveNode)
+                    if (node is Node_InteractiveVm interactiveNode)
                     {
-                        foreach (var predicate in interactiveNode.Predicates)
+                        foreach (var gameEvent in interactiveNode.GameEvents)
                         {
-                            if (!predicate.IsOk) { nodesToRemove.Add(childNode); }
+                            if (gameEvent.ExecuteWhenLeaveDialogNode) gameEvent.Execute();
                         }
                     }
-                }
 
-                childNodes.RemoveAll((childNode) => nodesToRemove.Contains(childNode));
+                    List<Node_BaseVm> nodesToRemove = new List<Node_BaseVm>();
+
+                    foreach (var childNode in childNodes)
+                    {
+                        if (childNode is Node_InteractiveVm interactiveChildNode)
+                        {
+                            foreach (var predicate in interactiveChildNode.Predicates)
+                            {
+                                if (!predicate.IsOk) { nodesToRemove.Add(childNode); }
+                            }
+                        }
+                    }
+
+                    childNodes.RemoveAll((childNode) => nodesToRemove.Contains(childNode));
+                }
 
                 if (childNodes.Count == 1)
                 {

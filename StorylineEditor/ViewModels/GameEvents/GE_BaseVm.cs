@@ -30,6 +30,8 @@ namespace StorylineEditor.ViewModels.GameEvents
 
         public GE_BaseVm() : this(null, 0) { }
 
+        public virtual void Execute() { }
+
         protected bool executeWhenLeaveDialogNode;
         public bool ExecuteWhenLeaveDialogNode
         {
