@@ -888,7 +888,7 @@ StorylineEditor распространяется в надежде, что он�
     </Style>
 
     <DataTemplate x:Key="DT_Selector_DNode">
-        <Grid ToolTip="{Binding Id}" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=ComboBox}}">
+        <Grid ToolTip="{Binding Id}" MaxWidth="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
@@ -907,7 +907,7 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
 
     <DataTemplate x:Key="DT_Selector_JNode">
-        <Grid ToolTip="{Binding Id}" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=ComboBox}}">
+        <Grid ToolTip="{Binding Id}" MaxWidth="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
@@ -1410,7 +1410,7 @@ StorylineEditor распространяется в надежде, что он�
                                             <ItemsControl ItemsSource="{Binding PassedNodes}">
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
-                                                        <Grid ToolTip="{Binding Id}" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=ComboBox}}">
+                                                        <Grid ToolTip="{Binding Id}" MaxWidth="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="auto"></ColumnDefinition>
                                                                 <ColumnDefinition></ColumnDefinition>
