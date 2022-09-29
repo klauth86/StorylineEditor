@@ -21,10 +21,14 @@ namespace StorylineEditor.ViewModels
     {
         public TreePathVm(TreePlayerHistoryVm parent, long additionalTicks) : base(parent, additionalTicks)
         {
+            IsActive = true;
+            Tree = null;
             PassedNodes = new ObservableCollection<Node_BaseVm>();
         }
 
         public TreePathVm() : this(null, 0) { }
+
+        public bool IsActive { get; set; }
 
         public TreeVm Tree { get; set; }
 

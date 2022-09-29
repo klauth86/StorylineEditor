@@ -147,14 +147,14 @@ namespace StorylineEditor.Views.Controls
         public static readonly DependencyProperty GenderToPlayProperty = DependencyProperty.Register(
             "GenderToPlay", typeof(int), typeof(TreeCanvas), new PropertyMetadata(1));
 
-        public bool IsPlaying
+        public bool IsPaused
         {
-            get => (bool)this.GetValue(IsPlayingProperty);
-            set { this.SetValue(IsPlayingProperty, value); }
+            get => (bool)this.GetValue(IsPausedProperty);
+            set { this.SetValue(IsPausedProperty, value); }
         }
 
-        public static readonly DependencyProperty IsPlayingProperty = DependencyProperty.Register(
-            "IsPlaying", typeof(bool), typeof(TreeCanvas), new PropertyMetadata(false));
+        public static readonly DependencyProperty IsPausedProperty = DependencyProperty.Register(
+            "IsPaused", typeof(bool), typeof(TreeCanvas), new PropertyMetadata(false));
 
         public bool FullMode
         {
@@ -409,6 +409,17 @@ namespace StorylineEditor.Views.Controls
 
                 if (FullMode)
                 {
+                    TreePlayerHistoryVm treePlayerHistory = Tree.Parent.Parent.TreePlayerHistory;
+
+                    TreePathVm activeTreePath = treePlayerHistory.PassedDialogsAndReplicas.FirstOrDefault((treePath)=>treePath.Tree == Tree && treePath.IsActive);
+                    
+                    if (activeTreePath == null)
+                    {
+                        activeTreePath = new TreePathVm(treePlayerHistory, 0) { Tree = Tree };
+                        treePlayerHistory.PassedDialogsAndReplicas.Add(activeTreePath);
+                        activeTreePath.PassedNodes.Add(node);
+                    }
+
                     if (node is Node_InteractiveVm interactiveNode)
                     {
                         foreach (var gameEvent in interactiveNode.GameEvents)
@@ -605,7 +616,17 @@ namespace StorylineEditor.Views.Controls
                 PlayingAdorner = null;
             }
 
-            IsPlaying = false;
+            if (FullMode)
+            {
+                TreePlayerHistoryVm treePlayerHistory = Tree.Parent.Parent.TreePlayerHistory;
+
+                TreePathVm activeTreePath = treePlayerHistory.PassedDialogsAndReplicas.FirstOrDefault((treePath) => treePath.Tree == Tree && treePath.IsActive);
+
+                if (activeTreePath != null)
+                {
+                    activeTreePath.IsActive = false;
+                }
+            }
 
             ActiveContext = null;
         }
@@ -614,13 +635,13 @@ namespace StorylineEditor.Views.Controls
         {
             if (Storyboard.GetIsPaused(this))
             {
+                IsPaused = false;
                 Storyboard.Resume(this);
-                IsPlaying = true;
             }
             else
             {
-                IsPlaying = false;
                 Storyboard.Pause(this);
+                IsPaused = true;
             }
         }
 
@@ -633,6 +654,7 @@ namespace StorylineEditor.Views.Controls
             Storyboard.Completed -= OnCompletedTransition;
             Storyboard.Completed -= OnCompletedState;
 
+            IsPaused = false;
             Storyboard.Stop(this);
 
             Storyboard.Children.Clear();
@@ -1294,7 +1316,7 @@ namespace StorylineEditor.Views.Controls
 
         ICommand togglePlayCommand;
         public ICommand TogglePlayCommand =>
-            togglePlayCommand ?? (togglePlayCommand = new RelayCommand(() => { if (ActiveContext != null) PauseUnpause(); else { StartTransition(SelectedValue); IsPlaying = ActiveContext != null; } }, () => SelectedValue != null));
+            togglePlayCommand ?? (togglePlayCommand = new RelayCommand(() => { if (ActiveContext != null) PauseUnpause(); else { StartTransition(SelectedValue); } }, () => SelectedValue != null));
 
 
         ICommand stopCommand;

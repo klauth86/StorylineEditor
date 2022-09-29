@@ -290,7 +290,6 @@ namespace StorylineEditor.ViewModels
                 }
 
                 NotifyIsValidChanged();
-                Notify(nameof(Stats));
             }
         }
 

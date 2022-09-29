@@ -683,13 +683,17 @@ StorylineEditor распространяется в надежде, что он�
     <!--COMMON UI BUTTONS-->
 
     <Style TargetType="Button" x:Key="S_Button_TreePlayer_Play" BasedOn="{StaticResource S_Button_CanvasPanel}">
-        <Setter Property="Content" Value="▶"></Setter>
-        <Setter Property="ToolTip" Value="Воспроизвести"></Setter>
+        <Setter Property="Content" Value="⏸"></Setter>
+        <Setter Property="ToolTip" Value="Пауза"></Setter>
         <Setter Property="Command" Value="{Binding TreeCanvas.TogglePlayCommand}"></Setter>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding TreeCanvas.IsPlaying, UpdateSourceTrigger=PropertyChanged}" Value="true">
-                <Setter Property="Content" Value="⏸"></Setter>
-                <Setter Property="ToolTip" Value="Пауза"></Setter>
+            <DataTrigger Binding="{Binding TreeCanvas.IsPaused, UpdateSourceTrigger=PropertyChanged}" Value="true">
+                <Setter Property="Content" Value="▶"></Setter>
+                <Setter Property="ToolTip" Value="Воспроизвести"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding TreeCanvas.ActiveContext, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                <Setter Property="Content" Value="▶"></Setter>
+                <Setter Property="ToolTip" Value="Воспроизвести"></Setter>
             </DataTrigger>
         </Style.Triggers>
     </Style>
