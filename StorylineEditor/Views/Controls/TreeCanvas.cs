@@ -921,15 +921,12 @@ namespace StorylineEditor.Views.Controls
         {
             Focus();
 
-            bool isLockedByTreePlayer = false;
-            // bool isLockedByTreePlayer = (TreePlayerVm.TreePlayerInstance?.IsLocked ?? false) || ((TreePlayerVm.TreePlayerInstance?.ActiveContext ?? null) != null);
-
             if (Tree != null)
             {
                 if (e.LeftButton == MouseButtonState.Released &&
                     e.RightButton == MouseButtonState.Pressed)
                 {
-                    if (e.Source is GraphNode graphNode && !isLockedByTreePlayer)
+                    if (e.Source is GraphNode graphNode)
                     {
                         if (shiftMode)
                         {
@@ -975,7 +972,7 @@ namespace StorylineEditor.Views.Controls
                 else if (e.LeftButton == MouseButtonState.Pressed &&
                     e.RightButton == MouseButtonState.Released)
                 {
-                    if (e.OriginalSource is Canvas && !isLockedByTreePlayer)
+                    if (e.OriginalSource is Canvas)
                     {
                         if (shiftMode)
                         {
