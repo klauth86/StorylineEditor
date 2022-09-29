@@ -531,11 +531,26 @@ namespace StorylineEditor.Views.Controls
             }
         }
 
+        public List<Node_BaseVm> GetChildNodes(Node_BaseVm node)
+        {
+            var nodeIds = Tree.Links.Where(link => link.FromId == node.Id).Select(link => link.ToId).ToList();
+
+            List<Node_BaseVm> nonTransitNodes = Tree.Nodes.Where((otherNode) => nodeIds.Contains(otherNode.Id) && !(otherNode is DNode_TransitVm)).ToList();
+
+            foreach (var transitChildNodes in
+                Tree.Nodes.Where((otherNode) => nodeIds.Contains(otherNode.Id) && (otherNode is DNode_TransitVm)).Select((otherNode) => GetChildNodes(otherNode)))
+            {
+                nonTransitNodes.AddRange(transitChildNodes);
+            }
+
+            return nonTransitNodes;
+        }
+
         private void GoToNextStep(Node_BaseVm node)
         {
             if (node != null)
             {
-                List<Node_BaseVm> childNodes = Tree.GetChildNodes(node);
+                List<Node_BaseVm> childNodes = GetChildNodes(node);
 
                 childNodes.RemoveAll((childNode) => childNode.Gender > 0 && childNode.Gender != GenderToPlay);
 

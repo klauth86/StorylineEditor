@@ -353,21 +353,6 @@ namespace StorylineEditor.ViewModels
             return Nodes.Where((otherNode) => nodeIds.Contains(otherNode.Id)).ToList();
         }
 
-        public List<Node_BaseVm> GetChildNodes(Node_BaseVm node)
-        {
-            var nodeIds = Links.Where(link => link.FromId == node.Id).Select(link => link.ToId).ToList();
-            
-            List<Node_BaseVm> nonTransitNodes = Nodes.Where((otherNode) => nodeIds.Contains(otherNode.Id) && !(otherNode is DNode_TransitVm)).ToList();
-            
-            foreach(var transitChildNodes in 
-                Nodes.Where((otherNode) => nodeIds.Contains(otherNode.Id) && (otherNode is DNode_TransitVm)).Select((otherNode) => GetChildNodes(otherNode)))
-            {
-                nonTransitNodes.AddRange(transitChildNodes);
-            }
-
-            return nonTransitNodes;
-        }
-
         public List<Node_BaseVm> NodesTraversal() => NodesTraversal(Nodes.Where((node) => RootNodeIds.Contains(node.Id)).ToList());
 
         public List<Node_BaseVm> NodesTraversal(Node_BaseVm startNode, bool includeSelf) { var result = NodesTraversal(GetPrimaryChildNodes(startNode)); if (includeSelf) result.Insert(0, startNode); return result; }
