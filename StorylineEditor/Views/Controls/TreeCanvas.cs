@@ -417,8 +417,9 @@ namespace StorylineEditor.Views.Controls
                     {
                         activeTreePath = new TreePathVm(treePlayerHistory, 0) { Tree = Tree };
                         treePlayerHistory.PassedDialogsAndReplicas.Add(activeTreePath);
-                        activeTreePath.PassedNodes.Add(node);
                     }
+
+                    if (activeTreePath != null) activeTreePath.PassedNodes.Add(node);
 
                     if (node is Node_InteractiveVm interactiveNode)
                     {

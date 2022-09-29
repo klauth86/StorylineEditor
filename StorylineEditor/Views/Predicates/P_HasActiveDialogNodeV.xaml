@@ -1,4 +1,4 @@
-﻿/*
+﻿<!--
 Этот файл — часть StorylineEditor.
 
 StorylineEditor — свободная программа: вы можете перераспространять ее и/или изменять ее на условиях Стандартной общественной лицензии GNU в том виде, 
@@ -8,26 +8,19 @@ StorylineEditor распространяется в надежде, что он�
 ОПРЕДЕЛЕННЫХ ЦЕЛЕЙ. Подробнее см. в Стандартной общественной лицензии GNU.
 
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
-*/
+-->
 
-using StorylineEditor.Common;
-using System;
-using System.Globalization;
-using System.Windows.Data;
-
-namespace StorylineEditor.Views.Converters
-{
-    class TypeToDescriptionConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            var type = value as Type;
-            return type != null ? AttributeHelper.GetTypeDescription(type): null;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-}
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:StorylineEditor.ViewModels.Predicates"
+                    xmlns:controls="clr-namespace:StorylineEditor.Views.Controls">
+    <DataTemplate DataType="{x:Type local:P_HasActiveDialogNodeVm}">
+        <GroupBox Header="Диалог и вершина" HeaderTemplate="{StaticResource DT_Header_GroupBox}">
+            <controls:FilteredComboBox FilteredItemsSource="{Binding Parent.Parent.Nodes}"
+                              Visibility="{Binding Dialog, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource collapseNullConverter}}"
+                              SelectedValue="{Binding DialogNode, UpdateSourceTrigger=PropertyChanged}"
+                              ItemTemplate="{StaticResource DT_Selector_DNode}">
+            </controls:FilteredComboBox>
+        </GroupBox>
+    </DataTemplate>
+</ResourceDictionary>

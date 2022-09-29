@@ -18,46 +18,28 @@ using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.Predicates
 {
-    [Description("Имеет вершину в прошлом диалоге|реплике")]
+    [Description("Имеет вершину в текущем диалоге|реплике")]
     [XmlRoot]
-    public class P_HasDialogNodeVm : P_BaseVm
+    public class P_HasActiveDialogNodeVm : P_BaseVm
     {
-        public P_HasDialogNodeVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks) {
-            DialogId = null;
+        public P_HasActiveDialogNodeVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks) {
             DialogNodeId = null;
         }
 
-        public P_HasDialogNodeVm() : this(null, 0) { }
+        public P_HasActiveDialogNodeVm() : this(null, 0) { }
 
-        public override bool IsValid => base.IsValid && Dialog != null && DialogNode != null;
+        public override bool IsValid => base.IsValid && DialogNode != null;
 
         public override bool IsOk => !IsValid ||
-            !isInversed && Parent.Parent.Parent.Parent.TreePlayerHistory.PassedDialogsAndReplicas.Any((treePath) => treePath?.Tree?.Id == DialogId && treePath.PassedNodes.Contains(DialogNode) && !treePath.IsActive) ||
-            isInversed && !Parent.Parent.Parent.Parent.TreePlayerHistory.PassedDialogsAndReplicas.Any((treePath) => treePath?.Tree?.Id == DialogId && treePath.PassedNodes.Contains(DialogNode) && !treePath.IsActive);
-
-        public string DialogId { get; set; }
-
-        [XmlIgnore]
-        public FolderedVm Dialog
-        {
-            get => Parent?.Parent?.Parent?.Parent?.DialogsAndReplicas.FirstOrDefault(item => item?.Id == DialogId);
-            set
-            {
-                if (DialogId != value?.Id)
-                {
-                    DialogId = value?.Id;
-                    NotifyWithCallerPropName();
-                    NotifyIsValidChanged();
-                }
-            }
-        }
+            !isInversed && Parent.Parent.Parent.Parent.TreePlayerHistory.PassedDialogsAndReplicas.Any((treePath) => treePath?.Tree?.Id == Parent.Parent.Id && treePath.PassedNodes.Contains(DialogNode) && treePath.IsActive) ||
+            isInversed && !Parent.Parent.Parent.Parent.TreePlayerHistory.PassedDialogsAndReplicas.Any((treePath) => treePath?.Tree?.Id == Parent.Parent.Id && treePath.PassedNodes.Contains(DialogNode) && treePath.IsActive);
 
         public string DialogNodeId { get; set; }
         
         [XmlIgnore]
         public Node_BaseVm DialogNode
         {
-            get => (Dialog as TreeVm)?.Nodes.FirstOrDefault(item => item?.Id == DialogNodeId);
+            get => Parent.Parent.Nodes.FirstOrDefault(item => item?.Id == DialogNodeId);
             set
             {
                 if (DialogNodeId != value?.Id)
@@ -73,7 +55,6 @@ namespace StorylineEditor.ViewModels.Predicates
         {
             base.ResetInternalData();
 
-            Dialog = null;
             DialogNode = null;
         }
 
@@ -81,9 +62,8 @@ namespace StorylineEditor.ViewModels.Predicates
         {
             base.CloneInternalData(destObj, additionalTicks);
 
-            if (destObj is P_HasDialogNodeVm casted)
+            if (destObj is P_HasActiveDialogNodeVm casted)
             {
-                casted.DialogId = DialogId;
                 casted.DialogNodeId = DialogNodeId;
             }
         }

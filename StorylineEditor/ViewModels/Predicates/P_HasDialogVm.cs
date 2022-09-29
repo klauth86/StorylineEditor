@@ -31,8 +31,8 @@ namespace StorylineEditor.ViewModels.Predicates
         public override bool IsValid => base.IsValid && Dialog != null;
 
         public override bool IsOk => !IsValid ||
-            !isInversed && Parent.Parent.Parent.Parent.TreePlayerHistory.PassedDialogsAndReplicas.Any((path) => path?.Tree?.Id == DialogId) ||
-            isInversed && !Parent.Parent.Parent.Parent.TreePlayerHistory.PassedDialogsAndReplicas.Any((path) => path?.Tree?.Id == DialogId);
+            !isInversed && Parent.Parent.Parent.Parent.TreePlayerHistory.PassedDialogsAndReplicas.Any((treePath) => treePath?.Tree?.Id == DialogId && !treePath.IsActive) ||
+            isInversed && !Parent.Parent.Parent.Parent.TreePlayerHistory.PassedDialogsAndReplicas.Any((treePath) => treePath?.Tree?.Id == DialogId && !treePath.IsActive); // This predicate logic is about already Passed dialogs, not Active one 
 
         public string DialogId { get; set; }
 

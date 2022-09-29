@@ -27,9 +27,9 @@ namespace StorylineEditor.ViewModels.Nodes
     public abstract class Node_InteractiveVm : Node_BaseVm
     {
         public IEnumerable<Type> EventTypes => AppDomain.CurrentDomain.GetAssemblies().SelectMany(assembly => assembly.GetTypes())
-                    .Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(GE_BaseVm)));
+                    .Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(GE_BaseVm))).OrderBy((type) => AttributeHelper.GetTypeDescription(type));
         public IEnumerable<Type> PredicateTypes => AppDomain.CurrentDomain.GetAssemblies().SelectMany(assembly => assembly.GetTypes())
-                    .Where(type => type.IsSubclassOf(typeof(P_BaseVm)));
+                    .Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(P_BaseVm))).OrderBy((type) => AttributeHelper.GetTypeDescription(type));
 
         public Node_InteractiveVm(TreeVm Parent, long additionalTicks) : base(Parent, additionalTicks)
         {

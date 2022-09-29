@@ -18,12 +18,11 @@ using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.Predicates
 {
-    [Description("Имеет вершину в прошлом диалоге|реплике <>")]
+    [Description("Имеет вершину в текущем диалоге|реплике <>")]
     [XmlRoot]
-    public class P_HasDialogNodeMoreLessVm : P_BaseVm
+    public class P_HasActiveDialogNodeMoreLessVm : P_BaseVm
     {
-        public P_HasDialogNodeMoreLessVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks) {
-            DialogId = null;
+        public P_HasActiveDialogNodeMoreLessVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks) {
             num = 0;
             isMore = false;
             isMoreOrEqual = false;
@@ -32,13 +31,13 @@ namespace StorylineEditor.ViewModels.Predicates
             isLess = false;
         }
 
-        public P_HasDialogNodeMoreLessVm() : this(null, 0) { }
+        public P_HasActiveDialogNodeMoreLessVm() : this(null, 0) { }
 
-        public override bool IsValid=> base.IsValid && Dialog != null && DialogNode != null && (isMore || isMoreOrEqual || isEqual || isLessOrEqual || isLess);
+        public override bool IsValid=> base.IsValid && DialogNode != null && (isMore || isMoreOrEqual || isEqual || isLessOrEqual || isLess);
 
         public override bool IsOk => !IsValid ||
-            !isInversed && NumericCondition(Parent.Parent.Parent.Parent.TreePlayerHistory.PassedDialogsAndReplicas.Sum((treePath) => treePath?.Tree?.Id == DialogId && !treePath.IsActive ? treePath.PassedNodes.Count((node)=> node == DialogNode) : 0)) ||
-            isInversed && !NumericCondition(Parent.Parent.Parent.Parent.TreePlayerHistory.PassedDialogsAndReplicas.Sum((treePath) => treePath?.Tree?.Id == DialogId && !treePath.IsActive ? treePath.PassedNodes.Count((node) => node == DialogNode) : 0));
+            !isInversed && NumericCondition(Parent.Parent.Parent.Parent.TreePlayerHistory.PassedDialogsAndReplicas.FirstOrDefault((treePath) => treePath?.Tree?.Id == Parent.Parent.Id && treePath.IsActive)?.PassedNodes.Count((node) => node == DialogNode) ?? 0) ||
+            isInversed && !NumericCondition(Parent.Parent.Parent.Parent.TreePlayerHistory.PassedDialogsAndReplicas.FirstOrDefault((treePath) => treePath?.Tree?.Id == Parent.Parent.Id && treePath.IsActive)?.PassedNodes.Count((node) => node == DialogNode) ?? 0);
 
         private bool NumericCondition(int count)
         {
@@ -51,29 +50,12 @@ namespace StorylineEditor.ViewModels.Predicates
             return false;
         }
 
-        public string DialogId { get; set; }
-
-        [XmlIgnore]
-        public FolderedVm Dialog
-        {
-            get => Parent?.Parent?.Parent?.Parent?.DialogsAndReplicas.FirstOrDefault(item => item?.Id == DialogId);
-            set
-            {
-                if (DialogId != value?.Id)
-                {
-                    DialogId = value?.Id;
-                    NotifyWithCallerPropName();
-                    NotifyIsValidChanged();
-                }
-            }
-        }
-
         public string DialogNodeId { get; set; }
 
         [XmlIgnore]
         public Node_BaseVm DialogNode
         {
-            get => (Dialog as TreeVm)?.Nodes.FirstOrDefault(item => item?.Id == DialogNodeId);
+            get => Parent.Parent.Nodes.FirstOrDefault(item => item?.Id == DialogNodeId);
             set
             {
                 if (DialogNodeId != value?.Id)
@@ -179,7 +161,6 @@ namespace StorylineEditor.ViewModels.Predicates
         {
             base.ResetInternalData();
 
-            Dialog = null;
             DialogNode = null;
             Num = 0;
             IsMore = false;
@@ -193,9 +174,8 @@ namespace StorylineEditor.ViewModels.Predicates
         {
             base.CloneInternalData(destObj, additionalTicks);
 
-            if (destObj is P_HasDialogNodeMoreLessVm casted)
+            if (destObj is P_HasActiveDialogNodeMoreLessVm casted)
             {
-                casted.DialogId = DialogId;
                 casted.DialogNodeId = DialogNodeId;
                 casted.num = num;
                 casted.isMore = isMore;

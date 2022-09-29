@@ -18,7 +18,6 @@ using System.Xml.Serialization;
 using StorylineEditor.Common;
 using StorylineEditor.ViewModels.Nodes;
 using StorylineEditor.ViewModels.Tabs;
-using StorylineEditor.Views.Converters;
 
 namespace StorylineEditor.ViewModels
 {
@@ -96,7 +95,7 @@ namespace StorylineEditor.ViewModels
 
                     countByCharacter[characterName][gender]++;
 
-                    var typeDescription = TypeToDescriptionConverter.GetTypeDescription(node.GetType());
+                    var typeDescription = AttributeHelper.GetTypeDescription(node.GetType());
                     if (!countByTypeDescription.ContainsKey(typeDescription)) countByTypeDescription.Add(typeDescription, 0);
                     countByTypeDescription[typeDescription]++;
                 }

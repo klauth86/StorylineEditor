@@ -10,24 +10,24 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using StorylineEditor.Common;
 using System;
-using System.Globalization;
-using System.Windows.Data;
+using System.ComponentModel;
 
-namespace StorylineEditor.Views.Converters
+namespace StorylineEditor.Common
 {
-    class TypeToDescriptionConverter : IValueConverter
+    public static class AttributeHelper
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public static string GetTypeDescription(Type type)
         {
-            var type = value as Type;
-            return type != null ? AttributeHelper.GetTypeDescription(type): null;
-        }
+            if (type != null)
+            {
+                foreach (var attribute in type.GetCustomAttributes(true))
+                {
+                    if (attribute is DescriptionAttribute descrAttribute) return descrAttribute.Description;
+                }
+            }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }

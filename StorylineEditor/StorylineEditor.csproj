@@ -96,6 +96,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Additive\Action_BaseVm.cs" />
+    <Compile Include="Common\AttributeHelper.cs" />
     <Compile Include="CopyPasteService\ICopyPasteService.cs" />
     <Compile Include="Common\CustomByteConverter.cs" />
     <Compile Include="Common\RelayCommand.cs" />
@@ -123,6 +124,8 @@
     <Compile Include="ViewModels\Nodes\Node_InteractiveVm.cs" />
     <Compile Include="ViewModels\Nodes\JNode_BaseVm.cs" />
     <Compile Include="ViewModels\Nodes\Ownered.cs" />
+    <Compile Include="ViewModels\Predicates\P_HasActiveDialogNodeMoreLessVm.cs" />
+    <Compile Include="ViewModels\Predicates\P_HasActiveDialogNodeVm.cs" />
     <Compile Include="ViewModels\TreePlayerContext_ChoiceVm.cs" />
     <Compile Include="ViewModels\TreePlayerContext_ErrorVm.cs" />
     <Compile Include="ViewModels\TreePlayerContext_TransitionVm.cs" />
@@ -326,9 +329,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Predicates\P_HasActiveDialogNodeMoreLessV.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Predicates\P_HasDialogNodeMoreLessV.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Predicates\P_HasActiveDialogNodeV.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Predicates\P_HasJournalRecordNodeV.xaml">
       <Generator>MSBuild:Compile</Generator>

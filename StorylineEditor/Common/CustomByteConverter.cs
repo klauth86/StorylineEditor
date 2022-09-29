@@ -42,6 +42,8 @@ namespace StorylineEditor.Common
             if (name == typeof(GE_StartReplicaVm).Name) return new GE_StartReplicaVm(Parent as Node_BaseVm, additionalTicks);
             if (name == typeof(GE_ChangeRelationVm).Name) return new GE_ChangeRelationVm(Parent as Node_BaseVm, additionalTicks);
 
+            if (name == typeof(P_HasActiveDialogNodeMoreLessVm).Name) return new P_HasActiveDialogNodeMoreLessVm(Parent as Node_BaseVm, additionalTicks);
+            if (name == typeof(P_HasActiveDialogNodeVm).Name) return new P_HasActiveDialogNodeVm(Parent as Node_BaseVm, additionalTicks);
             if (name == typeof(P_HasDialogNodeMoreLessVm).Name) return new P_HasDialogNodeMoreLessVm(Parent as Node_BaseVm, additionalTicks);
             if (name == typeof(P_HasDialogNodeVm).Name) return new P_HasDialogNodeVm(Parent as Node_BaseVm, additionalTicks);
             if (name == typeof(P_HasDialogVm).Name) return new P_HasDialogVm(Parent as Node_BaseVm, additionalTicks);
