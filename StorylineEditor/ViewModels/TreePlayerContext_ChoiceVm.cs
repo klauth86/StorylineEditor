@@ -22,16 +22,14 @@ namespace StorylineEditor.ViewModels
     {
         public readonly TreeCanvas TreeCanvas;
 
-        public TreePlayerContext_ChoiceVm(TreeCanvas treeCanvas, List<Node_BaseVm> nodesToSelect) : base(0)
+        public TreePlayerContext_ChoiceVm(TreeCanvas treeCanvas, Dictionary<Node_BaseVm, List<Node_BaseVm>> nodesPaths) : base(0)
         {
             TreeCanvas = treeCanvas;
-
-            NodesToSelect = new List<Node_BaseVm>();
-            NodesToSelect.AddRange(nodesToSelect);
+            NodesPaths = nodesPaths;
         }
-        public List<Node_BaseVm> NodesToSelect { get; set; }
+        public Dictionary<Node_BaseVm, List<Node_BaseVm>> NodesPaths { get; set; }
 
         protected ICommand selectNodeCommand;
-        public ICommand SelectNodeCommand => selectNodeCommand ?? (selectNodeCommand = new RelayCommand<Node_BaseVm>((node) => { TreeCanvas?.StartTransition(node); }, (node) => node != null && NodesToSelect.Contains(node)));
+        public ICommand SelectNodeCommand => selectNodeCommand ?? (selectNodeCommand = new RelayCommand<Node_BaseVm>((node) => { TreeCanvas?.PrepareAndStartTransition(node, NodesPaths[node]); }, (node) => node != null && NodesPaths.ContainsKey(node)));
     }
 }

@@ -411,8 +411,8 @@ namespace StorylineEditor.Views.Controls
                 {
                     TreePlayerHistoryVm treePlayerHistory = Tree.Parent.Parent.TreePlayerHistory;
 
-                    TreePathVm activeTreePath = treePlayerHistory.PassedDialogsAndReplicas.FirstOrDefault((treePath)=>treePath.Tree == Tree && treePath.IsActive);
-                    
+                    TreePathVm activeTreePath = treePlayerHistory.PassedDialogsAndReplicas.FirstOrDefault((treePath) => treePath.Tree == Tree && treePath.IsActive);
+
                     if (activeTreePath == null)
                     {
                         activeTreePath = new TreePathVm(treePlayerHistory, 0) { Tree = Tree };
@@ -429,7 +429,7 @@ namespace StorylineEditor.Views.Controls
                         }
                     }
                 }
-                  
+
                 if (PlayingAdorner == null)
                 {
                     PlayingAdorner = new PlayingAdorner();
@@ -485,20 +485,41 @@ namespace StorylineEditor.Views.Controls
             }
         }
 
-        public void StartTransition(Node_BaseVm node)
+        public void PrepareAndStartTransition(Node_BaseVm node, List<Node_BaseVm> nodesPath)
+        {
+            PlayingAdorner?.ToTransitionView(TransitionDuration / 4);
+            StartTransition(node, nodesPath);
+        }
+
+        public void StartTransition(Node_BaseVm node, List<Node_BaseVm> nodesPath)
         {
             if (node != null)
             {
                 ActiveContext = new TreePlayerContext_TransitionVm();
 
-                PlayingAdorner?.ToTransitionView(TransitionDuration / 4);
-
                 StopStoryboard();
+
+                if (nodesPath != null && nodesPath.Count > 0)
+                {
+                    nextNode = nodesPath[0];                    
+                    nodesPath.RemoveAt(0);
+
+                    customHandler = (o, e) => { StartTransition(node, nodesPath); };
+                    Storyboard.Completed += customHandler;
+                }
+                else
+                {
+                    nextNode = node;
+
+                    Storyboard.Completed += OnCompletedTransition;
+                }
+
+                StateTimeLeft = 0;
 
                 var xAnimation = new DoubleAnimation
                 {
                     From = TranslationX + ActualWidth / 2 / Scale,
-                    To = node.PositionX + GraphNodes[node].ActualWidth / 2,
+                    To = nextNode.PositionX + GraphNodes[nextNode].ActualWidth / 2,
                     Duration = TimeSpan.FromSeconds(TransitionDuration),
                     FillBehavior = FillBehavior.HoldEnd
                 };
@@ -508,7 +529,7 @@ namespace StorylineEditor.Views.Controls
                 var yAnimation = new DoubleAnimation
                 {
                     From = TranslationY + ActualHeight / 2 / Scale,
-                    To = node.PositionY + GraphNodes[node].ActualHeight / 2,
+                    To = nextNode.PositionY + GraphNodes[nextNode].ActualHeight / 2,
                     Duration = TimeSpan.FromSeconds(TransitionDuration),
                     FillBehavior = FillBehavior.HoldEnd
                 };
@@ -518,11 +539,6 @@ namespace StorylineEditor.Views.Controls
                 Storyboard.Children.Add(xAnimation);
                 Storyboard.Children.Add(yAnimation);
 
-                Storyboard.Completed += OnCompletedTransition;
-
-                StateTimeLeft = 0;
-                nextNode = node;
-
                 Storyboard.Begin(this, true);
             }
             else
@@ -531,29 +547,72 @@ namespace StorylineEditor.Views.Controls
             }
         }
 
-        public List<Node_BaseVm> GetChildNodes(Node_BaseVm node)
+        public Dictionary<Node_BaseVm, List<Node_BaseVm>> GetChildNodesPaths(Node_BaseVm node)
         {
             var nodeIds = Tree.Links.Where(link => link.FromId == node.Id).Select(link => link.ToId).ToList();
 
+            Dictionary<Node_BaseVm, List<Node_BaseVm>> childNodesPaths = new Dictionary<Node_BaseVm, List<Node_BaseVm>>();
+
             List<Node_BaseVm> nonTransitNodes = Tree.Nodes.Where((otherNode) => nodeIds.Contains(otherNode.Id) && !(otherNode is DNode_TransitVm)).ToList();
 
-            foreach (var transitChildNodes in
-                Tree.Nodes.Where((otherNode) => nodeIds.Contains(otherNode.Id) && (otherNode is DNode_TransitVm)).Select((otherNode) => GetChildNodes(otherNode)))
+            foreach (var nonTransitNode in nonTransitNodes)
             {
-                nonTransitNodes.AddRange(transitChildNodes);
+                if (nonTransitNode.Gender > 0 && nonTransitNode.Gender != GenderToPlay) continue;
+
+                if (FullMode)
+                {
+                    List<Node_BaseVm> nodesToRemove = new List<Node_BaseVm>();
+
+                    if (nonTransitNode is Node_InteractiveVm interactiveChildNode)
+                    {
+                        bool shouldSkip = false;
+
+                        foreach (var predicate in interactiveChildNode.Predicates)
+                        {
+                            if (!predicate.IsOk)
+                            {
+                                shouldSkip = true;
+                                break;
+                            }
+                        }
+
+                        if (shouldSkip) continue;
+                    }
+                }
+
+                childNodesPaths.Add(nonTransitNode, null);
             }
 
-            return nonTransitNodes;
+            foreach (var transitNode in Tree.Nodes.Where((otherNode) => nodeIds.Contains(otherNode.Id) && !nonTransitNodes.Contains(otherNode)))
+            {
+                Dictionary<Node_BaseVm, List<Node_BaseVm>> childResult = GetChildNodesPaths(transitNode);
+
+                foreach (var childResultEntry in childResult)
+                {
+                    if (childNodesPaths.ContainsKey(childResultEntry.Key))
+                    {
+                        continue; // One path to nonTransit node is enough
+                    }
+                    else
+                    {
+                        List<Node_BaseVm> nodesPath = childResultEntry.Value ?? new List<Node_BaseVm>();
+                        nodesPath.Insert(0, transitNode);
+                        childNodesPaths.Add(childResultEntry.Key, nodesPath);             
+                    }
+                }
+            }
+
+            return childNodesPaths;
         }
 
         private void GoToNextStep(Node_BaseVm node)
         {
             if (node != null)
             {
-                List<Node_BaseVm> childNodes = GetChildNodes(node);
-
-                childNodes.RemoveAll((childNode) => childNode.Gender > 0 && childNode.Gender != GenderToPlay);
-
+                Dictionary<Node_BaseVm, List<Node_BaseVm>> childNodesPaths = GetChildNodesPaths(node);
+                
+                List<Node_BaseVm> childNodes = childNodesPaths.Keys.ToList();
+                
                 if (FullMode)
                 {
                     if (node is Node_InteractiveVm interactiveNode)
@@ -563,36 +622,22 @@ namespace StorylineEditor.Views.Controls
                             if (gameEvent.ExecuteWhenLeaveDialogNode) gameEvent.Execute();
                         }
                     }
-
-                    List<Node_BaseVm> nodesToRemove = new List<Node_BaseVm>();
-
-                    foreach (var childNode in childNodes)
-                    {
-                        if (childNode is Node_InteractiveVm interactiveChildNode)
-                        {
-                            foreach (var predicate in interactiveChildNode.Predicates)
-                            {
-                                if (!predicate.IsOk) { nodesToRemove.Add(childNode); }
-                            }
-                        }
-                    }
-
-                    childNodes.RemoveAll((childNode) => nodesToRemove.Contains(childNode));
                 }
 
                 if (childNodes.Count == 1)
                 {
-                    StartTransition(childNodes[0]);
+                    PrepareAndStartTransition(childNodes[0], childNodesPaths[childNodes[0]]);
                 }
                 else if (childNodes.Count > 0)
                 {
                     if (node is DNode_RandomVm randomNode)
                     {
-                        StartTransition(childNodes[Random.Next(childNodes.Count)]);
+                        Node_BaseVm childNode = childNodes[Random.Next(childNodes.Count)];
+                        PrepareAndStartTransition(childNode, childNodesPaths[childNode]);
                     }
                     else if (childNodes.TrueForAll((childNode) => (childNode is IOwnered owneredNode) && owneredNode.Owner != null && owneredNode.Owner.Id == CharacterVm.PlayerId))
                     {
-                        ActiveContext = new TreePlayerContext_ChoiceVm(this, childNodes);
+                        ActiveContext = new TreePlayerContext_ChoiceVm(this, childNodesPaths);
                     }
                     else
                     {
@@ -667,6 +712,7 @@ namespace StorylineEditor.Views.Controls
 
         void StopStoryboard()
         {
+            Storyboard.Completed -= customHandler;
             Storyboard.Completed -= OnCompletedTransition;
             Storyboard.Completed -= OnCompletedState;
 
@@ -834,6 +880,7 @@ namespace StorylineEditor.Views.Controls
 
         Node_BaseVm nextNode = null;
 
+        EventHandler customHandler = delegate { };
         Storyboard Storyboard = new Storyboard();
         Random Random = new Random();
         protected Dictionary<Node_BaseVm, GraphNode> GraphNodes = new Dictionary<Node_BaseVm, GraphNode>();
@@ -1329,7 +1376,7 @@ namespace StorylineEditor.Views.Controls
 
         ICommand togglePlayCommand;
         public ICommand TogglePlayCommand =>
-            togglePlayCommand ?? (togglePlayCommand = new RelayCommand(() => { if (ActiveContext != null) PauseUnpause(); else { StartTransition(SelectedValue); } }, () => SelectedValue != null));
+            togglePlayCommand ?? (togglePlayCommand = new RelayCommand(() => { if (ActiveContext != null) PauseUnpause(); else { PrepareAndStartTransition(SelectedValue, null); } }, () => SelectedValue != null));
 
 
         ICommand stopCommand;

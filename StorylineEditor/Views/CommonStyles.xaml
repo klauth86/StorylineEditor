@@ -1257,7 +1257,7 @@ StorylineEditor распространяется в надежде, что он�
                             </DataTemplate>
                             <DataTemplate DataType="{x:Type viewModels:TreePlayerContext_ChoiceVm}">
                                 <ScrollViewer x:Name="sv_Main">
-                                    <ItemsControl ItemsSource="{Binding NodesToSelect}">
+                                    <ItemsControl ItemsSource="{Binding NodesPaths.Keys}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
                                                 <Button Margin="{StaticResource MarginPaddingThickness}" Padding="{StaticResource MarginPaddingThickness}"
