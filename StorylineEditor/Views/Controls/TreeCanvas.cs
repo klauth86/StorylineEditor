@@ -551,7 +551,7 @@ namespace StorylineEditor.Views.Controls
         {
             var nodeIds = Tree.Links.Where(link => link.FromId == node.Id).Select(link => link.ToId).ToList();
 
-            Dictionary<Node_BaseVm, List<Node_BaseVm>> childNodesPaths = new Dictionary<Node_BaseVm, List<Node_BaseVm>>();
+            Dictionary<Node_BaseVm, List<Node_BaseVm>> result = new Dictionary<Node_BaseVm, List<Node_BaseVm>>();
 
             List<Node_BaseVm> nonTransitNodes = Tree.Nodes.Where((otherNode) => nodeIds.Contains(otherNode.Id) && !(otherNode is DNode_TransitVm)).ToList();
 
@@ -561,8 +561,6 @@ namespace StorylineEditor.Views.Controls
 
                 if (FullMode)
                 {
-                    List<Node_BaseVm> nodesToRemove = new List<Node_BaseVm>();
-
                     if (nonTransitNode is Node_InteractiveVm interactiveChildNode)
                     {
                         bool shouldSkip = false;
@@ -580,16 +578,37 @@ namespace StorylineEditor.Views.Controls
                     }
                 }
 
-                childNodesPaths.Add(nonTransitNode, null);
+                result.Add(nonTransitNode, null);
             }
 
             foreach (var transitNode in Tree.Nodes.Where((otherNode) => nodeIds.Contains(otherNode.Id) && !nonTransitNodes.Contains(otherNode)))
             {
+                if (transitNode.Gender > 0 && transitNode.Gender != GenderToPlay) continue;
+
+                if (FullMode)
+                {
+                    if (transitNode is Node_InteractiveVm interactiveChildNode)
+                    {
+                        bool shouldSkip = false;
+
+                        foreach (var predicate in interactiveChildNode.Predicates)
+                        {
+                            if (!predicate.IsOk)
+                            {
+                                shouldSkip = true;
+                                break;
+                            }
+                        }
+
+                        if (shouldSkip) continue;
+                    }
+                }
+
                 Dictionary<Node_BaseVm, List<Node_BaseVm>> childResult = GetChildNodesPaths(transitNode);
 
                 foreach (var childResultEntry in childResult)
                 {
-                    if (childNodesPaths.ContainsKey(childResultEntry.Key))
+                    if (result.ContainsKey(childResultEntry.Key))
                     {
                         continue; // One path to nonTransit node is enough
                     }
@@ -597,12 +616,12 @@ namespace StorylineEditor.Views.Controls
                     {
                         List<Node_BaseVm> nodesPath = childResultEntry.Value ?? new List<Node_BaseVm>();
                         nodesPath.Insert(0, transitNode);
-                        childNodesPaths.Add(childResultEntry.Key, nodesPath);             
+                        result.Add(childResultEntry.Key, nodesPath);             
                     }
                 }
             }
 
-            return childNodesPaths;
+            return result;
         }
 
         private void GoToNextStep(Node_BaseVm node)
