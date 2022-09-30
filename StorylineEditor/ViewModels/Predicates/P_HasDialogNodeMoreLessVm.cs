@@ -36,7 +36,7 @@ namespace StorylineEditor.ViewModels.Predicates
 
         public override bool IsValid=> base.IsValid && Dialog != null && DialogNode != null && (isMore || isMoreOrEqual || isEqual || isLessOrEqual || isLess);
 
-        public override bool IsOk => !IsValid ||
+        public override bool IsConditionMet => !IsValid ||
             !isInversed && NumericCondition(Parent.Parent.Parent.Parent.TreePlayerHistory.PassedDialogsAndReplicas.Sum((treePath) => treePath?.Tree?.Id == DialogId && !treePath.IsActive ? treePath.PassedNodes.Count((node)=> node == DialogNode) : 0)) ||
             isInversed && !NumericCondition(Parent.Parent.Parent.Parent.TreePlayerHistory.PassedDialogsAndReplicas.Sum((treePath) => treePath?.Tree?.Id == DialogId && !treePath.IsActive ? treePath.PassedNodes.Count((node) => node == DialogNode) : 0));
 

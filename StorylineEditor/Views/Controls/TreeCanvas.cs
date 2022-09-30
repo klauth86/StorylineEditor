@@ -559,20 +559,9 @@ namespace StorylineEditor.Views.Controls
 
                 if (FullMode)
                 {
-                    if (nonTransitNode is Node_InteractiveVm interactiveChildNode)
+                    if (nonTransitNode is Node_InteractiveVm interactiveNode)
                     {
-                        bool shouldSkip = false;
-
-                        foreach (var predicate in interactiveChildNode.Predicates)
-                        {
-                            if (!predicate.IsOk)
-                            {
-                                shouldSkip = true;
-                                break;
-                            }
-                        }
-
-                        if (shouldSkip) continue;
+                        if (!interactiveNode.IsAvailable) continue;
                     }
                 }
 
@@ -585,20 +574,9 @@ namespace StorylineEditor.Views.Controls
 
                 if (FullMode)
                 {
-                    if (transitNode is Node_InteractiveVm interactiveChildNode)
+                    if (transitNode is Node_InteractiveVm interactiveNode)
                     {
-                        bool shouldSkip = false;
-
-                        foreach (var predicate in interactiveChildNode.Predicates)
-                        {
-                            if (!predicate.IsOk)
-                            {
-                                shouldSkip = true;
-                                break;
-                            }
-                        }
-
-                        if (shouldSkip) continue;
+                        if (!interactiveNode.IsAvailable) continue;
                     }
                 }
 

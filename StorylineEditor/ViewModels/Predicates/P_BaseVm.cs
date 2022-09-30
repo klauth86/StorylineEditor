@@ -30,7 +30,7 @@ namespace StorylineEditor.ViewModels.Predicates
 
         public P_BaseVm() : this(null, 0) { }
 
-        public abstract bool IsOk { get; }
+        public abstract bool IsConditionMet { get; }
 
         protected bool isInversed;
         public bool IsInversed

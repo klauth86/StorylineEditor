@@ -30,7 +30,7 @@ namespace StorylineEditor.ViewModels.Predicates
 
         public override bool IsValid => base.IsValid && DialogNode != null;
 
-        public override bool IsOk => !IsValid ||
+        public override bool IsConditionMet => !IsValid ||
             !isInversed && Parent.Parent.Parent.Parent.TreePlayerHistory.PassedDialogsAndReplicas.Any((treePath) => treePath?.Tree?.Id == Parent.Parent.Id && treePath.PassedNodes.Contains(DialogNode) && treePath.IsActive) ||
             isInversed && !Parent.Parent.Parent.Parent.TreePlayerHistory.PassedDialogsAndReplicas.Any((treePath) => treePath?.Tree?.Id == Parent.Parent.Id && treePath.PassedNodes.Contains(DialogNode) && treePath.IsActive);
 

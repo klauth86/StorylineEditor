@@ -31,7 +31,7 @@ namespace StorylineEditor.ViewModels.Predicates
 
         public override bool IsValid => base.IsValid && JournalRecord != null && JournalRecordNode != null;
 
-        public override bool IsOk => throw new System.Exception(); ////// TODO
+        public override bool IsConditionMet => throw new System.Exception(); ////// TODO
 
         public string JournalRecordId { get; set; }
 

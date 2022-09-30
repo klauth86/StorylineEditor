@@ -37,7 +37,7 @@ namespace StorylineEditor.ViewModels.Predicates
 
         public override bool IsValid => base.IsValid && Character != null && (isMore || isMoreOrEqual || isEqual || isLessOrEqual || isLess);
 
-        public override bool IsOk => throw new System.Exception(); ////// TODO
+        public override bool IsConditionMet => throw new System.Exception(); ////// TODO
 
         public string CharacterId { get; set; }
 

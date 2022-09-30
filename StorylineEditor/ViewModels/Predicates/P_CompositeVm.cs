@@ -34,9 +34,9 @@ namespace StorylineEditor.ViewModels.Predicates
 
         public override bool IsValid => base.IsValid && itemA != null && itemA.IsValid && itemB != null && itemB.IsValid && (isOR || isAND);
 
-        public override bool IsOk => !IsValid ||
-            !isInversed && ((itemA.IsOk && itemB.IsOk && isAND) || (itemA.IsOk && isOR) || (itemB.IsOk && isOR)) ||
-            isInversed && !((itemA.IsOk && itemB.IsOk && isAND) || (itemA.IsOk && isOR) || (itemB.IsOk && isOR));
+        public override bool IsConditionMet => !IsValid ||
+            !isInversed && ((itemA.IsConditionMet && itemB.IsConditionMet && isAND) || (itemA.IsConditionMet && isOR) || (itemB.IsConditionMet && isOR)) ||
+            isInversed && !((itemA.IsConditionMet && itemB.IsConditionMet && isAND) || (itemA.IsConditionMet && isOR) || (itemB.IsConditionMet && isOR));
 
         public bool isOR;
         public bool IsOR

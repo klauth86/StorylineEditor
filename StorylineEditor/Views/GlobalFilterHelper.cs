@@ -13,6 +13,7 @@ StorylineEditor распространяется в надежде, что он�
 using System.Collections.Generic;
 using System.Windows;
 using StorylineEditor.Common;
+using StorylineEditor.ViewModels.Nodes;
 
 namespace StorylineEditor.Views
 {
@@ -112,6 +113,17 @@ namespace StorylineEditor.Views
 
                 instance.Loaded -= OnLoaded;
                 instance.Unloaded -= OnUnloaded;
+            }
+        }
+
+        public static void OnHistoryChanged()
+        {
+            foreach (var instance in Instances)
+            {
+                if (instance.DataContext is Node_InteractiveVm interactiveNode)
+                {
+
+                }
             }
         }
     }

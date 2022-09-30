@@ -16,24 +16,18 @@ using System.Windows.Media;
 
 namespace StorylineEditor.Views.Adorners
 {
-    public class DragOveredAdorner : Adorner
+    public class NotAvailableAdorner : Adorner
     {
-        public DragOveredAdorner(UIElement adornedElement) : base(adornedElement) { }
+        static Pen renderPen = new Pen(new SolidColorBrush(Colors.Navy), 1.5);
+
+        public NotAvailableAdorner(UIElement adornedElement) : base(adornedElement) { }
 
         protected override void OnRender(DrawingContext drawingContext)
         {
             Rect adornedElementRect = new Rect(this.AdornedElement.RenderSize);
 
-            // Some arbitrary drawing implements.
-            SolidColorBrush renderBrush = new SolidColorBrush(Colors.ForestGreen);
-            renderBrush.Opacity = 0.4;
-            Pen renderPen = new Pen(new SolidColorBrush(Colors.Navy), 1.5);
-            double renderRadius = 4.0;
-
-            drawingContext.DrawEllipse(renderBrush, renderPen, adornedElementRect.TopLeft + new Vector(renderRadius, renderRadius), renderRadius, renderRadius);
-            drawingContext.DrawEllipse(renderBrush, renderPen, adornedElementRect.TopRight + new Vector(-renderRadius, renderRadius), renderRadius, renderRadius);
-            drawingContext.DrawEllipse(renderBrush, renderPen, adornedElementRect.BottomLeft + new Vector(renderRadius, -renderRadius), renderRadius, renderRadius);
-            drawingContext.DrawEllipse(renderBrush, renderPen, adornedElementRect.BottomRight + new Vector(-renderRadius, -renderRadius), renderRadius, renderRadius);
+            drawingContext.DrawLine(renderPen, adornedElementRect.TopLeft, adornedElementRect.BottomRight);
+            drawingContext.DrawLine(renderPen, adornedElementRect.BottomLeft, adornedElementRect.TopRight);
         }
     }
 }

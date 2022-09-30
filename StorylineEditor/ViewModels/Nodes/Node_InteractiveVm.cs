@@ -64,6 +64,8 @@ namespace StorylineEditor.ViewModels.Nodes
         public ObservableCollection<P_BaseVm> Predicates { get; set; }
         public bool HasPredicates => Predicates.Count > 0;
 
+        public bool IsAvailable => Predicates.All((predicate) => predicate.IsConditionMet); 
+
         ICommand addCommand;
         public ICommand AddCommand => addCommand ?? (addCommand = new RelayCommand<Type>((type) =>
                  {
