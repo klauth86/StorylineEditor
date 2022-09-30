@@ -411,15 +411,13 @@ namespace StorylineEditor.Views.Controls
                 {
                     TreePlayerHistoryVm treePlayerHistory = Tree.Parent.Parent.TreePlayerHistory;
 
-                    TreePathVm activeTreePath = treePlayerHistory.PassedDialogsAndReplicas.FirstOrDefault((treePath) => treePath.Tree == Tree && treePath.IsActive);
-
-                    if (activeTreePath == null)
+                    if (ActiveTreePath == null)
                     {
-                        activeTreePath = new TreePathVm(treePlayerHistory, 0) { Tree = Tree };
-                        treePlayerHistory.PassedDialogsAndReplicas.Add(activeTreePath);
+                        ActiveTreePath = new TreePathVm(treePlayerHistory, 0) { Tree = Tree };
+                        treePlayerHistory.PassedDialogsAndReplicas.Add(ActiveTreePath);
                     }
 
-                    if (activeTreePath != null) activeTreePath.PassedNodes.Add(node);
+                    if (ActiveTreePath != null) ActiveTreePath.PassedNodes.Add(node);
 
                     if (node is Node_InteractiveVm interactiveNode)
                     {
@@ -696,16 +694,10 @@ namespace StorylineEditor.Views.Controls
                 PlayingAdorner = null;
             }
 
-            if (FullMode)
+            if (ActiveTreePath != null)
             {
-                TreePlayerHistoryVm treePlayerHistory = Tree.Parent.Parent.TreePlayerHistory;
-
-                TreePathVm activeTreePath = treePlayerHistory.PassedDialogsAndReplicas.FirstOrDefault((treePath) => treePath.Tree == Tree && treePath.IsActive);
-
-                if (activeTreePath != null)
-                {
-                    activeTreePath.IsActive = false;
-                }
+                ActiveTreePath.IsActive = false;
+                ActiveTreePath = null;
             }
 
             ActiveContext = null;
@@ -919,6 +911,7 @@ namespace StorylineEditor.Views.Controls
         protected Rectangle SelectionRectangle;
 
         protected PlayingAdorner PlayingAdorner;
+        protected TreePathVm ActiveTreePath;
 
         protected IndicatorLink indicatorLink;
         public IndicatorLink IndicatorLink

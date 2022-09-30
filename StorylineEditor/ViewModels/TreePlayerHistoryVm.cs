@@ -38,9 +38,7 @@ namespace StorylineEditor.ViewModels
         public ICommand RemovePassedNodeCommand =>
             removePassedNodeCommand ?? (removePassedNodeCommand = new RelayCommand<Node_BaseVm>((node) => { PassedNodes.Remove(node); }, (node) => node != null));
 
-        protected ICommand addPassedNodeCommand;
-        public ICommand AddPassedNodeCommand =>
-            addPassedNodeCommand ?? (addPassedNodeCommand = new RelayCommand<Node_BaseVm>((node) => { PassedNodes.Add(node); }, (node) => node != null));
+        public Node_BaseVm NodeToAdd { get => null; set { if (value != null) PassedNodes.Add(value); } }
     }
 
     public class JournalNodeStateVm : BaseVm<JournalPathVm>
@@ -121,6 +119,8 @@ namespace StorylineEditor.ViewModels
         public ICommand AddItemCommand =>
             addItemCommand ?? (addItemCommand = new RelayCommand<FolderedVm>((item) => { Inventory.Add(item); }, (item) => item != null));
 
+        public ItemVm ItemToAdd { get => null; set { if (value != null) Inventory.Add(value); } }
+
         public bool HasItem(ItemVm item) => Inventory.Contains(item);
 
         public ObservableCollection<TreePathVm> PassedDialogsAndReplicas { get; private set; }
@@ -129,9 +129,7 @@ namespace StorylineEditor.ViewModels
         public ICommand RemoveDialogsAndReplicasCommand =>
             removeDialogsAndReplicasCommand ?? (removeDialogsAndReplicasCommand = new RelayCommand<TreePathVm>((item) => { PassedDialogsAndReplicas.Remove(item); }, (item) => item != null));
 
-        protected ICommand addDialogsAndReplicasCommand;
-        public ICommand AddDialogsAndReplicasCommand =>
-            addDialogsAndReplicasCommand ?? (addDialogsAndReplicasCommand = new RelayCommand<FolderedVm>((item) => { PassedDialogsAndReplicas.Add(new TreePathVm(this, 0) { Tree = (TreeVm)item }); }, (item) => item != null));
+        public FolderedVm DialogOrReplicaToAdd { get => null; set { if (value != null) PassedDialogsAndReplicas.Add(new TreePathVm(this, 0) { Tree = (TreeVm)value }); } }
 
         public ObservableCollection<JournalPathVm> Journal { get; private set; }
 
