@@ -1306,12 +1306,12 @@ StorylineEditor распространяется в надежде, что он�
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
 
-                        <CheckBox IsChecked="{Binding TreeCanvas.FullMode}">Полный режим</CheckBox>
+                        <CheckBox IsChecked="{Binding TreeCanvas.FullMode}" IsEnabled="{Binding ElementName=btn_ToggleGenderToPlay, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}">Полный режим</CheckBox>
 
                         <StackPanel Grid.Row="1" Orientation="Horizontal">
                             <Button Style="{StaticResource S_Button_TreePlayer_Play}"></Button>
                             <Button Style="{StaticResource S_Button_TreePlayer_Stop}"></Button>
-                            <Button Style="{StaticResource S_Button_TreePlayer_ToggleGenderToPlay}"></Button>
+                            <Button x:Name="btn_ToggleGenderToPlay" Style="{StaticResource S_Button_TreePlayer_ToggleGenderToPlay}"></Button>
                             <xctk:IntegerUpDown Padding="{StaticResource MarginPaddingThickness}" Margin="{StaticResource MarginPaddingThickness}" Minimum="1" MinWidth="64" Maximum="60" Value="{Binding TreeCanvas.StateDuration, UpdateSourceTrigger=PropertyChanged}" AllowTextInput="False" CultureInfo="ru-RU"></xctk:IntegerUpDown>
                             <TextBlock Style="{StaticResource S_TextBlock_Header}" Text="{Binding TreeCanvas.StateTimeLeft, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
                         </StackPanel>
