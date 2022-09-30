@@ -14,6 +14,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using StorylineEditor.Common;
 using StorylineEditor.ViewModels.Nodes;
+using StorylineEditor.Views;
 
 namespace StorylineEditor.ViewModels
 {
@@ -107,19 +108,33 @@ namespace StorylineEditor.ViewModels
             Journal = new ObservableCollection<JournalPathVm>();
         }
 
+        public void ShowAvailabilityAdorners() { GlobalFilterHelper.AvailabilityAdorners = true; }
+
+        public void HideAvailabilityAdorners() { GlobalFilterHelper.AvailabilityAdorners = false; }
+
         public TreePlayerHistoryVm() : this(null, 0) { }
 
         public ObservableCollection<FolderedVm> Inventory { get; private set; }
 
         protected ICommand removeItemCommand;
-        public ICommand RemoveItemCommand =>
-            removeItemCommand ?? (removeItemCommand = new RelayCommand<FolderedVm>((item) => { Inventory.Remove(item); }, (item) => item != null));
+        public ICommand RemoveItemCommand => removeItemCommand ?? (removeItemCommand = new RelayCommand<FolderedVm>((item) =>
+            {
+                Inventory.Remove(item);
+                ShowAvailabilityAdorners();
+            }, (item) => item != null));
 
-        protected ICommand addItemCommand;
-        public ICommand AddItemCommand =>
-            addItemCommand ?? (addItemCommand = new RelayCommand<FolderedVm>((item) => { Inventory.Add(item); }, (item) => item != null));
-
-        public ItemVm ItemToAdd { get => null; set { if (value != null) Inventory.Add(value); } }
+        public ItemVm ItemToAdd
+        {
+            get => null;
+            set
+            {
+                if (value != null)
+                {
+                    Inventory.Add(value);
+                    ShowAvailabilityAdorners();
+                }
+            }
+        }
 
         public bool HasItem(ItemVm item) => Inventory.Contains(item);
 

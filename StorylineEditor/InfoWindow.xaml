@@ -16,6 +16,6 @@ StorylineEditor распространяется в надежде, что он�
         SizeToContent="WidthAndHeight"
         WindowStyle="ToolWindow"
         ShowInTaskbar="False" MinWidth="320" MaxWidth="512" MinHeight="512" MaxHeight="1024"
-        Background="LightGray" Closing="Window_Closing">
+        Background="LightGray" Loaded="Window_Loaded" Closing="Window_Closing">
     <ContentControl Content="{Binding}" Name="cc" Margin="{StaticResource MarginPaddingThickness}"></ContentControl>
 </Window>

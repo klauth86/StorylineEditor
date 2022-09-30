@@ -10,28 +10,22 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using StorylineEditor.Common;
-using StorylineEditor.ViewModels.Tabs;
-using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System;
 using System.Xml.Serialization;
 using System.Windows.Input;
 using StorylineEditor.CopyPasteService;
 using StorylineEditor.Additive;
+using StorylineEditor.Common;
+using StorylineEditor.ViewModels.Tabs;
 
 namespace StorylineEditor.ViewModels
 {
     [XmlRoot]
     public class FullContextVm : BaseVm
     {
-        public event Action OnClosingEvent = delegate { };
-        public void OnClosing() { OnClosingEvent(); }
-
-
         public List<Action_BaseVm> Actions { get; set; }
-
 
         protected ObservableCollection<BaseVm<FullContextVm>> tabs;
         public ObservableCollection<BaseVm<FullContextVm>> Tabs => tabs;

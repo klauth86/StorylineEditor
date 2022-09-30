@@ -12,8 +12,10 @@ StorylineEditor распространяется в надежде, что он�
 
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Documents;
 using StorylineEditor.Common;
 using StorylineEditor.ViewModels.Nodes;
+using StorylineEditor.Views.Adorners;
 
 namespace StorylineEditor.Views
 {
@@ -21,6 +23,7 @@ namespace StorylineEditor.Views
     {
         public static HashSet<FrameworkElement> Instances = new HashSet<FrameworkElement>();
         
+
         private static string filter;
         public static string Filter
         {
@@ -55,6 +58,7 @@ namespace StorylineEditor.Views
                 }
             }
         }
+
 
         public static bool GetIsFiltered(DependencyObject obj) => (bool)obj.GetValue(IsFilteredProperty);
         public static void SetIsFiltered(DependencyObject obj, bool value) { obj.SetValue(IsFilteredProperty, value); }
@@ -101,6 +105,21 @@ namespace StorylineEditor.Views
                             instance.Visibility = Visibility.Visible;
                         }
                     }
+
+                    if (availabilityAdorners)
+                    {
+                        if (instance.DataContext is Node_InteractiveVm interactiveNode)
+                        {
+                            if (interactiveNode.IsAvailable)
+                            {
+                                RemoveAdorner(instance);
+                            }
+                            else
+                            {
+                                AddAdorner(instance);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -109,6 +128,8 @@ namespace StorylineEditor.Views
         {
             if (sender is FrameworkElement instance)
             {
+                RemoveAdorner(instance);
+
                 if (Instances.Contains(instance)) Instances.Remove(instance);
 
                 instance.Loaded -= OnLoaded;
@@ -116,14 +137,62 @@ namespace StorylineEditor.Views
             }
         }
 
-        public static void OnHistoryChanged()
-        {
-            foreach (var instance in Instances)
-            {
-                if (instance.DataContext is Node_InteractiveVm interactiveNode)
-                {
 
+        private static bool availabilityAdorners;
+        public static bool AvailabilityAdorners
+        {
+            get => availabilityAdorners;
+            set
+            {
+                if (value != availabilityAdorners)
+                {
+                    availabilityAdorners = value;
+
+                    if (availabilityAdorners)
+                    {
+                        foreach (var instance in Instances)
+                        {
+                            if (instance.DataContext is Node_InteractiveVm interactiveNode)
+                            {
+                                if (interactiveNode.IsAvailable)
+                                {
+                                    RemoveAdorner(instance);
+                                }
+                                else
+                                {
+                                    AddAdorner(instance);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (var instance in Instances)
+                        {
+                            if (instance.DataContext is Node_InteractiveVm interactiveNode)
+                            {
+                                RemoveAdorner(instance);
+                            }
+                        }
+                    }
                 }
+            }
+        }
+
+        private static void AddAdorner(FrameworkElement instance)
+        {
+            var adornerLayer = AdornerLayer.GetAdornerLayer(instance);
+
+            adornerLayer.Add(new NotAvailableAdorner(instance));
+        }
+
+        private static void RemoveAdorner(FrameworkElement instance)
+        {
+            var adornerLayer = AdornerLayer.GetAdornerLayer(instance);
+
+            foreach (var adorner in adornerLayer.GetAdorners(instance))
+            {
+                adornerLayer.Remove(adorner);
             }
         }
     }

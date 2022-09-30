@@ -31,6 +31,11 @@ namespace StorylineEditor
 
         private void btnOk_Click(object sender, RoutedEventArgs e) { Close(); }
 
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is IDialogContext dialogContext) dialogContext.OnLoaded();
+        }
+
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (DataContext is IDialogContext dialogContext) dialogContext.OnClosing();

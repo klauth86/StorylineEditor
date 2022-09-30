@@ -77,7 +77,6 @@ namespace StorylineEditor
 
         protected override void OnPreviewKeyUp(KeyEventArgs e) { FacadeKeyEvent(false, e.Key); base.OnPreviewKeyUp(e); }
 
-        protected override void OnClosing(CancelEventArgs e) { (DataContext as FullContextVm)?.OnClosing(); base.OnClosing(e); }
 
         const string xmlFilter = "XML files (*.xml)|*.xml";
 

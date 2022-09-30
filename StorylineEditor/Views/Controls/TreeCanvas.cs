@@ -26,12 +26,24 @@ using StorylineEditor.CopyPasteService;
 using StorylineEditor.FileDialog;
 using StorylineEditor.ViewModels;
 using StorylineEditor.ViewModels.Nodes;
-using StorylineEditor.ViewModels.Predicates;
 using StorylineEditor.ViewModels.Tabs;
 
 namespace StorylineEditor.Views.Controls
 {
-    public class TreeCanvasProxy { public TreeCanvas TreeCanvas { get; set; } }
+    public class TreeCanvasProxy: IDialogContext { 
+        
+        public TreeCanvas TreeCanvas { get; set; }
+
+        public void OnClosing()
+        {
+            TreeCanvas?.Tree?.Parent.Parent.TreePlayerHistory.HideAvailabilityAdorners();
+        }
+
+        public void OnLoaded()
+        {
+            TreeCanvas?.Tree?.Parent.Parent.TreePlayerHistory.ShowAvailabilityAdorners();
+        }
+    }
 
     public class TreeCanvas : Canvas, ICopyPaste
     {

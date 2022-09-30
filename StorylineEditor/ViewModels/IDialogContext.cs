@@ -14,6 +14,7 @@ namespace StorylineEditor.ViewModels
 {
     public interface IDialogContext
     {
+        void OnLoaded();
         void OnClosing();
     }
 }
