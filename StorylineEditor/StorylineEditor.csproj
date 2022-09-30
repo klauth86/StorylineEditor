@@ -114,6 +114,7 @@
     <Compile Include="Models\Nodes\LinkM.cs" />
     <Compile Include="Models\Nodes\Node_BaseM.cs" />
     <Compile Include="Models\Nodes\Node_InteractiveM.cs" />
+    <Compile Include="Models\Nodes\Node_RegularM.cs" />
     <Compile Include="Models\Predicates\P_BaseM.cs" />
     <Compile Include="Models\StorylineM.cs" />
     <Compile Include="ViewModels\FolderedVm.cs" />
