@@ -10,29 +10,22 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Models.Nodes;
 using System.Collections.Generic;
 
 namespace StorylineEditor.Models
 {
-    public class StorylineM : BaseM
+    public class GraphM : BaseM
     {
-        public StorylineM(long additionalTicks) : base(additionalTicks)
+        public GraphM(long additionalTicks) : base(additionalTicks)
         {
-            Characters = new List<CharacterM>();
-            Items = new List<ItemM>();
-            Actors = new List<ActorM>();
-            Journal = new List<GraphM>();
-            Dialogs = new List<GraphM>();
-            Replicas = new List<GraphM>();
+            Nodes = new List<Node_BaseM>();
+            Links = new List<LinkM>();
         }
 
-        public StorylineM() : this(0) { }
+        public GraphM() : this(0) { }
 
-        public List<CharacterM> Characters { get; set; }
-        public List<ItemM> Items { get; set; }
-        public List<ActorM> Actors { get; set; }
-        public List<GraphM> Journal { get; set; }
-        public List<GraphM> Dialogs { get; set; }
-        public List<GraphM> Replicas { get; set; }
+        public List<Node_BaseM> Nodes { get; set; }
+        public List<LinkM> Links { get; set; }
     }
 }

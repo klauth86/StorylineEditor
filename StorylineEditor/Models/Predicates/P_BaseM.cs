@@ -10,29 +10,17 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using System.Collections.Generic;
-
-namespace StorylineEditor.Models
+namespace StorylineEditor.Models.Predicates
 {
-    public class StorylineM : BaseM
+    public abstract class P_BaseM : BaseM
     {
-        public StorylineM(long additionalTicks) : base(additionalTicks)
+        public P_BaseM(long additionalTicks) : base(additionalTicks)
         {
-            Characters = new List<CharacterM>();
-            Items = new List<ItemM>();
-            Actors = new List<ActorM>();
-            Journal = new List<GraphM>();
-            Dialogs = new List<GraphM>();
-            Replicas = new List<GraphM>();
+            isInversed = false;
         }
 
-        public StorylineM() : this(0) { }
+        public P_BaseM() : this(0) { }
 
-        public List<CharacterM> Characters { get; set; }
-        public List<ItemM> Items { get; set; }
-        public List<ActorM> Actors { get; set; }
-        public List<GraphM> Journal { get; set; }
-        public List<GraphM> Dialogs { get; set; }
-        public List<GraphM> Replicas { get; set; }
+        public bool isInversed { get; set; }
     }
 }

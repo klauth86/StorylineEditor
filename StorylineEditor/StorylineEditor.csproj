@@ -108,7 +108,13 @@
     <Compile Include="Models\ActorM.cs" />
     <Compile Include="Models\CharacterM.cs" />
     <Compile Include="Models\FolderM.cs" />
+    <Compile Include="Models\GameEvents\GE_BaseM.cs" />
+    <Compile Include="Models\GraphM.cs" />
     <Compile Include="Models\ItemM.cs" />
+    <Compile Include="Models\Nodes\LinkM.cs" />
+    <Compile Include="Models\Nodes\Node_BaseM.cs" />
+    <Compile Include="Models\Nodes\Node_InteractiveM.cs" />
+    <Compile Include="Models\Predicates\P_BaseM.cs" />
     <Compile Include="Models\StorylineM.cs" />
     <Compile Include="ViewModels\FolderedVm.cs" />
     <Compile Include="ViewModels\GameEvents\GE_ChangeRelationVm.cs" />
