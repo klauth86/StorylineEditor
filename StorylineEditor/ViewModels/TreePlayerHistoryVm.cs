@@ -108,9 +108,9 @@ namespace StorylineEditor.ViewModels
             Journal = new ObservableCollection<JournalPathVm>();
         }
 
-        public void ShowAvailabilityAdorners() { GlobalFilterHelper.AvailabilityAdorners = true; }
+        public void ShowAvailabilityAdorners() { GlobalFilterHelper.ShowAvailabilityAdorners = true; }
 
-        public void HideAvailabilityAdorners() { GlobalFilterHelper.AvailabilityAdorners = false; }
+        public void HideAvailabilityAdorners() { GlobalFilterHelper.ShowAvailabilityAdorners = false; }
 
         public TreePlayerHistoryVm() : this(null, 0) { }
 

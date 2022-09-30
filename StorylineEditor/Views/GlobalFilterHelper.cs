@@ -106,7 +106,7 @@ namespace StorylineEditor.Views
                         }
                     }
 
-                    if (availabilityAdorners)
+                    if (showAvailabilityAdorners)
                     {
                         if (instance.DataContext is Node_InteractiveVm interactiveNode)
                         {
@@ -136,15 +136,15 @@ namespace StorylineEditor.Views
         }
 
 
-        private static bool availabilityAdorners;
-        public static bool AvailabilityAdorners
+        private static bool showAvailabilityAdorners;
+        public static bool ShowAvailabilityAdorners
         {
-            get => availabilityAdorners;
+            get => showAvailabilityAdorners;
             set
             {
-                availabilityAdorners = value;
+                showAvailabilityAdorners = value;
 
-                if (availabilityAdorners)
+                if (showAvailabilityAdorners)
                 {
                     foreach (var instance in Instances)
                     {
@@ -182,9 +182,12 @@ namespace StorylineEditor.Views
             {
                 Adorner[] adorners = adornerLayer.GetAdorners(instance);
 
-                if (adorners != null && adorners.Length > 0)
+                if (adorners != null)
                 {
-                    if (adorners[0].GetType() == typeof(NotAvailableAdorner)) return;
+                    foreach (var adorner in adorners)
+                    {
+                        if (adorner.GetType() == typeof(NotAvailableAdorner)) return;
+                    }
                 }
                 
                 adornerLayer.Add(new NotAvailableAdorner(instance));
