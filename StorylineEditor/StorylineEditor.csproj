@@ -105,10 +105,16 @@
     <Compile Include="InfoWindow.xaml.cs">
       <DependentUpon>InfoWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\ActorM.cs" />
+    <Compile Include="Models\CharacterM.cs" />
+    <Compile Include="Models\FolderM.cs" />
+    <Compile Include="Models\ItemM.cs" />
+    <Compile Include="Models\StorylineM.cs" />
     <Compile Include="ViewModels\FolderedVm.cs" />
     <Compile Include="ViewModels\GameEvents\GE_ChangeRelationVm.cs" />
     <Compile Include="ViewModels\IDialogContext.cs" />
     <Compile Include="ViewModels\IDragOverable.cs" />
+    <Compile Include="Models\BaseM.cs" />
     <Compile Include="ViewModels\Nodes\JNode_AlternativeVm.cs" />
     <Compile Include="ViewModels\Nodes\JNode_StepVm.cs" />
     <Compile Include="ViewModels\CharacterVm.cs" />
