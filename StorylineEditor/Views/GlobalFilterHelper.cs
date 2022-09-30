@@ -128,8 +128,6 @@ namespace StorylineEditor.Views
         {
             if (sender is FrameworkElement instance)
             {
-                RemoveAdorner(instance);
-
                 if (Instances.Contains(instance)) Instances.Remove(instance);
 
                 instance.Loaded -= OnLoaded;
@@ -144,35 +142,32 @@ namespace StorylineEditor.Views
             get => availabilityAdorners;
             set
             {
-                if (value != availabilityAdorners)
-                {
-                    availabilityAdorners = value;
+                availabilityAdorners = value;
 
-                    if (availabilityAdorners)
+                if (availabilityAdorners)
+                {
+                    foreach (var instance in Instances)
                     {
-                        foreach (var instance in Instances)
+                        if (instance.DataContext is Node_InteractiveVm interactiveNode)
                         {
-                            if (instance.DataContext is Node_InteractiveVm interactiveNode)
-                            {
-                                if (interactiveNode.IsAvailable)
-                                {
-                                    RemoveAdorner(instance);
-                                }
-                                else
-                                {
-                                    AddAdorner(instance);
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        foreach (var instance in Instances)
-                        {
-                            if (instance.DataContext is Node_InteractiveVm interactiveNode)
+                            if (interactiveNode.IsAvailable)
                             {
                                 RemoveAdorner(instance);
                             }
+                            else
+                            {
+                                AddAdorner(instance);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var instance in Instances)
+                    {
+                        if (instance.DataContext is Node_InteractiveVm interactiveNode)
+                        {
+                            RemoveAdorner(instance);
                         }
                     }
                 }
@@ -183,16 +178,34 @@ namespace StorylineEditor.Views
         {
             var adornerLayer = AdornerLayer.GetAdornerLayer(instance);
 
-            adornerLayer.Add(new NotAvailableAdorner(instance));
+            if (adornerLayer != null)
+            {
+                Adorner[] adorners = adornerLayer.GetAdorners(instance);
+
+                if (adorners != null && adorners.Length > 0)
+                {
+                    if (adorners[0].GetType() == typeof(NotAvailableAdorner)) return;
+                }
+                
+                adornerLayer.Add(new NotAvailableAdorner(instance));
+            }
         }
 
         private static void RemoveAdorner(FrameworkElement instance)
         {
             var adornerLayer = AdornerLayer.GetAdornerLayer(instance);
 
-            foreach (var adorner in adornerLayer.GetAdorners(instance))
+            if (adornerLayer != null)
             {
-                adornerLayer.Remove(adorner);
+                Adorner[] adorners = adornerLayer.GetAdorners(instance);
+
+                if (adorners != null)
+                {
+                    foreach (var adorner in adorners)
+                    {
+                        adornerLayer.Remove(adorner);
+                    }
+                }
             }
         }
     }

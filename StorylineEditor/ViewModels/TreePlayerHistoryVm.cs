@@ -116,25 +116,29 @@ namespace StorylineEditor.ViewModels
 
         public ObservableCollection<FolderedVm> Inventory { get; private set; }
 
-        protected ICommand removeItemCommand;
-        public ICommand RemoveItemCommand => removeItemCommand ?? (removeItemCommand = new RelayCommand<FolderedVm>((item) =>
+        public void PickUpItem(FolderedVm item)
+        {
+            Inventory.Add(item);
+            ShowAvailabilityAdorners();
+        }
+
+        public void DropItem(FolderedVm item)
+        {
+            if (Inventory.Remove(item))
             {
-                Inventory.Remove(item);
                 ShowAvailabilityAdorners();
-            }, (item) => item != null));
+            }
+        }
 
         public ItemVm ItemToAdd
         {
             get => null;
-            set
-            {
-                if (value != null)
-                {
-                    Inventory.Add(value);
-                    ShowAvailabilityAdorners();
-                }
-            }
+            set { if (value != null) PickUpItem(value); }
         }
+
+        protected ICommand removeItemCommand;
+        public ICommand RemoveItemCommand => removeItemCommand ?? (removeItemCommand = new RelayCommand<FolderedVm>(
+            (item) => DropItem(item), (item) => item != null));
 
         public bool HasItem(ItemVm item) => Inventory.Contains(item);
 

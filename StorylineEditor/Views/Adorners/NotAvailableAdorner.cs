@@ -18,7 +18,7 @@ namespace StorylineEditor.Views.Adorners
 {
     public class NotAvailableAdorner : Adorner
     {
-        static Pen renderPen = new Pen(new SolidColorBrush(Colors.Navy), 1.5);
+        static Pen renderPen = new Pen(new SolidColorBrush(Colors.Blue), 4);
 
         public NotAvailableAdorner(UIElement adornedElement) : base(adornedElement) { }
 

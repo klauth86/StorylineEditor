@@ -34,7 +34,7 @@ namespace StorylineEditor.ViewModels.GameEvents
         {
             if (IsValid)
             {
-                if (CharacterId == CharacterVm.PlayerId) Parent.Parent.Parent.Parent.TreePlayerHistory.Inventory.Add(Item);
+                if (CharacterId == CharacterVm.PlayerId) Parent.Parent.Parent.Parent.TreePlayerHistory.PickUpItem(Item);
             }
         }
 
