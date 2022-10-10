@@ -1540,53 +1540,94 @@ StorylineEditor распространяется в надежде, что он�
                 </ScrollViewer>
             </TabItem>
 
-            <TabItem Header="Журнал" IsEnabled="{Binding TreeCanvas.FullMode, UpdateSourceTrigger=PropertyChanged}">
-                <DockPanel>
-                    <Grid DockPanel.Dock="Top">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="auto"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <controls:FilteredComboBox x:Name="fcmb_Journal" FontSize="10" Grid.Column="0" ItemsSource="{Binding TreeCanvas.Tree.Parent.Parent.JournalRecords, UpdateSourceTrigger=PropertyChanged}"></controls:FilteredComboBox>
-                        <Button Grid.Column="1" Style="{StaticResource S_Button_UI_Add}" Command="{Binding TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.AddJournalCommand, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding ElementName=fcmb_Journal, Path=SelectedValue, UpdateSourceTrigger=PropertyChanged}"></Button>
-                    </Grid>
-                    <ScrollViewer x:Name="sv_Journal_Main">
-                        <ItemsControl ItemsSource="{Binding TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.Journal}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Expander x:Name="exp_Main">
-                                        <Expander.Header>
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                                                </Grid.ColumnDefinitions>
-                                                <TextBlock Style="{StaticResource S_TextBlock_Base}" Text="{Binding Tree.Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-                                                <Button Grid.Column="1" Style="{StaticResource S_Button_UI_Remove_TabItem}" Command="{Binding Parent.RemoveJournalCommand, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding}"></Button>
-                                            </Grid>
-                                        </Expander.Header>
+            <TabItem x:Name="ti_Journal" IsEnabled="{Binding TreeCanvas.FullMode, UpdateSourceTrigger=PropertyChanged}">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Журнал" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+                        <controls:FilteredComboBox Template="{StaticResource CT_FilteredComboBox_OnlyPopup}"
+                                                   IsEnabled="{Binding ElementName=ti_Journal, Path=IsSelected, UpdateSourceTrigger=PropertyChanged}"
+                                                   SelectedValue="{Binding TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.JournalEntryToAdd, UpdateSourceTrigger=PropertyChanged}"
+                                                   ItemsSource="{Binding TreeCanvas.Tree.Parent.Parent.JournalRecords, UpdateSourceTrigger=PropertyChanged}"></controls:FilteredComboBox>
+                    </StackPanel>
+                </TabItem.Header>
+                <ScrollViewer>
+                    <ItemsControl ItemsSource="{Binding TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.Journal}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Expander x:Name="exp_Main">
+                                    <Expander.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Tree.Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+                                            <controls:FilteredComboBox Template="{StaticResource CT_FilteredComboBox_OnlyPopup}"                                                   
+                                                   SelectedValue="{Binding KnownNodeToAdd, UpdateSourceTrigger=PropertyChanged}"
+                                                   ItemsSource="{Binding Tree.Nodes, UpdateSourceTrigger=PropertyChanged}">
+                                                <controls:FilteredComboBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Grid ToolTip="{Binding Id}">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                                                <ColumnDefinition></ColumnDefinition>
+                                                            </Grid.ColumnDefinitions>
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition Height="auto"></RowDefinition>
+                                                                <RowDefinition Height="auto"></RowDefinition>
+                                                            </Grid.RowDefinitions>
 
-                                        <ItemsControl ItemsSource="{Binding JournalNodesStates}">
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Grid>
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="*"></ColumnDefinition>
-                                                            <ColumnDefinition Width="auto"></ColumnDefinition>
-                                                        </Grid.ColumnDefinitions>
-                                                        <TextBlock Style="{StaticResource S_TextBlock_Base}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-                                                        <CheckBox Grid.Column="1" IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
-                                                    </Grid>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
-                                    </Expander>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
-                </DockPanel>
+                                                            <Label FontSize="12" FontWeight="Normal" Style="{StaticResource S_Label_NodeType}"></Label>
+
+                                                            <TextBlock Grid.Column="1" Grid.Row="0" FontWeight="Bold" Text="{Binding OwnerName, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+
+                                                            <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" nodes:RTBHelper.Document="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </controls:FilteredComboBox.ItemTemplate>
+                                            </controls:FilteredComboBox>
+                                            <Button Grid.Column="1" Style="{StaticResource S_Button_UI_Remove_TabItem}"
+                                                    FontSize="8"
+                                                    Width="{StaticResource PlayerToggleButtonSize}"
+                                                    Height="{StaticResource PlayerToggleButtonSize}"
+                                                    Command="{Binding ElementName=ti_Journal, Path=DataContext.TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.RemoveJournalEntryCommand, UpdateSourceTrigger=PropertyChanged}"
+                                                    CommandParameter="{Binding}"></Button>
+                                        </StackPanel>
+                                    </Expander.Header>
+                                    <ItemsControl ItemsSource="{Binding KnownNodes}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid ToolTip="{Binding Id}" MaxWidth="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                                                        <ColumnDefinition></ColumnDefinition>
+                                                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="auto"></RowDefinition>
+                                                        <RowDefinition Height="auto"></RowDefinition>
+                                                    </Grid.RowDefinitions>
+
+                                                    <Label FontSize="12" FontWeight="Normal" Style="{StaticResource S_Label_NodeType}"></Label>
+
+                                                    <TextBlock Grid.Column="1" Grid.Row="0" FontWeight="Bold" Text="{Binding OwnerName, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+
+                                                    <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" nodes:RTBHelper.Document="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+
+                                                    <Button Grid.Column="2" Grid.RowSpan="2" Style="{StaticResource S_Button_UI_Remove_TabItem}"
+                                                            FontSize="8"
+                                                            Width="{StaticResource PlayerToggleButtonSize}"
+                                                            Height="{StaticResource PlayerToggleButtonSize}"
+                                                            Command="{Binding ElementName=exp_Main, Path=DataContext.RemovePassedNodeCommand, UpdateSourceTrigger=PropertyChanged}"
+                                                            CommandParameter="{Binding}"></Button>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Expander>
+
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
             </TabItem>
+            
         </TabControl>
     </DataTemplate>
     
