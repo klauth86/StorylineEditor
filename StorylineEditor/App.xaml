@@ -34,7 +34,10 @@ StorylineEditor распространяется в надежде, что он�
                 <ResourceDictionary Source="Views/GameEvents/GE_SetIsActiveV.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Views/GameEvents/GE_SpawnActorV.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Views/GameEvents/GE_ChangeRelationV.xaml"></ResourceDictionary>
-                
+                <ResourceDictionary Source="Views/GameEvents/GE_AddJournalRecordV.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Views/GameEvents/GE_AddJournalRecordNodeV.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Views/GameEvents/GE_PassJournalRecordNodeV.xaml"></ResourceDictionary>
+
                 <ResourceDictionary Source="Views/Predicates/P_BaseV.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Views/Predicates/P_CompositeV.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Views/Predicates/P_HasActiveDialogNodeMoreLessV.xaml"></ResourceDictionary>
@@ -46,6 +49,8 @@ StorylineEditor распространяется в надежде, что он�
                 <ResourceDictionary Source="Views/Predicates/P_HasJournalRecordV.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Views/Predicates/P_HasJournalRecordNodeV.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Views/Predicates/P_HasRelationV.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Views/Predicates/P_FinishedJournalRecordV.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Views/Predicates/P_PassedJournalRecordNodeV.xaml"></ResourceDictionary>
 
                 <ResourceDictionary Source="Views/GraphNodes/GraphNodeV.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Views/Nodes/JNode_AlternativeV.xaml"></ResourceDictionary>

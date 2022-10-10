@@ -118,7 +118,10 @@
     <Compile Include="Models\Predicates\P_BaseM.cs" />
     <Compile Include="Models\StorylineM.cs" />
     <Compile Include="ViewModels\FolderedVm.cs" />
+    <Compile Include="ViewModels\GameEvents\GE_PassJournalRecordNodeVm.cs" />
+    <Compile Include="ViewModels\GameEvents\GE_AddJournalRecordNodeVm.cs" />
     <Compile Include="ViewModels\GameEvents\GE_ChangeRelationVm.cs" />
+    <Compile Include="ViewModels\GameEvents\GE_AddJournalRecordVm.cs" />
     <Compile Include="ViewModels\IDialogContext.cs" />
     <Compile Include="ViewModels\IDragOverable.cs" />
     <Compile Include="Models\BaseM.cs" />
@@ -139,6 +142,8 @@
     <Compile Include="ViewModels\Nodes\Ownered.cs" />
     <Compile Include="ViewModels\Predicates\P_HasActiveDialogNodeMoreLessVm.cs" />
     <Compile Include="ViewModels\Predicates\P_HasActiveDialogNodeVm.cs" />
+    <Compile Include="ViewModels\Predicates\P_FinishedJournalRecordVm.cs" />
+    <Compile Include="ViewModels\Predicates\P_PassedJournalRecordNodeVm.cs" />
     <Compile Include="ViewModels\TreePlayerContext_ChoiceVm.cs" />
     <Compile Include="ViewModels\TreePlayerContext_ErrorVm.cs" />
     <Compile Include="ViewModels\TreePlayerContext_TransitionVm.cs" />
@@ -218,6 +223,18 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\GameEvents\GE_PassJournalRecordNodeV.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\GameEvents\GE_AddJournalRecordNodeV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GameEvents\GE_AddJournalRecordV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\GameEvents\GE_ChangeRelationV.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -354,6 +371,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\Predicates\P_PassedJournalRecordNodeV.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Predicates\P_HasJournalRecordNodeV.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -361,6 +382,10 @@
     <Page Include="Views\Predicates\P_HasDialogNodeV.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Predicates\P_FinishedJournalRecordV.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Predicates\P_HasJournalRecordV.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -18,7 +18,7 @@ using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.Predicates
 {
-    [Description("Имеет шаг/альтернативу в квесте")]
+    [Description("Квест: добавлен/а шаг/альтернатива")]
     [XmlRoot]
     public class P_HasJournalRecordNodeVm : P_BaseVm
     {

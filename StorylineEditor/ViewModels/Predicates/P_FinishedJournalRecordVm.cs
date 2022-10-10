@@ -18,16 +18,16 @@ using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.Predicates
 {
-    [Description("Квест: добавлен")]
+    [Description("Квест: выполнен")]
     [XmlRoot]
-    public class P_HasJournalRecordVm : P_BaseVm
+    public class P_FinishedJournalRecordVm : P_BaseVm
     {
-        public P_HasJournalRecordVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks)
+        public P_FinishedJournalRecordVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks)
         {
             JournalRecordId = null;
         }
 
-        public P_HasJournalRecordVm() : this(null, 0) { }
+        public P_FinishedJournalRecordVm() : this(null, 0) { }
 
         public override bool IsValid => base.IsValid && JournalRecord != null;
 

@@ -16,29 +16,28 @@ using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace StorylineEditor.ViewModels.Predicates
+namespace StorylineEditor.ViewModels.GameEvents
 {
-    [Description("Квест: добавлен")]
+    [Description("Квест: добавить альтернативу")]
     [XmlRoot]
-    public class P_HasJournalRecordVm : P_BaseVm
+    public class GE_AddJournalRecordNodeVm : GE_BaseVm
     {
-        public P_HasJournalRecordVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks)
+        public GE_AddJournalRecordNodeVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks)
         {
             JournalRecordId = null;
+            JournalRecordNodeId = null;
         }
 
-        public P_HasJournalRecordVm() : this(null, 0) { }
+        public GE_AddJournalRecordNodeVm() : this(null, 0) { }
 
-        public override bool IsValid => base.IsValid && JournalRecord != null;
-
-        public override bool IsConditionMet => throw new System.Exception(); ////// TODO
+        public override bool IsValid => base.IsValid && JournalRecord != null && JournalRecordNode != null;
 
         public string JournalRecordId { get; set; }
 
         [XmlIgnore]
         public FolderedVm JournalRecord
         {
-            get => Parent.Parent.Parent.Parent.JournalRecords.FirstOrDefault(item => item?.Id == JournalRecordId);
+            get => Parent?.Parent?.Parent?.Parent?.JournalRecords.FirstOrDefault(item => item?.Id == JournalRecordId);
             set
             {
                 if (JournalRecordId != value?.Id)
@@ -50,20 +49,39 @@ namespace StorylineEditor.ViewModels.Predicates
             }
         }
 
+        public string JournalRecordNodeId { get; set; }
+
+        [XmlIgnore]
+        public Node_BaseVm JournalRecordNode
+        {
+            get => (JournalRecord as TreeVm)?.Nodes.FirstOrDefault(item => item?.Id == JournalRecordNodeId);
+            set
+            {
+                if (JournalRecordNodeId != value?.Id)
+                {
+                    JournalRecordNodeId = value?.Id;
+                    NotifyWithCallerPropName();
+                    NotifyIsValidChanged();
+                }
+            }
+        }
+
         protected override void ResetInternalData()
         {
             base.ResetInternalData();
 
             JournalRecord = null;
+            JournalRecordNode = null;
         }
 
         protected override void CloneInternalData(BaseVm destObj, long additionalTicks)
         {
             base.CloneInternalData(destObj, additionalTicks);
 
-            if (destObj is P_HasJournalRecordVm casted)
+            if (destObj is GE_AddJournalRecordNodeVm casted)
             {
                 casted.JournalRecordId = JournalRecordId;
+                casted.JournalRecordNodeId = JournalRecordNodeId;
             }
         }
     }

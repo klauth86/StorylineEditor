@@ -16,29 +16,26 @@ using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace StorylineEditor.ViewModels.Predicates
+namespace StorylineEditor.ViewModels.GameEvents
 {
-    [Description("Квест: добавлен")]
+    [Description("Квест: добавить")]
     [XmlRoot]
-    public class P_HasJournalRecordVm : P_BaseVm
+    public class GE_AddJournalRecordVm : GE_BaseVm
     {
-        public P_HasJournalRecordVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks)
-        {
+        public GE_AddJournalRecordVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks) {
             JournalRecordId = null;
         }
 
-        public P_HasJournalRecordVm() : this(null, 0) { }
+        public GE_AddJournalRecordVm() : this(null, 0) { }
 
         public override bool IsValid => base.IsValid && JournalRecord != null;
-
-        public override bool IsConditionMet => throw new System.Exception(); ////// TODO
 
         public string JournalRecordId { get; set; }
 
         [XmlIgnore]
         public FolderedVm JournalRecord
         {
-            get => Parent.Parent.Parent.Parent.JournalRecords.FirstOrDefault(item => item?.Id == JournalRecordId);
+            get => Parent?.Parent?.Parent?.Parent?.JournalRecords.FirstOrDefault(item => item?.Id == JournalRecordId);
             set
             {
                 if (JournalRecordId != value?.Id)
@@ -61,7 +58,8 @@ namespace StorylineEditor.ViewModels.Predicates
         {
             base.CloneInternalData(destObj, additionalTicks);
 
-            if (destObj is P_HasJournalRecordVm casted)
+            var casted = destObj as GE_AddJournalRecordVm;
+            if (casted != null)
             {
                 casted.JournalRecordId = JournalRecordId;
             }
