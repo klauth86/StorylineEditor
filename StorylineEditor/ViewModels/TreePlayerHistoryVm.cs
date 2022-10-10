@@ -62,7 +62,7 @@ namespace StorylineEditor.ViewModels
 
         protected ICommand removeKnownNodeCommand;
         public ICommand RemoveKnownNodeCommand =>
-            removeKnownNodeCommand ?? (removeKnownNodeCommand = new RelayCommand<Node_BaseVm>((node) => { PassedNodes.Remove(node); }, (node) => node != null));
+            removeKnownNodeCommand ?? (removeKnownNodeCommand = new RelayCommand<Node_BaseVm>((node) => { KnownNodes.Remove(node); }, (node) => node != null));
 
         public Node_BaseVm KnownNodeToAdd { get => null; set { if (value != null) KnownNodes.Add(value); } }
 

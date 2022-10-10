@@ -1575,9 +1575,9 @@ StorylineEditor распространяется в надежде, что он�
 
                                                             <Label FontSize="12" FontWeight="Normal" Style="{StaticResource S_Label_NodeType}"></Label>
 
-                                                            <TextBlock Grid.Column="1" Grid.Row="0" FontWeight="Bold" Text="{Binding OwnerName, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+                                                            <TextBlock Grid.Column="1" Grid.Row="0" FontWeight="Bold" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
 
-                                                            <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" nodes:RTBHelper.Document="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+                                                            <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" nodes:RTBHelper_Description.Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
                                                         </Grid>
                                                     </DataTemplate>
                                                 </controls:FilteredComboBox.ItemTemplate>
@@ -1606,15 +1606,15 @@ StorylineEditor распространяется в надежде, что он�
 
                                                     <Label FontSize="12" FontWeight="Normal" Style="{StaticResource S_Label_NodeType}"></Label>
 
-                                                    <TextBlock Grid.Column="1" Grid.Row="0" FontWeight="Bold" Text="{Binding OwnerName, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+                                                    <TextBlock Grid.Column="1" Grid.Row="0" FontWeight="Bold" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
 
-                                                    <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" nodes:RTBHelper.Document="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+                                                    <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" nodes:RTBHelper_Description.Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
 
                                                     <Button Grid.Column="2" Grid.RowSpan="2" Style="{StaticResource S_Button_UI_Remove_TabItem}"
                                                             FontSize="8"
                                                             Width="{StaticResource PlayerToggleButtonSize}"
                                                             Height="{StaticResource PlayerToggleButtonSize}"
-                                                            Command="{Binding ElementName=exp_Main, Path=DataContext.RemovePassedNodeCommand, UpdateSourceTrigger=PropertyChanged}"
+                                                            Command="{Binding ElementName=exp_Main, Path=DataContext.RemoveKnownNodeCommand, UpdateSourceTrigger=PropertyChanged}"
                                                             CommandParameter="{Binding}"></Button>
                                                 </Grid>
                                             </DataTemplate>
