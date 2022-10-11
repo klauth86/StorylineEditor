@@ -122,6 +122,7 @@
     <Compile Include="Models\Predicates\P_Dialog_Node_Has_ActiveSession_CmpM.cs" />
     <Compile Include="Models\Predicates\P_Dialog_Node_Has_PrevSessions_CmpM.cs" />
     <Compile Include="Models\Predicates\P_Dialog_Node_Has_PrevSessionsM.cs" />
+    <Compile Include="Models\Predicates\P_Dialog_HasM.cs" />
     <Compile Include="Models\Predicates\P_Relation_HasM.cs" />
     <Compile Include="Models\Predicates\P_Item_HasM.cs" />
     <Compile Include="Models\Predicates\P_Quest_Node_PassedM.cs" />
