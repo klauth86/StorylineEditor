@@ -18,21 +18,21 @@ namespace StorylineEditor.Models
     {
         public StorylineM(long additionalTicks) : base(additionalTicks)
         {
-            Characters = new List<CharacterM>();
-            Items = new List<ItemM>();
-            Actors = new List<ActorM>();
-            Journal = new List<GraphM>();
-            Dialogs = new List<GraphM>();
-            Replicas = new List<GraphM>();
+            characters = new List<CharacterM>();
+            items = new List<ItemM>();
+            actors = new List<ActorM>();
+            journal = new List<GraphM>();
+            dialogs = new List<GraphM>();
+            replicas = new List<GraphM>();
         }
 
         public StorylineM() : this(0) { }
 
-        public List<CharacterM> Characters { get; set; }
-        public List<ItemM> Items { get; set; }
-        public List<ActorM> Actors { get; set; }
-        public List<GraphM> Journal { get; set; }
-        public List<GraphM> Dialogs { get; set; }
-        public List<GraphM> Replicas { get; set; }
+        public List<CharacterM> characters { get; set; }
+        public List<ItemM> items { get; set; }
+        public List<ActorM> actors { get; set; }
+        public List<GraphM> journal { get; set; }
+        public List<GraphM> dialogs { get; set; }
+        public List<GraphM> replicas { get; set; }
     }
 }

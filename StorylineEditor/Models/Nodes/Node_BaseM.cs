@@ -16,15 +16,15 @@ namespace StorylineEditor.Models.Nodes
     {
         public Node_BaseM(long additionalTicks) : base(additionalTicks)
         {
-            Gender = 0;
-            PositionX = 0;
-            PositionY = 0;
+            gender = 0;
+            positionX = 0;
+            positionY = 0;
         }
 
         public Node_BaseM() : this(0) { }
 
-        public int Gender { get; set; }
-        public double PositionX { get; set; }
-        public double PositionY { get; set; }
+        public int gender { get; set; }
+        public double positionX { get; set; }
+        public double positionY { get; set; }
     }
 }

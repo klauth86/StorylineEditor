@@ -16,13 +16,13 @@ namespace StorylineEditor.Models.Nodes
     {
         public LinkM(long additionalTicks) : base(additionalTicks)
         {
-            FromNodeId = null;
-            ToNodeId = null;
+            fromNodeId = null;
+            toNodeId = null;
         }
 
         public LinkM() : this(0) { }
 
-        public string FromNodeId { get; set; }
-        public string ToNodeId { get; set; }
+        public string fromNodeId { get; set; }
+        public string toNodeId { get; set; }
     }
 }

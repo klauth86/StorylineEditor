@@ -16,12 +16,12 @@ namespace StorylineEditor.Models.Nodes
     {
         public Node_RegularM(long additionalTicks) : base(additionalTicks)
         {
-            CharacterId = null;
+            characterId = null;
         }
 
         public Node_RegularM() : this(0) { }
 
-        public string CharacterId { get; set; }
+        public string characterId { get; set; }
     }
 
     public class Node_ReplicaM : Node_RegularM { }

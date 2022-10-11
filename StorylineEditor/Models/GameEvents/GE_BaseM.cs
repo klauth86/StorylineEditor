@@ -16,11 +16,11 @@ namespace StorylineEditor.Models.GameEvents
     {
         public GE_BaseM(long additionalTicks) : base(additionalTicks)
         {
-            ExecutionMode = 0;
+            executionMode = 0;
         }
 
         public GE_BaseM() : this(0) { }
 
-        public int ExecutionMode { get; set; }
+        public byte executionMode { get; set; }
     }
 }

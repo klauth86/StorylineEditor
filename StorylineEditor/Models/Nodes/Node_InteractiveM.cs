@@ -20,14 +20,14 @@ namespace StorylineEditor.Models.Nodes
     {
         public Node_InteractiveM(long additionalTicks) : base(additionalTicks)
         {
-            Predicates = new List<P_BaseM>();
-            GameEvents = new List<GE_BaseM>();
+            predicates = new List<P_BaseM>();
+            gameEvents = new List<GE_BaseM>();
         }
 
         public Node_InteractiveM() : this(0) { }
 
-        public List<P_BaseM> Predicates { get; set; }
-        public List<GE_BaseM> GameEvents { get; set; }
+        public List<P_BaseM> predicates { get; set; }
+        public List<GE_BaseM> gameEvents { get; set; }
     }
 
     public class Node_RandomM : Node_InteractiveM { }

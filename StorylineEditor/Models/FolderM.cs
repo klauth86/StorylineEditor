@@ -18,11 +18,11 @@ namespace StorylineEditor.Models
     {
         public FolderM(long additionalTicks) : base(additionalTicks)
         {
-            Content = new List<BaseM>();
+            content = new List<BaseM>();
         }
 
         public FolderM() : this(0) { }
 
-        public List<BaseM> Content { get; set; }
+        public List<BaseM> content { get; set; }
     }
 }

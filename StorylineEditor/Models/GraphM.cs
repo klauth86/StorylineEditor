@@ -19,13 +19,13 @@ namespace StorylineEditor.Models
     {
         public GraphM(long additionalTicks) : base(additionalTicks)
         {
-            Nodes = new List<Node_BaseM>();
-            Links = new List<LinkM>();
+            nodes = new List<Node_BaseM>();
+            links = new List<LinkM>();
         }
 
         public GraphM() : this(0) { }
 
-        public List<Node_BaseM> Nodes { get; set; }
-        public List<LinkM> Links { get; set; }
+        public List<Node_BaseM> nodes { get; set; }
+        public List<LinkM> links { get; set; }
     }
 }
