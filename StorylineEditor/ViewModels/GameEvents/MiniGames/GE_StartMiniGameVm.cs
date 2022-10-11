@@ -18,7 +18,7 @@ using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.GameEvents
 {
-    [Description("Начать Мини Игру")]
+    [Description("Мини игра: начать")]
     [XmlRoot]
     public class GE_StartMiniGameVm : GE_BaseVm
     {

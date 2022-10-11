@@ -18,7 +18,7 @@ using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.GameEvents
 {
-    [Description("Получить предмет")]
+    [Description("Предмет: получить")]
     [XmlRoot]
     public class GE_PickUpItemVm : GE_ItemBaseVm
     {

@@ -18,7 +18,7 @@ using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.GameEvents
 {
-    [Description("Установить активность")]
+    [Description("Актор: установить активность")]
     [XmlRoot]
     public class GE_SetIsActiveVm : GE_BaseVm
     {

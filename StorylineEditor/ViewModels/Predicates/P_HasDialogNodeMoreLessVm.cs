@@ -18,7 +18,7 @@ using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.Predicates
 {
-    [Description("Имеет вершину в прошлом диалоге|реплике <>")]
+    [Description("Диалог: имеет вершину в прошлых сессиях <>")]
     [XmlRoot]
     public class P_HasDialogNodeMoreLessVm : P_BaseVm
     {

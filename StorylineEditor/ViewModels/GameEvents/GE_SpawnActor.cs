@@ -18,7 +18,7 @@ using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.GameEvents
 {
-    [Description("Создать актор")]
+    [Description("Актор: создать")]
     [XmlRoot]
     public class GE_SpawnActor : GE_BaseVm
     {

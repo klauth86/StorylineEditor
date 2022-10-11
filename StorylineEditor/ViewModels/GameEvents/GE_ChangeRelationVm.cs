@@ -18,7 +18,7 @@ using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.GameEvents
 {
-    [Description("Изменить отношение")]
+    [Description("Отношение: изменить")]
     [XmlRoot]
     public class GE_ChangeRelationVm : GE_BaseVm
     {

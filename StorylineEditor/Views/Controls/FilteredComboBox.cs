@@ -65,6 +65,30 @@ namespace StorylineEditor.Views.Controls
             }
         }
 
+        public IList ExcludeItemsSource
+        {
+            get => GetValue(FilteredItemsSourceProperty) as IList;
+            set
+            {
+                if (value == null)
+                {
+                    ClearValue(FilteredItemsSourceProperty);
+                }
+                else
+                {
+                    SetValue(FilteredItemsSourceProperty, value);
+                }
+            }
+        }
+
+        public static readonly DependencyProperty ExcludeItemsSourceProperty = DependencyProperty.Register(
+            "ExcludeItemsSource", typeof(IList), typeof(FilteredComboBox), new FrameworkPropertyMetadata(null, OnExcludeItemsSourceChanged));
+
+        private static void OnExcludeItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            (d as FilteredComboBox)?.filteredCVS?.View?.Refresh();
+        }
+
         public string Filter
         {
             get => this.GetValue(FilterProperty)?.ToString();
@@ -84,7 +108,9 @@ namespace StorylineEditor.Views.Controls
 
         protected bool FilterItem(object o)
         {
-            return string.IsNullOrEmpty(Filter) || o is BaseVm baseVm && baseVm.PassFilter(Filter);        
+            return
+                (string.IsNullOrEmpty(Filter) || o is BaseVm baseVm && baseVm.PassFilter(Filter)) &&
+                (ExcludeItemsSource == null || !ExcludeItemsSource.Contains(o));        
         }
     }
 }

@@ -18,7 +18,7 @@ using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.GameEvents
 {
-    [Description("Пойти к")]
+    [Description("Персонаж: пойти к")]
     [XmlRoot]
     public class GE_MoveToVm : GE_CharacterBaseVm
     {

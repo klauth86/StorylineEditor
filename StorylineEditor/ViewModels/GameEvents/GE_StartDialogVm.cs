@@ -18,7 +18,7 @@ using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.GameEvents
 {
-    [Description("Начать диалог")]
+    [Description("Диалог: начать диалог")]
     [XmlRoot]
     public class GE_StartDialogVm : GE_BaseVm
     {

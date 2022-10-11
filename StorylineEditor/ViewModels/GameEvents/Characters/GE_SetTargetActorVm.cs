@@ -18,7 +18,7 @@ using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.GameEvents
 {
-    [Description("Задать цель")]
+    [Description("Персонаж: задать цель")]
     [XmlRoot]
     public class GE_SetTargetActorVm : GE_CharacterBaseVm
     {

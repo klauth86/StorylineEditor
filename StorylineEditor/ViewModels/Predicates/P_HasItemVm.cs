@@ -18,7 +18,7 @@ using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.Predicates
 {
-    [Description("Имеет предмет")]
+    [Description("Предмет: имеет")]
     public class P_HasItemVm : P_BaseVm
     {
         public P_HasItemVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks) {

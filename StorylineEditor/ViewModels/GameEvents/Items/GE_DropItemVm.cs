@@ -18,7 +18,7 @@ using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.GameEvents
 {
-    [Description("Потерять предмет")]
+    [Description("Предмет: потерять")]
     [XmlRoot]
     public class GE_DropItemVm : GE_ItemBaseVm
     {

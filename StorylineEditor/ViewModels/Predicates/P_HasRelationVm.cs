@@ -18,7 +18,7 @@ using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.Predicates
 {
-    [Description("Имеет отношения с")]
+    [Description("Отношение: имеет")]
     [XmlRoot]
     public class P_HasRelationVm : P_BaseVm
     {

@@ -17,7 +17,7 @@ using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.GameEvents
 {
-    [Description("Сюжетная цепочка")]
+    [Description("Сюжетная цепь: выполнить")]
     [XmlRoot]
     public class GE_Storyline : GE_BaseVm
     {

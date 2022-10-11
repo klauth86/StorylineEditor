@@ -18,7 +18,7 @@ using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.Predicates
 {
-    [Description("Имеет диалог|реплику")]
+    [Description("Диалог: имеет")]
     [XmlRoot]
     public class P_HasDialogVm : P_BaseVm
     {

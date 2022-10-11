@@ -18,7 +18,7 @@ using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.GameEvents
 {
-    [Description("Уничтожить актор")]
+    [Description("Актор: уничтожить")]
     [XmlRoot]
     public class GE_DestroyActorVm : GE_BaseVm
     {
