@@ -118,6 +118,10 @@
     <Compile Include="Models\Nodes\Node_BaseM.cs" />
     <Compile Include="Models\Nodes\Node_InteractiveM.cs" />
     <Compile Include="Models\Nodes\Node_RegularM.cs" />
+    <Compile Include="Models\Predicates\P_Quest_Node_PassedM.cs" />
+    <Compile Include="Models\Predicates\P_Quest_Node_AddedM.cs" />
+    <Compile Include="Models\Predicates\P_Quest_AddedM.cs" />
+    <Compile Include="Models\Predicates\P_Quest_FinishedM.cs" />
     <Compile Include="Models\Predicates\P_CompositeM.cs" />
     <Compile Include="Models\Predicates\P_BaseM.cs" />
     <Compile Include="Models\StorylineM.cs" />

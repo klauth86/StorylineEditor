@@ -12,19 +12,17 @@ StorylineEditor распространяется в надежде, что он�
 
 namespace StorylineEditor.Models.Predicates
 {
-    public class P_CompositeM : P_BaseM
+    public class P_Quest_Node_PassedM : P_BaseM
     {
-        public P_CompositeM(long additionalTicks) : base(additionalTicks)
+        public P_Quest_Node_PassedM(long additionalTicks) : base(additionalTicks)
         {
-            compositionType = COMPOSITION_TYPE.AND;
-            predicateA = null;
-            predicateB = null;
+            questId = null;
+            nodeId = null;
         }
 
-        public P_CompositeM() : this(0) { }
+        public P_Quest_Node_PassedM() : this(0) { }
 
-        public byte compositionType { get; set; }
-        public P_BaseM predicateA { get; set; }
-        public P_BaseM predicateB { get; set; }
+        public string questId { get; set; }
+        public string nodeId { get; set; }
     }
 }
