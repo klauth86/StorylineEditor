@@ -105,11 +105,13 @@
     <Compile Include="InfoWindow.xaml.cs">
       <DependentUpon>InfoWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\Graphs\PassiveDialogM.cs" />
     <Compile Include="Models\ActorM.cs" />
     <Compile Include="Models\CharacterM.cs" />
     <Compile Include="Models\FolderM.cs" />
     <Compile Include="Models\GameEvents\GE_BaseM.cs" />
-    <Compile Include="Models\GraphM.cs" />
+    <Compile Include="Models\Graphs\ActiveDialogM.cs" />
+    <Compile Include="Models\Graphs\GraphM.cs" />
     <Compile Include="Models\ItemM.cs" />
     <Compile Include="Models\Nodes\LinkM.cs" />
     <Compile Include="Models\Nodes\Node_BaseM.cs" />

@@ -10,44 +10,17 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using StorylineEditor.Models.Graphs;
-using System.Collections.Generic;
-
-namespace StorylineEditor.Models
+namespace StorylineEditor.Models.Graphs
 {
-    public static class GENDER
+    public class ActiveDialogM : GraphM
     {
-        public const byte UNSET = 0;
-        public const byte MALE = 1;
-        public const byte FEMALE = 2;
-    }
-
-    public static class EXECUTION_MODE
-    {
-        public const byte UNSET = 0;
-        public const byte BEFORE = 1;
-        public const byte AFTER = 1;
-    }
-
-    public class StorylineM : BaseM
-    {
-        public StorylineM(long additionalTicks) : base(additionalTicks)
+        public ActiveDialogM(long additionalTicks) : base(additionalTicks)
         {
-            characters = new List<CharacterM>();
-            items = new List<ItemM>();
-            actors = new List<ActorM>();
-            journal = new List<GraphM>();
-            dialogs = new List<ActiveDialogM>();
-            replicas = new List<PassiveDialogM>();
+            npcId = null;
         }
 
-        public StorylineM() : this(0) { }
+        public ActiveDialogM() : this(0) { }
 
-        public List<CharacterM> characters { get; set; }
-        public List<ItemM> items { get; set; }
-        public List<ActorM> actors { get; set; }
-        public List<GraphM> journal { get; set; }
-        public List<ActiveDialogM> dialogs { get; set; }
-        public List<PassiveDialogM> replicas { get; set; }
+        public string npcId { get; set; }
     }
 }

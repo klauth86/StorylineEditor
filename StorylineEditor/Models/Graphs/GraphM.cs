@@ -13,7 +13,7 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Models.Nodes;
 using System.Collections.Generic;
 
-namespace StorylineEditor.Models
+namespace StorylineEditor.Models.Graphs
 {
     public class GraphM : BaseM
     {
