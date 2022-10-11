@@ -10,22 +10,21 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using StorylineEditor.Models.Nodes;
-using System.Collections.Generic;
-
-namespace StorylineEditor.Models.Graphs
+namespace StorylineEditor.Models.Predicates
 {
-    public abstract class GraphM : BaseM
+    public abstract class P_CompositeM : P_BaseM
     {
-        public GraphM(long additionalTicks) : base(additionalTicks)
+        public P_CompositeM(long additionalTicks) : base(additionalTicks)
         {
-            nodes = new List<Node_BaseM>();
-            links = new List<LinkM>();
+            compositionType = COMPOSITION_TYPE.AND;
+            predicateA = null;
+            predicateB = null;
         }
 
-        public GraphM() : this(0) { }
+        public P_CompositeM() : this(0) { }
 
-        public List<Node_BaseM> nodes { get; set; }
-        public List<LinkM> links { get; set; }
+        public byte compositionType { get; set; }
+        public P_BaseM predicateA { get; set; }
+        public P_BaseM predicateB { get; set; }
     }
 }

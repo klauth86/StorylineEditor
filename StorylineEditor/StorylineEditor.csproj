@@ -105,6 +105,7 @@
     <Compile Include="InfoWindow.xaml.cs">
       <DependentUpon>InfoWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\Graphs\QuestM.cs" />
     <Compile Include="Models\Graphs\PassiveDialogM.cs" />
     <Compile Include="Models\ActorM.cs" />
     <Compile Include="Models\CharacterM.cs" />
@@ -117,6 +118,7 @@
     <Compile Include="Models\Nodes\Node_BaseM.cs" />
     <Compile Include="Models\Nodes\Node_InteractiveM.cs" />
     <Compile Include="Models\Nodes\Node_RegularM.cs" />
+    <Compile Include="Models\Predicates\P_CompositeM.cs" />
     <Compile Include="Models\Predicates\P_BaseM.cs" />
     <Compile Include="Models\StorylineM.cs" />
     <Compile Include="ViewModels\FolderedVm.cs" />

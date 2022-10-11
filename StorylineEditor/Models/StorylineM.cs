@@ -26,7 +26,15 @@ namespace StorylineEditor.Models
     {
         public const byte UNSET = 0;
         public const byte BEFORE = 1;
-        public const byte AFTER = 1;
+        public const byte AFTER = 2;
+    }
+
+    public static class COMPOSITION_TYPE
+    {
+        public const byte UNSET = 0;
+        public const byte AND = 1;
+        public const byte OR = 2;
+        public const byte XOR = 3;
     }
 
     public class StorylineM : BaseM
@@ -36,7 +44,7 @@ namespace StorylineEditor.Models
             characters = new List<CharacterM>();
             items = new List<ItemM>();
             actors = new List<ActorM>();
-            journal = new List<GraphM>();
+            journal = new List<QuestM>();
             dialogs = new List<ActiveDialogM>();
             replicas = new List<PassiveDialogM>();
         }
@@ -46,7 +54,7 @@ namespace StorylineEditor.Models
         public List<CharacterM> characters { get; set; }
         public List<ItemM> items { get; set; }
         public List<ActorM> actors { get; set; }
-        public List<GraphM> journal { get; set; }
+        public List<QuestM> journal { get; set; }
         public List<ActiveDialogM> dialogs { get; set; }
         public List<PassiveDialogM> replicas { get; set; }
     }
