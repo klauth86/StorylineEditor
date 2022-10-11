@@ -10,12 +10,12 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-namespace StorylineEditor.Models.Graphs
+namespace StorylineEditor.Models.GameEvents
 {
-    public class PassiveDialogM : GraphM
+    public class GE_Item_DropM : GE_Item_PickUpM
     {
-        public PassiveDialogM(long additionalTicks) : base(additionalTicks) { }
+        public GE_Item_DropM(long additionalTicks) : base(additionalTicks) { }
 
-        public PassiveDialogM() : this(0) { }
+        public GE_Item_DropM() : this(0) { }
     }
 }

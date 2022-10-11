@@ -55,8 +55,8 @@ namespace StorylineEditor.Models
             items = new List<ItemM>();
             actors = new List<ActorM>();
             journal = new List<QuestM>();
-            dialogs = new List<ActiveDialogM>();
-            replicas = new List<PassiveDialogM>();
+            dialogs = new List<DialogM>();
+            replicas = new List<ReplicaM>();
         }
 
         public StorylineM() : this(0) { }
@@ -65,7 +65,7 @@ namespace StorylineEditor.Models
         public List<ItemM> items { get; set; }
         public List<ActorM> actors { get; set; }
         public List<QuestM> journal { get; set; }
-        public List<ActiveDialogM> dialogs { get; set; }
-        public List<PassiveDialogM> replicas { get; set; }
+        public List<DialogM> dialogs { get; set; }
+        public List<ReplicaM> replicas { get; set; }
     }
 }

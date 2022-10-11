@@ -10,17 +10,12 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-namespace StorylineEditor.Models.Graphs
+namespace StorylineEditor.Models.GameEvents
 {
-    public class ActiveDialogM : GraphM
+    public class GE_Quest_Node_PassM : GE_Quest_Node_AddM
     {
-        public ActiveDialogM(long additionalTicks) : base(additionalTicks)
-        {
-            npcId = null;
-        }
+        public GE_Quest_Node_PassM(long additionalTicks) : base(additionalTicks) { }
 
-        public ActiveDialogM() : this(0) { }
-
-        public string npcId { get; set; }
+        public GE_Quest_Node_PassM() : this(0) { }
     }
 }
