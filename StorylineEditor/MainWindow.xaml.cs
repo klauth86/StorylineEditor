@@ -20,6 +20,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Threading;
 using StorylineEditor.FileDialog;
+using StorylineEditor.Models;
 using StorylineEditor.ViewModels;
 using StorylineEditor.ViewModels.Tabs;
 using StorylineEditor.Views;
@@ -92,6 +93,11 @@ namespace StorylineEditor
             else if (!string.IsNullOrEmpty(IDialogService.DialogService.SaveFileDialog(xmlFilter, true))) SaveAsXml(IDialogService.DialogService.Path);
         }
 
+        private void SaveXML_Click_M(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(IDialogService.DialogService.SaveFileDialog(xmlFilter, true))) SaveAsXmlModel(IDialogService.DialogService.Path);
+        }
+
         private void Exit_Click(object sender, RoutedEventArgs e) { App.Current.Shutdown(); }
 
         private void OpenAsXml(string path)
@@ -124,6 +130,17 @@ namespace StorylineEditor
                 using (var fileStream = File.Open(path, FileMode.Create))
                 {
                     App.SerializeXml<FullContextVm>(fileStream, fullContext);
+                }
+            }
+        }
+
+        private void SaveAsXmlModel(string path)
+        {
+            if (DataContext is FullContextVm fullContext)
+            {
+                using (var fileStream = File.Open(path, FileMode.Create))
+                {
+                    App.SerializeXml<StorylineM>(fileStream, new StorylineM());
                 }
             }
         }
