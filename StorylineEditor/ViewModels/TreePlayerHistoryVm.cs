@@ -10,7 +10,6 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using StorylineEditor.Common;
@@ -31,17 +30,32 @@ namespace StorylineEditor.ViewModels
 
         public TreePathVm() : this(null, 0) { }
 
-        public bool IsActive { get; set; }
+        private bool isActive;
+        public bool IsActive
+        {
+            get => isActive;
+            set
+            {
+                if (value != isActive)
+                {
+                    isActive = value;
+                    Parent?.ShowAvailabilityAdorners();
+                }
+            }
+        }
 
         public TreeVm Tree { get; set; }
 
         public ObservableCollection<Node_BaseVm> PassedNodes { get; set; }
 
-        protected ICommand removePassedNodeCommand;
-        public ICommand RemovePassedNodeCommand =>
-            removePassedNodeCommand ?? (removePassedNodeCommand = new RelayCommand<Node_BaseVm>((node) => { PassedNodes.Remove(node); }, (node) => node != null));
+        public void AddNode(Node_BaseVm node) { PassedNodes.Add(node); Parent?.ShowAvailabilityAdorners(); }
+        public void RemoveNode(Node_BaseVm node) { if (PassedNodes.Remove(node)) { Parent?.ShowAvailabilityAdorners(); } }
 
-        public Node_BaseVm NodeToAdd { get => null; set { if (value != null) PassedNodes.Add(value); } }
+        public Node_BaseVm NodeToAdd { get => null; set { if (value != null) AddNode(value); } }
+
+        protected ICommand removePassedNodeCommand;
+        public ICommand RemovePassedNodeCommand => removePassedNodeCommand ??
+            (removePassedNodeCommand = new RelayCommand<Node_BaseVm>((node) => RemoveNode(node), (node) => node != null));
     }
 
     public class JournalEntryVm : BaseVm<TreePlayerHistoryVm>
@@ -57,23 +71,33 @@ namespace StorylineEditor.ViewModels
 
         public TreeVm Tree { get; set; }
 
+
+
         public ObservableCollection<Node_BaseVm> KnownNodes { get; set; }
+
+        public void AddKnownNode(Node_BaseVm node) { if (!KnownNodes.Contains(node)) { KnownNodes.Add(node); Parent?.ShowAvailabilityAdorners(); } }
+        public void RemoveKnownNode(Node_BaseVm node) { if (KnownNodes.Remove(node)) { Parent?.ShowAvailabilityAdorners(); } }
+
+        public Node_BaseVm KnownNodeToAdd { get => null; set { if (value != null) AddKnownNode(value); } }
+
+        protected ICommand removeKnownNodeCommand;
+        public ICommand RemoveKnownNodeCommand => removeKnownNodeCommand ?? 
+            (removeKnownNodeCommand = new RelayCommand<Node_BaseVm>((node) => RemoveKnownNode(node), (node) => node != null));
+
+
 
         public ObservableCollection<Node_BaseVm> PassedNodes { get; set; }
 
-        protected ICommand removeKnownNodeCommand;
-        public ICommand RemoveKnownNodeCommand =>
-            removeKnownNodeCommand ?? (removeKnownNodeCommand = new RelayCommand<Node_BaseVm>((node) => { KnownNodes.Remove(node); }, (node) => node != null));
-
-        public Node_BaseVm KnownNodeToAdd { get => null; set { if (value != null) KnownNodes.Add(value); } }
+        public void AddPassedNode(Node_BaseVm node) { if (!PassedNodes.Contains(node)) { PassedNodes.Add(node); Parent?.ShowAvailabilityAdorners(); } }
+        public void RemovePassedNode(Node_BaseVm node) { if (PassedNodes.Remove(node)) { Parent?.ShowAvailabilityAdorners(); } }
 
         protected ICommand addPassedNodeCommand;
-        public ICommand AddPassedNodeCommand =>
-            addPassedNodeCommand ?? (addPassedNodeCommand = new RelayCommand<Node_BaseVm>((node) => { PassedNodes.Add(node); }, (node) => node != null && !PassedNodes.Contains(node)));
+        public ICommand AddPassedNodeCommand => addPassedNodeCommand ??
+            (addPassedNodeCommand = new RelayCommand<Node_BaseVm>((node) => AddPassedNode(node), (node) => node != null && !PassedNodes.Contains(node)));
 
         protected ICommand removePassedNodeCommand;
-        public ICommand RemovePassedNodeCommand =>
-            removePassedNodeCommand ?? (removePassedNodeCommand = new RelayCommand<Node_BaseVm>((node) => { PassedNodes.Remove(node); }, (node) => node != null && PassedNodes.Contains(node)));
+        public ICommand RemovePassedNodeCommand => removePassedNodeCommand ??
+            (removePassedNodeCommand = new RelayCommand<Node_BaseVm>((node) => RemovePassedNode(node), (node) => node != null && PassedNodes.Contains(node)));
     }
 
     public class RelationEntryVm : BaseVm<TreePlayerHistoryVm>
@@ -88,7 +112,19 @@ namespace StorylineEditor.ViewModels
 
         public CharacterVm Character { get; set; }
 
-        public float DeltaRelation { get; set; }
+        private float deltaRelation;
+        public float DeltaRelation
+        {
+            get => deltaRelation;
+            set
+            {
+                if (value != deltaRelation)
+                {
+                    deltaRelation = value;
+                    Parent?.ShowAvailabilityAdorners();
+                }
+            }
+        }
     }
 
     public class TreePlayerHistoryVm : BaseVm<FullContextVm>
@@ -99,12 +135,10 @@ namespace StorylineEditor.ViewModels
 
             PassedDialogsAndReplicas = new ObservableCollection<TreePathVm>();
 
-            JournalEntries = new ObservableCollection<JournalEntryVm>();
-            
+            JournalEntries = new ObservableCollection<JournalEntryVm>();            
             JournalRecords = new ObservableCollection<TreeVm>();
 
             RelationEntries = new ObservableCollection<RelationEntryVm>();
-
             Characters = new ObservableCollection<CharacterVm>();
 
             GenderToPlay = 1;
@@ -116,6 +150,8 @@ namespace StorylineEditor.ViewModels
 
         public TreePlayerHistoryVm() : this(null, 0) { }
 
+
+
         public ObservableCollection<FolderedVm> Inventory { get; private set; }
 
         public void PickUpItem(FolderedVm item)
@@ -123,7 +159,6 @@ namespace StorylineEditor.ViewModels
             Inventory.Add(item);
             ShowAvailabilityAdorners();
         }
-
         public void DropItem(FolderedVm item)
         {
             if (Inventory.Remove(item))
@@ -142,13 +177,73 @@ namespace StorylineEditor.ViewModels
         public ICommand RemoveItemCommand => removeItemCommand ?? (removeItemCommand = new RelayCommand<FolderedVm>(
             (item) => DropItem(item), (item) => item != null));
 
-        public bool HasItem(ItemVm item) => Inventory.Contains(item);
+
+
+        public ObservableCollection<TreePathVm> PassedDialogsAndReplicas { get; private set; }
+
+        public void AddDialogTree(TreePathVm treePath)
+        {
+            PassedDialogsAndReplicas.Add(treePath);
+            ShowAvailabilityAdorners();
+        }
+        public void RemoveDialogTreePath(TreePathVm treePath)
+        {
+            if (PassedDialogsAndReplicas.Remove(treePath))
+            {
+                ShowAvailabilityAdorners();
+            }
+        }
+
+        public FolderedVm DialogOrReplicaToAdd { get => null; set { if (value != null) AddDialogTree(new TreePathVm(this, 0) { Tree = (TreeVm)value }); } }
+
+        protected ICommand removeDialogsAndReplicasCommand;
+        public ICommand RemoveDialogsAndReplicasCommand => removeDialogsAndReplicasCommand ??
+            (removeDialogsAndReplicasCommand = new RelayCommand<TreePathVm>((treePath) => RemoveDialogTreePath(treePath), (treePath) => treePath != null));
+
+
+
+        public ObservableCollection<JournalEntryVm> JournalEntries { get; private set; }
+        public ObservableCollection<TreeVm> JournalRecords { get; private set; }
+
+        public void AddJournalTree(TreeVm tree)
+        {
+            if (!JournalRecords.Contains(tree))
+            {
+                JournalRecords.Add(tree);
+                JournalEntries.Add(new JournalEntryVm(this, 0) { Tree = tree });
+
+                ShowAvailabilityAdorners();
+            }
+        }
+        public void RemoveJournalEntry(JournalEntryVm journalEntry)
+        {
+            if (JournalEntries.Remove(journalEntry))
+            {
+                JournalRecords.Remove(journalEntry.Tree);
+
+                ShowAvailabilityAdorners();
+            }
+        }
+
+        public FolderedVm JournalEntryToAdd
+        {
+            get => null; set { if (value is TreeVm tree) AddJournalTree(tree); }
+        }
+
+        protected ICommand removeJournalEntryCommand;
+        public ICommand RemoveJournalEntryCommand => removeJournalEntryCommand ??
+            (removeJournalEntryCommand = new RelayCommand<JournalEntryVm>((journalEntry) => RemoveJournalEntry(journalEntry), (journalEntry) => journalEntry != null));
+
+
+
+        public ObservableCollection<RelationEntryVm> RelationEntries { get; }
+        public ObservableCollection<CharacterVm> Characters { get; }
 
         public float GetRelation(FolderedVm foldered)
         {
             if (foldered is CharacterVm character)
             {
-                float result = character.InitialRelationMale;
+                float result = genderToPlay == Node_BaseVm.MALE ? character.InitialRelationMale : character.InitialRelationFemale;
 
                 if (Characters.Contains(character))
                 {
@@ -161,67 +256,36 @@ namespace StorylineEditor.ViewModels
             return 0;
         }
 
-        public ObservableCollection<TreePathVm> PassedDialogsAndReplicas { get; private set; }
-
-        protected ICommand removeDialogsAndReplicasCommand;
-        public ICommand RemoveDialogsAndReplicasCommand =>
-            removeDialogsAndReplicasCommand ?? (removeDialogsAndReplicasCommand = new RelayCommand<TreePathVm>((item) => { PassedDialogsAndReplicas.Remove(item); }, (item) => item != null));
-
-        public FolderedVm DialogOrReplicaToAdd { get => null; set { if (value != null) PassedDialogsAndReplicas.Add(new TreePathVm(this, 0) { Tree = (TreeVm)value }); } }
-
-        public ObservableCollection<JournalEntryVm> JournalEntries { get; private set; }
-        public ObservableCollection<TreeVm> JournalRecords { get; private set; }
-
-
-        public FolderedVm JournalEntryToAdd
+        public void AddCharacter(CharacterVm character)
         {
-            get => null; set
+            if (!Characters.Contains(character))
             {
-                if (value is TreeVm tree)
-                {
-                    if (!JournalRecords.Contains(tree))
-                    {
-                        JournalRecords.Add(tree);
-                        JournalEntries.Add(new JournalEntryVm(this, 0) { Tree = tree });
-                    }
-                }
+                Characters.Add(character);
+                RelationEntries.Add(new RelationEntryVm(this, 0) { Character = character });
+
+                ShowAvailabilityAdorners();
             }
         }
-
-        protected ICommand removeJournalEntryCommand;
-        public ICommand RemoveJournalEntryCommand =>
-            removeJournalEntryCommand ?? (removeJournalEntryCommand = new RelayCommand<JournalEntryVm>((journalEntry) =>
+        public void RemoveRelationEntry(RelationEntryVm relationEntry)
+        {
+            if (RelationEntries.Remove(relationEntry))
             {
-                JournalEntries.Remove(journalEntry);
-                JournalRecords.Remove(journalEntry.Tree);
-            }, (journalEntry) => journalEntry != null));
+                Characters.Remove(relationEntry.Character);
 
-
-        public ObservableCollection<RelationEntryVm> RelationEntries { get; }
-        public ObservableCollection<CharacterVm> Characters { get; }
+                ShowAvailabilityAdorners();
+            }
+        }
 
         public FolderedVm RelationEntryToAdd
         {
-            get => null; set
-            {
-                if (value is CharacterVm character)
-                {
-                    if (!Characters.Contains(character))
-                    {
-                        Characters.Add(character);
-                        RelationEntries.Add(new RelationEntryVm(this, 0) { Character = character });
-                    }
-                }
-            }
+            get => null; set { if (value is CharacterVm character) AddCharacter(character); }
         }
 
         protected ICommand removeRelationEntryCommand;
-        public ICommand RemoveRelationEntryCommand =>
-            removeRelationEntryCommand ?? (removeRelationEntryCommand = new RelayCommand<RelationEntryVm>((relationEntry) =>
-            {
-                RelationEntries.Remove(relationEntry);
-                Characters.Remove(relationEntry.Character);
-            }, (relationEntry) => relationEntry != null));
+        public ICommand RemoveRelationEntryCommand => removeRelationEntryCommand ?? 
+            (removeRelationEntryCommand = new RelayCommand<RelationEntryVm>((relationEntry) => RemoveRelationEntry(relationEntry), (relationEntry) => relationEntry != null));
+
+
 
         protected int genderToPlay;
         public int GenderToPlay

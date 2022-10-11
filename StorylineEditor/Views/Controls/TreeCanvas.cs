@@ -417,10 +417,10 @@ namespace StorylineEditor.Views.Controls
                     if (ActiveTreePath == null)
                     {
                         ActiveTreePath = new TreePathVm(treePlayerHistory, 0) { Tree = Tree };
-                        treePlayerHistory.PassedDialogsAndReplicas.Add(ActiveTreePath);
+                        treePlayerHistory.AddDialogTree(ActiveTreePath);
                     }
 
-                    if (ActiveTreePath != null) ActiveTreePath.PassedNodes.Add(node);
+                    ActiveTreePath?.AddNode(node);
 
                     if (node is Node_InteractiveVm interactiveNode)
                     {
