@@ -150,15 +150,6 @@ namespace StorylineEditor.Views.Controls
         public static readonly DependencyProperty ActiveContextProperty = DependencyProperty.Register(
             "ActiveContext", typeof(BaseVm), typeof(TreeCanvas), new PropertyMetadata(null));
 
-        public int GenderToPlay
-        {
-            get => (int)this.GetValue(GenderToPlayProperty);
-            set { this.SetValue(GenderToPlayProperty, value); }
-        }
-
-        public static readonly DependencyProperty GenderToPlayProperty = DependencyProperty.Register(
-            "GenderToPlay", typeof(int), typeof(TreeCanvas), new PropertyMetadata(1));
-
         public bool IsPaused
         {
             get => (bool)this.GetValue(IsPausedProperty);
@@ -567,7 +558,7 @@ namespace StorylineEditor.Views.Controls
 
             foreach (var nonTransitNode in nonTransitNodes)
             {
-                if (nonTransitNode.Gender > 0 && nonTransitNode.Gender != GenderToPlay) continue;
+                if (nonTransitNode.Gender > 0 && nonTransitNode.Gender != Tree.Parent.Parent.TreePlayerHistory.GenderToPlay) continue;
 
                 if (FullMode)
                 {
@@ -582,7 +573,7 @@ namespace StorylineEditor.Views.Controls
 
             foreach (var transitNode in Tree.Nodes.Where((otherNode) => nodeIds.Contains(otherNode.Id) && !nonTransitNodes.Contains(otherNode)))
             {
-                if (transitNode.Gender > 0 && transitNode.Gender != GenderToPlay) continue;
+                if (transitNode.Gender > 0 && transitNode.Gender != Tree.Parent.Parent.TreePlayerHistory.GenderToPlay) continue;
 
                 if (FullMode)
                 {
@@ -1388,6 +1379,6 @@ namespace StorylineEditor.Views.Controls
 
         ICommand toggleGenderToPlayCommand;
         public ICommand ToggleGenderToPlayCommand =>
-            toggleGenderToPlayCommand ?? (toggleGenderToPlayCommand = new RelayCommand(() => { GenderToPlay = 3 - GenderToPlay; }, () => ActiveContext == null));
+            toggleGenderToPlayCommand ?? (toggleGenderToPlayCommand = new RelayCommand(() => { Tree.Parent.Parent.TreePlayerHistory.GenderToPlay = 3 - Tree.Parent.Parent.TreePlayerHistory.GenderToPlay; }, () => ActiveContext == null));
     }
 }

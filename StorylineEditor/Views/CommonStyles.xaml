@@ -782,8 +782,8 @@ StorylineEditor распространяется в надежде, что он�
     </Style>
 
     <Style TargetType="Button" x:Key="S_Button_TreePlayer_ToggleGenderToPlay" BasedOn="{StaticResource S_Button_CanvasPanel}">
-        <Setter Property="Content" Value="{Binding TreeCanvas.GenderToPlay, Converter={StaticResource nodeToGenderIconConverter}, UpdateSourceTrigger=PropertyChanged}"></Setter>
-        <Setter Property="ToolTip" Value="{Binding TreeCanvas.GenderToPlay, Converter={StaticResource nodeToGenderDescriptionConverter}, UpdateSourceTrigger=PropertyChanged}"></Setter>
+        <Setter Property="Content" Value="{Binding TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.GenderToPlay, Converter={StaticResource nodeToGenderIconConverter}, UpdateSourceTrigger=PropertyChanged}"></Setter>
+        <Setter Property="ToolTip" Value="{Binding TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.GenderToPlay, Converter={StaticResource nodeToGenderDescriptionConverter}, UpdateSourceTrigger=PropertyChanged}"></Setter>
         <Setter Property="Command" Value="{Binding TreeCanvas.ToggleGenderToPlayCommand}"></Setter>
         <Setter Property="IsEnabled" Value="false"></Setter>
         <Style.Triggers>
@@ -1298,7 +1298,7 @@ StorylineEditor распространяется в надежде, что он�
     <DataTemplate x:Key="DT_ContentControl_TreePlayer">
         <TabControl>
             
-            <TabItem Header="Воспроизведение">
+            <TabItem Header="Воспроизведение" FontSize="10">
                 <DockPanel>
                     <Grid DockPanel.Dock="Top" Grid.Row="2">
                         <Grid.RowDefinitions>
@@ -1422,7 +1422,7 @@ StorylineEditor распространяется в надежде, что он�
             <TabItem x:Name="ti_Inventory" IsEnabled="{Binding TreeCanvas.FullMode, UpdateSourceTrigger=PropertyChanged}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Инвентарь" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+                        <TextBlock Text="Инвентарь" Style="{StaticResource S_TextBlock_Base}" FontSize="10"></TextBlock>
                         <controls:FilteredComboBox Template="{StaticResource CT_FilteredComboBox_OnlyPopup}"
                                                    IsEnabled="{Binding ElementName=ti_Inventory, Path=IsSelected, UpdateSourceTrigger=PropertyChanged}"
                                                    SelectedValue="{Binding TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.ItemToAdd, UpdateSourceTrigger=PropertyChanged}"
@@ -1455,7 +1455,7 @@ StorylineEditor распространяется в надежде, что он�
             <TabItem x:Name="ti_DialogsAndReplicas" IsEnabled="{Binding TreeCanvas.FullMode, UpdateSourceTrigger=PropertyChanged}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Диалоги и реплики" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+                        <TextBlock Text="Диалоги и реплики" Style="{StaticResource S_TextBlock_Base}" FontSize="10"></TextBlock>
                         <controls:FilteredComboBox Template="{StaticResource CT_FilteredComboBox_OnlyPopup}"
                                                    IsEnabled="{Binding ElementName=ti_DialogsAndReplicas, Path=IsSelected, UpdateSourceTrigger=PropertyChanged}"
                                                    SelectedValue="{Binding TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.DialogOrReplicaToAdd, UpdateSourceTrigger=PropertyChanged}"
@@ -1543,7 +1543,7 @@ StorylineEditor распространяется в надежде, что он�
             <TabItem x:Name="ti_Journal" IsEnabled="{Binding TreeCanvas.FullMode, UpdateSourceTrigger=PropertyChanged}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Журнал" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+                        <TextBlock Text="Журнал" Style="{StaticResource S_TextBlock_Base}" FontSize="10"></TextBlock>
                         <controls:FilteredComboBox Template="{StaticResource CT_FilteredComboBox_OnlyPopup}"
                                                    IsEnabled="{Binding ElementName=ti_Journal, Path=IsSelected, UpdateSourceTrigger=PropertyChanged}"
                                                    SelectedValue="{Binding TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.JournalEntryToAdd, UpdateSourceTrigger=PropertyChanged}"
@@ -1649,7 +1649,44 @@ StorylineEditor распространяется в надежде, что он�
                     </ItemsControl>
                 </ScrollViewer>
             </TabItem>
-            
+
+            <TabItem x:Name="ti_Relation" IsEnabled="{Binding TreeCanvas.FullMode, UpdateSourceTrigger=PropertyChanged}">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Отношения: изменения" Style="{StaticResource S_TextBlock_Base}" FontSize="10"></TextBlock>
+                        <controls:FilteredComboBox Template="{StaticResource CT_FilteredComboBox_OnlyPopup}"
+                                                   IsEnabled="{Binding ElementName=ti_Relation, Path=IsSelected, UpdateSourceTrigger=PropertyChanged}"
+                                                   SelectedValue="{Binding TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.RelationEntryToAdd, UpdateSourceTrigger=PropertyChanged}"
+                                                   FilteredItemsSource="{Binding TreeCanvas.Tree.Parent.Parent.Characters, UpdateSourceTrigger=PropertyChanged}"
+                                                   ExcludeItemsSource="{Binding TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.Characters, UpdateSourceTrigger=PropertyChanged}"></controls:FilteredComboBox>
+                    </StackPanel>
+                </TabItem.Header>
+                <ScrollViewer>
+                    <ItemsControl ItemsSource="{Binding TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.RelationEntries}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Character.Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+
+                                    <xctk:SingleUpDown FontSize="8" Grid.Column="1" MinWidth="64" VerticalAlignment="Center" Increment="0.25" Minimum="-20" Maximum="20" Value="{Binding DeltaRelation, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" AllowTextInput="False"></xctk:SingleUpDown>
+
+                                    <Button Grid.Column="2" Style="{StaticResource S_Button_UI_Remove_TabItem}"
+                                                    FontSize="8"
+                                                    Width="{StaticResource PlayerToggleButtonSize}"
+                                                    Height="{StaticResource PlayerToggleButtonSize}"
+                                                    Command="{Binding ElementName=ti_Relation, Path=DataContext.TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.RemoveRelationEntryCommand, UpdateSourceTrigger=PropertyChanged}"
+                                                    CommandParameter="{Binding}"></Button>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </TabItem>
         </TabControl>
     </DataTemplate>
     

@@ -40,13 +40,13 @@ namespace StorylineEditor.ViewModels.Predicates
             !isInversed && NumericCondition(Parent.Parent.Parent.Parent.TreePlayerHistory.PassedDialogsAndReplicas.Sum((treePath) => treePath?.Tree?.Id == DialogId && !treePath.IsActive ? treePath.PassedNodes.Count((node)=> node == DialogNode) : 0)) ||
             isInversed && !NumericCondition(Parent.Parent.Parent.Parent.TreePlayerHistory.PassedDialogsAndReplicas.Sum((treePath) => treePath?.Tree?.Id == DialogId && !treePath.IsActive ? treePath.PassedNodes.Count((node) => node == DialogNode) : 0));
 
-        private bool NumericCondition(int count)
+        private bool NumericCondition(int num)
         {
-            if (IsMore) return count > Num;
-            if (IsMoreOrEqual) return count >= Num;
-            if (IsEqual) return count == Num;
-            if (IsLessOrEqual) return count <= Num;
-            if (IsLess) return count < Num;
+            if (IsMore) return num > Num;
+            if (IsMoreOrEqual) return num >= Num;
+            if (IsEqual) return num == Num;
+            if (IsLessOrEqual) return num <= Num;
+            if (IsLess) return num < Num;
 
             return false;
         }

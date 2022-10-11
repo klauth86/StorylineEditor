@@ -37,7 +37,20 @@ namespace StorylineEditor.ViewModels.Predicates
 
         public override bool IsValid => base.IsValid && Character != null && (isMore || isMoreOrEqual || isEqual || isLessOrEqual || isLess);
 
-        public override bool IsConditionMet => throw new System.Exception(); ////// TODO
+        public override bool IsConditionMet => !IsValid ||
+            !isInversed && NumericCondition(Parent.Parent.Parent.Parent.TreePlayerHistory.GetRelation(Character)) ||
+            isInversed && !NumericCondition(Parent.Parent.Parent.Parent.TreePlayerHistory.GetRelation(Character));
+
+        private bool NumericCondition(float relation)
+        {
+            if (IsMore) return relation > Relation;
+            if (IsMoreOrEqual) return relation >= Relation;
+            if (IsEqual) return relation == Relation;
+            if (IsLessOrEqual) return relation <= Relation;
+            if (IsLess) return relation < Relation;
+
+            return false;
+        }
 
         public string CharacterId { get; set; }
 

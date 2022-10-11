@@ -10,6 +10,7 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using StorylineEditor.Common;
@@ -75,6 +76,21 @@ namespace StorylineEditor.ViewModels
             removePassedNodeCommand ?? (removePassedNodeCommand = new RelayCommand<Node_BaseVm>((node) => { PassedNodes.Remove(node); }, (node) => node != null && PassedNodes.Contains(node)));
     }
 
+    public class RelationEntryVm : BaseVm<TreePlayerHistoryVm>
+    {
+        public RelationEntryVm(TreePlayerHistoryVm parent, long additionalTicks) : base(parent, additionalTicks)
+        {
+            Character = null;
+            DeltaRelation = 0;
+        }
+
+        public RelationEntryVm() : this(null, 0) { }
+
+        public CharacterVm Character { get; set; }
+
+        public float DeltaRelation { get; set; }
+    }
+
     public class TreePlayerHistoryVm : BaseVm<FullContextVm>
     {
         public TreePlayerHistoryVm(FullContextVm parent, long additionalTicks) : base(parent, additionalTicks)
@@ -86,6 +102,12 @@ namespace StorylineEditor.ViewModels
             JournalEntries = new ObservableCollection<JournalEntryVm>();
             
             JournalRecords = new ObservableCollection<TreeVm>();
+
+            RelationEntries = new ObservableCollection<RelationEntryVm>();
+
+            Characters = new ObservableCollection<CharacterVm>();
+
+            GenderToPlay = 1;
         }
 
         public void ShowAvailabilityAdorners() { GlobalFilterHelper.ShowAvailabilityAdorners = true; }
@@ -122,6 +144,23 @@ namespace StorylineEditor.ViewModels
 
         public bool HasItem(ItemVm item) => Inventory.Contains(item);
 
+        public float GetRelation(FolderedVm foldered)
+        {
+            if (foldered is CharacterVm character)
+            {
+                float result = character.InitialRelationMale;
+
+                if (Characters.Contains(character))
+                {
+                    result += RelationEntries[Characters.IndexOf(character)].DeltaRelation;
+                }
+
+                return result;
+            }
+
+            return 0;
+        }
+
         public ObservableCollection<TreePathVm> PassedDialogsAndReplicas { get; private set; }
 
         protected ICommand removeDialogsAndReplicasCommand;
@@ -131,8 +170,8 @@ namespace StorylineEditor.ViewModels
         public FolderedVm DialogOrReplicaToAdd { get => null; set { if (value != null) PassedDialogsAndReplicas.Add(new TreePathVm(this, 0) { Tree = (TreeVm)value }); } }
 
         public ObservableCollection<JournalEntryVm> JournalEntries { get; private set; }
-
         public ObservableCollection<TreeVm> JournalRecords { get; private set; }
+
 
         public FolderedVm JournalEntryToAdd
         {
@@ -156,5 +195,46 @@ namespace StorylineEditor.ViewModels
                 JournalEntries.Remove(journalEntry);
                 JournalRecords.Remove(journalEntry.Tree);
             }, (journalEntry) => journalEntry != null));
+
+
+        public ObservableCollection<RelationEntryVm> RelationEntries { get; }
+        public ObservableCollection<CharacterVm> Characters { get; }
+
+        public FolderedVm RelationEntryToAdd
+        {
+            get => null; set
+            {
+                if (value is CharacterVm character)
+                {
+                    if (!Characters.Contains(character))
+                    {
+                        Characters.Add(character);
+                        RelationEntries.Add(new RelationEntryVm(this, 0) { Character = character });
+                    }
+                }
+            }
+        }
+
+        protected ICommand removeRelationEntryCommand;
+        public ICommand RemoveRelationEntryCommand =>
+            removeRelationEntryCommand ?? (removeRelationEntryCommand = new RelayCommand<RelationEntryVm>((relationEntry) =>
+            {
+                RelationEntries.Remove(relationEntry);
+                Characters.Remove(relationEntry.Character);
+            }, (relationEntry) => relationEntry != null));
+
+        protected int genderToPlay;
+        public int GenderToPlay
+        {
+            get => genderToPlay;
+            set
+            {
+                if (value != genderToPlay)
+                {
+                    genderToPlay = value;
+                    NotifyWithCallerPropName();                
+                }
+            }
+        }
     }
 }
