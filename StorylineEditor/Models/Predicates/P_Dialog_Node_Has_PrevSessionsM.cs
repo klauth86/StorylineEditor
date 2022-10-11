@@ -12,17 +12,10 @@ StorylineEditor распространяется в надежде, что он�
 
 namespace StorylineEditor.Models.Predicates
 {
-    public class P_Dialog_Node_Has_PrevSessionsM : P_BaseM
+    public class P_Dialog_Node_Has_PrevSessionsM : P_Dialog_Node_Has_ActiveSessionM
     {
-        public P_Dialog_Node_Has_PrevSessionsM(long additionalTicks) : base(additionalTicks)
-        {
-            dialogId = null;
-            nodeId = null;
-        }
+        public P_Dialog_Node_Has_PrevSessionsM(long additionalTicks) : base(additionalTicks) { }
 
         public P_Dialog_Node_Has_PrevSessionsM() : this(0) { }
-
-        public string dialogId { get; set; }
-        public string nodeId { get; set; }
     }
 }

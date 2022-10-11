@@ -12,5 +12,10 @@ StorylineEditor распространяется в надежде, что он�
 
 namespace StorylineEditor.Models.Graphs
 {
-    public class QuestM : GraphM { }
+    public class QuestM : GraphM
+    {
+        public QuestM(long additionalTicks) : base(additionalTicks) { }
+
+        public QuestM() : this(0) { }
+    }
 }

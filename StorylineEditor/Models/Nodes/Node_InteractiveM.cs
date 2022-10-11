@@ -30,7 +30,17 @@ namespace StorylineEditor.Models.Nodes
         public List<GE_BaseM> gameEvents { get; set; }
     }
 
-    public class Node_RandomM : Node_InteractiveM { }
+    public class Node_RandomM : Node_InteractiveM
+    {
+        public Node_RandomM(long additionalTicks) : base(additionalTicks) { }
 
-    public class Node_TransitM : Node_InteractiveM { }
+        public Node_RandomM() : this(0) { }
+    }
+
+    public class Node_TransitM : Node_InteractiveM
+    {
+        public Node_TransitM(long additionalTicks) : base(additionalTicks) { }
+
+        public Node_TransitM() : this(0) { }
+    }
 }

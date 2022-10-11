@@ -24,7 +24,17 @@ namespace StorylineEditor.Models.Nodes
         public string characterId { get; set; }
     }
 
-    public class Node_ReplicaM : Node_RegularM { }
+    public class Node_ReplicaM : Node_RegularM
+    {
+        public Node_ReplicaM(long additionalTicks) : base(additionalTicks) { }
 
-    public class Node_DialogM : Node_RegularM { }
+        public Node_ReplicaM() : this(0) { }
+    }
+
+    public class Node_DialogM : Node_RegularM
+    {
+        public Node_DialogM(long additionalTicks) : base(additionalTicks) { }
+
+        public Node_DialogM() : this(0) { }
+    }
 }

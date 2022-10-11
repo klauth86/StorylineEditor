@@ -12,17 +12,15 @@ StorylineEditor распространяется в надежде, что он�
 
 namespace StorylineEditor.Models.Predicates
 {
-    public class P_Quest_Node_AddedM : P_BaseM
+    public class P_Quest_Node_AddedM : P_Quest_AddedM
     {
         public P_Quest_Node_AddedM(long additionalTicks) : base(additionalTicks)
         {
-            questId = null;
             nodeId = null;
         }
 
         public P_Quest_Node_AddedM() : this(0) { }
 
-        public string questId { get; set; }
         public string nodeId { get; set; }
     }
 }

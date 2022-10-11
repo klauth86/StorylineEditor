@@ -12,5 +12,10 @@ StorylineEditor распространяется в надежде, что он�
 
 namespace StorylineEditor.Models.Graphs
 {
-    public class PassiveDialogM : GraphM { }
+    public class PassiveDialogM : GraphM
+    {
+        public PassiveDialogM(long additionalTicks) : base(additionalTicks) { }
+
+        public PassiveDialogM() : this(0) { }
+    }
 }
