@@ -118,6 +118,12 @@
     <Compile Include="Models\Nodes\Node_BaseM.cs" />
     <Compile Include="Models\Nodes\Node_InteractiveM.cs" />
     <Compile Include="Models\Nodes\Node_RegularM.cs" />
+    <Compile Include="Models\Predicates\P_Dialog_Node_Has_ActiveSessionM.cs" />
+    <Compile Include="Models\Predicates\P_Dialog_Node_Has_ActiveSession_CmpM.cs" />
+    <Compile Include="Models\Predicates\P_Dialog_Node_Has_PrevSessions_CmpM.cs" />
+    <Compile Include="Models\Predicates\P_Dialog_Node_Has_PrevSessionsM.cs" />
+    <Compile Include="Models\Predicates\P_Relation_HasM.cs" />
+    <Compile Include="Models\Predicates\P_Item_HasM.cs" />
     <Compile Include="Models\Predicates\P_Quest_Node_PassedM.cs" />
     <Compile Include="Models\Predicates\P_Quest_Node_AddedM.cs" />
     <Compile Include="Models\Predicates\P_Quest_AddedM.cs" />

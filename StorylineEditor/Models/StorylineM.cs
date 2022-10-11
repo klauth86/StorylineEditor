@@ -37,6 +37,16 @@ namespace StorylineEditor.Models
         public const byte XOR = 3;
     }
 
+    public static class COMPARE_TYPE
+    {
+        public const byte UNSET = 0;
+        public const byte LESS = 1;
+        public const byte LESS_OR_EQUAL = 2;
+        public const byte EQUAL = 3;
+        public const byte EQUAL_OR_GREATER = 4;
+        public const byte GREATER = 5;
+    }
+
     public class StorylineM : BaseM
     {
         public StorylineM(long additionalTicks) : base(additionalTicks)
