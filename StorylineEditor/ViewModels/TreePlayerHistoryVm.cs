@@ -205,15 +205,21 @@ namespace StorylineEditor.ViewModels
         public ObservableCollection<JournalEntryVm> JournalEntries { get; private set; }
         public ObservableCollection<TreeVm> JournalRecords { get; private set; }
 
-        public void AddJournalTree(TreeVm tree)
+        public JournalEntryVm AddJournalTree(TreeVm tree)
         {
             if (!JournalRecords.Contains(tree))
             {
                 JournalRecords.Add(tree);
-                JournalEntries.Add(new JournalEntryVm(this, 0) { Tree = tree });
+
+                JournalEntryVm journalEntry = new JournalEntryVm(this, 0) { Tree = tree };
+                JournalEntries.Add(journalEntry);
 
                 ShowAvailabilityAdorners();
+
+                return journalEntry;
             }
+
+            return JournalEntries[JournalRecords.IndexOf(tree)];
         }
         public void RemoveJournalEntry(JournalEntryVm journalEntry)
         {
@@ -256,15 +262,21 @@ namespace StorylineEditor.ViewModels
             return 0;
         }
 
-        public void AddCharacter(CharacterVm character)
+        public RelationEntryVm AddCharacter(CharacterVm character)
         {
             if (!Characters.Contains(character))
             {
                 Characters.Add(character);
-                RelationEntries.Add(new RelationEntryVm(this, 0) { Character = character });
+
+                RelationEntryVm relationEntry = new RelationEntryVm(this, 0) { Character = character };
+                RelationEntries.Add(relationEntry);
 
                 ShowAvailabilityAdorners();
+
+                return relationEntry;
             }
+
+            return RelationEntries[Characters.IndexOf(character)];
         }
         public void RemoveRelationEntry(RelationEntryVm relationEntry)
         {

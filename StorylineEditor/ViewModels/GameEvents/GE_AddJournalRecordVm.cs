@@ -30,6 +30,13 @@ namespace StorylineEditor.ViewModels.GameEvents
 
         public override bool IsValid => base.IsValid && JournalRecord != null;
 
+        public override void Execute()
+        {
+            if (IsValid)
+            {
+                JournalEntryVm journalEntry = Parent.Parent.Parent.Parent.TreePlayerHistory.AddJournalTree(JournalRecord as TreeVm);
+            }
+        }
         public string JournalRecordId { get; set; }
 
         [XmlIgnore]

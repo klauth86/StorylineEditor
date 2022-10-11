@@ -32,6 +32,15 @@ namespace StorylineEditor.ViewModels.GameEvents
 
         public override bool IsValid => base.IsValid && Character != null && deltaRelation != 0;
 
+        public override void Execute()
+        {
+            if (IsValid)
+            {
+                RelationEntryVm relationEntry = Parent.Parent.Parent.Parent.TreePlayerHistory.AddCharacter(Character as CharacterVm);
+                relationEntry.DeltaRelation += deltaRelation;
+            }
+        }
+
         public string CharacterId { get; set; }
 
         [XmlIgnore]
