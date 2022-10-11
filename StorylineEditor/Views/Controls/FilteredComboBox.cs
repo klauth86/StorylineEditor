@@ -11,7 +11,9 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Common;
+using System;
 using System.Collections;
+using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -21,6 +23,15 @@ namespace StorylineEditor.Views.Controls
     public class FilteredComboBox : ComboBox
     {
         protected CollectionViewSource filteredCVS = null;
+
+        protected NotifyCollectionChangedEventHandler CollectionChangedHandler = delegate { };
+
+        public FilteredComboBox() { CollectionChangedHandler = OnCollectionChangedHandler; }
+
+        private void OnCollectionChangedHandler(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            filteredCVS?.View?.Refresh();
+        }
 
         public IEnumerable FilteredItemsSource
         {
@@ -67,16 +78,16 @@ namespace StorylineEditor.Views.Controls
 
         public IList ExcludeItemsSource
         {
-            get => GetValue(FilteredItemsSourceProperty) as IList;
+            get => GetValue(ExcludeItemsSourceProperty) as IList;
             set
             {
                 if (value == null)
                 {
-                    ClearValue(FilteredItemsSourceProperty);
+                    ClearValue(ExcludeItemsSourceProperty);
                 }
                 else
                 {
-                    SetValue(FilteredItemsSourceProperty, value);
+                    SetValue(ExcludeItemsSourceProperty, value);
                 }
             }
         }
@@ -86,7 +97,20 @@ namespace StorylineEditor.Views.Controls
 
         private static void OnExcludeItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            (d as FilteredComboBox)?.filteredCVS?.View?.Refresh();
+            if (d is FilteredComboBox comboBox)
+            {
+                if (e.OldValue is INotifyCollectionChanged oldNotifyCollectionChanged)
+                {
+                    oldNotifyCollectionChanged.CollectionChanged -= comboBox.CollectionChangedHandler;
+                }
+
+                if (e.NewValue is INotifyCollectionChanged newNotifyCollectionChanged)
+                {
+                    newNotifyCollectionChanged.CollectionChanged += comboBox.CollectionChangedHandler;
+                }
+
+                comboBox.filteredCVS?.View?.Refresh();
+            }
         }
 
         public string Filter

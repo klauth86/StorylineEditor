@@ -83,7 +83,9 @@ namespace StorylineEditor.ViewModels
 
             PassedDialogsAndReplicas = new ObservableCollection<TreePathVm>();
 
-            Journal = new ObservableCollection<JournalEntryVm>();
+            JournalEntries = new ObservableCollection<JournalEntryVm>();
+            
+            JournalRecords = new ObservableCollection<TreeVm>();
         }
 
         public void ShowAvailabilityAdorners() { GlobalFilterHelper.ShowAvailabilityAdorners = true; }
@@ -128,12 +130,31 @@ namespace StorylineEditor.ViewModels
 
         public FolderedVm DialogOrReplicaToAdd { get => null; set { if (value != null) PassedDialogsAndReplicas.Add(new TreePathVm(this, 0) { Tree = (TreeVm)value }); } }
 
-        public ObservableCollection<JournalEntryVm> Journal { get; private set; }
+        public ObservableCollection<JournalEntryVm> JournalEntries { get; private set; }
 
-        public FolderedVm JournalEntryToAdd { get => null; set { if (value != null) Journal.Add(new JournalEntryVm(this, 0) { Tree = (TreeVm)value }); } }
+        public ObservableCollection<TreeVm> JournalRecords { get; private set; }
+
+        public FolderedVm JournalEntryToAdd
+        {
+            get => null; set
+            {
+                if (value is TreeVm tree)
+                {
+                    if (!JournalRecords.Contains(tree))
+                    {
+                        JournalRecords.Add(tree);
+                        JournalEntries.Add(new JournalEntryVm(this, 0) { Tree = tree });
+                    }
+                }
+            }
+        }
 
         protected ICommand removeJournalEntryCommand;
         public ICommand RemoveJournalEntryCommand =>
-            removeJournalEntryCommand ?? (removeJournalEntryCommand = new RelayCommand<JournalEntryVm>((item) => { Journal.Remove(item); }, (item) => item != null));
+            removeJournalEntryCommand ?? (removeJournalEntryCommand = new RelayCommand<JournalEntryVm>((journalEntry) =>
+            {
+                JournalEntries.Remove(journalEntry);
+                JournalRecords.Remove(journalEntry.Tree);
+            }, (journalEntry) => journalEntry != null));
     }
 }

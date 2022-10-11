@@ -32,8 +32,8 @@ namespace StorylineEditor.ViewModels.Predicates
         public override bool IsValid => base.IsValid && JournalRecord != null && JournalRecordNode != null;
 
         public override bool IsConditionMet => !IsValid ||
-            !isInversed && Parent.Parent.Parent.Parent.TreePlayerHistory.Journal.Any((journalEntry) => journalEntry?.Tree?.Id == JournalRecordId && journalEntry.PassedNodes.Contains(JournalRecordNode)) ||
-            isInversed && !Parent.Parent.Parent.Parent.TreePlayerHistory.Journal.Any((journalEntry) => journalEntry?.Tree?.Id == JournalRecordId && journalEntry.PassedNodes.Contains(JournalRecordNode));
+            !isInversed && Parent.Parent.Parent.Parent.TreePlayerHistory.JournalEntries.Any((journalEntry) => journalEntry?.Tree?.Id == JournalRecordId && journalEntry.PassedNodes.Contains(JournalRecordNode)) ||
+            isInversed && !Parent.Parent.Parent.Parent.TreePlayerHistory.JournalEntries.Any((journalEntry) => journalEntry?.Tree?.Id == JournalRecordId && journalEntry.PassedNodes.Contains(JournalRecordNode));
 
         public string JournalRecordId { get; set; }
 

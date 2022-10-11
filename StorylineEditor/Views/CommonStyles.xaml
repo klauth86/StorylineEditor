@@ -1547,11 +1547,12 @@ StorylineEditor распространяется в надежде, что он�
                         <controls:FilteredComboBox Template="{StaticResource CT_FilteredComboBox_OnlyPopup}"
                                                    IsEnabled="{Binding ElementName=ti_Journal, Path=IsSelected, UpdateSourceTrigger=PropertyChanged}"
                                                    SelectedValue="{Binding TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.JournalEntryToAdd, UpdateSourceTrigger=PropertyChanged}"
-                                                   ItemsSource="{Binding TreeCanvas.Tree.Parent.Parent.JournalRecords, UpdateSourceTrigger=PropertyChanged}"></controls:FilteredComboBox>
+                                                   FilteredItemsSource="{Binding TreeCanvas.Tree.Parent.Parent.JournalRecords, UpdateSourceTrigger=PropertyChanged}"
+                                                   ExcludeItemsSource="{Binding TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.JournalRecords, UpdateSourceTrigger=PropertyChanged}"></controls:FilteredComboBox>
                     </StackPanel>
                 </TabItem.Header>
                 <ScrollViewer>
-                    <ItemsControl ItemsSource="{Binding TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.Journal}">
+                    <ItemsControl ItemsSource="{Binding TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.JournalEntries}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Expander x:Name="exp_Main">
