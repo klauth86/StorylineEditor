@@ -1599,6 +1599,7 @@ StorylineEditor распространяется в надежде, что он�
                                                         <ColumnDefinition Width="auto"></ColumnDefinition>
                                                         <ColumnDefinition></ColumnDefinition>
                                                         <ColumnDefinition Width="auto"></ColumnDefinition>
+                                                        <ColumnDefinition Width="auto"></ColumnDefinition>
                                                     </Grid.ColumnDefinitions>
                                                     <Grid.RowDefinitions>
                                                         <RowDefinition Height="auto"></RowDefinition>
@@ -1611,7 +1612,27 @@ StorylineEditor распространяется в надежде, что он�
 
                                                     <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" nodes:RTBHelper_Description.Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
 
-                                                    <Button Grid.Column="2" Grid.RowSpan="2" Style="{StaticResource S_Button_UI_Remove_TabItem}"
+                                                    <Button Grid.Column="2" Grid.RowSpan="2" Style="{StaticResource S_Button_Node}"
+                                                            FontSize="8"
+                                                            Background="Transparent"
+                                                            Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self}, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource hideFalseConverter}}"
+                                                            Width="{StaticResource PlayerToggleButtonSize}"
+                                                            Height="{StaticResource PlayerToggleButtonSize}"
+                                                            Command="{Binding ElementName=exp_Main, Path=DataContext.AddPassedNodeCommand, UpdateSourceTrigger=PropertyChanged}"
+                                                            CommandParameter="{Binding}">                                                        
+                                                    </Button>
+
+                                                    <Button Grid.Column="2" Grid.RowSpan="2" Style="{StaticResource S_Button_Node}"
+                                                            FontSize="8"
+                                                            Background="Transparent"
+                                                            Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self}, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource hideFalseConverter}}"
+                                                            Width="{StaticResource PlayerToggleButtonSize}"
+                                                            Height="{StaticResource PlayerToggleButtonSize}"
+                                                            Command="{Binding ElementName=exp_Main, Path=DataContext.RemovePassedNodeCommand, UpdateSourceTrigger=PropertyChanged}"
+                                                            CommandParameter="{Binding}">✓</Button>
+
+
+                                                    <Button Grid.Column="3" Grid.RowSpan="2" Style="{StaticResource S_Button_UI_Remove_TabItem}"
                                                             FontSize="8"
                                                             Width="{StaticResource PlayerToggleButtonSize}"
                                                             Height="{StaticResource PlayerToggleButtonSize}"

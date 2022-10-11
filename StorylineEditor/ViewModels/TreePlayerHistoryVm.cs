@@ -68,11 +68,11 @@ namespace StorylineEditor.ViewModels
 
         protected ICommand addPassedNodeCommand;
         public ICommand AddPassedNodeCommand =>
-            addPassedNodeCommand ?? (addPassedNodeCommand = new RelayCommand<Node_BaseVm>((node) => { PassedNodes.Add(node); }, (node) => node != null));
+            addPassedNodeCommand ?? (addPassedNodeCommand = new RelayCommand<Node_BaseVm>((node) => { PassedNodes.Add(node); }, (node) => node != null && !PassedNodes.Contains(node)));
 
         protected ICommand removePassedNodeCommand;
         public ICommand RemovePassedNodeCommand =>
-            removePassedNodeCommand ?? (removePassedNodeCommand = new RelayCommand<Node_BaseVm>((node) => { PassedNodes.Remove(node); }, (node) => node != null));
+            removePassedNodeCommand ?? (removePassedNodeCommand = new RelayCommand<Node_BaseVm>((node) => { PassedNodes.Remove(node); }, (node) => node != null && PassedNodes.Contains(node)));
     }
 
     public class TreePlayerHistoryVm : BaseVm<FullContextVm>
