@@ -14,6 +14,20 @@ using System.Collections.Generic;
 
 namespace StorylineEditor.Models
 {
+    public static class GENDER
+    {
+        public const byte UNSET = 0;
+        public const byte MALE = 1;
+        public const byte FEMALE = 2;
+    }
+
+    public static class EXECUTION_MODE
+    {
+        public const byte UNSET = 0;
+        public const byte BEFORE = 1;
+        public const byte AFTER = 1;
+    }
+
     public class StorylineM : BaseM
     {
         public StorylineM(long additionalTicks) : base(additionalTicks)

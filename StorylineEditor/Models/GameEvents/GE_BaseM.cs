@@ -16,7 +16,7 @@ namespace StorylineEditor.Models.GameEvents
     {
         public GE_BaseM(long additionalTicks) : base(additionalTicks)
         {
-            executionMode = 0;
+            executionMode = EXECUTION_MODE.BEFORE;
         }
 
         public GE_BaseM() : this(0) { }

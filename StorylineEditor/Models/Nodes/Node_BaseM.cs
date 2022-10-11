@@ -16,14 +16,14 @@ namespace StorylineEditor.Models.Nodes
     {
         public Node_BaseM(long additionalTicks) : base(additionalTicks)
         {
-            gender = 0;
+            gender = GENDER.UNSET;
             positionX = 0;
             positionY = 0;
         }
 
         public Node_BaseM() : this(0) { }
 
-        public int gender { get; set; }
+        public byte gender { get; set; }
         public double positionX { get; set; }
         public double positionY { get; set; }
     }
