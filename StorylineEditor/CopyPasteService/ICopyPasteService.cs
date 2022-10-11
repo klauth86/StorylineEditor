@@ -16,6 +16,7 @@ namespace StorylineEditor.CopyPasteService
     {
         void Copy();
         void Paste();
+        void Delete();
     }
 
     public abstract class ICopyPasteService

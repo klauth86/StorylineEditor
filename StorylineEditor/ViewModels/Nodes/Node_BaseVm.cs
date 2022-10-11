@@ -52,18 +52,6 @@ namespace StorylineEditor.ViewModels.Nodes
 
 
         protected Vector position;
-        public Vector Position
-        {
-            get => position;
-            set
-            {
-                if (position != value)
-                {
-                    PositionX = value.X;
-                    PositionY = value.Y;
-                }
-            }
-        }
 
         public double PositionX
         {

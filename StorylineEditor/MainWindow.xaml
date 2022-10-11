@@ -47,7 +47,8 @@ StorylineEditor распространяется в надежде, что он�
         <ContentControl Content="{Binding SelectedContent, ElementName=tc_Worktabs, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
     </DockPanel>
     <Window.InputBindings>
-        <KeyBinding Key="C" Modifiers="Ctrl" Command="{Binding CopyCommand}" CommandParameter="{Binding ElementName=tc_Worktabs, Path=SelectedValue}"></KeyBinding>
-        <KeyBinding Key="V" Modifiers="Ctrl" Command="{Binding PasteCommand}" CommandParameter="{Binding ElementName=tc_Worktabs, Path=SelectedValue}"></KeyBinding>
+        <KeyBinding Key="C" Command="{Binding CopyCommand}" Modifiers="Ctrl"></KeyBinding>
+        <KeyBinding Key="V" Command="{Binding PasteCommand}" Modifiers="Ctrl"></KeyBinding>
+        <KeyBinding Key="Delete" Command="{Binding DeleteCommand}"></KeyBinding>
     </Window.InputBindings>
 </Window>

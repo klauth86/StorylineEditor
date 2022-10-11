@@ -402,7 +402,15 @@ namespace StorylineEditor.Views.Controls
             }
         }
 
-
+        public void Delete()
+        {
+            List<Node_BaseVm> nodesToDelete = Selection.ToList();
+            
+            foreach (var nodeToDelete in nodesToDelete)
+            {
+                Tree.RemoveNode(nodeToDelete);
+            }
+        }
 
         private void StartState(Node_BaseVm node, double duration)
         {
