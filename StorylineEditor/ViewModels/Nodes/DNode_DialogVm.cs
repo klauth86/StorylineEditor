@@ -28,7 +28,6 @@ namespace StorylineEditor.ViewModels.Nodes
             finInteractivePart = false;
         }
 
-        protected BaseM model = null;
         public override BaseM GetModel()
         {
             if (model != null) return model;

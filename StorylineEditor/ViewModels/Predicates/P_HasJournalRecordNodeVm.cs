@@ -34,14 +34,14 @@ namespace StorylineEditor.ViewModels.Predicates
         {
             if (model != null) return model;
 
-            model = new P_Quest_Node_AddedM()
-            {
-                name = Name,
-                description = Description,
-                isInversed = IsInversed,
-                questId = JournalRecord?.GetModel()?.id,
-                nodeId = JournalRecordNode?.GetModel()?.id, 
-            };
+            var newP = new P_Quest_Node_AddedM();
+            model = newP;
+
+            newP.name = Name;
+            newP.description = Description;
+            newP.isInversed = IsInversed;
+            newP.questId = JournalRecord?.GetModel()?.id;
+            newP.nodeId = JournalRecordNode?.GetModel()?.id;
 
             return model;
         }

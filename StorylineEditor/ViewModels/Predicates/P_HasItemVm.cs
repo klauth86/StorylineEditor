@@ -35,13 +35,13 @@ namespace StorylineEditor.ViewModels.Predicates
         {
             if (model != null) return model;
 
-            model = new P_Item_HasM()
-            {
-                name = Name,
-                description = Description,
-                isInversed = IsInversed,
-                itemId = Item?.GetModel()?.id, 
-            };
+            var newP = new P_Item_HasM();
+            model = newP;
+
+            newP.name = Name;
+            newP.description = Description;
+            newP.isInversed = IsInversed;
+            newP.itemId = Item?.GetModel()?.id;
 
             return model;
         }

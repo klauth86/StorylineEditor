@@ -35,13 +35,13 @@ namespace StorylineEditor.ViewModels.GameEvents
         {
             if (model != null) return model;
 
-            model = new GE_Item_PickUpM()
-            {
-                name = Name,
-                description = Description,
-                executionMode = ExecuteWhenLeaveDialogNode ? EXECUTION_MODE.ON_LEAVE : EXECUTION_MODE.ON_ENTER,
-                itemId = Item?.GetModel()?.id, 
-            };
+            var newGE = new GE_Item_PickUpM();
+            model = newGE;
+
+            newGE.name = Name;
+            newGE.description = Description;
+            newGE.executionMode = ExecuteWhenLeaveDialogNode ? EXECUTION_MODE.ON_LEAVE : EXECUTION_MODE.ON_ENTER;
+            newGE.itemId = Item?.GetModel()?.id;
 
             return model;
         }

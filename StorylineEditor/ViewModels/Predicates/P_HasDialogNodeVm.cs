@@ -36,14 +36,14 @@ namespace StorylineEditor.ViewModels.Predicates
         {
             if (model != null) return model;
 
-            model = new P_Dialog_Node_Has_PrevSessionsM()
-            {
-                name = Name,
-                description = Description,
-                isInversed = IsInversed,
-                dialogId = Dialog?.GetModel()?.id,
-                nodeId = DialogNode?.GetModel()?.id,
-            };
+            var newP = new P_Dialog_Node_Has_PrevSessionsM();
+            model = newP;
+
+            newP.name = Name;
+            newP.description = Description;
+            newP.isInversed = IsInversed;
+            newP.dialogId = Dialog?.GetModel()?.id;
+            newP.nodeId = DialogNode?.GetModel()?.id;
 
             return model;
         }

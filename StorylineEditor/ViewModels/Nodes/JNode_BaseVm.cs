@@ -28,7 +28,6 @@ namespace StorylineEditor.ViewModels.Nodes
 
         public JNode_BaseVm() : this(null, 0) { }
 
-        protected BaseM model = null;
         public override BaseM GetModel()
         {
             if (model != null) return model;

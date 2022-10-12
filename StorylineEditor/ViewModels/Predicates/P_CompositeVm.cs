@@ -39,15 +39,15 @@ namespace StorylineEditor.ViewModels.Predicates
         {
             if (model != null) return model;
 
-            model = new P_CompositeM()
-            {
-                name = Name,
-                description = Description,
-                isInversed = IsInversed,
-                compositionType = GetCompositionType(),
-                predicateA = itemA?.GetModel() as P_BaseM,
-                predicateB = itemB?.GetModel() as P_BaseM, 
-            };
+            var newP = new P_CompositeM();
+            model = newP;
+
+            newP.name = Name;
+            newP.description = Description;
+            newP.isInversed = IsInversed;
+            newP.compositionType = GetCompositionType();
+            newP.predicateA = itemA?.GetModel() as P_BaseM;
+            newP.predicateB = itemB?.GetModel() as P_BaseM;
 
             return model;
         }
@@ -177,6 +177,13 @@ namespace StorylineEditor.ViewModels.Predicates
                 casted.itemA = itemA?.Clone<P_BaseVm>(Parent, additionalTicks + 0);
                 casted.itemB = itemB?.Clone<P_BaseVm>(Parent, additionalTicks + 1);
             }
+        }
+
+        public override void SetupParenthood()
+        {
+            if (ItemA != null) { ItemA.Parent = Parent; itemA.SetupParenthood(); }
+
+            if (ItemB != null) { ItemB.Parent = Parent; ItemB.SetupParenthood(); }
         }
     }
 }

@@ -42,15 +42,15 @@ namespace StorylineEditor.ViewModels.Predicates
         {
             if (model != null) return model;
 
-            model = new P_Relation_HasM()
-            {
-                name = Name,
-                description = Description,
-                isInversed = IsInversed,
-                npcId = Character?.GetModel()?.id,
-                compareType = GetCompareType(),
-                value = Relation, 
-            };
+            var newP = new P_Relation_HasM();
+            model = newP;
+
+            newP.name = Name;
+            newP.description = Description;
+            newP.isInversed = IsInversed;
+            newP.npcId = Character?.GetModel()?.id;
+            newP.compareType = GetCompareType();
+            newP.value = Relation;
 
             return model;
         }

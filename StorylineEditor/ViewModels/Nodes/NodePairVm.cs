@@ -31,13 +31,13 @@ namespace StorylineEditor.ViewModels.Nodes
         {
             if (model != null) return model;
 
-            model = new LinkM()
-            {
-                name = Name,
-                description = Description,
-                fromNodeId = From?.GetModel()?.id,
-                toNodeId = To?.GetModel()?.id,  
-            };
+            var newLink = new LinkM();
+            model = newLink;
+
+            newLink.name = Name;
+            newLink.description = Description;
+            newLink.fromNodeId = From?.GetModel()?.id;
+            newLink.toNodeId = To?.GetModel()?.id;
 
             return model;
         }

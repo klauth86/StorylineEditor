@@ -52,34 +52,34 @@ namespace StorylineEditor.ViewModels
 
             if (Parent is JournalRecordsTabVm)
             {
-                model = new QuestM()
-                {
-                    name = Name,
-                    description = Description,
-                    links = Links.Select((link)=>(LinkM)(link.GetModel())).ToList(),
-                    nodes = Nodes.Select((node)=> (Node_BaseM)(node.GetModel())).ToList(), 
-                };
+                var newQuest = new QuestM();
+                model = newQuest;
+
+                newQuest.name = Name;
+                newQuest.description = Description;
+                newQuest.links = Links.Select((link) => (LinkM)(link.GetModel())).ToList();
+                newQuest.nodes = Nodes.Select((node) => (Node_BaseM)(node.GetModel())).ToList();
             }
             else if (Parent is PlayerDialogsTabVm)
             {
-                model = new DialogM()
-                {
-                    name = Name,
-                    description = Description,
-                    links = Links.Select((link) => (LinkM)(link.GetModel())).ToList(),
-                    nodes = Nodes.Select((node) => (Node_BaseM)(node.GetModel())).ToList(),
-                    npcId = Interlocutor?.GetModel()?.id, 
-                };
+                var newDialog = new DialogM();
+                model = newDialog;
+
+                newDialog.name = Name;
+                newDialog.description = Description;
+                newDialog.links = Links.Select((link) => (LinkM)(link.GetModel())).ToList();
+                newDialog.nodes = Nodes.Select((node) => (Node_BaseM)(node.GetModel())).ToList();
+                newDialog.npcId = Interlocutor?.GetModel()?.id;
             }
             else if (Parent is ReplicasTabVm)
             {
-                model = new ReplicaM()
-                {
-                    name = Name,
-                    description = Description,
-                    links = Links.Select((link) => (LinkM)(link.GetModel())).ToList(),
-                    nodes = Nodes.Select((node) => (Node_BaseM)(node.GetModel())).ToList(), 
-                };
+                var newReplica = new ReplicaM();
+                model = newReplica;
+
+                newReplica.name = Name;
+                newReplica.description = Description;
+                newReplica.links = Links.Select((link) => (LinkM)(link.GetModel())).ToList();
+                newReplica.nodes = Nodes.Select((node) => (Node_BaseM)(node.GetModel())).ToList();
             }
 
             return model;

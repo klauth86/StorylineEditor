@@ -37,14 +37,14 @@ namespace StorylineEditor.ViewModels.GameEvents
         {
             if (model != null) return model;
 
-            model = new GE_Relation_ChangeM()
-            {
-                name = Name,
-                description = Description,
-                executionMode = ExecuteWhenLeaveDialogNode ? EXECUTION_MODE.ON_LEAVE : EXECUTION_MODE.ON_ENTER,
-                npcId = Character?.GetModel()?.id,
-                value = DeltaRelation,
-            };
+            var newGE = new GE_Relation_ChangeM();
+            model = newGE;
+
+            newGE.name = Name;
+            newGE.description = Description;
+            newGE.executionMode = ExecuteWhenLeaveDialogNode ? EXECUTION_MODE.ON_LEAVE : EXECUTION_MODE.ON_ENTER;
+            newGE.npcId = Character?.GetModel()?.id;
+            newGE.value = DeltaRelation;
 
             return model;
         }

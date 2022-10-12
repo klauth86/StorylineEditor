@@ -38,15 +38,15 @@ namespace StorylineEditor.ViewModels.Nodes
         {
             if (model != null) return model;
 
-            model = new Node_StepM()
-            {
-                name = Name,
-                description = Description,
-                gender = (byte)Gender,
-                positionX = PositionX,
-                positionY = PositionY,
-                result = null, 
-            };
+            var newNode = new Node_StepM();
+            model = newNode;
+
+            newNode.name = Name;
+            newNode.description = Description;
+            newNode.gender = (byte)Gender;
+            newNode.positionX = PositionX;
+            newNode.positionY = PositionY;
+            newNode.result = null;
 
             return model;
         }

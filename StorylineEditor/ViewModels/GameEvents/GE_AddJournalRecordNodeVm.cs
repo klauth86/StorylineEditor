@@ -37,14 +37,14 @@ namespace StorylineEditor.ViewModels.GameEvents
         {
             if (model != null) return model;
 
-            model = new GE_Quest_Node_AddM()
-            {
-                name = Name,
-                description = Description,
-                executionMode = ExecuteWhenLeaveDialogNode ? EXECUTION_MODE.ON_LEAVE : EXECUTION_MODE.ON_ENTER,
-                questId = JournalRecord?.GetModel()?.id,
-                nodeId = JournalRecordNode?.GetModel()?.id,
-            };
+            var newGE = new GE_Quest_Node_AddM();
+            model = newGE;
+
+            newGE.name = Name;
+            newGE.description = Description;
+            newGE.executionMode = ExecuteWhenLeaveDialogNode ? EXECUTION_MODE.ON_LEAVE : EXECUTION_MODE.ON_ENTER;
+            newGE.questId = JournalRecord?.GetModel()?.id;
+            newGE.nodeId = JournalRecordNode?.GetModel()?.id;
 
             return model;
         }

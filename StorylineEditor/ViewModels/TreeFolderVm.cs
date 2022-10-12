@@ -37,12 +37,12 @@ namespace StorylineEditor.ViewModels
         {
             if (model != null) return model;
 
-            model = new FolderM()
-            {
-                name = Name,
-                description = Description,
-                content = Items.Select((fold) => fold.GetModel()).ToList(), 
-            };
+            var newFolder = new FolderM();
+            model = newFolder;
+
+            newFolder.name = Name;
+            newFolder.description = Description;
+            newFolder.content = Items.Select((fold) => fold.GetModel()).ToList();
 
             return model;
         }

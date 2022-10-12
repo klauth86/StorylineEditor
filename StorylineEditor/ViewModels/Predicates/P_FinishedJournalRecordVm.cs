@@ -36,13 +36,13 @@ namespace StorylineEditor.ViewModels.Predicates
         {
             if (model != null) return model;
 
-            model = new P_Quest_FinishedM()
-            {
-                name = Name,
-                description = Description,
-                isInversed = IsInversed,
-                questId = JournalRecord?.GetModel()?.id, 
-            };
+            var newP = new P_Quest_FinishedM();
+            model = newP;
+
+            newP.name = Name;
+            newP.description = Description;
+            newP.isInversed = IsInversed;
+            newP.questId = JournalRecord?.GetModel()?.id;
 
             return model;
         }
