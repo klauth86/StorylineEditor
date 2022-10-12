@@ -10,6 +10,7 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Model;
 using StorylineEditor.ViewModels;
 using StorylineEditor.ViewModels.GameEvents;
 using StorylineEditor.ViewModels.Nodes;
@@ -47,7 +48,8 @@ namespace StorylineEditor
             type.IsSubclassOf(typeof(P_BaseVm)) ||
             type.IsSubclassOf(typeof(GE_BaseVm)) ||
             type.IsSubclassOf(typeof(Node_BaseVm)) ||
-            type.IsSubclassOf(typeof(BaseTreesTabVm))).ToList();
+            type.IsSubclassOf(typeof(BaseTreesTabVm)) ||
+            type.IsSubclassOf(typeof(BaseM))).ToList();
 
         public static T DeserializeXml<T>(Stream stream) where T : class
         {
@@ -65,9 +67,14 @@ namespace StorylineEditor
 
         public static void SerializeXml<T>(Stream stream, T obj) where T : class
         {
+            List<Type> addOnTypes = new List<Type>(AddOnTypes);
+
+            var modelAssembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault((ass) => ass.GetName().Name.Contains("StorylineEditor.Model"));
+            addOnTypes.AddRange(modelAssembly.GetTypes().Where((type) => !type.IsSealed)); ////// We dont mark any of our class as sealed, so the only classes with this mark are static classes (marked automatically)
+
             using (var streamWriter = new StreamWriter(stream))
             {
-                XmlSerializer s = new XmlSerializer(typeof(T), AddOnTypes.ToArray<Type>());
+                XmlSerializer s = new XmlSerializer(typeof(T), addOnTypes.ToArray<Type>());
                 s.Serialize(streamWriter, obj);
             }
         }

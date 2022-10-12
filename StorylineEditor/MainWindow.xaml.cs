@@ -157,8 +157,6 @@ namespace StorylineEditor
                         if (actor != null) storyline.actors.Add(actor.GetModel());
                     }
 
-
-
                     App.SerializeXml<StorylineM>(fileStream, storyline);
                 }
             }
