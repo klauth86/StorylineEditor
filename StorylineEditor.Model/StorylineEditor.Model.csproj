@@ -60,6 +60,7 @@
     <Compile Include="Nodes\LinkM.cs" />
     <Compile Include="Nodes\Node_BaseM.cs" />
     <Compile Include="Nodes\Node_InteractiveM.cs" />
+    <Compile Include="Nodes\Node_JournalM.cs" />
     <Compile Include="Nodes\Node_RegularM.cs" />
     <Compile Include="Predicates\P_BaseM.cs" />
     <Compile Include="Predicates\P_CompositeM.cs" />

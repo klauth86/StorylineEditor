@@ -10,6 +10,8 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Model;
+using StorylineEditor.Model.Nodes;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -30,6 +32,24 @@ namespace StorylineEditor.ViewModels.Nodes
         }
 
         public JNode_StepVm() : this(null, 0) { }
+
+        protected BaseM model = null;
+        public override BaseM GetModel()
+        {
+            if (model != null) return model;
+
+            model = new Node_StepM()
+            {
+                name = Name,
+                description = Description,
+                gender = (byte)Gender,
+                positionX = PositionX,
+                positionY = PositionY,
+                result = null, 
+            };
+
+            return model;
+        }
 
         ~JNode_StepVm()
         {

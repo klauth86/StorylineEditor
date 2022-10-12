@@ -10,6 +10,10 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Model;
+using StorylineEditor.Model.GameEvents;
+using StorylineEditor.Model.Nodes;
+using StorylineEditor.Model.Predicates;
 using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
@@ -27,5 +31,24 @@ namespace StorylineEditor.ViewModels.Nodes
         public override bool IsValid => !string.IsNullOrEmpty(id) &&
             GameEvents.All(gameEvent => gameEvent?.IsValid ?? false) &&
             Predicates.All(predicate => predicate?.IsValid ?? false);
+
+        protected BaseM model = null;
+        public override BaseM GetModel()
+        {
+            if (model != null) return model;
+
+            model = new Node_TransitM()
+            {
+                name = Name,
+                description = Description,
+                gender = (byte)Gender,
+                positionX = PositionX,
+                positionY = PositionY,
+                gameEvents = GameEvents.Select((ge) => (GE_BaseM)ge.GetModel()).ToList(),
+                predicates = Predicates.Select((p) => (P_BaseM)p.GetModel()).ToList(),  
+            };
+
+            return model;
+        }
     }
 }

@@ -157,6 +157,21 @@ namespace StorylineEditor
                         if (actor != null) storyline.actors.Add(actor.GetModel());
                     }
 
+                    foreach (var quest in fullContext.JournalRecordsTab.Items)
+                    {
+                        if (quest != null) storyline.dialogs.Add(quest.GetModel());
+                    }
+
+                    foreach (var dialog in fullContext.PlayerDialogsTab.Items)
+                    {
+                        if (dialog != null) storyline.dialogs.Add(dialog.GetModel());
+                    }
+
+                    foreach (var replica in fullContext.ReplicasTab.Items)
+                    {
+                        if (replica != null) storyline.dialogs.Add(replica.GetModel());
+                    }
+
                     App.SerializeXml<StorylineM>(fileStream, storyline);
                 }
             }

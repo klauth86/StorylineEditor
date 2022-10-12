@@ -14,6 +14,8 @@ using System;
 using System.Linq;
 using System.Xml.Serialization;
 using StorylineEditor.Common;
+using StorylineEditor.Model;
+using StorylineEditor.Model.Nodes;
 
 namespace StorylineEditor.ViewModels.Nodes
 {
@@ -23,6 +25,22 @@ namespace StorylineEditor.ViewModels.Nodes
         public NodePairVm(TreeVm Parent, long additionalTicks) : base(Parent, additionalTicks) { }
 
         public NodePairVm() : this(null, 0) { }
+
+        protected BaseM model = null;
+        public override BaseM GetModel()
+        {
+            if (model != null) return model;
+
+            model = new LinkM()
+            {
+                name = Name,
+                description = Description,
+                fromNodeId = From?.GetModel()?.id,
+                toNodeId = To?.GetModel()?.id,  
+            };
+
+            return model;
+        }
 
         public string FromId { get; set; }
 

@@ -11,6 +11,10 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Common;
+using StorylineEditor.Model;
+using StorylineEditor.Model.GameEvents;
+using StorylineEditor.Model.Nodes;
+using StorylineEditor.Model.Predicates;
 using System.Linq;
 using System.Xml.Serialization;
 
@@ -22,6 +26,26 @@ namespace StorylineEditor.ViewModels.Nodes
         public DNode_DialogVm(TreeVm Parent, long additionalTicks) : base(Parent, additionalTicks)
         {
             finInteractivePart = false;
+        }
+
+        protected BaseM model = null;
+        public override BaseM GetModel()
+        {
+            if (model != null) return model;
+
+            model = new Node_DialogM()
+            {
+                name = Name,
+                description = Description,
+                gender = (byte)Gender,
+                positionX = PositionX,
+                positionY = PositionY,
+                gameEvents = GameEvents.Select((ge) => (GE_BaseM)ge.GetModel()).ToList(),
+                predicates = Predicates.Select((p) => (P_BaseM)p.GetModel()).ToList(),
+                characterId = Owner?.GetModel()?.id, 
+            };
+
+            return model;
         }
 
         public DNode_DialogVm() : this(null, 0) { }

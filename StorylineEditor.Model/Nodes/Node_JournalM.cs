@@ -10,42 +10,31 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using StorylineEditor.Model;
-using StorylineEditor.Model.GameEvents;
-using StorylineEditor.Model.Nodes;
-using StorylineEditor.Model.Predicates;
-using System.ComponentModel;
-using System.Linq;
-using System.Xml.Serialization;
-
-namespace StorylineEditor.ViewModels.Nodes
+namespace StorylineEditor.Model.Nodes
 {
-    [Description("Альтернатива")]
-    [XmlRoot]
-    public class JNode_AlternativeVm : Node_InteractiveVm
+    public abstract class Node_JournalM : Node_InteractiveM
     {
-        public JNode_AlternativeVm(TreeVm Parent, long additionalTicks) : base(Parent, additionalTicks) { }
-
-        public JNode_AlternativeVm() : this(null, 0) { }
-
-        protected BaseM model = null;
-        public override BaseM GetModel()
+        public Node_JournalM(long additionalTicks) : base(additionalTicks)
         {
-            if (model != null) return model;
-
-            model = new Node_AlternativeM()
-            {
-                name = Name,
-                description = Description,
-                gender = (byte)Gender,
-                positionX = PositionX,
-                positionY = PositionY,
-                gameEvents = GameEvents.Select((ge) => (GE_BaseM)ge.GetModel()).ToList(),
-                predicates = Predicates.Select((p) => (P_BaseM)p.GetModel()).ToList(), 
-                result = null
-            };
-
-            return model;
+            result = null;
         }
+
+        public Node_JournalM() : this(0) { }
+
+        public string result { get; set; }
+    }
+
+    public class Node_StepM : Node_JournalM
+    {
+        public Node_StepM(long additionalTicks) : base(additionalTicks) { }
+
+        public Node_StepM() : this(0) { }
+    }
+
+    public class Node_AlternativeM : Node_JournalM
+    {
+        public Node_AlternativeM(long additionalTicks) : base(additionalTicks) { }
+
+        public Node_AlternativeM() : this(0) { }
     }
 }
