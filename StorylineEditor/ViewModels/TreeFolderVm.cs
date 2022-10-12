@@ -11,6 +11,7 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Common;
+using StorylineEditor.Models;
 using StorylineEditor.ViewModels.Tabs;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -30,6 +31,21 @@ namespace StorylineEditor.ViewModels
         }
 
         public TreeFolderVm() : this(null, 0) { }
+
+        protected BaseM model = null;
+        public override BaseM GetModel()
+        {
+            if (model != null) return model;
+
+            model = new FolderM()
+            {
+                name = Name,
+                description = Description,
+                content = Items.Select((fold) => fold.GetModel()).ToList(), 
+            };
+
+            return model;
+        }
 
         public ObservableCollection<FolderedVm> Items { get; }
 

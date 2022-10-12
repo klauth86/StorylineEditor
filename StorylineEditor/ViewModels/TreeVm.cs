@@ -16,6 +16,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
 using StorylineEditor.Common;
+using StorylineEditor.Models;
+using StorylineEditor.Models.Graphs;
+using StorylineEditor.Models.Nodes;
 using StorylineEditor.ViewModels.Nodes;
 using StorylineEditor.ViewModels.Tabs;
 
@@ -40,6 +43,46 @@ namespace StorylineEditor.ViewModels
                     Notify(nameof(NameAndCharacter));
                 }
             }
+        }
+
+        protected BaseM model = null;
+        public override BaseM GetModel()
+        {
+            if (model != null) return model;
+
+            if (Parent is JournalRecordsTabVm)
+            {
+                model = new QuestM()
+                {
+                    name = Name,
+                    description = Description,
+                    links = Links.Select((link)=>(LinkM)(link.GetModel())).ToList(),
+                    nodes = Nodes.Select((node)=> (Node_BaseM)(node.GetModel())).ToList(), 
+                };
+            }
+            else if (Parent is PlayerDialogsTabVm)
+            {
+                model = new DialogM()
+                {
+                    name = Name,
+                    description = Description,
+                    links = Links.Select((link) => (LinkM)(link.GetModel())).ToList(),
+                    nodes = Nodes.Select((node) => (Node_BaseM)(node.GetModel())).ToList(),
+                    npcId = InterlocutorId, 
+                };
+            }
+            else if (Parent is ReplicasTabVm)
+            {
+                model = new ReplicaM()
+                {
+                    name = Name,
+                    description = Description,
+                    links = Links.Select((link) => (LinkM)(link.GetModel())).ToList(),
+                    nodes = Nodes.Select((node) => (Node_BaseM)(node.GetModel())).ToList(), 
+                };
+            }
+
+            return model;
         }
 
         public bool IsPlayerDialog => Parent is PlayerDialogsTabVm;

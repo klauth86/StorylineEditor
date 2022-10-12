@@ -11,6 +11,7 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Common;
+using StorylineEditor.Models;
 using StorylineEditor.ViewModels.Tabs;
 using System.Linq;
 using System.Xml.Serialization;
@@ -30,6 +31,25 @@ namespace StorylineEditor.ViewModels
 
         public CharacterVm() : this(null, 0) { }
 
+        protected BaseM model = null;
+        public override BaseM GetModel()
+        {
+            if (model != null) return model;
+
+            model = new CharacterM()
+            {
+                name = Name,
+                description = Description,
+                hasDescriptionFemale = false,
+                descriptionFemale = null,
+                actorName = ActorName,
+                classPathName = ClassPathName,
+                initialRelation = InitialRelationMale,
+                initialRelationFemale = InitialRelationFemale, 
+            };
+
+            return model;
+        }
 
         public bool IsPlayer => Id == PlayerId;
 
