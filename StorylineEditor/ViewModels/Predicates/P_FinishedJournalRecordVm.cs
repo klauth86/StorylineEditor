@@ -11,6 +11,8 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Common;
+using StorylineEditor.Models;
+using StorylineEditor.Models.Predicates;
 using StorylineEditor.ViewModels.Nodes;
 using System.ComponentModel;
 using System.Linq;
@@ -28,6 +30,22 @@ namespace StorylineEditor.ViewModels.Predicates
         }
 
         public P_FinishedJournalRecordVm() : this(null, 0) { }
+
+        protected BaseM model = null;
+        public override BaseM GetModel()
+        {
+            if (model != null) return model;
+
+            model = new P_Quest_FinishedM()
+            {
+                name = Name,
+                description = Description,
+                isInversed = IsInversed,
+                questId = JournalRecord?.GetModel()?.id, 
+            };
+
+            return model;
+        }
 
         public override bool IsValid => base.IsValid && JournalRecord != null;
 

@@ -11,6 +11,8 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Common;
+using StorylineEditor.Models;
+using StorylineEditor.Models.Predicates;
 using StorylineEditor.ViewModels.Nodes;
 using System.ComponentModel;
 using System.Linq;
@@ -34,6 +36,35 @@ namespace StorylineEditor.ViewModels.Predicates
         }
 
         public P_HasRelationVm() : this(null, 0) { }
+
+        protected BaseM model = null;
+        public override BaseM GetModel()
+        {
+            if (model != null) return model;
+
+            model = new P_Relation_HasM()
+            {
+                name = Name,
+                description = Description,
+                isInversed = IsInversed,
+                npcId = Character?.GetModel()?.id,
+                compareType = GetCompareType(),
+                value = Relation, 
+            };
+
+            return model;
+        }
+
+        protected byte GetCompareType()
+        {
+            if (IsMore) return COMPARE_TYPE.GREATER;
+            if (IsMoreOrEqual) return COMPARE_TYPE.EQUAL_OR_GREATER;
+            if (IsEqual) return COMPARE_TYPE.EQUAL;
+            if (IsLessOrEqual) return COMPARE_TYPE.LESS_OR_EQUAL;
+            if (IsLess) return COMPARE_TYPE.LESS;
+
+            return COMPARE_TYPE.UNSET;
+        }
 
         public override bool IsValid => base.IsValid && Character != null && (isMore || isMoreOrEqual || isEqual || isLessOrEqual || isLess);
 

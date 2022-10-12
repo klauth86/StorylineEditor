@@ -11,6 +11,8 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Common;
+using StorylineEditor.Models;
+using StorylineEditor.Models.Predicates;
 using StorylineEditor.ViewModels.Nodes;
 using System.ComponentModel;
 using System.Linq;
@@ -32,6 +34,35 @@ namespace StorylineEditor.ViewModels.Predicates
         }
 
         public P_HasActiveDialogNodeMoreLessVm() : this(null, 0) { }
+
+        protected BaseM model = null;
+        public override BaseM GetModel()
+        {
+            if (model != null) return model;
+
+            model = new P_Dialog_Node_Has_ActiveSession_CmpM()
+            {
+                name = Name,
+                description = Description,
+                isInversed = IsInversed,
+                nodeId = DialogNode?.GetModel()?.id,
+                compareType = GetCompareType(),
+                value = num,
+            };
+
+            return model;
+        }
+
+        protected byte GetCompareType()
+        {
+            if (IsMore) return COMPARE_TYPE.GREATER;
+            if (IsMoreOrEqual) return COMPARE_TYPE.EQUAL_OR_GREATER;
+            if (IsEqual) return COMPARE_TYPE.EQUAL;
+            if (IsLessOrEqual) return COMPARE_TYPE.LESS_OR_EQUAL;
+            if (IsLess) return COMPARE_TYPE.LESS;
+
+            return COMPARE_TYPE.UNSET;
+        }
 
         public override bool IsValid=> base.IsValid && DialogNode != null && (isMore || isMoreOrEqual || isEqual || isLessOrEqual || isLess);
 

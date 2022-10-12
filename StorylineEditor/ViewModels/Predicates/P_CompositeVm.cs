@@ -11,6 +11,8 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Common;
+using StorylineEditor.Models;
+using StorylineEditor.Models.Predicates;
 using StorylineEditor.ViewModels.Nodes;
 using System;
 using System.ComponentModel;
@@ -31,6 +33,34 @@ namespace StorylineEditor.ViewModels.Predicates
         }
 
         public P_CompositeVm() : this(null, 0) { }
+
+        protected BaseM model = null;
+        public override BaseM GetModel()
+        {
+            if (model != null) return model;
+
+            model = new P_CompositeM()
+            {
+                name = Name,
+                description = Description,
+                isInversed = IsInversed,
+                compositionType = GetCompositionType(),
+                predicateA = itemA?.GetModel() as P_BaseM,
+                predicateB = itemB?.GetModel() as P_BaseM, 
+            };
+
+            return model;
+        }
+
+        protected byte GetCompositionType()
+        {
+            if (isAND) return COMPOSITION_TYPE.AND;
+            
+            if (isOR) return COMPOSITION_TYPE.OR;
+
+            return COMPOSITION_TYPE.UNSET;
+        }
+
 
         public override bool IsValid => base.IsValid && itemA != null && itemA.IsValid && itemB != null && itemB.IsValid && (isOR || isAND);
 

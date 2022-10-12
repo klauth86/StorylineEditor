@@ -68,7 +68,7 @@ namespace StorylineEditor.ViewModels
                     description = Description,
                     links = Links.Select((link) => (LinkM)(link.GetModel())).ToList(),
                     nodes = Nodes.Select((node) => (Node_BaseM)(node.GetModel())).ToList(),
-                    npcId = InterlocutorId, 
+                    npcId = Interlocutor?.GetModel()?.id, 
                 };
             }
             else if (Parent is ReplicasTabVm)

@@ -11,6 +11,8 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Common;
+using StorylineEditor.Models;
+using StorylineEditor.Models.Predicates;
 using StorylineEditor.ViewModels.Nodes;
 using System.ComponentModel;
 using System.Linq;
@@ -27,6 +29,22 @@ namespace StorylineEditor.ViewModels.Predicates
         }
 
         public P_HasActiveDialogNodeVm() : this(null, 0) { }
+
+        protected BaseM model = null;
+        public override BaseM GetModel()
+        {
+            if (model != null) return model;
+
+            model = new P_Dialog_Node_Has_ActiveSessionM()
+            {
+                name = Name,
+                description = Description,
+                isInversed = IsInversed,
+                nodeId = DialogNode?.GetModel()?.id,
+            };
+
+            return model;
+        }
 
         public override bool IsValid => base.IsValid && DialogNode != null;
 
