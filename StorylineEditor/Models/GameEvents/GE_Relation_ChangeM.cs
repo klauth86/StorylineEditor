@@ -12,7 +12,7 @@ StorylineEditor распространяется в надежде, что он�
 
 namespace StorylineEditor.Models.GameEvents
 {
-    public class GE_Relation_ChangeM : BaseM
+    public class GE_Relation_ChangeM : GE_BaseM
     {
         public GE_Relation_ChangeM(long additionalTicks) : base(additionalTicks)
         {

@@ -11,6 +11,8 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Common;
+using StorylineEditor.Models;
+using StorylineEditor.Models.GameEvents;
 using StorylineEditor.ViewModels.Nodes;
 using System.ComponentModel;
 using System.Linq;
@@ -29,6 +31,23 @@ namespace StorylineEditor.ViewModels.GameEvents
         }
 
         public GE_AddJournalRecordNodeVm() : this(null, 0) { }
+
+        protected BaseM model = null;
+        public override BaseM GetModel()
+        {
+            if (model != null) return model;
+
+            model = new GE_Quest_Node_AddM()
+            {
+                name = Name,
+                description = Description,
+                executionMode = ExecuteWhenLeaveDialogNode ? EXECUTION_MODE.ON_LEAVE : EXECUTION_MODE.ON_ENTER,
+                questId = JournalRecord?.GetModel()?.id,
+                nodeId = JournalRecordNode?.GetModel()?.id,
+            };
+
+            return model;
+        }
 
         public override bool IsValid => base.IsValid && JournalRecord != null && JournalRecordNode != null;
 

@@ -12,7 +12,7 @@ StorylineEditor распространяется в надежде, что он�
 
 namespace StorylineEditor.Models.GameEvents
 {
-    public class GE_Quest_AddM : BaseM
+    public class GE_Quest_AddM : GE_BaseM
     {
         public GE_Quest_AddM(long additionalTicks) : base(additionalTicks)
         {

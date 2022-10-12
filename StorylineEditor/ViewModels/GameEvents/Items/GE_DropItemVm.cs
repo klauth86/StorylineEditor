@@ -11,6 +11,8 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Common;
+using StorylineEditor.Models;
+using StorylineEditor.Models.GameEvents;
 using StorylineEditor.ViewModels.Nodes;
 using System.ComponentModel;
 using System.Linq;
@@ -25,6 +27,22 @@ namespace StorylineEditor.ViewModels.GameEvents
         public GE_DropItemVm(Node_BaseVm inParent, long additionalTicks) : base(inParent, additionalTicks) { }
 
         public GE_DropItemVm() : this(null, 0) { }
+
+        protected BaseM model = null;
+        public override BaseM GetModel()
+        {
+            if (model != null) return model;
+
+            model = new GE_Item_DropM()
+            {
+                name = Name,
+                description = Description,
+                executionMode = ExecuteWhenLeaveDialogNode ? EXECUTION_MODE.ON_LEAVE : EXECUTION_MODE.ON_ENTER,
+                itemId = Item?.GetModel()?.id,
+            };
+
+            return model;
+        }
 
         public override bool IsValid => base.IsValid && Character != null;
 

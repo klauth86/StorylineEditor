@@ -25,8 +25,8 @@ namespace StorylineEditor.Models
     public static class EXECUTION_MODE
     {
         public const byte UNSET = 0;
-        public const byte BEFORE = 1;
-        public const byte AFTER = 2;
+        public const byte ON_ENTER = 1;
+        public const byte ON_LEAVE = 2;
     }
 
     public static class COMPOSITION_TYPE

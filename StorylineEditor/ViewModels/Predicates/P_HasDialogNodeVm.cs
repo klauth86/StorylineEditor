@@ -41,7 +41,7 @@ namespace StorylineEditor.ViewModels.Predicates
                 name = Name,
                 description = Description,
                 isInversed = IsInversed,
-                dialogId = Dialog?.GetModel()?.Id,
+                dialogId = Dialog?.GetModel()?.id,
                 nodeId = DialogNode?.GetModel()?.id,
             };
 
