@@ -16,9 +16,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
 using StorylineEditor.Common;
-using StorylineEditor.Models;
-using StorylineEditor.Models.Graphs;
-using StorylineEditor.Models.Nodes;
+using StorylineEditor.Model;
+using StorylineEditor.Model.Graphs;
+using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModels.Nodes;
 using StorylineEditor.ViewModels.Tabs;
 

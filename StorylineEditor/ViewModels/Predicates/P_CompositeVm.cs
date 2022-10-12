@@ -11,8 +11,8 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Common;
-using StorylineEditor.Models;
-using StorylineEditor.Models.Predicates;
+using StorylineEditor.Model;
+using StorylineEditor.Model.Predicates;
 using StorylineEditor.ViewModels.Nodes;
 using System;
 using System.ComponentModel;

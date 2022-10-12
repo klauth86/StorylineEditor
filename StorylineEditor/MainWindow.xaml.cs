@@ -20,7 +20,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Threading;
 using StorylineEditor.FileDialog;
-using StorylineEditor.Models;
+using StorylineEditor.Model;
 using StorylineEditor.ViewModels;
 using StorylineEditor.ViewModels.Tabs;
 using StorylineEditor.Views;
@@ -140,7 +140,26 @@ namespace StorylineEditor
             {
                 using (var fileStream = File.Open(path, FileMode.Create))
                 {
-                    App.SerializeXml<StorylineM>(fileStream, new StorylineM());
+                    var storyline = new StorylineM();
+
+                    foreach (var character in fullContext.CharactersTab.Items)
+                    {
+                        if (character != null) storyline.characters.Add(character.GetModel());
+                    }
+
+                    foreach (var item in fullContext.ItemsTab.Items)
+                    {
+                        if (item != null) storyline.items.Add(item.GetModel());
+                    }
+
+                    foreach (var actor in fullContext.LocationObjectsTab.Items)
+                    {
+                        if (actor != null) storyline.actors.Add(actor.GetModel());
+                    }
+
+
+
+                    App.SerializeXml<StorylineM>(fileStream, storyline);
                 }
             }
         }

@@ -10,14 +10,14 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using StorylineEditor.Models;
+using StorylineEditor.Model;
 using System;
 using System.Xml.Serialization;
 
 namespace StorylineEditor.Common
 {
     [XmlRoot]
-    public abstract class BaseVm : Notifier
+    public class BaseVm : Notifier
     {
         public BaseVm(long additionalTicks)
         {
@@ -110,8 +110,8 @@ namespace StorylineEditor.Common
         }
 
         #endregion
-        
-        public abstract BaseM GetModel();
+
+        public virtual BaseM GetModel() => throw new NotImplementedException();
 
         public virtual bool IsValid => !string.IsNullOrEmpty(id);
 
