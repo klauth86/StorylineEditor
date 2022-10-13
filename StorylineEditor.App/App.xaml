@@ -18,10 +18,14 @@ StorylineEditor распространяется в надежде, что он�
              StartupUri="MainWindow.xaml">
     <Application.Resources>
 
+        <!-- Constants -->
+        
         <sys:Boolean x:Key="True">True</sys:Boolean>
 
         <sys:Boolean x:Key="False">False</sys:Boolean>
 
+        
+        
         <!-- Global and base -->
 
         <Style TargetType="TextBlock" x:Key="S_TextBlock"></Style>
@@ -38,6 +42,8 @@ StorylineEditor распространяется в надежде, что он�
 
         <Style TargetType="Button" x:Key="S_Button_GroupBox.Header"></Style>
 
+        
+        
         <!-- Main Menu -->
         
         <Style TargetType="Button" x:Key="S_Button_MainMenu"></Style>
@@ -50,6 +56,8 @@ StorylineEditor распространяется в надежде, что он�
 
         <Style TargetType="TextBox" BasedOn="{StaticResource S_TextBox_Input}" x:Key="S_TextBox_Input_Filter"></Style>
 
+        
+        
         <!-- Data Templates -->
 
         <DataTemplate DataType="{x:Type vm:StorylineVM}" x:Key="DT_StorylineVM_Tabs">
@@ -90,12 +98,12 @@ StorylineEditor распространяется в надежде, что он�
                         </StackPanel>
                     </GroupBox.Header>
                 </GroupBox>
-                
+
                 <GridSplitter Grid.Column="1" Style="{StaticResource S_GridSplitter}"></GridSplitter>
 
                 <ContentControl Content="{Binding Selection, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
             </Grid>
         </DataTemplate>
-        
+
     </Application.Resources>
 </Application>
