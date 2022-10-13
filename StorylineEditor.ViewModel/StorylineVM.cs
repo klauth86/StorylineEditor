@@ -21,22 +21,40 @@ namespace StorylineEditor.ViewModel
         public StorylineVM(StorylineM model) : base(model) { }
 
         private ICommand charactersTabCommand;
-        public ICommand CharactersTabCommand => charactersTabCommand ?? (charactersTabCommand = new RelayCommand(() => { }));
+        public ICommand CharactersTabCommand => charactersTabCommand ?? (charactersTabCommand = new RelayCommand(() =>
+        {
+            Selection = new CollectionVM(Model.characters, () => new CharacterM());
+        }));
 
         private ICommand itemsTabCommand;
-        public ICommand ItemsTabCommand => itemsTabCommand ?? (itemsTabCommand = new RelayCommand(() => { }));
+        public ICommand ItemsTabCommand => itemsTabCommand ?? (itemsTabCommand = new RelayCommand(() =>
+        {
+            Selection = new CollectionVM(Model.items, () => new CharacterM());
+        }));
 
         private ICommand actorsTabCommand;
-        public ICommand ActorsTabCommand => actorsTabCommand ?? (actorsTabCommand = new RelayCommand(() => { }));
+        public ICommand ActorsTabCommand => actorsTabCommand ?? (actorsTabCommand = new RelayCommand(() =>
+        {
+            Selection = new CollectionVM(Model.actors, () => new CharacterM());
+        }));
 
         private ICommand journalTabCommand;
-        public ICommand JournalTabCommand => journalTabCommand ?? (journalTabCommand = new RelayCommand(() => { }));
+        public ICommand JournalTabCommand => journalTabCommand ?? (journalTabCommand = new RelayCommand(() =>
+        {
+
+        }));
 
         private ICommand dialogsTabCommand;
-        public ICommand DialogsTabCommand => dialogsTabCommand ?? (dialogsTabCommand = new RelayCommand(() => { }));
+        public ICommand DialogsTabCommand => dialogsTabCommand ?? (dialogsTabCommand = new RelayCommand(() =>
+        {
+
+        }));
 
         private ICommand replicasTabCommand;
-        public ICommand ReplicasTabCommand => replicasTabCommand ?? (replicasTabCommand = new RelayCommand(() => { }));
+        public ICommand ReplicasTabCommand => replicasTabCommand ?? (replicasTabCommand = new RelayCommand(() =>
+        {
+
+        }));
 
         private object selection;
         public object Selection

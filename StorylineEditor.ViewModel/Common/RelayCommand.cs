@@ -41,7 +41,10 @@ namespace StorylineEditor.ViewModel.Common
 
         public void Execute(object parameter) => _execute(TranslateParameter(parameter));
 
-        private T TranslateParameter(object parameter) { return (T)(parameter != null && typeof(T).IsEnum ? Enum.Parse(typeof(T), (string)parameter) : parameter); }
+        private T TranslateParameter(object parameter)
+        {
+            return parameter == null ? default(T) : (T)(typeof(T).IsEnum ? Enum.Parse(typeof(T), (string)parameter) : parameter);
+        }
     }
 
     public class RelayCommand : RelayCommand<object>

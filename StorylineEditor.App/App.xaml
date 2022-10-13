@@ -13,20 +13,42 @@ StorylineEditor распространяется в надежде, что он�
 <Application x:Class="StorylineEditor.App.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:vm="clr-namespace:StorylineEditor.ViewModel;assembly=StorylineEditor.ViewModel"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+
+        <sys:Boolean x:Key="True">True</sys:Boolean>
+
+        <sys:Boolean x:Key="False">False</sys:Boolean>
+
+        <!-- Global and base -->
+
+        <Style TargetType="TextBlock" x:Key="S_TextBlock"></Style>
+
+        <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_GroupBox.Header"></Style>
+        
+        <Style TargetType="TextBox" x:Key="S_TextBox_Input"></Style>
+
+        <Style TargetType="GridSplitter" x:Key="S_GridSplitter">
+            <Setter Property="Width" Value="4"></Setter>
+        </Style>
+
+        <Style TargetType="Button" x:Key="S_Button_GroupBox.Header"></Style>
+
+        <!-- Main Menu -->
         
         <Style TargetType="Button" x:Key="S_Button_MainMenu"></Style>
+
         <Style TargetType="Separator" x:Key="S_Separator_MainMenu">
             <Setter Property="Width" Value="16"></Setter>
         </Style>
-        
+
         <Style TargetType="Button" x:Key="S_Button_TabMenu"></Style>
 
-        <Style TargetType="TextBox" x:Key="S_TextBox_Input"></Style>
+        <Style TargetType="TextBox" BasedOn="{StaticResource S_TextBox_Input}" x:Key="S_TextBox_Input_Filter"></Style>
 
-        <Style TargetType="TextBox" x:Key="S_TextBox_Input_Filter"></Style>
+        <!-- Data Templates -->
 
         <DataTemplate DataType="{x:Type vm:StorylineVM}" x:Key="DT_StorylineVM_Tabs">
             <StackPanel Orientation="Horizontal">
@@ -44,7 +66,33 @@ StorylineEditor распространяется в надежде, что он�
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vm:StorylineVM}" x:Key="DT_StorylineVM_Selection">
-            
+            <ContentControl Content="{Binding Selection, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:CollectionVM}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="5*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <GroupBox>
+                    <GroupBox.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource S_TextBlock_GroupBox.Header}"></TextBlock>
+                            <Button Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding AddCommand}" CommandParameter="{StaticResource False}">A</Button>
+                            <Button Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding AddCommand}" CommandParameter="{StaticResource True}">AF</Button>
+                            <Button Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding RemoveCommand}">R</Button>
+                            <Button Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding InfoCommand}">I</Button>
+                        </StackPanel>
+                    </GroupBox.Header>
+                </GroupBox>
+                
+                <GridSplitter Grid.Column="1" Style="{StaticResource S_GridSplitter}"></GridSplitter>
+
+                <ContentControl Content="{Binding Selection, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+            </Grid>
         </DataTemplate>
         
     </Application.Resources>

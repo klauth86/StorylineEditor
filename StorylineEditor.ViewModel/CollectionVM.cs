@@ -28,9 +28,26 @@ namespace StorylineEditor.ViewModel
         }
 
         private ICommand addCommand;
-        public ICommand AddCommand => addCommand ?? (addCommand = new RelayCommand(() => { }));
+        public ICommand AddCommand => addCommand ?? (addCommand = new RelayCommand<bool>((isFolder) => { }));
 
         private ICommand removeCommand;
         public ICommand RemoveCommand => removeCommand ?? (removeCommand = new RelayCommand<BaseM>((item) => { }, (item) => item != null));
+
+        private ICommand infoCommand;
+        public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<BaseM>((item) => { }, (item) => item != null));
+
+        private object selection;
+        public object Selection
+        {
+            get => selection;
+            set
+            {
+                if (value != selection)
+                {
+                    selection = value;
+                    Notify(nameof(Selection));
+                }
+            }
+        }
     }
 }
