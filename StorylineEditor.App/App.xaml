@@ -13,9 +13,39 @@ StorylineEditor распространяется в надежде, что он�
 <Application x:Class="StorylineEditor.App.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:StorylineEditor.App"
+             xmlns:vm="clr-namespace:StorylineEditor.ViewModel;assembly=StorylineEditor.ViewModel"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        
+        <Style TargetType="Button" x:Key="S_Button_MainMenu"></Style>
+        <Style TargetType="Separator" x:Key="S_Separator_MainMenu">
+            <Setter Property="Width" Value="16"></Setter>
+        </Style>
+        
+        <Style TargetType="Button" x:Key="S_Button_TabMenu"></Style>
+
+        <Style TargetType="TextBox" x:Key="S_TextBox_Input"></Style>
+
+        <Style TargetType="TextBox" x:Key="S_TextBox_Input_Filter"></Style>
+
+        <DataTemplate DataType="{x:Type vm:StorylineVM}" x:Key="DT_StorylineVM_Tabs">
+            <StackPanel Orientation="Horizontal">
+                <Button Style="{StaticResource S_Button_TabMenu}" Command="{Binding CharactersTabCommand}">Characters</Button>
+                <Button Style="{StaticResource S_Button_TabMenu}" Command="{Binding ItemsTabCommand}">Items</Button>
+                <Button Style="{StaticResource S_Button_TabMenu}" Command="{Binding ActorsTabCommand}">Actors</Button>
+                <Button Style="{StaticResource S_Button_TabMenu}" Command="{Binding JournalTabCommand}">Journal</Button>
+                <Button Style="{StaticResource S_Button_TabMenu}" Command="{Binding DialogsTabCommand}">Dialogs</Button>
+                <Button Style="{StaticResource S_Button_TabMenu}" Command="{Binding ReplicasTabCommand}">Replicas</Button>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:StorylineVM}" x:Key="DT_StorylineVM_Filter">
+            <TextBox Style="{StaticResource S_TextBox_Input_Filter}" Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:StorylineVM}" x:Key="DT_StorylineVM_Selection">
+            
+        </DataTemplate>
+        
     </Application.Resources>
 </Application>

@@ -95,6 +95,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\StorylineEditor.Model\StorylineEditor.Model.csproj">
+      <Project>{9c1b256a-f0c5-4173-830d-e55c44be79bf}</Project>
+      <Name>StorylineEditor.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StorylineEditor.ViewModel\StorylineEditor.ViewModel.csproj">
       <Project>{b40707d7-50b4-4213-8c03-7445a55cd0a9}</Project>
       <Name>StorylineEditor.ViewModel</Name>

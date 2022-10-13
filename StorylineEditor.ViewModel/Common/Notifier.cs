@@ -11,7 +11,6 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace StorylineEditor.ViewModel.Common
 {
@@ -21,7 +20,5 @@ namespace StorylineEditor.ViewModel.Common
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void Notify(string propName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
-
-        protected void NotifyWithCallerPropName([CallerMemberName] string propName = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
     }
 }

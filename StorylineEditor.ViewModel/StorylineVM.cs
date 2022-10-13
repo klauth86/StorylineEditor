@@ -29,7 +29,16 @@ namespace StorylineEditor.ViewModel
         private ICommand actorsTabCommand;
         public ICommand ActorsTabCommand => actorsTabCommand ?? (actorsTabCommand = new RelayCommand(() => { }));
 
-        protected object selection;
+        private ICommand journalTabCommand;
+        public ICommand JournalTabCommand => journalTabCommand ?? (journalTabCommand = new RelayCommand(() => { }));
+
+        private ICommand dialogsTabCommand;
+        public ICommand DialogsTabCommand => dialogsTabCommand ?? (dialogsTabCommand = new RelayCommand(() => { }));
+
+        private ICommand replicasTabCommand;
+        public ICommand ReplicasTabCommand => replicasTabCommand ?? (replicasTabCommand = new RelayCommand(() => { }));
+
+        private object selection;
         public object Selection
         {
             get => selection;
@@ -38,7 +47,7 @@ namespace StorylineEditor.ViewModel
                 if (value != selection)
                 {
                     selection = value;
-                    NotifyWithCallerPropName();
+                    Notify(nameof(Selection));
                 }
             }
         }

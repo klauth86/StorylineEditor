@@ -10,6 +10,8 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Model;
+using StorylineEditor.ViewModel;
 using System.Windows;
 
 namespace StorylineEditor.App
@@ -22,6 +24,17 @@ namespace StorylineEditor.App
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new StorylineVM(new StorylineM());
+        }
+
+        private void btn_Open_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btn_Save_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
