@@ -31,6 +31,8 @@ StorylineEditor распространяется в надежде, что он�
         <Style TargetType="TextBox" x:Key="S_TextBox_Input"></Style>
 
         <Style TargetType="GridSplitter" x:Key="S_GridSplitter">
+            <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+            <Setter Property="VerticalAlignment" Value="Stretch"></Setter>
             <Setter Property="Width" Value="4"></Setter>
         </Style>
 
