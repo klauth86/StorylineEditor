@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorylineEditor", "Storylin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorylineEditor.Model", "StorylineEditor.Model\StorylineEditor.Model.csproj", "{9C1B256A-F0C5-4173-830D-E55C44BE79BF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorylineEditor.ViewModel", "StorylineEditor.ViewModel\StorylineEditor.ViewModel.csproj", "{B40707D7-50B4-4213-8C03-7445A55CD0A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorylineEditor.App", "StorylineEditor.App\StorylineEditor.App.csproj", "{D2794F6F-ED97-4D18-9F69-3582A412CB53}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{9C1B256A-F0C5-4173-830D-E55C44BE79BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C1B256A-F0C5-4173-830D-E55C44BE79BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C1B256A-F0C5-4173-830D-E55C44BE79BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B40707D7-50B4-4213-8C03-7445A55CD0A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B40707D7-50B4-4213-8C03-7445A55CD0A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B40707D7-50B4-4213-8C03-7445A55CD0A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B40707D7-50B4-4213-8C03-7445A55CD0A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2794F6F-ED97-4D18-9F69-3582A412CB53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2794F6F-ED97-4D18-9F69-3582A412CB53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2794F6F-ED97-4D18-9F69-3582A412CB53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2794F6F-ED97-4D18-9F69-3582A412CB53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
