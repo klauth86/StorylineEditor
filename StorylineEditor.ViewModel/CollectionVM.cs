@@ -21,11 +21,12 @@ namespace StorylineEditor.ViewModel
 {
     public class CollectionVM : BaseVM<ICollection<BaseM>>
     {
-        public CollectionVM(ICollection<BaseM> model, Func<bool, BaseM> itemMCreator, Func<BaseM, Notifier> itemVMCreator) : base(model)
+        public CollectionVM(ICollection<BaseM> model, Func<bool, BaseM> itemMCreator, Func<BaseM, Notifier> itemVMCreator,
+            Func<Notifier, Notifier, Notifier> selectionVMCreator) : base(model)
         {
             _itemMCreator = itemMCreator ?? throw new ArgumentNullException(nameof(itemMCreator));
-
             _itemVMCreator = itemVMCreator ?? throw new ArgumentNullException(nameof(itemVMCreator));
+            _selectionVMCreator = selectionVMCreator ?? throw new ArgumentNullException(nameof(selectionVMCreator));
 
             ItemsVMs = new ObservableCollection<Notifier>();
 
@@ -43,7 +44,7 @@ namespace StorylineEditor.ViewModel
             Notifier itemVM = _itemVMCreator(itemM);
             ItemsVMs.Add(itemVM);
 
-            Selection = itemVM;
+            Selection = _selectionVMCreator(Selection, itemVM);
         }));
 
         private ICommand removeCommand;
@@ -62,11 +63,17 @@ namespace StorylineEditor.ViewModel
             }
         }, (itemVM) => itemVM != null));
 
+        private ICommand selectCommand;
+        public ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<Notifier>((itemVM) =>
+        {
+            Selection = _selectionVMCreator(Selection, itemVM);
+        }, (itemVM) => itemVM != null));
+
 
 
         private readonly Func<bool, BaseM> _itemMCreator;
-
         private readonly Func<BaseM, Notifier> _itemVMCreator;
+        private readonly Func<Notifier, Notifier, Notifier> _selectionVMCreator;
 
 
 

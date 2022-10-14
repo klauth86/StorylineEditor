@@ -28,6 +28,12 @@ StorylineEditor распространяется в надежде, что он�
         
         <!-- Global and base -->
 
+        <Style TargetType="Button" x:Key="S_Button_Selector">
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+            <Setter Property="FontSize" Value="24"></Setter>
+        </Style>
+        
         <Style TargetType="TextBlock" x:Key="S_TextBlock"></Style>
 
         <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_GroupBox.Header"></Style>
@@ -107,16 +113,37 @@ StorylineEditor распространяется в надежде, что он�
 
                 <GridSplitter Grid.Column="1" Style="{StaticResource S_GridSplitter}"></GridSplitter>
 
-                <ContentControl Content="{Binding Selection, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+                <ContentControl Grid.Column="2" Content="{Binding Selection, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
             </Grid>
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vm:FolderVM}">
-            <Button Content="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+            <Border>
+                <StackPanel Orientation="Vertical">
+                    <Button Content="🗀" Style="{StaticResource S_Button_Selector}"
                     Command="{Binding Path=DataContext.SetContextCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
                     CommandParameter="{Binding}">
-            </Button>
+                    </Button>
+                    <TextBox Grid.Row="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                </StackPanel>
+            </Border>
         </DataTemplate>
-        
+
+        <DataTemplate DataType="{x:Type vm:CharacterVM}">
+            <Border>
+                <StackPanel Orientation="Vertical">
+                    <Button Content="👤" Style="{StaticResource S_Button_Selector}"
+                    Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                    CommandParameter="{Binding}">
+                    </Button>
+                    <TextBox Grid.Row="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:CharacterEditorVM}">
+            <TextBlock>123</TextBlock>
+        </DataTemplate>
+
     </Application.Resources>
 </Application>

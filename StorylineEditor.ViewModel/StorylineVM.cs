@@ -26,24 +26,40 @@ namespace StorylineEditor.ViewModel
         public ICommand CharactersTabCommand => charactersTabCommand ?? (charactersTabCommand = new RelayCommand(() =>
         {
             Selection = new CollectionVM(Model.characters,
-                (bool isFolder) => { if (isFolder) return new FolderM(); else return new CharacterM(); },
-                (BaseM model) => { if (model is FolderM) return new FolderVM((FolderM)model); else return new CharacterVM((CharacterM)model); });
+                (bool isFolder) => { if (isFolder) return new FolderM() { name = "Новая папка" }; else return new CharacterM() { name = "Новый персонаж" }; },
+                (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new CharacterVM((CharacterM)model); },
+                (Notifier oldSelection, Notifier newSelection) =>
+                {
+                    if (oldSelection is CharacterVM oldCharacterVM)
+                    {
+                        if (newSelection is CharacterVM newCharacterVM)
+                        {
+                            if (oldCharacterVM.Model == newCharacterVM.Model) return oldSelection;
+
+                            return new CharacterEditorVM(newCharacterVM.Model);
+                        }
+                        else
+                        {
+                            return oldSelection;
+                        }
+                    }
+                    else if (newSelection is CharacterVM newCharacterVM)
+                    {
+                        return new CharacterEditorVM(newCharacterVM.Model);
+                    }
+
+                    return null;
+                });
         }));
 
         private ICommand itemsTabCommand;
         public ICommand ItemsTabCommand => itemsTabCommand ?? (itemsTabCommand = new RelayCommand(() =>
         {
-            Selection = new CollectionVM(Model.items,
-                (bool isFolder) => { if (isFolder) return new FolderM(); else return new ItemM(); },
-                (BaseM model) => { if (model is FolderM) return new FolderVM((FolderM)model); else return new ItemVM((ItemM)model); });
         }));
 
         private ICommand actorsTabCommand;
         public ICommand ActorsTabCommand => actorsTabCommand ?? (actorsTabCommand = new RelayCommand(() =>
         {
-            Selection = new CollectionVM(Model.actors,
-                (bool isFolder) => { if (isFolder) return new FolderM(); else return new ActorM(); },
-                (BaseM model) => { if (model is FolderM) return new FolderVM((FolderM)model); else return new ActorVM((ActorM)model); });
         }));
 
         private ICommand journalTabCommand;
