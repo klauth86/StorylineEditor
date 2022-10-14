@@ -39,7 +39,7 @@ namespace StorylineEditor.ViewModel
         private ICommand actorsTabCommand;
         public ICommand ActorsTabCommand => actorsTabCommand ?? (actorsTabCommand = new RelayCommand(() =>
         {
-            Selection = new CollectionVM(Model.characters,
+            Selection = new CollectionVM(Model.actors,
                 (bool isFolder) => { if (isFolder) return new FolderM(); else return new ActorM(); },
                 (BaseM model) => { if (model is FolderM) return new FolderVM((FolderM)model); else return new ActorVM((ActorM)model); });
         }));
