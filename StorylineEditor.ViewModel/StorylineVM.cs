@@ -20,6 +20,8 @@ namespace StorylineEditor.ViewModel
     {
         public StorylineVM(StorylineM model) : base(model) { }
 
+
+
         private ICommand charactersTabCommand;
         public ICommand CharactersTabCommand => charactersTabCommand ?? (charactersTabCommand = new RelayCommand(() =>
         {
@@ -61,6 +63,8 @@ namespace StorylineEditor.ViewModel
         {
 
         }));
+
+
 
         private object selection;
         public object Selection

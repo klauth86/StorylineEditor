@@ -52,11 +52,24 @@ namespace StorylineEditor.ViewModel
         private ICommand infoCommand;
         public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<BaseM>((item) => { }, (item) => item != null));
 
+        private ICommand setContextCommand;
+        public ICommand SetContextCommand => setContextCommand ?? (setContextCommand = new RelayCommand<Notifier>((itemVM) =>
+        {
+            if (itemVM is FolderVM folderVM)
+            {
+                ItemsVMs.Clear();
+                foreach (var itemM in folderVM.Model.content) { ItemsVMs.Add(_itemVMCreator(itemM)); }
+            }
+        }, (itemVM) => itemVM != null));
+
 
 
         private readonly Func<bool, BaseM> _itemMCreator;
 
         private readonly Func<BaseM, Notifier> _itemVMCreator;
+
+
+
         public ObservableCollection<Notifier> ItemsVMs { get; }
 
         private ICollection<BaseM> context;

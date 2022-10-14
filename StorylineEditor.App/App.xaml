@@ -111,7 +111,12 @@ StorylineEditor распространяется в надежде, что он�
             </Grid>
         </DataTemplate>
 
-        
+        <DataTemplate DataType="{x:Type vm:FolderVM}">
+            <Button Content="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                    Command="{Binding Path=DataContext.SetContextCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                    CommandParameter="{Binding}">
+            </Button>
+        </DataTemplate>
         
     </Application.Resources>
 </Application>

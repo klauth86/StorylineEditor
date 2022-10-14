@@ -11,16 +11,17 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.ViewModel.Common;
+using System;
 
 namespace StorylineEditor.ViewModel
 {
-    public class BaseVM<T> : Notifier
+    public class BaseVM<T> : Notifier where T : class
     {
         public readonly T Model;
 
         public BaseVM(T model)
         {
-            Model = model;
+            Model = model ?? throw new ArgumentNullException(nameof(model));
         }
     }
 }
