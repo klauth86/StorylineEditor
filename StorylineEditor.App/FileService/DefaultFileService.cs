@@ -10,17 +10,38 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using StorylineEditor.ViewModel.Common;
+using Microsoft.Win32;
 
-namespace StorylineEditor.ViewModel
+namespace StorylineEditor.App.FileService
 {
-    public class BaseVM<T> : Notifier
+    public class DefaultFileService : IFileService
     {
-        public readonly T Model;
+        public string Path { get; protected set; }
 
-        public BaseVM(T model)
+        public string OpenFile(string filter, bool refreshPath)
         {
-            Model = model;
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = filter;
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                return refreshPath ? Path = openFileDialog.FileName : openFileDialog.FileName;
+            }
+
+            return null;
+        }
+
+        public string SaveFile(string filter, bool refreshPath)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = filter;
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                return refreshPath ? Path = saveFileDialog.FileName : saveFileDialog.FileName;
+            }
+
+            return null;
         }
     }
 }

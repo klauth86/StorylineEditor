@@ -24,6 +24,7 @@ namespace StorylineEditor.ViewModel
 
         public CollectionVM(ICollection<BaseM> model, Func<BaseM> itemCreator) : base(model)
         {
+            context = model;
             _itemCreator = itemCreator ?? throw new ArgumentNullException(nameof(itemCreator));
         }
 
@@ -35,6 +36,20 @@ namespace StorylineEditor.ViewModel
 
         private ICommand infoCommand;
         public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<BaseM>((item) => { }, (item) => item != null));
+
+        private object context;
+        public object Context
+        {
+            get => context;
+            set
+            {
+                if (value != context)
+                {
+                    context = value;
+                    Notify(nameof(Context));
+                }
+            }
+        }
 
         private object selection;
         public object Selection

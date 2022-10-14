@@ -10,17 +10,22 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using StorylineEditor.ViewModel.Common;
+using System.IO;
 
-namespace StorylineEditor.ViewModel
+namespace StorylineEditor.App.SerializeService
 {
-    public class BaseVM<T> : Notifier
+    public interface ISerializeService
     {
-        public readonly T Model;
+        // Universal
 
-        public BaseVM(T model)
-        {
-            Model = model;
-        }
+        void Serialize<T>(Stream stream, T obj);
+
+        T Deserialize<T>(Stream stream);
+
+        // Clipboard
+
+        string Serialize<T>(T obj);
+
+        T Deserialize<T>(string str);
     }
 }

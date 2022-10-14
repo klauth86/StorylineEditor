@@ -10,17 +10,12 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using StorylineEditor.ViewModel.Common;
-
-namespace StorylineEditor.ViewModel
+namespace StorylineEditor.App.FileService
 {
-    public class BaseVM<T> : Notifier
+    public interface IFileService
     {
-        public readonly T Model;
-
-        public BaseVM(T model)
-        {
-            Model = model;
-        }
+        string Path { get; }
+        string OpenFile(string filter, bool refreshPath); // открытие файла
+        string SaveFile(string filter, bool refreshPath);  // сохранение файла
     }
 }
