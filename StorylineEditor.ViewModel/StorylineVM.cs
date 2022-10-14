@@ -23,19 +23,25 @@ namespace StorylineEditor.ViewModel
         private ICommand charactersTabCommand;
         public ICommand CharactersTabCommand => charactersTabCommand ?? (charactersTabCommand = new RelayCommand(() =>
         {
-            Selection = new CollectionVM(Model.characters, () => new CharacterM());
+            Selection = new CollectionVM(Model.characters,
+                (bool isFolder) => { if (isFolder) return new FolderM(); else return new CharacterM(); },
+                (BaseM model) => { if (model is FolderM) return new FolderVM((FolderM)model); else return new CharacterVM((CharacterM)model); });
         }));
 
         private ICommand itemsTabCommand;
         public ICommand ItemsTabCommand => itemsTabCommand ?? (itemsTabCommand = new RelayCommand(() =>
         {
-            Selection = new CollectionVM(Model.items, () => new CharacterM());
+            Selection = new CollectionVM(Model.items,
+                (bool isFolder) => { if (isFolder) return new FolderM(); else return new ItemM(); },
+                (BaseM model) => { if (model is FolderM) return new FolderVM((FolderM)model); else return new ItemVM((ItemM)model); });
         }));
 
         private ICommand actorsTabCommand;
         public ICommand ActorsTabCommand => actorsTabCommand ?? (actorsTabCommand = new RelayCommand(() =>
         {
-            Selection = new CollectionVM(Model.actors, () => new CharacterM());
+            Selection = new CollectionVM(Model.characters,
+                (bool isFolder) => { if (isFolder) return new FolderM(); else return new ActorM(); },
+                (BaseM model) => { if (model is FolderM) return new FolderVM((FolderM)model); else return new ActorVM((ActorM)model); });
         }));
 
         private ICommand journalTabCommand;

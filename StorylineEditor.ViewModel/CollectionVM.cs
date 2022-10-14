@@ -14,22 +14,37 @@ using StorylineEditor.Model;
 using StorylineEditor.ViewModel.Common;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel
 {
     public class CollectionVM : BaseVM<ICollection<BaseM>>
     {
-        private readonly Func<BaseM> _itemCreator;
-
-        public CollectionVM(ICollection<BaseM> model, Func<BaseM> itemCreator) : base(model)
+        public CollectionVM(ICollection<BaseM> model, Func<bool, BaseM> itemMCreator, Func<BaseM, Notifier> itemVMCreator) : base(model)
         {
-            context = model;
-            _itemCreator = itemCreator ?? throw new ArgumentNullException(nameof(itemCreator));
+            _itemMCreator = itemMCreator ?? throw new ArgumentNullException(nameof(itemMCreator));
+
+            _itemVMCreator = itemVMCreator ?? throw new ArgumentNullException(nameof(itemVMCreator));
+
+            ItemsVMs = new ObservableCollection<Notifier>();
+
+            foreach (var itemM in Model) { ItemsVMs.Add(_itemVMCreator(itemM)); }
         }
 
+
+
         private ICommand addCommand;
-        public ICommand AddCommand => addCommand ?? (addCommand = new RelayCommand<bool>((isFolder) => { }));
+        public ICommand AddCommand => addCommand ?? (addCommand = new RelayCommand<bool>((isFolder) =>
+        {
+            BaseM itemM = _itemMCreator(isFolder);
+            (Context ?? Model).Add(itemM);
+
+            Notifier itemVM = _itemVMCreator(itemM);
+            ItemsVMs.Add(itemVM);
+
+            Selection = itemVM;
+        }));
 
         private ICommand removeCommand;
         public ICommand RemoveCommand => removeCommand ?? (removeCommand = new RelayCommand<BaseM>((item) => { }, (item) => item != null));
@@ -37,8 +52,15 @@ namespace StorylineEditor.ViewModel
         private ICommand infoCommand;
         public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<BaseM>((item) => { }, (item) => item != null));
 
-        private object context;
-        public object Context
+
+
+        private readonly Func<bool, BaseM> _itemMCreator;
+
+        private readonly Func<BaseM, Notifier> _itemVMCreator;
+        public ObservableCollection<Notifier> ItemsVMs { get; }
+
+        private ICollection<BaseM> context;
+        public ICollection<BaseM> Context
         {
             get => context;
             set
@@ -51,8 +73,8 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        private object selection;
-        public object Selection
+        private Notifier selection;
+        public Notifier Selection
         {
             get => selection;
             set
