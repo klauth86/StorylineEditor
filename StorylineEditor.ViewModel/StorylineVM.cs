@@ -37,11 +37,23 @@ namespace StorylineEditor.ViewModel
         private ICommand itemsTabCommand;
         public ICommand ItemsTabCommand => itemsTabCommand ?? (itemsTabCommand = new RelayCommand(() =>
         {
+            Selection = new CollectionVM(Model.items,
+            (bool isFolder) => { if (isFolder) return new FolderM() { name = "Новая папка" }; else return new ItemM() { name = "Новый предмет" }; },
+            (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new ItemVM((ItemM)model); },
+            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM.Model); else return new ItemEditorVM(((ItemVM)viewModel).Model); },
+            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) Model.items.Remove(folderVM.Model); else { Model.items.Remove(((ItemVM)viewModel).Model); } },
+            (Notifier viewModel) => { });
         }));
 
         private ICommand actorsTabCommand;
         public ICommand ActorsTabCommand => actorsTabCommand ?? (actorsTabCommand = new RelayCommand(() =>
         {
+            Selection = new CollectionVM(Model.actors,
+            (bool isFolder) => { if (isFolder) return new FolderM() { name = "Новая папка" }; else return new ActorM() { name = "Новый актор" }; },
+            (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new ActorVM((ActorM)model); },
+            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM.Model); else return new ActorEditorVM(((ActorVM)viewModel).Model); },
+            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) Model.actors.Remove(folderVM.Model); else { Model.actors.Remove(((ActorVM)viewModel).Model); } },
+            (Notifier viewModel) => { });
         }));
 
         private ICommand journalTabCommand;

@@ -16,9 +16,143 @@ namespace StorylineEditor.ViewModel
 {
     public class ItemVM : BaseVM<ItemM>
     {
-        public ItemVM(ItemM model) : base(model)
-        {
+        public ItemVM(ItemM model) : base(model) { }
 
+        public string Id => Model.id;
+
+        public string Name
+        {
+            get => Model.name;
+            set
+            {
+                if (Model.name != value)
+                {
+                    Model.name = value;
+                    OnModelChanged(Model, nameof(Name));
+                }
+            }
+        }
+    }
+
+    public class ItemEditorVM : ItemVM
+    {
+        public ItemEditorVM(ItemM model) : base(model) { }
+
+        public string Description
+        {
+            get => Model.description;
+            set
+            {
+                if (Model.description != value)
+                {
+                    Model.description = value;
+                    OnModelChanged(Model, nameof(Description));
+                }
+            }
+        }
+
+        public bool HasDescriptionFemale
+        {
+            get => Model.hasDescriptionFemale;
+            set
+            {
+                if (Model.hasDescriptionFemale != value)
+                {
+                    Model.hasDescriptionFemale = value;
+                    OnModelChanged(Model, nameof(HasDescriptionFemale));
+                }
+            }
+        }
+
+        public string DescriptionFemale
+        {
+            get => Model.descriptionFemale;
+            set
+            {
+                if (Model.descriptionFemale != value)
+                {
+                    Model.descriptionFemale = value;
+                    OnModelChanged(Model, nameof(DescriptionFemale));
+                }
+            }
+        }
+
+        public string ActorName
+        {
+            get => Model.actorName;
+            set
+            {
+                if (Model.actorName != value)
+                {
+                    Model.actorName = value;
+                    OnModelChanged(Model, nameof(ActorName));
+                }
+            }
+        }
+
+        public string ClassPathName
+        {
+            get => Model.classPathName;
+            set
+            {
+                if (Model.classPathName != value)
+                {
+                    Model.classPathName = value;
+                    OnModelChanged(Model, nameof(ClassPathName));
+                }
+            }
+        }
+
+        public bool HasInternalDescription
+        {
+            get => Model.hasInternalDescription;
+            set
+            {
+                if (Model.hasInternalDescription != value)
+                {
+                    Model.hasInternalDescription = value;
+                    OnModelChanged(Model, nameof(HasInternalDescription));
+                }
+            }
+        }
+
+        public string InternalDescription
+        {
+            get => Model.internalDescription;
+            set
+            {
+                if (Model.internalDescription != value)
+                {
+                    Model.internalDescription = value;
+                    OnModelChanged(Model, nameof(InternalDescription));
+                }
+            }
+        }
+
+        public bool HasInternalDescriptionFemale
+        {
+            get => Model.hasInternalDescriptionFemale;
+            set
+            {
+                if (Model.hasInternalDescriptionFemale != value)
+                {
+                    Model.hasInternalDescriptionFemale = value;
+                    OnModelChanged(Model, nameof(HasInternalDescriptionFemale));
+                }
+            }
+        }
+
+        public string InternalDescriptionFemale
+        {
+            get => Model.internalDescriptionFemale;
+            set
+            {
+                if (Model.internalDescriptionFemale != value)
+                {
+                    Model.internalDescriptionFemale = value;
+                    OnModelChanged(Model, nameof(InternalDescriptionFemale));
+                }
+            }
         }
     }
 }
