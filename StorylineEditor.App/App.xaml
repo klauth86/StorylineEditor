@@ -34,7 +34,11 @@ StorylineEditor распространяется в надежде, что он�
         
         <Style TargetType="TextBox" x:Key="S_TextBox_Input"></Style>
 
-        <Style TargetType="TextBox" x:Key="S_TextBox_MultilineInput" BasedOn="{StaticResource S_TextBox_Input}"></Style>
+        <Style TargetType="TextBox" x:Key="S_TextBox_MultilineInput" BasedOn="{StaticResource S_TextBox_Input}">
+            <Setter Property="MinLines" Value="3"></Setter>
+            <Setter Property="AcceptsReturn" Value="true"></Setter>
+            <Setter Property="TextWrapping" Value="Wrap"></Setter>
+        </Style>
 
         <Style TargetType="TextBox" x:Key="S_TextBox_Input_NumericUpDown_Float"></Style>
         
@@ -113,9 +117,15 @@ StorylineEditor распространяется в надежде, что он�
 
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Style="{StaticResource S_TextBlock_GroupBox.Header}"></TextBlock>
+                        <Button Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding UpCommand}">Up</Button>
+
                         <Button Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding AddCommand}" CommandParameter="{StaticResource False}">A</Button>
                         <Button Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding AddCommand}" CommandParameter="{StaticResource True}">AF</Button>
                         <Button Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding RemoveCommand}" CommandParameter="{Binding Selection, UpdateSourceTrigger=PropertyChanged}">R</Button>
+
+                        <Button Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding CutCommand}" CommandParameter="{Binding Selection, UpdateSourceTrigger=PropertyChanged}">C</Button>
+                        <Button Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding PasteCommand}" CommandParameter="{Binding Selection, UpdateSourceTrigger=PropertyChanged}">P</Button>
+
                         <Button Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding InfoCommand}" CommandParameter="{Binding Selection, UpdateSourceTrigger=PropertyChanged}">I</Button>
                     </StackPanel>
 

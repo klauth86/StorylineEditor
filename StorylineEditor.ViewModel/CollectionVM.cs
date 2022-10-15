@@ -80,6 +80,8 @@ namespace StorylineEditor.ViewModel
         {
             selectionSource = itemVM;
             Selection = _selectionVMCreator(Selection, selectionSource);
+            
+            CommandManager.InvalidateRequerySuggested();
         }, (itemVM) => itemVM != null));
 
 
