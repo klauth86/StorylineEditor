@@ -20,8 +20,6 @@ namespace StorylineEditor.ViewModel
         public static event Action<T, string> ModelChangedEvent = delegate { };
         public static void OnModelChanged(T model, string propName) => ModelChangedEvent?.Invoke(model, propName);
 
-
-
         public readonly T Model;
 
         public BaseVM(T model)
@@ -31,8 +29,6 @@ namespace StorylineEditor.ViewModel
         }
 
         ~BaseVM() { ModelChangedEvent -= OnModelChangedHandler; } ////// TODO Think where to unsubscribe
-
-
 
         private void OnModelChangedHandler(T model, string propName) { if (Model != null && Model == model) Notify(propName); }
     }

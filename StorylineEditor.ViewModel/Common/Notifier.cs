@@ -16,9 +16,35 @@ namespace StorylineEditor.ViewModel.Common
 {
     public abstract class Notifier : INotifyPropertyChanged
     {
-
         public event PropertyChangedEventHandler PropertyChanged;
-
         protected void Notify(string propName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+
+        protected bool isSelected;
+        public bool IsSelected
+        {
+            get => isSelected;
+            set
+            {
+                if (value != isSelected)
+                {
+                    isSelected = value;
+                    Notify(nameof(IsSelected));
+                }
+            }
+        }
+
+        protected bool isCut;
+        public bool IsCut
+        {
+            get => isCut;
+            set
+            {
+                if (value != isCut)
+                {
+                    isCut = value;
+                    Notify(nameof(IsCut));
+                }
+            }
+        }
     }
 }

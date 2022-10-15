@@ -24,7 +24,7 @@ StorylineEditor распространяется в надежде, что он�
 
         <sys:Boolean x:Key="False">False</sys:Boolean>
 
-        
+        <SolidColorBrush x:Key="Color_Selector_Selected" Color="#99005500" />
         
         <!-- Global and base -->
         
@@ -121,7 +121,7 @@ StorylineEditor распространяется в надежде, что он�
 
                         <Button Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding AddCommand}" CommandParameter="{StaticResource False}">A</Button>
                         <Button Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding AddCommand}" CommandParameter="{StaticResource True}">AF</Button>
-                        <Button Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding RemoveCommand}" CommandParameter="{Binding Selection, UpdateSourceTrigger=PropertyChanged}">R</Button>
+                        <Button Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding RemoveCommand}">R</Button>
 
                         <Button Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding CutCommand}" CommandParameter="{Binding Selection, UpdateSourceTrigger=PropertyChanged}">C</Button>
                         <Button Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding PasteCommand}" CommandParameter="{Binding Selection, UpdateSourceTrigger=PropertyChanged}">P</Button>
@@ -141,12 +141,12 @@ StorylineEditor распространяется в надежде, что он�
 
                 <GridSplitter Grid.Column="1" Style="{StaticResource S_GridSplitter}"></GridSplitter>
 
-                <ContentControl Grid.Column="2" Content="{Binding Selection, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+                <ContentControl Grid.Column="2" Content="{Binding SelectionEditor, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
             </Grid>
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vm:FolderVM}">
-            <Border Style="{StaticResource S_Border_Selector}">
+            <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}">
                 <Border.InputBindings>
                     <MouseBinding Gesture="LeftDoubleClick" Command="{Binding Path=DataContext.SetContextCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
                                   CommandParameter="{Binding}"/>
@@ -161,6 +161,11 @@ StorylineEditor распространяется в надежде, что он�
                     <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
                 </Grid>
             </Border>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" Value="true">
+                    <Setter TargetName="br_Main" Property="Background" Value="{StaticResource Color_Selector_Selected}"></Setter>
+                </DataTrigger>
+            </DataTemplate.Triggers>
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vm:FolderEditorVM}">
@@ -171,7 +176,7 @@ StorylineEditor распространяется в надежде, что он�
         </DataTemplate>
         
         <DataTemplate DataType="{x:Type vm:CharacterVM}">
-            <Border Style="{StaticResource S_Border_Selector}">
+            <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}">
                 <Border.InputBindings>
                     <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
                 </Border.InputBindings>
@@ -184,6 +189,11 @@ StorylineEditor распространяется в надежде, что он�
                     <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
                 </Grid>
             </Border>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" Value="true">
+                    <Setter TargetName="br_Main" Property="Background" Value="{StaticResource Color_Selector_Selected}"></Setter>
+                </DataTrigger>
+            </DataTemplate.Triggers>
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vm:CharacterEditorVM}">
