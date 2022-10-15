@@ -11,8 +11,8 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Model;
+using StorylineEditor.Model.Graphs;
 using StorylineEditor.ViewModel.Common;
-using System;
 using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel
@@ -59,19 +59,34 @@ namespace StorylineEditor.ViewModel
         private ICommand journalTabCommand;
         public ICommand JournalTabCommand => journalTabCommand ?? (journalTabCommand = new RelayCommand(() =>
         {
-
+            Selection = new CollectionVM(Model.journal,
+            (bool isFolder) => { if (isFolder) return new FolderM() { name = "Новая папка" }; else return new QuestM() { name = "Новый квест" }; },
+            (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new QuestVM((QuestM)model); },
+            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM.Model); else return new QuestEditorVM(((QuestVM)viewModel).Model); },
+            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) Model.journal.Remove(folderVM.Model); else { Model.journal.Remove(((QuestVM)viewModel).Model); } },
+            (Notifier viewModel) => { });
         }));
 
         private ICommand dialogsTabCommand;
         public ICommand DialogsTabCommand => dialogsTabCommand ?? (dialogsTabCommand = new RelayCommand(() =>
         {
-
+            Selection = new CollectionVM(Model.dialogs,
+            (bool isFolder) => { if (isFolder) return new FolderM() { name = "Новая папка" }; else return new DialogM() { name = "Новый диалог" }; },
+            (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new DialogVM((DialogM)model); },
+            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM.Model); else return new DialogEditorVM(((DialogVM)viewModel).Model); },
+            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) Model.dialogs.Remove(folderVM.Model); else { Model.dialogs.Remove(((DialogVM)viewModel).Model); } },
+            (Notifier viewModel) => { });
         }));
 
         private ICommand replicasTabCommand;
         public ICommand ReplicasTabCommand => replicasTabCommand ?? (replicasTabCommand = new RelayCommand(() =>
         {
-
+            Selection = new CollectionVM(Model.replicas,
+            (bool isFolder) => { if (isFolder) return new FolderM() { name = "Новая папка" }; else return new ReplicaM() { name = "Новая реплика" }; },
+            (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new ReplicaVM((ReplicaM)model); },
+            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM.Model); else return new ReplicaEditorVM(((ReplicaVM)viewModel).Model); },
+            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) Model.replicas.Remove(folderVM.Model); else { Model.replicas.Remove(((ReplicaVM)viewModel).Model); } },
+            (Notifier viewModel) => { });
         }));
 
 

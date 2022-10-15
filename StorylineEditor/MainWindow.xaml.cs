@@ -159,7 +159,7 @@ namespace StorylineEditor
 
                     foreach (var quest in fullContext.JournalRecordsTab.Items)
                     {
-                        if (quest != null) storyline.dialogs.Add(quest.GetModel());
+                        if (quest != null) storyline.journal.Add(quest.GetModel());
                     }
 
                     foreach (var dialog in fullContext.PlayerDialogsTab.Items)
@@ -169,7 +169,7 @@ namespace StorylineEditor
 
                     foreach (var replica in fullContext.ReplicasTab.Items)
                     {
-                        if (replica != null) storyline.dialogs.Add(replica.GetModel());
+                        if (replica != null) storyline.replicas.Add(replica.GetModel());
                     }
 
                     App.SerializeXml<StorylineM>(fileStream, storyline);
