@@ -29,7 +29,9 @@ namespace StorylineEditor.ViewModel
             Selection = new CollectionVM(Model.characters,
                 (bool isFolder) => { if (isFolder) return new FolderM() { name = "Новая папка" }; else return new CharacterM() { name = "Новый персонаж" }; },
                 (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new CharacterVM((CharacterM)model); },
-                (Notifier oldSel, Notifier newSel) => HandleSelection<CharacterVM>(oldSel, newSel, (Notifier sel) => new CharacterEditorVM(((CharacterVM)sel).Model)));
+                (Notifier oldSel, Notifier newSelSource) => HandleSelection<CharacterVM>(oldSel, newSelSource, (Notifier sel) => new CharacterEditorVM(((CharacterVM)sel).Model)),
+                (Notifier selToRemove) => { if (selToRemove is FolderVM folderVM) Model.characters.Remove(folderVM.Model); else { Model.characters.Remove(((CharacterVM)selToRemove).Model); } },
+                (Notifier selToInfo) => { });
         }));
 
         private ICommand itemsTabCommand;

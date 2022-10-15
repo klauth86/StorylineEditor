@@ -22,11 +22,13 @@ namespace StorylineEditor.ViewModel
     public class CollectionVM : BaseVM<ICollection<BaseM>>
     {
         public CollectionVM(ICollection<BaseM> model, Func<bool, BaseM> itemMCreator, Func<BaseM, Notifier> itemVMCreator,
-            Func<Notifier, Notifier, Notifier> selectionVMCreator) : base(model)
+            Func<Notifier, Notifier, Notifier> selectionVMCreator, Action<Notifier> itemMRemover, Action<Notifier> itemVMInformer) : base(model)
         {
             _itemMCreator = itemMCreator ?? throw new ArgumentNullException(nameof(itemMCreator));
             _itemVMCreator = itemVMCreator ?? throw new ArgumentNullException(nameof(itemVMCreator));
             _selectionVMCreator = selectionVMCreator ?? throw new ArgumentNullException(nameof(selectionVMCreator));
+            _itemMRemover = itemMRemover ?? throw new ArgumentNullException(nameof(itemMRemover));
+            _itemVMInformer = itemVMInformer ?? throw new ArgumentNullException(nameof(itemVMInformer));
 
             ItemsVMs = new ObservableCollection<Notifier>();
 
@@ -39,19 +41,29 @@ namespace StorylineEditor.ViewModel
         public ICommand AddCommand => addCommand ?? (addCommand = new RelayCommand<bool>((isFolder) =>
         {
             BaseM itemM = _itemMCreator(isFolder);
+            selectionSource = _itemVMCreator(itemM);
+
             (Context ?? Model).Add(itemM);
+            ItemsVMs.Add(selectionSource);
 
-            Notifier itemVM = _itemVMCreator(itemM);
-            ItemsVMs.Add(itemVM);
-
-            Selection = _selectionVMCreator(Selection, itemVM);
+            Selection = _selectionVMCreator(Selection, selectionSource);
         }));
 
         private ICommand removeCommand;
-        public ICommand RemoveCommand => removeCommand ?? (removeCommand = new RelayCommand<BaseM>((item) => { }, (item) => item != null));
+        public ICommand RemoveCommand => removeCommand ?? (removeCommand = new RelayCommand<Notifier>((itemVM) =>
+        {
+            Selection = null;
+
+            if (ItemsVMs.Remove(selectionSource))
+            {
+                _itemMRemover(selectionSource);
+
+                selectionSource = null;
+            }
+        }, (itemVM) => itemVM != null));
 
         private ICommand infoCommand;
-        public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<BaseM>((item) => { }, (item) => item != null));
+        public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<Notifier>((item) => _itemVMInformer(item), (item) => item != null));
 
         private ICommand setContextCommand;
         public ICommand SetContextCommand => setContextCommand ?? (setContextCommand = new RelayCommand<Notifier>((itemVM) =>
@@ -66,7 +78,8 @@ namespace StorylineEditor.ViewModel
         private ICommand selectCommand;
         public ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<Notifier>((itemVM) =>
         {
-            Selection = _selectionVMCreator(Selection, itemVM);
+            selectionSource = itemVM;
+            Selection = _selectionVMCreator(Selection, selectionSource);
         }, (itemVM) => itemVM != null));
 
 
@@ -74,7 +87,8 @@ namespace StorylineEditor.ViewModel
         private readonly Func<bool, BaseM> _itemMCreator;
         private readonly Func<BaseM, Notifier> _itemVMCreator;
         private readonly Func<Notifier, Notifier, Notifier> _selectionVMCreator;
-
+        private readonly Action<Notifier> _itemMRemover;
+        private readonly Action<Notifier> _itemVMInformer;
 
 
         public ObservableCollection<Notifier> ItemsVMs { get; }
@@ -92,6 +106,8 @@ namespace StorylineEditor.ViewModel
                 }
             }
         }
+
+        private Notifier selectionSource;
 
         private Notifier selection;
         public Notifier Selection
