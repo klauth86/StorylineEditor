@@ -15,6 +15,8 @@ using StorylineEditor.ViewModel.Common;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel
@@ -34,6 +36,15 @@ namespace StorylineEditor.ViewModel
 
             CutVMs = new ObservableCollection<Notifier>();
             ItemsVMs = new ObservableCollection<Notifier>();
+
+            ICollectionView view = CollectionViewSource.GetDefaultView(ItemsVMs);
+
+            if (view != null)
+            {
+                view.SortDescriptions.Add(new SortDescription(nameof(IsFolder), ListSortDirection.Descending));
+                view.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+                view.SortDescriptions.Add(new SortDescription("CreatedAt", ListSortDirection.Ascending));
+            }
 
             foreach (var itemM in Model) { ItemsVMs.Add(_viewModelCreator(itemM)); }
         }

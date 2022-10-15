@@ -32,6 +32,8 @@ namespace StorylineEditor.ViewModel
                 }
             }
         }
+
+        public override bool IsFolder => true;
     }
 
     public class FolderEditorVM : FolderVM

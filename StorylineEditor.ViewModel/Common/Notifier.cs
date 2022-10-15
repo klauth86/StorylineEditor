@@ -46,5 +46,7 @@ namespace StorylineEditor.ViewModel.Common
                 }
             }
         }
+
+        public virtual bool IsFolder => false;
     }
 }

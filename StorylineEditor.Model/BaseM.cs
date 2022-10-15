@@ -18,14 +18,15 @@ namespace StorylineEditor.Model
     {
         public BaseM(long additionalTicks)
         {
-            DateTime now = DateTime.Now;
-            id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss}_{2}_{3}", GetType().Name, now, now.Ticks, additionalTicks);
+            createdAt = DateTime.Now;
+            id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss}_{2}_{3}", GetType().Name, createdAt, createdAt.Ticks, additionalTicks);
             name = null;
             description = null;
         }
 
         public BaseM() : this(0) { }
 
+        public DateTime createdAt { get; set; }
         public string id { get; set; }
         public string name { get; set; }
         public string description { get; set; }
