@@ -28,10 +28,15 @@ namespace StorylineEditor.ViewModel
                 if (Model.name != value)
                 {
                     Model.name = value;
-                    Notify(nameof(Name));
+                    OnModelChanged(Model, nameof(Name));
                 }
             }
         }
+    }
+
+    public class FolderEditorVM : FolderVM
+    {
+        public FolderEditorVM(FolderM model) : base(model) { }
 
         public string Description
         {
@@ -41,7 +46,7 @@ namespace StorylineEditor.ViewModel
                 if (Model.description != value)
                 {
                     Model.description = value;
-                    Notify(nameof(Description));
+                    OnModelChanged(Model, nameof(Description));
                 }
             }
         }

@@ -28,7 +28,7 @@ namespace StorylineEditor.ViewModel
                 if (Model.name != value)
                 {
                     Model.name = value;
-                    Notify(nameof(Name));
+                    OnModelChanged(Model, nameof(Name));
                 }
             }
         }
@@ -46,7 +46,7 @@ namespace StorylineEditor.ViewModel
                 if (Model.description != value)
                 {
                     Model.description = value;
-                    Notify(nameof(Description));
+                    OnModelChanged(Model, nameof(Description));
                 }
             }
         }
@@ -59,7 +59,7 @@ namespace StorylineEditor.ViewModel
                 if (Model.hasDescriptionFemale != value)
                 {
                     Model.hasDescriptionFemale = value;
-                    Notify(nameof(HasDescriptionFemale));
+                    OnModelChanged(Model, nameof(HasDescriptionFemale));
                 }
             }
         }
@@ -72,7 +72,7 @@ namespace StorylineEditor.ViewModel
                 if (Model.descriptionFemale != value)
                 {
                     Model.descriptionFemale = value;
-                    Notify(nameof(DescriptionFemale));
+                    OnModelChanged(Model, nameof(DescriptionFemale));
                 }
             }
         }
@@ -85,7 +85,7 @@ namespace StorylineEditor.ViewModel
                 if (Model.actorName != value)
                 {
                     Model.actorName = value;
-                    Notify(nameof(ActorName));
+                    OnModelChanged(Model, nameof(ActorName));
                 }
             }
         }
@@ -98,7 +98,33 @@ namespace StorylineEditor.ViewModel
                 if (Model.classPathName != value)
                 {
                     Model.classPathName = value;
-                    Notify(nameof(ClassPathName));
+                    OnModelChanged(Model, nameof(ClassPathName));
+                }
+            }
+        }
+
+        public float InitialRelation
+        {
+            get => Model.initialRelation;
+            set
+            {
+                if (Model.initialRelation != value)
+                {
+                    Model.initialRelation = value;
+                    OnModelChanged(Model, nameof(InitialRelation));
+                }
+            }
+        }
+
+        public float InitialRelationFemale
+        {
+            get => Model.initialRelationFemale;
+            set
+            {
+                if (Model.initialRelationFemale != value)
+                {
+                    Model.initialRelationFemale = value;
+                    OnModelChanged(Model, nameof(InitialRelationFemale));
                 }
             }
         }

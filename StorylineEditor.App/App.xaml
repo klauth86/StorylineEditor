@@ -27,18 +27,14 @@ StorylineEditor распространяется в надежде, что он�
         
         
         <!-- Global and base -->
-
-        <Style TargetType="Button" x:Key="S_Button_Selector">
-            <Setter Property="VerticalAlignment" Value="Center"></Setter>
-            <Setter Property="HorizontalAlignment" Value="Center"></Setter>
-            <Setter Property="FontSize" Value="24"></Setter>
-        </Style>
         
         <Style TargetType="TextBlock" x:Key="S_TextBlock"></Style>
 
         <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_GroupBox.Header"></Style>
         
         <Style TargetType="TextBox" x:Key="S_TextBox_Input"></Style>
+
+        <Style TargetType="TextBox" x:Key="S_TextBox_MultilineInput" BasedOn="{StaticResource S_TextBox_Input}"></Style>
 
         <Style TargetType="GridSplitter" x:Key="S_GridSplitter">
             <Setter Property="HorizontalAlignment" Value="Center"></Setter>
@@ -48,6 +44,16 @@ StorylineEditor распространяется в надежде, что он�
 
         <Style TargetType="Button" x:Key="S_Button_GroupBox.Header"></Style>
 
+        
+        
+        <!-- Items -->
+        
+        <Style TargetType="Border" x:Key="S_Border_Selector"></Style>
+
+        <Style TargetType="TextBlock" x:Key="S_TextBlock_Selector_Icon"></Style>
+
+        <Style TargetType="TextBlock" x:Key="S_TextBlock_Selector_Name"></Style>
+        
         
         
         <!-- Main Menu -->
@@ -108,7 +114,9 @@ StorylineEditor распространяется в надежде, что он�
                         </StackPanel>
                     </GroupBox.Header>
 
-                    <ItemsControl ItemsPanel="{StaticResource IPT_WrapPanel}" ItemsSource="{Binding ItemsVMs}"></ItemsControl>
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding ItemsVMs}"></ItemsControl>
+                    </ScrollViewer>
                 </GroupBox>
 
                 <GridSplitter Grid.Column="1" Style="{StaticResource S_GridSplitter}"></GridSplitter>
@@ -118,26 +126,43 @@ StorylineEditor распространяется в надежде, что он�
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vm:FolderVM}">
-            <Border>
-                <StackPanel Orientation="Vertical">
-                    <Button Content="🗀" Style="{StaticResource S_Button_Selector}"
-                    Command="{Binding Path=DataContext.SetContextCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
-                    CommandParameter="{Binding}">
-                    </Button>
-                    <TextBox Grid.Row="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                </StackPanel>
+            <Border Style="{StaticResource S_Border_Selector}">
+                <Border.InputBindings>
+                    <MouseBinding Gesture="LeftDoubleClick" Command="{Binding Path=DataContext.SetContextCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                  CommandParameter="{Binding}"/>
+                    <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"></MouseBinding>
+                </Border.InputBindings>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="🗀" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+                    <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+                </Grid>
             </Border>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type vm:FolderEditorVM}">
+            <StackPanel Orientation="Vertical">
+                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Input}"></TextBox>
+                <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_MultilineInput}"></TextBox>
+            </StackPanel>
+        </DataTemplate>
+        
         <DataTemplate DataType="{x:Type vm:CharacterVM}">
-            <Border>
-                <StackPanel Orientation="Vertical">
-                    <Button Content="👤" Style="{StaticResource S_Button_Selector}"
-                    Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
-                    CommandParameter="{Binding}">
-                    </Button>
-                    <TextBox Grid.Row="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                </StackPanel>
+            <Border Style="{StaticResource S_Border_Selector}">
+                <Border.InputBindings>
+                    <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"></MouseBinding>
+                </Border.InputBindings>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="👤" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+                    <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+                </Grid>
             </Border>
         </DataTemplate>
 

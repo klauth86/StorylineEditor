@@ -12,6 +12,7 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model;
 using StorylineEditor.ViewModel.Common;
+using System;
 using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel
@@ -28,28 +29,7 @@ namespace StorylineEditor.ViewModel
             Selection = new CollectionVM(Model.characters,
                 (bool isFolder) => { if (isFolder) return new FolderM() { name = "Новая папка" }; else return new CharacterM() { name = "Новый персонаж" }; },
                 (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new CharacterVM((CharacterM)model); },
-                (Notifier oldSelection, Notifier newSelection) =>
-                {
-                    if (oldSelection is CharacterVM oldCharacterVM)
-                    {
-                        if (newSelection is CharacterVM newCharacterVM)
-                        {
-                            if (oldCharacterVM.Model == newCharacterVM.Model) return oldSelection;
-
-                            return new CharacterEditorVM(newCharacterVM.Model);
-                        }
-                        else
-                        {
-                            return oldSelection;
-                        }
-                    }
-                    else if (newSelection is CharacterVM newCharacterVM)
-                    {
-                        return new CharacterEditorVM(newCharacterVM.Model);
-                    }
-
-                    return null;
-                });
+                (Notifier oldSel, Notifier newSel) => HandleSelection<CharacterVM>(oldSel, newSel, (Notifier sel) => new CharacterEditorVM(((CharacterVM)sel).Model)));
         }));
 
         private ICommand itemsTabCommand;
@@ -94,6 +74,35 @@ namespace StorylineEditor.ViewModel
                     Notify(nameof(Selection));
                 }
             }
+        }
+
+
+
+        private Notifier HandleSelection<T>(Notifier oldSelection, Notifier newSelection, Func<Notifier, Notifier> editorCreator) where T : class
+        {
+            if (oldSelection == null && newSelection == null) return null;
+
+            if (oldSelection == null && newSelection != null ||
+                oldSelection != null && newSelection == null ||
+                oldSelection.GetType() != newSelection.GetType())
+            {
+                if (newSelection is FolderVM newFolderVM) return new FolderEditorVM(newFolderVM.Model);
+
+                return editorCreator(newSelection);
+            }
+
+            if (oldSelection is FolderVM oldFolderVM)
+            {
+                FolderM newFolderM = ((FolderVM)newSelection).Model;
+
+                if (oldFolderVM.Model == newFolderM) return oldSelection;
+
+                return new FolderEditorVM(newFolderM);
+            }
+
+            if (((BaseVM<T>)oldSelection).Model == ((BaseVM<T>)newSelection).Model) return oldSelection;
+
+            return editorCreator(newSelection);
         }
     }
 }
