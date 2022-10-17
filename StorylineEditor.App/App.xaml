@@ -310,6 +310,17 @@ StorylineEditor распространяется в надежде, что он�
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vm:QuestEditorVM}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="7*"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="3*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <GridSplitter Grid.Column="1" Style="{StaticResource S_GridSplitter}"></GridSplitter>
+
+                <ContentControl Grid.Column="2" Content="{Binding Selection, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+            </Grid>
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vm:DialogVM}">

@@ -31,6 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Nodes\Node_JournalVM.cs" />
+    <Compile Include="Nodes\Node_BaseVM.cs" />
     <Compile Include="ActorVM.cs" />
     <Compile Include="ReplicaVM.cs" />
     <Compile Include="DialogVM.cs" />

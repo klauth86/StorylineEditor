@@ -10,16 +10,15 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using StorylineEditor.Model.Graphs;
+using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModel.Common;
-using System;
 using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel
 {
-    public class QuestVM : BaseVM<QuestM>
+    public abstract class Node_BaseVM<T> : BaseVM<T> where T : Node_BaseM
     {
-        public QuestVM(QuestM model) : base(model) { }
+        public Node_BaseVM(T model) : base(model) { }
 
         public string Id => Model.id;
 
@@ -35,15 +34,6 @@ namespace StorylineEditor.ViewModel
                 }
             }
         }
-    }
-
-    public class QuestEditorVM : QuestVM
-    {
-        public QuestEditorVM(QuestM model) : base(model) { }
-
-
-
-
 
         public string Description
         {
@@ -58,43 +48,46 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        private Notifier selection;
-        public Notifier Selection
+        public byte Gender
         {
-            get => selection;
+            get => Model.gender;
             set
             {
-                if (selection != value)
+                if (Model.gender != value)
                 {
-                    if (selection != null) selection.IsSelected = false;
-
-                    selection = value;
-
-                    if (selection != null) selection.IsSelected = true;
-
-                    Notify(nameof(Selection));
-                    Notify(nameof(SelectionEditor));
-
-                    CommandManager.InvalidateRequerySuggested();
+                    Model.gender = value;
+                    OnModelChanged(Model, nameof(Gender));
                 }
             }
         }
 
-        public Notifier SelectionEditor => selection != null ? _editorCreator(selection) : null;
-
-        private Notifier _editorCreator(Notifier viewModel)
+        public double PositionX
         {
-            if (viewModel is Node_Journal_StepVM nodeJournalStepVM)
+            get => Model.positionX;
+            set
             {
-                return new Node_Journal_StepEditorVM(nodeJournalStepVM.Model);
+                if (Model.positionX != value)
+                {
+                    Model.positionX = value;
+                    OnModelChanged(Model, nameof(PositionX));
+                }
             }
-
-            if (viewModel is Node_Journal_AlternativeVM nodeJournalAlternativeVM)
-            {
-                return new Node_Journal_AlternativeEditorVM(nodeJournalAlternativeVM.Model);
-            }
-
-            return null;
         }
+
+        public double PositionY
+        {
+            get => Model.positionY;
+            set
+            {
+                if (Model.positionY != value)
+                {
+                    Model.positionY = value;
+                    OnModelChanged(Model, nameof(PositionY));
+                }
+            }
+        }
+
+        private ICommand toggleGenderCommand;
+        public ICommand ToggleGenderCommand => toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand(() => { Gender = (byte)((Gender + 1) % 3); }));
     }
 }
