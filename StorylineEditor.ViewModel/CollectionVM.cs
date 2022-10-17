@@ -31,7 +31,7 @@ namespace StorylineEditor.ViewModel
         public FolderM Context { get; set; }
     }
 
-    public class CollectionVM : BaseVM<List<BaseM>>
+    public class CollectionVM : SimpleVM<List<BaseM>>
     {
         public CollectionVM(List<BaseM> model, Func<bool, BaseM> modelCreator, Func<BaseM, Notifier> viewModelCreator,
             Func<Notifier, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Action<Notifier> viewModelInformer) : base(model)

@@ -11,45 +11,18 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Model;
+using StorylineEditor.ViewModel.Common;
 
 namespace StorylineEditor.ViewModel
 {
     public class ItemVM : BaseVM<ItemM>
     {
         public ItemVM(ItemM model) : base(model) { }
-
-        public string Id => Model.id;
-
-        public string Name
-        {
-            get => Model.name;
-            set
-            {
-                if (Model.name != value)
-                {
-                    Model.name = value;
-                    OnModelChanged(Model, nameof(Name));
-                }
-            }
-        }
     }
 
     public class ItemEditorVM : ItemVM
     {
         public ItemEditorVM(ItemM model) : base(model) { }
-
-        public string Description
-        {
-            get => Model.description;
-            set
-            {
-                if (Model.description != value)
-                {
-                    Model.description = value;
-                    OnModelChanged(Model, nameof(Description));
-                }
-            }
-        }
 
         public bool HasDescriptionFemale
         {

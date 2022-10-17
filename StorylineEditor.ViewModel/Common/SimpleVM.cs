@@ -10,12 +10,11 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using StorylineEditor.ViewModel.Common;
 using System;
 
-namespace StorylineEditor.ViewModel
+namespace StorylineEditor.ViewModel.Common
 {
-    public class BaseVM<T> : Notifier where T : class
+    public abstract class SimpleVM<T> : Notifier where T : class
     {
         public static event Action<T, string> ModelChangedEvent = delegate { };
         public static void OnModelChanged(T model, string propName) => ModelChangedEvent?.Invoke(model, propName);
@@ -24,13 +23,13 @@ namespace StorylineEditor.ViewModel
 
         private readonly T _model;
 
-        public BaseVM(T model)
+        public SimpleVM(T model)
         {
             _model = model ?? throw new ArgumentNullException(nameof(model));
             ModelChangedEvent += OnModelChangedHandler;
         }
 
-        ~BaseVM() { ModelChangedEvent -= OnModelChangedHandler; } ////// TODO Think where to unsubscribe
+        ~SimpleVM() { ModelChangedEvent -= OnModelChangedHandler; } ////// TODO Think where to unsubscribe
 
         private void OnModelChangedHandler(T model, string propName) { if (Model != null && Model == model) Notify(propName); }
     }

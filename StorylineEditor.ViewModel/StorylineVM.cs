@@ -17,7 +17,7 @@ using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel
 {
-    public class StorylineVM : BaseVM<StorylineM>
+    public class StorylineVM : SimpleVM<StorylineM>
     {
         public StorylineVM(StorylineM model) : base(model) { }
 

@@ -12,7 +12,6 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model.Graphs;
 using StorylineEditor.ViewModel.Common;
-using System;
 using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel
@@ -20,43 +19,11 @@ namespace StorylineEditor.ViewModel
     public class QuestVM : BaseVM<QuestM>
     {
         public QuestVM(QuestM model) : base(model) { }
-
-        public string Id => Model.id;
-
-        public string Name
-        {
-            get => Model.name;
-            set
-            {
-                if (Model.name != value)
-                {
-                    Model.name = value;
-                    OnModelChanged(Model, nameof(Name));
-                }
-            }
-        }
     }
 
     public class QuestEditorVM : QuestVM
     {
         public QuestEditorVM(QuestM model) : base(model) { }
-
-
-
-
-
-        public string Description
-        {
-            get => Model.description;
-            set
-            {
-                if (Model.description != value)
-                {
-                    Model.description = value;
-                    OnModelChanged(Model, nameof(Description));
-                }
-            }
-        }
 
         private Notifier selection;
         public Notifier Selection

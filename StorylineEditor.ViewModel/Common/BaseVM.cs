@@ -10,56 +10,40 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using StorylineEditor.Model.Nodes;
-using StorylineEditor.ViewModel.Common;
-using System.Windows.Input;
+using StorylineEditor.Model;
 
-namespace StorylineEditor.ViewModel
+namespace StorylineEditor.ViewModel.Common
 {
-    public abstract class Node_BaseVM<T> : BaseVM<T> where T : Node_BaseM
+    public abstract class BaseVM<T> : SimpleVM<T> where T : BaseM
     {
-        public Node_BaseVM(T model) : base(model) { }
+        public BaseVM(T model) : base(model) { }
 
-        public byte Gender
+        public string Id => Model.id;
+
+        public string Name
         {
-            get => Model.gender;
+            get => Model.name;
             set
             {
-                if (Model.gender != value)
+                if (Model.name != value)
                 {
-                    Model.gender = value;
-                    OnModelChanged(Model, nameof(Gender));
+                    Model.name = value;
+                    OnModelChanged(Model, nameof(Name));
                 }
             }
         }
 
-        public double PositionX
+        public string Description
         {
-            get => Model.positionX;
+            get => Model.description;
             set
             {
-                if (Model.positionX != value)
+                if (Model.description != value)
                 {
-                    Model.positionX = value;
-                    OnModelChanged(Model, nameof(PositionX));
+                    Model.description = value;
+                    OnModelChanged(Model, nameof(Description));
                 }
             }
         }
-
-        public double PositionY
-        {
-            get => Model.positionY;
-            set
-            {
-                if (Model.positionY != value)
-                {
-                    Model.positionY = value;
-                    OnModelChanged(Model, nameof(PositionY));
-                }
-            }
-        }
-
-        private ICommand toggleGenderCommand;
-        public ICommand ToggleGenderCommand => toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand(() => { Gender = (byte)((Gender + 1) % 3); }));
     }
 }

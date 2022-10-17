@@ -11,6 +11,7 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Model;
+using StorylineEditor.ViewModel.Common;
 
 namespace StorylineEditor.ViewModel
 {
@@ -18,39 +19,11 @@ namespace StorylineEditor.ViewModel
     {
         public FolderVM(FolderM model) : base(model) { }
 
-        public string Id => Model.id;
-
-        public string Name
-        {
-            get => Model.name;
-            set
-            {
-                if (Model.name != value)
-                {
-                    Model.name = value;
-                    OnModelChanged(Model, nameof(Name));
-                }
-            }
-        }
-
         public override bool IsFolder => true;
     }
 
     public class FolderEditorVM : FolderVM
     {
         public FolderEditorVM(FolderM model) : base(model) { }
-
-        public string Description
-        {
-            get => Model.description;
-            set
-            {
-                if (Model.description != value)
-                {
-                    Model.description = value;
-                    OnModelChanged(Model, nameof(Description));
-                }
-            }
-        }
     }
 }
