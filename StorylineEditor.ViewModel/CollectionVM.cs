@@ -22,9 +22,18 @@ using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel
 {
-    public class CollectionVM : BaseVM<ICollection<BaseM>>
+    public class FolderActionM : FolderM { }
+
+    public class CutEntryVM : Notifier
     {
-        public CollectionVM(ICollection<BaseM> model, Func<bool, BaseM> modelCreator, Func<BaseM, Notifier> viewModelCreator,
+        public BaseM Model { get; set; }
+        public Notifier ViewModel { get; set; }
+        public FolderM Context { get; set; }
+    }
+
+    public class CollectionVM : BaseVM<List<BaseM>>
+    {
+        public CollectionVM(List<BaseM> model, Func<bool, BaseM> modelCreator, Func<BaseM, Notifier> viewModelCreator,
             Func<Notifier, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Action<Notifier> viewModelInformer) : base(model)
         {
             _modelCreator = modelCreator ?? throw new ArgumentNullException(nameof(modelCreator));
@@ -35,7 +44,8 @@ namespace StorylineEditor.ViewModel
             
             _viewModelInformer = viewModelInformer ?? throw new ArgumentNullException(nameof(viewModelInformer));
 
-            CutVMs = new ObservableCollection<Notifier>();
+            CutVMs = new ObservableCollection<CutEntryVM>();
+
             ItemsVMs = new ObservableCollection<Notifier>();
 
             ICollectionView view = CollectionViewSource.GetDefaultView(ItemsVMs);
@@ -50,19 +60,11 @@ namespace StorylineEditor.ViewModel
             foreach (var itemM in Model) { Add(null, _viewModelCreator(itemM)); }
 
             Context = new ObservableCollection<FolderM>();
+            Context.Add(new FolderActionM());
+            Context.Add(new FolderM() { name = "root", content = model });
         }
 
-        private ICommand upCommand;
-        public ICommand UpCommand => upCommand ?? (upCommand = new RelayCommand(() =>
-        {
-            Context.RemoveAt(Context.Count - 1);
 
-            ItemsVMs.Clear();
-            foreach (var itemM in Context.Count > 0 ? Context.Last().content : Model) { Add(null, _viewModelCreator(itemM)); }
-
-            CommandManager.InvalidateRequerySuggested();
-
-        }, () => Context.Count > 0));
 
         private ICommand addCommand;
         public ICommand AddCommand => addCommand ?? (addCommand = new RelayCommand<bool>((isFolder) =>
@@ -85,7 +87,7 @@ namespace StorylineEditor.ViewModel
 
             Selection = null;
 
-            Remove(prevSelection, _modelExtractor(prevSelection));
+            Remove(prevSelection, _modelExtractor(prevSelection), Context.Last());
 
             CommandManager.InvalidateRequerySuggested();
 
@@ -94,23 +96,25 @@ namespace StorylineEditor.ViewModel
         private ICommand cutCommand;
         public ICommand CutCommand => cutCommand ?? (cutCommand = new RelayCommand<Notifier>((itemVM) =>
         {
-            CutVMs.Add(itemVM);
+            CutVMs.Add(new CutEntryVM() { Model = _modelExtractor(itemVM), ViewModel = itemVM, Context = Context.Last() });
+            itemVM.IsCut = true;
 
             CommandManager.InvalidateRequerySuggested();
 
-        }, (itemVM) => itemVM != null && !CutVMs.Contains(itemVM)));
+        }, (itemVM) => itemVM != null && !itemVM.IsCut));
 
         private ICommand pasteCommand;
         public ICommand PasteCommand => pasteCommand ?? (pasteCommand = new RelayCommand(() =>
         {
-            foreach (var cutVM in CutVMs)
+            foreach (var cutEntryVM in CutVMs)
             {
-                RemoveCommand.Execute(cutVM);
-                
-                Add(_modelExtractor(cutVM), cutVM);
+                Remove(cutEntryVM.ViewModel, cutEntryVM.Model, cutEntryVM.Context);                
+                Add(cutEntryVM.Model, cutEntryVM.ViewModel);
+
+                cutEntryVM.ViewModel.IsCut = false;
             }
 
-            Selection = CutVMs.Last();
+            Selection = CutVMs.Last().ViewModel;
 
             CutVMs.Clear();
 
@@ -121,6 +125,18 @@ namespace StorylineEditor.ViewModel
         private ICommand infoCommand;
         public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<Notifier>((item) => _viewModelInformer(item), (item) => item != null));
 
+        private ICommand upContextCommand;
+        public ICommand UpContextCommand => upContextCommand ?? (upContextCommand = new RelayCommand(() =>
+        {
+            Context.RemoveAt(Context.Count - 1);
+
+            ItemsVMs.Clear();
+            foreach (var itemM in Context.Last().content) { Add(null, _viewModelCreator(itemM)); }
+
+            CommandManager.InvalidateRequerySuggested();
+
+        }, () => Context.Count > 2));
+
         private ICommand setContextCommand;
         public ICommand SetContextCommand => setContextCommand ?? (setContextCommand = new RelayCommand<FolderM>((folderM) =>
         {
@@ -128,10 +144,10 @@ namespace StorylineEditor.ViewModel
 
             int cutIndex = -1;
 
-            foreach (var folderMEntry in Context)
+            foreach (var contextEntry in Context)
             {
                 cutIndex++;
-                if (folderMEntry == folderM) break;
+                if (contextEntry == folderM) break;
             }
 
             if (cutIndex >= 0 && cutIndex + 1 < Context.Count)
@@ -149,7 +165,7 @@ namespace StorylineEditor.ViewModel
             Selection = null;
 
             ItemsVMs.Clear();
-            foreach (var itemM in folderM.content) { Add(null, _viewModelCreator(itemM)); }
+            foreach (var itemM in Context.Last().content) { Add(null, _viewModelCreator(itemM)); }
 
             CommandManager.InvalidateRequerySuggested();
 
@@ -168,15 +184,15 @@ namespace StorylineEditor.ViewModel
 
         private void Add(BaseM model, Notifier viewModel) // pass null to one of params if want to add only model/only viewModel
         {
-            if (model != null) (Context.LastOrDefault()?.content ?? Model).Add(model);
+            if (model != null) Context.Last().content.Add(model);
 
             if (viewModel != null) ItemsVMs.Add(viewModel);
         }
-        private void Remove(Notifier viewModel, BaseM model)
+        private void Remove(Notifier viewModel, BaseM model, FolderM context) // pass null to one of params if want to remove only model/only viewModel
         {
             if (viewModel != null) ItemsVMs.Remove(viewModel);
 
-            if (model != null) (Context.LastOrDefault()?.content ?? Model).Remove(model);
+            if (model != null) context.content.Remove(model);
         }
 
 
@@ -189,7 +205,7 @@ namespace StorylineEditor.ViewModel
 
 
 
-        public ObservableCollection<Notifier> CutVMs { get; }
+        public ObservableCollection<CutEntryVM> CutVMs { get; }
         public ObservableCollection<Notifier> ItemsVMs { get; }
         public ObservableCollection<FolderM> Context { get; }
 

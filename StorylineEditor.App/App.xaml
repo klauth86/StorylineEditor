@@ -81,6 +81,10 @@ StorylineEditor распространяется в надежде, что он�
         
         <!-- Data Templates -->
 
+        <DataTemplate DataType="{x:Type vm:FolderActionM}">
+            <Button Style="{StaticResource S_Button_GroupBox.Header}" Content="Up" Command="{Binding Path=DataContext.UpContextCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"></Button>
+        </DataTemplate>
+        
         <DataTemplate DataType="{x:Type m:FolderM}">
             <Button Style="{StaticResource S_Button_Link}" Content="{Binding name}" Command="{Binding Path=DataContext.SetContextCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></Button>
         </DataTemplate>
@@ -124,7 +128,6 @@ StorylineEditor распространяется в надежде, что он�
 
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Style="{StaticResource S_TextBlock_GroupBox.Header}"></TextBlock>
-                        <Button Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding UpCommand}">Up</Button>
 
                         <Button Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding AddCommand}" CommandParameter="{StaticResource False}">A</Button>
                         <Button Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding AddCommand}" CommandParameter="{StaticResource True}">AF</Button>
