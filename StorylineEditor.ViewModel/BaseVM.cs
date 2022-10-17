@@ -20,11 +20,13 @@ namespace StorylineEditor.ViewModel
         public static event Action<T, string> ModelChangedEvent = delegate { };
         public static void OnModelChanged(T model, string propName) => ModelChangedEvent?.Invoke(model, propName);
 
-        public readonly T Model;
+        public T Model => _model;
+
+        private readonly T _model;
 
         public BaseVM(T model)
         {
-            Model = model ?? throw new ArgumentNullException(nameof(model));
+            _model = model ?? throw new ArgumentNullException(nameof(model));
             ModelChangedEvent += OnModelChangedHandler;
         }
 

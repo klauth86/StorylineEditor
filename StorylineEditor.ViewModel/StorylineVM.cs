@@ -30,7 +30,7 @@ namespace StorylineEditor.ViewModel
                 (bool isFolder) => { if (isFolder) return new FolderM() { name = "Новая папка" }; else return new CharacterM() { name = "Новый персонаж" }; },
                 (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new CharacterVM((CharacterM)model); },
                 (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM.Model); else return new CharacterEditorVM(((CharacterVM)viewModel).Model); },
-                (Notifier viewModel) => { if (viewModel is FolderVM folderVM) Model.characters.Remove(folderVM.Model); else { Model.characters.Remove(((CharacterVM)viewModel).Model); } },
+                (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((CharacterVM)viewModel).Model; },
                 (Notifier viewModel) => { });
         }));
 
@@ -41,7 +41,7 @@ namespace StorylineEditor.ViewModel
             (bool isFolder) => { if (isFolder) return new FolderM() { name = "Новая папка" }; else return new ItemM() { name = "Новый предмет" }; },
             (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new ItemVM((ItemM)model); },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM.Model); else return new ItemEditorVM(((ItemVM)viewModel).Model); },
-            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) Model.items.Remove(folderVM.Model); else { Model.items.Remove(((ItemVM)viewModel).Model); } },
+            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((ItemVM)viewModel).Model; },
             (Notifier viewModel) => { });
         }));
 
@@ -52,7 +52,7 @@ namespace StorylineEditor.ViewModel
             (bool isFolder) => { if (isFolder) return new FolderM() { name = "Новая папка" }; else return new ActorM() { name = "Новый актор" }; },
             (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new ActorVM((ActorM)model); },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM.Model); else return new ActorEditorVM(((ActorVM)viewModel).Model); },
-            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) Model.actors.Remove(folderVM.Model); else { Model.actors.Remove(((ActorVM)viewModel).Model); } },
+            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((ActorVM)viewModel).Model; },
             (Notifier viewModel) => { });
         }));
 
@@ -63,7 +63,7 @@ namespace StorylineEditor.ViewModel
             (bool isFolder) => { if (isFolder) return new FolderM() { name = "Новая папка" }; else return new QuestM() { name = "Новый квест" }; },
             (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new QuestVM((QuestM)model); },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM.Model); else return new QuestEditorVM(((QuestVM)viewModel).Model); },
-            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) Model.journal.Remove(folderVM.Model); else { Model.journal.Remove(((QuestVM)viewModel).Model); } },
+            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((QuestVM)viewModel).Model; },
             (Notifier viewModel) => { });
         }));
 
@@ -74,7 +74,7 @@ namespace StorylineEditor.ViewModel
             (bool isFolder) => { if (isFolder) return new FolderM() { name = "Новая папка" }; else return new DialogM() { name = "Новый диалог" }; },
             (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new DialogVM((DialogM)model); },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM.Model); else return new DialogEditorVM(((DialogVM)viewModel).Model); },
-            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) Model.dialogs.Remove(folderVM.Model); else { Model.dialogs.Remove(((DialogVM)viewModel).Model); } },
+            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((DialogVM)viewModel).Model; },
             (Notifier viewModel) => { });
         }));
 
@@ -85,7 +85,7 @@ namespace StorylineEditor.ViewModel
             (bool isFolder) => { if (isFolder) return new FolderM() { name = "Новая папка" }; else return new ReplicaM() { name = "Новая реплика" }; },
             (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new ReplicaVM((ReplicaM)model); },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM.Model); else return new ReplicaEditorVM(((ReplicaVM)viewModel).Model); },
-            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) Model.replicas.Remove(folderVM.Model); else { Model.replicas.Remove(((ReplicaVM)viewModel).Model); } },
+            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((ReplicaVM)viewModel).Model; },
             (Notifier viewModel) => { });
         }));
 

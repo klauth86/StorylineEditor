@@ -15,6 +15,7 @@ StorylineEditor распространяется в надежде, что он�
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:vm="clr-namespace:StorylineEditor.ViewModel;assembly=StorylineEditor.ViewModel"
+             xmlns:m="clr-namespace:StorylineEditor.Model;assembly=StorylineEditor.Model"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
 
@@ -50,8 +51,10 @@ StorylineEditor распространяется в надежде, что он�
 
         <Style TargetType="Button" x:Key="S_Button_GroupBox.Header"></Style>
 
-        
-        
+        <Style TargetType="Button" x:Key="S_Button_Link"></Style>
+
+
+
         <!-- Items -->
         
         <Style TargetType="Border" x:Key="S_Border_Selector"></Style>
@@ -78,6 +81,10 @@ StorylineEditor распространяется в надежде, что он�
         
         <!-- Data Templates -->
 
+        <DataTemplate DataType="{x:Type m:FolderM}">
+            <Button Style="{StaticResource S_Button_Link}" Content="{Binding name}" Command="{Binding Path=DataContext.SetContextCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></Button>
+        </DataTemplate>
+        
         <ItemsPanelTemplate x:Key="IPT_WrapPanel">
             <WrapPanel></WrapPanel>
         </ItemsPanelTemplate>
@@ -130,7 +137,8 @@ StorylineEditor распространяется в надежде, что он�
                     </StackPanel>
 
                     <GroupBox Grid.Row="1">
-                        <GroupBox.Header>1
+                        <GroupBox.Header>
+                            <ItemsControl ItemsPanel="{StaticResource IPT_WrapPanel}" ItemsSource="{Binding Context}"></ItemsControl>
                         </GroupBox.Header>
 
                         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
@@ -149,7 +157,7 @@ StorylineEditor распространяется в надежде, что он�
             <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}">
                 <Border.InputBindings>
                     <MouseBinding Gesture="LeftDoubleClick" Command="{Binding Path=DataContext.SetContextCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
-                                  CommandParameter="{Binding}"/>
+                                  CommandParameter="{Binding Model}"/>
                     <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
                 </Border.InputBindings>
                 <Grid>
