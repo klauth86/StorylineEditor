@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Collection_BaseVM.cs" />
+    <Compile Include="Graphs\Graph_BaseVM.cs" />
     <Compile Include="Nodes\Node_JournalVM.cs" />
     <Compile Include="Nodes\Node_BaseVM.cs" />
     <Compile Include="ActorVM.cs" />

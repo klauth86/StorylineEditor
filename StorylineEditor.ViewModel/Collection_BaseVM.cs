@@ -62,10 +62,11 @@ namespace StorylineEditor.ViewModel
         public ICommand RemoveCommand => removeCommand ?? (removeCommand = new RelayCommand(() =>
         {
             Notifier prevSelection = Selection;
-
             Selection = null;
 
-            Remove(prevSelection, _modelExtractor(prevSelection), ContextFolder);
+            BaseM itemM = _modelExtractor(prevSelection);
+
+            Remove(prevSelection, itemM, GetContext(itemM.GetType()));
 
             CommandManager.InvalidateRequerySuggested();
 
@@ -74,7 +75,9 @@ namespace StorylineEditor.ViewModel
         private ICommand cutCommand;
         public ICommand CutCommand => cutCommand ?? (cutCommand = new RelayCommand<Notifier>((itemVM) =>
         {
-            CutVMs.Add(new CutEntryVM() { Model = _modelExtractor(itemVM), ViewModel = itemVM, Context = ContextFolder });
+            BaseM itemM = _modelExtractor(itemVM);
+
+            CutVMs.Add(new CutEntryVM() { Model = itemM, ViewModel = itemVM, Context = GetContext(itemM.GetType()) });
             itemVM.IsCut = true;
 
             CommandManager.InvalidateRequerySuggested();
@@ -113,7 +116,7 @@ namespace StorylineEditor.ViewModel
 
         protected void Add(BaseM model, Notifier viewModel) // pass null to one of params if want to add only model/only viewModel
         {
-            if (model != null) ContextFolder.content.Add(model);
+            if (model != null) GetContext(model.GetType()).content.Add(model);
 
             if (viewModel != null) ItemsVMs.Add(viewModel);
         }
@@ -121,7 +124,7 @@ namespace StorylineEditor.ViewModel
         {
             if (viewModel != null) ItemsVMs.Remove(viewModel);
 
-            if (model != null) ContextFolder.content.Remove(model);
+            if (model != null) GetContext(model.GetType()).content.Remove(model);
         }
 
 
@@ -162,7 +165,6 @@ namespace StorylineEditor.ViewModel
 
         public Notifier SelectionEditor => selection != null ? _editorCreator(selection) : null;
 
-        public abstract FolderM ContextFolder { get; }
-
+        public abstract FolderM GetContext(Type type);
     }
 }

@@ -17,11 +17,16 @@ StorylineEditor распространяется в надежде, что он�
              xmlns:vm="clr-namespace:StorylineEditor.ViewModel;assembly=StorylineEditor.ViewModel"
              xmlns:vmg="clr-namespace:StorylineEditor.ViewModel.Graphs;assembly=StorylineEditor.ViewModel"
              xmlns:m="clr-namespace:StorylineEditor.Model;assembly=StorylineEditor.Model"
+             xmlns:mn="clr-namespace:StorylineEditor.Model.Nodes;assembly=StorylineEditor.Model"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
 
         <!-- Constants -->
-        
+
+        <sys:String x:Key="String_Icon_Node_Step">✔</sys:String>
+
+        <sys:String x:Key="String_Icon_Node_Alternative">💡</sys:String>
+
         <sys:Boolean x:Key="True">True</sys:Boolean>
 
         <sys:Boolean x:Key="False">False</sys:Boolean>
@@ -55,7 +60,7 @@ StorylineEditor распространяется в надежде, что он�
         <Style TargetType="Button" x:Key="S_Button_Link"></Style>
 
 
-
+        
         <!-- Items -->
         
         <Style TargetType="Border" x:Key="S_Border_Selector"></Style>
@@ -78,8 +83,22 @@ StorylineEditor распространяется в надежде, что он�
 
         <Style TargetType="TextBox" BasedOn="{StaticResource S_TextBox_Input}" x:Key="S_TextBox_Input_Filter"></Style>
 
+
+
+        <!-- Graph -->
         
+        <Style TargetType="Button" x:Key="S_Button_Graph"></Style>
+
+        <Style TargetType="Button" x:Key="S_Button_Graph_Selectable" BasedOn="{StaticResource S_Button_Graph}"></Style>
         
+        <Style TargetType="Separator" x:Key="S_Separator_Graph">
+            <Setter Property="Width" Value="4"></Setter>
+        </Style>
+
+        <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Graph"></Style>
+        
+        <Style TargetType="TextBox" BasedOn="{StaticResource S_TextBox_Input}" x:Key="S_TextBox_Input_Graph"></Style>
+
         <!-- Data Templates -->
 
         <DataTemplate DataType="{x:Type vm:FolderActionM}">
@@ -322,6 +341,21 @@ StorylineEditor распространяется в надежде, что он�
                     <ColumnDefinition Width="3*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
+                <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Style="{StaticResource S_Button_Graph_Selectable}" Content="{StaticResource String_Icon_Node_Step}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_StepM}"></Button>
+                        <Button Style="{StaticResource S_Button_Graph_Selectable}" Content="{StaticResource String_Icon_Node_Alternative}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_AlternativeM}"></Button>
+                        <Separator Style="{StaticResource S_Separator_Graph}"></Separator>
+                        <Button Style="{StaticResource S_Button_Graph}" Content="⏪" Command="{Binding PrevRootNodeCommand}"></Button>
+                        <Button Style="{StaticResource S_Button_Graph}" Content="⏩" Command="{Binding NextRootNodeCommand}"></Button>
+                    </StackPanel>
+                    <TextBlock Grid.Row="1" Text="{Binding SelectedNodeTypeName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Graph}"></TextBlock>
+                </Grid>
+                
                 <ItemsControl ItemsPanel="{StaticResource IPT_Canvas}" ItemsSource="{Binding GraphVMs}"></ItemsControl>
                 
                 <GridSplitter Grid.Column="1" Style="{StaticResource S_GridSplitter}"></GridSplitter>

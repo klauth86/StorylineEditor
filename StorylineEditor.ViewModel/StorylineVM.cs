@@ -63,7 +63,7 @@ namespace StorylineEditor.ViewModel
             Selection = new CollectionVM(Model.journal,
             (bool isFolder) => { if (isFolder) return new FolderM() { name = "Новая папка" }; else return new QuestM() { name = "Новый квест" }; },
             (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new QuestVM((QuestM)model); },
-            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM.Model); else return new QuestEditorVM(((QuestVM)viewModel).Model); },
+            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM.Model); else return null; },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((QuestVM)viewModel).Model; },
             (Notifier viewModel) => { });
         }));

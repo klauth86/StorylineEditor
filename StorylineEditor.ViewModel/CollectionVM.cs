@@ -102,6 +102,6 @@ namespace StorylineEditor.ViewModel
 
 
         public ObservableCollection<FolderM> Context { get; }
-        public override FolderM ContextFolder => Context.Last();
+        public override FolderM GetContext(Type type) { return Context.Last(); }
     }
 }
