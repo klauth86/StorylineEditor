@@ -113,6 +113,6 @@ namespace StorylineEditor.ViewModel.Graphs
 
         public string SelectedNodeTypeName => _typeDescriptor(SelectedNodeType);
 
-        public override IList GetContext(BaseM itemM) { if (itemM is LinkM) return Model.links; return Model.nodes; }
+        public override IList GetContext(BaseM model) { if (model is LinkM) return Model.links; return Model.nodes; }
     }
 }

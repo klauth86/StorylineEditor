@@ -63,25 +63,25 @@ namespace StorylineEditor.ViewModel
             Notifier prevSelection = Selection;
             Selection = null;
 
-            BaseM itemM = _modelExtractor(prevSelection);
+            BaseM model = _modelExtractor(prevSelection);
 
-            Remove(prevSelection, itemM, GetContext(itemM));
+            Remove(prevSelection, model, GetContext(model));
 
             CommandManager.InvalidateRequerySuggested();
 
         }, () => Selection != null));
 
         private ICommand cutCommand;
-        public ICommand CutCommand => cutCommand ?? (cutCommand = new RelayCommand<Notifier>((itemVM) =>
+        public ICommand CutCommand => cutCommand ?? (cutCommand = new RelayCommand<Notifier>((viewModel) =>
         {
-            BaseM itemM = _modelExtractor(itemVM);
+            BaseM model = _modelExtractor(viewModel);
 
-            CutVMs.Add(new CutEntryVM() { Model = itemM, ViewModel = itemVM, Context = GetContext(itemM) });
-            itemVM.IsCut = true;
+            CutVMs.Add(new CutEntryVM() { Model = model, ViewModel = viewModel, Context = GetContext(model) });
+            viewModel.IsCut = true;
 
             CommandManager.InvalidateRequerySuggested();
 
-        }, (itemVM) => itemVM != null && !itemVM.IsCut));
+        }, (viewModel) => viewModel != null && !viewModel.IsCut));
 
         private ICommand pasteCommand;
         public ICommand PasteCommand => pasteCommand ?? (pasteCommand = new RelayCommand(() =>
@@ -103,13 +103,13 @@ namespace StorylineEditor.ViewModel
         }, () => CutVMs.Count > 0));
 
         private ICommand selectCommand;
-        public ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<Notifier>((itemVM) =>
+        public ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<Notifier>((viewModel) =>
         {
-            Selection = itemVM;
+            Selection = viewModel;
 
             CommandManager.InvalidateRequerySuggested();
 
-        }, (itemVM) => itemVM != null));
+        }, (viewModel) => viewModel != null));
 
 
 

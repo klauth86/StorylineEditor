@@ -27,8 +27,8 @@ namespace StorylineEditor.ViewModel
 
     public class CollectionVM : Collection_BaseVM<List<BaseM>>
     {
-        public CollectionVM(List<BaseM> model, Func<bool, BaseM> modelCreator, Func<BaseM, Notifier> viewModelCreator,
-            Func<Notifier, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Action<Notifier> viewModelInformer) : base(model, modelCreator, viewModelCreator,
+        public CollectionVM(List<BaseM> inModel, Func<bool, BaseM> modelCreator, Func<BaseM, Notifier> viewModelCreator,
+            Func<Notifier, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Action<Notifier> viewModelInformer) : base(inModel, modelCreator, viewModelCreator,
                 editorCreator, modelExtractor)
         {            
             _viewModelInformer = viewModelInformer ?? throw new ArgumentNullException(nameof(viewModelInformer));
@@ -44,13 +44,13 @@ namespace StorylineEditor.ViewModel
 
             Context = new ObservableCollection<FolderM>();
             Context.Add(new FolderProxyM());
-            Context.Add(new FolderM() { name = "root", content = model });
+            Context.Add(new FolderM() { name = "root", content = inModel });
 
-            foreach (var itemM in Model) { Add(null, _viewModelCreator(itemM)); }
+            foreach (var model in Model) { Add(null, _viewModelCreator(model)); }
         }
 
         private ICommand infoCommand;
-        public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<Notifier>((item) => _viewModelInformer(item), (item) => item != null));
+        public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<Notifier>((viewModel) => _viewModelInformer(viewModel), (viewModel) => viewModel != null));
 
         private ICommand upContextCommand;
         public ICommand UpContextCommand => upContextCommand ?? (upContextCommand = new RelayCommand(() =>
@@ -58,7 +58,7 @@ namespace StorylineEditor.ViewModel
             Context.RemoveAt(Context.Count - 1);
 
             ItemsVMs.Clear();
-            foreach (var itemM in Context.Last().content) { Add(null, _viewModelCreator(itemM)); }
+            foreach (var model in Context.Last().content) { Add(null, _viewModelCreator(model)); }
 
             CommandManager.InvalidateRequerySuggested();
 
@@ -92,7 +92,7 @@ namespace StorylineEditor.ViewModel
             Selection = null;
 
             ItemsVMs.Clear();
-            foreach (var itemM in Context.Last().content) { Add(null, _viewModelCreator(itemM)); }
+            foreach (var model in Context.Last().content) { Add(null, _viewModelCreator(model)); }
 
             CommandManager.InvalidateRequerySuggested();
 
@@ -105,6 +105,6 @@ namespace StorylineEditor.ViewModel
 
 
         public ObservableCollection<FolderM> Context { get; }
-        public override IList GetContext(BaseM itemM) { return Context.Last().content; }
+        public override IList GetContext(BaseM model) { return Context.Last().content; }
     }
 }
