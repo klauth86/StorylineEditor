@@ -12,8 +12,10 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model;
 using StorylineEditor.Model.Graphs;
+using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Graphs;
+using StorylineEditor.ViewModel.Nodes;
 using System;
 using System.Windows.Input;
 
@@ -72,11 +74,45 @@ namespace StorylineEditor.ViewModel
         private Notifier CreateQuestEditorVM(QuestM inModel)
         {
             return new QuestEditorVM(inModel,
-            (Type type) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new ActorM() { name = "Новый актор" }; },
-            (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new ActorVM((ActorM)model); },
-            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM.Model); else return new ActorEditorVM(((ActorVM)viewModel).Model); },
-            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((ActorVM)viewModel).Model; },
-            (Type type) => { return ""; }
+            (Type type) =>
+            {
+                if (type == typeof(LinkM)) return new LinkM();
+                if (type == typeof(Node_StepM)) return new Node_StepM();
+                if (type == typeof(Node_AlternativeM)) return new Node_AlternativeM();
+
+                throw new ArgumentOutOfRangeException(nameof(type));
+            },
+            (BaseM model) =>
+            {
+                if (model is LinkM modelLink) return new LinkVM(modelLink);
+                if (model is Node_StepM modelStep) return new Node_Journal_StepVM(modelStep);
+                if (model is Node_AlternativeM modelAlternative) return new Node_Journal_AlternativeVM(modelAlternative);
+
+                throw new ArgumentOutOfRangeException(nameof(model));
+            },
+            (Notifier viewModel) =>
+            {
+                if (viewModel is Node_Journal_StepVM viewModelStep) return new Node_Journal_StepEditorVM(viewModelStep.Model);
+                if (viewModel is Node_Journal_AlternativeVM viewModelAlternative) return new Node_Journal_AlternativeEditorVM(viewModelAlternative.Model);
+
+                throw new ArgumentOutOfRangeException(nameof(viewModel));
+            },
+            (Notifier viewModel) =>
+            {
+                if (viewModel is LinkVM viewModelLink) return viewModelLink.Model;
+                if (viewModel is Node_Journal_StepVM viewModelStep) return viewModelStep.Model;
+                if (viewModel is Node_Journal_AlternativeVM viewModelAlternative) return viewModelAlternative.Model;
+
+                throw new ArgumentOutOfRangeException(nameof(viewModel));
+            },
+            typeof(Node_StepM),
+            (Type type) =>
+            {
+                if (type == typeof(Node_StepM)) return "Шаг";
+                if (type == typeof(Node_AlternativeM)) return "Альтернатива";
+
+                throw new ArgumentOutOfRangeException(nameof(type));
+            }
             );
         }
 

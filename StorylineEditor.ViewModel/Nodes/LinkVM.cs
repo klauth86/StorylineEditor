@@ -12,54 +12,11 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModel.Common;
-using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Nodes
 {
-    public abstract class Node_BaseVM<T> : BaseVM<T> where T : Node_BaseM
+    public class LinkVM : BaseVM<LinkM>
     {
-        public Node_BaseVM(T model) : base(model) { }
-
-        public byte Gender
-        {
-            get => Model.gender;
-            set
-            {
-                if (Model.gender != value)
-                {
-                    Model.gender = value;
-                    OnModelChanged(Model, nameof(Gender));
-                }
-            }
-        }
-
-        public double PositionX
-        {
-            get => Model.positionX;
-            set
-            {
-                if (Model.positionX != value)
-                {
-                    Model.positionX = value;
-                    OnModelChanged(Model, nameof(PositionX));
-                }
-            }
-        }
-
-        public double PositionY
-        {
-            get => Model.positionY;
-            set
-            {
-                if (Model.positionY != value)
-                {
-                    Model.positionY = value;
-                    OnModelChanged(Model, nameof(PositionY));
-                }
-            }
-        }
-
-        private ICommand toggleGenderCommand;
-        public ICommand ToggleGenderCommand => toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand(() => { Gender = (byte)((Gender + 1) % 3); }));
+        public LinkVM(LinkM model) : base(model) { }
     }
 }

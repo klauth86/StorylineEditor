@@ -12,7 +12,7 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model.Nodes;
 
-namespace StorylineEditor.ViewModel
+namespace StorylineEditor.ViewModel.Nodes
 {
     public abstract class Node_JournalVM<T> : Node_BaseVM<T> where T : Node_JournalM
     {
