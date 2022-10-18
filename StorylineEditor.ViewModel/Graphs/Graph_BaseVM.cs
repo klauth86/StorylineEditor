@@ -15,6 +15,7 @@ using StorylineEditor.Model.Graphs;
 using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModel.Common;
 using System;
+using System.Collections;
 using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Graphs
@@ -27,9 +28,6 @@ namespace StorylineEditor.ViewModel.Graphs
                 viewModelCreator, editorCreator, modelExtractor)
         {
             _typeDescriptor = typeDescriptor ?? throw new ArgumentNullException(nameof(typeDescriptor));
-
-            //_nodesFolder = new FolderM() { content = Model.nodes; }
-
         }
 
         protected ICommand selectNodeTypeCommand;
@@ -37,8 +35,6 @@ namespace StorylineEditor.ViewModel.Graphs
 
 
 
-        private readonly FolderM _nodesFolder;
-        private readonly FolderM _linksFolder;
         private readonly Func<Type, string> _typeDescriptor;
 
 
@@ -117,6 +113,6 @@ namespace StorylineEditor.ViewModel.Graphs
 
         public string SelectedNodeTypeName => _typeDescriptor(SelectedNodeType);
 
-        public override FolderM GetContext(Type type) { return type == typeof(LinkM) ? _linksFolder : _nodesFolder; }
+        public override IList GetContext(BaseM itemM) { if (itemM is LinkM) return Model.links; return Model.nodes; }
     }
 }

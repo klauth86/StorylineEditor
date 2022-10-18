@@ -13,19 +13,18 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Model;
 using StorylineEditor.ViewModel.Common;
 using System;
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel
 {
-    public class FolderActionM : FolderM { }
-
     public class CutEntryVM : Notifier
     {
         public BaseM Model { get; set; }
         public Notifier ViewModel { get; set; }
-        public FolderM Context { get; set; }
+        public IList Context { get; set; }
     }
 
     public abstract class Collection_BaseVM<T> : SimpleVM<T> where T : class
@@ -66,7 +65,7 @@ namespace StorylineEditor.ViewModel
 
             BaseM itemM = _modelExtractor(prevSelection);
 
-            Remove(prevSelection, itemM, GetContext(itemM.GetType()));
+            Remove(prevSelection, itemM, GetContext(itemM));
 
             CommandManager.InvalidateRequerySuggested();
 
@@ -77,7 +76,7 @@ namespace StorylineEditor.ViewModel
         {
             BaseM itemM = _modelExtractor(itemVM);
 
-            CutVMs.Add(new CutEntryVM() { Model = itemM, ViewModel = itemVM, Context = GetContext(itemM.GetType()) });
+            CutVMs.Add(new CutEntryVM() { Model = itemM, ViewModel = itemVM, Context = GetContext(itemM) });
             itemVM.IsCut = true;
 
             CommandManager.InvalidateRequerySuggested();
@@ -116,15 +115,15 @@ namespace StorylineEditor.ViewModel
 
         protected void Add(BaseM model, Notifier viewModel) // pass null to one of params if want to add only model/only viewModel
         {
-            if (model != null) GetContext(model.GetType()).content.Add(model);
+            if (model != null) GetContext(model).Add(model);
 
             if (viewModel != null) ItemsVMs.Add(viewModel);
         }
-        protected void Remove(Notifier viewModel, BaseM model, FolderM context) // pass null to one of params if want to remove only model/only viewModel
+        protected void Remove(Notifier viewModel, BaseM model, IList context) // pass null to one of params if want to remove only model/only viewModel
         {
             if (viewModel != null) ItemsVMs.Remove(viewModel);
 
-            if (model != null) GetContext(model.GetType()).content.Remove(model);
+            if (model != null) context.Remove(model);
         }
 
 
@@ -165,6 +164,6 @@ namespace StorylineEditor.ViewModel
 
         public Notifier SelectionEditor => selection != null ? _editorCreator(selection) : null;
 
-        public abstract FolderM GetContext(Type type);
+        public abstract IList GetContext(BaseM model);
     }
 }

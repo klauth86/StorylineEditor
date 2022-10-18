@@ -13,6 +13,7 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Model;
 using StorylineEditor.ViewModel.Common;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -22,6 +23,8 @@ using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel
 {
+    public class FolderProxyM : FolderM { }
+
     public class CollectionVM : Collection_BaseVM<List<BaseM>>
     {
         public CollectionVM(List<BaseM> model, Func<bool, BaseM> modelCreator, Func<BaseM, Notifier> viewModelCreator,
@@ -40,7 +43,7 @@ namespace StorylineEditor.ViewModel
             }
 
             Context = new ObservableCollection<FolderM>();
-            Context.Add(new FolderActionM());
+            Context.Add(new FolderProxyM());
             Context.Add(new FolderM() { name = "root", content = model });
 
             foreach (var itemM in Model) { Add(null, _viewModelCreator(itemM)); }
@@ -102,6 +105,6 @@ namespace StorylineEditor.ViewModel
 
 
         public ObservableCollection<FolderM> Context { get; }
-        public override FolderM GetContext(Type type) { return Context.Last(); }
+        public override IList GetContext(BaseM itemM) { return Context.Last().content; }
     }
 }
