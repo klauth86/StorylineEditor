@@ -29,7 +29,7 @@ namespace StorylineEditor.ViewModel
 
     public abstract class Collection_BaseVM<T> : SimpleVM<T> where T : class
     {
-        public Collection_BaseVM(T model, Func<bool, BaseM> modelCreator, Func<BaseM, Notifier> viewModelCreator,
+        public Collection_BaseVM(T model, Func<Type, BaseM> modelCreator, Func<BaseM, Notifier> viewModelCreator,
             Func<Notifier, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor) : base(model)
         {
             _modelCreator = modelCreator ?? throw new ArgumentNullException(nameof(modelCreator));
@@ -46,7 +46,7 @@ namespace StorylineEditor.ViewModel
         private ICommand addCommand;
         public ICommand AddCommand => addCommand ?? (addCommand = new RelayCommand<bool>((isFolder) =>
         {
-            BaseM model = _modelCreator(isFolder);
+            BaseM model = _modelCreator(isFolder ? typeof(FolderM) : null);
             Notifier viewModel = _viewModelCreator(model);
 
             Add(model, viewModel);
@@ -128,7 +128,7 @@ namespace StorylineEditor.ViewModel
 
 
 
-        protected readonly Func<bool, BaseM> _modelCreator;
+        protected readonly Func<Type, BaseM> _modelCreator;
         protected readonly Func<BaseM, Notifier> _viewModelCreator;
         protected readonly Func<Notifier, Notifier> _editorCreator;
         protected readonly Func<Notifier, BaseM> _modelExtractor;

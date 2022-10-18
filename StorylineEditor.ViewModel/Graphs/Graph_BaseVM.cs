@@ -22,10 +22,9 @@ namespace StorylineEditor.ViewModel.Graphs
 {
     public class Graph_BaseVM<T> : Collection_BaseVM<T> where T : GraphM
     {
-        public Graph_BaseVM(T model, Func<Type, BaseM> typedModelCreator, Func<BaseM, Notifier> viewModelCreator,
+        public Graph_BaseVM(T model, Func<Type, BaseM> modelCreator, Func<BaseM, Notifier> viewModelCreator,
             Func<Notifier, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Func<Type, string> typeDescriptor) : base(model,
-                null,
-                viewModelCreator, editorCreator, modelExtractor)
+                modelCreator, viewModelCreator, editorCreator, modelExtractor)
         {
             _typeDescriptor = typeDescriptor ?? throw new ArgumentNullException(nameof(typeDescriptor));
         }

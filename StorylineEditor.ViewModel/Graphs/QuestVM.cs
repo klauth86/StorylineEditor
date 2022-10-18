@@ -24,9 +24,9 @@ namespace StorylineEditor.ViewModel.Graphs
 
     public class QuestEditorVM : Graph_BaseVM<QuestM>
     {
-        public QuestEditorVM(QuestM model, Func<bool, BaseM> modelCreator, Func<BaseM, Notifier> viewModelCreator,
+        public QuestEditorVM(QuestM model, Func<Type, BaseM> modelCreator, Func<BaseM, Notifier> viewModelCreator,
             Func<Notifier, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Func<Type, string> typeDescriptor) : base(model,
-                null, viewModelCreator, editorCreator, modelExtractor, typeDescriptor)
+                modelCreator, viewModelCreator, editorCreator, modelExtractor, typeDescriptor)
         { }
     }
 }
