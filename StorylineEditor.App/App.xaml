@@ -15,6 +15,7 @@ StorylineEditor распространяется в надежде, что он�
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:vm="clr-namespace:StorylineEditor.ViewModel;assembly=StorylineEditor.ViewModel"
+             xmlns:vmg="clr-namespace:StorylineEditor.ViewModel.Graphs;assembly=StorylineEditor.ViewModel"
              xmlns:m="clr-namespace:StorylineEditor.Model;assembly=StorylineEditor.Model"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
@@ -92,7 +93,11 @@ StorylineEditor распространяется в надежде, что он�
         <ItemsPanelTemplate x:Key="IPT_WrapPanel">
             <WrapPanel></WrapPanel>
         </ItemsPanelTemplate>
-        
+
+        <ItemsPanelTemplate x:Key="IPT_Canvas">
+            <Canvas></Canvas>
+        </ItemsPanelTemplate>
+
         <DataTemplate DataType="{x:Type vm:StorylineVM}" x:Key="DT_StorylineVM_Tabs">
             <StackPanel Orientation="Horizontal">
                 <Button Style="{StaticResource S_Button_TabMenu}" Command="{Binding CharactersTabCommand}">Characters</Button>
@@ -288,7 +293,7 @@ StorylineEditor распространяется в надежде, что он�
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type vm:QuestVM}">
+        <DataTemplate DataType="{x:Type vmg:QuestVM}">
             <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}">
                 <Border.InputBindings>
                     <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
@@ -309,7 +314,7 @@ StorylineEditor распространяется в надежде, что он�
             </DataTemplate.Triggers>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type vm:QuestEditorVM}">
+        <DataTemplate DataType="{x:Type vmg:QuestEditorVM}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="7*"></ColumnDefinition>
@@ -317,13 +322,15 @@ StorylineEditor распространяется в надежде, что он�
                     <ColumnDefinition Width="3*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
+                <ItemsControl ItemsPanel="{StaticResource IPT_Canvas}" ItemsSource="{Binding GraphVMs}"></ItemsControl>
+                
                 <GridSplitter Grid.Column="1" Style="{StaticResource S_GridSplitter}"></GridSplitter>
 
                 <ContentControl Grid.Column="2" Content="{Binding Selection, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
             </Grid>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type vm:DialogVM}">
+        <DataTemplate DataType="{x:Type vmg:DialogVM}">
             <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}">
                 <Border.InputBindings>
                     <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
@@ -343,11 +350,11 @@ StorylineEditor распространяется в надежде, что он�
                 </DataTrigger>
             </DataTemplate.Triggers>
         </DataTemplate>
-        
-        <DataTemplate DataType="{x:Type vm:DialogEditorVM}">
+
+        <DataTemplate DataType="{x:Type vmg:DialogEditorVM}">
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type vm:ReplicaVM}">
+        <DataTemplate DataType="{x:Type vmg:ReplicaVM}">
             <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}">
                 <Border.InputBindings>
                     <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
@@ -367,8 +374,8 @@ StorylineEditor распространяется в надежде, что он�
                 </DataTrigger>
             </DataTemplate.Triggers>
         </DataTemplate>
-        
-        <DataTemplate DataType="{x:Type vm:ReplicaEditorVM}">
+
+        <DataTemplate DataType="{x:Type vmg:ReplicaEditorVM}">
         </DataTemplate>
     </Application.Resources>
 </Application>

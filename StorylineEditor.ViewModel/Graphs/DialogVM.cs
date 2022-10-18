@@ -13,15 +13,15 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Model.Graphs;
 using StorylineEditor.ViewModel.Common;
 
-namespace StorylineEditor.ViewModel
+namespace StorylineEditor.ViewModel.Graphs
 {
-    public class ReplicaVM : BaseVM<ReplicaM>
+    public class DialogVM : BaseVM<DialogM>
     {
-        public ReplicaVM(ReplicaM model) : base(model) { }
+        public DialogVM(DialogM model) : base(model) { }
     }
 
-    public class ReplicaEditorVM : ReplicaVM
+    public class DialogEditorVM : DialogVM
     {
-        public ReplicaEditorVM(ReplicaM model) : base(model) { }
+        public DialogEditorVM(DialogM model) : base(model) { }
     }
 }

@@ -22,31 +22,13 @@ using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel
 {
-    public class FolderActionM : FolderM { }
-
-    public class CutEntryVM : Notifier
-    {
-        public BaseM Model { get; set; }
-        public Notifier ViewModel { get; set; }
-        public FolderM Context { get; set; }
-    }
-
-    public class CollectionVM : SimpleVM<List<BaseM>>
+    public class CollectionVM : Collection_BaseVM<List<BaseM>>
     {
         public CollectionVM(List<BaseM> model, Func<bool, BaseM> modelCreator, Func<BaseM, Notifier> viewModelCreator,
-            Func<Notifier, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Action<Notifier> viewModelInformer) : base(model)
-        {
-            _modelCreator = modelCreator ?? throw new ArgumentNullException(nameof(modelCreator));
-            _viewModelCreator = viewModelCreator ?? throw new ArgumentNullException(nameof(viewModelCreator));
-            _editorCreator = editorCreator ?? throw new ArgumentNullException(nameof(editorCreator));
-            
-            _modelExtractor = modelExtractor ?? throw new ArgumentNullException(nameof(modelExtractor));
-            
+            Func<Notifier, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Action<Notifier> viewModelInformer) : base(model, modelCreator, viewModelCreator,
+                editorCreator, modelExtractor)
+        {            
             _viewModelInformer = viewModelInformer ?? throw new ArgumentNullException(nameof(viewModelInformer));
-
-            CutVMs = new ObservableCollection<CutEntryVM>();
-
-            ItemsVMs = new ObservableCollection<Notifier>();
 
             ICollectionView view = CollectionViewSource.GetDefaultView(ItemsVMs);
 
@@ -57,70 +39,12 @@ namespace StorylineEditor.ViewModel
                 view.SortDescriptions.Add(new SortDescription("CreatedAt", ListSortDirection.Ascending));
             }
 
-            foreach (var itemM in Model) { Add(null, _viewModelCreator(itemM)); }
-
             Context = new ObservableCollection<FolderM>();
             Context.Add(new FolderActionM());
             Context.Add(new FolderM() { name = "root", content = model });
+
+            foreach (var itemM in Model) { Add(null, _viewModelCreator(itemM)); }
         }
-
-
-
-        private ICommand addCommand;
-        public ICommand AddCommand => addCommand ?? (addCommand = new RelayCommand<bool>((isFolder) =>
-        {
-            BaseM model = _modelCreator(isFolder);
-            Notifier viewModel = _viewModelCreator(model);
-
-            Add(model, viewModel);
-
-            Selection = viewModel;
-
-            CommandManager.InvalidateRequerySuggested();
-
-        }));
-
-        private ICommand removeCommand;
-        public ICommand RemoveCommand => removeCommand ?? (removeCommand = new RelayCommand(() =>
-        {
-            Notifier prevSelection = Selection;
-
-            Selection = null;
-
-            Remove(prevSelection, _modelExtractor(prevSelection), Context.Last());
-
-            CommandManager.InvalidateRequerySuggested();
-
-        }, () => Selection != null));
-
-        private ICommand cutCommand;
-        public ICommand CutCommand => cutCommand ?? (cutCommand = new RelayCommand<Notifier>((itemVM) =>
-        {
-            CutVMs.Add(new CutEntryVM() { Model = _modelExtractor(itemVM), ViewModel = itemVM, Context = Context.Last() });
-            itemVM.IsCut = true;
-
-            CommandManager.InvalidateRequerySuggested();
-
-        }, (itemVM) => itemVM != null && !itemVM.IsCut));
-
-        private ICommand pasteCommand;
-        public ICommand PasteCommand => pasteCommand ?? (pasteCommand = new RelayCommand(() =>
-        {
-            foreach (var cutEntryVM in CutVMs)
-            {
-                Remove(cutEntryVM.ViewModel, cutEntryVM.Model, cutEntryVM.Context);                
-                Add(cutEntryVM.Model, cutEntryVM.ViewModel);
-
-                cutEntryVM.ViewModel.IsCut = false;
-            }
-
-            Selection = CutVMs.Last().ViewModel;
-
-            CutVMs.Clear();
-
-            CommandManager.InvalidateRequerySuggested();
-
-        }, () => CutVMs.Count > 0));
 
         private ICommand infoCommand;
         public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<Notifier>((item) => _viewModelInformer(item), (item) => item != null));
@@ -171,68 +95,13 @@ namespace StorylineEditor.ViewModel
 
         }, (folderM) => folderM != null));
 
-        private ICommand selectCommand;
-        public ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<Notifier>((itemVM) =>
-        {
-            Selection = itemVM;
-
-            CommandManager.InvalidateRequerySuggested();
-
-        }, (itemVM) => itemVM != null));
 
 
-
-        private void Add(BaseM model, Notifier viewModel) // pass null to one of params if want to add only model/only viewModel
-        {
-            if (model != null) Context.Last().content.Add(model);
-
-            if (viewModel != null) ItemsVMs.Add(viewModel);
-        }
-        private void Remove(Notifier viewModel, BaseM model, FolderM context) // pass null to one of params if want to remove only model/only viewModel
-        {
-            if (viewModel != null) ItemsVMs.Remove(viewModel);
-
-            if (model != null) context.content.Remove(model);
-        }
-
-
-
-        private readonly Func<bool, BaseM> _modelCreator;
-        private readonly Func<BaseM, Notifier> _viewModelCreator;
-        private readonly Func<Notifier, Notifier> _editorCreator;
-        private readonly Func<Notifier, BaseM> _modelExtractor;
         private readonly Action<Notifier> _viewModelInformer;
 
 
 
-        public ObservableCollection<CutEntryVM> CutVMs { get; }
-        public ObservableCollection<Notifier> ItemsVMs { get; }
         public ObservableCollection<FolderM> Context { get; }
-
-
-
-        private Notifier selection;
-        public Notifier Selection
-        {
-            get => selection;
-            set
-            {
-                if (selection != value)
-                {
-                    if (selection != null) selection.IsSelected = false;
-
-                    selection = value;
-
-                    if (selection != null) selection.IsSelected = true;
-
-                    Notify(nameof(Selection));
-                    Notify(nameof(SelectionEditor));
-
-                    CommandManager.InvalidateRequerySuggested();
-                }
-            }
-        }
-
-        public Notifier SelectionEditor => selection != null ? _editorCreator(selection) : null;
+        public override FolderM ContextFolder => Context.Last();
     }
 }

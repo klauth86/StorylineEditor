@@ -10,12 +10,80 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Model;
 using StorylineEditor.Model.Graphs;
 using StorylineEditor.ViewModel.Common;
+using System;
 using System.Windows.Input;
 
-namespace StorylineEditor.ViewModel
+namespace StorylineEditor.ViewModel.Graphs
 {
+    public abstract class Graph_BaseVM<T> : Collection_BaseVM<T> where T : GraphM
+    {
+        public Graph_BaseVM(T model, Func<bool, BaseM> modelCreator, Func<BaseM, Notifier> viewModelCreator,
+            Func<Notifier, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Action<Notifier> viewModelInformer) : base(model, modelCreator, viewModelCreator,
+                editorCreator, modelExtractor)
+        {
+
+        }
+
+        protected double offsetX;
+        public double OffsetX
+        {
+            get => offsetX;
+            set
+            {
+                if (offsetX != value)
+                {
+                    offsetX = value;
+                    Notify(nameof(OffsetX));
+                }
+            }
+        }
+
+        protected double offsetY;
+        public double OffsetY
+        {
+            get => offsetY;
+            set
+            {
+                if (offsetY != value)
+                {
+                    offsetY = value;
+                    Notify(nameof(OffsetY));
+                }
+            }
+        }
+
+        protected double scaleX;
+        public double ScaleX
+        {
+            get => scaleX;
+            set
+            {
+                if (scaleX != value)
+                {
+                    scaleX = value;
+                    Notify(nameof(ScaleX));
+                }
+            }
+        }
+
+        protected double scaleY;
+        public double ScaleY
+        {
+            get => scaleY;
+            set
+            {
+                if (scaleY != value)
+                {
+                    scaleY = value;
+                    Notify(nameof(ScaleY));
+                }
+            }
+        }
+    }
+
     public class QuestVM : BaseVM<QuestM>
     {
         public QuestVM(QuestM model) : base(model) { }

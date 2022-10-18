@@ -31,12 +31,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Collection_BaseVM.cs" />
     <Compile Include="Nodes\Node_JournalVM.cs" />
     <Compile Include="Nodes\Node_BaseVM.cs" />
     <Compile Include="ActorVM.cs" />
-    <Compile Include="ReplicaVM.cs" />
-    <Compile Include="DialogVM.cs" />
-    <Compile Include="QuestVM.cs" />
+    <Compile Include="Graphs\ReplicaVM.cs" />
+    <Compile Include="Graphs\DialogVM.cs" />
+    <Compile Include="Graphs\QuestVM.cs" />
     <Compile Include="ItemVM.cs" />
     <Compile Include="CharacterVM.cs" />
     <Compile Include="Common\Notifier.cs" />
