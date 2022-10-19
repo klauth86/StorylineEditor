@@ -14,6 +14,7 @@ using StorylineEditor.Model;
 using StorylineEditor.Model.Graphs;
 using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModel.Common;
+using StorylineEditor.ViewModel.Nodes;
 using System;
 using System.Collections;
 using System.Windows;
@@ -36,8 +37,8 @@ namespace StorylineEditor.ViewModel.Graphs
         protected ICommand selectNodeTypeCommand;
         public ICommand SelectNodeTypeCommand => selectNodeTypeCommand ?? (selectNodeTypeCommand = new RelayCommand<Type>((type) => SelectedNodeType = type));
 
-        protected ICommand addNodeTypeCommand;
-        public ICommand AddNodeTypeCommand => addNodeTypeCommand ?? (addNodeTypeCommand = new RelayCommand<UIElement>((uiElement) =>
+        protected ICommand addNodeCommand;
+        public ICommand AddNodeCommand => addNodeCommand ?? (addNodeCommand = new RelayCommand<UIElement>((uiElement) =>
         {
             Point position = Mouse.GetPosition(uiElement);
             FromLocalToAbsolute(position);
@@ -135,7 +136,7 @@ namespace StorylineEditor.ViewModel.Graphs
             if (point != null)
             {
                 point.X = FromLocalToAbsoluteX(point.X);
-                point.Y = FromLocalToAbsoluteX(point.Y);
+                point.Y = FromLocalToAbsoluteY(point.Y);
             }
         }
 
@@ -167,21 +168,19 @@ namespace StorylineEditor.ViewModel.Graphs
 
 
 
-        public void Callback(string propName)
-        { 
-        
+        public void Callback(object viewModelObj, string propName)
+        {
+            if (viewModelObj is INodeVM nodeViewModel)
+            {
+                if (propName == nameof(Node_BaseVM<Node_BaseM>.PositionX))
+                {
+                    nodeViewModel.LocalPositionX = FromAbsoluteToLocalX(nodeViewModel.PositionX);
+                }
+                else if (propName == nameof(Node_BaseVM<Node_BaseM>.PositionY))
+                {
+                    nodeViewModel.LocalPositionY = FromAbsoluteToLocalY(nodeViewModel.PositionY);
+                }
+            }
         }
-        //protected override void OnModelChangedHandlerGeneral(object model, string propName)
-        //{
-        //    if (nameof(Node_BaseM.positionX) == propName || nameof(Node_BaseM.positionY) == propName)
-        //    {
-        //        var viewModel = SimpleVM<Node_JournalM>.GetVMByM(model);
-        //        if (viewModel is Node_BaseVM<Node_JournalM> viewModelJournal)
-        //        {
-        //            viewModelJournal.LocalPositionX = FromAbsoluteToLocalX(viewModelJournal.PositionX);
-        //            viewModelJournal.LocalPositionY = FromAbsoluteToLocalY(viewModelJournal.PositionY);
-        //        }
-        //    }
-        //}
     }
 }

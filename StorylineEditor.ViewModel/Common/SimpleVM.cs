@@ -22,7 +22,7 @@ namespace StorylineEditor.ViewModel.Common
 
     public interface ICallbackContext
     {
-        void Callback(string propName);
+        void Callback(object viewModelObj, string propName);
     }
 
     public abstract class SimpleVM<T> : Notifier, IRegistrable where T : class

@@ -33,7 +33,9 @@ StorylineEditor распространяется в надежде, что он�
         <sys:Boolean x:Key="False">False</sys:Boolean>
 
         <SolidColorBrush x:Key="Color_Selector_Selected" Color="#99005500" />
-        
+
+        <SolidColorBrush x:Key="Color_Node_Background" Color="White" />
+
         <!-- Global and base -->
         
         <Style TargetType="TextBlock" x:Key="S_TextBlock"></Style>
@@ -360,10 +362,16 @@ StorylineEditor распространяется в надежде, что он�
                     <ColumnDefinition Width="3*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <ItemsControl x:Name="ic_Canvas" Background="LightGray" ItemsPanel="{StaticResource IPT_Canvas}" ItemsSource="{Binding GraphVMs}">
+                <ItemsControl x:Name="ic_Canvas" Background="LightGray" ItemsPanel="{StaticResource IPT_Canvas}" ItemsSource="{Binding ItemsVMs}">
                     <ItemsControl.InputBindings>
                         <MouseBinding Gesture="LeftClick" Command="{Binding AddNodeCommand}" CommandParameter="{x:Reference Name=ic_Canvas}"></MouseBinding>
                     </ItemsControl.InputBindings>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="Canvas.Left" Value="{Binding LocalPositionX, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Setter Property="Canvas.Top" Value="{Binding LocalPositionY, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
                 </ItemsControl>
                 
                 <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
@@ -444,8 +452,7 @@ StorylineEditor распространяется в надежде, что он�
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vmn:Node_Journal_StepVM}">
-            <Border MinHeight="64" MinWidth="96" MaxHeight="256" MaxWidth="256" ToolTip="{Binding Id}" 
-                    Canvas.Left="{Binding LocalPositionX, UpdateSourceTrigger=PropertyChanged}" Canvas.Top="{Binding LocalPositionY, UpdateSourceTrigger=PropertyChanged}">
+            <Border MinHeight="64" MinWidth="96" MaxHeight="256" MaxWidth="256" ToolTip="{Binding Id}" Background="{StaticResource Color_Node_Background}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"></ColumnDefinition>
@@ -456,8 +463,8 @@ StorylineEditor распространяется в надежде, что он�
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    
-                    <Label Content="{StaticResource String_Icon_Node_Step}" Style="{StaticResource S_Label_NodeType}"></Label>
+
+                    <Label Content="{StaticResource String_Icon_Node_Step}" Style="{StaticResource S_Label_Node}"></Label>
 
                     <TextBlock Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
@@ -467,6 +474,30 @@ StorylineEditor распространяется в надежде, что он�
                 </Grid>
             </Border>
         </DataTemplate>
-        
+
+        <DataTemplate DataType="{x:Type vmn:Node_Journal_AlternativeVM}">
+            <Border MinHeight="64" MinWidth="96" MaxHeight="256" MaxWidth="256" ToolTip="{Binding Id}" Background="{StaticResource Color_Node_Background}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <Label Content="{StaticResource String_Icon_Node_Alternative}" Style="{StaticResource S_Label_Node}"></Label>
+
+                    <TextBlock Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+
+                    <TextBlock Grid.ColumnSpan="2" Grid.Row="1" Style="{StaticResource S_TextBlock_Node_Description}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+
+                    <TextBlock Grid.ColumnSpan="2" Grid.Row="1" Style="{StaticResource S_TextBlock_Node_Result}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                </Grid>
+            </Border>
+        </DataTemplate>
+
     </Application.Resources>
 </Application>

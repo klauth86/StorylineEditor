@@ -16,9 +16,21 @@ using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Nodes
 {
-    public abstract class Node_BaseVM<T> : BaseVM<T> where T : Node_BaseM
+    public interface INodeVM
     {
-        public Node_BaseVM(T model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+        double PositionX { get; set; }
+        double PositionY { get; set; }
+        double LocalPositionX { get; set; }
+        double LocalPositionY { get; set; }
+    }
+
+    public abstract class Node_BaseVM<T> : BaseVM<T>, INodeVM where T : Node_BaseM
+    {
+        public Node_BaseVM(T model, ICallbackContext callbackContext) : base(model, callbackContext)
+        {
+            CallbackContext?.Callback(this, nameof(PositionX));
+            CallbackContext?.Callback(this, nameof(PositionY));
+        }
 
         public byte Gender
         {
@@ -42,6 +54,7 @@ namespace StorylineEditor.ViewModel.Nodes
                 {
                     Model.positionX = value;
                     OnModelChanged(Model, nameof(PositionX));
+                    CallbackContext?.Callback(this, nameof(PositionX));
                 }
             }
         }
@@ -55,6 +68,7 @@ namespace StorylineEditor.ViewModel.Nodes
                 {
                     Model.positionY = value;
                     OnModelChanged(Model, nameof(PositionY));
+                    CallbackContext?.Callback(this, nameof(PositionY));
                 }
             }
         }
