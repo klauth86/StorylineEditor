@@ -22,7 +22,7 @@ namespace StorylineEditor.ViewModel
 
     public class CharacterEditorVM : CharacterVM
     {
-        public CharacterEditorVM(CharacterM model) : base(model) { }
+        public CharacterEditorVM(CharacterVM viewModel) : base(viewModel.Model) { }
 
         public bool HasDescriptionFemale
         {

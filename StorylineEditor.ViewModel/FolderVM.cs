@@ -24,6 +24,6 @@ namespace StorylineEditor.ViewModel
 
     public class FolderEditorVM : FolderVM
     {
-        public FolderEditorVM(FolderM model) : base(model) { }
+        public FolderEditorVM(FolderVM viewModel) : base(viewModel.Model) { }
     }
 }

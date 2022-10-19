@@ -22,6 +22,6 @@ namespace StorylineEditor.ViewModel.Graphs
 
     public class DialogEditorVM : DialogVM
     {
-        public DialogEditorVM(DialogM model) : base(model) { }
+        public DialogEditorVM(DialogVM viewModel) : base(viewModel.Model) { }
     }
 }
