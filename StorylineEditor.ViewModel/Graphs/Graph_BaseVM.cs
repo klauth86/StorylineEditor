@@ -16,13 +16,14 @@ using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModel.Common;
 using System;
 using System.Collections;
+using System.Windows;
 using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Graphs
 {
-    public class Graph_BaseVM<T> : Collection_BaseVM<T> where T : GraphM
+    public class Graph_BaseVM<T> : Collection_BaseVM<T, Point> where T : GraphM
     {
-        public Graph_BaseVM(T model, Func<Type, BaseM> modelCreator, Func<BaseM, Notifier> viewModelCreator,
+        public Graph_BaseVM(T model, Func<Type, Point, BaseM> modelCreator, Func<BaseM, Notifier> viewModelCreator,
             Func<Notifier, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Type defaultNodeType, Func<Type, string> typeDescriptor) : base(model,
                 modelCreator, viewModelCreator, editorCreator, modelExtractor)
         {
@@ -33,7 +34,12 @@ namespace StorylineEditor.ViewModel.Graphs
         protected ICommand selectNodeTypeCommand;
         public ICommand SelectNodeTypeCommand => selectNodeTypeCommand ?? (selectNodeTypeCommand = new RelayCommand<Type>((type) => SelectedNodeType = type));
 
-
+        protected ICommand addNodeTypeCommand;
+        public ICommand AddNodeTypeCommand => addNodeTypeCommand ?? (addNodeTypeCommand = new RelayCommand<UIElement>((uiElement) =>
+        {
+            Point mousePosition = Mouse.GetPosition(uiElement);
+            AddCommandInternal(SelectedNodeType, mousePosition);
+        }, (uiElement) => uiElement != null && SelectedNodeType != null));
 
         private readonly Func<Type, string> _typeDescriptor;
 
@@ -107,6 +113,8 @@ namespace StorylineEditor.ViewModel.Graphs
                     Notify(nameof(SelectedNodeType));
 
                     Notify(nameof(SelectedNodeTypeName));
+
+                    CommandManager.InvalidateRequerySuggested();
                 }
             }
         }

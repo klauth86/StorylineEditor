@@ -14,6 +14,7 @@ using StorylineEditor.Model;
 using StorylineEditor.Model.Graphs;
 using StorylineEditor.ViewModel.Common;
 using System;
+using System.Windows;
 
 namespace StorylineEditor.ViewModel.Graphs
 {
@@ -24,7 +25,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
     public class QuestEditorVM : Graph_BaseVM<QuestM>
     {
-        public QuestEditorVM(QuestM model, Func<Type, BaseM> modelCreator, Func<BaseM, Notifier> viewModelCreator,
+        public QuestEditorVM(QuestM model, Func<Type, Point, BaseM> modelCreator, Func<BaseM, Notifier> viewModelCreator,
             Func<Notifier, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Type defaultNodeType, Func<Type, string> typeDescriptor) : base(model,
                 modelCreator, viewModelCreator, editorCreator, modelExtractor, defaultNodeType, typeDescriptor)
         { }

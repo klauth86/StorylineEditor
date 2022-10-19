@@ -27,9 +27,9 @@ namespace StorylineEditor.ViewModel
         public IList Context { get; set; }
     }
 
-    public abstract class Collection_BaseVM<T> : SimpleVM<T> where T : class
+    public abstract class Collection_BaseVM<T, U> : SimpleVM<T> where T : class
     {
-        public Collection_BaseVM(T model, Func<Type, BaseM> modelCreator, Func<BaseM, Notifier> viewModelCreator,
+        public Collection_BaseVM(T model, Func<Type, U, BaseM> modelCreator, Func<BaseM, Notifier> viewModelCreator,
             Func<Notifier, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor) : base(model)
         {
             _modelCreator = modelCreator ?? throw new ArgumentNullException(nameof(modelCreator));
@@ -44,18 +44,7 @@ namespace StorylineEditor.ViewModel
         }
 
         private ICommand addCommand;
-        public ICommand AddCommand => addCommand ?? (addCommand = new RelayCommand<bool>((isFolder) =>
-        {
-            BaseM model = _modelCreator(isFolder ? typeof(FolderM) : null);
-            Notifier viewModel = _viewModelCreator(model);
-
-            Add(model, viewModel);
-
-            Selection = viewModel;
-
-            CommandManager.InvalidateRequerySuggested();
-
-        }));
+        public ICommand AddCommand => addCommand ?? (addCommand = new RelayCommand<bool>((isFolder) => { AddCommandInternal(isFolder ? typeof(FolderM) : null, default(U)); }));
 
         private ICommand removeCommand;
         public ICommand RemoveCommand => removeCommand ?? (removeCommand = new RelayCommand(() =>
@@ -113,6 +102,17 @@ namespace StorylineEditor.ViewModel
 
 
 
+        protected virtual void AddCommandInternal(Type type, U param)
+        {
+            BaseM model = _modelCreator(type, param);
+            Notifier viewModel = _viewModelCreator(model);
+
+            Add(model, viewModel);
+
+            Selection = viewModel;
+
+            CommandManager.InvalidateRequerySuggested();
+        }
         protected void Add(BaseM model, Notifier viewModel) // pass null to one of params if want to add only model/only viewModel
         {
             if (model != null) GetContext(model).Add(model);
@@ -128,7 +128,7 @@ namespace StorylineEditor.ViewModel
 
 
 
-        protected readonly Func<Type, BaseM> _modelCreator;
+        protected readonly Func<Type, U, BaseM> _modelCreator;
         protected readonly Func<BaseM, Notifier> _viewModelCreator;
         protected readonly Func<Notifier, Notifier> _editorCreator;
         protected readonly Func<Notifier, BaseM> _modelExtractor;

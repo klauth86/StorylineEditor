@@ -25,9 +25,9 @@ namespace StorylineEditor.ViewModel
 {
     public class FolderProxyM : FolderM { }
 
-    public class CollectionVM : Collection_BaseVM<List<BaseM>>
+    public class CollectionVM : Collection_BaseVM<List<BaseM>, object>
     {
-        public CollectionVM(List<BaseM> inModel, Func<Type, BaseM> modelCreator, Func<BaseM, Notifier> viewModelCreator,
+        public CollectionVM(List<BaseM> inModel, Func<Type, object, BaseM> modelCreator, Func<BaseM, Notifier> viewModelCreator,
             Func<Notifier, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Action<Notifier> viewModelInformer) : base(inModel, modelCreator, viewModelCreator,
                 editorCreator, modelExtractor)
         {            

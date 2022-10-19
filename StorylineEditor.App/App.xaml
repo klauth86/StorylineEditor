@@ -90,6 +90,10 @@ StorylineEditor распространяется в надежде, что он�
         <Style TargetType="Button" x:Key="S_Button_Graph"></Style>
 
         <Style TargetType="Button" x:Key="S_Button_Graph_Selectable" BasedOn="{StaticResource S_Button_Graph}"></Style>
+
+        <Style TargetType="Button" x:Key="S_Button_Graph_Selectable_Selected" BasedOn="{StaticResource S_Button_Graph_Selectable}">
+            <Setter Property="Background" Value="{StaticResource Color_Selector_Selected}"></Setter>
+        </Style>
         
         <Style TargetType="Separator" x:Key="S_Separator_Graph">
             <Setter Property="Width" Value="4"></Setter>
@@ -341,27 +345,39 @@ StorylineEditor распространяется в надежде, что он�
                     <ColumnDefinition Width="3*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
+                <ItemsControl x:Name="ic_Canvas" Background="LightGray" ItemsPanel="{StaticResource IPT_Canvas}" ItemsSource="{Binding GraphVMs}">
+                    <ItemsControl.InputBindings>
+                        <MouseBinding Gesture="LeftClick" Command="{Binding AddNodeCommand}" CommandParameter="{x:Reference Name=ic_Canvas}"></MouseBinding>
+                    </ItemsControl.InputBindings>
+                </ItemsControl>
+                
                 <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal">
-                        <Button Style="{StaticResource S_Button_Graph_Selectable}" Content="{StaticResource String_Icon_Node_Step}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_StepM}"></Button>
-                        <Button Style="{StaticResource S_Button_Graph_Selectable}" Content="{StaticResource String_Icon_Node_Alternative}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_AlternativeM}"></Button>
+                        <Button x:Name="btn_selectable_Step" Style="{StaticResource S_Button_Graph_Selectable}" Content="{StaticResource String_Icon_Node_Step}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_StepM}"></Button>
+                        <Button x:Name="btn_selectable_Alternative" Style="{StaticResource S_Button_Graph_Selectable}" Content="{StaticResource String_Icon_Node_Alternative}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_AlternativeM}"></Button>
                         <Separator Style="{StaticResource S_Separator_Graph}"></Separator>
                         <Button Style="{StaticResource S_Button_Graph}" Content="⏪" Command="{Binding PrevRootNodeCommand}"></Button>
                         <Button Style="{StaticResource S_Button_Graph}" Content="⏩" Command="{Binding NextRootNodeCommand}"></Button>
                     </StackPanel>
                     <TextBlock Grid.Row="1" Text="{Binding SelectedNodeTypeName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Graph}"></TextBlock>
                 </Grid>
-                
-                <ItemsControl ItemsPanel="{StaticResource IPT_Canvas}" ItemsSource="{Binding GraphVMs}"></ItemsControl>
-                
+
                 <GridSplitter Grid.Column="1" Style="{StaticResource S_GridSplitter}"></GridSplitter>
 
                 <ContentControl Grid.Column="2" Content="{Binding Selection, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
             </Grid>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_StepM}">
+                    <Setter TargetName="btn_selectable_Step" Property="Style" Value="{StaticResource S_Button_Graph_Selectable_Selected}"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_AlternativeM}">
+                    <Setter TargetName="btn_selectable_Alternative" Property="Style" Value="{StaticResource S_Button_Graph_Selectable_Selected}"></Setter>
+                </DataTrigger>
+            </DataTemplate.Triggers>
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vmg:DialogVM}">
