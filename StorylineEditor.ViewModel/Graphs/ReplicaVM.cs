@@ -17,7 +17,7 @@ namespace StorylineEditor.ViewModel.Graphs
 {
     public class ReplicaVM : BaseVM<ReplicaM>
     {
-        public ReplicaVM(ReplicaM model) : base(model) { }
+        public ReplicaVM(ReplicaM model) : base(model, null) { }
     }
 
     public class ReplicaEditorVM : ReplicaVM

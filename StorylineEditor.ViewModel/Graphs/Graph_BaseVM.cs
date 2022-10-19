@@ -21,12 +21,14 @@ using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Graphs
 {
-    public class Graph_BaseVM<T> : Collection_BaseVM<T, Point> where T : GraphM
+    public class Graph_BaseVM<T> : Collection_BaseVM<T, Point>, ICallbackContext where T : GraphM
     {
-        public Graph_BaseVM(T model, Func<Type, Point, BaseM> modelCreator, Func<BaseM, Notifier> viewModelCreator,
-            Func<Notifier, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Type defaultNodeType, Func<Type, string> typeDescriptor) : base(model,
+        public Graph_BaseVM(T model, ICallbackContext callbackContext, Func<Type, Point, BaseM> modelCreator, Func<BaseM, ICallbackContext, Notifier> viewModelCreator,
+            Func<Notifier, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Type defaultNodeType, Func<Type, string> typeDescriptor) : base(model, callbackContext,
                 modelCreator, viewModelCreator, editorCreator, modelExtractor)
         {
+            offsetY = offsetX = 0;
+            scaleY = scaleX = 1;
             selectedNodeType = defaultNodeType;
             _typeDescriptor = typeDescriptor ?? throw new ArgumentNullException(nameof(typeDescriptor));
         }
@@ -37,9 +39,12 @@ namespace StorylineEditor.ViewModel.Graphs
         protected ICommand addNodeTypeCommand;
         public ICommand AddNodeTypeCommand => addNodeTypeCommand ?? (addNodeTypeCommand = new RelayCommand<UIElement>((uiElement) =>
         {
-            Point mousePosition = Mouse.GetPosition(uiElement);
-            AddCommandInternal(SelectedNodeType, mousePosition);
+            Point position = Mouse.GetPosition(uiElement);
+            FromLocalToAbsolute(position);
+            AddCommandInternal(SelectedNodeType, position, this);
         }, (uiElement) => uiElement != null && SelectedNodeType != null));
+
+
 
         private readonly Func<Type, string> _typeDescriptor;
 
@@ -122,5 +127,61 @@ namespace StorylineEditor.ViewModel.Graphs
         public string SelectedNodeTypeName => _typeDescriptor(SelectedNodeType);
 
         public override IList GetContext(BaseM model) { if (model is LinkM) return Model.links; return Model.nodes; }
+
+
+
+        protected void FromLocalToAbsolute(Point point)
+        {
+            if (point != null)
+            {
+                point.X = FromLocalToAbsoluteX(point.X);
+                point.Y = FromLocalToAbsoluteX(point.Y);
+            }
+        }
+
+        protected double FromLocalToAbsoluteX(double x)
+        {
+            double result = x /= scaleX;    // Scale
+            result += offsetX;              // Transaltion
+            return result;
+        }
+        protected double FromLocalToAbsoluteY(double y)
+        {
+            double result = y /= scaleY;    // Scale
+            result += offsetY;              // Transaltion
+            return result;
+        }
+
+        protected double FromAbsoluteToLocalX(double x)
+        {
+            double result = x - offsetX;    // Transaltion
+            result *= scaleX;               // Scale
+            return result;
+        }
+        protected double FromAbsoluteToLocalY(double y)
+        {
+            double result = y - offsetY;    // Transaltion
+            result *= scaleY;               // Scale
+            return result;
+        }
+
+
+
+        public void Callback(string propName)
+        { 
+        
+        }
+        //protected override void OnModelChangedHandlerGeneral(object model, string propName)
+        //{
+        //    if (nameof(Node_BaseM.positionX) == propName || nameof(Node_BaseM.positionY) == propName)
+        //    {
+        //        var viewModel = SimpleVM<Node_JournalM>.GetVMByM(model);
+        //        if (viewModel is Node_BaseVM<Node_JournalM> viewModelJournal)
+        //        {
+        //            viewModelJournal.LocalPositionX = FromAbsoluteToLocalX(viewModelJournal.PositionX);
+        //            viewModelJournal.LocalPositionY = FromAbsoluteToLocalY(viewModelJournal.PositionY);
+        //        }
+        //    }
+        //}
     }
 }

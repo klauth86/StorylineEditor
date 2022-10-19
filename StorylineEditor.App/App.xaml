@@ -16,6 +16,7 @@ StorylineEditor распространяется в надежде, что он�
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:vm="clr-namespace:StorylineEditor.ViewModel;assembly=StorylineEditor.ViewModel"
              xmlns:vmg="clr-namespace:StorylineEditor.ViewModel.Graphs;assembly=StorylineEditor.ViewModel"
+             xmlns:vmn="clr-namespace:StorylineEditor.ViewModel.Nodes;assembly=StorylineEditor.ViewModel"
              xmlns:m="clr-namespace:StorylineEditor.Model;assembly=StorylineEditor.Model"
              xmlns:mn="clr-namespace:StorylineEditor.Model.Nodes;assembly=StorylineEditor.Model"
              StartupUri="MainWindow.xaml">
@@ -103,6 +104,20 @@ StorylineEditor распространяется в надежде, что он�
         
         <Style TargetType="TextBox" BasedOn="{StaticResource S_TextBox_Input}" x:Key="S_TextBox_Input_Graph"></Style>
 
+        
+        
+        <!-- Node -->
+        
+        <Style TargetType="Label" x:Key="S_Label_Node"></Style>
+
+        <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Node_Header"></Style>
+
+        <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Node_Description"></Style>
+
+        <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Node_Result"></Style>
+
+        
+        
         <!-- Data Templates -->
 
         <DataTemplate DataType="{x:Type vm:FolderProxyM}">
@@ -427,5 +442,31 @@ StorylineEditor распространяется в надежде, что он�
 
         <DataTemplate DataType="{x:Type vmg:ReplicaEditorVM}">
         </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vmn:Node_Journal_StepVM}">
+            <Border MinHeight="64" MinWidth="96" MaxHeight="256" MaxWidth="256" ToolTip="{Binding Id}" 
+                    Canvas.Left="{Binding LocalPositionX, UpdateSourceTrigger=PropertyChanged}" Canvas.Top="{Binding LocalPositionY, UpdateSourceTrigger=PropertyChanged}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    
+                    <Label Content="{StaticResource String_Icon_Node_Step}" Style="{StaticResource S_Label_NodeType}"></Label>
+
+                    <TextBlock Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+
+                    <TextBlock Grid.ColumnSpan="2" Grid.Row="1" Style="{StaticResource S_TextBlock_Node_Description}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+
+                    <TextBlock Grid.ColumnSpan="2" Grid.Row="1" Style="{StaticResource S_TextBlock_Node_Result}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                </Grid>
+            </Border>
+        </DataTemplate>
+        
     </Application.Resources>
 </Application>

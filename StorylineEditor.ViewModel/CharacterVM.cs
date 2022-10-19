@@ -17,7 +17,7 @@ namespace StorylineEditor.ViewModel
 {
     public class CharacterVM : BaseVM<CharacterM>
     {
-        public CharacterVM(CharacterM model) : base(model) { }
+        public CharacterVM(CharacterM model) : base(model, null) { }
     }
 
     public class CharacterEditorVM : CharacterVM

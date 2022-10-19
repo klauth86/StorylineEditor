@@ -18,7 +18,7 @@ namespace StorylineEditor.ViewModel.Nodes
 {
     public abstract class Node_BaseVM<T> : BaseVM<T> where T : Node_BaseM
     {
-        public Node_BaseVM(T model) : base(model) { }
+        public Node_BaseVM(T model, ICallbackContext callbackContext) : base(model, callbackContext) { }
 
         public byte Gender
         {
@@ -58,6 +58,38 @@ namespace StorylineEditor.ViewModel.Nodes
                 }
             }
         }
+
+
+
+        double localPositionX;
+        public double LocalPositionX
+        {
+            get => localPositionX;
+            set
+            {
+                if (localPositionX != value)
+                {
+                    localPositionX = value;
+                    Notify(nameof(LocalPositionX));
+                }
+            }
+        }
+
+        double localPositionY;
+        public double LocalPositionY
+        {
+            get => localPositionY;
+            set
+            {
+                if (localPositionY != value)
+                {
+                    localPositionY = value;
+                    Notify(nameof(LocalPositionY));
+                }
+            }
+        }
+
+
 
         private ICommand toggleGenderCommand;
         public ICommand ToggleGenderCommand => toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand(() => { Gender = (byte)((Gender + 1) % 3); }));

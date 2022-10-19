@@ -14,23 +14,37 @@ using System;
 
 namespace StorylineEditor.ViewModel.Common
 {
-    public abstract class SimpleVM<T> : Notifier where T : class
+    public interface IRegistrable
+    {
+        void Register();
+        void Unregister();
+    }
+
+    public interface ICallbackContext
+    {
+        void Callback(string propName);
+    }
+
+    public abstract class SimpleVM<T> : Notifier, IRegistrable where T : class
     {
         public static event Action<T, string> ModelChangedEvent = delegate { };
         public static void OnModelChanged(T model, string propName) => ModelChangedEvent?.Invoke(model, propName);
 
+        private readonly T _model;
         public T Model => _model;
 
-        private readonly T _model;
+        private readonly ICallbackContext _callbackContext;
+        public ICallbackContext CallbackContext => _callbackContext;
 
-        public SimpleVM(T model)
+        public SimpleVM(T model, ICallbackContext callbackContext)
         {
             _model = model ?? throw new ArgumentNullException(nameof(model));
-            ModelChangedEvent += OnModelChangedHandler;
+            _callbackContext = callbackContext;
         }
 
-        ~SimpleVM() { ModelChangedEvent -= OnModelChangedHandler; } ////// TODO Think where to unsubscribe
-
         private void OnModelChangedHandler(T model, string propName) { if (Model != null && Model == model) Notify(propName); }
+
+        public void Register() { ModelChangedEvent += OnModelChangedHandler; }
+        public void Unregister() { ModelChangedEvent -= OnModelChangedHandler; }
     }
 }

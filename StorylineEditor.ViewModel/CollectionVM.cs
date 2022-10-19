@@ -27,8 +27,8 @@ namespace StorylineEditor.ViewModel
 
     public class CollectionVM : Collection_BaseVM<List<BaseM>, object>
     {
-        public CollectionVM(List<BaseM> inModel, Func<Type, object, BaseM> modelCreator, Func<BaseM, Notifier> viewModelCreator,
-            Func<Notifier, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Action<Notifier> viewModelInformer) : base(inModel, modelCreator, viewModelCreator,
+        public CollectionVM(List<BaseM> inModel, Func<Type, object, BaseM> modelCreator, Func<BaseM, ICallbackContext, Notifier> viewModelCreator,
+            Func<Notifier, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Action<Notifier> viewModelInformer) : base(inModel, null, modelCreator, viewModelCreator,
                 editorCreator, modelExtractor)
         {            
             _viewModelInformer = viewModelInformer ?? throw new ArgumentNullException(nameof(viewModelInformer));
@@ -46,7 +46,7 @@ namespace StorylineEditor.ViewModel
             Context.Add(new FolderProxyM());
             Context.Add(new FolderM() { name = "root", content = inModel });
 
-            foreach (var model in Model) { Add(null, _viewModelCreator(model)); }
+            foreach (var model in Model) { Add(null, _viewModelCreator(model, null)); }
         }
 
         private ICommand infoCommand;
@@ -58,7 +58,7 @@ namespace StorylineEditor.ViewModel
             Context.RemoveAt(Context.Count - 1);
 
             ItemsVMs.Clear();
-            foreach (var model in Context.Last().content) { Add(null, _viewModelCreator(model)); }
+            foreach (var model in Context.Last().content) { Add(null, _viewModelCreator(model, null)); }
 
             CommandManager.InvalidateRequerySuggested();
 
@@ -92,7 +92,7 @@ namespace StorylineEditor.ViewModel
             Selection = null;
 
             ItemsVMs.Clear();
-            foreach (var model in Context.Last().content) { Add(null, _viewModelCreator(model)); }
+            foreach (var model in Context.Last().content) { Add(null, _viewModelCreator(model, null)); }
 
             CommandManager.InvalidateRequerySuggested();
 

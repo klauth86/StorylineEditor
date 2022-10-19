@@ -17,7 +17,7 @@ namespace StorylineEditor.ViewModel
 {
     public class ItemVM : BaseVM<ItemM>
     {
-        public ItemVM(ItemM model) : base(model) { }
+        public ItemVM(ItemM model) : base(model, null) { }
     }
 
     public class ItemEditorVM : ItemVM

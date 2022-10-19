@@ -11,12 +11,13 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Model.Nodes;
+using StorylineEditor.ViewModel.Common;
 
 namespace StorylineEditor.ViewModel.Nodes
 {
     public abstract class Node_JournalVM<T> : Node_BaseVM<T> where T : Node_JournalM
     {
-        public Node_JournalVM(T model) : base(model) { }
+        public Node_JournalVM(T model, ICallbackContext callbackContext) : base(model, callbackContext) { }
 
         public string Result
         {
@@ -34,21 +35,21 @@ namespace StorylineEditor.ViewModel.Nodes
 
     public class Node_Journal_StepVM : Node_JournalVM<Node_StepM>
     {
-        public Node_Journal_StepVM(Node_StepM model) : base(model) { }
+        public Node_Journal_StepVM(Node_StepM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
     }
 
     public class Node_Journal_StepEditorVM : Node_Journal_StepVM
     {
-        public Node_Journal_StepEditorVM(Node_StepM model) : base(model) { }
+        public Node_Journal_StepEditorVM(Node_Journal_StepVM viewModel) : base(viewModel.Model, viewModel.CallbackContext) { }
     }
 
     public class Node_Journal_AlternativeVM : Node_JournalVM<Node_AlternativeM>
     {
-        public Node_Journal_AlternativeVM(Node_AlternativeM model) : base(model) { }
+        public Node_Journal_AlternativeVM(Node_AlternativeM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
     }
 
     public class Node_Journal_AlternativeEditorVM : Node_Journal_AlternativeVM
     {
-        public Node_Journal_AlternativeEditorVM(Node_AlternativeM model) : base(model) { }
+        public Node_Journal_AlternativeEditorVM(Node_Journal_AlternativeVM viewModel) : base(viewModel.Model, viewModel.CallbackContext) { }
     }
 }

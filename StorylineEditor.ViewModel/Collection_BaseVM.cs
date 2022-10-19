@@ -29,8 +29,8 @@ namespace StorylineEditor.ViewModel
 
     public abstract class Collection_BaseVM<T, U> : SimpleVM<T> where T : class
     {
-        public Collection_BaseVM(T model, Func<Type, U, BaseM> modelCreator, Func<BaseM, Notifier> viewModelCreator,
-            Func<Notifier, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor) : base(model)
+        public Collection_BaseVM(T model, ICallbackContext callbackContext, Func<Type, U, BaseM> modelCreator, Func<BaseM, ICallbackContext, Notifier> viewModelCreator,
+            Func<Notifier, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor) : base(model, callbackContext)
         {
             _modelCreator = modelCreator ?? throw new ArgumentNullException(nameof(modelCreator));
             _viewModelCreator = viewModelCreator ?? throw new ArgumentNullException(nameof(viewModelCreator));
@@ -44,7 +44,7 @@ namespace StorylineEditor.ViewModel
         }
 
         private ICommand addCommand;
-        public ICommand AddCommand => addCommand ?? (addCommand = new RelayCommand<bool>((isFolder) => { AddCommandInternal(isFolder ? typeof(FolderM) : null, default(U)); }));
+        public ICommand AddCommand => addCommand ?? (addCommand = new RelayCommand<bool>((isFolder) => { AddCommandInternal(isFolder ? typeof(FolderM) : null, default(U), null); }));
 
         private ICommand removeCommand;
         public ICommand RemoveCommand => removeCommand ?? (removeCommand = new RelayCommand(() =>
@@ -102,10 +102,10 @@ namespace StorylineEditor.ViewModel
 
 
 
-        protected virtual void AddCommandInternal(Type type, U param)
+        protected virtual void AddCommandInternal(Type type, U param, ICallbackContext callbackContext)
         {
             BaseM model = _modelCreator(type, param);
-            Notifier viewModel = _viewModelCreator(model);
+            Notifier viewModel = _viewModelCreator(model, callbackContext);
 
             Add(model, viewModel);
 
@@ -129,7 +129,7 @@ namespace StorylineEditor.ViewModel
 
 
         protected readonly Func<Type, U, BaseM> _modelCreator;
-        protected readonly Func<BaseM, Notifier> _viewModelCreator;
+        protected readonly Func<BaseM, ICallbackContext, Notifier> _viewModelCreator;
         protected readonly Func<Notifier, Notifier> _editorCreator;
         protected readonly Func<Notifier, BaseM> _modelExtractor;
 

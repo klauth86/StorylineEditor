@@ -17,7 +17,7 @@ namespace StorylineEditor.ViewModel
 {
     public class FolderVM : BaseVM<FolderM>
     {
-        public FolderVM(FolderM model) : base(model) { }
+        public FolderVM(FolderM model) : base(model, null) { }
 
         public override bool IsFolder => true;
     }

@@ -16,7 +16,7 @@ namespace StorylineEditor.ViewModel.Common
 {
     public abstract class BaseVM<T> : SimpleVM<T> where T : BaseM
     {
-        public BaseVM(T model) : base(model) { }
+        public BaseVM(T model, ICallbackContext callbackContext) : base(model, callbackContext) { }
 
         public string Id => Model.id;
 

@@ -24,7 +24,7 @@ namespace StorylineEditor.ViewModel
 {
     public class StorylineVM : SimpleVM<StorylineM>
     {
-        public StorylineVM(StorylineM model) : base(model) { }
+        public StorylineVM(StorylineM model) : base(model, null) { }
 
 
 
@@ -33,7 +33,7 @@ namespace StorylineEditor.ViewModel
         {
             Selection = new CollectionVM(Model.characters,
                 (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new CharacterM() { name = "Новый персонаж" }; },
-                (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new CharacterVM((CharacterM)model); },
+                (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new CharacterVM((CharacterM)model); },
                 (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM.Model); else return new CharacterEditorVM(((CharacterVM)viewModel).Model); },
                 (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((CharacterVM)viewModel).Model; },
                 (Notifier viewModel) => { });
@@ -44,7 +44,7 @@ namespace StorylineEditor.ViewModel
         {
             Selection = new CollectionVM(Model.items,
             (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new ItemM() { name = "Новый предмет" }; },
-            (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new ItemVM((ItemM)model); },
+            (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new ItemVM((ItemM)model); },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM.Model); else return new ItemEditorVM(((ItemVM)viewModel).Model); },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((ItemVM)viewModel).Model; },
             (Notifier viewModel) => { });
@@ -55,7 +55,7 @@ namespace StorylineEditor.ViewModel
         {
             Selection = new CollectionVM(Model.actors,
             (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new ActorM() { name = "Новый актор" }; },
-            (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new ActorVM((ActorM)model); },
+            (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new ActorVM((ActorM)model); },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM.Model); else return new ActorEditorVM(((ActorVM)viewModel).Model); },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((ActorVM)viewModel).Model; },
             (Notifier viewModel) => { });
@@ -66,7 +66,7 @@ namespace StorylineEditor.ViewModel
         {
             Selection = new CollectionVM(Model.journal,
             (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new QuestM() { name = "Новый квест" }; },
-            (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new QuestVM((QuestM)model); },
+            (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new QuestVM((QuestM)model); },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM.Model); else return CreateQuestEditorVM(((QuestVM)viewModel).Model); },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((QuestVM)viewModel).Model; },
             (Notifier viewModel) => { });
@@ -75,26 +75,26 @@ namespace StorylineEditor.ViewModel
         private Notifier CreateQuestEditorVM(QuestM inModel)
         {
             return new QuestEditorVM(inModel,
-            (Type type, Point param) =>
+            (Type type, Point position) =>
             {
                 if (type == typeof(LinkM)) return new LinkM();
-                if (type == typeof(Node_StepM)) return new Node_StepM();
-                if (type == typeof(Node_AlternativeM)) return new Node_AlternativeM();
+                if (type == typeof(Node_StepM)) return new Node_StepM() { positionX = position.X, positionY = position.Y };
+                if (type == typeof(Node_AlternativeM)) return new Node_AlternativeM() { positionX = position.X, positionY = position.Y };
 
                 throw new ArgumentOutOfRangeException(nameof(type));
             },
-            (BaseM model) =>
+            (BaseM model, ICallbackContext callbackContext) =>
             {
-                if (model is LinkM modelLink) return new LinkVM(modelLink);
-                if (model is Node_StepM modelStep) return new Node_Journal_StepVM(modelStep);
-                if (model is Node_AlternativeM modelAlternative) return new Node_Journal_AlternativeVM(modelAlternative);
+                if (model is LinkM modelLink) return new LinkVM(modelLink, callbackContext);
+                if (model is Node_StepM modelStep) return new Node_Journal_StepVM(modelStep, callbackContext);
+                if (model is Node_AlternativeM modelAlternative) return new Node_Journal_AlternativeVM(modelAlternative, callbackContext);
 
                 throw new ArgumentOutOfRangeException(nameof(model));
             },
             (Notifier viewModel) =>
             {
-                if (viewModel is Node_Journal_StepVM viewModelStep) return new Node_Journal_StepEditorVM(viewModelStep.Model);
-                if (viewModel is Node_Journal_AlternativeVM viewModelAlternative) return new Node_Journal_AlternativeEditorVM(viewModelAlternative.Model);
+                if (viewModel is Node_Journal_StepVM viewModelStep) return new Node_Journal_StepEditorVM(viewModelStep);
+                if (viewModel is Node_Journal_AlternativeVM viewModelAlternative) return new Node_Journal_AlternativeEditorVM(viewModelAlternative);
 
                 throw new ArgumentOutOfRangeException(nameof(viewModel));
             },
@@ -122,7 +122,7 @@ namespace StorylineEditor.ViewModel
         {
             Selection = new CollectionVM(Model.dialogs,
             (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new DialogM() { name = "Новый диалог" }; },
-            (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new DialogVM((DialogM)model); },
+            (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new DialogVM((DialogM)model); },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM.Model); else return new DialogEditorVM(((DialogVM)viewModel).Model); },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((DialogVM)viewModel).Model; },
             (Notifier viewModel) => { });
@@ -133,7 +133,7 @@ namespace StorylineEditor.ViewModel
         {
             Selection = new CollectionVM(Model.replicas,
             (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new ReplicaM() { name = "Новая реплика" }; },
-            (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new ReplicaVM((ReplicaM)model); },
+            (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM); else return new ReplicaVM((ReplicaM)model); },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM.Model); else return new ReplicaEditorVM(((ReplicaVM)viewModel).Model); },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((ReplicaVM)viewModel).Model; },
             (Notifier viewModel) => { });

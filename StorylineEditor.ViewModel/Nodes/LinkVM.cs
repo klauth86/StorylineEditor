@@ -17,6 +17,6 @@ namespace StorylineEditor.ViewModel.Nodes
 {
     public class LinkVM : BaseVM<LinkM>
     {
-        public LinkVM(LinkM model) : base(model) { }
+        public LinkVM(LinkM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
     }
 }
