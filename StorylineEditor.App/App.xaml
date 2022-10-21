@@ -25,6 +25,10 @@ StorylineEditor распространяется в надежде, что он�
 
         <!-- Constants -->
 
+        <sys:Double x:Key="Double_Node_MinHeight">64</sys:Double>
+
+        <sys:Double x:Key="Double_Node_MinWidth">96</sys:Double>
+        
         <sys:Double x:Key="Double_Node_MaxHeight">256</sys:Double>
 
         <sys:Double x:Key="Double_Node_MaxWidth">256</sys:Double>
@@ -39,6 +43,8 @@ StorylineEditor распространяется в надежде, что он�
 
         <SolidColorBrush x:Key="Color_Selector_Selected" Color="#99005500" />
 
+        <SolidColorBrush x:Key="Color_Node_Selected" Color="#99005500" />
+        
         <SolidColorBrush x:Key="Color_Node_Background" Color="White" />
 
         <!-- Global and base -->
@@ -123,8 +129,35 @@ StorylineEditor распространяется в надежде, что он�
 
         <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Node_Result"></Style>
 
+        <Style TargetType="Border" x:Key="S_Border_Node">
+            <Setter Property="BorderThickness" Value="4"></Setter>
+            <Setter Property="MinHeight" Value="{StaticResource Double_Node_MinHeight}"></Setter>
+            <Setter Property="MinWidth" Value="{StaticResource Double_Node_MinWidth}"></Setter>
+            <Setter Property="MaxHeight" Value="{StaticResource Double_Node_MaxHeight}"></Setter>
+            <Setter Property="MaxWidth" Value="{StaticResource Double_Node_MaxWidth}"></Setter>
+            <Setter Property="ToolTip" Value="{Binding Id, Mode=OneTime}"></Setter>
+            <Setter Property="Background" Value="{StaticResource Color_Node_Background}"></Setter>
+            <Setter Property="bhvrs:RenderSizeBehavior.ActualWidth" Value="{Binding Width, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"></Setter>
+            <Setter Property="bhvrs:RenderSizeBehavior.ActualHeight" Value="{Binding Height, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"></Setter>
+            <Setter Property="bhvrs:RenderSizeBehavior.IsEnabled" Value="true"></Setter>
+            <Setter Property="bhvrs:MouseExtBehavior.MouseRightButtonDownCommand" Value="{Binding Path=DataContext.StartDragCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"></Setter>
+            <Setter Property="bhvrs:MouseExtBehavior.MouseRightButtonUpCommand" Value="{Binding Path=DataContext.EndDragCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"></Setter>
+            <Setter Property="RenderTransformOrigin" Value="0.5, 0.5"></Setter>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="{Binding Path=DataContext.ScaleX, RelativeSource={RelativeSource AncestorType=ItemsControl}, UpdateSourceTrigger=PropertyChanged}"
+                                    ScaleY="{Binding Path=DataContext.ScaleY, RelativeSource={RelativeSource AncestorType=ItemsControl}, UpdateSourceTrigger=PropertyChanged}"></ScaleTransform>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" Value="true">
+                    <Setter Property="BorderBrush" Value="{StaticResource Color_Node_Selected}"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
 
-
+        
+        
         <!-- Data Templates -->
 
         <DataTemplate DataType="{x:Type vm:FolderProxyM}">
@@ -466,19 +499,11 @@ StorylineEditor распространяется в надежде, что он�
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vmn:Node_Journal_StepVM}">
-            <Border MinHeight="64" MinWidth="96" MaxHeight="{StaticResource Double_Node_MaxHeight}" MaxWidth="{StaticResource Double_Node_MaxWidth}" ToolTip="{Binding Id}" Background="{StaticResource Color_Node_Background}"
-                    bhvrs:RenderSizeBehavior.ActualWidth="{Binding Width, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
-                    bhvrs:RenderSizeBehavior.ActualHeight="{Binding Height, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
-                    bhvrs:RenderSizeBehavior.IsEnabled="true" RenderTransformOrigin="0.5,0.5"
-                    bhvrs:MouseExtBehavior.MouseRightButtonDownCommand="{Binding Path=DataContext.StartDragCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                    bhvrs:MouseExtBehavior.MouseRightButtonUpCommand="{Binding Path=DataContext.EndDragCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
+            <Border Style="{StaticResource S_Border_Node}">
                 <Border.InputBindings>
-                    <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.AddToSelectionCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
+                    <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
+                    <MouseBinding Gesture="Control+LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
                 </Border.InputBindings>
-                <Border.RenderTransform>
-                    <ScaleTransform ScaleX="{Binding Path=DataContext.ScaleX, RelativeSource={RelativeSource AncestorType=ItemsControl}, UpdateSourceTrigger=PropertyChanged}"
-                                    ScaleY="{Binding Path=DataContext.ScaleY, RelativeSource={RelativeSource AncestorType=ItemsControl}, UpdateSourceTrigger=PropertyChanged}"></ScaleTransform>
-                </Border.RenderTransform>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"></ColumnDefinition>
@@ -504,19 +529,11 @@ StorylineEditor распространяется в надежде, что он�
         <DataTemplate DataType="{x:Type vmn:Node_Journal_StepEditorVM}"></DataTemplate>
 
         <DataTemplate DataType="{x:Type vmn:Node_Journal_AlternativeVM}">
-            <Border MinHeight="64" MinWidth="96" MaxHeight="{StaticResource Double_Node_MaxHeight}" MaxWidth="{StaticResource Double_Node_MaxWidth}" ToolTip="{Binding Id}" Background="{StaticResource Color_Node_Background}"
-                    bhvrs:RenderSizeBehavior.ActualWidth="{Binding Width, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
-                    bhvrs:RenderSizeBehavior.ActualHeight="{Binding Height, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
-                    bhvrs:RenderSizeBehavior.IsEnabled="true" RenderTransformOrigin="0.5,0.5"
-                    bhvrs:MouseExtBehavior.MouseRightButtonDownCommand="{Binding Path=DataContext.StartDragCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                    bhvrs:MouseExtBehavior.MouseRightButtonUpCommand="{Binding Path=DataContext.EndDragCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
+            <Border Style="{StaticResource S_Border_Node}">
                 <Border.InputBindings>
-                    <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.AddToSelectionCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
+                    <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
+                    <MouseBinding Gesture="Control+LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
                 </Border.InputBindings>
-                <Border.RenderTransform>
-                    <ScaleTransform ScaleX="{Binding Path=DataContext.ScaleX, RelativeSource={RelativeSource AncestorType=ItemsControl}, UpdateSourceTrigger=PropertyChanged}"
-                                    ScaleY="{Binding Path=DataContext.ScaleY, RelativeSource={RelativeSource AncestorType=ItemsControl}, UpdateSourceTrigger=PropertyChanged}"></ScaleTransform>
-                </Border.RenderTransform>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"></ColumnDefinition>

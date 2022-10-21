@@ -27,6 +27,8 @@ namespace StorylineEditor.ViewModel.Nodes
         // Local
         double Left { get; set; }
         double Top { get; set; }
+
+        bool IsSelected { get; }
     }
 
     public abstract class Node_BaseVM<T> : BaseVM<T>, INodeVM where T : Node_BaseM

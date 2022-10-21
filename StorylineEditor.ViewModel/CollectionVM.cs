@@ -57,19 +57,11 @@ namespace StorylineEditor.ViewModel
 
             Add(model, viewModel);
 
-            Selection = viewModel;
-
-            CommandManager.InvalidateRequerySuggested(); 
+            AddToSelection(viewModel, true);
         }));
 
         private ICommand selectCommand;
-        public override ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<Notifier>((viewModel) =>
-        {
-            Selection = viewModel;
-
-            CommandManager.InvalidateRequerySuggested();
-
-        }, (viewModel) => viewModel != null));
+        public override ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<Notifier>((viewModel) => AddToSelection(viewModel, true), (viewModel) => viewModel != null));
 
         private ICommand infoCommand;
         public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<Notifier>((viewModel) => _viewModelInformer(viewModel), (viewModel) => viewModel != null));
@@ -78,6 +70,8 @@ namespace StorylineEditor.ViewModel
         public ICommand UpContextCommand => upContextCommand ?? (upContextCommand = new RelayCommand(() =>
         {
             Context.RemoveAt(Context.Count - 1);
+
+            AddToSelection(null, true);
 
             ItemsVMs.Clear();
             foreach (var model in Context.Last().content) { Add(null, _viewModelCreator(model, null)); }
@@ -111,7 +105,7 @@ namespace StorylineEditor.ViewModel
                 Context.Add(folderM);
             }
 
-            Selection = null;
+            AddToSelection(null, true);
 
             ItemsVMs.Clear();
             foreach (var model in Context.Last().content) { Add(null, _viewModelCreator(model, null)); }
@@ -128,5 +122,29 @@ namespace StorylineEditor.ViewModel
 
         public ObservableCollection<FolderM> Context { get; }
         public override IList GetContext(BaseM model) { return Context.Last().content; }
+
+
+
+        private Notifier selection;
+        public override void AddToSelection(Notifier viewModel, bool resetSelection)
+        {
+            if (selection != null)
+            {
+                SelectionEditor = null;
+                selection.IsSelected = false;
+            }
+
+            selection = viewModel;
+
+            if (selection != null)
+            {
+                selection.IsSelected = true;
+                SelectionEditor = _editorCreator(selection);
+            }
+
+            CommandManager.InvalidateRequerySuggested();
+        }
+        public override void GetSelection(IList outSelection) { if (selection != null) outSelection.Add(selection); }
+        public override bool HasSelection() => selection != null;
     }
 }

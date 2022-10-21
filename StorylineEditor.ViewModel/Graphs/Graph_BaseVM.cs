@@ -47,6 +47,8 @@ namespace StorylineEditor.ViewModel.Graphs
 
             NodesVMs = new Dictionary<BaseM, Notifier>();
             LinksVMs = new Dictionary<BaseM, Notifier>();
+
+            selection = new List<Notifier>();
         }
 
         protected ICommand selectNodeTypeCommand;
@@ -70,18 +72,13 @@ namespace StorylineEditor.ViewModel.Graphs
             ((viewModel is INodeVM) ? NodesVMs : LinksVMs).Add(model, viewModel);
             Add(null, viewModel);
 
-            AddToSelection(viewModel);
-
-            CommandManager.InvalidateRequerySuggested();
+            AddToSelection(viewModel, !Keyboard.Modifiers.HasFlag(ModifierKeys.Control));
         }, (uiElement) => uiElement != null && SelectedNodeType != null));
 
         protected ICommand selectCommand;
         public override ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<Notifier>((viewModel) =>
         {
-            AddToSelection(viewModel);
-
-            CommandManager.InvalidateRequerySuggested();
-
+            AddToSelection(viewModel, !Keyboard.Modifiers.HasFlag(ModifierKeys.Control));
         }, (viewModel) => viewModel != null));
 
 
@@ -118,11 +115,26 @@ namespace StorylineEditor.ViewModel.Graphs
         public ICommand MoveCommand => moveCommand ?? (moveCommand = new RelayCommand<MouseEventArgs>((args) =>
         {
             Point position = args.GetPosition(null);
+            
+            double deltaX = (position.X - prevPosition.X) / ScaleX;
+            double deltaY = (position.Y - prevPosition.Y) / ScaleY;
 
             if (draggedNodeViewModel != null)
             {
-                draggedNodeViewModel.PositionX += (position.X - prevPosition.X) / ScaleX;
-                draggedNodeViewModel.PositionY += (position.Y - prevPosition.Y) / ScaleY;
+                if (!draggedNodeViewModel.IsSelected)
+                {
+                    draggedNodeViewModel.PositionX += deltaX;
+                    draggedNodeViewModel.PositionY += deltaY;
+                }
+
+                foreach (var selectedViewModel in selection)
+                {
+                    if (selectedViewModel is INodeVM nodeViewModel)
+                    {
+                        nodeViewModel.PositionX += deltaX;
+                        nodeViewModel.PositionY += deltaY;
+                    }
+                }
             }
             else
             {
@@ -297,7 +309,6 @@ namespace StorylineEditor.ViewModel.Graphs
                 }
             }
         }
-
         private void UpdateLocalPosition(INodeVM nodeViewModel, EUpdateTarget updateTarget)
         {
             switch (updateTarget)
@@ -318,6 +329,8 @@ namespace StorylineEditor.ViewModel.Graphs
                     break;
             }
         }
+
+
 
         private void TranslateView(double absoluteDeltaX, double absoluteDeltaY)
         {
@@ -378,19 +391,33 @@ namespace StorylineEditor.ViewModel.Graphs
 
         public double ViewWidth { get; set; }
         public double ViewHeight { get; set; }
-
         public bool SizeChangedFlag { set => TranslateView(0, 0); }
 
 
 
-        public void AddToSelection(Notifier viewModel)
+        protected readonly List<Notifier> selection;
+        public override void AddToSelection(Notifier viewModel, bool resetSelection)
         {
+            if (resetSelection)
+            {
+                foreach (var selectedVewModel in selection) selectedVewModel.IsSelected = false;
+                selection.Clear();
+            }
 
+            if (!selection.Contains(viewModel) && viewModel != null)
+            {
+                selection.Add(viewModel);
+                viewModel.IsSelected = true;
+            }
+
+            selectionEditor = selection.Count == 1 ? _editorCreator(selection[0]) : null;
+
+            CommandManager.InvalidateRequerySuggested();
         }
-
-        private void AddToSelectionInternal(Notifier viewModel, bool resetSelection)
+        public override void GetSelection(IList outSelection)
         {
-
+            foreach (var selectedViewModel in selection) outSelection.Add(selectedViewModel);
         }
+        public override bool HasSelection() => selection.Count > 0;
     }
 }

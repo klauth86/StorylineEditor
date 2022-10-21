@@ -14,6 +14,7 @@ using StorylineEditor.Model;
 using StorylineEditor.ViewModel.Common;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
@@ -48,16 +49,20 @@ namespace StorylineEditor.ViewModel
         private ICommand removeCommand;
         public ICommand RemoveCommand => removeCommand ?? (removeCommand = new RelayCommand(() =>
         {
-            Notifier prevSelection = Selection;
-            Selection = null;
+            List<Notifier> prevSelection = new List<Notifier>();            
+            GetSelection(prevSelection);
+            
+            AddToSelection(null, true);
 
-            BaseM model = _modelExtractor(prevSelection);
+            foreach (var selectedViewModel in prevSelection)
+            {
+                BaseM model = _modelExtractor(selectedViewModel);
 
-            Remove(prevSelection, model, GetContext(model));
+                Remove(selectedViewModel, model, GetContext(model));
 
-            CommandManager.InvalidateRequerySuggested();
-
-        }, () => Selection != null));
+                CommandManager.InvalidateRequerySuggested();
+            }
+        }, () => HasSelection()));
 
         private ICommand cutCommand;
         public ICommand CutCommand => cutCommand ?? (cutCommand = new RelayCommand<Notifier>((viewModel) =>
@@ -82,7 +87,7 @@ namespace StorylineEditor.ViewModel
                 cutEntryVM.ViewModel.IsCut = false;
             }
 
-            Selection = CutVMs.Last().ViewModel;
+            AddToSelection(CutVMs.Last().ViewModel, true);
 
             CutVMs.Clear();
 
@@ -120,30 +125,25 @@ namespace StorylineEditor.ViewModel
 
 
 
-        private Notifier selection;
-        public Notifier Selection
+        protected Notifier selectionEditor;
+        public Notifier SelectionEditor
         {
-            get => selection;
+            get => selectionEditor;
             set
             {
-                if (selection != value)
+                if (value != selectionEditor)
                 {
-                    if (selection != null) selection.IsSelected = false;
-
-                    selection = value;
-
-                    if (selection != null) selection.IsSelected = true;
-
-                    Notify(nameof(Selection));
+                    selectionEditor = value;
                     Notify(nameof(SelectionEditor));
-
-                    CommandManager.InvalidateRequerySuggested();
                 }
             }
         }
-
-        public Notifier SelectionEditor => selection != null ? _editorCreator(selection) : null;
-
         public abstract IList GetContext(BaseM model);
+
+
+
+        public abstract void AddToSelection(Notifier viewModel, bool resetSelection);
+        public abstract void GetSelection(IList outSelection);
+        public abstract bool HasSelection();
     }
 }
