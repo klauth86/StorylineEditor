@@ -55,8 +55,9 @@ namespace StorylineEditor.ViewModel.Graphs
         public ICommand AddNodeCommand => addNodeCommand ?? (addNodeCommand = new RelayCommand<UIElement>((uiElement) =>
         {
             Point position = Mouse.GetPosition(uiElement);
-            
-            FromLocalToAbsolute(position);
+
+            position.X /= ScaleX;
+            position.Y /= ScaleY;
 
             position.X += OffsetX;
             position.Y += OffsetY;
@@ -75,12 +76,12 @@ namespace StorylineEditor.ViewModel.Graphs
 
 
         protected bool isDragging;
-        protected Point prevDragPosition;
+        protected Point prevPosition;
 
         protected ICommand startDragCommand;
         public ICommand StartDragCommand => startDragCommand ?? (startDragCommand = new RelayCommand<MouseButtonEventArgs>((eventArgs) =>
         {
-            prevDragPosition = eventArgs.GetPosition((IInputElement)eventArgs.OriginalSource);
+            prevPosition = eventArgs.GetPosition((IInputElement)eventArgs.OriginalSource);
             isDragging = true;
 
             CommandManager.InvalidateRequerySuggested();
@@ -99,11 +100,11 @@ namespace StorylineEditor.ViewModel.Graphs
         {
             if (eventArgs.OriginalSource is UIElement uiElement)
             {
-                Point dragPosition = eventArgs.GetPosition(uiElement);
+                Point position = eventArgs.GetPosition(uiElement);
 
-                TranslateView(dragPosition.X - prevDragPosition.X, dragPosition.Y - prevDragPosition.Y, uiElement.RenderSize.Width, uiElement.RenderSize.Height);
+                TranslateView((position.X - prevPosition.X) / ScaleX, (position.Y - prevPosition.Y) / ScaleY, uiElement.RenderSize.Width / scaleX, uiElement.RenderSize.Height / ScaleY);
 
-                prevDragPosition = dragPosition;
+                prevPosition = position;
             }
         }, (eventArgs) => eventArgs != null && isDragging));
 
@@ -112,7 +113,27 @@ namespace StorylineEditor.ViewModel.Graphs
         {
             if (eventArgs.OriginalSource is UIElement uiElement)
             {
-                TranslateView(OffsetX, offsetY, uiElement.RenderSize.Width, uiElement.RenderSize.Height);
+                TranslateView(0, 0, uiElement.RenderSize.Width / scaleX, uiElement.RenderSize.Height / ScaleY);
+            }
+        }, (eventArgs) => eventArgs != null));
+
+        protected ICommand scaleCommand;
+        public ICommand ScaleCommand => scaleCommand ?? (scaleCommand = new RelayCommand<MouseWheelEventArgs>((eventArgs) =>
+        {
+            if (eventArgs.OriginalSource is UIElement uiElement)
+            {
+                Point position = eventArgs.GetPosition(uiElement);
+
+                double oldX = position.X / ScaleX;
+                double oldY = position.Y / ScaleY;
+
+                ScaleX = Math.Max(Math.Min(ScaleX + eventArgs.Delta * 0.0002, 4), 1.0 / 64);
+                ScaleY = Math.Max(Math.Min(ScaleY + eventArgs.Delta * 0.0002, 4), 1.0 / 64);
+
+                double newX = position.X / ScaleX;
+                double newY = position.Y / ScaleY;
+
+                TranslateView(newX - oldX, newY - oldY, uiElement.RenderSize.Width / scaleX, uiElement.RenderSize.Height / ScaleY);
             }
         }, (eventArgs) => eventArgs != null));
 
@@ -202,8 +223,8 @@ namespace StorylineEditor.ViewModel.Graphs
 
 
 
-        private Dictionary<BaseM, Notifier> NodesVMs = new Dictionary<BaseM, Notifier>();
-        private Dictionary<BaseM, Notifier> LinksVMs = new Dictionary<BaseM, Notifier>();
+        private readonly Dictionary<BaseM, Notifier> NodesVMs;
+        private readonly Dictionary<BaseM, Notifier> LinksVMs;
 
 
 
@@ -218,27 +239,27 @@ namespace StorylineEditor.ViewModel.Graphs
 
         protected double FromLocalToAbsoluteX(double x)
         {
-            double result = x / scaleX;    // Scale
-            result += offsetX;              // Transaltion
+            double result = x / ScaleX;    // Scale
+            result += OffsetX;              // Transaltion
             return result;
         }
         protected double FromLocalToAbsoluteY(double y)
         {
-            double result = y / scaleY;    // Scale
-            result += offsetY;              // Transaltion
+            double result = y / ScaleY;    // Scale
+            result += OffsetY;              // Transaltion
             return result;
         }
 
         protected double FromAbsoluteToLocalX(double x)
         {
-            double result = x - offsetX;    // Transaltion
-            result *= scaleX;               // Scale
+            double result = x - OffsetX;    // Transaltion
+            result *= ScaleX;               // Scale
             return result;
         }
         protected double FromAbsoluteToLocalY(double y)
         {
-            double result = y - offsetY;    // Transaltion
-            result *= scaleY;               // Scale
+            double result = y - OffsetY;    // Transaltion
+            result *= ScaleY;               // Scale
             return result;
         }
 
@@ -280,13 +301,10 @@ namespace StorylineEditor.ViewModel.Graphs
             }
         }
 
-        private void TranslateView(double deltaX, double deltaY, double sizeX, double sizeY)
+        private void TranslateView(double deltaX, double deltaY, double absSizeX, double absSizeY)
         {
-            OffsetX -= deltaX / scaleX;
-            OffsetY -= deltaY / scaleX;
-
-            double absSizeX = sizeX / scaleX;
-            double absSizeY = sizeY / scaleY;
+            OffsetX -= deltaX;
+            OffsetY -= deltaY;
 
             Rect viewRect = new Rect(OffsetX, OffsetY, absSizeX, absSizeY);
             Rect nodeRect = new Rect();

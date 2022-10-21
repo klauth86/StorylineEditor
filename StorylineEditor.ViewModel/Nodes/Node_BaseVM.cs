@@ -12,7 +12,6 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModel.Common;
-using System.Windows;
 using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Nodes
@@ -90,6 +89,7 @@ namespace StorylineEditor.ViewModel.Nodes
                 }
             }
         }
+
         protected double height;
         public double Height
         {
