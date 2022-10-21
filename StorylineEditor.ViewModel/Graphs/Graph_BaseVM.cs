@@ -102,7 +102,7 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 Point position = eventArgs.GetPosition(uiElement);
 
-                TranslateView((position.X - prevPosition.X) / ScaleX, (position.Y - prevPosition.Y) / ScaleY, uiElement.RenderSize.Width / scaleX, uiElement.RenderSize.Height / ScaleY);
+                TranslateView((position.X - prevPosition.X) / ScaleX, (position.Y - prevPosition.Y) / ScaleY, uiElement.RenderSize.Width / ScaleX, uiElement.RenderSize.Height / ScaleY);
 
                 prevPosition = position;
             }
@@ -113,14 +113,14 @@ namespace StorylineEditor.ViewModel.Graphs
         {
             if (eventArgs.OriginalSource is UIElement uiElement)
             {
-                TranslateView(0, 0, uiElement.RenderSize.Width / scaleX, uiElement.RenderSize.Height / ScaleY);
+                TranslateView(0, 0, uiElement.RenderSize.Width / ScaleX, uiElement.RenderSize.Height / ScaleY);
             }
         }, (eventArgs) => eventArgs != null));
 
         protected ICommand scaleCommand;
         public ICommand ScaleCommand => scaleCommand ?? (scaleCommand = new RelayCommand<MouseWheelEventArgs>((eventArgs) =>
         {
-            if (eventArgs.OriginalSource is UIElement uiElement)
+            if (eventArgs.Source is UIElement uiElement)
             {
                 Point position = eventArgs.GetPosition(uiElement);
 
@@ -133,7 +133,7 @@ namespace StorylineEditor.ViewModel.Graphs
                 double newX = position.X / ScaleX;
                 double newY = position.Y / ScaleY;
 
-                TranslateView(newX - oldX, newY - oldY, uiElement.RenderSize.Width / scaleX, uiElement.RenderSize.Height / ScaleY);
+                TranslateView(newX - oldX, newY - oldY, uiElement.RenderSize.Width / ScaleX, uiElement.RenderSize.Height / ScaleY);
             }
         }, (eventArgs) => eventArgs != null));
 
@@ -301,12 +301,12 @@ namespace StorylineEditor.ViewModel.Graphs
             }
         }
 
-        private void TranslateView(double deltaX, double deltaY, double absSizeX, double absSizeY)
+        private void TranslateView(double absoluteDeltaX, double absoluteDeltaY, double absoluteSizeX, double absoluteSizeY)
         {
-            OffsetX -= deltaX;
-            OffsetY -= deltaY;
+            OffsetX -= absoluteDeltaX;
+            OffsetY -= absoluteDeltaY;
 
-            Rect viewRect = new Rect(OffsetX, OffsetY, absSizeX, absSizeY);
+            Rect viewRect = new Rect(OffsetX, OffsetY, absoluteSizeX, absoluteSizeY);
             Rect nodeRect = new Rect();
 
             double doubleMaxHeight = 2 * (double)Application.Current.FindResource("Double_Node_MaxHeight");
