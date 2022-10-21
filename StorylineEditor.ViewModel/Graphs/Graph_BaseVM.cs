@@ -17,6 +17,7 @@ using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Nodes;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 
@@ -32,6 +33,11 @@ namespace StorylineEditor.ViewModel.Graphs
             scaleY = scaleX = 1;
             selectedNodeType = defaultNodeType;
             _typeDescriptor = typeDescriptor ?? throw new ArgumentNullException(nameof(typeDescriptor));
+
+            foreach (var nodeModel in Model.nodes) { Add(null, _viewModelCreator(nodeModel, this)); }
+            foreach (var linkModel in Model.links) { Add(null, _viewModelCreator(linkModel, this)); }
+
+            isDragging = false;
         }
 
         protected ICommand selectNodeTypeCommand;
@@ -44,6 +50,40 @@ namespace StorylineEditor.ViewModel.Graphs
             FromLocalToAbsolute(position);
             AddCommandInternal(SelectedNodeType, position, this);
         }, (uiElement) => uiElement != null && SelectedNodeType != null));
+
+
+        protected bool isDragging;
+        protected Point prevDragPosition;
+
+        protected ICommand startDragCommand;
+        public ICommand StartDragCommand => startDragCommand ?? (startDragCommand = new RelayCommand<MouseButtonEventArgs>((eventArgs) =>
+        {
+            prevDragPosition = eventArgs.GetPosition((IInputElement)eventArgs.OriginalSource);
+            isDragging = true;
+
+            CommandManager.InvalidateRequerySuggested();
+        }, (eventArgs) => eventArgs != null && !isDragging));
+
+        protected ICommand endDragCommand;
+        public ICommand EndDragCommand => endDragCommand ?? (endDragCommand = new RelayCommand<MouseButtonEventArgs>((eventArgs) =>
+        {
+            isDragging = false;
+
+            CommandManager.InvalidateRequerySuggested();
+        }, (eventArgs) => eventArgs != null && isDragging));
+
+        protected ICommand moveCommand;
+        public ICommand MoveCommand => moveCommand ?? (moveCommand = new RelayCommand<MouseButtonEventArgs>((eventArgs) =>
+        {
+            if (eventArgs.OriginalSource is UIElement uiElement)
+            {
+                Point dragPosition = eventArgs.GetPosition(uiElement);
+
+                TranslateView(dragPosition.X - prevDragPosition.X, dragPosition.Y - prevDragPosition.Y, uiElement.RenderSize.Width, uiElement.RenderSize.Height);
+
+                prevDragPosition = dragPosition;
+            }
+        }, (eventArgs) => eventArgs != null && isDragging));
 
 
 
@@ -174,11 +214,40 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 if (propName == nameof(Node_BaseVM<Node_BaseM>.PositionX))
                 {
-                    nodeViewModel.LocalPositionX = FromAbsoluteToLocalX(nodeViewModel.PositionX);
+                    nodeViewModel.Left = FromAbsoluteToLocalX(nodeViewModel.PositionX) - nodeViewModel.Width / 2;
                 }
                 else if (propName == nameof(Node_BaseVM<Node_BaseM>.PositionY))
                 {
-                    nodeViewModel.LocalPositionY = FromAbsoluteToLocalY(nodeViewModel.PositionY);
+                    nodeViewModel.Top = FromAbsoluteToLocalY(nodeViewModel.PositionY) - nodeViewModel.Height / 2;
+                }
+            }
+        }
+
+
+
+        private void TranslateView(double deltaX, double deltaY, double sizeX, double sizeY)
+        {
+            OffsetX += FromLocalToAbsoluteX(deltaX);
+            OffsetY += FromLocalToAbsoluteY(deltaY);
+
+            double absSizeX = FromLocalToAbsoluteX(sizeX);
+            double absSizeY = FromLocalToAbsoluteX(sizeY);
+
+            Rect viewRect = new Rect(OffsetX, OffsetY, absSizeX, absSizeY);
+            Rect nodeRect = new Rect();
+
+            List<Notifier> removeVMs = new List<Notifier>();
+
+            foreach (var viewModel in ItemsVMs)
+            {
+                if (viewModel is INodeVM nodeViewModel)
+                {
+                    nodeRect.X = nodeViewModel.PositionX - nodeViewModel.Width / 2;
+                    nodeRect.Y = nodeViewModel.PositionY - nodeViewModel.Height / 2;
+                    nodeRect.Width = nodeViewModel.Width;
+                    nodeRect.Height = nodeViewModel.Height;
+
+                    if (!viewRect.IntersectsWith(nodeRect)) { removeVMs.Add(viewModel); }
                 }
             }
         }

@@ -12,6 +12,7 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModel.Common;
+using System.Windows;
 using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Nodes
@@ -20,17 +21,15 @@ namespace StorylineEditor.ViewModel.Nodes
     {
         double PositionX { get; set; }
         double PositionY { get; set; }
-        double LocalPositionX { get; set; }
-        double LocalPositionY { get; set; }
+        double Left { get; set; }
+        double Top { get; set; }
+        double Width { get; set; }
+        double Height { get; set; }
     }
 
     public abstract class Node_BaseVM<T> : BaseVM<T>, INodeVM where T : Node_BaseM
     {
-        public Node_BaseVM(T model, ICallbackContext callbackContext) : base(model, callbackContext)
-        {
-            CallbackContext?.Callback(this, nameof(PositionX));
-            CallbackContext?.Callback(this, nameof(PositionY));
-        }
+        public Node_BaseVM(T model, ICallbackContext callbackContext) : base(model, callbackContext) { }
 
         public byte Gender
         {
@@ -75,35 +74,69 @@ namespace StorylineEditor.ViewModel.Nodes
 
 
 
-        double localPositionX;
-        public double LocalPositionX
+        double left;
+        public double Left
         {
-            get => localPositionX;
+            get => left;
             set
             {
-                if (localPositionX != value)
+                if (left != value)
                 {
-                    localPositionX = value;
-                    Notify(nameof(LocalPositionX));
+                    left = value;
+                    Notify(nameof(Left));
                 }
             }
         }
 
-        double localPositionY;
-        public double LocalPositionY
+        double top;
+        public double Top
         {
-            get => localPositionY;
+            get => top;
             set
             {
-                if (localPositionY != value)
+                if (top != value)
                 {
-                    localPositionY = value;
-                    Notify(nameof(LocalPositionY));
+                    top = value;
+                    Notify(nameof(Top));
                 }
             }
         }
 
+        public Size RenderSize
+        {
+            set
+            {
+                Width = value.Width;
+                Height = value.Height;
+            }
+        }
 
+        protected double width;
+        public double Width
+        {
+            get => width;
+            set
+            {
+                if (width != value)
+                {
+                    width = value;
+                    CallbackContext?.Callback(this, nameof(PositionX));
+                }
+            }
+        }
+        protected double height;
+        public double Height
+        {
+            get => height;
+            set
+            {
+                if (height != value)
+                {
+                    height = value;
+                    CallbackContext?.Callback(this, nameof(PositionY));
+                }
+            }
+        }
 
         private ICommand toggleGenderCommand;
         public ICommand ToggleGenderCommand => toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand(() => { Gender = (byte)((Gender + 1) % 3); }));

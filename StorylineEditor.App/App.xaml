@@ -19,6 +19,7 @@ StorylineEditor распространяется в надежде, что он�
              xmlns:vmn="clr-namespace:StorylineEditor.ViewModel.Nodes;assembly=StorylineEditor.ViewModel"
              xmlns:m="clr-namespace:StorylineEditor.Model;assembly=StorylineEditor.Model"
              xmlns:mn="clr-namespace:StorylineEditor.Model.Nodes;assembly=StorylineEditor.Model"
+             xmlns:bhvrs="clr-namespace:StorylineEditor.App.Behaviors"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
 
@@ -37,11 +38,11 @@ StorylineEditor распространяется в надежде, что он�
         <SolidColorBrush x:Key="Color_Node_Background" Color="White" />
 
         <!-- Global and base -->
-        
+
         <Style TargetType="TextBlock" x:Key="S_TextBlock"></Style>
 
         <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_GroupBox.Header"></Style>
-        
+
         <Style TargetType="TextBox" x:Key="S_TextBox_Input"></Style>
 
         <Style TargetType="TextBox" x:Key="S_TextBox_MultilineInput" BasedOn="{StaticResource S_TextBox_Input}">
@@ -51,7 +52,7 @@ StorylineEditor распространяется в надежде, что он�
         </Style>
 
         <Style TargetType="TextBox" x:Key="S_TextBox_Input_NumericUpDown_Float"></Style>
-        
+
         <Style TargetType="GridSplitter" x:Key="S_GridSplitter">
             <Setter Property="HorizontalAlignment" Value="Center"></Setter>
             <Setter Property="VerticalAlignment" Value="Stretch"></Setter>
@@ -63,19 +64,19 @@ StorylineEditor распространяется в надежде, что он�
         <Style TargetType="Button" x:Key="S_Button_Link"></Style>
 
 
-        
+
         <!-- Items -->
-        
+
         <Style TargetType="Border" x:Key="S_Border_Selector"></Style>
 
         <Style TargetType="TextBlock" x:Key="S_TextBlock_Selector_Icon"></Style>
 
         <Style TargetType="TextBlock" x:Key="S_TextBlock_Selector_Name"></Style>
-        
-        
-        
+
+
+
         <!-- Main Menu -->
-        
+
         <Style TargetType="Button" x:Key="S_Button_MainMenu"></Style>
 
         <Style TargetType="Separator" x:Key="S_Separator_MainMenu">
@@ -89,7 +90,7 @@ StorylineEditor распространяется в надежде, что он�
 
 
         <!-- Graph -->
-        
+
         <Style TargetType="Button" x:Key="S_Button_Graph"></Style>
 
         <Style TargetType="Button" x:Key="S_Button_Graph_Selectable" BasedOn="{StaticResource S_Button_Graph}"></Style>
@@ -97,19 +98,19 @@ StorylineEditor распространяется в надежде, что он�
         <Style TargetType="Button" x:Key="S_Button_Graph_Selectable_Selected" BasedOn="{StaticResource S_Button_Graph_Selectable}">
             <Setter Property="Background" Value="{StaticResource Color_Selector_Selected}"></Setter>
         </Style>
-        
+
         <Style TargetType="Separator" x:Key="S_Separator_Graph">
             <Setter Property="Width" Value="4"></Setter>
         </Style>
 
         <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Graph"></Style>
-        
+
         <Style TargetType="TextBox" BasedOn="{StaticResource S_TextBox_Input}" x:Key="S_TextBox_Input_Graph"></Style>
 
-        
-        
+
+
         <!-- Node -->
-        
+
         <Style TargetType="Label" x:Key="S_Label_Node"></Style>
 
         <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Node_Header"></Style>
@@ -118,18 +119,18 @@ StorylineEditor распространяется в надежде, что он�
 
         <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Node_Result"></Style>
 
-        
-        
+
+
         <!-- Data Templates -->
 
         <DataTemplate DataType="{x:Type vm:FolderProxyM}">
             <Button Style="{StaticResource S_Button_GroupBox.Header}" Content="Up" Command="{Binding Path=DataContext.UpContextCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"></Button>
         </DataTemplate>
-        
+
         <DataTemplate DataType="{x:Type m:FolderM}">
             <Button Style="{StaticResource S_Button_Link}" Content="{Binding name}" Command="{Binding Path=DataContext.SetContextCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></Button>
         </DataTemplate>
-        
+
         <ItemsPanelTemplate x:Key="IPT_WrapPanel">
             <WrapPanel></WrapPanel>
         </ItemsPanelTemplate>
@@ -230,7 +231,7 @@ StorylineEditor распространяется в надежде, что он�
                 <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_MultilineInput}"></TextBox>
             </StackPanel>
         </DataTemplate>
-        
+
         <DataTemplate DataType="{x:Type vm:CharacterVM}">
             <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}">
                 <Border.InputBindings>
@@ -296,7 +297,7 @@ StorylineEditor распространяется в надежде, что он�
                 <TextBox Text="{Binding ClassPathName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Input}"></TextBox>
             </StackPanel>
         </DataTemplate>
-        
+
         <DataTemplate DataType="{x:Type vm:ItemVM}">
             <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}">
                 <Border.InputBindings>
@@ -362,18 +363,20 @@ StorylineEditor распространяется в надежде, что он�
                     <ColumnDefinition Width="3*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <ItemsControl x:Name="ic_Canvas" Background="LightGray" ItemsPanel="{StaticResource IPT_Canvas}" ItemsSource="{Binding ItemsVMs}">
+                <ItemsControl x:Name="ic_Canvas" Background="LightGray" ItemsPanel="{StaticResource IPT_Canvas}" ItemsSource="{Binding ItemsVMs}"
+                              bhvrs:MouseExtBehavior.MouseRightButtonDownCommand="{Binding StartDragCommand}"
+                              bhvrs:MouseExtBehavior.MouseRightButtonUpCommand="{Binding EndDragCommand}">
                     <ItemsControl.InputBindings>
                         <MouseBinding Gesture="LeftClick" Command="{Binding AddNodeCommand}" CommandParameter="{x:Reference Name=ic_Canvas}"></MouseBinding>
                     </ItemsControl.InputBindings>
                     <ItemsControl.ItemContainerStyle>
                         <Style TargetType="ContentPresenter">
-                            <Setter Property="Canvas.Left" Value="{Binding LocalPositionX, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Setter Property="Canvas.Top" Value="{Binding LocalPositionY, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Setter Property="Canvas.Left" Value="{Binding Left, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Setter Property="Canvas.Top" Value="{Binding Top, UpdateSourceTrigger=PropertyChanged}"/>
                         </Style>
                     </ItemsControl.ItemContainerStyle>
                 </ItemsControl>
-                
+
                 <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
@@ -391,7 +394,7 @@ StorylineEditor распространяется в надежде, что он�
 
                 <GridSplitter Grid.Column="1" Style="{StaticResource S_GridSplitter}"></GridSplitter>
 
-                <ContentControl Grid.Column="2" Content="{Binding Selection, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+                <ContentControl Grid.Column="2" Content="{Binding SelectionEditor, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
             </Grid>
             <DataTemplate.Triggers>
                 <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_StepM}">
@@ -452,7 +455,10 @@ StorylineEditor распространяется в надежде, что он�
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vmn:Node_Journal_StepVM}">
-            <Border MinHeight="64" MinWidth="96" MaxHeight="256" MaxWidth="256" ToolTip="{Binding Id}" Background="{StaticResource Color_Node_Background}">
+            <Border MinHeight="64" MinWidth="96" MaxHeight="256" MaxWidth="256" ToolTip="{Binding Id}" Background="{StaticResource Color_Node_Background}"
+                    bhvrs:RenderSizeBehavior.ActualWidth="{Binding Width, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                    bhvrs:RenderSizeBehavior.ActualHeight="{Binding Height, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                    bhvrs:RenderSizeBehavior.IsEnabled="true">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"></ColumnDefinition>
@@ -475,8 +481,13 @@ StorylineEditor распространяется в надежде, что он�
             </Border>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type vmn:Node_Journal_StepEditorVM}"></DataTemplate>
+
         <DataTemplate DataType="{x:Type vmn:Node_Journal_AlternativeVM}">
-            <Border MinHeight="64" MinWidth="96" MaxHeight="256" MaxWidth="256" ToolTip="{Binding Id}" Background="{StaticResource Color_Node_Background}">
+            <Border MinHeight="64" MinWidth="96" MaxHeight="256" MaxWidth="256" ToolTip="{Binding Id}" Background="{StaticResource Color_Node_Background}"
+                    bhvrs:RenderSizeBehavior.ActualWidth="{Binding Width, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                    bhvrs:RenderSizeBehavior.ActualHeight="{Binding Height, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                    bhvrs:RenderSizeBehavior.IsEnabled="true">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"></ColumnDefinition>
@@ -498,6 +509,8 @@ StorylineEditor распространяется в надежде, что он�
                 </Grid>
             </Border>
         </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vmn:Node_Journal_AlternativeEditorVM}"></DataTemplate>
 
     </Application.Resources>
 </Application>
