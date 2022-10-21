@@ -67,8 +67,21 @@ namespace StorylineEditor.App.Behaviors
             if (sender is DependencyObject dp)
             {
                 if (args.WidthChanged) SetActualWidth(dp, args.NewSize.Width);
+                
                 if (args.HeightChanged) SetActualHeight(dp, args.NewSize.Height);
+
+                if (args.WidthChanged || args.HeightChanged) SetSizeChangedFlag(dp, !GetSizeChangedFlag(dp));
             }
         }
+
+        private static readonly DependencyProperty SizeChangedFlagProperty = DependencyProperty.RegisterAttached
+            (
+            "SizeChangedFlag",
+            typeof(bool),
+            typeof(RenderSizeBehavior)
+            );
+
+        public static void SetSizeChangedFlag(DependencyObject dp, bool value) { dp.SetValue(SizeChangedFlagProperty, value); }
+        public static bool GetSizeChangedFlag(DependencyObject dp) { return (bool)dp.GetValue(SizeChangedFlagProperty); }
     }
 }

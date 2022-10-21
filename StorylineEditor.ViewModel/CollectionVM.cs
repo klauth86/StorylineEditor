@@ -49,6 +49,28 @@ namespace StorylineEditor.ViewModel
             foreach (var model in Model) { Add(null, _viewModelCreator(model, null)); }
         }
 
+        private ICommand addCommand;
+        public override ICommand AddCommand => addCommand ?? (addCommand = new RelayCommand<bool>((isFolder) =>
+        {
+            BaseM model = _modelCreator(isFolder ? typeof(FolderM) : null, null);
+            Notifier viewModel = _viewModelCreator(model, null);
+
+            Add(model, viewModel);
+
+            Selection = viewModel;
+
+            CommandManager.InvalidateRequerySuggested(); 
+        }));
+
+        private ICommand selectCommand;
+        public override ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<Notifier>((viewModel) =>
+        {
+            Selection = viewModel;
+
+            CommandManager.InvalidateRequerySuggested();
+
+        }, (viewModel) => viewModel != null));
+
         private ICommand infoCommand;
         public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<Notifier>((viewModel) => _viewModelInformer(viewModel), (viewModel) => viewModel != null));
 

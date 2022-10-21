@@ -52,8 +52,8 @@ namespace StorylineEditor.ViewModel.Graphs
         protected ICommand selectNodeTypeCommand;
         public ICommand SelectNodeTypeCommand => selectNodeTypeCommand ?? (selectNodeTypeCommand = new RelayCommand<Type>((type) => SelectedNodeType = type));
 
-        protected ICommand addNodeCommand;
-        public ICommand AddNodeCommand => addNodeCommand ?? (addNodeCommand = new RelayCommand<UIElement>((uiElement) =>
+        protected ICommand addCommand;
+        public override ICommand AddCommand => addCommand ?? (addCommand = new RelayCommand<UIElement>((uiElement) =>
         {
             Point position = Mouse.GetPosition(uiElement);
 
@@ -70,15 +70,27 @@ namespace StorylineEditor.ViewModel.Graphs
             ((viewModel is INodeVM) ? NodesVMs : LinksVMs).Add(model, viewModel);
             Add(null, viewModel);
 
-            Selection = viewModel;
+            AddToSelection(viewModel);
 
             CommandManager.InvalidateRequerySuggested();
         }, (uiElement) => uiElement != null && SelectedNodeType != null));
+
+        protected ICommand selectCommand;
+        public override ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<Notifier>((viewModel) =>
+        {
+            AddToSelection(viewModel);
+
+            CommandManager.InvalidateRequerySuggested();
+
+        }, (viewModel) => viewModel != null));
+
 
 
         protected bool isDragging;
         protected INodeVM draggedNodeViewModel;
         protected Point prevPosition;
+
+
 
         protected ICommand startDragCommand;
         public ICommand StartDragCommand => startDragCommand ?? (startDragCommand = new RelayCommand<MouseButtonEventArgs>((args) =>
@@ -366,5 +378,19 @@ namespace StorylineEditor.ViewModel.Graphs
 
         public double ViewWidth { get; set; }
         public double ViewHeight { get; set; }
+
+        public bool SizeChangedFlag { set => TranslateView(0, 0); }
+
+
+
+        public void AddToSelection(Notifier viewModel)
+        {
+
+        }
+
+        private void AddToSelectionInternal(Notifier viewModel, bool resetSelection)
+        {
+
+        }
     }
 }

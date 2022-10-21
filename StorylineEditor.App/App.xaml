@@ -375,9 +375,10 @@ StorylineEditor распространяется в надежде, что он�
                               bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding InitCommand}"
                               bhvrs:RenderSizeBehavior.IsEnabled="true"
                               bhvrs:RenderSizeBehavior.ActualWidth="{Binding ViewWidth, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
-                              bhvrs:RenderSizeBehavior.ActualHeight="{Binding ViewHeight, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}">
+                              bhvrs:RenderSizeBehavior.ActualHeight="{Binding ViewHeight, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                              bhvrs:RenderSizeBehavior.SizeChangedFlag="{Binding SizeChangedFlag, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}">
                     <ItemsControl.InputBindings>
-                        <MouseBinding Gesture="LeftClick" Command="{Binding AddNodeCommand}" CommandParameter="{x:Reference Name=ic_Canvas}"></MouseBinding>
+                        <MouseBinding Gesture="LeftClick" Command="{Binding AddCommand}" CommandParameter="{x:Reference Name=ic_Canvas}"></MouseBinding>
                     </ItemsControl.InputBindings>
                     <ItemsControl.ItemContainerStyle>
                         <Style TargetType="ContentPresenter">
@@ -471,6 +472,9 @@ StorylineEditor распространяется в надежде, что он�
                     bhvrs:RenderSizeBehavior.IsEnabled="true" RenderTransformOrigin="0.5,0.5"
                     bhvrs:MouseExtBehavior.MouseRightButtonDownCommand="{Binding Path=DataContext.StartDragCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                     bhvrs:MouseExtBehavior.MouseRightButtonUpCommand="{Binding Path=DataContext.EndDragCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
+                <Border.InputBindings>
+                    <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.AddToSelectionCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
+                </Border.InputBindings>
                 <Border.RenderTransform>
                     <ScaleTransform ScaleX="{Binding Path=DataContext.ScaleX, RelativeSource={RelativeSource AncestorType=ItemsControl}, UpdateSourceTrigger=PropertyChanged}"
                                     ScaleY="{Binding Path=DataContext.ScaleY, RelativeSource={RelativeSource AncestorType=ItemsControl}, UpdateSourceTrigger=PropertyChanged}"></ScaleTransform>
@@ -506,6 +510,9 @@ StorylineEditor распространяется в надежде, что он�
                     bhvrs:RenderSizeBehavior.IsEnabled="true" RenderTransformOrigin="0.5,0.5"
                     bhvrs:MouseExtBehavior.MouseRightButtonDownCommand="{Binding Path=DataContext.StartDragCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                     bhvrs:MouseExtBehavior.MouseRightButtonUpCommand="{Binding Path=DataContext.EndDragCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
+                <Border.InputBindings>
+                    <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.AddToSelectionCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
+                </Border.InputBindings>
                 <Border.RenderTransform>
                     <ScaleTransform ScaleX="{Binding Path=DataContext.ScaleX, RelativeSource={RelativeSource AncestorType=ItemsControl}, UpdateSourceTrigger=PropertyChanged}"
                                     ScaleY="{Binding Path=DataContext.ScaleY, RelativeSource={RelativeSource AncestorType=ItemsControl}, UpdateSourceTrigger=PropertyChanged}"></ScaleTransform>

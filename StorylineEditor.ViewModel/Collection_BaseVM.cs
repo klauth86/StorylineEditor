@@ -43,8 +43,7 @@ namespace StorylineEditor.ViewModel
             ItemsVMs = new ObservableCollection<Notifier>();
         }
 
-        private ICommand addCommand;
-        public ICommand AddCommand => addCommand ?? (addCommand = new RelayCommand<bool>((isFolder) => { AddCommandInternal(isFolder ? typeof(FolderM) : null, default(U), null); }));
+        public abstract ICommand AddCommand { get; }
 
         private ICommand removeCommand;
         public ICommand RemoveCommand => removeCommand ?? (removeCommand = new RelayCommand(() =>
@@ -90,29 +89,10 @@ namespace StorylineEditor.ViewModel
             CommandManager.InvalidateRequerySuggested();
 
         }, () => CutVMs.Count > 0));
-
-        private ICommand selectCommand;
-        public ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<Notifier>((viewModel) =>
-        {
-            Selection = viewModel;
-
-            CommandManager.InvalidateRequerySuggested();
-
-        }, (viewModel) => viewModel != null));
+        public abstract ICommand SelectCommand{ get; }
 
 
 
-        protected virtual void AddCommandInternal(Type type, U param, ICallbackContext callbackContext)
-        {
-            BaseM model = _modelCreator(type, param);
-            Notifier viewModel = _viewModelCreator(model, callbackContext);
-
-            Add(model, viewModel);
-
-            Selection = viewModel;
-
-            CommandManager.InvalidateRequerySuggested();
-        }
         protected void Add(BaseM model, Notifier viewModel) // pass null to one of params if want to add only model/only viewModel
         {
             if (model != null) GetContext(model).Add(model);
