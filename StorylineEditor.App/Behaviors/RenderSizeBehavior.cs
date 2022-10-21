@@ -42,13 +42,13 @@ namespace StorylineEditor.App.Behaviors
             new PropertyMetadata(false, IsEnabledPropertyChanged)
             );
 
-        public static void SetIsEnabled(this UIElement inUIElement, bool enable) { inUIElement.SetValue(IsEnabledProperty, enable); }
+        public static void SetIsEnabled(this UIElement inUIElement, bool value) { inUIElement.SetValue(IsEnabledProperty, value); }
 
-        private static void IsEnabledPropertyChanged(DependencyObject inDependencyObject, DependencyPropertyChangedEventArgs inEventArgs)
+        private static void IsEnabledPropertyChanged(DependencyObject dp, DependencyPropertyChangedEventArgs args)
         {
-            if (inDependencyObject is FrameworkElement frameworkElement)
+            if (dp is FrameworkElement frameworkElement)
             {
-                if (inEventArgs.NewValue == DependencyProperty.UnsetValue || !(bool)inEventArgs.NewValue)
+                if (args.NewValue == DependencyProperty.UnsetValue || args.NewValue == null || !(bool)args.NewValue)
                 {
                     frameworkElement.SizeChanged -= OnSizeChanged;
                 }

@@ -34,10 +34,10 @@ namespace StorylineEditor.ViewModel.Graphs
             selectedNodeType = defaultNodeType;
             _typeDescriptor = typeDescriptor ?? throw new ArgumentNullException(nameof(typeDescriptor));
 
-            foreach (var nodeModel in Model.nodes) { Add(null, _viewModelCreator(nodeModel, this)); }
-            foreach (var linkModel in Model.links) { Add(null, _viewModelCreator(linkModel, this)); }
-
             isDragging = false;
+
+            NodesVMs = new Dictionary<Node_BaseM, Notifier>();
+            LinksVMs = new Dictionary<LinkM, Notifier>();
         }
 
         protected ICommand selectNodeTypeCommand;
@@ -171,6 +171,11 @@ namespace StorylineEditor.ViewModel.Graphs
 
 
 
+        private Dictionary<Node_BaseM, Notifier> NodesVMs = new Dictionary<Node_BaseM, Notifier>();
+        private Dictionary<LinkM, Notifier> LinksVMs = new Dictionary<LinkM, Notifier>();
+
+
+
         protected void FromLocalToAbsolute(Point point)
         {
             if (point != null)
@@ -231,24 +236,54 @@ namespace StorylineEditor.ViewModel.Graphs
             OffsetY += FromLocalToAbsoluteY(deltaY);
 
             double absSizeX = FromLocalToAbsoluteX(sizeX);
-            double absSizeY = FromLocalToAbsoluteX(sizeY);
+            double absSizeY = FromLocalToAbsoluteY(sizeY);
 
             Rect viewRect = new Rect(OffsetX, OffsetY, absSizeX, absSizeY);
             Rect nodeRect = new Rect();
 
-            List<Notifier> removeVMs = new List<Notifier>();
+            HashSet<BaseM> existingMs = new HashSet<BaseM>();
+            HashSet<BaseM> removeMs = new HashSet<BaseM>();
+
+            double doubleMaxHeight = 2 * (double)Application.Current.FindResource("Double_Node_MaxHeight");
+            double doubleMaxWidth = 2 * (double)Application.Current.FindResource("Double_Node_MaxWidth");
 
             foreach (var viewModel in ItemsVMs)
             {
                 if (viewModel is INodeVM nodeViewModel)
                 {
-                    nodeRect.X = nodeViewModel.PositionX - nodeViewModel.Width / 2;
-                    nodeRect.Y = nodeViewModel.PositionY - nodeViewModel.Height / 2;
-                    nodeRect.Width = nodeViewModel.Width;
-                    nodeRect.Height = nodeViewModel.Height;
+                    nodeRect.X = nodeViewModel.PositionX - doubleMaxHeight / 2;
+                    nodeRect.Y = nodeViewModel.PositionY - doubleMaxWidth / 2;
+                    nodeRect.Width = doubleMaxHeight;
+                    nodeRect.Height = doubleMaxWidth;
 
-                    if (!viewRect.IntersectsWith(nodeRect)) { removeVMs.Add(viewModel); }
+                    if (!viewRect.IntersectsWith(nodeRect))
+                    {
+                        ItemsVMs.Remove(viewModel);
+                        removeMs.Add(_modelExtractor(viewModel));
+                    }
+                    else
+                    {
+                        existingMs.Add(_modelExtractor(viewModel));
+                    }
                 }
+            }
+
+            foreach (var nodeModel in Model.nodes)
+            {
+                if (existingMs.Contains(nodeModel)) continue;
+
+                if (removeMs.Contains(nodeModel)) continue;
+
+                nodeRect.X = nodeModel.positionX - doubleMaxHeight / 2;
+                nodeRect.Y = nodeModel.positionY - doubleMaxWidth / 2;
+                nodeRect.Width = doubleMaxHeight;
+                nodeRect.Height = doubleMaxWidth;
+
+                if (!viewRect.IntersectsWith(nodeRect)) continue;
+
+                Add(null, _viewModelCreator(nodeModel, this));
+                
+                existingMs.Add(nodeModel);
             }
         }
     }

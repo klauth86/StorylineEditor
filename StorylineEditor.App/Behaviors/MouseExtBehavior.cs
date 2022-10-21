@@ -25,25 +25,31 @@ namespace StorylineEditor.App.Behaviors
             new PropertyMetadata(MouseLeftButtonDownCommandPropertyChanged)
             );
 
-        public static void SetMouseLeftButtonDownCommand(this UIElement inUIElement, ICommand inCommand)
-        {
-            inUIElement.SetValue(MouseLeftButtonDownCommandProperty, inCommand);
-        }
-        public static ICommand GetMouseLeftButtonDownCommand(UIElement inUIElement)
-        {
-            return (ICommand)inUIElement.GetValue(MouseLeftButtonDownCommandProperty);
-        }
+        public static void SetMouseLeftButtonDownCommand(DependencyObject dp, ICommand value) { dp.SetValue(MouseLeftButtonDownCommandProperty, value); }
+        public static ICommand GetMouseLeftButtonDownCommand(DependencyObject dp) { return (ICommand)dp.GetValue(MouseLeftButtonDownCommandProperty); }
 
-        private static void MouseLeftButtonDownCommandPropertyChanged(DependencyObject inDependencyObject, DependencyPropertyChangedEventArgs inEventArgs)
+        private static void MouseLeftButtonDownCommandPropertyChanged(DependencyObject dp, DependencyPropertyChangedEventArgs args)
         {
-            UIElement uiElement = inDependencyObject as UIElement;
-            if (null == uiElement) return;
-
-            uiElement.MouseLeftButtonDown += (sender, args) =>
+            if (dp is UIElement uIElement)
             {
-                GetMouseLeftButtonDownCommand(uiElement).Execute(args);
+                if (args.NewValue == DependencyProperty.UnsetValue || args.NewValue == null)
+                {
+                    uIElement.MouseLeftButtonDown -= OnMouseLeftButtonDown;
+                }
+                else
+                {
+                    uIElement.MouseLeftButtonDown += OnMouseLeftButtonDown;
+                }
+            }
+        }
+        private static void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs args)
+        {
+            if (sender is DependencyObject dp)
+            {
+                ICommand command = GetMouseLeftButtonDownCommand(dp);
+                if (command?.CanExecute(args) ?? false) command.Execute(args);
                 args.Handled = true;
-            };
+            }
         }
 
 
@@ -56,25 +62,31 @@ namespace StorylineEditor.App.Behaviors
             new PropertyMetadata(MouseLeftButtonUpCommandPropertyChanged)
             );
 
-        public static void SetMouseLeftButtonUpCommand(this UIElement inUIElement, ICommand inCommand)
-        {
-            inUIElement.SetValue(MouseLeftButtonUpCommandProperty, inCommand);
-        }
-        public static ICommand GetMouseLeftButtonUpCommand(UIElement inUIElement)
-        {
-            return (ICommand)inUIElement.GetValue(MouseLeftButtonUpCommandProperty);
-        }
+        public static void SetMouseLeftButtonUpCommand(DependencyObject dp, ICommand value) { dp.SetValue(MouseLeftButtonUpCommandProperty, value); }
+        public static ICommand GetMouseLeftButtonUpCommand(DependencyObject dp) { return (ICommand)dp.GetValue(MouseLeftButtonUpCommandProperty); }
 
-        private static void MouseLeftButtonUpCommandPropertyChanged(DependencyObject inDependencyObject, DependencyPropertyChangedEventArgs inEventArgs)
+        private static void MouseLeftButtonUpCommandPropertyChanged(DependencyObject dp, DependencyPropertyChangedEventArgs args)
         {
-            UIElement uiElement = inDependencyObject as UIElement;
-            if (null == uiElement) return;
-
-            uiElement.MouseLeftButtonUp += (sender, args) =>
+            if (dp is UIElement uIElement)
             {
-                GetMouseLeftButtonUpCommand(uiElement).Execute(args);
+                if (args.NewValue == DependencyProperty.UnsetValue || args.NewValue == null)
+                {
+                    uIElement.MouseLeftButtonUp -= OnMouseLeftButtonUp;
+                }
+                else
+                {
+                    uIElement.MouseLeftButtonUp += OnMouseLeftButtonUp;
+                }
+            }
+        }
+        private static void OnMouseLeftButtonUp(object sender, MouseButtonEventArgs args)
+        {
+            if (sender is DependencyObject dp)
+            {
+                ICommand command = GetMouseLeftButtonUpCommand(dp);
+                if (command?.CanExecute(args) ?? false) command.Execute(args);
                 args.Handled = true;
-            };
+            }
         }
 
 
@@ -87,26 +99,31 @@ namespace StorylineEditor.App.Behaviors
             new PropertyMetadata(MouseRightButtonDownCommandPropertyChanged)
             );
 
-        public static void SetMouseRightButtonDownCommand(this UIElement inUIElement, ICommand inCommand)
-        {
-            inUIElement.SetValue(MouseRightButtonDownCommandProperty, inCommand);
-        }
-        public static ICommand GetMouseRightButtonDownCommand(UIElement inUIElement)
-        {
-            return (ICommand)inUIElement.GetValue(MouseRightButtonDownCommandProperty);
-        }
+        public static void SetMouseRightButtonDownCommand(DependencyObject dp, ICommand value) { dp.SetValue(MouseRightButtonDownCommandProperty, value); }
+        public static ICommand GetMouseRightButtonDownCommand(DependencyObject dp) { return (ICommand)dp.GetValue(MouseRightButtonDownCommandProperty); }
 
-        private static void MouseRightButtonDownCommandPropertyChanged(DependencyObject inDependencyObject, DependencyPropertyChangedEventArgs inEventArgs)
+        private static void MouseRightButtonDownCommandPropertyChanged(DependencyObject dp, DependencyPropertyChangedEventArgs args)
         {
-            UIElement uiElement = inDependencyObject as UIElement;
-            if (null == uiElement) return;
-
-            uiElement.MouseRightButtonDown += (sender, args) =>
+            if (dp is UIElement uIElement)
             {
-                uiElement.CaptureMouse();
-                GetMouseRightButtonDownCommand(uiElement).Execute(args);
+                if (args.NewValue == DependencyProperty.UnsetValue || args.NewValue == null)
+                {
+                    uIElement.MouseRightButtonDown -= OnMouseRightButtonDown;
+                }
+                else
+                {
+                    uIElement.MouseRightButtonDown += OnMouseRightButtonDown;
+                }
+            }
+        }
+        private static void OnMouseRightButtonDown(object sender, MouseButtonEventArgs args)
+        {
+            if (sender is DependencyObject dp)
+            {
+                ICommand command = GetMouseRightButtonDownCommand(dp);
+                if (command?.CanExecute(args) ?? false) command.Execute(args);
                 args.Handled = true;
-            };
+            }
         }
 
 
@@ -119,27 +136,31 @@ namespace StorylineEditor.App.Behaviors
             new PropertyMetadata(MouseRightButtonUpCommandPropertyChanged)
             );
 
-        public static void SetMouseRightButtonUpCommand(this UIElement inUIElement, ICommand inCommand)
-        {
-            inUIElement.SetValue(MouseRightButtonUpCommandProperty, inCommand);
-        }
-        public static ICommand GetMouseRightButtonUpCommand(UIElement inUIElement)
-        {
-            return (ICommand)inUIElement.GetValue(MouseRightButtonUpCommandProperty);
-        }
+        public static void SetMouseRightButtonUpCommand(DependencyObject dp, ICommand value) { dp.SetValue(MouseRightButtonUpCommandProperty, value); }
+        public static ICommand GetMouseRightButtonUpCommand(DependencyObject dp) { return (ICommand)dp.GetValue(MouseRightButtonUpCommandProperty); }
 
-        private static void MouseRightButtonUpCommandPropertyChanged(DependencyObject inDependencyObject, DependencyPropertyChangedEventArgs inEventArgs)
+        private static void MouseRightButtonUpCommandPropertyChanged(DependencyObject dp, DependencyPropertyChangedEventArgs args)
         {
-            UIElement uiElement = inDependencyObject as UIElement;
-            if (null == uiElement) return;
-
-            uiElement.MouseRightButtonUp += (sender, args) =>
+            if (dp is UIElement uIElement)
             {
-                GetMouseRightButtonUpCommand(uiElement).Execute(args);
+                if (args.NewValue == DependencyProperty.UnsetValue || args.NewValue == null)
+                {
+                    uIElement.MouseRightButtonUp -= OnMouseRightButtonUp;
+                }
+                else
+                {
+                    uIElement.MouseRightButtonUp += OnMouseRightButtonUp;
+                }
+            }
+        }
+        private static void OnMouseRightButtonUp(object sender, MouseButtonEventArgs args)
+        {
+            if (sender is DependencyObject dp)
+            {
+                ICommand command = GetMouseRightButtonUpCommand(dp);
+                if (command?.CanExecute(args) ?? false) command.Execute(args);
                 args.Handled = true;
-
-                uiElement.ReleaseMouseCapture();
-            };
+            }
         }
 
 
@@ -152,25 +173,31 @@ namespace StorylineEditor.App.Behaviors
             new PropertyMetadata(MouseWheelCommandPropertyChanged)
             );
 
-        public static void SetMouseWheelCommand(this UIElement inUIElement, ICommand inCommand)
-        {
-            inUIElement.SetValue(MouseWheelCommandProperty, inCommand);
-        }
-        public static ICommand GetMouseWheelCommand(UIElement inUIElement)
-        {
-            return (ICommand)inUIElement.GetValue(MouseWheelCommandProperty);
-        }
+        public static void SetMouseWheelCommand(DependencyObject dp, ICommand value) { dp.SetValue(MouseWheelCommandProperty, value); }
+        public static ICommand GetMouseWheelCommand(DependencyObject dp) { return (ICommand)dp.GetValue(MouseWheelCommandProperty); }
 
-        private static void MouseWheelCommandPropertyChanged(DependencyObject inDependencyObject, DependencyPropertyChangedEventArgs inEventArgs)
+        private static void MouseWheelCommandPropertyChanged(DependencyObject dp, DependencyPropertyChangedEventArgs args)
         {
-            UIElement uiElement = inDependencyObject as UIElement;
-            if (null == uiElement) return;
-
-            uiElement.MouseWheel += (sender, args) =>
+            if (dp is UIElement uIElement)
             {
-                GetMouseWheelCommand(uiElement).Execute(args);
+                if (args.NewValue == DependencyProperty.UnsetValue || args.NewValue == null)
+                {
+                    uIElement.MouseWheel -= OnMouseWheel;
+                }
+                else
+                {
+                    uIElement.MouseWheel += OnMouseWheel;
+                }
+            }
+        }
+        private static void OnMouseWheel(object sender, MouseWheelEventArgs args)
+        {
+            if (sender is DependencyObject dp)
+            {
+                ICommand command = GetMouseWheelCommand(dp);
+                if (command?.CanExecute(args) ?? false) command.Execute(args);
                 args.Handled = true;
-            };
+            }
         }
 
 
@@ -183,28 +210,31 @@ namespace StorylineEditor.App.Behaviors
             new PropertyMetadata(MouseMoveCommandPropertyChanged)
             );
 
-        public static void SetMouseMoveCommand(this UIElement inUIElement, ICommand inCommand)
-        {
-            inUIElement.SetValue(MouseMoveCommandProperty, inCommand);
-        }
-        public static ICommand GetMouseMoveCommand(UIElement inUIElement)
-        {
-            return (ICommand)inUIElement.GetValue(MouseMoveCommandProperty);
-        }
+        public static void SetMouseMoveCommand(DependencyObject dp, ICommand value) { dp.SetValue(MouseMoveCommandProperty, value); }
+        public static ICommand GetMouseMoveCommand(DependencyObject dp) { return (ICommand)dp.GetValue(MouseMoveCommandProperty); }
 
-        private static void MouseMoveCommandPropertyChanged(DependencyObject inDependencyObject, DependencyPropertyChangedEventArgs inEventArgs)
+        private static void MouseMoveCommandPropertyChanged(DependencyObject dp, DependencyPropertyChangedEventArgs args)
         {
-            UIElement uiElement = inDependencyObject as UIElement;
-            if (null == uiElement) return;
-
-            uiElement.MouseMove += (sender, args) =>
+            if (dp is UIElement uIElement)
             {
-                if (sender == uiElement)
+                if (args.NewValue == DependencyProperty.UnsetValue || args.NewValue == null)
                 {
-                    GetMouseMoveCommand(uiElement).Execute(args);
-                    args.Handled = true;
+                    uIElement.MouseMove -= OnMouseMove;
                 }
-            };
+                else
+                {
+                    uIElement.MouseMove += OnMouseMove;
+                }
+            }
+        }
+        private static void OnMouseMove(object sender, MouseEventArgs args)
+        {
+            if (sender is DependencyObject dp)
+            {
+                ICommand command = GetMouseMoveCommand(dp);
+                if (command?.CanExecute(args) ?? false) command.Execute(args);
+                args.Handled = true;
+            }
         }
     }
 }

@@ -19,12 +19,15 @@ namespace StorylineEditor.ViewModel.Nodes
 {
     public interface INodeVM
     {
+        // Absoulute
         double PositionX { get; set; }
         double PositionY { get; set; }
-        double Left { get; set; }
-        double Top { get; set; }
         double Width { get; set; }
         double Height { get; set; }
+
+        // Local
+        double Left { get; set; }
+        double Top { get; set; }
     }
 
     public abstract class Node_BaseVM<T> : BaseVM<T>, INodeVM where T : Node_BaseM
@@ -74,6 +77,33 @@ namespace StorylineEditor.ViewModel.Nodes
 
 
 
+        protected double width;
+        public double Width
+        {
+            get => width;
+            set
+            {
+                if (width != value)
+                {
+                    width = value;
+                    CallbackContext?.Callback(this, nameof(PositionX));
+                }
+            }
+        }
+        protected double height;
+        public double Height
+        {
+            get => height;
+            set
+            {
+                if (height != value)
+                {
+                    height = value;
+                    CallbackContext?.Callback(this, nameof(PositionY));
+                }
+            }
+        }
+
         double left;
         public double Left
         {
@@ -98,42 +128,6 @@ namespace StorylineEditor.ViewModel.Nodes
                 {
                     top = value;
                     Notify(nameof(Top));
-                }
-            }
-        }
-
-        public Size RenderSize
-        {
-            set
-            {
-                Width = value.Width;
-                Height = value.Height;
-            }
-        }
-
-        protected double width;
-        public double Width
-        {
-            get => width;
-            set
-            {
-                if (width != value)
-                {
-                    width = value;
-                    CallbackContext?.Callback(this, nameof(PositionX));
-                }
-            }
-        }
-        protected double height;
-        public double Height
-        {
-            get => height;
-            set
-            {
-                if (height != value)
-                {
-                    height = value;
-                    CallbackContext?.Callback(this, nameof(PositionY));
                 }
             }
         }
