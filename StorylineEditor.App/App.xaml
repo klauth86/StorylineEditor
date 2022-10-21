@@ -140,7 +140,7 @@ StorylineEditor распространяется в надежде, что он�
         </ItemsPanelTemplate>
 
         <ItemsPanelTemplate x:Key="IPT_Canvas">
-            <Canvas></Canvas>
+            <Canvas ClipToBounds="True"></Canvas>
         </ItemsPanelTemplate>
 
         <DataTemplate DataType="{x:Type vm:StorylineVM}" x:Key="DT_StorylineVM_Tabs">
@@ -369,7 +369,9 @@ StorylineEditor распространяется в надежде, что он�
 
                 <ItemsControl x:Name="ic_Canvas" Background="LightGray" ItemsPanel="{StaticResource IPT_Canvas}" ItemsSource="{Binding ItemsVMs}"
                               bhvrs:MouseExtBehavior.MouseRightButtonDownCommand="{Binding StartDragCommand}"
-                              bhvrs:MouseExtBehavior.MouseRightButtonUpCommand="{Binding EndDragCommand}">
+                              bhvrs:MouseExtBehavior.MouseRightButtonUpCommand="{Binding EndDragCommand}"
+                              bhvrs:MouseExtBehavior.MouseMoveCommand="{Binding MoveCommand}"
+                              bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding InitCommand}">
                     <ItemsControl.InputBindings>
                         <MouseBinding Gesture="LeftClick" Command="{Binding AddNodeCommand}" CommandParameter="{x:Reference Name=ic_Canvas}"></MouseBinding>
                     </ItemsControl.InputBindings>

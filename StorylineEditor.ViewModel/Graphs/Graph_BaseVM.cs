@@ -23,6 +23,14 @@ using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Graphs
 {
+    enum EUpdateTarget
+    {
+        None,
+        X,
+        Y,
+        Both
+    }
+
     public class Graph_BaseVM<T> : Collection_BaseVM<T, Point>, ICallbackContext where T : GraphM
     {
         public Graph_BaseVM(T model, ICallbackContext callbackContext, Func<Type, Point, BaseM> modelCreator, Func<BaseM, ICallbackContext, Notifier> viewModelCreator,
@@ -36,8 +44,8 @@ namespace StorylineEditor.ViewModel.Graphs
 
             isDragging = false;
 
-            NodesVMs = new Dictionary<Node_BaseM, Notifier>();
-            LinksVMs = new Dictionary<LinkM, Notifier>();
+            NodesVMs = new Dictionary<BaseM, Notifier>();
+            LinksVMs = new Dictionary<BaseM, Notifier>();
         }
 
         protected ICommand selectNodeTypeCommand;
@@ -47,8 +55,22 @@ namespace StorylineEditor.ViewModel.Graphs
         public ICommand AddNodeCommand => addNodeCommand ?? (addNodeCommand = new RelayCommand<UIElement>((uiElement) =>
         {
             Point position = Mouse.GetPosition(uiElement);
+            
             FromLocalToAbsolute(position);
-            AddCommandInternal(SelectedNodeType, position, this);
+
+            position.X += OffsetX;
+            position.Y += OffsetY;
+
+            BaseM model = _modelCreator(SelectedNodeType, position);
+            Notifier viewModel = _viewModelCreator(model, this);
+
+            Add(model, null);
+            ((viewModel is INodeVM) ? NodesVMs : LinksVMs).Add(model, viewModel);
+            Add(null, viewModel);
+
+            Selection = viewModel;
+
+            CommandManager.InvalidateRequerySuggested();
         }, (uiElement) => uiElement != null && SelectedNodeType != null));
 
 
@@ -73,7 +95,7 @@ namespace StorylineEditor.ViewModel.Graphs
         }, (eventArgs) => eventArgs != null && isDragging));
 
         protected ICommand moveCommand;
-        public ICommand MoveCommand => moveCommand ?? (moveCommand = new RelayCommand<MouseButtonEventArgs>((eventArgs) =>
+        public ICommand MoveCommand => moveCommand ?? (moveCommand = new RelayCommand<MouseEventArgs>((eventArgs) =>
         {
             if (eventArgs.OriginalSource is UIElement uiElement)
             {
@@ -84,6 +106,15 @@ namespace StorylineEditor.ViewModel.Graphs
                 prevDragPosition = dragPosition;
             }
         }, (eventArgs) => eventArgs != null && isDragging));
+
+        protected ICommand initCommand;
+        public ICommand InitCommand => initCommand ?? (initCommand = new RelayCommand<RoutedEventArgs>((eventArgs) =>
+        {
+            if (eventArgs.OriginalSource is UIElement uiElement)
+            {
+                TranslateView(OffsetX, offsetY, uiElement.RenderSize.Width, uiElement.RenderSize.Height);
+            }
+        }, (eventArgs) => eventArgs != null));
 
 
 
@@ -171,8 +202,8 @@ namespace StorylineEditor.ViewModel.Graphs
 
 
 
-        private Dictionary<Node_BaseM, Notifier> NodesVMs = new Dictionary<Node_BaseM, Notifier>();
-        private Dictionary<LinkM, Notifier> LinksVMs = new Dictionary<LinkM, Notifier>();
+        private Dictionary<BaseM, Notifier> NodesVMs = new Dictionary<BaseM, Notifier>();
+        private Dictionary<BaseM, Notifier> LinksVMs = new Dictionary<BaseM, Notifier>();
 
 
 
@@ -187,13 +218,13 @@ namespace StorylineEditor.ViewModel.Graphs
 
         protected double FromLocalToAbsoluteX(double x)
         {
-            double result = x /= scaleX;    // Scale
+            double result = x / scaleX;    // Scale
             result += offsetX;              // Transaltion
             return result;
         }
         protected double FromLocalToAbsoluteY(double y)
         {
-            double result = y /= scaleY;    // Scale
+            double result = y / scaleY;    // Scale
             result += offsetY;              // Transaltion
             return result;
         }
@@ -219,36 +250,59 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 if (propName == nameof(Node_BaseVM<Node_BaseM>.PositionX))
                 {
-                    nodeViewModel.Left = FromAbsoluteToLocalX(nodeViewModel.PositionX) - nodeViewModel.Width / 2;
+                    UpdateLocalPosition(nodeViewModel, EUpdateTarget.X);
                 }
                 else if (propName == nameof(Node_BaseVM<Node_BaseM>.PositionY))
                 {
-                    nodeViewModel.Top = FromAbsoluteToLocalY(nodeViewModel.PositionY) - nodeViewModel.Height / 2;
+                    UpdateLocalPosition(nodeViewModel, EUpdateTarget.Y);
                 }
             }
         }
 
-
+        private void UpdateLocalPosition(INodeVM nodeViewModel, EUpdateTarget updateTarget)
+        {
+            switch (updateTarget)
+            {
+                case EUpdateTarget.None:
+                    break;
+                case EUpdateTarget.X:
+                    nodeViewModel.Left = FromAbsoluteToLocalX(nodeViewModel.PositionX) - nodeViewModel.Width / 2;
+                    break;
+                case EUpdateTarget.Y:
+                    nodeViewModel.Top = FromAbsoluteToLocalY(nodeViewModel.PositionY) - nodeViewModel.Height / 2;
+                    break;
+                case EUpdateTarget.Both:
+                    nodeViewModel.Left = FromAbsoluteToLocalX(nodeViewModel.PositionX) - nodeViewModel.Width / 2;
+                    nodeViewModel.Top = FromAbsoluteToLocalY(nodeViewModel.PositionY) - nodeViewModel.Height / 2;
+                    break;
+                default:
+                    break;
+            }
+        }
 
         private void TranslateView(double deltaX, double deltaY, double sizeX, double sizeY)
         {
-            OffsetX += FromLocalToAbsoluteX(deltaX);
-            OffsetY += FromLocalToAbsoluteY(deltaY);
+            OffsetX -= deltaX / scaleX;
+            OffsetY -= deltaY / scaleX;
 
-            double absSizeX = FromLocalToAbsoluteX(sizeX);
-            double absSizeY = FromLocalToAbsoluteY(sizeY);
+            double absSizeX = sizeX / scaleX;
+            double absSizeY = sizeY / scaleY;
 
             Rect viewRect = new Rect(OffsetX, OffsetY, absSizeX, absSizeY);
             Rect nodeRect = new Rect();
 
-            HashSet<BaseM> existingMs = new HashSet<BaseM>();
-            HashSet<BaseM> removeMs = new HashSet<BaseM>();
-
             double doubleMaxHeight = 2 * (double)Application.Current.FindResource("Double_Node_MaxHeight");
             double doubleMaxWidth = 2 * (double)Application.Current.FindResource("Double_Node_MaxWidth");
 
-            foreach (var viewModel in ItemsVMs)
+            HashSet<BaseM> keepMs = new HashSet<BaseM>();
+            HashSet<BaseM> addMs = new HashSet<BaseM>();
+            HashSet<BaseM> removeMs = new HashSet<BaseM>();
+
+            foreach (var entry in NodesVMs)
             {
+                var model = entry.Key;
+                var viewModel = entry.Value;
+
                 if (viewModel is INodeVM nodeViewModel)
                 {
                     nodeRect.X = nodeViewModel.PositionX - doubleMaxHeight / 2;
@@ -256,21 +310,13 @@ namespace StorylineEditor.ViewModel.Graphs
                     nodeRect.Width = doubleMaxHeight;
                     nodeRect.Height = doubleMaxWidth;
 
-                    if (!viewRect.IntersectsWith(nodeRect))
-                    {
-                        ItemsVMs.Remove(viewModel);
-                        removeMs.Add(_modelExtractor(viewModel));
-                    }
-                    else
-                    {
-                        existingMs.Add(_modelExtractor(viewModel));
-                    }
+                    (viewRect.IntersectsWith(nodeRect) ? keepMs : removeMs).Add(_modelExtractor(viewModel));
                 }
             }
 
             foreach (var nodeModel in Model.nodes)
             {
-                if (existingMs.Contains(nodeModel)) continue;
+                if (keepMs.Contains(nodeModel)) continue;
 
                 if (removeMs.Contains(nodeModel)) continue;
 
@@ -279,11 +325,16 @@ namespace StorylineEditor.ViewModel.Graphs
                 nodeRect.Width = doubleMaxHeight;
                 nodeRect.Height = doubleMaxWidth;
 
-                if (!viewRect.IntersectsWith(nodeRect)) continue;
+                if (viewRect.IntersectsWith(nodeRect)) addMs.Add(nodeModel);
+            }
 
-                Add(null, _viewModelCreator(nodeModel, this));
-                
-                existingMs.Add(nodeModel);
+            foreach (var model in removeMs) { if (NodesVMs.ContainsKey(model)) { ItemsVMs.Remove(NodesVMs[model]); NodesVMs.Remove(model); } }
+
+            foreach (var model in addMs) { if (!NodesVMs.ContainsKey(model)) { NodesVMs.Add(model, _viewModelCreator(model, this)); ItemsVMs.Add(NodesVMs[model]); } }
+
+            foreach (var viewModel in ItemsVMs)
+            {
+                if (viewModel is INodeVM nodeViewModel) UpdateLocalPosition(nodeViewModel, EUpdateTarget.Both);
             }
         }
     }
