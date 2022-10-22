@@ -19,8 +19,8 @@ namespace StorylineEditor.ViewModel.Nodes
     public interface ILinkVM
     {
         // Absoulute
-        double FromX { get; }
-        double FromY { get; }
+        double FromX { get; set; }
+        double FromY { get; set; }
         double ToX { get; set; }
         double ToY { get; set; }
 
@@ -38,12 +38,37 @@ namespace StorylineEditor.ViewModel.Nodes
         public LinkVM(LinkM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
     }
 
-    public sealed class PreviewLinkVM : SimpleVM<Tuple<double, double>>, ILinkVM
+    public sealed class PreviewLinkVM : SimpleVM<object>, ILinkVM
     {
-        public PreviewLinkVM(double inFromX, double inFromY, ICallbackContext callbackContext) : base(new Tuple<double, double>(inFromX, inFromY), callbackContext) { }
+        public PreviewLinkVM(ICallbackContext callbackContext) : base(null, callbackContext) { }
 
-        public double FromX => Model.Item1;
-        public double FromY => Model.Item2;
+        private double _fromX;
+        public double FromX
+        {
+            get => _fromX;
+            set
+            {
+                if (value != _fromX)
+                {
+                    _fromX = value;
+                    CallbackContext?.Callback(this, nameof(FromX));
+                }
+            }
+        }
+
+        private double _fromY;
+        public double FromY
+        {
+            get => _fromY;
+            set
+            {
+                if (value != _fromY)
+                {
+                    _fromY = value;
+                    CallbackContext?.Callback(this, nameof(FromY));
+                }
+            }
+        }
 
         private double _toX;
         public double ToX

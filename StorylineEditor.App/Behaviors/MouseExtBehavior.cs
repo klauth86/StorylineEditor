@@ -46,8 +46,6 @@ namespace StorylineEditor.App.Behaviors
         {
             if (sender is UIElement uIElement)
             {
-                uIElement.CaptureMouse();
-
                 GetMouseLeftButtonDownCommand(uIElement)?.Execute(args);
                 args.Handled = true;
             }
@@ -86,8 +84,6 @@ namespace StorylineEditor.App.Behaviors
             {
                 GetMouseLeftButtonUpCommand(uIElement)?.Execute(args);
                 args.Handled = true;
-
-                uIElement.ReleaseMouseCapture();
             }
         }
 

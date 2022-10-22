@@ -46,6 +46,9 @@ namespace StorylineEditor.ViewModel.Graphs
             isDragging = false;
             draggedNodeViewModel = null;
 
+            previewLinkIsAdded = false;
+            previewLink = new PreviewLinkVM(this);
+
             NodesVMs = new Dictionary<BaseM, Notifier>();
             LinksVMs = new Dictionary<BaseM, Notifier>();
 
@@ -65,10 +68,7 @@ namespace StorylineEditor.ViewModel.Graphs
                 bool resetSelection = !Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
                 AddToSelection((Notifier)nodeViewModel, resetSelection);
 
-                if (resetSelection)
-                {
-                    fromNodeViewModel = nodeViewModel;
-                }
+                if (resetSelection) fromNodeViewModel = nodeViewModel;
             }
             else if (args.Source is IInputElement inputElement)
             {
@@ -86,16 +86,13 @@ namespace StorylineEditor.ViewModel.Graphs
                     Notifier viewModel = _viewModelCreator(model, this);
 
                     Add(model, null);
-                    ((viewModel is INodeVM) ? NodesVMs : LinksVMs).Add(model, viewModel);
+                    NodesVMs.Add(model, viewModel);
                     Add(null, viewModel);
 
                     bool resetSelection = !Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
                     AddToSelection(viewModel, resetSelection);
 
-                    if (resetSelection)
-                    {
-                        fromNodeViewModel = viewModel as INodeVM;
-                    }
+                    if (resetSelection) fromNodeViewModel = viewModel as INodeVM;
                 }
             }
         }));
@@ -104,13 +101,25 @@ namespace StorylineEditor.ViewModel.Graphs
         public override ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<Notifier>((viewModel) => { }));
 
         protected ICommand linkCommand;
-        public ICommand LinkCommand => linkCommand ?? (linkCommand = new RelayCommand<MouseButtonEventArgs>((args) => {
+        public ICommand LinkCommand => linkCommand ?? (linkCommand = new RelayCommand<MouseButtonEventArgs>((args) =>
+        {
             if (fromNodeViewModel != null)
             {
                 if ((args.OriginalSource as FrameworkElement)?.DataContext is INodeVM toNodeViewModel)
                 {
-                    TryLinkNodes(fromNodeViewModel, toNodeViewModel);
+                    string message = CanLinkNodes(fromNodeViewModel, toNodeViewModel);
+                    if (message == null)
+                    {
+                        BaseM model = _modelCreator(typeof(LinkM), new Point());
+                        Notifier viewModel = _viewModelCreator(model, this);
+
+                        Add(model, null);
+                        LinksVMs.Add(model, viewModel);
+                        Add(null, viewModel);
+                    }
                 }
+
+                HidePreviewLink();
 
                 fromNodeViewModel = null;
             }
@@ -122,6 +131,8 @@ namespace StorylineEditor.ViewModel.Graphs
         protected bool isDragging;
         protected INodeVM draggedNodeViewModel;
         protected Point prevPosition;
+        protected bool previewLinkIsAdded;
+        protected PreviewLinkVM previewLink;
 
 
 
@@ -178,11 +189,38 @@ namespace StorylineEditor.ViewModel.Graphs
                     }
                 }
             }
-            else if (fromNodeViewModel != null && Mouse.LeftButton == MouseButtonState.Pressed)
+            else if (fromNodeViewModel != null)
             {
-                if ((args.OriginalSource as FrameworkElement)?.DataContext is INodeVM toNodeViewModel)
+                if (Mouse.LeftButton == MouseButtonState.Pressed)
                 {
+                    if ((args.OriginalSource as FrameworkElement)?.DataContext is INodeVM toNodeViewModel)
+                    {
+                        if (fromNodeViewModel == toNodeViewModel)
+                        {
+                            HidePreviewLink();
+                        }
+                        else
+                        {
+                            previewLink.ToX = toNodeViewModel.PositionX;
+                            previewLink.ToY = toNodeViewModel.PositionY;
 
+                            ShowPreviewLink();
+                        }
+                    }
+                    else
+                    {
+                        Point relativeToSourcePosition = args.GetPosition(args.Source as UIElement);
+                        FromLocalToAbsolute(relativeToSourcePosition);
+
+                        previewLink.ToX = relativeToSourcePosition.X;
+                        previewLink.ToY = relativeToSourcePosition.Y;
+                    }
+                }
+                else
+                {
+                    HidePreviewLink();
+
+                    fromNodeViewModel = null;
                 }
             }
 
@@ -468,6 +506,22 @@ namespace StorylineEditor.ViewModel.Graphs
 
 
 
-        protected virtual string TryLinkNodes(INodeVM from, INodeVM to) { return null; }
+        protected virtual string CanLinkNodes(INodeVM from, INodeVM to) { return null; }
+        protected void ShowPreviewLink()
+        {
+            if (!previewLinkIsAdded)
+            {
+                previewLinkIsAdded = true;
+                ItemsVMs.Add(previewLink);
+            }
+        }
+        protected void HidePreviewLink()
+        {
+            if (previewLinkIsAdded)
+            {
+                previewLinkIsAdded = false;
+                ItemsVMs.Remove(previewLink);
+            }
+        }
     }
 }
