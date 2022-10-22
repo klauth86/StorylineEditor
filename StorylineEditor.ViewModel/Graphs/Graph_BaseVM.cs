@@ -182,18 +182,15 @@ namespace StorylineEditor.ViewModel.Graphs
                             draggedNodeViewModel.PositionY += deltaY;
                         }
 
-                        foreach (var selectedViewModel in selection)
+                        foreach (INodeVM nodeViewModel in selection)
                         {
-                            if (selectedViewModel is INodeVM nodeViewModel)
-                            {
-                                nodeViewModel.PositionX += deltaX;
-                                nodeViewModel.PositionY += deltaY;
-                            }
+                            nodeViewModel.PositionX += deltaX;
+                            nodeViewModel.PositionY += deltaY;
                         }
                     }
                     else
                     {
-                        TranslateView((position.X - prevPosition.X) / ScaleX, (position.Y - prevPosition.Y) / ScaleY);
+                        TranslateView(deltaX, deltaY);
                     }
                 }
 
@@ -220,13 +217,10 @@ namespace StorylineEditor.ViewModel.Graphs
                     }
                     else
                     {
-                        Point relativeToSourcePosition = args.GetPosition(args.Source as UIElement);
-                        
-                        relativeToSourcePosition.X = FromLocalToAbsoluteX(relativeToSourcePosition.X);
-                        relativeToSourcePosition.Y = FromLocalToAbsoluteY(relativeToSourcePosition.Y);
+                        Point position = args.GetPosition(args.Source as UIElement);
 
-                        previewLink.ToX = relativeToSourcePosition.X;
-                        previewLink.ToY = relativeToSourcePosition.Y;
+                        previewLink.ToX = FromLocalToAbsoluteX(position.X);
+                        previewLink.ToY = FromLocalToAbsoluteY(position.Y);
                         UpdateLocalPosition(previewLink, ELinkVMUpdate.ToX | ELinkVMUpdate.ToY);
 
                         ShowPreviewLink(fromNodeViewModel);
