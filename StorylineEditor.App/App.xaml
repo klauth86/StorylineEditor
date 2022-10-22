@@ -44,7 +44,13 @@ StorylineEditor распространяется в надежде, что он�
         <SolidColorBrush x:Key="Color_Selector_Selected" Color="#99005500" />
 
         <SolidColorBrush x:Key="Color_Node_Selected" Color="#99005500" />
-        
+
+        <SolidColorBrush x:Key="Color_PreviewLink_Base" Color="Goldenrod" />
+
+        <SolidColorBrush x:Key="Color_PreviewLink_Allow" Color="Green" />
+
+        <SolidColorBrush x:Key="Color_PreviewLink_Disallow" Color="Red" />
+
         <SolidColorBrush x:Key="Color_Node_Background" Color="White" />
 
         <!-- Global and base -->
@@ -121,7 +127,9 @@ StorylineEditor распространяется в надежде, что он�
 
         <!-- Node -->
 
-        <Style TargetType="Label" x:Key="S_Label_Node"></Style>
+        <Style TargetType="Label" x:Key="S_Label_Node">
+            <Setter Property="IsHitTestVisible" Value="False"></Setter>
+        </Style>
 
         <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Node_Header"></Style>
 
@@ -546,5 +554,11 @@ StorylineEditor распространяется в надежде, что он�
 
         <DataTemplate DataType="{x:Type vmn:Node_Journal_AlternativeEditorVM}"></DataTemplate>
 
+        <DataTemplate DataType="{x:Type vmn:PreviewLinkVM}">
+            <Line X1="{Binding LocalFromX, UpdateSourceTrigger=PropertyChanged}" Y1="{Binding LocalFromY, UpdateSourceTrigger=PropertyChanged}"
+                  X2="{Binding LocalToX, UpdateSourceTrigger=PropertyChanged}" Y2="{Binding LocalToY, UpdateSourceTrigger=PropertyChanged}"
+                  StrokeThickness="4" Stroke="{StaticResource Color_PreviewLink_Base}"></Line>
+        </DataTemplate>
+        
     </Application.Resources>
 </Application>

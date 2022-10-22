@@ -23,12 +23,20 @@ using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Graphs
 {
+    public enum ELinkVMUpdate : byte
+    {
+        FromX = 1,
+        FromY = 2,
+        ToX = 4,
+        ToY = 8
+    }
+
     enum EUpdateTarget
     {
         None,
         X,
         Y,
-        Both
+        Both,
     }
 
     public class Graph_BaseVM<T> : Collection_BaseVM<T, Point>, ICallbackContext where T : GraphM
@@ -204,16 +212,24 @@ namespace StorylineEditor.ViewModel.Graphs
                             previewLink.ToX = toNodeViewModel.PositionX;
                             previewLink.ToY = toNodeViewModel.PositionY;
 
-                            ShowPreviewLink();
+                            UpdateLocalPosition(previewLink, ELinkVMUpdate.ToX | ELinkVMUpdate.ToY);
+
+                            ShowPreviewLink(fromNodeViewModel);
                         }
                     }
                     else
                     {
                         Point relativeToSourcePosition = args.GetPosition(args.Source as UIElement);
-                        FromLocalToAbsolute(relativeToSourcePosition);
+                        
+                        relativeToSourcePosition.X = FromLocalToAbsoluteX(relativeToSourcePosition.X);
+                        relativeToSourcePosition.Y = FromLocalToAbsoluteY(relativeToSourcePosition.Y);
 
                         previewLink.ToX = relativeToSourcePosition.X;
                         previewLink.ToY = relativeToSourcePosition.Y;
+
+                        UpdateLocalPosition(previewLink, ELinkVMUpdate.ToX | ELinkVMUpdate.ToY);
+
+                        ShowPreviewLink(fromNodeViewModel);
                     }
                 }
                 else
@@ -342,15 +358,6 @@ namespace StorylineEditor.ViewModel.Graphs
 
 
 
-        protected void FromLocalToAbsolute(Point point)
-        {
-            if (point != null)
-            {
-                point.X = FromLocalToAbsoluteX(point.X);
-                point.Y = FromLocalToAbsoluteY(point.Y);
-            }
-        }
-
         protected double FromLocalToAbsoluteX(double x)
         {
             double result = x / ScaleX;    // Scale
@@ -383,11 +390,11 @@ namespace StorylineEditor.ViewModel.Graphs
         {
             if (viewModelObj is INodeVM nodeViewModel)
             {
-                if (propName == nameof(Node_BaseVM<Node_BaseM>.PositionX))
+                if (propName == nameof(INodeVM.PositionX))
                 {
                     UpdateLocalPosition(nodeViewModel, EUpdateTarget.X);
                 }
-                else if (propName == nameof(Node_BaseVM<Node_BaseM>.PositionY))
+                else if (propName == nameof(INodeVM.PositionY))
                 {
                     UpdateLocalPosition(nodeViewModel, EUpdateTarget.Y);
                 }
@@ -412,6 +419,14 @@ namespace StorylineEditor.ViewModel.Graphs
                 default:
                     break;
             }
+        }
+
+        private void UpdateLocalPosition(ILinkVM linkViewModel, ELinkVMUpdate updateTarget)
+        {
+            if ((updateTarget & ELinkVMUpdate.FromX) > 0) linkViewModel.LocalFromX = FromAbsoluteToLocalX(linkViewModel.FromX);
+            if ((updateTarget & ELinkVMUpdate.FromY) > 0) linkViewModel.LocalFromY = FromAbsoluteToLocalY(linkViewModel.FromY);
+            if ((updateTarget & ELinkVMUpdate.ToX) > 0) linkViewModel.LocalToX = FromAbsoluteToLocalX(linkViewModel.ToX);
+            if ((updateTarget & ELinkVMUpdate.ToY) > 0) linkViewModel.LocalToY = FromAbsoluteToLocalY(linkViewModel.ToY);
         }
 
 
@@ -506,11 +521,16 @@ namespace StorylineEditor.ViewModel.Graphs
 
 
 
-        protected virtual string CanLinkNodes(INodeVM from, INodeVM to) { return null; }
-        protected void ShowPreviewLink()
+        protected virtual string CanLinkNodes(INodeVM from, INodeVM to) { return nameof(NotImplementedException); }
+        protected void ShowPreviewLink(INodeVM nodeViewModel)
         {
             if (!previewLinkIsAdded)
             {
+                previewLink.FromX = nodeViewModel.PositionX;
+                previewLink.FromY = nodeViewModel.PositionY;
+
+                UpdateLocalPosition(previewLink, ELinkVMUpdate.FromX | ELinkVMUpdate.FromY);
+
                 previewLinkIsAdded = true;
                 ItemsVMs.Add(previewLink);
             }

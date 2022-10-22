@@ -12,7 +12,6 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModel.Common;
-using System;
 
 namespace StorylineEditor.ViewModel.Nodes
 {
@@ -31,6 +30,7 @@ namespace StorylineEditor.ViewModel.Nodes
         double LocalToY { get; set; }
 
         string Description { get; set; }
+        string HasTarget { get; set; }
     }
 
     public class LinkVM : BaseVM<LinkM>
@@ -40,63 +40,12 @@ namespace StorylineEditor.ViewModel.Nodes
 
     public sealed class PreviewLinkVM : SimpleVM<object>, ILinkVM
     {
-        public PreviewLinkVM(ICallbackContext callbackContext) : base(null, callbackContext) { }
+        public PreviewLinkVM(ICallbackContext callbackContext) : base(new object(), callbackContext) { }
 
-        private double _fromX;
-        public double FromX
-        {
-            get => _fromX;
-            set
-            {
-                if (value != _fromX)
-                {
-                    _fromX = value;
-                    CallbackContext?.Callback(this, nameof(FromX));
-                }
-            }
-        }
-
-        private double _fromY;
-        public double FromY
-        {
-            get => _fromY;
-            set
-            {
-                if (value != _fromY)
-                {
-                    _fromY = value;
-                    CallbackContext?.Callback(this, nameof(FromY));
-                }
-            }
-        }
-
-        private double _toX;
-        public double ToX
-        {
-            get => _toX;
-            set
-            {
-                if (value != _toX)
-                {
-                    _toX = value;
-                    CallbackContext?.Callback(this, nameof(ToX));
-                }
-            }
-        }
-
-        private double _toY;
-        public double ToY
-        {
-            get => _toY;
-            set
-            {
-                if (value != _toY)
-                {
-                    _toY = value;
-                    CallbackContext?.Callback(this, nameof(ToY));
-                }
-            }
-        }
+        public double FromX { get; set; }
+        public double FromY { get; set; }
+        public double ToX { get; set; }
+        public double ToY { get; set; }
 
         private double _localFromX;
         public double LocalFromX
@@ -164,6 +113,20 @@ namespace StorylineEditor.ViewModel.Nodes
                 {
                     _description = value;
                     Notify(nameof(Description));
+                }
+            }
+        }
+
+        private string _hasTarget;
+        public string HasTarget
+        {
+            get => _hasTarget;
+            set
+            {
+                if (_hasTarget != value)
+                {
+                    _hasTarget = value;
+                    Notify(nameof(HasTarget));
                 }
             }
         }
