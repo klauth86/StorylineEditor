@@ -160,10 +160,10 @@ namespace StorylineEditor.ViewModel.Graphs
         protected ICommand moveCommand;
         public ICommand MoveCommand => moveCommand ?? (moveCommand = new RelayCommand<MouseEventArgs>((args) =>
         {
-            Point position = args.GetPosition(null);
-
             if (isDragging)
             {
+                Point position = args.GetPosition(null);
+
                 if (Mouse.RightButton != MouseButtonState.Pressed)
                 {
                     isDragging = false;
@@ -196,6 +196,8 @@ namespace StorylineEditor.ViewModel.Graphs
                         TranslateView((position.X - prevPosition.X) / ScaleX, (position.Y - prevPosition.Y) / ScaleY);
                     }
                 }
+
+                prevPosition = position;
             }
             else if (fromNodeViewModel != null)
             {
@@ -211,7 +213,6 @@ namespace StorylineEditor.ViewModel.Graphs
                         {
                             previewLink.ToX = toNodeViewModel.PositionX;
                             previewLink.ToY = toNodeViewModel.PositionY;
-
                             UpdateLocalPosition(previewLink, ELinkVMUpdate.ToX | ELinkVMUpdate.ToY);
 
                             ShowPreviewLink(fromNodeViewModel);
@@ -226,7 +227,6 @@ namespace StorylineEditor.ViewModel.Graphs
 
                         previewLink.ToX = relativeToSourcePosition.X;
                         previewLink.ToY = relativeToSourcePosition.Y;
-
                         UpdateLocalPosition(previewLink, ELinkVMUpdate.ToX | ELinkVMUpdate.ToY);
 
                         ShowPreviewLink(fromNodeViewModel);
@@ -239,8 +239,6 @@ namespace StorylineEditor.ViewModel.Graphs
                     fromNodeViewModel = null;
                 }
             }
-
-            prevPosition = position;
 
         }));
 
@@ -528,7 +526,6 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 previewLink.FromX = nodeViewModel.PositionX;
                 previewLink.FromY = nodeViewModel.PositionY;
-
                 UpdateLocalPosition(previewLink, ELinkVMUpdate.FromX | ELinkVMUpdate.FromY);
 
                 previewLinkIsAdded = true;

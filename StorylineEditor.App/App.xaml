@@ -557,7 +557,7 @@ StorylineEditor распространяется в надежде, что он�
         <DataTemplate DataType="{x:Type vmn:PreviewLinkVM}">
             <Line X1="{Binding LocalFromX, UpdateSourceTrigger=PropertyChanged}" Y1="{Binding LocalFromY, UpdateSourceTrigger=PropertyChanged}"
                   X2="{Binding LocalToX, UpdateSourceTrigger=PropertyChanged}" Y2="{Binding LocalToY, UpdateSourceTrigger=PropertyChanged}"
-                  StrokeThickness="4" Stroke="{StaticResource Color_PreviewLink_Base}"></Line>
+                  StrokeThickness="4" Stroke="{StaticResource Color_PreviewLink_Base}" IsHitTestVisible="False"></Line>
         </DataTemplate>
         
     </Application.Resources>
