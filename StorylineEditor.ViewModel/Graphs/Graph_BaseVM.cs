@@ -57,6 +57,11 @@ namespace StorylineEditor.ViewModel.Graphs
             previewLinkIsAdded = false;
             previewLink = new PreviewLinkVM(this);
 
+            viewRect = new Rect();
+            nodeRect = new Rect();
+            absMaxHeight = (double)Application.Current.FindResource("Double_Node_MaxHeight");
+            absMaxWidth = (double)Application.Current.FindResource("Double_Node_MaxWidth");
+
             NodesVMs = new Dictionary<BaseM, Notifier>();
             LinksVMs = new Dictionary<BaseM, Notifier>();
 
@@ -84,11 +89,8 @@ namespace StorylineEditor.ViewModel.Graphs
                 {
                     Point position = args.GetPosition(inputElement);
 
-                    position.X /= ScaleX;
-                    position.Y /= ScaleY;
-
-                    position.X += OffsetX;
-                    position.Y += OffsetY;
+                    position.X = FromLocalToAbsoluteX(position.X);
+                    position.Y = FromLocalToAbsoluteY(position.Y);
 
                     BaseM model = _modelCreator(SelectedNodeType, position);
                     Notifier viewModel = _viewModelCreator(model, this);
@@ -141,8 +143,10 @@ namespace StorylineEditor.ViewModel.Graphs
         protected Point prevPosition;
         protected bool previewLinkIsAdded;
         protected PreviewLinkVM previewLink;
-
-
+        protected Rect viewRect;
+        protected Rect nodeRect;
+        double absMaxHeight;
+        double absMaxWidth;
 
         protected ICommand dragCommand;
         public ICommand DragCommand => dragCommand ?? (dragCommand = new RelayCommand<MouseButtonEventArgs>((args) =>
@@ -242,6 +246,10 @@ namespace StorylineEditor.ViewModel.Graphs
         protected ICommand scaleCommand;
         public ICommand ScaleCommand => scaleCommand ?? (scaleCommand = new RelayCommand<MouseWheelEventArgs>((args) =>
         {
+            if (fromNodeViewModel != null) return;
+
+            if (isDragging) return;
+
             if (args.Source is UIElement uiElement)
             {
                 Point position = args.GetPosition(uiElement);
@@ -331,7 +339,6 @@ namespace StorylineEditor.ViewModel.Graphs
                 {
                     selectedNodeType = value;
                     Notify(nameof(SelectedNodeType));
-
                     Notify(nameof(SelectedNodeTypeName));
 
                     CommandManager.InvalidateRequerySuggested();
@@ -352,13 +359,13 @@ namespace StorylineEditor.ViewModel.Graphs
 
         protected double FromLocalToAbsoluteX(double x)
         {
-            double result = x / ScaleX;    // Scale
+            double result = x / ScaleX;     // Scale
             result += OffsetX;              // Transaltion
             return result;
         }
         protected double FromLocalToAbsoluteY(double y)
         {
-            double result = y / ScaleY;    // Scale
+            double result = y / ScaleY;     // Scale
             result += OffsetY;              // Transaltion
             return result;
         }
@@ -428,11 +435,10 @@ namespace StorylineEditor.ViewModel.Graphs
             OffsetX -= absoluteDeltaX;
             OffsetY -= absoluteDeltaY;
 
-            Rect viewRect = new Rect(OffsetX, OffsetY, ViewWidth / ScaleX, ViewHeight / ScaleY);
-            Rect nodeRect = new Rect();
-
-            double doubleMaxHeight = 2 * (double)Application.Current.FindResource("Double_Node_MaxHeight");
-            double doubleMaxWidth = 2 * (double)Application.Current.FindResource("Double_Node_MaxWidth");
+            viewRect.X = OffsetX;
+            viewRect.Y = OffsetY;
+            viewRect.Width = ViewWidth / ScaleX;
+            viewRect.Height = ViewHeight / ScaleY;
 
             HashSet<BaseM> keepMs = new HashSet<BaseM>();
             HashSet<BaseM> addMs = new HashSet<BaseM>();
@@ -445,10 +451,10 @@ namespace StorylineEditor.ViewModel.Graphs
 
                 if (viewModel is INodeVM nodeViewModel)
                 {
-                    nodeRect.X = nodeViewModel.PositionX - doubleMaxHeight / 2;
-                    nodeRect.Y = nodeViewModel.PositionY - doubleMaxWidth / 2;
-                    nodeRect.Width = doubleMaxHeight;
-                    nodeRect.Height = doubleMaxWidth;
+                    nodeRect.X = nodeViewModel.PositionX - absMaxHeight;
+                    nodeRect.Y = nodeViewModel.PositionY - absMaxWidth;
+                    nodeRect.Width = absMaxHeight * 2;
+                    nodeRect.Height = absMaxWidth * 2;
 
                     (viewRect.IntersectsWith(nodeRect) ? keepMs : removeMs).Add(_modelExtractor(viewModel));
                 }
@@ -460,10 +466,10 @@ namespace StorylineEditor.ViewModel.Graphs
 
                 if (removeMs.Contains(nodeModel)) continue;
 
-                nodeRect.X = nodeModel.positionX - doubleMaxHeight / 2;
-                nodeRect.Y = nodeModel.positionY - doubleMaxWidth / 2;
-                nodeRect.Width = doubleMaxHeight;
-                nodeRect.Height = doubleMaxWidth;
+                nodeRect.X = nodeModel.positionX - absMaxHeight;
+                nodeRect.Y = nodeModel.positionY - absMaxWidth;
+                nodeRect.Width = absMaxHeight * 2;
+                nodeRect.Height = absMaxWidth * 2;
 
                 if (viewRect.IntersectsWith(nodeRect)) addMs.Add(nodeModel);
             }
