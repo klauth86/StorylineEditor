@@ -474,13 +474,13 @@ namespace StorylineEditor.ViewModel.Graphs
                 if (viewRect.IntersectsWith(nodeRect)) addMs.Add(nodeModel);
             }
 
-            foreach (var model in removeMs) { if (NodesVMs.ContainsKey(model)) { ItemsVMs.Remove(NodesVMs[model]); NodesVMs.Remove(model); } }
+            foreach (var model in removeMs) { ItemsVMs.Remove(NodesVMs[model]); NodesVMs.Remove(model); }
 
             foreach (var model in addMs) { if (!NodesVMs.ContainsKey(model)) { NodesVMs.Add(model, _viewModelCreator(model, this)); ItemsVMs.Add(NodesVMs[model]); } }
 
-            foreach (var viewModel in ItemsVMs)
+            foreach (INodeVM nodeViewModel in ItemsVMs)
             {
-                if (viewModel is INodeVM nodeViewModel) UpdateLocalPosition(nodeViewModel, EUpdateTarget.Both);
+                UpdateLocalPosition(nodeViewModel, EUpdateTarget.Both);
             }
         }
 
