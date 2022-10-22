@@ -140,8 +140,6 @@ StorylineEditor распространяется в надежде, что он�
             <Setter Property="bhvrs:RenderSizeBehavior.ActualWidth" Value="{Binding Width, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"></Setter>
             <Setter Property="bhvrs:RenderSizeBehavior.ActualHeight" Value="{Binding Height, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"></Setter>
             <Setter Property="bhvrs:RenderSizeBehavior.IsEnabled" Value="true"></Setter>
-            <Setter Property="bhvrs:MouseExtBehavior.MouseRightButtonDownCommand" Value="{Binding Path=DataContext.StartDragCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"></Setter>
-            <Setter Property="bhvrs:MouseExtBehavior.MouseRightButtonUpCommand" Value="{Binding Path=DataContext.EndDragCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"></Setter>
             <Setter Property="RenderTransformOrigin" Value="0.5, 0.5"></Setter>
             <Setter Property="RenderTransform">
                 <Setter.Value>
@@ -401,8 +399,9 @@ StorylineEditor распространяется в надежде, что он�
                 </Grid.ColumnDefinitions>
 
                 <ItemsControl x:Name="ic_Canvas" Background="LightGray" ItemsPanel="{StaticResource IPT_Canvas}" ItemsSource="{Binding ItemsVMs}"
-                              bhvrs:MouseExtBehavior.MouseRightButtonDownCommand="{Binding StartDragCommand}"
-                              bhvrs:MouseExtBehavior.MouseRightButtonUpCommand="{Binding EndDragCommand}"
+                              bhvrs:MouseExtBehavior.MouseRightButtonDownCommand="{Binding DragCommand}"
+                              bhvrs:MouseExtBehavior.MouseLeftButtonDownCommand="{Binding AddCommand}"
+                              bhvrs:MouseExtBehavior.MouseLeftButtonUpCommand="{Binding LinkCommand}"
                               bhvrs:MouseExtBehavior.MouseMoveCommand="{Binding MoveCommand}"
                               bhvrs:MouseExtBehavior.MouseWheelCommand="{Binding ScaleCommand}"
                               bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding InitCommand}"
@@ -410,9 +409,6 @@ StorylineEditor распространяется в надежде, что он�
                               bhvrs:RenderSizeBehavior.ActualWidth="{Binding ViewWidth, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
                               bhvrs:RenderSizeBehavior.ActualHeight="{Binding ViewHeight, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
                               bhvrs:RenderSizeBehavior.SizeChangedFlag="{Binding SizeChangedFlag, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}">
-                    <ItemsControl.InputBindings>
-                        <MouseBinding Gesture="LeftClick" Command="{Binding AddCommand}" CommandParameter="{x:Reference Name=ic_Canvas}"></MouseBinding>
-                    </ItemsControl.InputBindings>
                     <ItemsControl.ItemContainerStyle>
                         <Style TargetType="ContentPresenter">
                             <Setter Property="Canvas.Left" Value="{Binding Left, UpdateSourceTrigger=PropertyChanged}"/>
@@ -500,10 +496,6 @@ StorylineEditor распространяется в надежде, что он�
 
         <DataTemplate DataType="{x:Type vmn:Node_Journal_StepVM}">
             <Border Style="{StaticResource S_Border_Node}">
-                <Border.InputBindings>
-                    <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
-                    <MouseBinding Gesture="Control+LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
-                </Border.InputBindings>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"></ColumnDefinition>
@@ -530,10 +522,6 @@ StorylineEditor распространяется в надежде, что он�
 
         <DataTemplate DataType="{x:Type vmn:Node_Journal_AlternativeVM}">
             <Border Style="{StaticResource S_Border_Node}">
-                <Border.InputBindings>
-                    <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
-                    <MouseBinding Gesture="Control+LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
-                </Border.InputBindings>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"></ColumnDefinition>

@@ -42,6 +42,7 @@ namespace StorylineEditor.ViewModel.Graphs
             selectedNodeType = defaultNodeType;
             _typeDescriptor = typeDescriptor ?? throw new ArgumentNullException(nameof(typeDescriptor));
 
+            fromNodeViewModel = null;
             isDragging = false;
             draggedNodeViewModel = null;
 
@@ -55,94 +56,139 @@ namespace StorylineEditor.ViewModel.Graphs
         public ICommand SelectNodeTypeCommand => selectNodeTypeCommand ?? (selectNodeTypeCommand = new RelayCommand<Type>((type) => SelectedNodeType = type));
 
         protected ICommand addCommand;
-        public override ICommand AddCommand => addCommand ?? (addCommand = new RelayCommand<UIElement>((uiElement) =>
+        public override ICommand AddCommand => addCommand ?? (addCommand = new RelayCommand<MouseButtonEventArgs>((args) =>
         {
-            Point position = Mouse.GetPosition(uiElement);
+            if (isDragging) return;
 
-            position.X /= ScaleX;
-            position.Y /= ScaleY;
+            if ((args.OriginalSource as FrameworkElement)?.DataContext is INodeVM nodeViewModel)
+            {
+                bool resetSelection = !Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
+                AddToSelection((Notifier)nodeViewModel, resetSelection);
 
-            position.X += OffsetX;
-            position.Y += OffsetY;
+                if (resetSelection)
+                {
+                    fromNodeViewModel = nodeViewModel;
+                }
+            }
+            else if (args.Source is IInputElement inputElement)
+            {
+                if (SelectedNodeType != null)
+                {
+                    Point position = args.GetPosition(inputElement);
 
-            BaseM model = _modelCreator(SelectedNodeType, position);
-            Notifier viewModel = _viewModelCreator(model, this);
+                    position.X /= ScaleX;
+                    position.Y /= ScaleY;
 
-            Add(model, null);
-            ((viewModel is INodeVM) ? NodesVMs : LinksVMs).Add(model, viewModel);
-            Add(null, viewModel);
+                    position.X += OffsetX;
+                    position.Y += OffsetY;
 
-            AddToSelection(viewModel, !Keyboard.Modifiers.HasFlag(ModifierKeys.Control));
-        }, (uiElement) => uiElement != null && SelectedNodeType != null));
+                    BaseM model = _modelCreator(SelectedNodeType, position);
+                    Notifier viewModel = _viewModelCreator(model, this);
+
+                    Add(model, null);
+                    ((viewModel is INodeVM) ? NodesVMs : LinksVMs).Add(model, viewModel);
+                    Add(null, viewModel);
+
+                    bool resetSelection = !Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
+                    AddToSelection(viewModel, resetSelection);
+
+                    if (resetSelection)
+                    {
+                        fromNodeViewModel = viewModel as INodeVM;
+                    }
+                }
+            }
+        }));
 
         protected ICommand selectCommand;
-        public override ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<Notifier>((viewModel) =>
-        {
-            AddToSelection(viewModel, !Keyboard.Modifiers.HasFlag(ModifierKeys.Control));
-        }, (viewModel) => viewModel != null));
+        public override ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<Notifier>((viewModel) => { }));
+
+        protected ICommand linkCommand;
+        public ICommand LinkCommand => linkCommand ?? (linkCommand = new RelayCommand<MouseButtonEventArgs>((args) => {
+            if (fromNodeViewModel != null)
+            {
+                if ((args.OriginalSource as FrameworkElement)?.DataContext is INodeVM toNodeViewModel)
+                {
+                    TryLinkNodes(fromNodeViewModel, toNodeViewModel);
+                }
+
+                fromNodeViewModel = null;
+            }
+        }));
 
 
 
+        protected INodeVM fromNodeViewModel;
         protected bool isDragging;
         protected INodeVM draggedNodeViewModel;
         protected Point prevPosition;
 
 
 
-        protected ICommand startDragCommand;
-        public ICommand StartDragCommand => startDragCommand ?? (startDragCommand = new RelayCommand<MouseButtonEventArgs>((args) =>
+        protected ICommand dragCommand;
+        public ICommand DragCommand => dragCommand ?? (dragCommand = new RelayCommand<MouseButtonEventArgs>((args) =>
         {
-            if (args.Source is FrameworkElement frameworkElement)
-            {
-                prevPosition = args.GetPosition(null);
-                draggedNodeViewModel = frameworkElement.DataContext as INodeVM;
-                isDragging = true;
+            if (fromNodeViewModel != null) return;
 
-                CommandManager.InvalidateRequerySuggested();
-            }
-        }, (args) => args != null && !isDragging));
+            prevPosition = args.GetPosition(null);
 
-        protected ICommand endDragCommand;
-        public ICommand EndDragCommand => endDragCommand ?? (endDragCommand = new RelayCommand<MouseButtonEventArgs>((args) =>
-        {
-            isDragging = false;
-            draggedNodeViewModel = null;
+            draggedNodeViewModel = (args.OriginalSource as FrameworkElement)?.DataContext as INodeVM;
+            isDragging = true;
 
             CommandManager.InvalidateRequerySuggested();
-        }, (args) => args != null && isDragging));
+        }));
 
         protected ICommand moveCommand;
         public ICommand MoveCommand => moveCommand ?? (moveCommand = new RelayCommand<MouseEventArgs>((args) =>
         {
             Point position = args.GetPosition(null);
-            
-            double deltaX = (position.X - prevPosition.X) / ScaleX;
-            double deltaY = (position.Y - prevPosition.Y) / ScaleY;
 
-            if (draggedNodeViewModel != null)
+            if (isDragging)
             {
-                if (!draggedNodeViewModel.IsSelected)
+                if (Mouse.RightButton != MouseButtonState.Pressed)
                 {
-                    draggedNodeViewModel.PositionX += deltaX;
-                    draggedNodeViewModel.PositionY += deltaY;
+                    isDragging = false;
+                    draggedNodeViewModel = null;
                 }
-
-                foreach (var selectedViewModel in selection)
+                else
                 {
-                    if (selectedViewModel is INodeVM nodeViewModel)
+                    double deltaX = (position.X - prevPosition.X) / ScaleX;
+                    double deltaY = (position.Y - prevPosition.Y) / ScaleY;
+
+                    if (draggedNodeViewModel != null)
                     {
-                        nodeViewModel.PositionX += deltaX;
-                        nodeViewModel.PositionY += deltaY;
+                        if (!draggedNodeViewModel.IsSelected)
+                        {
+                            draggedNodeViewModel.PositionX += deltaX;
+                            draggedNodeViewModel.PositionY += deltaY;
+                        }
+
+                        foreach (var selectedViewModel in selection)
+                        {
+                            if (selectedViewModel is INodeVM nodeViewModel)
+                            {
+                                nodeViewModel.PositionX += deltaX;
+                                nodeViewModel.PositionY += deltaY;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        TranslateView((position.X - prevPosition.X) / ScaleX, (position.Y - prevPosition.Y) / ScaleY);
                     }
                 }
             }
-            else
+            else if (fromNodeViewModel != null && Mouse.LeftButton == MouseButtonState.Pressed)
             {
-                TranslateView((position.X - prevPosition.X) / ScaleX, (position.Y - prevPosition.Y) / ScaleY);
+                if ((args.OriginalSource as FrameworkElement)?.DataContext is INodeVM toNodeViewModel)
+                {
+
+                }
             }
 
             prevPosition = position;
-        }, (args) => args != null && isDragging));
+
+        }));
 
         protected ICommand initCommand;
         public ICommand InitCommand => initCommand ?? (initCommand = new RelayCommand<RoutedEventArgs>((args) => TranslateView(0, 0), (args) => args != null));
@@ -165,7 +211,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
                 TranslateView(newX - oldX, newY - oldY);
             }
-        }, (args) => args != null));
+        }));
 
 
 
@@ -419,5 +465,9 @@ namespace StorylineEditor.ViewModel.Graphs
             foreach (var selectedViewModel in selection) outSelection.Add(selectedViewModel);
         }
         public override bool HasSelection() => selection.Count > 0;
+
+
+
+        protected virtual string TryLinkNodes(INodeVM from, INodeVM to) { return null; }
     }
 }

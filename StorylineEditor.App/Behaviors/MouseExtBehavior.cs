@@ -44,10 +44,11 @@ namespace StorylineEditor.App.Behaviors
         }
         private static void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs args)
         {
-            if (sender is DependencyObject dp)
+            if (sender is UIElement uIElement)
             {
-                ICommand command = GetMouseLeftButtonDownCommand(dp);
-                if (command?.CanExecute(args) ?? false) command.Execute(args);
+                uIElement.CaptureMouse();
+
+                GetMouseLeftButtonDownCommand(uIElement)?.Execute(args);
                 args.Handled = true;
             }
         }
@@ -81,11 +82,12 @@ namespace StorylineEditor.App.Behaviors
         }
         private static void OnMouseLeftButtonUp(object sender, MouseButtonEventArgs args)
         {
-            if (sender is DependencyObject dp)
+            if (sender is UIElement uIElement)
             {
-                ICommand command = GetMouseLeftButtonUpCommand(dp);
-                if (command?.CanExecute(args) ?? false) command.Execute(args);
+                GetMouseLeftButtonUpCommand(uIElement)?.Execute(args);
                 args.Handled = true;
+
+                uIElement.ReleaseMouseCapture();
             }
         }
 
@@ -121,7 +123,7 @@ namespace StorylineEditor.App.Behaviors
             if (sender is DependencyObject dp)
             {
                 ICommand command = GetMouseRightButtonDownCommand(dp);
-                if (command?.CanExecute(args) ?? false) command.Execute(args);
+                GetMouseRightButtonDownCommand(dp)?.Execute(args);
                 args.Handled = true;
             }
         }
@@ -157,8 +159,7 @@ namespace StorylineEditor.App.Behaviors
         {
             if (sender is DependencyObject dp)
             {
-                ICommand command = GetMouseRightButtonUpCommand(dp);
-                if (command?.CanExecute(args) ?? false) command.Execute(args);
+                GetMouseRightButtonUpCommand(dp)?.Execute(args);
                 args.Handled = true;
             }
         }
@@ -194,8 +195,7 @@ namespace StorylineEditor.App.Behaviors
         {
             if (sender is DependencyObject dp)
             {
-                ICommand command = GetMouseWheelCommand(dp);
-                if (command?.CanExecute(args) ?? false) command.Execute(args);
+                GetMouseWheelCommand(dp)?.Execute(args);
                 args.Handled = true;
             }
         }
@@ -231,8 +231,7 @@ namespace StorylineEditor.App.Behaviors
         {
             if (sender is DependencyObject dp)
             {
-                ICommand command = GetMouseMoveCommand(dp);
-                if (command?.CanExecute(args) ?? false) command.Execute(args);
+                GetMouseMoveCommand(dp)?.Execute(args);
                 args.Handled = true;
             }
         }
