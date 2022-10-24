@@ -12,6 +12,9 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModel.Common;
+using System;
+using System.Windows;
+using System.Windows.Media;
 
 namespace StorylineEditor.ViewModel.Nodes
 {
@@ -28,6 +31,8 @@ namespace StorylineEditor.ViewModel.Nodes
         double Top { get; set; }
         double HandleX { get; set; }
         double HandleY { get; set; }
+
+        void RefreshStepPoints();
 
         string Description { get; set; }
     }
@@ -46,59 +51,101 @@ namespace StorylineEditor.ViewModel.Nodes
         public double ToX { get; set; }
         public double ToY { get; set; }
 
-        private double _localFromX;
+        private double _left;
         public double Left
         {
-            get => _localFromX;
+            get => _left;
             set
             {
-                if (_localFromX != value)
+                if (_left != value)
                 {
-                    _localFromX = value;
+                    _left = value;
                     Notify(nameof(Left));
                 }
             }
         }
 
-        private double _localFromY;
+        private double _top;
         public double Top
         {
-            get => _localFromY;
+            get => _top;
             set
             {
-                if (_localFromY != value)
+                if (_top != value)
                 {
-                    _localFromY = value;
+                    _top = value;
                     Notify(nameof(Top));
                 }
             }
         }
 
-        private double _localToX;
+        private double _handleX;
         public double HandleX
         {
-            get => _localToX;
+            get => _handleX;
             set
             {
-                if (_localToX != value)
+                if (_handleX != value)
                 {
-                    _localToX = value;
+                    _handleX = value;
                     Notify(nameof(HandleX));
                 }
             }
         }
 
-        private double _localToY;
+        private double _handleY;
         public double HandleY
         {
-            get => _localToY;
+            get => _handleY;
             set
             {
-                if (_localToY != value)
+                if (_handleY != value)
                 {
-                    _localToY = value;
+                    _handleY = value;
                     Notify(nameof(HandleY));
                 }
+            }
+        }
+
+        public void RefreshStepPoints()
+        {
+            double norm2 = HandleX * HandleX + HandleY * HandleY;
+
+            if (norm2 > 0)
+            {
+                System.Diagnostics.Trace.WriteLine("!!! " + HandleX);
+
+                double norm2root = Math.Sqrt(norm2);
+
+                double dirX = HandleX / norm2root;
+                double dirY = HandleY / norm2root;
+
+                double cos30 = Math.Cos(Math.PI/6);
+                double sin30 = Math.Sin(Math.PI / 6);
+
+                double dxFwd = dirX * cos30 + dirY * sin30;
+                double dyFwd = -dirX * sin30 + dirY * cos30;
+
+                double dxBwd = dirX * cos30 - dirY * sin30;
+                double dyBwd = dirX * sin30 + dirY * cos30;
+
+                double step = norm2root;
+                while (step > 64) step /= 2;
+
+                _stepPoints = new PointCollection();
+
+                double start = norm2root;
+                while (start >= step)
+                {
+                    _stepPoints.Add(new Point(start * dirX, start * dirY));
+                    _stepPoints.Add(new Point(start * dirX - 8 * dxFwd, start * dirY - 8 * dyFwd));
+                    _stepPoints.Add(new Point(start * dirX - 8 * dxBwd, start * dirY - 8 * dyBwd));
+                    _stepPoints.Add(new Point(start * dirX, start * dirY));
+
+                    start -= step;
+                }
+
+                Notify(nameof(StepPoints));
             }
         }
 
@@ -115,5 +162,8 @@ namespace StorylineEditor.ViewModel.Nodes
                 }
             }
         }
+
+        protected PointCollection _stepPoints;
+        public PointCollection StepPoints => _stepPoints;
     }
 }
