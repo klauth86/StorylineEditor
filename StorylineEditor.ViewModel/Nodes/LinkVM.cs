@@ -37,14 +37,21 @@ namespace StorylineEditor.ViewModel.Nodes
         string Description { get; set; }
     }
 
-    public class LinkVM : BaseVM<LinkM>
+    public sealed class LinkVM : BaseVM<LinkM>, ILinkVM
     {
-        public LinkVM(LinkM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
-    }
+        public LinkVM(LinkM model, ICallbackContext callbackContext, double step = 64, double cap = 8) : base(model, callbackContext)
+        {
+            Step = step;
+            Cap = cap;
 
-    public sealed class PreviewLinkVM : SimpleVM<object>, ILinkVM
-    {
-        public PreviewLinkVM(ICallbackContext callbackContext) : base(new object(), callbackContext) { }
+            _cos30 = Cap * Math.Cos(Math.PI / 6);
+            _sin30 = Cap * Math.Sin(Math.PI / 6);
+        }
+
+        public readonly double Step;        
+        public readonly double Cap;
+        private readonly double _cos30;
+        private readonly double _sin30;
 
         public double FromX { get; set; }
         public double FromY { get; set; }
@@ -113,57 +120,43 @@ namespace StorylineEditor.ViewModel.Nodes
 
             if (norm2 > 0)
             {
-                System.Diagnostics.Trace.WriteLine("!!! " + HandleX);
+                double remainingLength = Math.Sqrt(norm2);
 
-                double norm2root = Math.Sqrt(norm2);
+                double dirX = HandleX / remainingLength;
+                double dirY = HandleY / remainingLength;
 
-                double dirX = HandleX / norm2root;
-                double dirY = HandleY / norm2root;
+                double dxFwd = dirX * _cos30 + dirY * _sin30;
+                double dyFwd = -dirX * _sin30 + dirY * _cos30;
 
-                double cos30 = Math.Cos(Math.PI/6);
-                double sin30 = Math.Sin(Math.PI / 6);
+                double dxBwd = dirX * _cos30 - dirY * _sin30;
+                double dyBwd = dirX * _sin30 + dirY * _cos30;
 
-                double dxFwd = dirX * cos30 + dirY * sin30;
-                double dyFwd = -dirX * sin30 + dirY * cos30;
-
-                double dxBwd = dirX * cos30 - dirY * sin30;
-                double dyBwd = dirX * sin30 + dirY * cos30;
-
-                double step = norm2root;
-                while (step > 64) step /= 2;
-
-                _stepPoints = new PointCollection();
-
-                double start = norm2root;
-                while (start >= step)
+                int stepCount = 1;
+                
+                double actualStep = remainingLength;
+                while (actualStep > Step)
                 {
-                    _stepPoints.Add(new Point(start * dirX, start * dirY));
-                    _stepPoints.Add(new Point(start * dirX - 8 * dxFwd, start * dirY - 8 * dyFwd));
-                    _stepPoints.Add(new Point(start * dirX - 8 * dxBwd, start * dirY - 8 * dyBwd));
-                    _stepPoints.Add(new Point(start * dirX, start * dirY));
+                    actualStep /= 2;
+                    stepCount *= 2;
+                }
 
-                    start -= step;
+                _stepPoints = new PointCollection(4 * stepCount);
+
+                while (remainingLength >= actualStep)
+                {
+                    _stepPoints.Add(new Point(remainingLength * dirX, remainingLength * dirY));
+                    _stepPoints.Add(new Point(remainingLength * dirX - dxFwd, remainingLength * dirY - dyFwd));
+                    _stepPoints.Add(new Point(remainingLength * dirX - dxBwd, remainingLength * dirY - dyBwd));
+                    _stepPoints.Add(new Point(remainingLength * dirX, remainingLength * dirY));
+
+                    remainingLength -= actualStep;
                 }
 
                 Notify(nameof(StepPoints));
             }
         }
 
-        private string _description;
-        public string Description
-        {
-            get => _description;
-            set
-            {
-                if (_description != value)
-                {
-                    _description = value;
-                    Notify(nameof(Description));
-                }
-            }
-        }
-
-        protected PointCollection _stepPoints;
+        private PointCollection _stepPoints;
         public PointCollection StepPoints => _stepPoints;
     }
 }

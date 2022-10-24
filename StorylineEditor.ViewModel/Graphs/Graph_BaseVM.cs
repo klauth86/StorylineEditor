@@ -53,7 +53,7 @@ namespace StorylineEditor.ViewModel.Graphs
             draggedNodeViewModel = null;
 
             previewLinkIsAdded = false;
-            previewLink = new PreviewLinkVM(this);
+            previewLink = new LinkVM(new LinkM(), this);
 
             viewRect = new Rect();
             nodeRect = new Rect();
@@ -143,7 +143,7 @@ namespace StorylineEditor.ViewModel.Graphs
         protected INodeVM draggedNodeViewModel;
         protected Point prevPosition;
         protected bool previewLinkIsAdded;
-        protected PreviewLinkVM previewLink;
+        protected LinkVM previewLink;
         protected Rect viewRect;
         protected Rect nodeRect;
         protected readonly double absMaxHeight;
