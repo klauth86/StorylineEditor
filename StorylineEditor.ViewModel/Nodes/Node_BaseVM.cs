@@ -28,6 +28,7 @@ namespace StorylineEditor.ViewModel.Nodes
         double Left { get; set; }
         double Top { get; set; }
 
+        string Id { get; }
         bool IsSelected { get; }
     }
 

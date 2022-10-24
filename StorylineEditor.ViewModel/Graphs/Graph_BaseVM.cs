@@ -31,12 +31,10 @@ namespace StorylineEditor.ViewModel.Graphs
         ToY = 8
     }
 
-    enum EUpdateTarget
+    enum ENodeVMUpdate
     {
-        None,
-        X,
-        Y,
-        Both,
+        X = 1,
+        Y = 2,
     }
 
     public class Graph_BaseVM<T> : Collection_BaseVM<T, Point>, ICallbackContext where T : GraphM
@@ -62,8 +60,8 @@ namespace StorylineEditor.ViewModel.Graphs
             absMaxHeight = (double)Application.Current.FindResource("Double_Node_MaxHeight");
             absMaxWidth = (double)Application.Current.FindResource("Double_Node_MaxWidth");
 
-            NodesVMs = new Dictionary<BaseM, Notifier>();
-            LinksVMs = new Dictionary<BaseM, Notifier>();
+            NodesVMs = new Dictionary<string, Notifier>();
+            LinksVMs = new Dictionary<string, LinkVM>();
 
             selection = new List<Notifier>();
         }
@@ -96,7 +94,7 @@ namespace StorylineEditor.ViewModel.Graphs
                     Notifier viewModel = _viewModelCreator(model, this);
 
                     Add(model, null);
-                    NodesVMs.Add(model, viewModel);
+                    NodesVMs.Add(model.id, viewModel);
                     Add(null, viewModel);
 
                     bool resetSelection = !Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
@@ -120,11 +118,14 @@ namespace StorylineEditor.ViewModel.Graphs
                     string message = CanLinkNodes(fromNodeViewModel, toNodeViewModel);
                     if (message == null)
                     {
-                        BaseM model = _modelCreator(typeof(LinkM), new Point());
-                        Notifier viewModel = _viewModelCreator(model, this);
+                        LinkM model = (LinkM)_modelCreator(typeof(LinkM), new Point());
+                        model.fromNodeId = fromNodeViewModel.Id;
+                        model.toNodeId = toNodeViewModel.Id;
+                        
+                        LinkVM viewModel = (LinkVM)_viewModelCreator(model, this);
 
                         Add(model, null);
-                        LinksVMs.Add(model, viewModel);
+                        LinksVMs.Add(model.id, viewModel);
                         Add(null, viewModel);
                     }
                 }
@@ -145,8 +146,8 @@ namespace StorylineEditor.ViewModel.Graphs
         protected PreviewLinkVM previewLink;
         protected Rect viewRect;
         protected Rect nodeRect;
-        double absMaxHeight;
-        double absMaxWidth;
+        protected readonly double absMaxHeight;
+        protected readonly double absMaxWidth;
 
         protected ICommand dragCommand;
         public ICommand DragCommand => dragCommand ?? (dragCommand = new RelayCommand<MouseButtonEventArgs>((args) =>
@@ -216,6 +217,8 @@ namespace StorylineEditor.ViewModel.Graphs
                             previewLink.ToY = toNodeViewModel.PositionY;
                             UpdateLocalPosition(previewLink, ELinkVMUpdate.ToX | ELinkVMUpdate.ToY);
 
+                            previewLink.Description = CanLinkNodes(fromNodeViewModel, toNodeViewModel);
+
                             ShowPreviewLink(fromNodeViewModel);
                         }
                     }
@@ -226,6 +229,8 @@ namespace StorylineEditor.ViewModel.Graphs
                         previewLink.ToX = FromLocalToAbsoluteX(position.X);
                         previewLink.ToY = FromLocalToAbsoluteY(position.Y);
                         UpdateLocalPosition(previewLink, ELinkVMUpdate.ToX | ELinkVMUpdate.ToY);
+
+                        previewLink.Description = null;
 
                         ShowPreviewLink(fromNodeViewModel);
                     }
@@ -352,8 +357,8 @@ namespace StorylineEditor.ViewModel.Graphs
 
 
 
-        private readonly Dictionary<BaseM, Notifier> NodesVMs;
-        private readonly Dictionary<BaseM, Notifier> LinksVMs;
+        private readonly Dictionary<string, Notifier> NodesVMs;
+        private readonly Dictionary<string, LinkVM> LinksVMs;
 
 
 
@@ -391,41 +396,26 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 if (propName == nameof(INodeVM.PositionX))
                 {
-                    UpdateLocalPosition(nodeViewModel, EUpdateTarget.X);
+                    UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.X);
                 }
                 else if (propName == nameof(INodeVM.PositionY))
                 {
-                    UpdateLocalPosition(nodeViewModel, EUpdateTarget.Y);
+                    UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.Y);
                 }
             }
         }
-        private void UpdateLocalPosition(INodeVM nodeViewModel, EUpdateTarget updateTarget)
+        private void UpdateLocalPosition(INodeVM nodeViewModel, ENodeVMUpdate updateTarget)
         {
-            switch (updateTarget)
-            {
-                case EUpdateTarget.None:
-                    break;
-                case EUpdateTarget.X:
-                    nodeViewModel.Left = FromAbsoluteToLocalX(nodeViewModel.PositionX) - nodeViewModel.Width / 2;
-                    break;
-                case EUpdateTarget.Y:
-                    nodeViewModel.Top = FromAbsoluteToLocalY(nodeViewModel.PositionY) - nodeViewModel.Height / 2;
-                    break;
-                case EUpdateTarget.Both:
-                    nodeViewModel.Left = FromAbsoluteToLocalX(nodeViewModel.PositionX) - nodeViewModel.Width / 2;
-                    nodeViewModel.Top = FromAbsoluteToLocalY(nodeViewModel.PositionY) - nodeViewModel.Height / 2;
-                    break;
-                default:
-                    break;
-            }
+            if ((updateTarget & ENodeVMUpdate.X) > 0) nodeViewModel.Left = FromAbsoluteToLocalX(nodeViewModel.PositionX) - nodeViewModel.Width / 2;
+            if ((updateTarget & ENodeVMUpdate.Y) > 0) nodeViewModel.Top = FromAbsoluteToLocalY(nodeViewModel.PositionY) - nodeViewModel.Height / 2;
         }
 
         private void UpdateLocalPosition(ILinkVM linkViewModel, ELinkVMUpdate updateTarget)
         {
-            if ((updateTarget & ELinkVMUpdate.FromX) > 0) linkViewModel.LocalFromX = FromAbsoluteToLocalX(linkViewModel.FromX);
-            if ((updateTarget & ELinkVMUpdate.FromY) > 0) linkViewModel.LocalFromY = FromAbsoluteToLocalY(linkViewModel.FromY);
-            if ((updateTarget & ELinkVMUpdate.ToX) > 0) linkViewModel.LocalToX = FromAbsoluteToLocalX(linkViewModel.ToX);
-            if ((updateTarget & ELinkVMUpdate.ToY) > 0) linkViewModel.LocalToY = FromAbsoluteToLocalY(linkViewModel.ToY);
+            if ((updateTarget & ELinkVMUpdate.FromX) > 0) linkViewModel.Left = FromAbsoluteToLocalX(linkViewModel.FromX);
+            if ((updateTarget & ELinkVMUpdate.FromY) > 0) linkViewModel.Top = FromAbsoluteToLocalY(linkViewModel.FromY);
+            if ((updateTarget & ELinkVMUpdate.ToX) > 0) linkViewModel.HandleX = FromAbsoluteToLocalX(linkViewModel.ToX) - linkViewModel.Left;
+            if ((updateTarget & ELinkVMUpdate.ToY) > 0) linkViewModel.HandleY = FromAbsoluteToLocalY(linkViewModel.ToY) - linkViewModel.Top;
         }
 
 
@@ -474,13 +464,13 @@ namespace StorylineEditor.ViewModel.Graphs
                 if (viewRect.IntersectsWith(nodeRect)) addMs.Add(nodeModel);
             }
 
-            foreach (var model in removeMs) { ItemsVMs.Remove(NodesVMs[model]); NodesVMs.Remove(model); }
+            foreach (var model in removeMs) { ItemsVMs.Remove(NodesVMs[model.id]); NodesVMs.Remove(model.id); }
 
-            foreach (var model in addMs) { if (!NodesVMs.ContainsKey(model)) { NodesVMs.Add(model, _viewModelCreator(model, this)); ItemsVMs.Add(NodesVMs[model]); } }
+            foreach (var model in addMs) { if (!NodesVMs.ContainsKey(model.id)) { NodesVMs.Add(model.id, _viewModelCreator(model, this)); ItemsVMs.Add(NodesVMs[model.id]); } }
 
             foreach (INodeVM nodeViewModel in ItemsVMs)
             {
-                UpdateLocalPosition(nodeViewModel, EUpdateTarget.Both);
+                UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.X | ENodeVMUpdate.Y);
             }
         }
 

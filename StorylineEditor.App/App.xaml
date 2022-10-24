@@ -51,7 +51,13 @@ StorylineEditor распространяется в надежде, что он�
 
         <SolidColorBrush x:Key="Color_PreviewLink_Disallow" Color="Red" />
 
-        <SolidColorBrush x:Key="Color_Node_Background" Color="White" />
+        <sys:Double x:Key="Double_PreviewLink_MinHeight">16</sys:Double>
+
+        <sys:Double x:Key="Double_PreviewLink_MinWidth">16</sys:Double>
+
+        <sys:Double x:Key="Double_PreviewLink_StrokeThickness">2</sys:Double>
+        
+        
 
         <!-- Global and base -->
 
@@ -121,6 +127,11 @@ StorylineEditor распространяется в надежде, что он�
 
         <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Graph"></Style>
 
+        <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_PreviewLink">
+            <Setter Property="Foreground" Value="White"></Setter>
+            <Setter Property="FontSize" Value="8"></Setter>
+        </Style>
+        
         <Style TargetType="TextBox" BasedOn="{StaticResource S_TextBox_Input}" x:Key="S_TextBox_Input_Graph"></Style>
 
 
@@ -144,7 +155,7 @@ StorylineEditor распространяется в надежде, что он�
             <Setter Property="MaxHeight" Value="{StaticResource Double_Node_MaxHeight}"></Setter>
             <Setter Property="MaxWidth" Value="{StaticResource Double_Node_MaxWidth}"></Setter>
             <Setter Property="ToolTip" Value="{Binding Id, Mode=OneTime}"></Setter>
-            <Setter Property="Background" Value="{StaticResource Color_Node_Background}"></Setter>
+            <Setter Property="Background" Value="White"></Setter>
             <Setter Property="bhvrs:RenderSizeBehavior.ActualWidth" Value="{Binding Width, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"></Setter>
             <Setter Property="bhvrs:RenderSizeBehavior.ActualHeight" Value="{Binding Height, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"></Setter>
             <Setter Property="bhvrs:RenderSizeBehavior.IsEnabled" Value="true"></Setter>
@@ -555,9 +566,29 @@ StorylineEditor распространяется в надежде, что он�
         <DataTemplate DataType="{x:Type vmn:Node_Journal_AlternativeEditorVM}"></DataTemplate>
 
         <DataTemplate DataType="{x:Type vmn:PreviewLinkVM}">
-            <Line X1="{Binding LocalFromX, UpdateSourceTrigger=PropertyChanged}" Y1="{Binding LocalFromY, UpdateSourceTrigger=PropertyChanged}"
-                  X2="{Binding LocalToX, UpdateSourceTrigger=PropertyChanged}" Y2="{Binding LocalToY, UpdateSourceTrigger=PropertyChanged}"
-                  StrokeThickness="4" Stroke="{StaticResource Color_PreviewLink_Base}" IsHitTestVisible="False"></Line>
+            <Grid IsHitTestVisible="False">
+                <Line x:Name="ln_Main" X1="0" Y1="0"
+                  X2="{Binding HandleX, UpdateSourceTrigger=PropertyChanged}" Y2="{Binding HandleY, UpdateSourceTrigger=PropertyChanged}"
+                  StrokeThickness="{StaticResource Double_PreviewLink_StrokeThickness}" Stroke="{StaticResource Color_PreviewLink_Disallow}">
+                </Line>
+                <Grid x:Name="gr_Hint" VerticalAlignment="Center" HorizontalAlignment="Center" MinHeight="{StaticResource Double_PreviewLink_MinHeight}" MinWidth="{StaticResource Double_PreviewLink_MinWidth}">
+                    <Ellipse x:Name="ell_Description" Fill="{StaticResource Color_PreviewLink_Disallow}" Stroke="White"></Ellipse>
+                    <TextBlock x:Name="tb_Description" VerticalAlignment="Center" HorizontalAlignment="Center" Text="⤫" Style="{StaticResource S_TextBlock_PreviewLink}"></TextBlock>
+                </Grid>
+            </Grid>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                    <Setter TargetName="ln_Main" Property="Line.Stroke" Value="{StaticResource Color_PreviewLink_Base}"></Setter>
+                    <Setter TargetName="gr_Hint" Property="Visibility" Value="Collapsed"></Setter>
+                    <Setter TargetName="ell_Description" Property="Ellipse.Fill" Value="{StaticResource Color_PreviewLink_Base}"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Value="">
+                    <Setter TargetName="ln_Main" Property="Line.Stroke" Value="{StaticResource Color_PreviewLink_Allow}"></Setter>
+                    <Setter TargetName="gr_Hint" Property="Visibility" Value="Visible"></Setter>
+                    <Setter TargetName="ell_Description" Property="Ellipse.Fill" Value="{StaticResource Color_PreviewLink_Allow}"></Setter>
+                    <Setter TargetName="tb_Description" Property="Text" Value="✓"></Setter>
+                </DataTrigger>
+            </DataTemplate.Triggers>
         </DataTemplate>
         
     </Application.Resources>

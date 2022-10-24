@@ -24,13 +24,12 @@ namespace StorylineEditor.ViewModel.Nodes
         double ToY { get; set; }
 
         // Local
-        double LocalFromX { get; set; }
-        double LocalFromY { get; set; }
-        double LocalToX { get; set; }
-        double LocalToY { get; set; }
+        double Left { get; set; }
+        double Top { get; set; }
+        double HandleX { get; set; }
+        double HandleY { get; set; }
 
         string Description { get; set; }
-        string HasTarget { get; set; }
     }
 
     public class LinkVM : BaseVM<LinkM>
@@ -48,7 +47,7 @@ namespace StorylineEditor.ViewModel.Nodes
         public double ToY { get; set; }
 
         private double _localFromX;
-        public double LocalFromX
+        public double Left
         {
             get => _localFromX;
             set
@@ -56,13 +55,13 @@ namespace StorylineEditor.ViewModel.Nodes
                 if (_localFromX != value)
                 {
                     _localFromX = value;
-                    Notify(nameof(LocalFromX));
+                    Notify(nameof(Left));
                 }
             }
         }
 
         private double _localFromY;
-        public double LocalFromY
+        public double Top
         {
             get => _localFromY;
             set
@@ -70,13 +69,13 @@ namespace StorylineEditor.ViewModel.Nodes
                 if (_localFromY != value)
                 {
                     _localFromY = value;
-                    Notify(nameof(LocalFromY));
+                    Notify(nameof(Top));
                 }
             }
         }
 
         private double _localToX;
-        public double LocalToX
+        public double HandleX
         {
             get => _localToX;
             set
@@ -84,13 +83,13 @@ namespace StorylineEditor.ViewModel.Nodes
                 if (_localToX != value)
                 {
                     _localToX = value;
-                    Notify(nameof(LocalToX));
+                    Notify(nameof(HandleX));
                 }
             }
         }
 
         private double _localToY;
-        public double LocalToY
+        public double HandleY
         {
             get => _localToY;
             set
@@ -98,7 +97,7 @@ namespace StorylineEditor.ViewModel.Nodes
                 if (_localToY != value)
                 {
                     _localToY = value;
-                    Notify(nameof(LocalToY));
+                    Notify(nameof(HandleY));
                 }
             }
         }
@@ -113,20 +112,6 @@ namespace StorylineEditor.ViewModel.Nodes
                 {
                     _description = value;
                     Notify(nameof(Description));
-                }
-            }
-        }
-
-        private string _hasTarget;
-        public string HasTarget
-        {
-            get => _hasTarget;
-            set
-            {
-                if (_hasTarget != value)
-                {
-                    _hasTarget = value;
-                    Notify(nameof(HasTarget));
                 }
             }
         }
