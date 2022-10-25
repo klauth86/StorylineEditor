@@ -257,7 +257,9 @@ StorylineEditor распространяется в надежде, что он�
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vm:FolderVM}">
-            <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}">
+            <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
                 <Border.InputBindings>
                     <MouseBinding Gesture="LeftDoubleClick" Command="{Binding Path=DataContext.SetContextCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
                                   CommandParameter="{Binding Model}"/>
@@ -287,7 +289,9 @@ StorylineEditor распространяется в надежде, что он�
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vm:CharacterVM}">
-            <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}">
+            <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
                 <Border.InputBindings>
                     <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
                 </Border.InputBindings>
@@ -321,7 +325,9 @@ StorylineEditor распространяется в надежде, что он�
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vm:ActorVM}">
-            <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}">
+            <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
                 <Border.InputBindings>
                     <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
                 </Border.InputBindings>
@@ -353,7 +359,9 @@ StorylineEditor распространяется в надежде, что он�
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vm:ItemVM}">
-            <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}">
+            <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
                 <Border.InputBindings>
                     <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
                 </Border.InputBindings>
@@ -389,7 +397,9 @@ StorylineEditor распространяется в надежде, что он�
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vmg:QuestVM}">
-            <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}">
+            <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
                 <Border.InputBindings>
                     <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
                 </Border.InputBindings>
@@ -466,7 +476,9 @@ StorylineEditor распространяется в надежде, что он�
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vmg:DialogVM}">
-            <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}">
+            <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
                 <Border.InputBindings>
                     <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
                 </Border.InputBindings>
@@ -490,7 +502,9 @@ StorylineEditor распространяется в надежде, что он�
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vmg:ReplicaVM}">
-            <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}">
+            <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
                 <Border.InputBindings>
                     <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
                 </Border.InputBindings>
@@ -514,7 +528,9 @@ StorylineEditor распространяется в надежде, что он�
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vmn:Node_Journal_StepVM}">
-            <Border Style="{StaticResource S_Border_Node}">
+            <Border Style="{StaticResource S_Border_Node}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"></ColumnDefinition>
@@ -540,7 +556,9 @@ StorylineEditor распространяется в надежде, что он�
         <DataTemplate DataType="{x:Type vmn:Node_Journal_StepEditorVM}"></DataTemplate>
 
         <DataTemplate DataType="{x:Type vmn:Node_Journal_AlternativeVM}">
-            <Border Style="{StaticResource S_Border_Node}">
+            <Border Style="{StaticResource S_Border_Node}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"></ColumnDefinition>
@@ -566,12 +584,10 @@ StorylineEditor распространяется в надежде, что он�
         <DataTemplate DataType="{x:Type vmn:Node_Journal_AlternativeEditorVM}"></DataTemplate>
 
         <DataTemplate DataType="{x:Type vmn:LinkVM}">
-            <Grid IsHitTestVisible="False">
-                <Line x:Name="ln_Main" X1="0" Y1="0"
-                  X2="{Binding HandleX, UpdateSourceTrigger=PropertyChanged}" Y2="{Binding HandleY, UpdateSourceTrigger=PropertyChanged}"
-                  StrokeThickness="{StaticResource Double_PreviewLink_StrokeThickness}" Stroke="{StaticResource Color_PreviewLink_Disallow}">
-                </Line>
-                <Polygon x:Name="pl_Main" Points="{Binding StepPoints}" Fill="{StaticResource Color_PreviewLink_Disallow}"></Polygon>
+            <Grid IsHitTestVisible="False"
+                  bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                  bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+                <Polygon x:Name="pl_Main" Points="{Binding StepPoints}" Stroke="{StaticResource Color_PreviewLink_Disallow}" StrokeThickness="{StaticResource Double_PreviewLink_StrokeThickness}" Fill="{StaticResource Color_PreviewLink_Disallow}"></Polygon>
                 <Grid x:Name="gr_Hint" VerticalAlignment="Center" HorizontalAlignment="Center" MinHeight="{StaticResource Double_PreviewLink_MinHeight}" MinWidth="{StaticResource Double_PreviewLink_MinWidth}">
                     <Ellipse x:Name="ell_Description" Fill="{StaticResource Color_PreviewLink_Disallow}" Stroke="White"></Ellipse>
                     <TextBlock x:Name="tb_Description" VerticalAlignment="Center" HorizontalAlignment="Center" Text="⤫" Style="{StaticResource S_TextBlock_PreviewLink}"></TextBlock>
@@ -579,14 +595,14 @@ StorylineEditor распространяется в надежде, что он�
             </Grid>
             <DataTemplate.Triggers>
                 <DataTrigger Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
-                    <Setter TargetName="ln_Main" Property="Stroke" Value="{StaticResource Color_PreviewLink_Base}"></Setter>
                     <Setter TargetName="pl_Main" Property="Stroke" Value="{StaticResource Color_PreviewLink_Base}"></Setter>
+                    <Setter TargetName="pl_Main" Property="Fill" Value="{StaticResource Color_PreviewLink_Base}"></Setter>
                     <Setter TargetName="gr_Hint" Property="Visibility" Value="Collapsed"></Setter>
                     <Setter TargetName="ell_Description" Property="Fill" Value="{StaticResource Color_PreviewLink_Base}"></Setter>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Value="">
-                    <Setter TargetName="ln_Main" Property="Stroke" Value="{StaticResource Color_PreviewLink_Allow}"></Setter>
-                    <Setter TargetName="pl_Main" Property="Stroke" Value="{StaticResource Color_PreviewLink_Base}"></Setter>
+                    <Setter TargetName="pl_Main" Property="Stroke" Value="{StaticResource Color_PreviewLink_Allow}"></Setter>
+                    <Setter TargetName="pl_Main" Property="Fill" Value="{StaticResource Color_PreviewLink_Allow}"></Setter>
                     <Setter TargetName="gr_Hint" Property="Visibility" Value="Visible"></Setter>
                     <Setter TargetName="ell_Description" Property="Fill" Value="{StaticResource Color_PreviewLink_Allow}"></Setter>
                     <Setter TargetName="tb_Description" Property="Text" Value="✓"></Setter>

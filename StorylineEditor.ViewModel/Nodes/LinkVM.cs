@@ -152,6 +152,8 @@ namespace StorylineEditor.ViewModel.Nodes
                     remainingLength -= actualStep;
                 }
 
+                _stepPoints.Add(new Point(0, 0));
+
                 Notify(nameof(StepPoints));
             }
         }

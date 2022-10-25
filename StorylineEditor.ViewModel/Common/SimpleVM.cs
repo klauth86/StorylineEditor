@@ -11,21 +11,16 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using System;
+using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Common
 {
-    public interface IRegistrable
-    {
-        void Register();
-        void Unregister();
-    }
-
     public interface ICallbackContext
     {
         void Callback(object viewModelObj, string propName);
     }
 
-    public abstract class SimpleVM<T> : Notifier, IRegistrable where T : class
+    public abstract class SimpleVM<T> : Notifier where T : class
     {
         public static event Action<T, string> ModelChangedEvent = delegate { };
         public static void OnModelChanged(T model, string propName) => ModelChangedEvent?.Invoke(model, propName);
@@ -44,7 +39,16 @@ namespace StorylineEditor.ViewModel.Common
 
         private void OnModelChangedHandler(T model, string propName) { if (Model != null && Model == model) Notify(propName); }
 
-        public void Register() { ModelChangedEvent += OnModelChangedHandler; }
-        public void Unregister() { ModelChangedEvent -= OnModelChangedHandler; }
+
+
+        protected ICommand registerCommand;
+        public ICommand RegisterCommand => registerCommand ?? (registerCommand = new RelayCommand(() => RegisterCommandInternal()));
+        protected virtual void RegisterCommandInternal() { ModelChangedEvent += OnModelChangedHandler; }
+
+
+
+        protected ICommand unregisterCommand;
+        public ICommand UnregisterCommand => unregisterCommand ?? (unregisterCommand = new RelayCommand(() => UnregisterCommandInternal()));
+        protected virtual void UnregisterCommandInternal() { ModelChangedEvent -= OnModelChangedHandler; }
     }
 }
