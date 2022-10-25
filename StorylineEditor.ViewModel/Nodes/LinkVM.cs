@@ -37,7 +37,7 @@ namespace StorylineEditor.ViewModel.Nodes
         string Description { get; set; }
     }
 
-    public sealed class LinkVM : BaseVM<LinkM>, ILinkVM
+    public class LinkVM : BaseVM<LinkM>, ILinkVM
     {
         public LinkVM(LinkM model, ICallbackContext callbackContext, double step = 64, double cap = 8) : base(model, callbackContext)
         {
@@ -46,6 +46,8 @@ namespace StorylineEditor.ViewModel.Nodes
 
             _cos30 = Cap * Math.Cos(Math.PI / 6);
             _sin30 = Cap * Math.Sin(Math.PI / 6);
+
+            zIndex = 0;
         }
 
         public readonly double Step;        
@@ -160,5 +162,15 @@ namespace StorylineEditor.ViewModel.Nodes
 
         private PointCollection _stepPoints;
         public PointCollection StepPoints => _stepPoints;
+
+        protected int zIndex;
+        public int ZIndex => zIndex;
+    }
+
+    public class PreviewLinkVM : LinkVM {
+        public PreviewLinkVM(LinkM model, ICallbackContext callbackContext, double step = 64, double cap = 8) : base(model, callbackContext, step, cap)
+        {
+            zIndex = 10000;
+        }
     }
 }

@@ -34,7 +34,10 @@ namespace StorylineEditor.ViewModel.Nodes
 
     public abstract class Node_BaseVM<T> : BaseVM<T>, INodeVM where T : Node_BaseM
     {
-        public Node_BaseVM(T model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+        public Node_BaseVM(T model, ICallbackContext callbackContext) : base(model, callbackContext)
+        {
+            zIndex = 100;
+        }
 
         public byte Gender
         {
@@ -137,5 +140,8 @@ namespace StorylineEditor.ViewModel.Nodes
 
         private ICommand toggleGenderCommand;
         public ICommand ToggleGenderCommand => toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand(() => { Gender = (byte)((Gender + 1) % 3); }));
+
+        protected int zIndex;
+        public int ZIndex => zIndex;
     }
 }

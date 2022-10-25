@@ -53,7 +53,7 @@ namespace StorylineEditor.ViewModel.Graphs
             draggedNodeViewModel = null;
 
             previewLinkIsAdded = false;
-            previewLink = new LinkVM(new LinkM(), this);
+            previewLink = new PreviewLinkVM(new LinkM(), this);
 
             viewRect = new Rect();
             nodeRect = new Rect();
@@ -111,28 +111,37 @@ namespace StorylineEditor.ViewModel.Graphs
         protected ICommand linkCommand;
         public ICommand LinkCommand => linkCommand ?? (linkCommand = new RelayCommand<MouseButtonEventArgs>((args) =>
         {
-            if (fromNodeViewModel != null)
+            if (previewLinkIsAdded)
             {
-                if ((args.OriginalSource as FrameworkElement)?.DataContext is INodeVM toNodeViewModel)
+                if (fromNodeViewModel != null)
                 {
-                    string message = CanLinkNodes(fromNodeViewModel, toNodeViewModel);
-                    if (message == null)
+                    if ((args.OriginalSource as FrameworkElement)?.DataContext is INodeVM toNodeViewModel)
                     {
-                        LinkM model = (LinkM)_modelCreator(typeof(LinkM), new Point());
-                        model.fromNodeId = fromNodeViewModel.Id;
-                        model.toNodeId = toNodeViewModel.Id;
-                        
-                        LinkVM viewModel = (LinkVM)_viewModelCreator(model, this);
+                        string message = CanLinkNodes(fromNodeViewModel, toNodeViewModel);
+                        if (message == string.Empty)
+                        {
+                            LinkM model = (LinkM)_modelCreator(typeof(LinkM), new Point());
+                            model.fromNodeId = fromNodeViewModel.Id;
+                            model.toNodeId = toNodeViewModel.Id;
 
-                        Add(model, null);
-                        LinksVMs.Add(model.id, viewModel);
-                        Add(null, viewModel);
+                            LinkVM viewModel = (LinkVM)_viewModelCreator(model, this);
+
+                            viewModel.FromX = fromNodeViewModel.PositionX;
+                            viewModel.FromY = fromNodeViewModel.PositionY;
+                            viewModel.ToX = toNodeViewModel.PositionX;
+                            viewModel.ToY = toNodeViewModel.PositionY;
+                            UpdateLocalPosition(viewModel, ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.ToX | ELinkVMUpdate.ToY);
+
+                            Add(model, null);
+                            LinksVMs.Add(model.id, viewModel);
+                            Add(null, viewModel);
+                        }
                     }
+
+                    HidePreviewLink();
+
+                    fromNodeViewModel = null;
                 }
-
-                HidePreviewLink();
-
-                fromNodeViewModel = null;
             }
         }));
 
@@ -394,14 +403,8 @@ namespace StorylineEditor.ViewModel.Graphs
         {
             if (viewModelObj is INodeVM nodeViewModel)
             {
-                if (propName == nameof(INodeVM.PositionX))
-                {
-                    UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.X);
-                }
-                else if (propName == nameof(INodeVM.PositionY))
-                {
-                    UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.Y);
-                }
+                if (propName == nameof(INodeVM.PositionX)) UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.X);                
+                else if (propName == nameof(INodeVM.PositionY)) UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.Y);
             }
         }
         private void UpdateLocalPosition(INodeVM nodeViewModel, ENodeVMUpdate updateTarget)
@@ -511,7 +514,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
 
 
-        protected virtual string CanLinkNodes(INodeVM from, INodeVM to) { return nameof(NotImplementedException); }
+        protected virtual string CanLinkNodes(INodeVM from, INodeVM to) { return String.Empty; }
         protected void ShowPreviewLink(INodeVM nodeViewModel)
         {
             if (!previewLinkIsAdded)

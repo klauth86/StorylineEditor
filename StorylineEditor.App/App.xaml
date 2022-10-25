@@ -56,8 +56,10 @@ StorylineEditor распространяется в надежде, что он�
         <sys:Double x:Key="Double_PreviewLink_MinWidth">16</sys:Double>
 
         <sys:Double x:Key="Double_PreviewLink_StrokeThickness">2</sys:Double>
+
+        <SolidColorBrush x:Key="Color_Link" Color="Black" />
         
-        
+        <sys:Double x:Key="Double_Link_StrokeThickness">1</sys:Double>
 
         <!-- Global and base -->
 
@@ -83,7 +85,12 @@ StorylineEditor распространяется в надежде, что он�
 
         <Style TargetType="Button" x:Key="S_Button_GroupBox.Header"></Style>
 
-        <Style TargetType="Button" x:Key="S_Button_Link"></Style>
+        <Style TargetType="Button" x:Key="S_Button_Ref"></Style>
+        
+        <Style TargetType="Button" x:Key="S_Button_Link">
+            <Setter Property="Background" Value="Red"></Setter>
+            
+        </Style>
 
 
 
@@ -182,7 +189,7 @@ StorylineEditor распространяется в надежде, что он�
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type m:FolderM}">
-            <Button Style="{StaticResource S_Button_Link}" Content="{Binding name}" Command="{Binding Path=DataContext.SetContextCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></Button>
+            <Button Style="{StaticResource S_Button_Ref}" Content="{Binding name}" Command="{Binding Path=DataContext.SetContextCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></Button>
         </DataTemplate>
 
         <ItemsPanelTemplate x:Key="IPT_WrapPanel">
@@ -440,6 +447,7 @@ StorylineEditor распространяется в надежде, что он�
                               bhvrs:RenderSizeBehavior.SizeChangedFlag="{Binding SizeChangedFlag, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}">
                     <ItemsControl.ItemContainerStyle>
                         <Style TargetType="ContentPresenter">
+                            <Setter Property="Canvas.ZIndex" Value="{Binding ZIndex, UpdateSourceTrigger=PropertyChanged}"/>
                             <Setter Property="Canvas.Left" Value="{Binding Left, UpdateSourceTrigger=PropertyChanged}"/>
                             <Setter Property="Canvas.Top" Value="{Binding Top, UpdateSourceTrigger=PropertyChanged}"/>
                         </Style>
@@ -583,7 +591,7 @@ StorylineEditor распространяется в надежде, что он�
 
         <DataTemplate DataType="{x:Type vmn:Node_Journal_AlternativeEditorVM}"></DataTemplate>
 
-        <DataTemplate DataType="{x:Type vmn:LinkVM}">
+        <DataTemplate DataType="{x:Type vmn:PreviewLinkVM}">
             <Grid IsHitTestVisible="False"
                   bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
                   bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
@@ -608,6 +616,15 @@ StorylineEditor распространяется в надежде, что он�
                     <Setter TargetName="tb_Description" Property="Text" Value="✓"></Setter>
                 </DataTrigger>
             </DataTemplate.Triggers>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vmn:LinkVM}">
+            <Grid IsHitTestVisible="False"
+                  bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                  bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+                <Polygon x:Name="pl_Main" Points="{Binding StepPoints}" Stroke="{StaticResource Color_Link}" StrokeThickness="{StaticResource Double_Link_StrokeThickness}" Fill="{StaticResource Color_Link}"></Polygon>
+                <Button VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource S_Button_Link}" Content="⤫"></Button>
+            </Grid>
         </DataTemplate>
         
     </Application.Resources>
