@@ -39,21 +39,33 @@ namespace StorylineEditor.ViewModel.Nodes
 
     public class LinkVM : BaseVM<LinkM>, ILinkVM
     {
-        public LinkVM(LinkM model, ICallbackContext callbackContext, double step = 64, double cap = 8) : base(model, callbackContext)
+        const int N = 12;
+
+        public LinkVM(LinkM model, ICallbackContext callbackContext, double step = 64, double cap = 8, double remove = 12) : base(model, callbackContext)
         {
             Step = step;
             Cap = cap;
+            Remove = remove;
 
-            _cos30 = Cap * Math.Cos(Math.PI / 6);
-            _sin30 = Cap * Math.Sin(Math.PI / 6);
+            _coss = new double[N];
+            _sins = new double[N];
+            
+            for (int i = 0; i < N; i++)
+            {
+                _coss[i] = Math.Cos(2 * i * Math.PI / N);
+                _sins[i] = Math.Sin(2 * i * Math.PI / N);
+            }
 
             zIndex = 0;
         }
 
         public readonly double Step;        
         public readonly double Cap;
+        public readonly double Remove;
         private readonly double _cos30;
         private readonly double _sin30;
+        private readonly double[] _coss;
+        private readonly double[] _sins;
 
         public double FromX { get; set; }
         public double FromY { get; set; }
@@ -156,12 +168,32 @@ namespace StorylineEditor.ViewModel.Nodes
 
                 _stepPoints.Add(new Point(0, 0));
 
+                double centerX = HandleX / 2;
+                double centerY = HandleY / 2;
+
+                _removePoints = new PointCollection(N);
+
+                for (int i = 0; i < N; i++)
+                {
+                    _removePoints.Add(new Point(centerX + Remove*(_coss[i] * dirX + _sins[i] * dirY), centerY + Remove * (- _sins[i] * dirX + _coss[i] * dirY)));
+                }
+
+                _removePoints.Add(_removePoints[0]);
+
                 Notify(nameof(StepPoints));
+                Notify(nameof(RemovePoints));
+                Notify(nameof(CrossPoints));
             }
         }
 
         private PointCollection _stepPoints;
         public PointCollection StepPoints => _stepPoints;
+
+        private PointCollection _removePoints;
+        public PointCollection RemovePoints => _removePoints;
+
+        private PointCollection _crossPoints;
+        public PointCollection CrossPoints => _crossPoints;
 
         protected int zIndex;
         public int ZIndex => zIndex;
