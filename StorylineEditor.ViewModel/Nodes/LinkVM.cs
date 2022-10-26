@@ -20,6 +20,11 @@ namespace StorylineEditor.ViewModel.Nodes
 {
     public interface ILinkVM
     {
+        string Id { get; }
+        string Description { get; set; }
+        string FromNodeId { get; }
+        string ToNodeId { get; }
+
         // Absoulute
         double FromX { get; set; }
         double FromY { get; set; }
@@ -32,17 +37,12 @@ namespace StorylineEditor.ViewModel.Nodes
         double HandleX { get; set; }
         double HandleY { get; set; }
 
-        string Id { get; }
-        string Description { get; set; }
-
         void RefreshStepPoints();
     }
 
     public class LinkVM : BaseVM<LinkM>, ILinkVM
     {
-        const int N = 12;
-
-        public LinkVM(LinkM model, ICallbackContext callbackContext, double step = 64, double cap = 8, double remove = 8) : base(model, callbackContext)
+        public LinkVM(LinkM model, ICallbackContext callbackContext, double step = 64, double cap = 6, double remove = 8) : base(model, callbackContext)
         {
             Step = step;
             Cap = cap;
@@ -63,6 +63,7 @@ namespace StorylineEditor.ViewModel.Nodes
             zIndex = 0;
         }
 
+        const int N = 12;
         public readonly double Step;        
         public readonly double Cap;
         public readonly double Remove;
@@ -70,6 +71,9 @@ namespace StorylineEditor.ViewModel.Nodes
         private readonly double _sin30;
         private readonly double[] _coss;
         private readonly double[] _sins;
+
+        public string FromNodeId => Model?.fromNodeId;
+        public string ToNodeId => Model?.toNodeId;
 
         public double FromX { get; set; }
         public double FromY { get; set; }
@@ -132,6 +136,18 @@ namespace StorylineEditor.ViewModel.Nodes
             }
         }
 
+        public double Cross1_X1 { get; set; }
+        public double Cross1_Y1 { get; set; }
+        public double Cross1_X2 { get; set; }
+        public double Cross1_Y2 { get; set; }
+        public double Cross2_X1 { get; set; }
+        public double Cross2_Y1 { get; set; }
+        public double Cross2_X2 { get; set; }
+        public double Cross2_Y2 { get; set; }
+
+        protected int zIndex;
+        public int ZIndex => zIndex;
+
         public void RefreshStepPoints()
         {
             double norm2 = HandleX * HandleX + HandleY * HandleY;
@@ -158,22 +174,27 @@ namespace StorylineEditor.ViewModel.Nodes
                     stepCount *= 2;
                 }
 
-                _stepPoints = new PointCollection(4 * stepCount);
+                _stepPoints = new PointCollection(4 * stepCount + 1);
 
-                while (remainingLength >= actualStep)
+                remainingLength = 0;
+
+                double directionOffsetX = -dirY * Remove * 1.25;
+                double directionOffsetY = dirX * Remove * 1.25;
+
+                _stepPoints.Add(new Point(directionOffsetX, directionOffsetY));
+
+                for (int i = 0; i < stepCount; i++)
                 {
-                    _stepPoints.Add(new Point(remainingLength * dirX, remainingLength * dirY));
-                    _stepPoints.Add(new Point(remainingLength * dirX - dxFwd, remainingLength * dirY - dyFwd));
-                    _stepPoints.Add(new Point(remainingLength * dirX - dxBwd, remainingLength * dirY - dyBwd));
-                    _stepPoints.Add(new Point(remainingLength * dirX, remainingLength * dirY));
+                    remainingLength += actualStep;
 
-                    remainingLength -= actualStep;
+                    _stepPoints.Add(new Point(remainingLength * dirX + directionOffsetX, remainingLength * dirY + directionOffsetY));
+                    _stepPoints.Add(new Point(remainingLength * dirX - dxFwd + directionOffsetX, remainingLength * dirY - dyFwd + directionOffsetY));
+                    _stepPoints.Add(new Point(remainingLength * dirX - dxBwd + directionOffsetX, remainingLength * dirY - dyBwd + directionOffsetY));
+                    _stepPoints.Add(new Point(remainingLength * dirX + directionOffsetX, remainingLength * dirY + directionOffsetY));
                 }
 
-                _stepPoints.Add(new Point(0, 0));
-
-                double centerX = HandleX / 2;
-                double centerY = HandleY / 2;
+                double centerX = HandleX / 2 + directionOffsetX;
+                double centerY = HandleY / 2 + directionOffsetY;
 
                 _removePoints = new PointCollection(N + 1);
 
@@ -216,22 +237,10 @@ namespace StorylineEditor.ViewModel.Nodes
 
         private PointCollection _removePoints;
         public PointCollection RemovePoints => _removePoints;
-
-        public double Cross1_X1 { get; set; }
-        public double Cross1_Y1 { get; set; }
-        public double Cross1_X2 { get; set; }
-        public double Cross1_Y2 { get; set; }
-        public double Cross2_X1 { get; set; }
-        public double Cross2_Y1 { get; set; }
-        public double Cross2_X2 { get; set; }
-        public double Cross2_Y2 { get; set; }
-
-        protected int zIndex;
-        public int ZIndex => zIndex;
     }
 
     public class PreviewLinkVM : LinkVM {
-        public PreviewLinkVM(LinkM model, ICallbackContext callbackContext, double step = 64, double cap = 8) : base(model, callbackContext, step, cap)
+        public PreviewLinkVM(LinkM model, ICallbackContext callbackContext) : base(model, callbackContext)
         {
             zIndex = 10000;
         }

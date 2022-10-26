@@ -109,7 +109,7 @@ namespace StorylineEditor.ViewModel
         {
             if (viewModel != null) ItemsVMs.Remove(viewModel);
 
-            if (model != null) context.Remove(model);
+            if (model != null && context != null) context.Remove(model);
         }
 
 

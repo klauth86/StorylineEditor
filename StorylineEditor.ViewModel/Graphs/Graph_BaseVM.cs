@@ -62,6 +62,8 @@ namespace StorylineEditor.ViewModel.Graphs
 
             NodesVMs = new Dictionary<string, Notifier>();
             LinksVMs = new Dictionary<string, LinkVM>();
+            FromNodesLinks = new Dictionary<string, HashSet<string>>();
+            ToNodesLinks = new Dictionary<string, HashSet<string>>();
 
             selection = new List<Notifier>();
         }
@@ -97,6 +99,9 @@ namespace StorylineEditor.ViewModel.Graphs
                     NodesVMs.Add(model.id, viewModel);
                     Add(null, viewModel);
 
+                    FromNodesLinks.Add(model.id, new HashSet<string>());
+                    ToNodesLinks.Add(model.id, new HashSet<string>());
+
                     bool resetSelection = !Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
                     AddToSelection(viewModel, resetSelection);
 
@@ -130,11 +135,15 @@ namespace StorylineEditor.ViewModel.Graphs
                             viewModel.FromY = fromNodeViewModel.PositionY;
                             viewModel.ToX = toNodeViewModel.PositionX;
                             viewModel.ToY = toNodeViewModel.PositionY;
+
                             UpdateLocalPosition(viewModel, ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.ToX | ELinkVMUpdate.ToY);
 
                             Add(model, null);
                             LinksVMs.Add(model.id, viewModel);
                             Add(null, viewModel);
+
+                            FromNodesLinks[fromNodeViewModel.Id].Add(model.id);
+                            ToNodesLinks[toNodeViewModel.Id].Add(model.id);
                         }
                     }
 
@@ -194,12 +203,40 @@ namespace StorylineEditor.ViewModel.Graphs
                         {
                             draggedNodeViewModel.PositionX += deltaX;
                             draggedNodeViewModel.PositionY += deltaY;
+
+                            foreach (var linkId in FromNodesLinks[draggedNodeViewModel.Id])
+                            {
+                                LinksVMs[linkId].FromX += deltaX;
+                                LinksVMs[linkId].FromY += deltaY;
+                                UpdateLocalPosition(LinksVMs[linkId], ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.ToX | ELinkVMUpdate.ToY);
+                            }
+
+                            foreach (var linkId in ToNodesLinks[draggedNodeViewModel.Id])
+                            {
+                                LinksVMs[linkId].ToX += deltaX;
+                                LinksVMs[linkId].ToY += deltaY;
+                                UpdateLocalPosition(LinksVMs[linkId], ELinkVMUpdate.ToX | ELinkVMUpdate.ToY);
+                            }
                         }
 
                         foreach (INodeVM nodeViewModel in selection)
                         {
                             nodeViewModel.PositionX += deltaX;
                             nodeViewModel.PositionY += deltaY;
+
+                            foreach (var linkId in FromNodesLinks[nodeViewModel.Id])
+                            {
+                                LinksVMs[linkId].FromX += deltaX;
+                                LinksVMs[linkId].FromY += deltaY;
+                                UpdateLocalPosition(LinksVMs[linkId], ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.ToX | ELinkVMUpdate.ToY);
+                            }
+
+                            foreach (var linkId in ToNodesLinks[nodeViewModel.Id])
+                            {
+                                LinksVMs[linkId].ToX += deltaX;
+                                LinksVMs[linkId].ToY += deltaY;
+                                UpdateLocalPosition(LinksVMs[linkId], ELinkVMUpdate.ToX | ELinkVMUpdate.ToY);
+                            }
                         }
                     }
                     else
@@ -286,21 +323,21 @@ namespace StorylineEditor.ViewModel.Graphs
         {
             if (viewModel is INodeVM nodeVM)
             {
-                            
+                CommandManager.InvalidateRequerySuggested();
             }
-            if (viewModel is ILinkVM linkVM)
+            else if (viewModel is ILinkVM linkVM)
             {
-                ItemsVMs.Remove(viewModel);
-
-                LinksVMs.Remove(linkVM.Id);
+                FromNodesLinks[linkVM.FromNodeId].Remove(linkVM.Id);
+                ToNodesLinks[linkVM.ToNodeId].Remove(linkVM.Id);
 
                 BaseM model = _modelExtractor(viewModel);
 
-                Remove(viewModel, model, GetContext(model));
+                Remove(viewModel, null, null);
+                LinksVMs.Remove(linkVM.Id);
+                Remove(null, model, GetContext(model));
+
+                CommandManager.InvalidateRequerySuggested();
             }
-
-            CommandManager.InvalidateRequerySuggested();
-
         }, (viewModel) => viewModel != null));
 
 
@@ -390,7 +427,8 @@ namespace StorylineEditor.ViewModel.Graphs
 
         private readonly Dictionary<string, Notifier> NodesVMs;
         private readonly Dictionary<string, LinkVM> LinksVMs;
-
+        private readonly Dictionary<string, HashSet<string>> FromNodesLinks;
+        private readonly Dictionary<string, HashSet<string>> ToNodesLinks;
 
 
         protected double FromLocalToAbsoluteX(double x)
@@ -493,7 +531,19 @@ namespace StorylineEditor.ViewModel.Graphs
 
             foreach (var model in removeMs) { ItemsVMs.Remove(NodesVMs[model.id]); NodesVMs.Remove(model.id); }
 
-            foreach (var model in addMs) { if (!NodesVMs.ContainsKey(model.id)) { NodesVMs.Add(model.id, _viewModelCreator(model, this)); ItemsVMs.Add(NodesVMs[model.id]); } }
+            foreach (var model in addMs)
+            {
+                if (!NodesVMs.ContainsKey(model.id))
+                {
+                    Notifier viewModel = _viewModelCreator(model, this);
+
+                    NodesVMs.Add(model.id, viewModel);
+                    Add(null, viewModel);
+
+                    FromNodesLinks.Add(model.id, new HashSet<string>());
+                    ToNodesLinks.Add(model.id, new HashSet<string>());
+                }
+            }
 
             foreach (INodeVM nodeViewModel in ItemsVMs)
             {
