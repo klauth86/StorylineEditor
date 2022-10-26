@@ -281,6 +281,28 @@ namespace StorylineEditor.ViewModel.Graphs
             }
         }));
 
+        protected ICommand removeElementCommand;
+        public ICommand RemoveElementCommand => removeElementCommand ?? (removeElementCommand = new RelayCommand<Notifier>((viewModel) =>
+        {
+            if (viewModel is INodeVM nodeVM)
+            {
+                            
+            }
+            if (viewModel is ILinkVM linkVM)
+            {
+                ItemsVMs.Remove(viewModel);
+
+                LinksVMs.Remove(linkVM.Id);
+
+                BaseM model = _modelExtractor(viewModel);
+
+                Remove(viewModel, model, GetContext(model));
+            }
+
+            CommandManager.InvalidateRequerySuggested();
+
+        }, (viewModel) => viewModel != null));
+
 
 
         private readonly Func<Type, string> _typeDescriptor;

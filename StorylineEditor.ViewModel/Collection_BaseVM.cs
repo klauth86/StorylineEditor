@@ -59,9 +59,10 @@ namespace StorylineEditor.ViewModel
                 BaseM model = _modelExtractor(selectedViewModel);
 
                 Remove(selectedViewModel, model, GetContext(model));
-
-                CommandManager.InvalidateRequerySuggested();
             }
+
+            CommandManager.InvalidateRequerySuggested();
+
         }, () => HasSelection()));
 
         private ICommand cutCommand;

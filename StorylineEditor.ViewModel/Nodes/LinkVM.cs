@@ -32,20 +32,24 @@ namespace StorylineEditor.ViewModel.Nodes
         double HandleX { get; set; }
         double HandleY { get; set; }
 
-        void RefreshStepPoints();
-
+        string Id { get; }
         string Description { get; set; }
+
+        void RefreshStepPoints();
     }
 
     public class LinkVM : BaseVM<LinkM>, ILinkVM
     {
         const int N = 12;
 
-        public LinkVM(LinkM model, ICallbackContext callbackContext, double step = 64, double cap = 8, double remove = 12) : base(model, callbackContext)
+        public LinkVM(LinkM model, ICallbackContext callbackContext, double step = 64, double cap = 8, double remove = 8) : base(model, callbackContext)
         {
             Step = step;
             Cap = cap;
             Remove = remove;
+
+            _cos30 = cap * Math.Cos(Math.PI / 6);
+            _sin30 = cap * Math.Sin(Math.PI / 6);
 
             _coss = new double[N];
             _sins = new double[N];
@@ -146,7 +150,7 @@ namespace StorylineEditor.ViewModel.Nodes
                 double dyBwd = dirX * _sin30 + dirY * _cos30;
 
                 int stepCount = 1;
-                
+
                 double actualStep = remainingLength;
                 while (actualStep > Step)
                 {
@@ -171,19 +175,40 @@ namespace StorylineEditor.ViewModel.Nodes
                 double centerX = HandleX / 2;
                 double centerY = HandleY / 2;
 
-                _removePoints = new PointCollection(N);
+                _removePoints = new PointCollection(N + 1);
 
-                for (int i = 0; i < N; i++)
-                {
-                    _removePoints.Add(new Point(centerX + Remove*(_coss[i] * dirX + _sins[i] * dirY), centerY + Remove * (- _sins[i] * dirX + _coss[i] * dirY)));
-                }
-
+                for (int i = 0; i < N; i++) _removePoints.Add(new Point(centerX + Remove * (_coss[i] * dirX + _sins[i] * dirY), centerY + Remove * (-_sins[i] * dirX + _coss[i] * dirY)));
                 _removePoints.Add(_removePoints[0]);
+
+                double offset = Remove / 3;
+
+                EvalIndicatorSymbol(centerX, centerY, offset);
 
                 Notify(nameof(StepPoints));
                 Notify(nameof(RemovePoints));
-                Notify(nameof(CrossPoints));
             }
+        }
+
+        protected virtual void EvalIndicatorSymbol(double centerX, double centerY, double offset)
+        {
+            Cross1_X1 = centerX - offset;
+            Cross1_Y1 = centerY - offset;
+            Cross1_X2 = centerX + offset;
+            Cross1_Y2 = centerY + offset;
+
+            Cross2_X1 = centerX + offset;
+            Cross2_Y1 = centerY - offset;
+            Cross2_X2 = centerX - offset;
+            Cross2_Y2 = centerY + offset;
+
+            Notify(nameof(Cross1_X1));
+            Notify(nameof(Cross1_Y1));
+            Notify(nameof(Cross1_X2));
+            Notify(nameof(Cross1_Y2));
+            Notify(nameof(Cross2_X1));
+            Notify(nameof(Cross2_Y1));
+            Notify(nameof(Cross2_X2));
+            Notify(nameof(Cross2_Y2));
         }
 
         private PointCollection _stepPoints;
@@ -192,8 +217,14 @@ namespace StorylineEditor.ViewModel.Nodes
         private PointCollection _removePoints;
         public PointCollection RemovePoints => _removePoints;
 
-        private PointCollection _crossPoints;
-        public PointCollection CrossPoints => _crossPoints;
+        public double Cross1_X1 { get; set; }
+        public double Cross1_Y1 { get; set; }
+        public double Cross1_X2 { get; set; }
+        public double Cross1_Y2 { get; set; }
+        public double Cross2_X1 { get; set; }
+        public double Cross2_Y1 { get; set; }
+        public double Cross2_X2 { get; set; }
+        public double Cross2_Y2 { get; set; }
 
         protected int zIndex;
         public int ZIndex => zIndex;
@@ -203,6 +234,35 @@ namespace StorylineEditor.ViewModel.Nodes
         public PreviewLinkVM(LinkM model, ICallbackContext callbackContext, double step = 64, double cap = 8) : base(model, callbackContext, step, cap)
         {
             zIndex = 10000;
+        }
+
+        protected override void EvalIndicatorSymbol(double centerX, double centerY, double offset)
+        {
+            if (Description == string.Empty)
+            {
+                Cross1_X1 = centerX - offset;
+                Cross1_Y1 = centerY - offset / 2;
+                Cross1_X2 = centerX;
+                Cross1_Y2 = centerY + 2 * offset;
+
+                Cross2_X1 = centerX + offset;
+                Cross2_Y1 = centerY - 2 * offset;
+                Cross2_X2 = centerX;
+                Cross2_Y2 = centerY + 2 * offset;
+
+                Notify(nameof(Cross1_X1));
+                Notify(nameof(Cross1_Y1));
+                Notify(nameof(Cross1_X2));
+                Notify(nameof(Cross1_Y2));
+                Notify(nameof(Cross2_X1));
+                Notify(nameof(Cross2_Y1));
+                Notify(nameof(Cross2_X2));
+                Notify(nameof(Cross2_Y2));
+            }
+            else if (Description != null)
+            {
+                base.EvalIndicatorSymbol(centerX, centerY, offset);
+            }
         }
     }
 }

@@ -62,8 +62,10 @@ StorylineEditor распространяется в надежде, что он�
         <SolidColorBrush x:Key="Color_Link_Foreground" Color="White" />
 
         <SolidColorBrush x:Key="Color_Link_Remove" Color="Red" />
-        
+
         <sys:Double x:Key="Double_Link_StrokeThickness">1</sys:Double>
+
+        <sys:Double x:Key="Double_Link_Label_StrokeThickness">2</sys:Double>
 
         <!-- Global and base -->
 
@@ -601,28 +603,34 @@ StorylineEditor распространяется в надежде, что он�
         <DataTemplate DataType="{x:Type vmn:Node_Journal_AlternativeEditorVM}"></DataTemplate>
 
         <DataTemplate DataType="{x:Type vmn:PreviewLinkVM}">
-            <Grid IsHitTestVisible="False"
+            <Grid 
                   bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
                   bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
-                <Polygon x:Name="pl_Main" Points="{Binding StepPoints}" Stroke="{StaticResource Color_PreviewLink_Disallow}" StrokeThickness="{StaticResource Double_PreviewLink_StrokeThickness}" Fill="{StaticResource Color_PreviewLink_Disallow}"></Polygon>
-                <Grid x:Name="gr_Hint" VerticalAlignment="Center" HorizontalAlignment="Center" MinHeight="{StaticResource Double_PreviewLink_MinHeight}" MinWidth="{StaticResource Double_PreviewLink_MinWidth}">
-                    <Ellipse x:Name="ell_Description" Fill="{StaticResource Color_PreviewLink_Disallow}" Stroke="White"></Ellipse>
-                    <TextBlock x:Name="tb_Description" VerticalAlignment="Center" HorizontalAlignment="Center" Text="⤫" Style="{StaticResource S_TextBlock_PreviewLink}"></TextBlock>
-                </Grid>
+                <Polygon x:Name="pg_Main" IsHitTestVisible="False" Points="{Binding StepPoints}" Stroke="{StaticResource Color_PreviewLink_Disallow}" StrokeThickness="{StaticResource Double_Link_StrokeThickness}" Fill="{StaticResource Color_PreviewLink_Disallow}"></Polygon>
+                <Polygon x:Name="pg_Indicator" IsHitTestVisible="False" Points="{Binding RemovePoints}" Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{StaticResource Double_PreviewLink_StrokeThickness}" Fill="{StaticResource Color_PreviewLink_Disallow}"></Polygon>
+                <!--Here two Polyline are used just for one Cross because of WPF render bug check -->
+                <Line x:Name="ln_1" IsHitTestVisible="False" X1="{Binding Cross1_X1, UpdateSourceTrigger=PropertyChanged}" Y1="{Binding Cross1_Y1, UpdateSourceTrigger=PropertyChanged}"
+                      X2="{Binding Cross1_X2, UpdateSourceTrigger=PropertyChanged}" Y2="{Binding Cross1_Y2, UpdateSourceTrigger=PropertyChanged}"
+                      Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{StaticResource Double_Link_Label_StrokeThickness}"></Line>
+                <Line x:Name="ln_2" IsHitTestVisible="False" X1="{Binding Cross2_X1, UpdateSourceTrigger=PropertyChanged}" Y1="{Binding Cross2_Y1, UpdateSourceTrigger=PropertyChanged}"
+                      X2="{Binding Cross2_X2, UpdateSourceTrigger=PropertyChanged}" Y2="{Binding Cross2_Y2, UpdateSourceTrigger=PropertyChanged}"
+                      Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{StaticResource Double_Link_Label_StrokeThickness}"></Line>
             </Grid>
             <DataTemplate.Triggers>
                 <DataTrigger Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
-                    <Setter TargetName="pl_Main" Property="Stroke" Value="{StaticResource Color_PreviewLink_Base}"></Setter>
-                    <Setter TargetName="pl_Main" Property="Fill" Value="{StaticResource Color_PreviewLink_Base}"></Setter>
-                    <Setter TargetName="gr_Hint" Property="Visibility" Value="Collapsed"></Setter>
-                    <Setter TargetName="ell_Description" Property="Fill" Value="{StaticResource Color_PreviewLink_Base}"></Setter>
+                    <Setter TargetName="pg_Main" Property="Stroke" Value="{StaticResource Color_PreviewLink_Base}"></Setter>
+                    <Setter TargetName="pg_Main" Property="Fill" Value="{StaticResource Color_PreviewLink_Base}"></Setter>
+                    <Setter TargetName="pg_Indicator" Property="Visibility" Value="Collapsed"></Setter>
+                    <Setter TargetName="ln_1" Property="Visibility" Value="Collapsed"></Setter>
+                    <Setter TargetName="ln_2" Property="Visibility" Value="Collapsed"></Setter>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Value="">
-                    <Setter TargetName="pl_Main" Property="Stroke" Value="{StaticResource Color_PreviewLink_Allow}"></Setter>
-                    <Setter TargetName="pl_Main" Property="Fill" Value="{StaticResource Color_PreviewLink_Allow}"></Setter>
-                    <Setter TargetName="gr_Hint" Property="Visibility" Value="Visible"></Setter>
-                    <Setter TargetName="ell_Description" Property="Fill" Value="{StaticResource Color_PreviewLink_Allow}"></Setter>
-                    <Setter TargetName="tb_Description" Property="Text" Value="✓"></Setter>
+                    <Setter TargetName="pg_Main" Property="Stroke" Value="{StaticResource Color_PreviewLink_Allow}"></Setter>
+                    <Setter TargetName="pg_Main" Property="Fill" Value="{StaticResource Color_PreviewLink_Allow}"></Setter>
+                    <Setter TargetName="pg_Indicator" Property="Visibility" Value="Visible"></Setter>
+                    <Setter TargetName="pg_Indicator" Property="Fill" Value="{StaticResource Color_PreviewLink_Allow}"></Setter>
+                    <Setter TargetName="ln_1" Property="Visibility" Value="Visible"></Setter>
+                    <Setter TargetName="ln_2" Property="Visibility" Value="Visible"></Setter>
                 </DataTrigger>
             </DataTemplate.Triggers>
         </DataTemplate>
@@ -632,8 +640,19 @@ StorylineEditor распространяется в надежде, что он�
                   bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
                   bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
                 <Polygon IsHitTestVisible="False" Points="{Binding StepPoints}" Stroke="{StaticResource Color_Link}" StrokeThickness="{StaticResource Double_Link_StrokeThickness}" Fill="{StaticResource Color_Link}"></Polygon>
-                <Polygon IsHitTestVisible="False" Points="{Binding RemovePoints}" Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{StaticResource Double_Link_StrokeThickness}" Fill="{StaticResource Color_Link_Remove}"></Polygon>
-                <Polygon IsHitTestVisible="False" Points="{Binding CrossPoints}" Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{StaticResource Double_Link_StrokeThickness}" Fill="{StaticResource Color_Link_Foreground}"></Polygon>
+                <Polygon Points="{Binding RemovePoints}" Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{StaticResource Double_Link_StrokeThickness}" 
+                         Fill="{StaticResource Color_Link_Remove}">
+                    <Polygon.InputBindings>
+                        <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.RemoveElementCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
+                    </Polygon.InputBindings>
+                </Polygon>
+                <!--Here two Polyline are used just for one Cross because of WPF render bug check -->
+                <Line IsHitTestVisible="False" X1="{Binding Cross1_X1, UpdateSourceTrigger=PropertyChanged}" Y1="{Binding Cross1_Y1, UpdateSourceTrigger=PropertyChanged}"
+                      X2="{Binding Cross1_X2, UpdateSourceTrigger=PropertyChanged}" Y2="{Binding Cross1_Y2, UpdateSourceTrigger=PropertyChanged}"
+                      Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{StaticResource Double_Link_Label_StrokeThickness}"></Line>
+                <Line IsHitTestVisible="False" X1="{Binding Cross2_X1, UpdateSourceTrigger=PropertyChanged}" Y1="{Binding Cross2_Y1, UpdateSourceTrigger=PropertyChanged}"
+                      X2="{Binding Cross2_X2, UpdateSourceTrigger=PropertyChanged}" Y2="{Binding Cross2_Y2, UpdateSourceTrigger=PropertyChanged}"
+                      Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{StaticResource Double_Link_Label_StrokeThickness}"></Line>
             </Grid>
         </DataTemplate>
         
