@@ -18,7 +18,7 @@ namespace StorylineEditor.ViewModel.Common
     {
         public BaseVM(T model, ICallbackContext callbackContext) : base(model, callbackContext) { }
 
-        public override string Id => Model.id;
+        public override string Id => Model?.id;
 
         public string Name
         {

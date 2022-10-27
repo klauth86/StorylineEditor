@@ -651,6 +651,23 @@ StorylineEditor распространяется в надежде, что он�
                       Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}"></Line>
             </Grid>
         </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vmn:SelectionBoxVM}">
+            <Grid>
+                <Line IsHitTestVisible="False" X1="0" Y1="0"
+                      X2="0" Y2="{Binding HandleY, UpdateSourceTrigger=PropertyChanged}"
+                      Stroke="{StaticResource Color_Link}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" StrokeDashArray="4, 8"></Line>
+                <Line IsHitTestVisible="False" X1="0" Y1="{Binding HandleY, UpdateSourceTrigger=PropertyChanged}"
+                      X2="{Binding HandleX, UpdateSourceTrigger=PropertyChanged}" Y2="{Binding HandleY, UpdateSourceTrigger=PropertyChanged}"
+                      Stroke="{StaticResource Color_Link}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" StrokeDashArray="4, 8"></Line>
+                <Line IsHitTestVisible="False" X1="{Binding HandleX, UpdateSourceTrigger=PropertyChanged}" Y1="{Binding HandleY, UpdateSourceTrigger=PropertyChanged}"
+                      X2="{Binding HandleX, UpdateSourceTrigger=PropertyChanged}" Y2="0"
+                      Stroke="{StaticResource Color_Link}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" StrokeDashArray="4, 8"></Line>
+                <Line IsHitTestVisible="False" X1="{Binding HandleX, UpdateSourceTrigger=PropertyChanged}" Y1="0"
+                      X2="0" Y2="0"
+                      Stroke="{StaticResource Color_Link}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" StrokeDashArray="4, 8"></Line>
+            </Grid>
+        </DataTemplate>
         
     </Application.Resources>
 </Application>

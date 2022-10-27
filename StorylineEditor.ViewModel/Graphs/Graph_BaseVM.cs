@@ -57,6 +57,9 @@ namespace StorylineEditor.ViewModel.Graphs
             previewLinkIsAdded = false;
             previewLink = new PreviewLinkVM(new LinkM(), this);
 
+            selectionBoxIsAdded = false;
+            selectionBox = new SelectionBoxVM();
+
             viewRect = new Rect();
             nodeRect = new Rect();
             absMaxHeight = (double)Application.Current.FindResource("Double_Node_MaxHeight");
@@ -78,7 +81,21 @@ namespace StorylineEditor.ViewModel.Graphs
         {
             if (isDragging) return;
 
-            if ((args.OriginalSource as FrameworkElement)?.DataContext is INodeVM nodeViewModel)
+            if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+            {
+                if (args.Source is IInputElement inputElement)
+                {
+                    prevPosition = args.GetPosition(null);
+
+                    Point position = args.GetPosition(inputElement);
+
+                    double positionX = FromLocalToAbsoluteX(position.X);
+                    double positionY = FromLocalToAbsoluteY(position.Y);
+
+                    ShowSelectionBox(positionX, positionY);
+                }
+            }
+            else if ((args.OriginalSource as FrameworkElement)?.DataContext is INodeVM nodeViewModel)
             {
                 bool resetSelection = !Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
                 AddToSelection((Notifier)nodeViewModel, resetSelection);
@@ -118,7 +135,12 @@ namespace StorylineEditor.ViewModel.Graphs
         protected ICommand linkCommand;
         public ICommand LinkCommand => linkCommand ?? (linkCommand = new RelayCommand<MouseButtonEventArgs>((args) =>
         {
-            if (previewLinkIsAdded)
+            if (selectionBoxIsAdded)
+            {
+                ProcessSelectionBox();
+                HideSelectionBox();
+            }
+            else if (previewLinkIsAdded)
             {
                 if (fromNodeViewModel != null)
                 {
@@ -164,6 +186,8 @@ namespace StorylineEditor.ViewModel.Graphs
         protected Point prevPosition;
         protected bool previewLinkIsAdded;
         protected LinkVM previewLink;
+        protected bool selectionBoxIsAdded;
+        protected SelectionBoxVM selectionBox;
         protected Rect viewRect;
         protected Rect nodeRect;
         protected readonly double absMaxHeight;
@@ -172,7 +196,7 @@ namespace StorylineEditor.ViewModel.Graphs
         protected ICommand dragCommand;
         public ICommand DragCommand => dragCommand ?? (dragCommand = new RelayCommand<MouseButtonEventArgs>((args) =>
         {
-            if (fromNodeViewModel != null) return;
+            if (fromNodeViewModel != null || selectionBoxIsAdded) return;
 
             prevPosition = args.GetPosition(null);
 
@@ -185,7 +209,29 @@ namespace StorylineEditor.ViewModel.Graphs
         protected ICommand moveCommand;
         public ICommand MoveCommand => moveCommand ?? (moveCommand = new RelayCommand<MouseEventArgs>((args) =>
         {
-            if (isDragging)
+            if (selectionBoxIsAdded)
+            {
+                Point position = args.GetPosition(null);
+
+                if (Mouse.LeftButton != MouseButtonState.Pressed)
+                {
+                    ProcessSelectionBox();
+                    HideSelectionBox();
+                }
+                else
+                {
+                    double deltaX = (position.X - prevPosition.X) / ScaleX;
+                    double deltaY = (position.Y - prevPosition.Y) / ScaleY;
+
+                    selectionBox.ToX += deltaX;
+                    selectionBox.ToY += deltaY;
+
+                    UpdateSelectionBoxLocalPosition(selectionBox, ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
+                }
+
+                prevPosition = position;
+            }
+            else if (isDragging)
             {
                 Point position = args.GetPosition(null);
 
@@ -277,7 +323,6 @@ namespace StorylineEditor.ViewModel.Graphs
                     fromNodeViewModel = null;
                 }
             }
-
         }));
 
         protected ICommand initCommand;
@@ -286,7 +331,7 @@ namespace StorylineEditor.ViewModel.Graphs
         protected ICommand scaleCommand;
         public ICommand ScaleCommand => scaleCommand ?? (scaleCommand = new RelayCommand<MouseWheelEventArgs>((args) =>
         {
-            if (fromNodeViewModel != null) return;
+            if (fromNodeViewModel != null || selectionBoxIsAdded) return;
 
             if (isDragging) return;
 
@@ -454,7 +499,7 @@ namespace StorylineEditor.ViewModel.Graphs
         {
             if (viewModelObj is INodeVM nodeViewModel)
             {
-                if (propName == nameof(INodeVM.PositionX)) UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.X);                
+                if (propName == nameof(INodeVM.PositionX)) UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.X);
                 else if (propName == nameof(INodeVM.PositionY)) UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.Y);
             }
         }
@@ -492,7 +537,13 @@ namespace StorylineEditor.ViewModel.Graphs
             linkViewModel.RefreshStepPoints();
         }
 
-
+        private void UpdateSelectionBoxLocalPosition(SelectionBoxVM selectionBoxViewModel, ELinkVMUpdate updateTarget)
+        {
+            if ((updateTarget & ELinkVMUpdate.FromX) > 0) selectionBoxViewModel.Left = FromAbsoluteToLocalX(selectionBoxViewModel.FromX);
+            if ((updateTarget & ELinkVMUpdate.FromY) > 0) selectionBoxViewModel.Top = FromAbsoluteToLocalY(selectionBoxViewModel.FromY);
+            if ((updateTarget & ELinkVMUpdate.ToX) > 0) selectionBoxViewModel.HandleX = FromAbsoluteToLocalX(selectionBoxViewModel.ToX) - selectionBoxViewModel.Left;
+            if ((updateTarget & ELinkVMUpdate.ToY) > 0) selectionBoxViewModel.HandleY = FromAbsoluteToLocalY(selectionBoxViewModel.ToY) - selectionBoxViewModel.Top;
+        }
 
         private void TranslateView(double absoluteDeltaX, double absoluteDeltaY)
         {
@@ -622,6 +673,65 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 previewLinkIsAdded = false;
                 ItemsVMs.Remove(previewLink);
+            }
+        }
+
+        protected void ShowSelectionBox(double positionX, double positionY)
+        {
+            if (!previewLinkIsAdded)
+            {
+                selectionBox.FromX = positionX;
+                selectionBox.FromY = positionY;
+                selectionBox.ToX = positionX;
+                selectionBox.ToY = positionY;
+                UpdateSelectionBoxLocalPosition(selectionBox, ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
+
+                selectionBoxIsAdded = true;
+                ItemsVMs.Add(selectionBox);
+            }
+        }
+        protected void HideSelectionBox()
+        {
+            if (selectionBoxIsAdded)
+            {
+                selectionBoxIsAdded = false;
+                ItemsVMs.Remove(selectionBox);
+            }
+        }
+
+        protected void ProcessSelectionBox()
+        {
+            if (selectionBoxIsAdded)
+            {
+                HashSet<Notifier> selectionBoxCapture = new HashSet<Notifier>();
+
+                Rect selectionRect = new Rect();
+                selectionRect.X = Math.Min(selectionBox.FromX, selectionBox.ToX);
+                selectionRect.Y = Math.Min(selectionBox.FromY, selectionBox.ToY);
+                selectionRect.Width = Math.Max(selectionBox.FromX, selectionBox.ToX) - selectionRect.X;
+                selectionRect.Height = Math.Max(selectionBox.FromY, selectionBox.ToY) - selectionRect.Y;
+
+                foreach (var entry in NodesVMs)
+                {
+                    var viewModel = entry.Value;
+
+                    if (viewModel is INodeVM nodeViewModel)
+                    {
+                        nodeRect.X = nodeViewModel.PositionX - nodeViewModel.Width / 2;
+                        nodeRect.Y = nodeViewModel.PositionY - nodeViewModel.Height / 2;
+                        nodeRect.Width = nodeViewModel.Width;
+                        nodeRect.Height = nodeViewModel.Height;
+
+                        if (selectionRect.IntersectsWith(nodeRect)) selectionBoxCapture.Add(viewModel);
+                    }
+                }
+
+                bool resetSelection = true;
+                foreach (var viewModel in selectionBoxCapture)
+                {
+                    AddToSelection(viewModel, resetSelection);
+                    resetSelection = false;
+                }
             }
         }
     }

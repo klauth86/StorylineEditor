@@ -45,6 +45,7 @@
     <Compile Include="Common\Notifier.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="FolderVM.cs" />
+    <Compile Include="Nodes\SelectionBoxVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\BaseVM.cs" />
     <Compile Include="Common\SimpleVM.cs" />
