@@ -28,7 +28,8 @@ namespace StorylineEditor.ViewModel.Graphs
         FromX = 1,
         FromY = 2,
         ToX = 4,
-        ToY = 8
+        ToY = 8,
+        Scale = 16
     }
 
     enum ENodeVMUpdate
@@ -136,14 +137,14 @@ namespace StorylineEditor.ViewModel.Graphs
                             viewModel.ToX = toNodeViewModel.PositionX;
                             viewModel.ToY = toNodeViewModel.PositionY;
 
-                            UpdateLocalPosition(viewModel, ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.ToX | ELinkVMUpdate.ToY);
-
                             Add(model, null);
                             LinksVMs.Add(model.id, viewModel);
                             Add(null, viewModel);
 
                             FromNodesLinks[fromNodeViewModel.Id].Add(model.id);
                             ToNodesLinks[toNodeViewModel.Id].Add(model.id);
+
+                            UpdateLinkLocalPosition(LinksVMs[model.id], ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
                         }
                     }
 
@@ -203,40 +204,12 @@ namespace StorylineEditor.ViewModel.Graphs
                         {
                             draggedNodeViewModel.PositionX += deltaX;
                             draggedNodeViewModel.PositionY += deltaY;
-
-                            foreach (var linkId in FromNodesLinks[draggedNodeViewModel.Id])
-                            {
-                                LinksVMs[linkId].FromX += deltaX;
-                                LinksVMs[linkId].FromY += deltaY;
-                                UpdateLocalPosition(LinksVMs[linkId], ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.ToX | ELinkVMUpdate.ToY);
-                            }
-
-                            foreach (var linkId in ToNodesLinks[draggedNodeViewModel.Id])
-                            {
-                                LinksVMs[linkId].ToX += deltaX;
-                                LinksVMs[linkId].ToY += deltaY;
-                                UpdateLocalPosition(LinksVMs[linkId], ELinkVMUpdate.ToX | ELinkVMUpdate.ToY);
-                            }
                         }
 
                         foreach (INodeVM nodeViewModel in selection)
                         {
                             nodeViewModel.PositionX += deltaX;
                             nodeViewModel.PositionY += deltaY;
-
-                            foreach (var linkId in FromNodesLinks[nodeViewModel.Id])
-                            {
-                                LinksVMs[linkId].FromX += deltaX;
-                                LinksVMs[linkId].FromY += deltaY;
-                                UpdateLocalPosition(LinksVMs[linkId], ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.ToX | ELinkVMUpdate.ToY);
-                            }
-
-                            foreach (var linkId in ToNodesLinks[nodeViewModel.Id])
-                            {
-                                LinksVMs[linkId].ToX += deltaX;
-                                LinksVMs[linkId].ToY += deltaY;
-                                UpdateLocalPosition(LinksVMs[linkId], ELinkVMUpdate.ToX | ELinkVMUpdate.ToY);
-                            }
                         }
                     }
                     else
@@ -261,7 +234,7 @@ namespace StorylineEditor.ViewModel.Graphs
                         {
                             previewLink.ToX = toNodeViewModel.PositionX;
                             previewLink.ToY = toNodeViewModel.PositionY;
-                            UpdateLocalPosition(previewLink, ELinkVMUpdate.ToX | ELinkVMUpdate.ToY);
+                            UpdateLinkLocalPosition(previewLink, ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
 
                             previewLink.Description = CanLinkNodes(fromNodeViewModel, toNodeViewModel);
 
@@ -274,7 +247,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
                         previewLink.ToX = FromLocalToAbsoluteX(position.X);
                         previewLink.ToY = FromLocalToAbsoluteY(position.Y);
-                        UpdateLocalPosition(previewLink, ELinkVMUpdate.ToX | ELinkVMUpdate.ToY);
+                        UpdateLinkLocalPosition(previewLink, ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
 
                         previewLink.Description = null;
 
@@ -471,14 +444,32 @@ namespace StorylineEditor.ViewModel.Graphs
         {
             if ((updateTarget & ENodeVMUpdate.X) > 0) nodeViewModel.Left = FromAbsoluteToLocalX(nodeViewModel.PositionX) - nodeViewModel.Width / 2;
             if ((updateTarget & ENodeVMUpdate.Y) > 0) nodeViewModel.Top = FromAbsoluteToLocalY(nodeViewModel.PositionY) - nodeViewModel.Height / 2;
+
+            if (updateTarget > 0)
+            {
+                foreach (var linkId in FromNodesLinks[nodeViewModel.Id])
+                {
+                    LinksVMs[linkId].FromX = nodeViewModel.PositionX;
+                    LinksVMs[linkId].FromY = nodeViewModel.PositionY;
+                    UpdateLinkLocalPosition(LinksVMs[linkId], ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
+                }
+
+                foreach (var linkId in ToNodesLinks[nodeViewModel.Id])
+                {
+                    LinksVMs[linkId].ToX = nodeViewModel.PositionX;
+                    LinksVMs[linkId].ToY = nodeViewModel.PositionY;
+                    UpdateLinkLocalPosition(LinksVMs[linkId], ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
+                }
+            }
         }
 
-        private void UpdateLocalPosition(ILinkVM linkViewModel, ELinkVMUpdate updateTarget)
+        private void UpdateLinkLocalPosition(ILinkVM linkViewModel, ELinkVMUpdate updateTarget)
         {
             if ((updateTarget & ELinkVMUpdate.FromX) > 0) linkViewModel.Left = FromAbsoluteToLocalX(linkViewModel.FromX);
             if ((updateTarget & ELinkVMUpdate.FromY) > 0) linkViewModel.Top = FromAbsoluteToLocalY(linkViewModel.FromY);
             if ((updateTarget & ELinkVMUpdate.ToX) > 0) linkViewModel.HandleX = FromAbsoluteToLocalX(linkViewModel.ToX) - linkViewModel.Left;
             if ((updateTarget & ELinkVMUpdate.ToY) > 0) linkViewModel.HandleY = FromAbsoluteToLocalY(linkViewModel.ToY) - linkViewModel.Top;
+            if ((updateTarget & ELinkVMUpdate.Scale) > 0) { linkViewModel.ScaleX = ScaleX; linkViewModel.ScaleY = ScaleY; }
 
             linkViewModel.RefreshStepPoints();
         }
@@ -529,7 +520,14 @@ namespace StorylineEditor.ViewModel.Graphs
                 if (viewRect.IntersectsWith(nodeRect)) addMs.Add(nodeModel);
             }
 
-            foreach (var model in removeMs) { ItemsVMs.Remove(NodesVMs[model.id]); NodesVMs.Remove(model.id); }
+            foreach (var model in removeMs)
+            {
+                if (NodesVMs.ContainsKey(model.id))
+                {
+                    Remove(NodesVMs[model.id], null, null);
+                    NodesVMs.Remove(model.id);
+                }
+            }
 
             foreach (var model in addMs)
             {
@@ -539,16 +537,11 @@ namespace StorylineEditor.ViewModel.Graphs
 
                     NodesVMs.Add(model.id, viewModel);
                     Add(null, viewModel);
-
-                    FromNodesLinks.Add(model.id, new HashSet<string>());
-                    ToNodesLinks.Add(model.id, new HashSet<string>());
                 }
             }
 
-            foreach (INodeVM nodeViewModel in ItemsVMs)
-            {
-                UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.X | ENodeVMUpdate.Y);
-            }
+            foreach (var nodeEntry in NodesVMs) UpdateLocalPosition((INodeVM)nodeEntry.Value, ENodeVMUpdate.X | ENodeVMUpdate.Y);
+            foreach (var linkEntry in LinksVMs) UpdateLinkLocalPosition(linkEntry.Value, ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
         }
 
 
@@ -593,7 +586,7 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 previewLink.FromX = nodeViewModel.PositionX;
                 previewLink.FromY = nodeViewModel.PositionY;
-                UpdateLocalPosition(previewLink, ELinkVMUpdate.FromX | ELinkVMUpdate.FromY);
+                UpdateLinkLocalPosition(previewLink, ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.Scale);
 
                 previewLinkIsAdded = true;
                 ItemsVMs.Add(previewLink);

@@ -37,6 +37,9 @@ namespace StorylineEditor.ViewModel.Nodes
         double HandleX { get; set; }
         double HandleY { get; set; }
 
+        double ScaleX { get; set; }
+        double ScaleY { get; set; }
+
         void RefreshStepPoints();
     }
 
@@ -61,6 +64,7 @@ namespace StorylineEditor.ViewModel.Nodes
             }
 
             zIndex = 0;
+            strokeThicknessBase = 1;
         }
 
         const int N = 12;
@@ -136,6 +140,9 @@ namespace StorylineEditor.ViewModel.Nodes
             }
         }
 
+        public double ScaleX { get; set; }
+        public double ScaleY { get; set; }
+
         public double Cross1_X1 { get; set; }
         public double Cross1_Y1 { get; set; }
         public double Cross1_X2 { get; set; }
@@ -148,6 +155,15 @@ namespace StorylineEditor.ViewModel.Nodes
         protected int zIndex;
         public int ZIndex => zIndex;
 
+        protected double strokeThicknessBase;
+        public double StrokeThickness => strokeThicknessBase * ScaleX;
+
+        private PointCollection _stepPoints;
+        public PointCollection StepPoints => _stepPoints;
+
+        private PointCollection _removePoints;
+        public PointCollection RemovePoints => _removePoints;
+
         public void RefreshStepPoints()
         {
             double norm2 = HandleX * HandleX + HandleY * HandleY;
@@ -159,16 +175,16 @@ namespace StorylineEditor.ViewModel.Nodes
                 double dirX = HandleX / remainingLength;
                 double dirY = HandleY / remainingLength;
 
-                double dxFwd = dirX * _cos30 + dirY * _sin30;
-                double dyFwd = -dirX * _sin30 + dirY * _cos30;
+                double dxFwd = dirX * _cos30 * ScaleX + dirY * _sin30 * ScaleY;
+                double dyFwd = -dirX * _sin30 * ScaleY + dirY * _cos30 * ScaleX;
 
-                double dxBwd = dirX * _cos30 - dirY * _sin30;
-                double dyBwd = dirX * _sin30 + dirY * _cos30;
+                double dxBwd = dirX * _cos30 * ScaleX - dirY * _sin30 * ScaleY;
+                double dyBwd = dirX * _sin30 * ScaleY + dirY * _cos30 * ScaleX;
 
                 int stepCount = 1;
 
                 double actualStep = remainingLength;
-                while (actualStep > Step)
+                while (actualStep > Step * ScaleX) ////// TODO This will work only when ScaleX and ScaleY are same
                 {
                     actualStep /= 2;
                     stepCount *= 2;
@@ -178,8 +194,8 @@ namespace StorylineEditor.ViewModel.Nodes
 
                 remainingLength = 0;
 
-                double directionOffsetX = -dirY * Remove * 1.25;
-                double directionOffsetY = dirX * Remove * 1.25;
+                double directionOffsetX = -dirY * Remove * 1.25 * ScaleX;
+                double directionOffsetY = dirX * Remove * 1.25 * ScaleY;
 
                 _stepPoints.Add(new Point(directionOffsetX, directionOffsetY));
 
@@ -198,15 +214,16 @@ namespace StorylineEditor.ViewModel.Nodes
 
                 _removePoints = new PointCollection(N + 1);
 
-                for (int i = 0; i < N; i++) _removePoints.Add(new Point(centerX + Remove * (_coss[i] * dirX + _sins[i] * dirY), centerY + Remove * (-_sins[i] * dirX + _coss[i] * dirY)));
+                for (int i = 0; i < N; i++) _removePoints.Add(new Point(centerX + ScaleX * Remove * (_coss[i] * dirX + _sins[i] * dirY), centerY + ScaleY * Remove * (-_sins[i] * dirX + _coss[i] * dirY)));
                 _removePoints.Add(_removePoints[0]);
 
-                double offset = Remove / 3;
+                double offset = Remove / 3 * ScaleX; ////// TODO This will work only when ScaleX and ScaleY are same
 
                 EvalIndicatorSymbol(centerX, centerY, offset);
 
                 Notify(nameof(StepPoints));
                 Notify(nameof(RemovePoints));
+                Notify(nameof(StrokeThickness));
             }
         }
 
@@ -231,18 +248,13 @@ namespace StorylineEditor.ViewModel.Nodes
             Notify(nameof(Cross2_X2));
             Notify(nameof(Cross2_Y2));
         }
-
-        private PointCollection _stepPoints;
-        public PointCollection StepPoints => _stepPoints;
-
-        private PointCollection _removePoints;
-        public PointCollection RemovePoints => _removePoints;
     }
 
     public class PreviewLinkVM : LinkVM {
         public PreviewLinkVM(LinkM model, ICallbackContext callbackContext) : base(model, callbackContext)
         {
             zIndex = 10000;
+            strokeThicknessBase = 2;
         }
 
         protected override void EvalIndicatorSymbol(double centerX, double centerY, double offset)

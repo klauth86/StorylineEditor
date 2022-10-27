@@ -55,8 +55,6 @@ StorylineEditor распространяется в надежде, что он�
 
         <sys:Double x:Key="Double_PreviewLink_MinWidth">16</sys:Double>
 
-        <sys:Double x:Key="Double_PreviewLink_StrokeThickness">2</sys:Double>
-
         <SolidColorBrush x:Key="Color_Link" Color="Black" />
 
         <SolidColorBrush x:Key="Color_Link_Foreground" Color="White" />
@@ -64,8 +62,6 @@ StorylineEditor распространяется в надежде, что он�
         <SolidColorBrush x:Key="Color_Link_Remove" Color="Red" />
 
         <sys:Double x:Key="Double_Link_StrokeThickness">1</sys:Double>
-
-        <sys:Double x:Key="Double_Link_Label_StrokeThickness">2</sys:Double>
 
         <!-- Global and base -->
 
@@ -606,15 +602,15 @@ StorylineEditor распространяется в надежде, что он�
             <Grid 
                   bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
                   bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
-                <Polygon x:Name="pg_Main" IsHitTestVisible="False" Points="{Binding StepPoints}" Stroke="{StaticResource Color_PreviewLink_Disallow}" StrokeThickness="{StaticResource Double_Link_StrokeThickness}" Fill="{StaticResource Color_PreviewLink_Disallow}"></Polygon>
-                <Polygon x:Name="pg_Indicator" IsHitTestVisible="False" Points="{Binding RemovePoints}" Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{StaticResource Double_PreviewLink_StrokeThickness}" Fill="{StaticResource Color_PreviewLink_Disallow}"></Polygon>
+                <Polygon x:Name="pg_Main" IsHitTestVisible="False" Points="{Binding StepPoints}" Stroke="{StaticResource Color_PreviewLink_Disallow}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" Fill="{StaticResource Color_PreviewLink_Disallow}"></Polygon>
+                <Polygon x:Name="pg_Indicator" IsHitTestVisible="False" Points="{Binding RemovePoints}" Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" Fill="{StaticResource Color_PreviewLink_Disallow}"></Polygon>
                 <!--Here two Polyline are used just for one Cross because of WPF render bug check -->
                 <Line x:Name="ln_1" IsHitTestVisible="False" X1="{Binding Cross1_X1, UpdateSourceTrigger=PropertyChanged}" Y1="{Binding Cross1_Y1, UpdateSourceTrigger=PropertyChanged}"
                       X2="{Binding Cross1_X2, UpdateSourceTrigger=PropertyChanged}" Y2="{Binding Cross1_Y2, UpdateSourceTrigger=PropertyChanged}"
-                      Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{StaticResource Double_Link_Label_StrokeThickness}"></Line>
+                      Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{Binding CrossStrokeThickness, UpdateSourceTrigger=PropertyChanged}"></Line>
                 <Line x:Name="ln_2" IsHitTestVisible="False" X1="{Binding Cross2_X1, UpdateSourceTrigger=PropertyChanged}" Y1="{Binding Cross2_Y1, UpdateSourceTrigger=PropertyChanged}"
                       X2="{Binding Cross2_X2, UpdateSourceTrigger=PropertyChanged}" Y2="{Binding Cross2_Y2, UpdateSourceTrigger=PropertyChanged}"
-                      Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{StaticResource Double_Link_Label_StrokeThickness}"></Line>
+                      Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{Binding CrossStrokeThickness, UpdateSourceTrigger=PropertyChanged}"></Line>
             </Grid>
             <DataTemplate.Triggers>
                 <DataTrigger Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
@@ -639,8 +635,8 @@ StorylineEditor распространяется в надежде, что он�
             <Grid 
                   bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
                   bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
-                <Polygon IsHitTestVisible="False" Points="{Binding StepPoints}" Stroke="{StaticResource Color_Link}" StrokeThickness="{StaticResource Double_Link_StrokeThickness}" Fill="{StaticResource Color_Link}"></Polygon>
-                <Polygon Points="{Binding RemovePoints}" Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{StaticResource Double_Link_StrokeThickness}" 
+                <Polygon IsHitTestVisible="False" Points="{Binding StepPoints}" Stroke="{StaticResource Color_Link}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" Fill="{StaticResource Color_Link}"></Polygon>
+                <Polygon Points="{Binding RemovePoints}" Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" 
                          Fill="{StaticResource Color_Link_Remove}">
                     <Polygon.InputBindings>
                         <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.RemoveElementCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
@@ -649,10 +645,10 @@ StorylineEditor распространяется в надежде, что он�
                 <!--Here two Polyline are used just for one Cross because of WPF render bug check -->
                 <Line IsHitTestVisible="False" X1="{Binding Cross1_X1, UpdateSourceTrigger=PropertyChanged}" Y1="{Binding Cross1_Y1, UpdateSourceTrigger=PropertyChanged}"
                       X2="{Binding Cross1_X2, UpdateSourceTrigger=PropertyChanged}" Y2="{Binding Cross1_Y2, UpdateSourceTrigger=PropertyChanged}"
-                      Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{StaticResource Double_Link_Label_StrokeThickness}"></Line>
+                      Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}"></Line>
                 <Line IsHitTestVisible="False" X1="{Binding Cross2_X1, UpdateSourceTrigger=PropertyChanged}" Y1="{Binding Cross2_Y1, UpdateSourceTrigger=PropertyChanged}"
                       X2="{Binding Cross2_X2, UpdateSourceTrigger=PropertyChanged}" Y2="{Binding Cross2_Y2, UpdateSourceTrigger=PropertyChanged}"
-                      Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{StaticResource Double_Link_Label_StrokeThickness}"></Line>
+                      Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}"></Line>
             </Grid>
         </DataTemplate>
         
