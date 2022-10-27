@@ -120,6 +120,7 @@ namespace StorylineEditor.ViewModel
 
 
 
+        public override string Id => null;
         public ObservableCollection<FolderM> Context { get; }
         public override IList GetContext(BaseM model) { return Context.Last().content; }
 

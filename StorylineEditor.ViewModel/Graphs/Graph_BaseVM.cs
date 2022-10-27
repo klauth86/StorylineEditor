@@ -18,6 +18,7 @@ using StorylineEditor.ViewModel.Nodes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -66,7 +67,7 @@ namespace StorylineEditor.ViewModel.Graphs
             FromNodesLinks = new Dictionary<string, HashSet<string>>();
             ToNodesLinks = new Dictionary<string, HashSet<string>>();
 
-            selection = new List<Notifier>();
+            selection = new HashSet<string>();
         }
 
         protected ICommand selectNodeTypeCommand;
@@ -206,10 +207,25 @@ namespace StorylineEditor.ViewModel.Graphs
                             draggedNodeViewModel.PositionY += deltaY;
                         }
 
-                        foreach (INodeVM nodeViewModel in selection)
+                        foreach (string selectedId in selection)
                         {
-                            nodeViewModel.PositionX += deltaX;
-                            nodeViewModel.PositionY += deltaY;
+                            if (NodesVMs.ContainsKey(selectedId))
+                            {
+                                if (NodesVMs[selectedId] is INodeVM nodeViewModel)
+                                {
+                                    nodeViewModel.PositionX += deltaX;
+                                    nodeViewModel.PositionY += deltaY;
+                                }
+                            }
+                            else
+                            {
+                                Node_BaseM nodeModel = Model.nodes.FirstOrDefault((node) => node.id == selectedId); ////// TODO Cache if will be slow
+                                if (nodeModel != null)
+                                {
+                                    nodeModel.positionX += deltaX;
+                                    nodeModel.positionY += deltaY;
+                                }
+                            }
                         }
                     }
                     else
@@ -391,9 +407,11 @@ namespace StorylineEditor.ViewModel.Graphs
                 }
             }
         }
-
         public string SelectedNodeTypeName => _typeDescriptor(SelectedNodeType);
 
+
+
+        public override string Id => null;
         public override IList GetContext(BaseM model) { if (model is LinkM) return Model.links; return Model.nodes; }
 
 
@@ -534,6 +552,7 @@ namespace StorylineEditor.ViewModel.Graphs
                 if (!NodesVMs.ContainsKey(model.id))
                 {
                     Notifier viewModel = _viewModelCreator(model, this);
+                    viewModel.IsSelected = selection.Contains(model.id);
 
                     NodesVMs.Add(model.id, viewModel);
                     Add(null, viewModel);
@@ -552,22 +571,27 @@ namespace StorylineEditor.ViewModel.Graphs
 
 
 
-        protected readonly List<Notifier> selection;
+        protected readonly HashSet<string> selection;
         public override void AddToSelection(Notifier viewModel, bool resetSelection)
         {
             if (resetSelection)
             {
-                foreach (var selectedVewModel in selection) selectedVewModel.IsSelected = false;
+                foreach (var selectedId in selection)
+                {
+                    if (NodesVMs.ContainsKey(selectedId)) NodesVMs[selectedId].IsSelected = false;
+                }
+
                 selection.Clear();
             }
 
-            if (!selection.Contains(viewModel) && viewModel != null)
+            if (viewModel != null && !selection.Contains(viewModel.Id))
             {
-                selection.Add(viewModel);
+                selection.Add(viewModel.Id);
+
                 viewModel.IsSelected = true;
             }
 
-            selectionEditor = selection.Count == 1 ? _editorCreator(selection[0]) : null;
+            selectionEditor = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? _editorCreator(NodesVMs[selection.First()]) : null;
 
             CommandManager.InvalidateRequerySuggested();
         }

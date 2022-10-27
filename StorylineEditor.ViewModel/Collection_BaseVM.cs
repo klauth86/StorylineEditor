@@ -23,6 +23,7 @@ namespace StorylineEditor.ViewModel
 {
     public class CutEntryVM : Notifier
     {
+        public override string Id => null;
         public BaseM Model { get; set; }
         public Notifier ViewModel { get; set; }
         public IList Context { get; set; }

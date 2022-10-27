@@ -19,6 +19,9 @@ namespace StorylineEditor.ViewModel.Common
         public event PropertyChangedEventHandler PropertyChanged;
         protected void Notify(string propName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
 
+        public abstract string Id { get; }
+        public virtual bool IsFolder => false;
+
         protected bool isSelected;
         public bool IsSelected
         {
@@ -46,7 +49,5 @@ namespace StorylineEditor.ViewModel.Common
                 }
             }
         }
-
-        public virtual bool IsFolder => false;
     }
 }

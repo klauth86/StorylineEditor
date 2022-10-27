@@ -141,6 +141,8 @@ namespace StorylineEditor.ViewModel
 
 
 
+        public override string Id => Model.id;
+
         private object selection;
         public object Selection
         {
