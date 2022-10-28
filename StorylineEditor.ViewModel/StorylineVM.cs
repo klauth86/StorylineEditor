@@ -24,6 +24,14 @@ namespace StorylineEditor.ViewModel
 {
     public class StorylineVM : SimpleVM<StorylineM>
     {
+        private static double viewWidth;
+        public static double ViewWidth { get => viewWidth; set => viewWidth = value > 0 ? value : viewWidth; }
+
+        private static double viewHeight;
+        public static double ViewHeight { get => viewHeight; set => viewHeight = value > 0 ? value : viewHeight; }
+
+
+
         public StorylineVM(StorylineM model) : base(model, null) { }
 
 

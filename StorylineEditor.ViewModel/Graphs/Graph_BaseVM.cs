@@ -67,8 +67,21 @@ namespace StorylineEditor.ViewModel.Graphs
 
             NodesVMs = new Dictionary<string, Notifier>();
             LinksVMs = new Dictionary<string, LinkVM>();
+            
             FromNodesLinks = new Dictionary<string, HashSet<string>>();
             ToNodesLinks = new Dictionary<string, HashSet<string>>();
+
+            foreach (var nodeModel in Model.nodes)
+            {
+                if (!FromNodesLinks.ContainsKey(nodeModel.id)) FromNodesLinks.Add(nodeModel.id, new HashSet<string>());
+                if (!ToNodesLinks.ContainsKey(nodeModel.id)) ToNodesLinks.Add(nodeModel.id, new HashSet<string>());
+            }
+
+            foreach (var linkModel in Model.links)
+            {
+                FromNodesLinks[linkModel.fromNodeId].Add(linkModel.id);
+                ToNodesLinks[linkModel.toNodeId].Add(linkModel.id);
+            }
 
             selection = new HashSet<string>();
         }
@@ -552,8 +565,8 @@ namespace StorylineEditor.ViewModel.Graphs
 
             viewRect.X = OffsetX;
             viewRect.Y = OffsetY;
-            viewRect.Width = ViewWidth / ScaleX;
-            viewRect.Height = ViewHeight / ScaleY;
+            viewRect.Width = StorylineVM.ViewWidth / ScaleX;
+            viewRect.Height = StorylineVM.ViewHeight / ScaleY;
 
             HashSet<BaseM> keepMs = new HashSet<BaseM>();
             HashSet<BaseM> addMs = new HashSet<BaseM>();
@@ -616,8 +629,6 @@ namespace StorylineEditor.ViewModel.Graphs
 
 
 
-        public double ViewWidth { get; set; }
-        public double ViewHeight { get; set; }
         public bool SizeChangedFlag { set => TranslateView(0, 0); }
 
 
@@ -705,9 +716,11 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 HashSet<Notifier> selectionBoxCapture = new HashSet<Notifier>();
 
-                Rect selectionRect = new Rect();
-                selectionRect.X = Math.Min(selectionBox.FromX, selectionBox.ToX);
-                selectionRect.Y = Math.Min(selectionBox.FromY, selectionBox.ToY);
+                Rect selectionRect = new Rect
+                {
+                    X = Math.Min(selectionBox.FromX, selectionBox.ToX),
+                    Y = Math.Min(selectionBox.FromY, selectionBox.ToY)
+                };
                 selectionRect.Width = Math.Max(selectionBox.FromX, selectionBox.ToX) - selectionRect.X;
                 selectionRect.Height = Math.Max(selectionBox.FromY, selectionBox.ToY) - selectionRect.Y;
 

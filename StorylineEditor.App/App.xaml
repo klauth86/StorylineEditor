@@ -449,8 +449,8 @@ StorylineEditor распространяется в надежде, что он�
                               bhvrs:MouseExtBehavior.MouseWheelCommand="{Binding ScaleCommand}"
                               bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding InitCommand}"
                               bhvrs:RenderSizeBehavior.IsEnabled="true"
-                              bhvrs:RenderSizeBehavior.ActualWidth="{Binding ViewWidth, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
-                              bhvrs:RenderSizeBehavior.ActualHeight="{Binding ViewHeight, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                              bhvrs:RenderSizeBehavior.ActualWidth="{Binding Path=(vm:StorylineVM.ViewWidth), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                              bhvrs:RenderSizeBehavior.ActualHeight="{Binding Path=(vm:StorylineVM.ViewHeight), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
                               bhvrs:RenderSizeBehavior.SizeChangedFlag="{Binding SizeChangedFlag, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}">
                     <ItemsControl.ItemContainerStyle>
                         <Style TargetType="ContentPresenter">
