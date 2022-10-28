@@ -30,6 +30,7 @@ namespace StorylineEditor.ViewModel.Nodes
 
         string Id { get; }
         bool IsSelected { get; }
+        bool IsRoot { get; set; }
     }
 
     public abstract class Node_BaseVM<T> : BaseVM<T>, INodeVM where T : Node_BaseM
@@ -37,6 +38,7 @@ namespace StorylineEditor.ViewModel.Nodes
         public Node_BaseVM(T model, ICallbackContext callbackContext) : base(model, callbackContext)
         {
             zIndex = 100;
+            isRoot = false;
         }
 
         public byte Gender
@@ -110,7 +112,7 @@ namespace StorylineEditor.ViewModel.Nodes
             }
         }
 
-        double left;
+        protected double left;
         public double Left
         {
             get => left;
@@ -124,7 +126,7 @@ namespace StorylineEditor.ViewModel.Nodes
             }
         }
 
-        double top;
+        protected double top;
         public double Top
         {
             get => top;
@@ -143,5 +145,19 @@ namespace StorylineEditor.ViewModel.Nodes
 
         protected int zIndex;
         public int ZIndex => zIndex;
+
+        protected bool isRoot;
+        public bool IsRoot
+        {
+            get => isRoot;
+            set
+            {
+                if (isRoot != value)
+                {
+                    isRoot = value;
+                    Notify(nameof(IsRoot));
+                }
+            }
+        }
     }
 }

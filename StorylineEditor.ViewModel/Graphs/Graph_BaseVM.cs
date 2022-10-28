@@ -19,6 +19,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -71,6 +73,8 @@ namespace StorylineEditor.ViewModel.Graphs
             FromNodesLinks = new Dictionary<string, HashSet<string>>();
             ToNodesLinks = new Dictionary<string, HashSet<string>>();
 
+            RootNodeIds = new List<string>();
+
             Dictionary<string, Tuple<double, double>> nodesPositions = new Dictionary<string, Tuple<double, double>>();
 
             foreach (var nodeModel in Model.nodes)
@@ -87,11 +91,112 @@ namespace StorylineEditor.ViewModel.Graphs
                     linkModel.toNodeId, nodesPositions[linkModel.toNodeId].Item2, nodesPositions[linkModel.toNodeId].Item1);
             }
 
+            foreach (var nodeModel in Model.nodes)
+            {
+                if (ToNodesLinks[nodeModel.id].Count == 0)
+                {
+                    RootNodeIds.Add(nodeModel.id);
+                }
+            }
+
+            RootNodeIndex = 0;
+
             selection = new HashSet<string>();
+        }
+
+        protected bool cancelFlag;        
+        protected Task scrollingTask;
+        protected double targetPositionX;
+        protected double targetPositionY;
+
+        async void StartScrollingTask()
+        {
+            const int waitDurationMsec = 8;
+
+            const int durationMsec = 512;
+            const int stepCount = 256;
+            const int stepDuration = durationMsec / stepCount;
+
+            if (scrollingTask != null && !scrollingTask.IsCompleted)
+            {
+                cancelFlag = true;
+                while (!scrollingTask.IsCompleted) await Task.Delay(waitDurationMsec);
+            }
+
+            cancelFlag = false;
+            scrollingTask = Task.Run(async () =>
+            {
+                double targetOffsetX;
+                double targetOffsetY;
+
+                double deltaAlpha = 1.0 / stepCount;
+                double currentAlpha = deltaAlpha;
+
+                for (int i = 1; i < stepCount; i++)
+                {
+                    if (Application.Current == null) return;
+
+                    if (cancelFlag) return;
+
+                    targetOffsetX = targetPositionX - StorylineVM.ViewWidth / 2 / ScaleX;
+                    targetOffsetY = targetPositionY - StorylineVM.ViewWidth / 2 / ScaleY;
+
+                    double stepX = (OffsetX - targetOffsetX) * currentAlpha;
+                    double stepY = (OffsetY - targetOffsetY) * currentAlpha;
+                    Application.Current?.Dispatcher?.Invoke(new Action(() => { TranslateView(stepX, stepY); }));
+
+                    currentAlpha += deltaAlpha;
+
+                    await Task.Delay(stepDuration);
+                }
+
+                targetOffsetX = targetPositionX - StorylineVM.ViewWidth / 2 / ScaleX;
+                targetOffsetY = targetPositionY - StorylineVM.ViewWidth / 2 / ScaleY;
+
+                double lastStepX = (OffsetX - targetOffsetX);
+                double lastStepY = (OffsetY - targetOffsetY);
+                Application.Current?.Dispatcher?.Invoke(new Action(() => { TranslateView(lastStepX, lastStepY); }));
+            });
         }
 
         protected ICommand selectNodeTypeCommand;
         public ICommand SelectNodeTypeCommand => selectNodeTypeCommand ?? (selectNodeTypeCommand = new RelayCommand<Type>((type) => SelectedNodeType = type));
+
+        protected ICommand prevRootNodeCommand;
+        public ICommand PrevRootNodeCommand => prevRootNodeCommand ?? (prevRootNodeCommand = new RelayCommand(() =>
+        {
+            RootNodeIndex = (RootNodeIndex + 1 + RootNodeIds.Count) % RootNodeIds.Count;
+
+            if (RootNodeIds.Count > 0 && RootNodeIndex >= 0 && RootNodeIndex < RootNodeIds.Count)
+            {
+                Node_BaseM targetNodeModel = Model.nodes.FirstOrDefault((nodeModel) => nodeModel?.id == RootNodeIds[RootNodeIndex]);
+                if (targetNodeModel != null)
+                {
+                    targetPositionX = targetNodeModel.positionX;
+                    targetPositionY = targetNodeModel.positionY;
+
+                    StartScrollingTask();
+                }
+            }
+        }, () => RootNodeIds.Count > 0));
+
+        protected ICommand nextRootNodeCommand;
+        public ICommand NextRootNodeCommand => nextRootNodeCommand ?? (nextRootNodeCommand = new RelayCommand(() =>
+        {
+            RootNodeIndex = (RootNodeIndex - 1 + RootNodeIds.Count) % RootNodeIds.Count;
+            
+            if (RootNodeIds.Count > 0 && RootNodeIndex >= 0 && RootNodeIndex < RootNodeIds.Count)
+            {
+                Node_BaseM targetNodeModel = Model.nodes.FirstOrDefault((nodeModel) => nodeModel?.id == RootNodeIds[RootNodeIndex]);
+                if (targetNodeModel != null)
+                {
+                    targetPositionX = targetNodeModel.positionX;
+                    targetPositionY = targetNodeModel.positionY;
+
+                    StartScrollingTask();
+                }
+            }
+        }, ()=> RootNodeIds.Count > 0));
 
         protected ICommand addCommand;
         public override ICommand AddCommand => addCommand ?? (addCommand = new RelayCommand<MouseButtonEventArgs>((args) =>
@@ -139,6 +244,9 @@ namespace StorylineEditor.ViewModel.Graphs
                     FromNodesLinks.Add(model.id, new HashSet<string>());
                     ToNodesLinks.Add(model.id, new HashSet<string>());
 
+                    RootNodeIds.Add(model.id);
+                    ((INodeVM)NodesVMs[model.id]).IsRoot = true;
+
                     bool resetSelection = !Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
                     AddToSelection(viewModel, resetSelection);
 
@@ -176,6 +284,11 @@ namespace StorylineEditor.ViewModel.Graphs
                             AddLinkVM(model,
                                 fromNodeViewModel.Id, fromNodeViewModel.PositionX, fromNodeViewModel.PositionY, 
                                 toNodeViewModel.Id, toNodeViewModel.PositionX, toNodeViewModel.PositionY);
+
+                            toNodeViewModel.IsRoot = false;
+                            RootNodeIds.Remove(toNodeViewModel.Id);
+
+                            CommandManager.InvalidateRequerySuggested();
                         }
                     }
 
@@ -393,6 +506,12 @@ namespace StorylineEditor.ViewModel.Graphs
                 LinksVMs.Remove(linkVM.Id);
                 Remove(null, model, GetContext(model));
 
+                if (ToNodesLinks[linkVM.ToNodeId].Count == 0)
+                {
+                    RootNodeIds.Add(linkVM.ToNodeId);
+                    if (NodesVMs.ContainsKey(linkVM.ToNodeId)) ((INodeVM)NodesVMs[linkVM.ToNodeId]).IsRoot = true;
+                }
+
                 CommandManager.InvalidateRequerySuggested();
             }
         }, (viewModel) => viewModel != null));
@@ -488,7 +607,8 @@ namespace StorylineEditor.ViewModel.Graphs
         private readonly Dictionary<string, LinkVM> LinksVMs;
         private readonly Dictionary<string, HashSet<string>> FromNodesLinks;
         private readonly Dictionary<string, HashSet<string>> ToNodesLinks;
-
+        private readonly List<string> RootNodeIds;
+        private int RootNodeIndex;
 
         protected double FromLocalToAbsoluteX(double x)
         {
@@ -627,6 +747,7 @@ namespace StorylineEditor.ViewModel.Graphs
                 {
                     Notifier viewModel = _viewModelCreator(model, this);
                     viewModel.IsSelected = selection.Contains(model.id);
+                    ((INodeVM)viewModel).IsRoot = RootNodeIds.Contains(model.id);
 
                     NodesVMs.Add(model.id, viewModel);
                     Add(null, viewModel);
