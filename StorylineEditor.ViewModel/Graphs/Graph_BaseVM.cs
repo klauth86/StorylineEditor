@@ -67,20 +67,24 @@ namespace StorylineEditor.ViewModel.Graphs
 
             NodesVMs = new Dictionary<string, Notifier>();
             LinksVMs = new Dictionary<string, LinkVM>();
-            
+
             FromNodesLinks = new Dictionary<string, HashSet<string>>();
             ToNodesLinks = new Dictionary<string, HashSet<string>>();
+
+            Dictionary<string, Tuple<double, double>> nodesPositions = new Dictionary<string, Tuple<double, double>>();
 
             foreach (var nodeModel in Model.nodes)
             {
                 if (!FromNodesLinks.ContainsKey(nodeModel.id)) FromNodesLinks.Add(nodeModel.id, new HashSet<string>());
                 if (!ToNodesLinks.ContainsKey(nodeModel.id)) ToNodesLinks.Add(nodeModel.id, new HashSet<string>());
+                if (!nodesPositions.ContainsKey(nodeModel.id)) nodesPositions.Add(nodeModel.id, new Tuple<double, double>(nodeModel.positionX, nodeModel.positionY));
             }
 
             foreach (var linkModel in Model.links)
             {
-                FromNodesLinks[linkModel.fromNodeId].Add(linkModel.id);
-                ToNodesLinks[linkModel.toNodeId].Add(linkModel.id);
+                AddLinkVM(linkModel,
+                    linkModel.fromNodeId, nodesPositions[linkModel.fromNodeId].Item2, nodesPositions[linkModel.fromNodeId].Item1,
+                    linkModel.toNodeId, nodesPositions[linkModel.toNodeId].Item2, nodesPositions[linkModel.toNodeId].Item1);
             }
 
             selection = new HashSet<string>();
@@ -125,9 +129,10 @@ namespace StorylineEditor.ViewModel.Graphs
                     position.Y = FromLocalToAbsoluteY(position.Y);
 
                     BaseM model = _modelCreator(SelectedNodeType, position);
+                    Add(model, null);
+
                     Notifier viewModel = _viewModelCreator(model, this);
 
-                    Add(model, null);
                     NodesVMs.Add(model.id, viewModel);
                     Add(null, viewModel);
 
@@ -166,21 +171,11 @@ namespace StorylineEditor.ViewModel.Graphs
                             model.fromNodeId = fromNodeViewModel.Id;
                             model.toNodeId = toNodeViewModel.Id;
 
-                            LinkVM viewModel = (LinkVM)_viewModelCreator(model, this);
-
-                            viewModel.FromX = fromNodeViewModel.PositionX;
-                            viewModel.FromY = fromNodeViewModel.PositionY;
-                            viewModel.ToX = toNodeViewModel.PositionX;
-                            viewModel.ToY = toNodeViewModel.PositionY;
-
                             Add(model, null);
-                            LinksVMs.Add(model.id, viewModel);
-                            Add(null, viewModel);
 
-                            FromNodesLinks[fromNodeViewModel.Id].Add(model.id);
-                            ToNodesLinks[toNodeViewModel.Id].Add(model.id);
-
-                            UpdateLinkLocalPosition(LinksVMs[model.id], ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
+                            AddLinkVM(model,
+                                fromNodeViewModel.Id, fromNodeViewModel.PositionX, fromNodeViewModel.PositionY, 
+                                toNodeViewModel.Id, toNodeViewModel.PositionX, toNodeViewModel.PositionY);
                         }
                     }
 
@@ -190,8 +185,23 @@ namespace StorylineEditor.ViewModel.Graphs
                 }
             }
         }));
+        protected void AddLinkVM(LinkM model, string fromId, double fromX, double fromY, string toId, double toX, double toY)
+        {
+            LinkVM viewModel = (LinkVM)_viewModelCreator(model, this);
 
+            viewModel.FromX = fromX;
+            viewModel.FromY = fromY;
+            viewModel.ToX = toX;
+            viewModel.ToY = toY;
 
+            LinksVMs.Add(model.id, viewModel);
+            Add(null, viewModel);
+
+            FromNodesLinks[fromId].Add(model.id);
+            ToNodesLinks[toId].Add(model.id);
+
+            UpdateLinkLocalPosition(LinksVMs[model.id], ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
+        }
 
         protected INodeVM fromNodeViewModel;
         protected bool isDragging;
