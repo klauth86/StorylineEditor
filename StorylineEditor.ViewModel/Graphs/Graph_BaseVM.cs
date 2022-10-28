@@ -779,7 +779,7 @@ namespace StorylineEditor.ViewModel.Graphs
                 viewModel.IsSelected = true;
             }
 
-            selectionEditor = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? _editorCreator(NodesVMs[selection.First()]) : null;
+            SelectionEditor = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? _editorCreator(NodesVMs[selection.First()]) : null;
 
             CommandManager.InvalidateRequerySuggested();
         }
