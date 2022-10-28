@@ -48,7 +48,7 @@ namespace StorylineEditor.ViewModel.Graphs
                 modelCreator, viewModelCreator, editorCreator, modelExtractor)
         {
             offsetY = offsetX = 0;
-            scaleY = scaleX = 1;
+            scale = 1;
             selectedNodeType = defaultNodeType;
             _typeDescriptor = typeDescriptor ?? throw new ArgumentNullException(nameof(typeDescriptor));
 
@@ -138,8 +138,8 @@ namespace StorylineEditor.ViewModel.Graphs
 
                     if (cancelFlag) return;
 
-                    targetOffsetX = targetPositionX - StorylineVM.ViewWidth / 2 / ScaleX;
-                    targetOffsetY = targetPositionY - StorylineVM.ViewWidth / 2 / ScaleY;
+                    targetOffsetX = targetPositionX - StorylineVM.ViewWidth / 2 / Scale;
+                    targetOffsetY = targetPositionY - StorylineVM.ViewWidth / 2 / Scale;
 
                     double stepX = (OffsetX - targetOffsetX) * currentAlpha;
                     double stepY = (OffsetY - targetOffsetY) * currentAlpha;
@@ -150,8 +150,8 @@ namespace StorylineEditor.ViewModel.Graphs
                     await Task.Delay(stepDuration);
                 }
 
-                targetOffsetX = targetPositionX - StorylineVM.ViewWidth / 2 / ScaleX;
-                targetOffsetY = targetPositionY - StorylineVM.ViewWidth / 2 / ScaleY;
+                targetOffsetX = targetPositionX - StorylineVM.ViewWidth / 2 / Scale;
+                targetOffsetY = targetPositionY - StorylineVM.ViewWidth / 2 / Scale;
 
                 double lastStepX = (OffsetX - targetOffsetX);
                 double lastStepY = (OffsetY - targetOffsetY);
@@ -255,6 +255,12 @@ namespace StorylineEditor.ViewModel.Graphs
             }
         }));
 
+        protected ICommand resetScaleCommand;
+        public ICommand ResetScaleCommand => resetScaleCommand ?? (resetScaleCommand = new RelayCommand(() => SetScale(StorylineVM.ViewWidth / 2, StorylineVM.ViewHeight / 2, 1)));
+
+        protected ICommand goToOriginCommand;
+        public ICommand GoToOriginCommand => goToOriginCommand ?? (goToOriginCommand = new RelayCommand(() => { OffsetX = 0; OffsetY = 0; TranslateView(0, 0); }));
+
         protected ICommand selectCommand;
         public override ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<Notifier>((viewModel) => { }));
 
@@ -356,8 +362,8 @@ namespace StorylineEditor.ViewModel.Graphs
                 }
                 else
                 {
-                    double deltaX = (position.X - prevPosition.X) / ScaleX;
-                    double deltaY = (position.Y - prevPosition.Y) / ScaleY;
+                    double deltaX = (position.X - prevPosition.X) / Scale;
+                    double deltaY = (position.Y - prevPosition.Y) / Scale;
 
                     selectionBox.ToX += deltaX;
                     selectionBox.ToY += deltaY;
@@ -378,8 +384,8 @@ namespace StorylineEditor.ViewModel.Graphs
                 }
                 else
                 {
-                    double deltaX = (position.X - prevPosition.X) / ScaleX;
-                    double deltaY = (position.Y - prevPosition.Y) / ScaleY;
+                    double deltaX = (position.X - prevPosition.X) / Scale;
+                    double deltaY = (position.Y - prevPosition.Y) / Scale;
 
                     if (draggedNodeViewModel != null)
                     {
@@ -473,20 +479,23 @@ namespace StorylineEditor.ViewModel.Graphs
 
             if (args.Source is UIElement uiElement)
             {
-                Point position = args.GetPosition(uiElement);
-
-                double oldX = position.X / ScaleX;
-                double oldY = position.Y / ScaleY;
-
-                ScaleX = Math.Max(Math.Min(ScaleX + args.Delta * 0.0002, 4), 1.0 / 64);
-                ScaleY = Math.Max(Math.Min(ScaleY + args.Delta * 0.0002, 4), 1.0 / 64);
-
-                double newX = position.X / ScaleX;
-                double newY = position.Y / ScaleY;
-
-                TranslateView(newX - oldX, newY - oldY);
+                Point position = args.GetPosition(uiElement);                
+                SetScale(position.X, position.Y, Math.Max(Math.Min(Scale + args.Delta * 0.0002, 4), 1.0 / 64));
             }
         }));
+
+        void SetScale(double transformX, double transformY, double newScale)
+        {
+            double oldX = transformX / Scale;
+            double oldY = transformY / Scale;
+
+            Scale = newScale;
+
+            double newX = transformX / Scale;
+            double newY = transformY / Scale;
+
+            TranslateView(newX - oldX, newY - oldY);
+        }
 
         protected ICommand removeElementCommand;
         public ICommand RemoveElementCommand => removeElementCommand ?? (removeElementCommand = new RelayCommand<Notifier>((viewModel) =>
@@ -550,30 +559,16 @@ namespace StorylineEditor.ViewModel.Graphs
             }
         }
 
-        protected double scaleX;
-        public double ScaleX
+        protected double scale;
+        public double Scale
         {
-            get => scaleX;
+            get => scale;
             set
             {
-                if (scaleX != value)
+                if (scale != value)
                 {
-                    scaleX = value;
-                    Notify(nameof(ScaleX));
-                }
-            }
-        }
-
-        protected double scaleY;
-        public double ScaleY
-        {
-            get => scaleY;
-            set
-            {
-                if (scaleY != value)
-                {
-                    scaleY = value;
-                    Notify(nameof(ScaleY));
+                    scale = value;
+                    Notify(nameof(Scale));
                 }
             }
         }
@@ -612,13 +607,13 @@ namespace StorylineEditor.ViewModel.Graphs
 
         protected double FromLocalToAbsoluteX(double x)
         {
-            double result = x / ScaleX;     // Scale
+            double result = x / Scale;     // Scale
             result += OffsetX;              // Transaltion
             return result;
         }
         protected double FromLocalToAbsoluteY(double y)
         {
-            double result = y / ScaleY;     // Scale
+            double result = y / Scale;     // Scale
             result += OffsetY;              // Transaltion
             return result;
         }
@@ -626,13 +621,13 @@ namespace StorylineEditor.ViewModel.Graphs
         protected double FromAbsoluteToLocalX(double x)
         {
             double result = x - OffsetX;    // Transaltion
-            result *= ScaleX;               // Scale
+            result *= Scale;               // Scale
             return result;
         }
         protected double FromAbsoluteToLocalY(double y)
         {
             double result = y - OffsetY;    // Transaltion
-            result *= ScaleY;               // Scale
+            result *= Scale;               // Scale
             return result;
         }
 
@@ -675,7 +670,7 @@ namespace StorylineEditor.ViewModel.Graphs
             if ((updateTarget & ELinkVMUpdate.FromY) > 0) linkViewModel.Top = FromAbsoluteToLocalY(linkViewModel.FromY);
             if ((updateTarget & ELinkVMUpdate.ToX) > 0) linkViewModel.HandleX = FromAbsoluteToLocalX(linkViewModel.ToX) - linkViewModel.Left;
             if ((updateTarget & ELinkVMUpdate.ToY) > 0) linkViewModel.HandleY = FromAbsoluteToLocalY(linkViewModel.ToY) - linkViewModel.Top;
-            if ((updateTarget & ELinkVMUpdate.Scale) > 0) { linkViewModel.ScaleX = ScaleX; linkViewModel.ScaleY = ScaleY; }
+            if ((updateTarget & ELinkVMUpdate.Scale) > 0) { linkViewModel.Scale = Scale; }
 
             linkViewModel.RefreshStepPoints();
         }
@@ -695,8 +690,8 @@ namespace StorylineEditor.ViewModel.Graphs
 
             viewRect.X = OffsetX;
             viewRect.Y = OffsetY;
-            viewRect.Width = StorylineVM.ViewWidth / ScaleX;
-            viewRect.Height = StorylineVM.ViewHeight / ScaleY;
+            viewRect.Width = StorylineVM.ViewWidth / Scale;
+            viewRect.Height = StorylineVM.ViewHeight / Scale;
 
             HashSet<BaseM> keepMs = new HashSet<BaseM>();
             HashSet<BaseM> addMs = new HashSet<BaseM>();

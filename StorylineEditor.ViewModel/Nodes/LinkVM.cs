@@ -37,8 +37,7 @@ namespace StorylineEditor.ViewModel.Nodes
         double HandleX { get; set; }
         double HandleY { get; set; }
 
-        double ScaleX { get; set; }
-        double ScaleY { get; set; }
+        double Scale { get; set; }
 
         void RefreshStepPoints();
     }
@@ -140,8 +139,7 @@ namespace StorylineEditor.ViewModel.Nodes
             }
         }
 
-        public double ScaleX { get; set; }
-        public double ScaleY { get; set; }
+        public double Scale { get; set; }
 
         public double Cross1_X1 { get; set; }
         public double Cross1_Y1 { get; set; }
@@ -156,7 +154,7 @@ namespace StorylineEditor.ViewModel.Nodes
         public int ZIndex => zIndex;
 
         protected double strokeThicknessBase;
-        public double StrokeThickness => strokeThicknessBase * ScaleX;
+        public double StrokeThickness => strokeThicknessBase * Scale;
 
         private PointCollection _stepPoints;
         public PointCollection StepPoints => _stepPoints;
@@ -175,16 +173,16 @@ namespace StorylineEditor.ViewModel.Nodes
                 double dirX = HandleX / remainingLength;
                 double dirY = HandleY / remainingLength;
 
-                double dxFwd = dirX * _cos30 * ScaleX + dirY * _sin30 * ScaleY;
-                double dyFwd = -dirX * _sin30 * ScaleY + dirY * _cos30 * ScaleX;
+                double dxFwd = dirX * _cos30 * Scale + dirY * _sin30 * Scale;
+                double dyFwd = -dirX * _sin30 * Scale + dirY * _cos30 * Scale;
 
-                double dxBwd = dirX * _cos30 * ScaleX - dirY * _sin30 * ScaleY;
-                double dyBwd = dirX * _sin30 * ScaleY + dirY * _cos30 * ScaleX;
+                double dxBwd = dirX * _cos30 * Scale - dirY * _sin30 * Scale;
+                double dyBwd = dirX * _sin30 * Scale + dirY * _cos30 * Scale;
 
                 int stepCount = 1;
 
                 double actualStep = remainingLength;
-                while (actualStep > Step * ScaleX) ////// TODO This will work only when ScaleX and ScaleY are same
+                while (actualStep > Step * Scale)
                 {
                     actualStep /= 2;
                     stepCount *= 2;
@@ -194,8 +192,8 @@ namespace StorylineEditor.ViewModel.Nodes
 
                 remainingLength = 0;
 
-                double directionOffsetX = -dirY * Remove * 1.25 * ScaleX;
-                double directionOffsetY = dirX * Remove * 1.25 * ScaleY;
+                double directionOffsetX = -dirY * Remove * 1.25 * Scale;
+                double directionOffsetY = dirX * Remove * 1.25 * Scale;
 
                 _stepPoints.Add(new Point(directionOffsetX, directionOffsetY));
 
@@ -214,10 +212,10 @@ namespace StorylineEditor.ViewModel.Nodes
 
                 _removePoints = new PointCollection(N + 1);
 
-                for (int i = 0; i < N; i++) _removePoints.Add(new Point(centerX + ScaleX * Remove * (_coss[i] * dirX + _sins[i] * dirY), centerY + ScaleY * Remove * (-_sins[i] * dirX + _coss[i] * dirY)));
+                for (int i = 0; i < N; i++) _removePoints.Add(new Point(centerX + Scale * Remove * (_coss[i] * dirX + _sins[i] * dirY), centerY + Scale * Remove * (-_sins[i] * dirX + _coss[i] * dirY)));
                 _removePoints.Add(_removePoints[0]);
 
-                double offset = Remove / 3 * ScaleX; ////// TODO This will work only when ScaleX and ScaleY are same
+                double offset = Remove / 3 * Scale;
 
                 EvalIndicatorSymbol(centerX, centerY, offset);
 
