@@ -66,6 +66,8 @@ StorylineEditor распространяется в надежде, что он�
         <CornerRadius x:Key="CornerRadius_Common" TopLeft="2" TopRight="2" BottomRight="2" BottomLeft="2"></CornerRadius>
 
         <SolidColorBrush x:Key="Color_HitVisible" Color="#01ffffff"/>
+
+        <SolidColorBrush x:Key="Color_Selection_Inactive" Color="Gray"/>
         
         <SolidColorBrush x:Key="Color_Selection_Border" Color="Goldenrod"/>
 
@@ -197,7 +199,8 @@ StorylineEditor распространяется в надежде, что он�
         </Style>
 
         <ControlTemplate TargetType="Button" x:Key="CT_Button_Path">
-            <Border x:Name="br_Main" Margin="{StaticResource Thickness_Margin_Common}" Background="{StaticResource Color_HitVisible}" BorderBrush="{StaticResource Color_HitVisible}" BorderThickness="0,0,0,1">
+            <Border x:Name="br_Main" Margin="{StaticResource Thickness_Margin_Common}" Background="{StaticResource Color_HitVisible}" 
+                    BorderBrush="{StaticResource Color_HitVisible}" BorderThickness="0,0,0,1" Cursor="Hand">
                 <ContentPresenter></ContentPresenter>
             </Border>
             <ControlTemplate.Triggers>
@@ -213,6 +216,7 @@ StorylineEditor распространяется в надежде, что он�
         <!-- Items -->
 
         <Style TargetType="Border" x:Key="S_Border_Selector">
+            <Setter Property="Cursor" Value="Hand"></Setter>
             <Setter Property="Margin" Value="{StaticResource Thickness_Margin_Common}"></Setter>
             <Setter Property="CornerRadius" Value="{StaticResource CornerRadius_Common}"></Setter>
             <Setter Property="BorderThickness" Value="2"></Setter>
@@ -262,18 +266,21 @@ StorylineEditor распространяется в надежде, что он�
             <Setter Property="Width" Value="1"></Setter>
             <Setter Property="VerticalAlignment" Value="Stretch"></Setter>
             <Setter Property="Margin" Value="{StaticResource Thickness_Margin_Common}"></Setter>
-            <Setter Property="Fill" Value="Gray"></Setter>
+            <Setter Property="Fill" Value="{StaticResource Color_Selection_Inactive}"></Setter>
         </Style>
 
         <ControlTemplate TargetType="Button" x:Key="CT_Button_TabMenu">
             <Border x:Name="br_Main" Margin="{StaticResource Thickness_Margin_Common}" Padding="{StaticResource Thickness_Padding_LeftRight}"
-                                Background="{StaticResource Color_HitVisible}" BorderBrush="{StaticResource Color_HitVisible}" BorderThickness="0,0,0,4">
+                                Background="{StaticResource Color_HitVisible}" BorderBrush="{StaticResource Color_HitVisible}" BorderThickness="0,0,0,4" Cursor="Hand">
                 <ContentPresenter></ContentPresenter>
             </Border>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsEnabled" Value="false">
                     <Setter TargetName="br_Main" Property="BorderBrush" Value="{StaticResource Color_Selection_Border}"></Setter>
                     <Setter Property="FontWeight" Value="Bold"></Setter>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter TargetName="br_Main" Property="BorderBrush" Value="{StaticResource Color_Selection_Inactive}"></Setter>
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>

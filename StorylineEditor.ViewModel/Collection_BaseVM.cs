@@ -69,6 +69,9 @@ namespace StorylineEditor.ViewModel
         private ICommand cutCommand;
         public ICommand CutCommand => cutCommand ?? (cutCommand = new RelayCommand(() =>
         {
+            foreach (var cutEntryVM in CutVMs) cutEntryVM.ViewModel.IsCut = false;
+            CutVMs.Clear();
+
             List<Notifier> selection = new List<Notifier>();
             GetSelection(selection);
 
