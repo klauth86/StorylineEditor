@@ -298,7 +298,7 @@ StorylineEditor распространяется в надежде, что он�
         <Style TargetType="Button" x:Key="S_Button_Graph_Selectable" BasedOn="{StaticResource S_Button_Graph}"></Style>
 
         <Style TargetType="Button" x:Key="S_Button_Graph_Selectable_Selected" BasedOn="{StaticResource S_Button_Graph_Selectable}">
-            <Setter Property="Background" Value="{StaticResource Color_Selector_Selected}"></Setter>
+            <Setter Property="Background" Value="{StaticResource Color_Selection_Border}"></Setter>
         </Style>
 
         <Style TargetType="Separator" x:Key="S_Separator_Graph">
