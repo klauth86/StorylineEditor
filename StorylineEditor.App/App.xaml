@@ -170,7 +170,15 @@ StorylineEditor распространяется в надежде, что он�
             <Setter Property="Width" Value="4"></Setter>
         </Style>
 
-        <Style TargetType="Button" x:Key="S_Button_GroupBox.Header">
+        <Style TargetType="Button">
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="2"/>
+                </Style>
+            </Style.Resources>
+        </Style>
+        
+        <Style TargetType="Button" x:Key="S_Button_GroupBox.Header" BasedOn="{StaticResource {x:Type Button}}">
             <Setter Property="Width" Value="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}, UpdateSourceTrigger=PropertyChanged}"></Setter>
             <Setter Property="Margin" Value="{StaticResource Thickness_Margin_Common}"></Setter>
         </Style>
@@ -187,7 +195,7 @@ StorylineEditor распространяется в надежде, что он�
             </ControlTemplate.Triggers>
         </ControlTemplate>
 
-        <Style TargetType="Button" x:Key="S_Button_Link">
+        <Style TargetType="Button" x:Key="S_Button_Link" BasedOn="{StaticResource {x:Type Button}}">
             <Setter Property="Background" Value="Red"></Setter>
             <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
             <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
@@ -211,7 +219,7 @@ StorylineEditor распространяется в надежде, что он�
 
         <!-- Main Menu -->
 
-        <Style TargetType="Button" x:Key="S_Button_MainMenu">
+        <Style TargetType="Button" x:Key="S_Button_MainMenu" BasedOn="{StaticResource {x:Type Button}}">
             <Setter Property="Width" Value="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}, UpdateSourceTrigger=PropertyChanged}"></Setter>
             <Setter Property="Margin" Value="{StaticResource Thickness_Margin_Common}"></Setter>
         </Style>
@@ -244,7 +252,7 @@ StorylineEditor распространяется в надежде, что он�
 
         <!-- Graph -->
 
-        <Style TargetType="Button" x:Key="S_Button_Graph"></Style>
+        <Style TargetType="Button" x:Key="S_Button_Graph" BasedOn="{StaticResource {x:Type Button}}"></Style>
 
         <Style TargetType="Button" x:Key="S_Button_Graph_Selectable" BasedOn="{StaticResource S_Button_Graph}"></Style>
 
@@ -304,7 +312,7 @@ StorylineEditor распространяется в надежде, что он�
             </Style.Triggers>
         </Style>
 
-        <Style TargetType="Button" x:Key="S_Button_Node_Gender">
+        <Style TargetType="Button" x:Key="S_Button_Node_Gender" BasedOn="{StaticResource {x:Type Button}}">
             <Setter Property="Width" Value="{StaticResource Double_Icon_Gender_Width}"></Setter>
             <Setter Property="Height" Value="{StaticResource Double_Icon_Gender_Height}"></Setter>
             <Setter Property="Command" Value="{Binding ToggleGenderCommand}"></Setter>
