@@ -24,6 +24,10 @@ StorylineEditor распространяется в надежде, что он�
     <Application.Resources>
 
         <!-- Constants -->
+
+        <Thickness x:Key="Thickness_Margin_Common">1</Thickness>
+
+        <Thickness x:Key="Thickness_Padding_LeftRight" Left="4" Right="4"></Thickness>
         
         <sys:Double x:Key="Double_Node_MinHeight">64</sys:Double>
 
@@ -51,6 +55,14 @@ StorylineEditor распространяется в надежде, что он�
 
         <sys:Double x:Key="Double_Icon_Gender_-Width/2">-10</sys:Double>
 
+        <sys:String x:Key="String_Icon_MainMenu_Open">🗀</sys:String>
+
+        <sys:String x:Key="String_Tooltip_MainMenu_Open">Open</sys:String>
+
+        <sys:String x:Key="String_Icon_MainMenu_Save">🖫</sys:String>
+
+        <sys:String x:Key="String_Tooltip_MainMenu_Save">Save</sys:String>
+        
         <sys:String x:Key="String_Icon_Gender_Unset">😐</sys:String>
 
         <sys:String x:Key="String_Icon_Gender_Male">👦</sys:String>
@@ -95,7 +107,9 @@ StorylineEditor распространяется в надежде, что он�
 
         <!-- Global and base -->
 
-        <Style TargetType="TextBlock" x:Key="S_TextBlock"></Style>
+        <Style TargetType="TextBlock" x:Key="S_TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap"></Setter>
+        </Style>
 
         <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_GroupBox.Header"></Style>
 
@@ -135,23 +149,49 @@ StorylineEditor распространяется в надежде, что он�
 
         <Style TargetType="Border" x:Key="S_Border_Selector"></Style>
 
-        <Style TargetType="TextBlock" x:Key="S_TextBlock_Selector_Icon"></Style>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Selector_Icon"></Style>
 
-        <Style TargetType="TextBlock" x:Key="S_TextBlock_Selector_Name"></Style>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Selector_Name"></Style>
 
 
 
         <!-- Main Menu -->
 
-        <Style TargetType="Button" x:Key="S_Button_MainMenu"></Style>
-
-        <Style TargetType="Separator" x:Key="S_Separator_MainMenu">
-            <Setter Property="Width" Value="16"></Setter>
+        <Style TargetType="Button" x:Key="S_Button_MainMenu">
+            <Setter Property="Width" Value="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}, UpdateSourceTrigger=PropertyChanged}"></Setter>
+            <Setter Property="Margin" Value="{StaticResource Thickness_Margin_Common}"></Setter>
         </Style>
 
-        <Style TargetType="Button" x:Key="S_Button_TabMenu"></Style>
+        <Style TargetType="Rectangle" x:Key="S_Rectangle_MainMenu">
+            <Setter Property="Width" Value="1"></Setter>
+            <Setter Property="VerticalAlignment" Value="Stretch"></Setter>
+            <Setter Property="Margin" Value="{StaticResource Thickness_Margin_Common}"></Setter>
+            <Setter Property="Fill" Value="Gray"></Setter>
+        </Style>
 
-        <Style TargetType="TextBox" BasedOn="{StaticResource S_TextBox_Input}" x:Key="S_TextBox_Input_Filter"></Style>
+        <Style TargetType="Button" x:Key="S_Button_TabMenu">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Margin="{StaticResource Thickness_Margin_Common}" Padding="{StaticResource Thickness_Padding_LeftRight}"
+                                Background="Transparent" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0,0,0,4">
+                            <ContentPresenter></ContentPresenter>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderBrush" Value="Transparent"></Setter>
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="BorderBrush" Value="Goldenrod"></Setter>
+                    <Setter Property="FontWeight" Value="Bold"></Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="TextBox" BasedOn="{StaticResource S_TextBox_Input}" x:Key="S_TextBox_Input_Filter">
+            <Setter Property="Margin" Value="{StaticResource Thickness_Margin_Common}"></Setter>
+        </Style>
 
 
 

@@ -45,7 +45,8 @@ namespace StorylineEditor.ViewModel
                 (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return new CharacterEditorVM((CharacterVM)viewModel); },
                 (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((CharacterVM)viewModel).Model; },
                 (Notifier viewModel) => { });
-        }));
+            SelectionModel = Model.characters;
+        }, ()=> SelectionModel != Model.characters));
 
         private ICommand itemsTabCommand;
         public ICommand ItemsTabCommand => itemsTabCommand ?? (itemsTabCommand = new RelayCommand(() =>
@@ -56,7 +57,8 @@ namespace StorylineEditor.ViewModel
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return new ItemEditorVM((ItemVM)viewModel); },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((ItemVM)viewModel).Model; },
             (Notifier viewModel) => { });
-        }));
+            SelectionModel = Model.items;
+        }, () => SelectionModel != Model.items));
 
         private ICommand actorsTabCommand;
         public ICommand ActorsTabCommand => actorsTabCommand ?? (actorsTabCommand = new RelayCommand(() =>
@@ -67,7 +69,8 @@ namespace StorylineEditor.ViewModel
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return new ActorEditorVM((ActorVM)viewModel); },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((ActorVM)viewModel).Model; },
             (Notifier viewModel) => { });
-        }));
+            SelectionModel = Model.actors;
+        }, () => SelectionModel != Model.actors));
 
         private ICommand journalTabCommand;
         public ICommand JournalTabCommand => journalTabCommand ?? (journalTabCommand = new RelayCommand(() =>
@@ -78,7 +81,8 @@ namespace StorylineEditor.ViewModel
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return CreateQuestEditorVM((QuestVM)viewModel); },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((QuestVM)viewModel).Model; },
             (Notifier viewModel) => { });
-        }));
+            SelectionModel = Model.journal;
+        }, () => SelectionModel != Model.journal));
 
         private Notifier CreateQuestEditorVM(QuestVM inViewModel)
         {
@@ -134,7 +138,8 @@ namespace StorylineEditor.ViewModel
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return new DialogEditorVM((DialogVM)viewModel); },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((DialogVM)viewModel).Model; },
             (Notifier viewModel) => { });
-        }));
+            SelectionModel = Model.dialogs;
+        }, () => SelectionModel != Model.dialogs));
 
         private ICommand replicasTabCommand;
         public ICommand ReplicasTabCommand => replicasTabCommand ?? (replicasTabCommand = new RelayCommand(() =>
@@ -145,11 +150,26 @@ namespace StorylineEditor.ViewModel
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return new ReplicaEditorVM((ReplicaVM)viewModel); },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((ReplicaVM)viewModel).Model; },
             (Notifier viewModel) => { });
-        }));
+            SelectionModel = Model.replicas;
+        }, () => SelectionModel != Model.replicas));
 
 
 
         public override string Id => Model.id;
+
+        private object selectionModel;
+        public object SelectionModel
+        {
+            get => selectionModel;
+            set
+            {
+                if (value != selectionModel)
+                {
+                    selectionModel = value;
+                    CommandManager.InvalidateRequerySuggested();
+                }
+            }
+        }
 
         private object selection;
         public object Selection

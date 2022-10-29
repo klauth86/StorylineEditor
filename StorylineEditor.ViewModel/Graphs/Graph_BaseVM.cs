@@ -281,6 +281,8 @@ namespace StorylineEditor.ViewModel.Graphs
                         string message = CanLinkNodes(fromNodeViewModel, toNodeViewModel);
                         if (message == string.Empty)
                         {
+                            PreLinkNodes(fromNodeViewModel, toNodeViewModel);
+
                             LinkM model = (LinkM)_modelCreator(typeof(LinkM), new Point());
                             model.fromNodeId = fromNodeViewModel.Id;
                             model.toNodeId = toNodeViewModel.Id;
@@ -631,10 +633,10 @@ namespace StorylineEditor.ViewModel.Graphs
 
 
 
-        private readonly Dictionary<string, Notifier> NodesVMs;
-        private readonly Dictionary<string, LinkVM> LinksVMs;
-        private readonly Dictionary<string, HashSet<string>> FromNodesLinks;
-        private readonly Dictionary<string, HashSet<string>> ToNodesLinks;
+        protected readonly Dictionary<string, Notifier> NodesVMs;
+        protected readonly Dictionary<string, LinkVM> LinksVMs;
+        protected readonly Dictionary<string, HashSet<string>> FromNodesLinks;
+        protected readonly Dictionary<string, HashSet<string>> ToNodesLinks;
         private readonly List<string> RootNodeIds;
         private int RootNodeIndex;
 
@@ -842,7 +844,9 @@ namespace StorylineEditor.ViewModel.Graphs
 
 
 
-        protected virtual string CanLinkNodes(INodeVM from, INodeVM to) { return String.Empty; }
+        protected virtual string CanLinkNodes(INodeVM from, INodeVM to) { return nameof(NotImplementedException); }
+        protected virtual void PreLinkNodes(INodeVM from, INodeVM to) { }
+
         protected void ShowPreviewLink(INodeVM nodeViewModel)
         {
             if (!previewLinkIsAdded)

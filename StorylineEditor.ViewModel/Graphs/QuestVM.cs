@@ -13,7 +13,9 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Model;
 using StorylineEditor.Model.Graphs;
 using StorylineEditor.ViewModel.Common;
+using StorylineEditor.ViewModel.Nodes;
 using System;
+using System.Linq;
 using System.Windows;
 
 namespace StorylineEditor.ViewModel.Graphs
@@ -29,5 +31,48 @@ namespace StorylineEditor.ViewModel.Graphs
             Func<Notifier, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Type defaultNodeType, Func<Type, string> typeDescriptor) : base(viewModel.Model, null,
                 modelCreator, viewModelCreator, editorCreator, modelExtractor, defaultNodeType, typeDescriptor)
         { }
+
+        protected override string CanLinkNodes(INodeVM from, INodeVM to)
+        {
+            if (from is Node_Journal_AlternativeVM && to is Node_Journal_AlternativeVM) return nameof(NotImplementedException);
+
+            foreach (var linkId in FromNodesLinks[from.Id])
+            {
+                if (LinksVMs.ContainsKey(linkId))
+                {
+                    if (LinksVMs[linkId].ToNodeId == to.Id) return nameof(NotImplementedException);
+                }
+            }
+
+            return string.Empty;
+        }
+
+        protected override void PreLinkNodes(INodeVM from, INodeVM to)
+        {
+            if (from is Node_Journal_AlternativeVM) // Remove all if linking Alternative to smth
+            {
+                foreach (var fromlinkId in FromNodesLinks[from.Id].ToList()) RemoveLink(fromlinkId);
+            }
+            else
+            {
+                if (to is Node_Journal_AlternativeVM) // Remove all Steps if linking Step to Alternative
+                {
+                    foreach (var fromlinkId in FromNodesLinks[from.Id].ToList())
+                    {
+                        if (LinksVMs.ContainsKey(fromlinkId))
+                        {
+                            if (NodesVMs.ContainsKey(LinksVMs[fromlinkId].ToNodeId))
+                            {
+                                if (NodesVMs[LinksVMs[fromlinkId].ToNodeId] is Node_Journal_StepVM) RemoveLink(fromlinkId);
+                            }
+                        }
+                    }
+                }
+                else // Remove all if linking Step to Step
+                {
+                    foreach (var fromlinkId in FromNodesLinks[from.Id].ToList()) RemoveLink(fromlinkId);
+                }
+            }
+        }
     }
 }
