@@ -24,7 +24,7 @@ StorylineEditor распространяется в надежде, что он�
     <Application.Resources>
 
         <!-- Constants -->
-
+        
         <sys:Double x:Key="Double_Node_MinHeight">64</sys:Double>
 
         <sys:Double x:Key="Double_Node_MinWidth">96</sys:Double>
@@ -33,6 +33,30 @@ StorylineEditor распространяется в надежде, что он�
 
         <sys:Double x:Key="Double_Node_MaxWidth">256</sys:Double>
 
+        <sys:Double x:Key="Double_Button_Node_Remove_FontSize">8</sys:Double>
+        
+        <sys:Double x:Key="Double_Button_Node_Remove_Height">16</sys:Double>
+
+        <sys:Double x:Key="Double_Button_Node_Remove_Width">16</sys:Double>
+
+        <sys:Double x:Key="Double_Button_Node_Remove_-Height/2">-8</sys:Double>
+
+        <sys:Double x:Key="Double_Button_Node_Remove_Width/2">8</sys:Double>
+        
+        <sys:Double x:Key="Double_Icon_Gender_Height">20</sys:Double>
+
+        <sys:Double x:Key="Double_Icon_Gender_Width">20</sys:Double>
+
+        <sys:Double x:Key="Double_Icon_Gender_-Height/2">-10</sys:Double>
+
+        <sys:Double x:Key="Double_Icon_Gender_-Width/2">-10</sys:Double>
+
+        <sys:String x:Key="String_Icon_Gender_Unset">😐</sys:String>
+
+        <sys:String x:Key="String_Icon_Gender_Male">👦</sys:String>
+
+        <sys:String x:Key="String_Icon_Gender_Female">👧</sys:String>
+        
         <sys:String x:Key="String_Icon_Node_Step">✔</sys:String>
 
         <sys:String x:Key="String_Icon_Node_Alternative">💡</sys:String>
@@ -40,6 +64,8 @@ StorylineEditor распространяется в надежде, что он�
         <sys:String x:Key="String_Icon_Graph_Origin">⌱</sys:String>
 
         <sys:String x:Key="String_Icon_Graph_Reset">⭯</sys:String>
+
+        <sys:String x:Key="String_Icon_Remove">❌</sys:String>
         
         <sys:Boolean x:Key="True">True</sys:Boolean>
 
@@ -191,8 +217,34 @@ StorylineEditor распространяется в надежде, что он�
             </Style.Triggers>
         </Style>
 
-        
-        
+        <Style TargetType="Button" x:Key="S_Button_Node_Gender">
+            <Setter Property="Width" Value="{StaticResource Double_Icon_Gender_Width}"></Setter>
+            <Setter Property="Height" Value="{StaticResource Double_Icon_Gender_Height}"></Setter>
+            <Setter Property="Command" Value="{Binding ToggleGenderCommand}"></Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Gender, UpdateSourceTrigger=PropertyChanged}" Value="{x:Static m:GENDER.UNSET}">
+                    <Setter Property="Content" Value="{StaticResource String_Icon_Gender_Unset}"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Gender, UpdateSourceTrigger=PropertyChanged}" Value="{x:Static m:GENDER.MALE}">
+                    <Setter Property="Content" Value="{StaticResource String_Icon_Gender_Male}"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Gender, UpdateSourceTrigger=PropertyChanged}" Value="{x:Static m:GENDER.FEMALE}">
+                    <Setter Property="Content" Value="{StaticResource String_Icon_Gender_Female}"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Button" x:Key="S_Button_Node_Remove">
+            <Setter Property="FontSize" Value="{StaticResource Double_Button_Node_Remove_FontSize}"></Setter>
+            <Setter Property="Width" Value="{StaticResource Double_Button_Node_Remove_Width}"></Setter>
+            <Setter Property="Height" Value="{StaticResource Double_Button_Node_Remove_Height}"></Setter>
+            <Setter Property="Content" Value="{StaticResource String_Icon_Remove}"></Setter>
+            <Setter Property="Command" Value="{Binding Path=DataContext.RemoveElementCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"></Setter>
+            <Setter Property="CommandParameter" Value="{Binding}"></Setter>
+            <Setter Property="Foreground" Value="White"></Setter>
+            <Setter Property="Background" Value="Red"></Setter>
+        </Style>
+
         <!-- Data Templates -->
 
         <DataTemplate DataType="{x:Type vm:FolderProxyM}">
@@ -489,20 +541,24 @@ StorylineEditor распространяется в надежде, что он�
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
                             <ColumnDefinition Width="Auto"></ColumnDefinition>
                             <ColumnDefinition Width="Auto"></ColumnDefinition>
                             <ColumnDefinition Width="*"></ColumnDefinition>
                             <ColumnDefinition Width="Auto"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <TextBox Style="{StaticResource S_TextBox_Input_Graph}" Text="{Binding OffsetX, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBox>
-                        <TextBox Grid.Column="1" Style="{StaticResource S_TextBox_Input_Graph}" Text="{Binding OffsetY, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBox>
-                        <Button Grid.Column="2" Style="{StaticResource S_Button_Graph}" Content="{StaticResource String_Icon_Graph_Origin}" Command="{Binding GoToOriginCommand}"></Button>
+                        <TextBlock Style="{StaticResource S_TextBlock_Graph}">
+                            <Run Text="("></Run>
+                            <Run Text="{Binding OffsetX, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"></Run>
+                            <Run Text=", "></Run>
+                            <Run Text="{Binding OffsetY, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"></Run>
+                            <Run Text=")"></Run>
+                        </TextBlock>
+                        <Button Grid.Column="1" Style="{StaticResource S_Button_Graph}" Content="{StaticResource String_Icon_Graph_Origin}" Command="{Binding GoToOriginCommand}"></Button>
 
-                        <Separator Grid.Column="3" Style="{StaticResource S_Separator_Graph}"></Separator>
+                        <Separator Grid.Column="2" Style="{StaticResource S_Separator_Graph}"></Separator>
 
-                        <TextBox Grid.Column="4" Style="{StaticResource S_TextBox_Input_Graph}" Text="{Binding Scale, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBox>
-                        <Button Grid.Column="5" Style="{StaticResource S_Button_Graph}" Content="{StaticResource String_Icon_Graph_Reset}" Command="{Binding ResetScaleCommand}"></Button>
+                        <TextBlock Grid.Column="3" Style="{StaticResource S_TextBlock_Graph}" Text="{Binding Scale, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBlock>
+                        <Button Grid.Column="4" Style="{StaticResource S_Button_Graph}" Content="{StaticResource String_Icon_Graph_Reset}" Command="{Binding ResetScaleCommand}"></Button>
                     </Grid>
 
                     <Grid Grid.Row="1">
@@ -510,8 +566,8 @@ StorylineEditor распространяется в надежде, что он�
                             <ColumnDefinition Width="*"></ColumnDefinition>
                             <ColumnDefinition Width="*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <TextBox Style="{StaticResource S_TextBox_Input_Graph}" Text="{Binding SelectionEditor.PositionX, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBox>
-                        <TextBox Grid.Column="1" Style="{StaticResource S_TextBox_Input_Graph}" Text="{Binding SelectionEditor.PositionY, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBox>
+                        <TextBox Grid.Column="0" x:Name="tb_SelectionNodePositionX" Style="{StaticResource S_TextBox_Input_Graph}" Text="{Binding SelectionNode.PositionX, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" ></TextBox>
+                        <TextBox Grid.Column="1" x:Name="tb_SelectionNodePositionY" Style="{StaticResource S_TextBox_Input_Graph}" Text="{Binding SelectionNode.PositionY, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" ></TextBox>
                     </Grid>
                 </Grid>
 
@@ -525,6 +581,10 @@ StorylineEditor распространяется в надежде, что он�
                 </DataTrigger>
                 <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_AlternativeM}">
                     <Setter TargetName="btn_selectable_Alternative" Property="Style" Value="{StaticResource S_Button_Graph_Selectable_Selected}"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding SelectionNode, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                    <Setter TargetName="tb_SelectionNodePositionX" Property="Visibility" Value="Collapsed"></Setter>
+                    <Setter TargetName="tb_SelectionNodePositionY" Property="Visibility" Value="Collapsed"></Setter>
                 </DataTrigger>
             </DataTemplate.Triggers>
         </DataTemplate>
@@ -596,18 +656,41 @@ StorylineEditor распространяется в надежде, что он�
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
 
+                    <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left">
+                        <Button.RenderTransform>
+                            <TranslateTransform X="{StaticResource Double_Icon_Gender_-Width/2}" Y="{StaticResource Double_Icon_Gender_-Height/2}"></TranslateTransform>
+                        </Button.RenderTransform>
+                    </Button>
+
                     <Label Content="{StaticResource String_Icon_Node_Step}" Style="{StaticResource S_Label_Node}"></Label>
 
                     <TextBlock Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
                     <TextBlock Grid.ColumnSpan="2" Grid.Row="1" Style="{StaticResource S_TextBlock_Node_Description}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
-                    <TextBlock Grid.ColumnSpan="2" Grid.Row="1" Style="{StaticResource S_TextBlock_Node_Result}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                    <TextBlock Grid.ColumnSpan="2" Grid.Row="2" Style="{StaticResource S_TextBlock_Node_Result}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+
+                    <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
+                        <Button.RenderTransform>
+                            <TranslateTransform X="{StaticResource Double_Button_Node_Remove_Width/2}" Y="{StaticResource Double_Button_Node_Remove_-Height/2}"></TranslateTransform>
+                        </Button.RenderTransform>
+                    </Button>
                 </Grid>
             </Border>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type vmn:Node_Journal_StepEditorVM}"></DataTemplate>
+        <DataTemplate DataType="{x:Type vmn:Node_Journal_StepEditorVM}">
+            <Grid VerticalAlignment="Top">
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBox Style="{StaticResource S_TextBox_Input}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <TextBox Grid.Row="1" Style="{StaticResource S_TextBox_MultilineInput}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <TextBox Grid.Row="2" Style="{StaticResource S_TextBox_MultilineInput}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            </Grid>
+        </DataTemplate>
 
         <DataTemplate DataType="{x:Type vmn:Node_Journal_AlternativeVM}">
             <Border Style="{StaticResource S_Border_Node}"

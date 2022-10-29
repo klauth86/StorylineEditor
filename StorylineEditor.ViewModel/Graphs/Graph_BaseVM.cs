@@ -500,30 +500,63 @@ namespace StorylineEditor.ViewModel.Graphs
         protected ICommand removeElementCommand;
         public ICommand RemoveElementCommand => removeElementCommand ?? (removeElementCommand = new RelayCommand<Notifier>((viewModel) =>
         {
-            if (viewModel is INodeVM nodeVM)
+            if (viewModel is INodeVM nodeViewModel)
             {
+                foreach (var fromlinkId in FromNodesLinks[nodeViewModel.Id].ToList()) RemoveLink(fromlinkId);
+                foreach (var tolinkId in ToNodesLinks[nodeViewModel.Id].ToList()) RemoveLink(tolinkId);
+                RemoveNode(nodeViewModel.Id);
                 CommandManager.InvalidateRequerySuggested();
             }
-            else if (viewModel is ILinkVM linkVM)
+            else if (viewModel is ILinkVM linkViewModel)
             {
-                FromNodesLinks[linkVM.FromNodeId].Remove(linkVM.Id);
-                ToNodesLinks[linkVM.ToNodeId].Remove(linkVM.Id);
-
-                BaseM model = _modelExtractor(viewModel);
-
-                Remove(viewModel, null, null);
-                LinksVMs.Remove(linkVM.Id);
-                Remove(null, model, GetContext(model));
-
-                if (ToNodesLinks[linkVM.ToNodeId].Count == 0)
-                {
-                    RootNodeIds.Add(linkVM.ToNodeId);
-                    if (NodesVMs.ContainsKey(linkVM.ToNodeId)) ((INodeVM)NodesVMs[linkVM.ToNodeId]).IsRoot = true;
-                }
-
+                RemoveLink(linkViewModel.Id);
                 CommandManager.InvalidateRequerySuggested();
             }
         }, (viewModel) => viewModel != null));
+
+        protected void RemoveNode(string nodeId)
+        {
+            if (NodesVMs.ContainsKey(nodeId))
+            {
+                if (NodesVMs[nodeId] is INodeVM)
+                {
+                    RootNodeIds.Remove(nodeId);
+
+                    FromNodesLinks.Remove(nodeId);
+                    ToNodesLinks.Remove(nodeId);
+
+                    BaseM nodeModel = _modelExtractor(NodesVMs[nodeId]);
+
+                    Remove(NodesVMs[nodeId], null, null);
+                    NodesVMs.Remove(nodeId);
+                    Remove(null, nodeModel, GetContext(nodeModel));
+                }
+            }
+        }
+
+        protected void RemoveLink(string linkId)
+        {
+            if (LinksVMs.ContainsKey(linkId))
+            {
+                if (LinksVMs[linkId] is ILinkVM linkViewModel)
+                {
+                    FromNodesLinks[linkViewModel.FromNodeId].Remove(linkViewModel.Id);
+                    ToNodesLinks[linkViewModel.ToNodeId].Remove(linkViewModel.Id);
+
+                    BaseM linkModel = _modelExtractor(LinksVMs[linkId]);
+
+                    Remove(LinksVMs[linkId], null, null);
+                    LinksVMs.Remove(linkId);
+                    Remove(null, linkModel, GetContext(linkModel));
+
+                    if (ToNodesLinks[linkViewModel.ToNodeId].Count == 0)
+                    {
+                        RootNodeIds.Add(linkViewModel.ToNodeId);
+                        if (NodesVMs.ContainsKey(linkViewModel.ToNodeId)) ((INodeVM)NodesVMs[linkViewModel.ToNodeId]).IsRoot = true;
+                    }
+                }            
+            }
+        }
 
 
 
@@ -781,6 +814,8 @@ namespace StorylineEditor.ViewModel.Graphs
 
             SelectionEditor = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? _editorCreator(NodesVMs[selection.First()]) : null;
 
+            SelectionNode = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? (INodeVM)NodesVMs[selection.First()] : null;
+
             CommandManager.InvalidateRequerySuggested();
         }
         public override void GetSelection(IList outSelection)
@@ -788,6 +823,22 @@ namespace StorylineEditor.ViewModel.Graphs
             foreach (var selectedViewModel in selection) outSelection.Add(selectedViewModel);
         }
         public override bool HasSelection() => selection.Count > 0;
+
+
+
+        protected INodeVM selectionNode;
+        public INodeVM SelectionNode
+        {
+            get => selectionNode;
+            set
+            {
+                if (value != selectionNode)
+                {
+                    selectionNode = value;
+                    Notify(nameof(SelectionNode));
+                }
+            }
+        }
 
 
 
