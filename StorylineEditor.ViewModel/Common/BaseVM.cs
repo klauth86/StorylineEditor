@@ -29,6 +29,7 @@ namespace StorylineEditor.ViewModel.Common
                 {
                     Model.name = value;
                     OnModelChanged(Model, nameof(Name));
+                    CallbackContext?.Callback(this, nameof(Name));
                 }
             }
         }

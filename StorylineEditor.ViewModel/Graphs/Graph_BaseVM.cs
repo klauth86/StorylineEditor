@@ -44,7 +44,7 @@ namespace StorylineEditor.ViewModel.Graphs
     public class Graph_BaseVM<T> : Collection_BaseVM<T, Point>, ICallbackContext where T : GraphM
     {
         public Graph_BaseVM(T model, ICallbackContext callbackContext, Func<Type, Point, BaseM> modelCreator, Func<BaseM, ICallbackContext, Notifier> viewModelCreator,
-            Func<Notifier, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Type defaultNodeType, Func<Type, string> typeDescriptor) : base(model, callbackContext,
+            Func<Notifier, ICallbackContext, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Type defaultNodeType, Func<Type, string> typeDescriptor) : base(model, callbackContext,
                 modelCreator, viewModelCreator, editorCreator, modelExtractor)
         {
             offsetY = offsetX = 0;
@@ -676,6 +676,7 @@ namespace StorylineEditor.ViewModel.Graphs
                 else if (propName == nameof(INodeVM.PositionY)) UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.Y);
             }
         }
+
         private void UpdateLocalPosition(INodeVM nodeViewModel, ENodeVMUpdate updateTarget)
         {
             if ((updateTarget & ENodeVMUpdate.X) > 0) nodeViewModel.Left = FromAbsoluteToLocalX(nodeViewModel.PositionX) - nodeViewModel.Width / 2;
@@ -814,7 +815,7 @@ namespace StorylineEditor.ViewModel.Graphs
                 viewModel.IsSelected = true;
             }
 
-            SelectionEditor = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? _editorCreator(NodesVMs[selection.First()]) : null;
+            SelectionEditor = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? _editorCreator(NodesVMs[selection.First()], this) : null;
 
             SelectionNode = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? (INodeVM)NodesVMs[selection.First()] : null;
 

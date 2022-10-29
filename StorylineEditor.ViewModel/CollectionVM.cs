@@ -25,10 +25,10 @@ namespace StorylineEditor.ViewModel
 {
     public class FolderProxyM : FolderM { }
 
-    public class CollectionVM : Collection_BaseVM<List<BaseM>, object>
+    public class CollectionVM : Collection_BaseVM<List<BaseM>, object>, ICallbackContext
     {
         public CollectionVM(List<BaseM> inModel, Func<Type, object, BaseM> modelCreator, Func<BaseM, ICallbackContext, Notifier> viewModelCreator,
-            Func<Notifier, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Action<Notifier> viewModelInformer) : base(inModel, null, modelCreator, viewModelCreator,
+            Func<Notifier, ICallbackContext, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Action<Notifier> viewModelInformer) : base(inModel, null, modelCreator, viewModelCreator,
                 editorCreator, modelExtractor)
         {            
             _viewModelInformer = viewModelInformer ?? throw new ArgumentNullException(nameof(viewModelInformer));
@@ -140,12 +140,20 @@ namespace StorylineEditor.ViewModel
             if (selection != null)
             {
                 selection.IsSelected = true;
-                SelectionEditor = _editorCreator(selection);
+                SelectionEditor = _editorCreator(selection, this);
             }
 
             CommandManager.InvalidateRequerySuggested();
         }
         public override void GetSelection(IList outSelection) { if (selection != null) outSelection.Add(selection); }
         public override bool HasSelection() => selection != null;
+
+        public void Callback(object viewModelObj, string propName)
+        {
+            if (viewModelObj != null && propName == nameof(BaseVM<BaseM>.Name))
+            {
+                CollectionViewSource.GetDefaultView(ItemsVMs)?.Refresh();
+            }
+        }
     }
 }

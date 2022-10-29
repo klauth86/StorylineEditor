@@ -32,7 +32,7 @@ namespace StorylineEditor.ViewModel
     public abstract class Collection_BaseVM<T, U> : SimpleVM<T> where T : class
     {
         public Collection_BaseVM(T model, ICallbackContext callbackContext, Func<Type, U, BaseM> modelCreator, Func<BaseM, ICallbackContext, Notifier> viewModelCreator,
-            Func<Notifier, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor) : base(model, callbackContext)
+            Func<Notifier, ICallbackContext, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor) : base(model, callbackContext)
         {
             _modelCreator = modelCreator ?? throw new ArgumentNullException(nameof(modelCreator));
             _viewModelCreator = viewModelCreator ?? throw new ArgumentNullException(nameof(viewModelCreator));
@@ -122,7 +122,7 @@ namespace StorylineEditor.ViewModel
 
         protected readonly Func<Type, U, BaseM> _modelCreator;
         protected readonly Func<BaseM, ICallbackContext, Notifier> _viewModelCreator;
-        protected readonly Func<Notifier, Notifier> _editorCreator;
+        protected readonly Func<Notifier, ICallbackContext, Notifier> _editorCreator;
         protected readonly Func<Notifier, BaseM> _modelExtractor;
 
 

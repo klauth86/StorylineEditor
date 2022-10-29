@@ -17,13 +17,13 @@ namespace StorylineEditor.ViewModel
 {
     public class FolderVM : BaseVM<FolderM>
     {
-        public FolderVM(FolderM model) : base(model, null) { }
+        public FolderVM(FolderM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
 
         public override bool IsFolder => true;
     }
 
     public class FolderEditorVM : FolderVM
     {
-        public FolderEditorVM(FolderVM viewModel) : base(viewModel.Model) { }
+        public FolderEditorVM(FolderVM viewModel, ICallbackContext callbackContext) : base(viewModel.Model, callbackContext) { }
     }
 }

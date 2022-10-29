@@ -17,12 +17,12 @@ namespace StorylineEditor.ViewModel
 {
     public class ItemVM : BaseVM<ItemM>
     {
-        public ItemVM(ItemM model) : base(model, null) { }
+        public ItemVM(ItemM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
     }
 
     public class ItemEditorVM : ItemVM
     {
-        public ItemEditorVM(ItemVM viewModel) : base(viewModel.Model) { }
+        public ItemEditorVM(ItemVM viewModel, ICallbackContext callbackContext) : base(viewModel.Model, callbackContext) { }
 
         public bool HasDescriptionFemale
         {

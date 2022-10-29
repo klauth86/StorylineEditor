@@ -17,11 +17,11 @@ namespace StorylineEditor.ViewModel.Graphs
 {
     public class DialogVM : BaseVM<DialogM>
     {
-        public DialogVM(DialogM model) : base(model, null) { }
+        public DialogVM(DialogM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
     }
 
     public class DialogEditorVM : DialogVM
     {
-        public DialogEditorVM(DialogVM viewModel) : base(viewModel.Model) { }
+        public DialogEditorVM(DialogVM viewModel, ICallbackContext callbackContext) : base(viewModel.Model, callbackContext) { }
     }
 }

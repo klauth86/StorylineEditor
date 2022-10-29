@@ -17,11 +17,11 @@ namespace StorylineEditor.ViewModel.Graphs
 {
     public class ReplicaVM : BaseVM<ReplicaM>
     {
-        public ReplicaVM(ReplicaM model) : base(model, null) { }
+        public ReplicaVM(ReplicaM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
     }
 
     public class ReplicaEditorVM : ReplicaVM
     {
-        public ReplicaEditorVM(ReplicaVM viewModel) : base(viewModel.Model) { }
+        public ReplicaEditorVM(ReplicaVM viewModel, ICallbackContext callbackContext) : base(viewModel.Model, callbackContext) { }
     }
 }
