@@ -169,25 +169,18 @@ StorylineEditor распространяется в надежде, что он�
             <Setter Property="Fill" Value="Gray"></Setter>
         </Style>
 
-        <Style TargetType="Button" x:Key="S_Button_TabMenu">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Margin="{StaticResource Thickness_Margin_Common}" Padding="{StaticResource Thickness_Padding_LeftRight}"
-                                Background="Transparent" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0,0,0,4">
-                            <ContentPresenter></ContentPresenter>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="BorderBrush" Value="Transparent"></Setter>
-            <Style.Triggers>
+        <ControlTemplate TargetType="Button" x:Key="CT_Button_TabMenu">
+            <Border x:Name="br_Main" Margin="{StaticResource Thickness_Margin_Common}" Padding="{StaticResource Thickness_Padding_LeftRight}"
+                                Background="#01ffffff" BorderBrush="#01ffffff" BorderThickness="0,0,0,4">
+                <ContentPresenter></ContentPresenter>
+            </Border>
+            <ControlTemplate.Triggers>
                 <Trigger Property="IsEnabled" Value="false">
-                    <Setter Property="BorderBrush" Value="Goldenrod"></Setter>
+                    <Setter TargetName="br_Main" Property="BorderBrush" Value="Goldenrod"></Setter>
                     <Setter Property="FontWeight" Value="Bold"></Setter>
                 </Trigger>
-            </Style.Triggers>
-        </Style>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
 
         <Style TargetType="TextBox" BasedOn="{StaticResource S_TextBox_Input}" x:Key="S_TextBox_Input_Filter">
             <Setter Property="Margin" Value="{StaticResource Thickness_Margin_Common}"></Setter>
@@ -305,17 +298,13 @@ StorylineEditor распространяется в надежде, что он�
 
         <DataTemplate DataType="{x:Type vm:StorylineVM}" x:Key="DT_StorylineVM_Tabs">
             <StackPanel Orientation="Horizontal">
-                <Button Style="{StaticResource S_Button_TabMenu}" Command="{Binding CharactersTabCommand}">Characters</Button>
-                <Button Style="{StaticResource S_Button_TabMenu}" Command="{Binding ItemsTabCommand}">Items</Button>
-                <Button Style="{StaticResource S_Button_TabMenu}" Command="{Binding ActorsTabCommand}">Actors</Button>
-                <Button Style="{StaticResource S_Button_TabMenu}" Command="{Binding JournalTabCommand}">Journal</Button>
-                <Button Style="{StaticResource S_Button_TabMenu}" Command="{Binding DialogsTabCommand}">Dialogs</Button>
-                <Button Style="{StaticResource S_Button_TabMenu}" Command="{Binding ReplicasTabCommand}">Replicas</Button>
+                <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding CharactersTabCommand}">Characters</Button>
+                <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding ItemsTabCommand}">Items</Button>
+                <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding ActorsTabCommand}">Actors</Button>
+                <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding JournalTabCommand}">Journal</Button>
+                <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding DialogsTabCommand}">Dialogs</Button>
+                <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding ReplicasTabCommand}">Replicas</Button>
             </StackPanel>
-        </DataTemplate>
-
-        <DataTemplate DataType="{x:Type vm:StorylineVM}" x:Key="DT_StorylineVM_Filter">
-            <TextBox Style="{StaticResource S_TextBox_Input_Filter}" Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vm:StorylineVM}" x:Key="DT_StorylineVM_Selection">
