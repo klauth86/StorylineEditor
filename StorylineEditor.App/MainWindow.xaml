@@ -17,22 +17,24 @@ StorylineEditor распространяется в надежде, что он�
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" Title="MainWindow" WindowState="Maximized">
     <DockPanel>
-        <Grid DockPanel.Dock="Top">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"></ColumnDefinition>
-                <ColumnDefinition Width="auto"></ColumnDefinition>
-                <ColumnDefinition Width="auto"></ColumnDefinition>
-                <ColumnDefinition Width="auto"></ColumnDefinition>
-                <ColumnDefinition Width="auto"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <Button x:Name="btn_Open" ToolTip="{StaticResource String_MainMenu_Open_Tooltip}" Style="{StaticResource S_Button_MainMenu}" Click="btn_Open_Click" Content="{StaticResource String_Icon_Open}"></Button>
-            <Button Grid.Column="1" x:Name="btn_Save"  ToolTip="{StaticResource String_MainMenu_Save_Tooltip}" Style="{StaticResource S_Button_MainMenu}" Click="btn_Save_Click" Content="{StaticResource String_Icon_Save}"></Button>
-            <Rectangle Grid.Column="2" Style="{StaticResource S_Rectangle_MainMenu}"></Rectangle>
-            <ContentControl Grid.Column="3" Content="{Binding UpdateSourceTrigger=PropertyChanged}" ContentTemplate="{StaticResource DT_StorylineVM_Tabs}"></ContentControl>
-            <Rectangle Grid.Column="4" Style="{StaticResource S_Rectangle_MainMenu}"></Rectangle>
-            <TextBox Grid.Column="5" Style="{StaticResource S_TextBox_Input_Filter}" Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" MaxLength="128"></TextBox>
-        </Grid>
+        <Border DockPanel.Dock="Top" BorderThickness="0,0,0,0.5" BorderBrush="Black" Margin="0,0,0,2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="btn_Open" ToolTip="{StaticResource String_MainMenu_Open_Tooltip}" Style="{StaticResource S_Button_MainMenu}" Click="btn_Open_Click" Content="{StaticResource String_Icon_Open}"></Button>
+                <Button Grid.Column="1" x:Name="btn_Save"  ToolTip="{StaticResource String_MainMenu_Save_Tooltip}" Style="{StaticResource S_Button_MainMenu}" Click="btn_Save_Click" Content="{StaticResource String_Icon_Save}"></Button>
+                <Rectangle Grid.Column="2" Style="{StaticResource S_Rectangle_MainMenu}"></Rectangle>
+                <ContentControl Grid.Column="3" Content="{Binding UpdateSourceTrigger=PropertyChanged}" ContentTemplate="{StaticResource DT_StorylineVM_Tabs}"></ContentControl>
+                <Rectangle Grid.Column="4" Style="{StaticResource S_Rectangle_MainMenu}"></Rectangle>
+                <TextBox Grid.Column="5" Style="{StaticResource S_TextBox_Input_Filter}" Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" MaxLength="128"></TextBox>
+            </Grid>
+        </Border>
         <ContentControl Content="{Binding UpdateSourceTrigger=PropertyChanged}" ContentTemplate="{StaticResource DT_StorylineVM_Selection}"></ContentControl>
     </DockPanel>
 </Window>
