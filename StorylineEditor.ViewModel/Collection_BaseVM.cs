@@ -67,16 +67,21 @@ namespace StorylineEditor.ViewModel
         }, () => HasSelection()));
 
         private ICommand cutCommand;
-        public ICommand CutCommand => cutCommand ?? (cutCommand = new RelayCommand<Notifier>((viewModel) =>
+        public ICommand CutCommand => cutCommand ?? (cutCommand = new RelayCommand(() =>
         {
-            BaseM model = _modelExtractor(viewModel);
+            List<Notifier> selection = new List<Notifier>();
+            GetSelection(selection);
 
-            CutVMs.Add(new CutEntryVM() { Model = model, ViewModel = viewModel, Context = GetContext(model) });
-            viewModel.IsCut = true;
+            foreach (var viewModel in selection)
+            {
+                BaseM model = _modelExtractor(viewModel);
+                CutVMs.Add(new CutEntryVM() { Model = model, ViewModel = viewModel, Context = GetContext(model) });
+                viewModel.IsCut = true;
+            }
 
             CommandManager.InvalidateRequerySuggested();
 
-        }, (viewModel) => viewModel != null && !viewModel.IsCut));
+        }, () => HasSelection()));
 
         private ICommand pasteCommand;
         public ICommand PasteCommand => pasteCommand ?? (pasteCommand = new RelayCommand(() =>
