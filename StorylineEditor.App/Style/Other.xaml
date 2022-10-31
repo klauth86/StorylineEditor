@@ -10,23 +10,8 @@
 
     <!-- Global and base -->
 
-    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_GroupBox.Header"></Style>
-
-    <Style TargetType="Button">
-        <Style.Resources>
-            <Style TargetType="Border">
-                <Setter Property="CornerRadius" Value="{StaticResource CornerRadius_Common}"/>
-            </Style>
-        </Style.Resources>
-    </Style>
-
-    <Style TargetType="Button" x:Key="S_Button_GroupBox.Header" BasedOn="{StaticResource {x:Type Button}}">
-        <Setter Property="Width" Value="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}, UpdateSourceTrigger=PropertyChanged}"></Setter>
-        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_Common}"></Setter>
-    </Style>
-
     <ControlTemplate TargetType="Button" x:Key="CT_Button_Path">
-        <Border x:Name="br_Main" Margin="{StaticResource Thickness_Margin_Common}" Background="{StaticResource Color_HitVisible}" 
+        <Border x:Name="br_Main" Margin="{StaticResource Thickness_Margin_1x}" Background="{StaticResource Color_HitVisible}" 
                     BorderBrush="{StaticResource Color_HitVisible}" BorderThickness="0,0,0,1" Cursor="Hand">
             <ContentPresenter></ContentPresenter>
         </Border>
@@ -44,7 +29,7 @@
 
     <Style TargetType="Border" x:Key="S_Border_Selector">
         <Setter Property="Cursor" Value="Hand"></Setter>
-        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_Common}"></Setter>
+        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_1x}"></Setter>
         <Setter Property="CornerRadius" Value="{StaticResource CornerRadius_Common}"></Setter>
         <Setter Property="BorderThickness" Value="2"></Setter>
         <Setter Property="Background" Value="{StaticResource Color_HitVisible}"></Setter>
@@ -73,7 +58,7 @@
         <Setter Property="TextAlignment" Value="Center"></Setter>
         <Setter Property="VerticalAlignment" Value="Center"></Setter>
         <Setter Property="FontSize" Value="16"></Setter>
-        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_Selector_Icon}"></Setter>
+        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_2x}"></Setter>
     </Style>
 
     <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Selector_Name">
@@ -84,20 +69,15 @@
 
     <!-- Main Menu -->
 
-    <Style TargetType="Button" x:Key="S_Button_MainMenu" BasedOn="{StaticResource {x:Type Button}}">
-        <Setter Property="Width" Value="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}, UpdateSourceTrigger=PropertyChanged}"></Setter>
-        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_Common}"></Setter>
-    </Style>
-
     <Style TargetType="Rectangle" x:Key="S_Rectangle_MainMenu">
         <Setter Property="Width" Value="1"></Setter>
         <Setter Property="VerticalAlignment" Value="Stretch"></Setter>
-        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_Common}"></Setter>
+        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_1x}"></Setter>
         <Setter Property="Fill" Value="{StaticResource Color_Selection_Inactive}"></Setter>
     </Style>
 
     <ControlTemplate TargetType="Button" x:Key="CT_Button_TabMenu">
-        <Border x:Name="br_Main" Margin="{StaticResource Thickness_Margin_Common}" Padding="{StaticResource Thickness_Padding_LeftRight}"
+        <Border x:Name="br_Main" Margin="{StaticResource Thickness_Margin_1x}" Padding="{StaticResource Thickness_Padding_LeftRight}"
                                 Background="{StaticResource Color_HitVisible}" BorderBrush="{StaticResource Color_HitVisible}" BorderThickness="0,0,0,4" Cursor="Hand">
             <ContentPresenter></ContentPresenter>
         </Border>
@@ -113,7 +93,7 @@
     </ControlTemplate>
 
     <Style TargetType="TextBox" BasedOn="{StaticResource S_TextBox}" x:Key="S_TextBox_Input_Filter">
-        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_Common}"></Setter>
+        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_1x}"></Setter>
     </Style>
 
 
@@ -211,7 +191,7 @@
     <!-- Data Templates -->
 
     <DataTemplate DataType="{x:Type vm:FolderProxyM}">
-        <Button Style="{StaticResource S_Button_GroupBox.Header}" Content="{StaticResource String_Icon_Up}" Command="{Binding Path=DataContext.UpContextCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"></Button>
+        <Button Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Up}" Command="{Binding Path=DataContext.UpContextCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"></Button>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type m:FolderM}">
@@ -258,19 +238,19 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="{StaticResource String_Icon_Add}" ToolTip="{StaticResource String_TabMenu_Add_Tooltip}" Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding AddCommand}" CommandParameter="{StaticResource False}"></Button>
-                    <Button ToolTip="{StaticResource String_TabMenu_AddFolder_Tooltip}" Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding AddCommand}" CommandParameter="{StaticResource True}">
+                    <Button Content="{StaticResource String_Icon_Add}" ToolTip="{StaticResource String_TabMenu_Add_Tooltip}" Style="{StaticResource S_Button_Base}" Command="{Binding AddCommand}" CommandParameter="{StaticResource False}"></Button>
+                    <Button ToolTip="{StaticResource String_TabMenu_AddFolder_Tooltip}" Style="{StaticResource S_Button_Base}" Command="{Binding AddCommand}" CommandParameter="{StaticResource True}">
                         <Grid>
                             <TextBlock Text="{StaticResource String_Icon_Open}"></TextBlock>
                             <TextBlock Text="{StaticResource String_Icon_AddSmall}"></TextBlock>
                         </Grid>
                     </Button>
-                    <Button Content="{StaticResource String_Icon_Remove}" ToolTip="{StaticResource String_TabMenu_Remove_Tooltip}" Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding RemoveCommand}"></Button>
+                    <Button Content="{StaticResource String_Icon_Remove}" ToolTip="{StaticResource String_TabMenu_Remove_Tooltip}" Style="{StaticResource S_Button_Base}" Command="{Binding RemoveCommand}"></Button>
 
-                    <Button Content="{StaticResource String_Icon_Cut}" ToolTip="{StaticResource String_TabMenu_Cut_Tooltip}" Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding CutCommand}"></Button>
-                    <Button Content="{StaticResource String_Icon_Paste}" ToolTip="{StaticResource String_TabMenu_Paste_Tooltip}" Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding PasteCommand}"></Button>
+                    <Button Content="{StaticResource String_Icon_Cut}" ToolTip="{StaticResource String_TabMenu_Cut_Tooltip}" Style="{StaticResource S_Button_Base}" Command="{Binding CutCommand}"></Button>
+                    <Button Content="{StaticResource String_Icon_Paste}" ToolTip="{StaticResource String_TabMenu_Paste_Tooltip}" Style="{StaticResource S_Button_Base}" Command="{Binding PasteCommand}"></Button>
 
-                    <Button Content="{StaticResource String_Icon_Info}" ToolTip="{StaticResource String_TabMenu_Info_Tooltip}" Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding InfoCommand}"></Button>
+                    <Button Content="{StaticResource String_Icon_Info}" ToolTip="{StaticResource String_TabMenu_Info_Tooltip}" Style="{StaticResource S_Button_Base}" Command="{Binding InfoCommand}"></Button>
                 </StackPanel>
 
                 <GroupBox Grid.Row="1">
@@ -314,8 +294,8 @@
 
     <DataTemplate DataType="{x:Type vm:FolderEditorVM}">
         <StackPanel Orientation="Vertical">
-            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox}"></TextBox>
-            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_MultilineInput}"></TextBox>
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_Name}"></TextBox>
+            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
         </StackPanel>
     </DataTemplate>
 
@@ -341,19 +321,26 @@
 
     <DataTemplate DataType="{x:Type vm:CharacterEditorVM}">
         <StackPanel Orientation="Vertical">
-            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox}" Tag="{StaticResource String_Tag_Name}"></TextBox>
-            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_MultilineInput}" Tag="{StaticResource String_Tag_DescriptionMale}"></TextBox>
-            <CheckBox IsChecked="{Binding HasDescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_HasDescriptionFemale}"></CheckBox>
-            <TextBox x:Name="tb_DescriptionFemale" Text="{Binding DescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_MultilineInput}" Visibility="Collapsed" Tag="{StaticResource String_Tag_DescriptionFemale}"></TextBox>
-            <TextBox Text="{Binding ActorName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox}" Tag="{StaticResource String_Tag_ActorName}"></TextBox>
-            <TextBox Text="{Binding ClassPathName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox}" Tag="{StaticResource String_Tag_ClassPathName}"></TextBox>
-            <TextBox Text="{Binding InitialRelation, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Input_NumericUpDown_Float}" Tag="{StaticResource String_Tag_Relation}"></TextBox>
-            <TextBox Text="{Binding InitialRelationFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Input_NumericUpDown_Float}" Tag="{StaticResource String_Tag_RelationFemale}"></TextBox>
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_Name}"></TextBox>
+            <CheckBox x:Name="cb_HasDescriptionFemale" IsChecked="{Binding HasDescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_CheckBox_Prop}" Tag="{StaticResource String_Tag_HasDescriptionFemale}"></CheckBox>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition x:Name="cd_DescriptionFemale" Width="0"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="tb_Description" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
+                <TextBox x:Name="tb_DescriptionFemale" Grid.Column="1" Text="{Binding DescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_DescriptionFemale}"></TextBox>
+            </Grid>
+            <TextBox Text="{Binding ActorName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_ActorName}"></TextBox>
+            <TextBox Text="{Binding ClassPathName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_ClassPathName}"></TextBox>
+            <TextBox Text="{Binding InitialRelation, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_NumericUpDown_Float}" Tag="{StaticResource String_Tag_Relation}"></TextBox>
+            <TextBox Text="{Binding InitialRelationFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_NumericUpDown_Float}" Tag="{StaticResource String_Tag_RelationFemale}"></TextBox>
         </StackPanel>
         <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding HasDescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Value="true">
-                <Setter TargetName="tb_DescriptionFemale" Property="Visibility" Value="Visible"></Setter>
-            </DataTrigger>
+            <Trigger SourceName="cb_HasDescriptionFemale" Property="IsChecked" Value="true">
+                <Setter TargetName="tb_Description" Property="Tag" Value="{StaticResource String_Tag_DescriptionMale}"></Setter>
+                <Setter TargetName="cd_DescriptionFemale" Property="Width" Value="*"></Setter>
+            </Trigger>
         </DataTemplate.Triggers>
     </DataTemplate>
 
@@ -380,9 +367,9 @@
     <DataTemplate DataType="{x:Type vm:ActorEditorVM}">
         <StackPanel Orientation="Vertical">
             <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox}"></TextBox>
-            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_MultilineInput}"></TextBox>
+            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}"></TextBox>
             <CheckBox IsChecked="{Binding HasDescriptionFemale, UpdateSourceTrigger=PropertyChanged}">HasDescriptionFemale</CheckBox>
-            <TextBox Text="{Binding DescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_MultilineInput}"></TextBox>
+            <TextBox Text="{Binding DescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}"></TextBox>
             <TextBox Text="{Binding ActorName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox}"></TextBox>
             <TextBox Text="{Binding ClassPathName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox}"></TextBox>
         </StackPanel>
@@ -411,15 +398,15 @@
     <DataTemplate DataType="{x:Type vm:ItemEditorVM}">
         <StackPanel Orientation="Vertical">
             <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox}"></TextBox>
-            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_MultilineInput}"></TextBox>
+            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}"></TextBox>
             <CheckBox IsChecked="{Binding HasDescriptionFemale, UpdateSourceTrigger=PropertyChanged}">HasDescriptionFemale</CheckBox>
-            <TextBox Text="{Binding DescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_MultilineInput}"></TextBox>
+            <TextBox Text="{Binding DescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}"></TextBox>
             <TextBox Text="{Binding ActorName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox}"></TextBox>
             <TextBox Text="{Binding ClassPathName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox}"></TextBox>
             <CheckBox IsChecked="{Binding HasInternalDescription, UpdateSourceTrigger=PropertyChanged}">HasInternalDescription</CheckBox>
-            <TextBox Text="{Binding InternalDescription, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_MultilineInput}"></TextBox>
+            <TextBox Text="{Binding InternalDescription, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}"></TextBox>
             <CheckBox IsChecked="{Binding HasInternalDescriptionFemale, UpdateSourceTrigger=PropertyChanged}">HasInternalDescriptionFemale</CheckBox>
-            <TextBox Text="{Binding InternalDescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_MultilineInput}"></TextBox>
+            <TextBox Text="{Binding InternalDescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}"></TextBox>
         </StackPanel>
     </DataTemplate>
 
@@ -635,8 +622,8 @@
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <TextBox Style="{StaticResource S_TextBox}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            <TextBox Grid.Row="1" Style="{StaticResource S_TextBox_MultilineInput}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            <TextBox Grid.Row="2" Style="{StaticResource S_TextBox_MultilineInput}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <TextBox Grid.Row="1" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <TextBox Grid.Row="2" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         </Grid>
     </DataTemplate>
 

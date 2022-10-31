@@ -3,31 +3,50 @@
 
 
     <Style TargetType="GroupBox" x:Key="S_GroupBox_Prop">
-        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_Selector_Icon}"></Setter>
+        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_2x}"></Setter>
     </Style>
 
     <DataTemplate x:Key="DT_GroupBox_HeaderTemplate_Prop">
-        <TextBlock Text="{Binding UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" TextWrapping="Wrap"></TextBlock>
+        <TextBlock Margin="{StaticResource Thickness_Margin_1x}" Text="{Binding UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" TextWrapping="Wrap"></TextBlock>
     </DataTemplate>
-    
-    <Style TargetType="TextBox" x:Key="S_TextBox_Input_NumericUpDown_Float"></Style>
 
-    <Style TargetType="TextBox" x:Key="S_TextBox_Input_Prop" BasedOn="{StaticResource S_TextBox}">
+    <Style TargetType="TextBox" x:Key="S_TextBox_Prop" BasedOn="{StaticResource S_TextBox}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TextBox">
                     <GroupBox Style="{StaticResource S_GroupBox_Prop}" Header="{TemplateBinding Tag}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
-                        <TextBox Text="{TemplateBinding Text}"></TextBox>
+                        <TextBox Text="{TemplateBinding Text}" TextWrapping="{TemplateBinding TextWrapping}" MinLines="{TemplateBinding MinLines}"
+                                 AcceptsReturn="{TemplateBinding AcceptsReturn}"></TextBox>
                     </GroupBox>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style TargetType="TextBox" x:Key="S_TextBox_MultilineInput" BasedOn="{StaticResource S_TextBox}">
+    <Style TargetType="TextBox" x:Key="S_TextBox_Prop_Multiline" BasedOn="{StaticResource S_TextBox_Prop}">
         <Setter Property="MinLines" Value="3"></Setter>
         <Setter Property="AcceptsReturn" Value="true"></Setter>
-        <Setter Property="TextWrapping" Value="Wrap"></Setter>
+    </Style>
+
+    <Style TargetType="TextBox" x:Key="S_TextBox_Prop_NumericUpDown_Float">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <StackPanel Orientation="Horizontal" Margin="{StaticResource Thickness_Margin_4x}">
+                        <ContentControl ContentTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}" Content="{TemplateBinding Tag}"></ContentControl>
+                        <TextBox Margin="{StaticResource Thickness_Margin_1x}" MinWidth="{StaticResource Double_MinWidth_Selector_Icon}" x:Name="tb_Num" Text="{TemplateBinding Text}"></TextBox>
+                        <Button Style="{StaticResource S_Button_Base}" Grid.Column="1" Content="{StaticResource String_Icon_Plus}"></Button>
+                        <Button Style="{StaticResource S_Button_Base}" Grid.Column="2" Content="{StaticResource String_Icon_Minus}"></Button>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="CheckBox" x:Key="S_CheckBox_Prop">
+        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_2x}"></Setter>
+        <Setter Property="FontWeight" Value="Bold"></Setter>
+        <Setter Property="Content" Value="{Binding Path=Tag, RelativeSource={RelativeSource Mode=Self}}"></Setter>
     </Style>
     
 </ResourceDictionary>

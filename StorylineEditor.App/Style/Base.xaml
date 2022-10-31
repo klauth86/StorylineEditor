@@ -12,12 +12,34 @@
         </Style.Triggers>
     </Style>
     
+    
+    
     <Style TargetType="TextBlock" x:Key="S_TextBlock">
         <Setter Property="TextWrapping" Value="Wrap"></Setter>
     </Style>
 
+    
+    
     <Style TargetType="TextBox" x:Key="S_TextBox">
         <Setter Property="TextWrapping" Value="Wrap"></Setter>
     </Style>
+
     
+    
+    <Style TargetType="Button">
+        <Style.Resources>
+            <Style TargetType="Border">
+                <Setter Property="CornerRadius" Value="{StaticResource CornerRadius_Common}"/>
+            </Style>
+        </Style.Resources>
+    </Style>
+
+    <Style TargetType="Button" x:Key="S_Button_Square" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Width" Value="{Binding ActualHeight, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=Self}}"></Setter>
+    </Style>
+
+    <Style TargetType="Button" x:Key="S_Button_Base" BasedOn="{StaticResource S_Button_Square}">
+        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_1x}"></Setter>
+    </Style>
+
 </ResourceDictionary>
