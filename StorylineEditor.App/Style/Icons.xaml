@@ -49,5 +49,11 @@ StorylineEditor распространяется в надежде, что он�
     <sys:String x:Key="String_Icon_Graph_Origin">⌱</sys:String>
 
     <sys:String x:Key="String_Icon_Graph_Reset">⭯</sys:String>
-    
+
+    <sys:String x:Key="String_Icon_Character">👥</sys:String>
+
+    <sys:String x:Key="String_Icon_Actor">🧊</sys:String>
+
+    <sys:String x:Key="String_Icon_Item">💰</sys:String>
+
 </ResourceDictionary>
