@@ -27,7 +27,7 @@ StorylineEditor распространяется в надежде, что он�
             <Setter.Value>
                 <ControlTemplate TargetType="TextBox">
                     <GroupBox Style="{StaticResource S_GroupBox_Prop}" Header="{TemplateBinding Tag}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
-                        <TextBox Text="{TemplateBinding Text}" TextWrapping="{TemplateBinding TextWrapping}" MinLines="{TemplateBinding MinLines}"
+                        <TextBox Text="{Binding Text, RelativeSource={RelativeSource Mode=TemplatedParent}, UpdateSourceTrigger=PropertyChanged}" TextWrapping="{TemplateBinding TextWrapping}" MinLines="{TemplateBinding MinLines}"
                                  AcceptsReturn="{TemplateBinding AcceptsReturn}"></TextBox>
                     </GroupBox>
                 </ControlTemplate>
@@ -46,7 +46,7 @@ StorylineEditor распространяется в надежде, что он�
                 <ControlTemplate TargetType="TextBox">
                     <StackPanel Orientation="Horizontal" Margin="{StaticResource Thickness_Margin_4x}">
                         <ContentControl ContentTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}" Content="{TemplateBinding Tag}"></ContentControl>
-                        <TextBox Margin="{StaticResource Thickness_Margin_1x}" MinWidth="{StaticResource Double_MinWidth_Selector_Icon}" x:Name="tb_Num" Text="{TemplateBinding Text}"></TextBox>
+                        <TextBox Margin="{StaticResource Thickness_Margin_1x}" MinWidth="{StaticResource Double_MinWidth_Selector_Icon}" x:Name="tb_Num" Text="{Binding Text, RelativeSource={RelativeSource Mode=TemplatedParent}, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                         <Button Style="{StaticResource S_Button_Base}" Grid.Column="1" Content="{StaticResource String_Icon_Plus}"></Button>
                         <Button Style="{StaticResource S_Button_Base}" Grid.Column="2" Content="{StaticResource String_Icon_Minus}"></Button>
                     </StackPanel>
