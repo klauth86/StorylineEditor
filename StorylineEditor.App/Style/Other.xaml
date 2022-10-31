@@ -341,7 +341,7 @@ StorylineEditor распространяется в надежде, что он�
                     <ColumnDefinition x:Name="cd_DescriptionFemale" Width="0"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <TextBox x:Name="tb_Description" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
-                <TextBox x:Name="tb_DescriptionFemale" Grid.Column="1" Text="{Binding DescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_DescriptionFemale}"></TextBox>
+                <TextBox Grid.Column="1" Text="{Binding DescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_DescriptionFemale}"></TextBox>
             </Grid>
             <TextBox Text="{Binding ActorName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_ActorName}"></TextBox>
             <TextBox Text="{Binding ClassPathName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_ClassPathName}"></TextBox>
@@ -386,7 +386,7 @@ StorylineEditor распространяется в надежде, что он�
                     <ColumnDefinition x:Name="cd_DescriptionFemale" Width="0"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <TextBox x:Name="tb_Description" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
-                <TextBox x:Name="tb_DescriptionFemale" Grid.Column="1" Text="{Binding DescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_DescriptionFemale}"></TextBox>
+                <TextBox Grid.Column="1" Text="{Binding DescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_DescriptionFemale}"></TextBox>
             </Grid>
             <TextBox Text="{Binding ActorName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_ActorName}"></TextBox>
             <TextBox Text="{Binding ClassPathName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_ClassPathName}"></TextBox>
@@ -412,7 +412,7 @@ StorylineEditor распространяется в надежде, что он�
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="💰" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+                <TextBlock Text="{StaticResource String_Icon_Item}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
                 <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
                 <TextBlock Grid.Column="2" Style="{StaticResource S_TextBlock_Selector_Cut}"></TextBlock>
             </Grid>
@@ -421,17 +421,45 @@ StorylineEditor распространяется в надежде, что он�
 
     <DataTemplate DataType="{x:Type vm:ItemEditorVM}">
         <StackPanel Orientation="Vertical">
-            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox}"></TextBox>
-            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}"></TextBox>
-            <CheckBox IsChecked="{Binding HasDescriptionFemale, UpdateSourceTrigger=PropertyChanged}">HasDescriptionFemale</CheckBox>
-            <TextBox Text="{Binding DescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}"></TextBox>
-            <TextBox Text="{Binding ActorName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox}"></TextBox>
-            <TextBox Text="{Binding ClassPathName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox}"></TextBox>
-            <CheckBox IsChecked="{Binding HasInternalDescription, UpdateSourceTrigger=PropertyChanged}">HasInternalDescription</CheckBox>
-            <TextBox Text="{Binding InternalDescription, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}"></TextBox>
-            <CheckBox IsChecked="{Binding HasInternalDescriptionFemale, UpdateSourceTrigger=PropertyChanged}">HasInternalDescriptionFemale</CheckBox>
-            <TextBox Text="{Binding InternalDescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}"></TextBox>
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_Name}"></TextBox>
+            <CheckBox x:Name="cb_HasDescriptionFemale" IsChecked="{Binding HasDescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_CheckBox_Prop}" Tag="{StaticResource String_Tag_HasDescriptionFemale}"></CheckBox>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition x:Name="cd_DescriptionFemale" Width="0"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="tb_Description" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
+                <TextBox Grid.Column="1" Text="{Binding DescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_DescriptionFemale}"></TextBox>
+            </Grid>
+
+            <CheckBox x:Name="cb_HasInternalDescription" IsChecked="{Binding HasInternalDescription, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_CheckBox_Prop}" Tag="{StaticResource String_Tag_HasInternalDescription}"></CheckBox>
+            <CheckBox x:Name="cb_HasInternalDescriptionFemale" IsChecked="{Binding HasInternalDescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_CheckBox_Prop}" Tag="{StaticResource String_Tag_HasInternalDescriptionFemale}"></CheckBox>
+            <Grid x:Name="gr_InternalDescription">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition x:Name="cd_InternalDescriptionFemale" Width="0"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="tb_InternalDescription" Text="{Binding InternalDescription, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_InternalDescription}"></TextBox>
+                <TextBox Grid.Column="1" Text="{Binding InternalDescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_InternalDescriptionFemale}"></TextBox>
+            </Grid>
+
+            <TextBox Text="{Binding ActorName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_ActorName}"></TextBox>
+            <TextBox Text="{Binding ClassPathName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_ClassPathName}"></TextBox>
         </StackPanel>
+        <DataTemplate.Triggers>
+            <Trigger SourceName="cb_HasDescriptionFemale" Property="IsChecked" Value="true">
+                <Setter TargetName="tb_Description" Property="Tag" Value="{StaticResource String_Tag_DescriptionMale}"></Setter>
+                <Setter TargetName="cd_DescriptionFemale" Property="Width" Value="*"></Setter>
+            </Trigger>
+            <Trigger SourceName="cb_HasInternalDescription" Property="IsChecked" Value="false">
+                <Setter TargetName="cb_HasInternalDescriptionFemale" Property="Visibility" Value="Collapsed"></Setter>
+                <Setter TargetName="gr_InternalDescription" Property="Visibility" Value="Collapsed"></Setter>
+            </Trigger>
+            <Trigger SourceName="cb_HasInternalDescriptionFemale" Property="IsChecked" Value="true">
+                <Setter TargetName="tb_InternalDescription" Property="Tag" Value="{StaticResource String_Tag_InternalDescriptionMale}"></Setter>
+                <Setter TargetName="cd_InternalDescriptionFemale" Property="Width" Value="*"></Setter>
+            </Trigger>
+        </DataTemplate.Triggers>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmg:QuestVM}">

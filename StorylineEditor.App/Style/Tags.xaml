@@ -35,5 +35,15 @@ StorylineEditor распространяется в надежде, что он�
     <sys:String x:Key="String_Tag_Relation">👦 Отношение</sys:String>
 
     <sys:String x:Key="String_Tag_RelationFemale">👧 Отношение</sys:String>
+
+    <sys:String x:Key="String_Tag_HasInternalDescription">Имеет внутреннее описание</sys:String>
+
+    <sys:String x:Key="String_Tag_HasInternalDescriptionFemale">Внутреннее описание зависит от пола</sys:String>
     
+    <sys:String x:Key="String_Tag_InternalDescription">Внутреннее описание</sys:String>
+
+    <sys:String x:Key="String_Tag_InternalDescriptionMale">👦 Внутреннее описание</sys:String>
+
+    <sys:String x:Key="String_Tag_InternalDescriptionFemale">👧 Внутреннее описание</sys:String>
+
 </ResourceDictionary>
