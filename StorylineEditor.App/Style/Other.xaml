@@ -1,0 +1,742 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:vm="clr-namespace:StorylineEditor.ViewModel;assembly=StorylineEditor.ViewModel"
+                    xmlns:vmg="clr-namespace:StorylineEditor.ViewModel.Graphs;assembly=StorylineEditor.ViewModel"
+                    xmlns:vmn="clr-namespace:StorylineEditor.ViewModel.Nodes;assembly=StorylineEditor.ViewModel"
+                    xmlns:m="clr-namespace:StorylineEditor.Model;assembly=StorylineEditor.Model"
+                    xmlns:mn="clr-namespace:StorylineEditor.Model.Nodes;assembly=StorylineEditor.Model"
+                    xmlns:bhvrs="clr-namespace:StorylineEditor.App.Behaviors">
+
+    <!-- Global and base -->
+
+    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_GroupBox.Header"></Style>
+
+    <Style TargetType="Button">
+        <Style.Resources>
+            <Style TargetType="Border">
+                <Setter Property="CornerRadius" Value="{StaticResource CornerRadius_Common}"/>
+            </Style>
+        </Style.Resources>
+    </Style>
+
+    <Style TargetType="Button" x:Key="S_Button_GroupBox.Header" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Width" Value="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}, UpdateSourceTrigger=PropertyChanged}"></Setter>
+        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_Common}"></Setter>
+    </Style>
+
+    <ControlTemplate TargetType="Button" x:Key="CT_Button_Path">
+        <Border x:Name="br_Main" Margin="{StaticResource Thickness_Margin_Common}" Background="{StaticResource Color_HitVisible}" 
+                    BorderBrush="{StaticResource Color_HitVisible}" BorderThickness="0,0,0,1" Cursor="Hand">
+            <ContentPresenter></ContentPresenter>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter TargetName="br_Main" Property="BorderBrush" Value="{StaticResource Color_Selection_Border}"></Setter>
+                <Setter Property="Foreground" Value="{StaticResource Color_Selection_Border}"></Setter>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+
+
+    <!-- Items -->
+
+    <Style TargetType="Border" x:Key="S_Border_Selector">
+        <Setter Property="Cursor" Value="Hand"></Setter>
+        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_Common}"></Setter>
+        <Setter Property="CornerRadius" Value="{StaticResource CornerRadius_Common}"></Setter>
+        <Setter Property="BorderThickness" Value="2"></Setter>
+        <Setter Property="Background" Value="{StaticResource Color_HitVisible}"></Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                <Setter Property="Background" Value="{StaticResource Color_Selection_Background}"></Setter>
+                <Setter Property="BorderBrush" Value="{StaticResource Color_Selection_Border}"></Setter>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Selector_Cut">
+        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Right"></Setter>
+        <Setter Property="Text" Value="{StaticResource String_Icon_Cut}"></Setter>
+        <Setter Property="Width" Value="{Binding ActualHeight, RelativeSource={RelativeSource Mode=Self}, UpdateSourceTrigger=PropertyChanged}"></Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsCut, UpdateSourceTrigger=PropertyChanged}" Value="false">
+                <Setter Property="Visibility" Value="Hidden"></Setter>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Selector_Icon">
+        <Setter Property="MinWidth" Value="{StaticResource Double_MinWidth_Selector_Icon}"></Setter>
+        <Setter Property="TextAlignment" Value="Center"></Setter>
+        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+        <Setter Property="FontSize" Value="16"></Setter>
+        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_Selector_Icon}"></Setter>
+    </Style>
+
+    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Selector_Name">
+        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+    </Style>
+
+
+
+    <!-- Main Menu -->
+
+    <Style TargetType="Button" x:Key="S_Button_MainMenu" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Width" Value="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}, UpdateSourceTrigger=PropertyChanged}"></Setter>
+        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_Common}"></Setter>
+    </Style>
+
+    <Style TargetType="Rectangle" x:Key="S_Rectangle_MainMenu">
+        <Setter Property="Width" Value="1"></Setter>
+        <Setter Property="VerticalAlignment" Value="Stretch"></Setter>
+        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_Common}"></Setter>
+        <Setter Property="Fill" Value="{StaticResource Color_Selection_Inactive}"></Setter>
+    </Style>
+
+    <ControlTemplate TargetType="Button" x:Key="CT_Button_TabMenu">
+        <Border x:Name="br_Main" Margin="{StaticResource Thickness_Margin_Common}" Padding="{StaticResource Thickness_Padding_LeftRight}"
+                                Background="{StaticResource Color_HitVisible}" BorderBrush="{StaticResource Color_HitVisible}" BorderThickness="0,0,0,4" Cursor="Hand">
+            <ContentPresenter></ContentPresenter>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter TargetName="br_Main" Property="BorderBrush" Value="{StaticResource Color_Selection_Border}"></Setter>
+                <Setter Property="FontWeight" Value="Bold"></Setter>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter TargetName="br_Main" Property="BorderBrush" Value="{StaticResource Color_Selection_Inactive}"></Setter>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style TargetType="TextBox" BasedOn="{StaticResource S_TextBox}" x:Key="S_TextBox_Input_Filter">
+        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_Common}"></Setter>
+    </Style>
+
+
+
+    <!-- Graph -->
+
+    <Style TargetType="Button" x:Key="S_Button_Graph" BasedOn="{StaticResource {x:Type Button}}"></Style>
+
+    <Style TargetType="Button" x:Key="S_Button_Graph_Selectable" BasedOn="{StaticResource S_Button_Graph}"></Style>
+
+    <Style TargetType="Button" x:Key="S_Button_Graph_Selectable_Selected" BasedOn="{StaticResource S_Button_Graph_Selectable}">
+        <Setter Property="Background" Value="{StaticResource Color_Selection_Border}"></Setter>
+    </Style>
+
+    <Style TargetType="Separator" x:Key="S_Separator_Graph">
+        <Setter Property="Width" Value="4"></Setter>
+    </Style>
+
+    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Graph"></Style>
+
+    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_PreviewLink">
+        <Setter Property="Foreground" Value="White"></Setter>
+        <Setter Property="FontSize" Value="8"></Setter>
+    </Style>
+
+    <Style TargetType="TextBox" BasedOn="{StaticResource S_TextBox}" x:Key="S_TextBox_Input_Graph"></Style>
+
+
+
+    <!-- Node -->
+
+    <Style TargetType="Label" x:Key="S_Label_Node">
+        <Setter Property="IsHitTestVisible" Value="False"></Setter>
+    </Style>
+
+    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Node_Header"></Style>
+
+    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Node_Description"></Style>
+
+    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Node_Result"></Style>
+
+    <Style TargetType="Border" x:Key="S_Border_Node">
+        <Setter Property="BorderThickness" Value="4"></Setter>
+        <Setter Property="MinHeight" Value="{StaticResource Double_Node_MinHeight}"></Setter>
+        <Setter Property="MinWidth" Value="{StaticResource Double_Node_MinWidth}"></Setter>
+        <Setter Property="MaxHeight" Value="{StaticResource Double_Node_MaxHeight}"></Setter>
+        <Setter Property="MaxWidth" Value="{StaticResource Double_Node_MaxWidth}"></Setter>
+        <Setter Property="ToolTip" Value="{Binding Id, Mode=OneTime}"></Setter>
+        <Setter Property="Background" Value="White"></Setter>
+        <Setter Property="bhvrs:RenderSizeBehavior.ActualWidth" Value="{Binding Width, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"></Setter>
+        <Setter Property="bhvrs:RenderSizeBehavior.ActualHeight" Value="{Binding Height, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"></Setter>
+        <Setter Property="bhvrs:RenderSizeBehavior.IsEnabled" Value="true"></Setter>
+        <Setter Property="RenderTransformOrigin" Value="0.5, 0.5"></Setter>
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <ScaleTransform ScaleX="{Binding Path=DataContext.Scale, RelativeSource={RelativeSource AncestorType=ItemsControl}, UpdateSourceTrigger=PropertyChanged}"
+                                    ScaleY="{Binding Path=DataContext.Scale, RelativeSource={RelativeSource AncestorType=ItemsControl}, UpdateSourceTrigger=PropertyChanged}"></ScaleTransform>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" Value="true">
+                <Setter Property="BorderBrush" Value="{StaticResource Color_Selection_Border}"></Setter>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="Button" x:Key="S_Button_Node_Gender" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Width" Value="{StaticResource Double_Icon_Gender_Width}"></Setter>
+        <Setter Property="Height" Value="{StaticResource Double_Icon_Gender_Height}"></Setter>
+        <Setter Property="Command" Value="{Binding ToggleGenderCommand}"></Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Gender, UpdateSourceTrigger=PropertyChanged}" Value="{x:Static m:GENDER.UNSET}">
+                <Setter Property="Content" Value="{StaticResource String_Icon_Gender_Unset}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Gender, UpdateSourceTrigger=PropertyChanged}" Value="{x:Static m:GENDER.MALE}">
+                <Setter Property="Content" Value="{StaticResource String_Icon_Gender_Male}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Gender, UpdateSourceTrigger=PropertyChanged}" Value="{x:Static m:GENDER.FEMALE}">
+                <Setter Property="Content" Value="{StaticResource String_Icon_Gender_Female}"></Setter>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="Button" x:Key="S_Button_Node_Remove">
+        <Setter Property="FontSize" Value="{StaticResource Double_Button_Node_Remove_FontSize}"></Setter>
+        <Setter Property="Width" Value="{StaticResource Double_Button_Node_Remove_Width}"></Setter>
+        <Setter Property="Height" Value="{StaticResource Double_Button_Node_Remove_Height}"></Setter>
+        <Setter Property="Content" Value="{StaticResource String_Icon_Remove}"></Setter>
+        <Setter Property="Command" Value="{Binding Path=DataContext.RemoveElementCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"></Setter>
+        <Setter Property="CommandParameter" Value="{Binding}"></Setter>
+        <Setter Property="Foreground" Value="White"></Setter>
+        <Setter Property="Background" Value="Red"></Setter>
+    </Style>
+
+    <!-- Data Templates -->
+
+    <DataTemplate DataType="{x:Type vm:FolderProxyM}">
+        <Button Style="{StaticResource S_Button_GroupBox.Header}" Content="{StaticResource String_Icon_Up}" Command="{Binding Path=DataContext.UpContextCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"></Button>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type m:FolderM}">
+        <Button VerticalAlignment="Center" Template="{StaticResource CT_Button_Path}" Command="{Binding Path=DataContext.SetContextCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}">
+            <TextBlock><Run Text="{Binding name}"></Run><Run Text="/"></Run></TextBlock>
+        </Button>
+    </DataTemplate>
+
+    <ItemsPanelTemplate x:Key="IPT_WrapPanel">
+        <WrapPanel></WrapPanel>
+    </ItemsPanelTemplate>
+
+    <ItemsPanelTemplate x:Key="IPT_Canvas">
+        <Canvas ClipToBounds="True"></Canvas>
+    </ItemsPanelTemplate>
+
+    <DataTemplate DataType="{x:Type vm:StorylineVM}" x:Key="DT_StorylineVM_Tabs">
+        <StackPanel Orientation="Horizontal">
+            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding CharactersTabCommand}">Characters</Button>
+            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding ItemsTabCommand}">Items</Button>
+            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding ActorsTabCommand}">Actors</Button>
+            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding JournalTabCommand}">Journal</Button>
+            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding DialogsTabCommand}">Dialogs</Button>
+            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding ReplicasTabCommand}">Replicas</Button>
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:StorylineVM}" x:Key="DT_StorylineVM_Selection">
+        <ContentControl Content="{Binding Selection, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:CollectionVM}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="5*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="{StaticResource String_Icon_Add}" ToolTip="{StaticResource String_TabMenu_Add_Tooltip}" Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding AddCommand}" CommandParameter="{StaticResource False}"></Button>
+                    <Button ToolTip="{StaticResource String_TabMenu_AddFolder_Tooltip}" Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding AddCommand}" CommandParameter="{StaticResource True}">
+                        <Grid>
+                            <TextBlock Text="{StaticResource String_Icon_Open}"></TextBlock>
+                            <TextBlock Text="{StaticResource String_Icon_AddSmall}"></TextBlock>
+                        </Grid>
+                    </Button>
+                    <Button Content="{StaticResource String_Icon_Remove}" ToolTip="{StaticResource String_TabMenu_Remove_Tooltip}" Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding RemoveCommand}"></Button>
+
+                    <Button Content="{StaticResource String_Icon_Cut}" ToolTip="{StaticResource String_TabMenu_Cut_Tooltip}" Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding CutCommand}"></Button>
+                    <Button Content="{StaticResource String_Icon_Paste}" ToolTip="{StaticResource String_TabMenu_Paste_Tooltip}" Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding PasteCommand}"></Button>
+
+                    <Button Content="{StaticResource String_Icon_Info}" ToolTip="{StaticResource String_TabMenu_Info_Tooltip}" Style="{StaticResource S_Button_GroupBox.Header}" Command="{Binding InfoCommand}"></Button>
+                </StackPanel>
+
+                <GroupBox Grid.Row="1">
+                    <GroupBox.Header>
+                        <ItemsControl ItemsPanel="{StaticResource IPT_WrapPanel}" ItemsSource="{Binding Context}"></ItemsControl>
+                    </GroupBox.Header>
+
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding ItemsVMs}"></ItemsControl>
+                    </ScrollViewer>
+                </GroupBox>
+            </Grid>
+
+            <GridSplitter Grid.Column="1"></GridSplitter>
+
+            <ContentControl Grid.Column="2" Content="{Binding SelectionEditor, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:FolderVM}">
+        <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+            <Border.InputBindings>
+                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding Path=DataContext.SetContextCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                  CommandParameter="{Binding Model}"/>
+                <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
+            </Border.InputBindings>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="🗀" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+                <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+                <TextBlock Grid.Column="2" Style="{StaticResource S_TextBlock_Selector_Cut}"></TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:FolderEditorVM}">
+        <StackPanel Orientation="Vertical">
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox}"></TextBox>
+            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_MultilineInput}"></TextBox>
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:CharacterVM}">
+        <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+            <Border.InputBindings>
+                <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
+            </Border.InputBindings>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="👥" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+                <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+                <TextBlock Grid.Column="2" Style="{StaticResource S_TextBlock_Selector_Cut}"></TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:CharacterEditorVM}">
+        <StackPanel Orientation="Vertical">
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox}" Tag="{StaticResource String_Tag_Name}"></TextBox>
+            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_MultilineInput}" Tag="{StaticResource String_Tag_DescriptionMale}"></TextBox>
+            <CheckBox IsChecked="{Binding HasDescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_HasDescriptionFemale}"></CheckBox>
+            <TextBox x:Name="tb_DescriptionFemale" Text="{Binding DescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_MultilineInput}" Visibility="Collapsed" Tag="{StaticResource String_Tag_DescriptionFemale}"></TextBox>
+            <TextBox Text="{Binding ActorName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox}" Tag="{StaticResource String_Tag_ActorName}"></TextBox>
+            <TextBox Text="{Binding ClassPathName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox}" Tag="{StaticResource String_Tag_ClassPathName}"></TextBox>
+            <TextBox Text="{Binding InitialRelation, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Input_NumericUpDown_Float}" Tag="{StaticResource String_Tag_Relation}"></TextBox>
+            <TextBox Text="{Binding InitialRelationFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Input_NumericUpDown_Float}" Tag="{StaticResource String_Tag_RelationFemale}"></TextBox>
+        </StackPanel>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding HasDescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Value="true">
+                <Setter TargetName="tb_DescriptionFemale" Property="Visibility" Value="Visible"></Setter>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:ActorVM}">
+        <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+            <Border.InputBindings>
+                <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
+            </Border.InputBindings>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="🧊" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+                <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+                <TextBlock Grid.Column="2" Style="{StaticResource S_TextBlock_Selector_Cut}"></TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:ActorEditorVM}">
+        <StackPanel Orientation="Vertical">
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox}"></TextBox>
+            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_MultilineInput}"></TextBox>
+            <CheckBox IsChecked="{Binding HasDescriptionFemale, UpdateSourceTrigger=PropertyChanged}">HasDescriptionFemale</CheckBox>
+            <TextBox Text="{Binding DescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_MultilineInput}"></TextBox>
+            <TextBox Text="{Binding ActorName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox}"></TextBox>
+            <TextBox Text="{Binding ClassPathName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox}"></TextBox>
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:ItemVM}">
+        <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+            <Border.InputBindings>
+                <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
+            </Border.InputBindings>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="💰" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+                <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+                <TextBlock Grid.Column="2" Style="{StaticResource S_TextBlock_Selector_Cut}"></TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:ItemEditorVM}">
+        <StackPanel Orientation="Vertical">
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox}"></TextBox>
+            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_MultilineInput}"></TextBox>
+            <CheckBox IsChecked="{Binding HasDescriptionFemale, UpdateSourceTrigger=PropertyChanged}">HasDescriptionFemale</CheckBox>
+            <TextBox Text="{Binding DescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_MultilineInput}"></TextBox>
+            <TextBox Text="{Binding ActorName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox}"></TextBox>
+            <TextBox Text="{Binding ClassPathName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox}"></TextBox>
+            <CheckBox IsChecked="{Binding HasInternalDescription, UpdateSourceTrigger=PropertyChanged}">HasInternalDescription</CheckBox>
+            <TextBox Text="{Binding InternalDescription, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_MultilineInput}"></TextBox>
+            <CheckBox IsChecked="{Binding HasInternalDescriptionFemale, UpdateSourceTrigger=PropertyChanged}">HasInternalDescriptionFemale</CheckBox>
+            <TextBox Text="{Binding InternalDescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_MultilineInput}"></TextBox>
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmg:QuestVM}">
+        <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+            <Border.InputBindings>
+                <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
+            </Border.InputBindings>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="📝" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+                <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+                <TextBlock Grid.Column="2" Style="{StaticResource S_TextBlock_Selector_Cut}"></TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmg:QuestEditorVM}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="7*"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <ItemsControl x:Name="ic_Canvas" Background="LightGray" ItemsPanel="{StaticResource IPT_Canvas}" ItemsSource="{Binding ItemsVMs}"
+                              bhvrs:MouseExtBehavior.MouseRightButtonDownCommand="{Binding DragCommand}"
+                              bhvrs:MouseExtBehavior.MouseLeftButtonDownCommand="{Binding AddCommand}"
+                              bhvrs:MouseExtBehavior.MouseLeftButtonUpCommand="{Binding LinkCommand}"
+                              bhvrs:MouseExtBehavior.MouseMoveCommand="{Binding MoveCommand}"
+                              bhvrs:MouseExtBehavior.MouseWheelCommand="{Binding ScaleCommand}"
+                              bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding InitCommand}"
+                              bhvrs:RenderSizeBehavior.IsEnabled="true"
+                              bhvrs:RenderSizeBehavior.ActualWidth="{Binding Path=(vm:StorylineVM.ViewWidth), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                              bhvrs:RenderSizeBehavior.ActualHeight="{Binding Path=(vm:StorylineVM.ViewHeight), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                              bhvrs:RenderSizeBehavior.SizeChangedFlag="{Binding SizeChangedFlag, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}">
+                <ItemsControl.ItemContainerStyle>
+                    <Style TargetType="ContentPresenter">
+                        <Setter Property="Canvas.ZIndex" Value="{Binding ZIndex, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Setter Property="Canvas.Left" Value="{Binding Left, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Setter Property="Canvas.Top" Value="{Binding Top, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+            </ItemsControl>
+
+            <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="btn_selectable_Step" Style="{StaticResource S_Button_Graph_Selectable}" Content="{StaticResource String_Icon_Node_Step}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_StepM}"></Button>
+                    <Button x:Name="btn_selectable_Alternative" Style="{StaticResource S_Button_Graph_Selectable}" Content="{StaticResource String_Icon_Node_Alternative}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_AlternativeM}"></Button>
+                    <Separator Style="{StaticResource S_Separator_Graph}"></Separator>
+                    <Button Style="{StaticResource S_Button_Graph}" Content="⏪" Command="{Binding PrevRootNodeCommand}"></Button>
+                    <Button Style="{StaticResource S_Button_Graph}" Content="⏩" Command="{Binding NextRootNodeCommand}"></Button>
+                </StackPanel>
+                <TextBlock Grid.Row="1" Text="{Binding SelectedNodeTypeName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Graph}"></TextBlock>
+            </Grid>
+
+            <Grid HorizontalAlignment="Right" VerticalAlignment="Top">
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Style="{StaticResource S_TextBlock_Graph}">
+                            <Run Text="("></Run>
+                            <Run Text="{Binding OffsetX, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"></Run>
+                            <Run Text=", "></Run>
+                            <Run Text="{Binding OffsetY, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"></Run>
+                            <Run Text=")"></Run>
+                    </TextBlock>
+                    <Button Grid.Column="1" Style="{StaticResource S_Button_Graph}" Content="{StaticResource String_Icon_Graph_Origin}" Command="{Binding GoToOriginCommand}"></Button>
+
+                    <Separator Grid.Column="2" Style="{StaticResource S_Separator_Graph}"></Separator>
+
+                    <TextBlock Grid.Column="3" Style="{StaticResource S_TextBlock_Graph}" Text="{Binding Scale, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBlock>
+                    <Button Grid.Column="4" Style="{StaticResource S_Button_Graph}" Content="{StaticResource String_Icon_Graph_Reset}" Command="{Binding ResetScaleCommand}"></Button>
+                </Grid>
+
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0" x:Name="tb_SelectionNodePositionX" Style="{StaticResource S_TextBox_Input_Graph}" Text="{Binding SelectionNode.PositionX, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" ></TextBox>
+                    <TextBox Grid.Column="1" x:Name="tb_SelectionNodePositionY" Style="{StaticResource S_TextBox_Input_Graph}" Text="{Binding SelectionNode.PositionY, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" ></TextBox>
+                </Grid>
+            </Grid>
+
+            <GridSplitter Grid.Column="1"></GridSplitter>
+
+            <ContentControl Grid.Column="2" Content="{Binding SelectionEditor, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+        </Grid>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_StepM}">
+                <Setter TargetName="btn_selectable_Step" Property="Style" Value="{StaticResource S_Button_Graph_Selectable_Selected}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_AlternativeM}">
+                <Setter TargetName="btn_selectable_Alternative" Property="Style" Value="{StaticResource S_Button_Graph_Selectable_Selected}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding SelectionNode, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                <Setter TargetName="tb_SelectionNodePositionX" Property="Visibility" Value="Collapsed"></Setter>
+                <Setter TargetName="tb_SelectionNodePositionY" Property="Visibility" Value="Collapsed"></Setter>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmg:DialogVM}">
+        <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+            <Border.InputBindings>
+                <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
+            </Border.InputBindings>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="💬" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+                <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+                <TextBlock Grid.Column="2" Style="{StaticResource S_TextBlock_Selector_Cut}"></TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmg:DialogEditorVM}">
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmg:ReplicaVM}">
+        <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+            <Border.InputBindings>
+                <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
+            </Border.InputBindings>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="🗣" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+                <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+                <TextBlock Grid.Column="2" Style="{StaticResource S_TextBlock_Selector_Cut}"></TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmg:ReplicaEditorVM}">
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmn:Node_Journal_StepVM}">
+        <Border Style="{StaticResource S_Border_Node}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <Button.RenderTransform>
+                        <TranslateTransform X="{StaticResource Double_Icon_Gender_-Width/2}" Y="{StaticResource Double_Icon_Gender_-Height/2}"></TranslateTransform>
+                    </Button.RenderTransform>
+                </Button>
+
+                <Label Content="{StaticResource String_Icon_Node_Step}" Style="{StaticResource S_Label_Node}"></Label>
+
+                <TextBlock Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+
+                <TextBlock Grid.ColumnSpan="2" Grid.Row="1" Style="{StaticResource S_TextBlock_Node_Description}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+
+                <TextBlock Grid.ColumnSpan="2" Grid.Row="2" Style="{StaticResource S_TextBlock_Node_Result}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+
+                <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <Button.RenderTransform>
+                        <TranslateTransform X="{StaticResource Double_Button_Node_Remove_Width/2}" Y="{StaticResource Double_Button_Node_Remove_-Height/2}"></TranslateTransform>
+                    </Button.RenderTransform>
+                </Button>
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmn:Node_Journal_StepEditorVM}">
+        <Grid VerticalAlignment="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBox Style="{StaticResource S_TextBox}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <TextBox Grid.Row="1" Style="{StaticResource S_TextBox_MultilineInput}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <TextBox Grid.Row="2" Style="{StaticResource S_TextBox_MultilineInput}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmn:Node_Journal_AlternativeVM}">
+        <Border Style="{StaticResource S_Border_Node}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Label Content="{StaticResource String_Icon_Node_Alternative}" Style="{StaticResource S_Label_Node}"></Label>
+
+                <TextBlock Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+
+                <TextBlock Grid.ColumnSpan="2" Grid.Row="1" Style="{StaticResource S_TextBlock_Node_Description}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+
+                <TextBlock Grid.ColumnSpan="2" Grid.Row="1" Style="{StaticResource S_TextBlock_Node_Result}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmn:Node_Journal_AlternativeEditorVM}"></DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmn:PreviewLinkVM}">
+        <Grid 
+                  bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                  bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+            <Polygon x:Name="pg_Main" IsHitTestVisible="False" Points="{Binding StepPoints}" Stroke="{StaticResource Color_PreviewLink_Disallow}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" Fill="{StaticResource Color_PreviewLink_Disallow}"></Polygon>
+            <Polygon x:Name="pg_Indicator" IsHitTestVisible="False" Points="{Binding RemovePoints}" Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" Fill="{StaticResource Color_PreviewLink_Disallow}"></Polygon>
+            <!--Here two Polyline are used just for one Cross because of WPF render bug check -->
+            <Line x:Name="ln_1" IsHitTestVisible="False" X1="{Binding Cross1_X1, UpdateSourceTrigger=PropertyChanged}" Y1="{Binding Cross1_Y1, UpdateSourceTrigger=PropertyChanged}"
+                      X2="{Binding Cross1_X2, UpdateSourceTrigger=PropertyChanged}" Y2="{Binding Cross1_Y2, UpdateSourceTrigger=PropertyChanged}"
+                      Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{Binding CrossStrokeThickness, UpdateSourceTrigger=PropertyChanged}"></Line>
+            <Line x:Name="ln_2" IsHitTestVisible="False" X1="{Binding Cross2_X1, UpdateSourceTrigger=PropertyChanged}" Y1="{Binding Cross2_Y1, UpdateSourceTrigger=PropertyChanged}"
+                      X2="{Binding Cross2_X2, UpdateSourceTrigger=PropertyChanged}" Y2="{Binding Cross2_Y2, UpdateSourceTrigger=PropertyChanged}"
+                      Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{Binding CrossStrokeThickness, UpdateSourceTrigger=PropertyChanged}"></Line>
+        </Grid>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                <Setter TargetName="pg_Main" Property="Stroke" Value="{StaticResource Color_PreviewLink_Base}"></Setter>
+                <Setter TargetName="pg_Main" Property="Fill" Value="{StaticResource Color_PreviewLink_Base}"></Setter>
+                <Setter TargetName="pg_Indicator" Property="Visibility" Value="Collapsed"></Setter>
+                <Setter TargetName="ln_1" Property="Visibility" Value="Collapsed"></Setter>
+                <Setter TargetName="ln_2" Property="Visibility" Value="Collapsed"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Value="">
+                <Setter TargetName="pg_Main" Property="Stroke" Value="{StaticResource Color_PreviewLink_Allow}"></Setter>
+                <Setter TargetName="pg_Main" Property="Fill" Value="{StaticResource Color_PreviewLink_Allow}"></Setter>
+                <Setter TargetName="pg_Indicator" Property="Visibility" Value="Visible"></Setter>
+                <Setter TargetName="pg_Indicator" Property="Fill" Value="{StaticResource Color_PreviewLink_Allow}"></Setter>
+                <Setter TargetName="ln_1" Property="Visibility" Value="Visible"></Setter>
+                <Setter TargetName="ln_2" Property="Visibility" Value="Visible"></Setter>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmn:LinkVM}">
+        <Grid 
+                  bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                  bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+            <Polygon IsHitTestVisible="False" Points="{Binding StepPoints}" Stroke="{StaticResource Color_Link}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" Fill="{StaticResource Color_Link}"></Polygon>
+            <Polygon Points="{Binding RemovePoints}" Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" 
+                         Fill="{StaticResource Color_Link_Remove}">
+                <Polygon.InputBindings>
+                    <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.RemoveElementCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
+                </Polygon.InputBindings>
+            </Polygon>
+            <!--Here two Polyline are used just for one Cross because of WPF render bug check -->
+            <Line IsHitTestVisible="False" X1="{Binding Cross1_X1, UpdateSourceTrigger=PropertyChanged}" Y1="{Binding Cross1_Y1, UpdateSourceTrigger=PropertyChanged}"
+                      X2="{Binding Cross1_X2, UpdateSourceTrigger=PropertyChanged}" Y2="{Binding Cross1_Y2, UpdateSourceTrigger=PropertyChanged}"
+                      Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}"></Line>
+            <Line IsHitTestVisible="False" X1="{Binding Cross2_X1, UpdateSourceTrigger=PropertyChanged}" Y1="{Binding Cross2_Y1, UpdateSourceTrigger=PropertyChanged}"
+                      X2="{Binding Cross2_X2, UpdateSourceTrigger=PropertyChanged}" Y2="{Binding Cross2_Y2, UpdateSourceTrigger=PropertyChanged}"
+                      Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}"></Line>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmn:SelectionBoxVM}">
+        <Grid>
+            <Line IsHitTestVisible="False" X1="0" Y1="0"
+                      X2="0" Y2="{Binding HandleY, UpdateSourceTrigger=PropertyChanged}"
+                      Stroke="{StaticResource Color_Link}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" StrokeDashArray="4, 8"></Line>
+            <Line IsHitTestVisible="False" X1="0" Y1="{Binding HandleY, UpdateSourceTrigger=PropertyChanged}"
+                      X2="{Binding HandleX, UpdateSourceTrigger=PropertyChanged}" Y2="{Binding HandleY, UpdateSourceTrigger=PropertyChanged}"
+                      Stroke="{StaticResource Color_Link}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" StrokeDashArray="4, 8"></Line>
+            <Line IsHitTestVisible="False" X1="{Binding HandleX, UpdateSourceTrigger=PropertyChanged}" Y1="{Binding HandleY, UpdateSourceTrigger=PropertyChanged}"
+                      X2="{Binding HandleX, UpdateSourceTrigger=PropertyChanged}" Y2="0"
+                      Stroke="{StaticResource Color_Link}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" StrokeDashArray="4, 8"></Line>
+            <Line IsHitTestVisible="False" X1="{Binding HandleX, UpdateSourceTrigger=PropertyChanged}" Y1="0"
+                      X2="0" Y2="0"
+                      Stroke="{StaticResource Color_Link}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" StrokeDashArray="4, 8"></Line>
+        </Grid>
+    </DataTemplate>
+    
+</ResourceDictionary>

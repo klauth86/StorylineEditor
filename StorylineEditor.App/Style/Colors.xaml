@@ -1,0 +1,22 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <SolidColorBrush x:Key="Color_HitVisible" Color="#01ffffff"/>
+
+    <SolidColorBrush x:Key="Color_Selection_Inactive" Color="Gray"/>
+
+    <SolidColorBrush x:Key="Color_Selection_Border" Color="Goldenrod"/>
+
+    <SolidColorBrush x:Key="Color_Selection_Background" Color="#22DAA520"/>
+
+    <SolidColorBrush x:Key="Color_PreviewLink_Allow" Color="Green" />
+
+    <SolidColorBrush x:Key="Color_PreviewLink_Disallow" Color="Red" />
+
+    <SolidColorBrush x:Key="Color_Link" Color="Black" />
+
+    <SolidColorBrush x:Key="Color_Link_Foreground" Color="White" />
+
+    <SolidColorBrush x:Key="Color_Link_Remove" Color="Red" />
+    
+</ResourceDictionary>

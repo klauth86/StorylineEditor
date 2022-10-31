@@ -1,0 +1,45 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <Thickness x:Key="Thickness_Margin_Common">1</Thickness>
+
+    <Thickness x:Key="Thickness_Margin_Selector_Icon">2</Thickness>
+
+    <Thickness x:Key="Thickness_Padding_LeftRight" Left="4" Right="4"></Thickness>
+
+    <sys:Double x:Key="Double_MinWidth_Selector_Icon">32</sys:Double>
+
+    <sys:Double x:Key="Double_Node_MinHeight">64</sys:Double>
+
+    <sys:Double x:Key="Double_Node_MinWidth">96</sys:Double>
+
+    <sys:Double x:Key="Double_Node_MaxHeight">256</sys:Double>
+
+    <sys:Double x:Key="Double_Node_MaxWidth">256</sys:Double>
+
+    <sys:Double x:Key="Double_Button_Node_Remove_FontSize">8</sys:Double>
+
+    <sys:Double x:Key="Double_Button_Node_Remove_Height">16</sys:Double>
+
+    <sys:Double x:Key="Double_Button_Node_Remove_Width">16</sys:Double>
+
+    <sys:Double x:Key="Double_Button_Node_Remove_-Height/2">-8</sys:Double>
+
+    <sys:Double x:Key="Double_Button_Node_Remove_Width/2">8</sys:Double>
+
+    <sys:Double x:Key="Double_Icon_Gender_Height">20</sys:Double>
+
+    <sys:Double x:Key="Double_Icon_Gender_Width">20</sys:Double>
+
+    <sys:Double x:Key="Double_Icon_Gender_-Height/2">-10</sys:Double>
+
+    <sys:Double x:Key="Double_Icon_Gender_-Width/2">-10</sys:Double>
+
+    <CornerRadius x:Key="CornerRadius_Common" TopLeft="2" TopRight="2" BottomRight="2" BottomLeft="2"></CornerRadius>
+
+    <sys:Double x:Key="Double_PreviewLink_MinHeight">16</sys:Double>
+
+    <sys:Double x:Key="Double_PreviewLink_MinWidth">16</sys:Double>
+    
+</ResourceDictionary>

@@ -1,0 +1,33 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+
+    <Style TargetType="GroupBox" x:Key="S_GroupBox_Prop">
+        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_Selector_Icon}"></Setter>
+    </Style>
+
+    <DataTemplate x:Key="DT_GroupBox_HeaderTemplate_Prop">
+        <TextBlock Text="{Binding UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" TextWrapping="Wrap"></TextBlock>
+    </DataTemplate>
+    
+    <Style TargetType="TextBox" x:Key="S_TextBox_Input_NumericUpDown_Float"></Style>
+
+    <Style TargetType="TextBox" x:Key="S_TextBox_Input_Prop" BasedOn="{StaticResource S_TextBox}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <GroupBox Style="{StaticResource S_GroupBox_Prop}" Header="{TemplateBinding Tag}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
+                        <TextBox Text="{TemplateBinding Text}"></TextBox>
+                    </GroupBox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="TextBox" x:Key="S_TextBox_MultilineInput" BasedOn="{StaticResource S_TextBox}">
+        <Setter Property="MinLines" Value="3"></Setter>
+        <Setter Property="AcceptsReturn" Value="true"></Setter>
+        <Setter Property="TextWrapping" Value="Wrap"></Setter>
+    </Style>
+    
+</ResourceDictionary>

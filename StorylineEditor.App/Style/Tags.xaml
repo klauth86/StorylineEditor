@@ -1,0 +1,27 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <sys:Boolean x:Key="True">True</sys:Boolean>
+
+    <sys:Boolean x:Key="False">False</sys:Boolean>
+    
+    <sys:String x:Key="String_Tag_Name">Имя</sys:String>
+
+    <sys:String x:Key="String_Tag_Description">Описание</sys:String>
+
+    <sys:String x:Key="String_Tag_HasDescriptionFemale">Описание зависит от пола</sys:String>
+
+    <sys:String x:Key="String_Tag_DescriptionMale">👦 Описание</sys:String>
+
+    <sys:String x:Key="String_Tag_DescriptionFemale">👧 Описание</sys:String>
+
+    <sys:String x:Key="String_Tag_ActorName">Actor name</sys:String>
+
+    <sys:String x:Key="String_Tag_ClassPathName">Class path name</sys:String>
+
+    <sys:String x:Key="String_Tag_Relation">👦 Отношение</sys:String>
+
+    <sys:String x:Key="String_Tag_RelationFemale">👧 Отношение</sys:String>
+    
+</ResourceDictionary>

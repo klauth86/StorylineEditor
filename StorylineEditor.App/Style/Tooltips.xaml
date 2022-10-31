@@ -1,0 +1,27 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!--MainMenu-->
+    
+    <sys:String x:Key="String_MainMenu_Open_Tooltip">Открыть</sys:String>
+
+    <sys:String x:Key="String_MainMenu_Save_Tooltip">Сохранить</sys:String>
+
+    <!--TabMenu-->
+
+    <sys:String x:Key="String_TabMenu_Up_Tooltip">На уровень выше</sys:String>
+
+    <sys:String x:Key="String_TabMenu_Add_Tooltip">Создать элемент</sys:String>
+
+    <sys:String x:Key="String_TabMenu_AddFolder_Tooltip">Создать папку</sys:String>
+
+    <sys:String x:Key="String_TabMenu_Remove_Tooltip">Удалить</sys:String>
+
+    <sys:String x:Key="String_TabMenu_Cut_Tooltip">Вырезать</sys:String>
+
+    <sys:String x:Key="String_TabMenu_Paste_Tooltip">Вставить</sys:String>
+
+    <sys:String x:Key="String_TabMenu_Info_Tooltip">Свойства</sys:String>
+    
+</ResourceDictionary>
