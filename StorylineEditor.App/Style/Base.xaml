@@ -54,4 +54,8 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="Margin" Value="{StaticResource Thickness_Margin_1x}"></Setter>
     </Style>
 
+    <Style TargetType="Button" x:Key="S_Button_Selected" BasedOn="{StaticResource S_Button_Base}">
+        <Setter Property="Background" Value="{StaticResource Color_Selection_Border}"></Setter>
+    </Style>
+    
 </ResourceDictionary>
