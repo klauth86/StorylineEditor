@@ -102,17 +102,6 @@ StorylineEditor распространяется в надежде, что он�
 
 
 
-    <!-- Graph -->
-
-    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Graph"></Style>
-
-    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_PreviewLink">
-        <Setter Property="Foreground" Value="{StaticResource Color_Link_Foreground}"></Setter>
-        <Setter Property="FontSize" Value="8"></Setter>
-    </Style>
-
-
-
     <!-- Node -->
 
     <Style TargetType="Label" x:Key="S_Label_Node">
@@ -493,46 +482,36 @@ StorylineEditor распространяется в надежде, что он�
                     <RowDefinition></RowDefinition>
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
+                
                 <StackPanel Orientation="Horizontal">
                     <Button x:Name="btn_selectable_Step" Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Node_Step}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_StepM}"></Button>
                     <Button x:Name="btn_selectable_Alternative" Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Node_Alternative}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_AlternativeM}"></Button>
                     <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
                     <Button Style="{StaticResource S_Button_Base}" Content="⏪" Command="{Binding PrevRootNodeCommand}"></Button>
                     <Button Style="{StaticResource S_Button_Base}" Content="⏩" Command="{Binding NextRootNodeCommand}"></Button>
+                    <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
+                    <Button Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Graph_Origin}" Command="{Binding GoToOriginCommand}"></Button>
+                    <Button Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Graph_Reset}" Command="{Binding ResetScaleCommand}"></Button>
                 </StackPanel>
-                <TextBlock Grid.Row="1" Text="{Binding SelectedNodeTypeName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Graph}"></TextBlock>
+                
+                <TextBlock Grid.Row="1" Style="{StaticResource S_TextBlock_Graph}">
+                    <Run Text="{Binding SelectedNodeTypeName, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"></Run>
+                    <Run Text="{Binding Scale, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></Run>
+                    <Run Text="("></Run>
+                    <Run Text="{Binding OffsetX, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"></Run>
+                    <Run Text=","></Run>
+                    <Run Text="{Binding OffsetY, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"></Run>
+                    <Run Text=")"></Run>
+                </TextBlock>
             </Grid>
 
             <Grid HorizontalAlignment="Right" VerticalAlignment="Top">
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Graph}">
-                            <Run Text="("></Run>
-                            <Run Text="{Binding OffsetX, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"></Run>
-                            <Run Text=", "></Run>
-                            <Run Text="{Binding OffsetY, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"></Run>
-                            <Run Text=")"></Run>
-                    </TextBlock>
-                    <Button Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Graph_Origin}" Command="{Binding GoToOriginCommand}"></Button>
-
-                    <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
-
-                    <TextBlock VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Graph}" Text="{Binding Scale, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBlock>
-                    <Button Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Graph_Reset}" Command="{Binding ResetScaleCommand}"></Button>
-                </StackPanel>
-
-                <Grid Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <TextBox Grid.Column="0" x:Name="tb_SelectionNodePositionX" Style="{StaticResource S_TextBox_Graph}" Text="{Binding SelectionNode.PositionX, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" ></TextBox>
-                    <TextBox Grid.Column="1" x:Name="tb_SelectionNodePositionY" Style="{StaticResource S_TextBox_Graph}" Text="{Binding SelectionNode.PositionY, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" ></TextBox>
-                </Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition MinWidth="{StaticResource Double_TextBox_Graph_MinWidth}" Width="*"></ColumnDefinition>
+                    <ColumnDefinition MinWidth="{StaticResource Double_TextBox_Graph_MinWidth}" Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" x:Name="tb_SelectionNodePositionX" Style="{StaticResource S_TextBox_Graph}" Text="{Binding SelectionNode.PositionX, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" ></TextBox>
+                <TextBox Grid.Column="1" x:Name="tb_SelectionNodePositionY" Style="{StaticResource S_TextBox_Graph}" Text="{Binding SelectionNode.PositionY, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" ></TextBox>
             </Grid>
 
             <GridSplitter Grid.Column="1"></GridSplitter>

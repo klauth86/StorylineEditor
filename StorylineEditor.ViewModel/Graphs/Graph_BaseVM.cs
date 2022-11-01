@@ -105,7 +105,7 @@ namespace StorylineEditor.ViewModel.Graphs
         }
 
         protected bool cancelFlag;        
-        protected Task scrollingTask;
+        protected Task activeTask;
         protected double targetPositionX;
         protected double targetPositionY;
 
@@ -113,18 +113,18 @@ namespace StorylineEditor.ViewModel.Graphs
         {
             const int waitDurationMsec = 8;
 
-            const int durationMsec = 512;
+            if (activeTask != null && !activeTask.IsCompleted)
+            {
+                cancelFlag = true;
+                while (!activeTask.IsCompleted) await Task.Delay(waitDurationMsec);
+            }
+
+            const int durationMsec = 256;
             const int stepCount = 256;
             const int stepDuration = durationMsec / stepCount;
 
-            if (scrollingTask != null && !scrollingTask.IsCompleted)
-            {
-                cancelFlag = true;
-                while (!scrollingTask.IsCompleted) await Task.Delay(waitDurationMsec);
-            }
-
             cancelFlag = false;
-            scrollingTask = Task.Run(async () =>
+            activeTask = Task.Run(async () =>
             {
                 double targetOffsetX;
                 double targetOffsetY;
@@ -139,10 +139,13 @@ namespace StorylineEditor.ViewModel.Graphs
                     if (cancelFlag) return;
 
                     targetOffsetX = targetPositionX - StorylineVM.ViewWidth / 2 / Scale;
-                    targetOffsetY = targetPositionY - StorylineVM.ViewWidth / 2 / Scale;
+                    targetOffsetY = targetPositionY - StorylineVM.ViewHeight / 2 / Scale;
 
                     double stepX = (OffsetX - targetOffsetX) * currentAlpha;
                     double stepY = (OffsetY - targetOffsetY) * currentAlpha;
+
+                    if (Math.Abs(stepX) < 0.01) break;
+
                     Application.Current?.Dispatcher?.Invoke(new Action(() => { TranslateView(stepX, stepY); }));
 
                     currentAlpha += deltaAlpha;
@@ -151,11 +154,52 @@ namespace StorylineEditor.ViewModel.Graphs
                 }
 
                 targetOffsetX = targetPositionX - StorylineVM.ViewWidth / 2 / Scale;
-                targetOffsetY = targetPositionY - StorylineVM.ViewWidth / 2 / Scale;
+                targetOffsetY = targetPositionY - StorylineVM.ViewHeight / 2 / Scale;
 
                 double lastStepX = (OffsetX - targetOffsetX);
                 double lastStepY = (OffsetY - targetOffsetY);
                 Application.Current?.Dispatcher?.Invoke(new Action(() => { TranslateView(lastStepX, lastStepY); }));
+            });
+        }
+
+        async void StartScalingTask()
+        {
+            const int waitDurationMsec = 8;
+
+            if (activeTask != null && !activeTask.IsCompleted)
+            {
+                cancelFlag = true;
+                while (!activeTask.IsCompleted) await Task.Delay(waitDurationMsec);
+            }
+
+            const int durationMsec = 256;
+            const int stepCount = 256;
+            const int stepDuration = durationMsec / stepCount;
+
+            cancelFlag = false;
+            activeTask = Task.Run(async () =>
+            {
+                double deltaAlpha = 1.0 / stepCount;
+                double currentAlpha = deltaAlpha;
+
+                for (int i = 1; i < stepCount; i++)
+                {
+                    if (Application.Current == null) return;
+
+                    if (cancelFlag) return;
+
+                    double newScale = Scale * (1 - currentAlpha) + currentAlpha;
+
+                    if (Math.Abs(newScale - 1) < 0.01) break;
+
+                    Application.Current?.Dispatcher?.Invoke(new Action(() => { SetScale(StorylineVM.ViewWidth / 2, StorylineVM.ViewHeight / 2, newScale); }));
+
+                    currentAlpha += deltaAlpha;
+
+                    await Task.Delay(stepDuration);
+                }
+
+                Application.Current?.Dispatcher?.Invoke(new Action(() => { SetScale(StorylineVM.ViewWidth / 2, StorylineVM.ViewHeight / 2, 1); }));
             });
         }
 
@@ -256,10 +300,16 @@ namespace StorylineEditor.ViewModel.Graphs
         }));
 
         protected ICommand resetScaleCommand;
-        public ICommand ResetScaleCommand => resetScaleCommand ?? (resetScaleCommand = new RelayCommand(() => SetScale(StorylineVM.ViewWidth / 2, StorylineVM.ViewHeight / 2, 1)));
+        public ICommand ResetScaleCommand => resetScaleCommand ?? (resetScaleCommand = new RelayCommand(() => StartScalingTask()));
 
         protected ICommand goToOriginCommand;
-        public ICommand GoToOriginCommand => goToOriginCommand ?? (goToOriginCommand = new RelayCommand(() => { OffsetX = 0; OffsetY = 0; TranslateView(0, 0); }));
+        public ICommand GoToOriginCommand => goToOriginCommand ?? (goToOriginCommand = new RelayCommand(() =>
+        {
+            targetPositionX = StorylineVM.ViewWidth / 2 / Scale;
+            targetPositionY = StorylineVM.ViewHeight / 2 / Scale;
+
+            StartScrollingTask();
+        }));
 
         protected ICommand selectCommand;
         public override ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<Notifier>((viewModel) => { }));
