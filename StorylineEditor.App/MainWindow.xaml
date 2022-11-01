@@ -32,7 +32,7 @@ StorylineEditor распространяется в надежде, что он�
                 <Rectangle Grid.Column="2" Style="{StaticResource S_Rectangle_MainMenu}"></Rectangle>
                 <ContentControl Grid.Column="3" Content="{Binding UpdateSourceTrigger=PropertyChanged}" ContentTemplate="{StaticResource DT_StorylineVM_Tabs}"></ContentControl>
                 <Rectangle Grid.Column="4" Style="{StaticResource S_Rectangle_MainMenu}"></Rectangle>
-                <TextBox Grid.Column="5" Style="{StaticResource S_TextBox_Input_Filter}" Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" MaxLength="128"></TextBox>
+                <TextBox Grid.Column="5" Style="{StaticResource S_TextBox_Filter}" Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" MaxLength="128"></TextBox>
             </Grid>
         </Border>
         <ContentControl Content="{Binding UpdateSourceTrigger=PropertyChanged}" ContentTemplate="{StaticResource DT_StorylineVM_Selection}"></ContentControl>

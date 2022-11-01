@@ -38,9 +38,9 @@ StorylineEditor распространяется в надежде, что он�
 
     <sys:String x:Key="String_Icon_Gender_Unset">😐</sys:String>
 
-    <sys:String x:Key="String_Icon_Gender_Male">👦</sys:String>
+    <sys:String x:Key="String_Icon_Gender_Male">👨</sys:String>
 
-    <sys:String x:Key="String_Icon_Gender_Female">👧</sys:String>
+    <sys:String x:Key="String_Icon_Gender_Female">👩</sys:String>
 
     <sys:String x:Key="String_Icon_Node_Step">✔</sys:String>
 

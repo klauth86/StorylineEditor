@@ -24,17 +24,17 @@ StorylineEditor распространяется в надежде, что он�
 
     <sys:String x:Key="String_Tag_HasDescriptionFemale">Описание зависит от пола</sys:String>
 
-    <sys:String x:Key="String_Tag_DescriptionMale">👦 Описание</sys:String>
+    <sys:String x:Key="String_Tag_DescriptionMale">👨 Описание</sys:String>
 
-    <sys:String x:Key="String_Tag_DescriptionFemale">👧 Описание</sys:String>
+    <sys:String x:Key="String_Tag_DescriptionFemale">👩 Описание</sys:String>
 
     <sys:String x:Key="String_Tag_ActorName">Actor name</sys:String>
 
     <sys:String x:Key="String_Tag_ClassPathName">Class path name</sys:String>
 
-    <sys:String x:Key="String_Tag_Relation">👦 Отношение</sys:String>
+    <sys:String x:Key="String_Tag_Relation">👨 Отношение</sys:String>
 
-    <sys:String x:Key="String_Tag_RelationFemale">👧 Отношение</sys:String>
+    <sys:String x:Key="String_Tag_RelationFemale">👩 Отношение</sys:String>
 
     <sys:String x:Key="String_Tag_HasInternalDescription">Имеет внутреннее описание</sys:String>
 
@@ -42,8 +42,8 @@ StorylineEditor распространяется в надежде, что он�
     
     <sys:String x:Key="String_Tag_InternalDescription">Внутреннее описание</sys:String>
 
-    <sys:String x:Key="String_Tag_InternalDescriptionMale">👦 Внутреннее описание</sys:String>
+    <sys:String x:Key="String_Tag_InternalDescriptionMale">👨 Внутреннее описание</sys:String>
 
-    <sys:String x:Key="String_Tag_InternalDescriptionFemale">👧 Внутреннее описание</sys:String>
+    <sys:String x:Key="String_Tag_InternalDescriptionFemale">👩 Внутреннее описание</sys:String>
 
 </ResourceDictionary>

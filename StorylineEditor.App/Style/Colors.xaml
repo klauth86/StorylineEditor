@@ -21,6 +21,8 @@ StorylineEditor распространяется в надежде, что он�
 
     <SolidColorBrush x:Key="Color_Selection_Background" Color="#22DAA520"/>
 
+    <SolidColorBrush x:Key="Color_PreviewLink" Color="Goldenrod" />
+    
     <SolidColorBrush x:Key="Color_PreviewLink_Allow" Color="Green" />
 
     <SolidColorBrush x:Key="Color_PreviewLink_Disallow" Color="Red" />
