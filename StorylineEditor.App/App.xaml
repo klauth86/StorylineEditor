@@ -22,6 +22,7 @@ StorylineEditor распространяется в надежде, что он�
                 <ResourceDictionary Source="Style/Tooltips.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Style/Colors.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Style/Dimensions.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Style/Fonts.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Style/Base.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Style/Props.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Style/Other.xaml"></ResourceDictionary>

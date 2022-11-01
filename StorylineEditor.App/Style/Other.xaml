@@ -68,7 +68,7 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="MinWidth" Value="{StaticResource Double_MinWidth_Selector_Icon}"></Setter>
         <Setter Property="TextAlignment" Value="Center"></Setter>
         <Setter Property="VerticalAlignment" Value="Center"></Setter>
-        <Setter Property="FontSize" Value="16"></Setter>
+        <Setter Property="FontSize" Value="{StaticResource FontSize_Selector_Icon}"></Setter>
         <Setter Property="Margin" Value="{StaticResource Thickness_Margin_2x}"></Setter>
     </Style>
 
@@ -157,7 +157,7 @@ StorylineEditor распространяется в надежде, что он�
     </Style>
 
     <Style TargetType="Button" x:Key="S_Button_Node_Remove">
-        <Setter Property="FontSize" Value="{StaticResource Double_Button_Node_Remove_FontSize}"></Setter>
+        <Setter Property="FontSize" Value="{StaticResource FontSize_Button_Node_Remove}"></Setter>
         <Setter Property="Width" Value="{StaticResource Double_Button_Node_Remove_Width}"></Setter>
         <Setter Property="Height" Value="{StaticResource Double_Button_Node_Remove_Height}"></Setter>
         <Setter Property="Content" Value="{StaticResource String_Icon_Remove}"></Setter>
@@ -626,7 +626,7 @@ StorylineEditor распространяется в надежде, что он�
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
                     <TextBox Style="{StaticResource S_TextBox_Prop}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Step_Name}"></TextBox>
-                    <TextBox Grid.Row="1" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Step_Description}"></TextBox>
+                    <TextBox Grid.Row="1" Style="{StaticResource S_TextBox_Prop_Rich}" Text="{Binding DescriptionFD, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Step_Description}"></TextBox>
                     <TextBox Grid.Row="2" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Step_Result}"></TextBox>
                 </Grid>
             </TabItem>
@@ -669,7 +669,7 @@ StorylineEditor распространяется в надежде, что он�
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
                     <TextBox Style="{StaticResource S_TextBox_Prop}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Alternative_Name}"></TextBox>
-                    <TextBox Grid.Row="1" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Alternative_Description}"></TextBox>
+                    <TextBox Grid.Row="1" Style="{StaticResource S_TextBox_Prop_Rich}" Text="{Binding DescriptionFD, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Alternative_Description}"></TextBox>
                     <TextBox Grid.Row="2" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Alternative_Result}"></TextBox>
                 </Grid>
             </TabItem>

@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <sys:Double x:Key="FontSize_Button_Node_Remove">8</sys:Double>
+    
+    <sys:Double x:Key="FontSize_Selector_Icon">16</sys:Double>
+
+    <FontFamily x:Key="FontFamily_Button_Prop_Rich_Command">Palatino Linotype</FontFamily>
+
+</ResourceDictionary>
