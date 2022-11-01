@@ -35,5 +35,15 @@ StorylineEditor распространяется в надежде, что он�
     <sys:String x:Key="String_TabMenu_Paste_Tooltip">Вставить</sys:String>
 
     <sys:String x:Key="String_TabMenu_Info_Tooltip">Свойства</sys:String>
-    
+
+    <!--GraphMenu-->
+
+    <sys:String x:Key="String_GraphMenu_PrevRootNode_Tooltip">К предудщей вершине</sys:String>
+
+    <sys:String x:Key="String_GraphMenu_NextRootNode_Tooltip">К следующей вершине</sys:String>
+
+    <sys:String x:Key="String_GraphMenu_ResetScale_Tooltip">Сбросить масштаб</sys:String>
+
+    <sys:String x:Key="String_GraphMenu_GoToOrigin_Tooltip">Вернуться в начало координат</sys:String>
+
 </ResourceDictionary>

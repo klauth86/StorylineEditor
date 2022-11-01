@@ -487,11 +487,11 @@ StorylineEditor распространяется в надежде, что он�
                     <Button x:Name="btn_selectable_Step" Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Node_Step}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_StepM}"></Button>
                     <Button x:Name="btn_selectable_Alternative" Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Node_Alternative}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_AlternativeM}"></Button>
                     <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
-                    <Button Style="{StaticResource S_Button_Base}" Content="⏪" Command="{Binding PrevRootNodeCommand}"></Button>
-                    <Button Style="{StaticResource S_Button_Base}" Content="⏩" Command="{Binding NextRootNodeCommand}"></Button>
+                    <Button Style="{StaticResource S_Button_Base}" Content="⏪" Command="{Binding PrevRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_PrevRootNode_Tooltip}"></Button>
+                    <Button Style="{StaticResource S_Button_Base}" Content="⏩" Command="{Binding NextRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_NextRootNode_Tooltip}"></Button>
                     <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
-                    <Button Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Graph_Origin}" Command="{Binding GoToOriginCommand}"></Button>
-                    <Button Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Graph_Reset}" Command="{Binding ResetScaleCommand}"></Button>
+                    <Button Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Graph_Origin}" Command="{Binding GoToOriginCommand}" ToolTip="{StaticResource String_GraphMenu_GoToOrigin_Tooltip}"></Button>
+                    <Button Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Graph_Reset}" Command="{Binding ResetScaleCommand}" ToolTip="{StaticResource String_GraphMenu_ResetScale_Tooltip}"></Button>
                 </StackPanel>
                 
                 <TextBlock Grid.Row="1" Style="{StaticResource S_TextBlock_Graph}">
