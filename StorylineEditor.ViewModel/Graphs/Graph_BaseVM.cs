@@ -554,14 +554,19 @@ namespace StorylineEditor.ViewModel.Graphs
         {
             if (viewModel is INodeVM nodeViewModel)
             {
+                RemoveFromSelection(nodeViewModel);
+
                 foreach (var fromlinkId in FromNodesLinks[nodeViewModel.Id].ToList()) RemoveLink(fromlinkId);
                 foreach (var tolinkId in ToNodesLinks[nodeViewModel.Id].ToList()) RemoveLink(tolinkId);
+                
                 RemoveNode(nodeViewModel.Id);
+                
                 CommandManager.InvalidateRequerySuggested();
             }
             else if (viewModel is ILinkVM linkViewModel)
             {
                 RemoveLink(linkViewModel.Id);
+                
                 CommandManager.InvalidateRequerySuggested();
             }
         }, (viewModel) => viewModel != null));
@@ -848,8 +853,12 @@ namespace StorylineEditor.ViewModel.Graphs
         protected readonly HashSet<string> selection;
         public override void AddToSelection(Notifier viewModel, bool resetSelection)
         {
+            bool hasChanges = false;
+
             if (resetSelection)
             {
+                hasChanges = selection.Count > 0;
+
                 foreach (var selectedId in selection)
                 {
                     if (NodesVMs.ContainsKey(selectedId)) NodesVMs[selectedId].IsSelected = false;
@@ -860,17 +869,39 @@ namespace StorylineEditor.ViewModel.Graphs
 
             if (viewModel != null && !selection.Contains(viewModel.Id))
             {
-                selection.Add(viewModel.Id);
+                if (selection.Add(viewModel.Id))
+                {
+                    viewModel.IsSelected = true;
 
-                viewModel.IsSelected = true;
+                    hasChanges = true;
+                }
             }
 
-            SelectionEditor = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? _editorCreator(NodesVMs[selection.First()], this) : null;
+            if (hasChanges)
+            {
+                SelectionEditor = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? _editorCreator(NodesVMs[selection.First()], this) : null;
 
-            SelectionNode = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? (INodeVM)NodesVMs[selection.First()] : null;
+                SelectionNode = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? (INodeVM)NodesVMs[selection.First()] : null;
 
-            CommandManager.InvalidateRequerySuggested();
+                CommandManager.InvalidateRequerySuggested();
+            }
         }
+
+        void RemoveFromSelection(INodeVM nodeViewModel)
+        {
+            if (nodeViewModel != null)
+            {
+                if (selection.Remove(nodeViewModel.Id))
+                {
+                    SelectionEditor = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? _editorCreator(NodesVMs[selection.First()], this) : null;
+
+                    SelectionNode = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? (INodeVM)NodesVMs[selection.First()] : null;
+
+                    CommandManager.InvalidateRequerySuggested();
+                }
+            }
+        }
+
         public override void GetSelection(IList outSelection)
         {
             foreach (var selectedViewModel in selection) outSelection.Add(selectedViewModel);

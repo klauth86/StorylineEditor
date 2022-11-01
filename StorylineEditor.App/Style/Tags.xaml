@@ -46,4 +46,17 @@ StorylineEditor распространяется в надежде, что он�
 
     <sys:String x:Key="String_Tag_InternalDescriptionFemale">👩 Внутреннее описание</sys:String>
 
+    <sys:String x:Key="String_Tag_Node_Step_Name">Имя шага</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Step_Description">Описание шага</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Step_Result">Результат шага</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Alternative_Name">Имя альтернативы</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Alternative_Description">Описание альтернативы</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Alternative_Result">Результат альтернативы</sys:String>
+
+
 </ResourceDictionary>
