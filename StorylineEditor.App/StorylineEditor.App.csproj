@@ -56,8 +56,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Behaviors\LoadUnloadExtBehavior.cs" />
+    <Compile Include="Behaviors\NumericUpDownBehavior.cs" />
     <Compile Include="Behaviors\RenderSizeBehavior.cs" />
     <Compile Include="Behaviors\MouseExtBehavior.cs" />
+    <Compile Include="Controls\RichTextBoxExt.cs" />
     <Compile Include="SerializeService\ISerializeService.cs" />
     <Compile Include="SerializeService\DefaultSerializeService.cs" />
     <Compile Include="ServiceFacade.cs" />
@@ -70,6 +72,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Style\Dimensions.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Style\Fonts.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
