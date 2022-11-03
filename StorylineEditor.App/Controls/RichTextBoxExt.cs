@@ -11,85 +11,55 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using System;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Markup;
-using System.Xml;
 
 namespace StorylineEditor.App.Controls
 {
     public class RichTextBoxExt : RichTextBox
     {
-        protected bool setDocumentTextIsBlocked = false;
-
         protected override void OnTextChanged(TextChangedEventArgs e)
         {
             base.OnTextChanged(e);
 
-            if (!setDocumentTextIsBlocked) SetDocumentText(this, XamlWriter.Save(Document));
+            Application.Current.Dispatcher.BeginInvoke(new Action(() => SetDocumentChangedFlag(this, !GetDocumentChangedFlag(this))));
         }
 
-        private TextRange textRange;
-
-        private static readonly DependencyProperty DocumentTextProperty = DependencyProperty.Register
+        private static readonly DependencyProperty BindableDocumentProperty = DependencyProperty.Register
             (
-            "DocumentText",
-            typeof(string),
+            "BindableDocument",
+            typeof(FlowDocument),
             typeof(RichTextBoxExt),
-            new PropertyMetadata(DocumentTextPropertyChanged)
+            new PropertyMetadata(null, OnBindableDocumentPropertyChanged)
             );
 
-        public static void SetDocumentText(DependencyObject dp, string value) { dp.SetValue(DocumentTextProperty, value); }
-        public static string GetDocumentText(DependencyObject dp) { return dp.GetValue(DocumentTextProperty)?.ToString(); }
+        public static void SetBindableDocument(DependencyObject dp, FlowDocument value) { dp.SetValue(BindableDocumentProperty, value); }
+        public static FlowDocument GetBindableDocument(DependencyObject dp) { return (FlowDocument)dp.GetValue(BindableDocumentProperty); }
 
-        private static void DocumentTextPropertyChanged(DependencyObject dp, DependencyPropertyChangedEventArgs args)
+        private static void OnBindableDocumentPropertyChanged(DependencyObject dp, DependencyPropertyChangedEventArgs args)
         {
             if (args.NewValue != DependencyProperty.UnsetValue && !string.IsNullOrEmpty(args.NewValue?.ToString()))
             {
                 if (dp is RichTextBoxExt rtbExt)
                 {
-                    FlowDocument newDocument = ConvertToFlowDocument(args.NewValue.ToString());
-
-                    if (newDocument != null)
+                    if (args.NewValue != DependencyProperty.UnsetValue && args.NewValue != null)
                     {
-                        rtbExt.setDocumentTextIsBlocked = true;
-
-                        ////TextRange textRange = new TextRange(rtbExt.Document.ContentStart, rtbExt.Document.ContentEnd);
-
-                        ////TextRange newTextRange = new TextRange(newDocument.ContentStart, newDocument.ContentEnd);
-
-                        //////using (MemoryStream ms = new MemoryStream())
-                        //////{
-                        //////    newTextRange.Save(ms, DataFormats.Rtf);
-
-                        //////    ms.Seek(0, SeekOrigin.Begin);
-
-                        //////    textRange.Load(ms, DataFormats.Rtf);
-                        //////}
-
-                        rtbExt.setDocumentTextIsBlocked = false;
+                        rtbExt.Document = args.NewValue as FlowDocument;
                     }
                 }
             }
         }
 
-        private static FlowDocument ConvertToFlowDocument(string newValue)
-        {
-            using (var stringReader = new StringReader(newValue))
-            {
-                try
-                {
-                    using (var xmlTextReader = new XmlTextReader(stringReader))
-                    {
-                        return (FlowDocument)XamlReader.Load(xmlTextReader);
-                    }
-                }
-                catch (Exception) { }
-            }
+        private static readonly DependencyProperty DocumentChangedFlagProperty = DependencyProperty.Register
+            (
+            "DocumentChangedFlag",
+            typeof(bool),
+            typeof(RichTextBoxExt),
+            new PropertyMetadata(false)
+            );
 
-            return null;
-        }
+        public static void SetDocumentChangedFlag(DependencyObject dp, bool value) { dp.SetValue(DocumentChangedFlagProperty, value); }
+        public static bool GetDocumentChangedFlag(DependencyObject dp) { return (bool)dp.GetValue(DocumentChangedFlagProperty); }
     }
 }

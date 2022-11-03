@@ -60,6 +60,7 @@
     <Compile Include="Behaviors\RenderSizeBehavior.cs" />
     <Compile Include="Behaviors\MouseExtBehavior.cs" />
     <Compile Include="Controls\RichTextBoxExt.cs" />
+    <Compile Include="Controls\TextBlockExt.cs" />
     <Compile Include="SerializeService\ISerializeService.cs" />
     <Compile Include="SerializeService\DefaultSerializeService.cs" />
     <Compile Include="ServiceFacade.cs" />

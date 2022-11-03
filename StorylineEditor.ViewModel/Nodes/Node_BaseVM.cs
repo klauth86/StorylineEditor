@@ -12,7 +12,10 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModel.Common;
+using StorylineEditor.ViewModel.Helpers;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Markup;
 
 namespace StorylineEditor.ViewModel.Nodes
 {
@@ -156,6 +159,35 @@ namespace StorylineEditor.ViewModel.Nodes
                 {
                     isRoot = value;
                     Notify(nameof(IsRoot));
+                }
+            }
+        }
+
+        protected FlowDocument descriptionFlow;
+        public FlowDocument DescriptionFlow
+        {
+            get
+            {
+                if (descriptionFlow == null)
+                {
+                    descriptionFlow = FlowDocumentHelper.ConvertBack(Description);
+                    descriptionFlow.Name = Id;
+                }
+
+                return descriptionFlow;
+            }
+        }
+
+        protected bool documentChangedFlag;
+        public bool DocumentChangedFlag
+        {
+            get => documentChangedFlag;
+            set
+            {
+                if (value != documentChangedFlag)
+                {
+                    documentChangedFlag = value;
+                    if (DescriptionFlow != null) Description = FlowDocumentHelper.ConvertTo(DescriptionFlow);
                 }
             }
         }

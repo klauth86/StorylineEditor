@@ -17,7 +17,8 @@ StorylineEditor распространяется в надежде, что он�
                     xmlns:vmn="clr-namespace:StorylineEditor.ViewModel.Nodes;assembly=StorylineEditor.ViewModel"
                     xmlns:m="clr-namespace:StorylineEditor.Model;assembly=StorylineEditor.Model"
                     xmlns:mn="clr-namespace:StorylineEditor.Model.Nodes;assembly=StorylineEditor.Model"
-                    xmlns:bhvrs="clr-namespace:StorylineEditor.App.Behaviors">
+                    xmlns:bhvrs="clr-namespace:StorylineEditor.App.Behaviors"
+                    xmlns:controls="clr-namespace:StorylineEditor.App.Controls">
 
     <!-- COLLECTION CONTEXT (FOLDERS AND PATH) -->
     
@@ -108,11 +109,19 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="IsHitTestVisible" Value="False"></Setter>
     </Style>
 
-    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Node_Header"></Style>
+    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Node">
+        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_1x}"></Setter>
+    </Style>
 
-    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Node_Description"></Style>
+    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock_Node}" x:Key="S_TextBlock_Node_Header">
+        <Setter Property="FontWeight" Value="Bold"></Setter>
+    </Style>
 
-    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Node_Result"></Style>
+    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock_Node}" x:Key="S_TextBlock_Node_Description"></Style>
+
+    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock_Node}" x:Key="S_TextBlock_Node_Result">
+        <Setter Property="FontStyle" Value="Italic"></Setter>
+    </Style>
 
     <Style TargetType="Border" x:Key="S_Border_Node">
         <Setter Property="BorderThickness" Value="4"></Setter>
@@ -601,9 +610,10 @@ StorylineEditor распространяется в надежде, что он�
 
                 <Label Content="{StaticResource String_Icon_Node_Step}" Style="{StaticResource S_Label_Node}"></Label>
 
-                <TextBlock Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                <TextBlock VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
-                <TextBlock Grid.ColumnSpan="2" Grid.Row="1" Style="{StaticResource S_TextBlock_Node_Description}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                <controls:TextBlockExt Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                                       Style="{StaticResource S_TextBlock_Node_Description}"></controls:TextBlockExt>
 
                 <TextBlock Grid.ColumnSpan="2" Grid.Row="2" Style="{StaticResource S_TextBlock_Node_Result}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
@@ -650,7 +660,7 @@ StorylineEditor распространяется в надежде, что он�
 
                 <Label Content="{StaticResource String_Icon_Node_Alternative}" Style="{StaticResource S_Label_Node}"></Label>
 
-                <TextBlock Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                <TextBlock VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
                 <TextBlock Grid.ColumnSpan="2" Grid.Row="1" Style="{StaticResource S_TextBlock_Node_Description}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
