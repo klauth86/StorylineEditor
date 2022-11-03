@@ -38,6 +38,8 @@ namespace StorylineEditor.App.Controls
 
                 FlowDocument document = FlowDocumentHelper.ConvertBack(e.NewValue?.ToString());
 
+                int i = 0;
+
                 foreach (Block block in document.Blocks)
                 {
                     if (block is Paragraph paragraph)
@@ -51,7 +53,9 @@ namespace StorylineEditor.App.Controls
                             }
                         }
 
-                        textBlock.Inlines.Add(new LineBreak());
+                        if (i < document.Blocks.Count - 1) textBlock.Inlines.Add(new LineBreak());
+
+                        i++;
                     }
                 }
             }
