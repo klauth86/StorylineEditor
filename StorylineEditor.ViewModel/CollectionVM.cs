@@ -30,7 +30,7 @@ namespace StorylineEditor.ViewModel
         public CollectionVM(List<BaseM> inModel, Func<Type, object, BaseM> modelCreator, Func<BaseM, ICallbackContext, Notifier> viewModelCreator,
             Func<Notifier, ICallbackContext, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Action<Notifier> viewModelInformer) : base(inModel, null, modelCreator, viewModelCreator,
                 editorCreator, modelExtractor)
-        {            
+        {
             _viewModelInformer = viewModelInformer ?? throw new ArgumentNullException(nameof(viewModelInformer));
 
             ICollectionView view = CollectionViewSource.GetDefaultView(ItemsVMs);
@@ -71,12 +71,7 @@ namespace StorylineEditor.ViewModel
         {
             Context.RemoveAt(Context.Count - 1);
 
-            AddToSelection(null, true);
-
-            ItemsVMs.Clear();
-            foreach (var model in Context.Last().content) { Add(null, _viewModelCreator(model, null)); }
-
-            CommandManager.InvalidateRequerySuggested();
+            RefreshItemsVMs();
 
         }, () => Context.Count > 2));
 
@@ -105,16 +100,28 @@ namespace StorylineEditor.ViewModel
                 Context.Add(folderM);
             }
 
-            AddToSelection(null, true);
-
-            ItemsVMs.Clear();
-            foreach (var model in Context.Last().content) { Add(null, _viewModelCreator(model, null)); }
-
-            CommandManager.InvalidateRequerySuggested();
+            RefreshItemsVMs();
 
         }, (folderM) => folderM != null));
 
+        protected void RefreshItemsVMs()
+        {
+            AddToSelection(null, true);
 
+            ItemsVMs.Clear();
+
+            HashSet<string> cutViewModels = new HashSet<string>();
+            foreach (var cutEntryVM in CutVMs) cutViewModels.Add(cutEntryVM.ViewModel.Id);
+
+            foreach (var model in Context.Last().content)
+            {
+                Notifier viewModel = _viewModelCreator(model, null);
+                viewModel.IsCut = cutViewModels.Contains(viewModel.Id);
+                Add(null, viewModel);
+            }
+
+            CommandManager.InvalidateRequerySuggested();
+        }
 
         private readonly Action<Notifier> _viewModelInformer;
 
