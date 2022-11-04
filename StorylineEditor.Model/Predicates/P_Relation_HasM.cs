@@ -23,6 +23,24 @@ namespace StorylineEditor.Model.Predicates
 
         public P_Relation_HasM() : this(0) { }
 
+        public override BaseM Clone(long additionalTicks)
+        {
+            P_Relation_HasM clone = new P_Relation_HasM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
+        protected override void CloneInternal(BaseM targetObject)
+        {
+            base.CloneInternal(targetObject);
+
+            if (targetObject is P_Relation_HasM casted)
+            {
+                casted.npcId = npcId;
+                casted.compareType = compareType;
+                casted.value = value;
+            }
+        }
+
         public string npcId { get; set; }
         public byte compareType { get; set; }
         public float value { get; set; }

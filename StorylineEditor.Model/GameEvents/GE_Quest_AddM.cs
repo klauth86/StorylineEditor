@@ -21,6 +21,22 @@ namespace StorylineEditor.Model.GameEvents
 
         public GE_Quest_AddM() : this(0) { }
 
+        public override BaseM Clone(long additionalTicks)
+        {
+            GE_Quest_AddM clone = new GE_Quest_AddM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
+        protected override void CloneInternal(BaseM targetObject)
+        {
+            base.CloneInternal(targetObject);
+
+            if (targetObject is GE_Quest_AddM casted)
+            {
+                casted.questId = questId;
+            }
+        }
+
         public string questId { get; set; }
     }
 }

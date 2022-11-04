@@ -21,6 +21,16 @@ namespace StorylineEditor.Model.Nodes
 
         public Node_RegularM() : this(0) { }
 
+        protected override void CloneInternal(BaseM targetObject)
+        {
+            base.CloneInternal(targetObject);
+
+            if (targetObject is Node_RegularM casted)
+            {
+                casted.characterId = characterId;
+            }
+        }
+
         public string characterId { get; set; }
     }
 
@@ -29,6 +39,13 @@ namespace StorylineEditor.Model.Nodes
         public Node_ReplicaM(long additionalTicks) : base(additionalTicks) { }
 
         public Node_ReplicaM() : this(0) { }
+
+        public override BaseM Clone(long additionalTicks)
+        {
+            Node_ReplicaM clone = new Node_ReplicaM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
     }
 
     public class Node_DialogM : Node_RegularM
@@ -36,5 +53,12 @@ namespace StorylineEditor.Model.Nodes
         public Node_DialogM(long additionalTicks) : base(additionalTicks) { }
 
         public Node_DialogM() : this(0) { }
+
+        public override BaseM Clone(long additionalTicks)
+        {
+            Node_DialogM clone = new Node_DialogM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
     }
 }

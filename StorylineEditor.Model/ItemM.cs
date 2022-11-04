@@ -24,6 +24,25 @@ namespace StorylineEditor.Model
 
         public ItemM() : this(0) { }
 
+        public override BaseM Clone(long additionalTicks)
+        {
+            ItemM clone = new ItemM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
+        protected override void CloneInternal(BaseM targetObject)
+        {
+            base.CloneInternal(targetObject);
+
+            if (targetObject is ItemM casted)
+            {
+                casted.hasInternalDescription = hasInternalDescription;
+                casted.internalDescription = internalDescription;
+                casted.hasInternalDescriptionFemale = hasInternalDescriptionFemale;
+                casted.internalDescriptionFemale = internalDescriptionFemale;
+            }
+        }
+
         public bool hasInternalDescription { get; set; }
         public string internalDescription { get; set; }
         public bool hasInternalDescriptionFemale { get; set; }

@@ -23,6 +23,24 @@ namespace StorylineEditor.Model.Predicates
 
         public P_CompositeM() : this(0) { }
 
+        public override BaseM Clone(long additionalTicks)
+        {
+            P_CompositeM clone = new P_CompositeM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
+        protected override void CloneInternal(BaseM targetObject)
+        {
+            base.CloneInternal(targetObject);
+
+            if (targetObject is P_CompositeM casted)
+            {
+                casted.compositionType = compositionType;
+                casted.predicateA = predicateA.CloneAs<P_BaseM>(0);
+                casted.predicateB = predicateB.CloneAs<P_BaseM>(1);
+            }
+        }
+
         public byte compositionType { get; set; }
         public P_BaseM predicateA { get; set; }
         public P_BaseM predicateB { get; set; }

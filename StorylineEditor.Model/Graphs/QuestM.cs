@@ -17,5 +17,12 @@ namespace StorylineEditor.Model.Graphs
         public QuestM(long additionalTicks) : base(additionalTicks) { }
 
         public QuestM() : this(0) { }
+
+        public override BaseM Clone(long additionalTicks)
+        {
+            QuestM clone = new QuestM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
     }
 }

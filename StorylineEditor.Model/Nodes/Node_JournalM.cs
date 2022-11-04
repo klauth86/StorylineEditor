@@ -21,6 +21,16 @@ namespace StorylineEditor.Model.Nodes
 
         public Node_JournalM() : this(0) { }
 
+        protected override void CloneInternal(BaseM targetObject)
+        {
+            base.CloneInternal(targetObject);
+
+            if (targetObject is Node_JournalM casted)
+            {
+                casted.result = result;
+            }
+        }
+
         public string result { get; set; }
     }
 
@@ -29,6 +39,13 @@ namespace StorylineEditor.Model.Nodes
         public Node_StepM(long additionalTicks) : base(additionalTicks) { }
 
         public Node_StepM() : this(0) { }
+
+        public override BaseM Clone(long additionalTicks)
+        {
+            Node_StepM clone = new Node_StepM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
     }
 
     public class Node_AlternativeM : Node_JournalM
@@ -36,5 +53,12 @@ namespace StorylineEditor.Model.Nodes
         public Node_AlternativeM(long additionalTicks) : base(additionalTicks) { }
 
         public Node_AlternativeM() : this(0) { }
+
+        public override BaseM Clone(long additionalTicks)
+        {
+            Node_AlternativeM clone = new Node_AlternativeM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
     }
 }

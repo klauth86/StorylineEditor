@@ -21,6 +21,22 @@ namespace StorylineEditor.Model.Predicates
 
         public P_Dialog_Node_Has_PrevSessionsM() : this(0) { }
 
+        public override BaseM Clone(long additionalTicks)
+        {
+            P_Dialog_Node_Has_PrevSessionsM clone = new P_Dialog_Node_Has_PrevSessionsM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
+        protected override void CloneInternal(BaseM targetObject)
+        {
+            base.CloneInternal(targetObject);
+
+            if (targetObject is P_Dialog_Node_Has_PrevSessionsM casted)
+            {
+                casted.nodeId = nodeId;
+            }
+        }
+
         public string nodeId { get; set; }
     }
 }

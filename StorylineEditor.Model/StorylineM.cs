@@ -10,7 +10,7 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using StorylineEditor.Model.Graphs;
+using System;
 using System.Collections.Generic;
 
 namespace StorylineEditor.Model
@@ -60,6 +60,9 @@ namespace StorylineEditor.Model
         }
 
         public StorylineM() : this(0) { }
+
+        public override BaseM Clone(long additionalTicks) => throw new NotImplementedException();
+        protected override void CloneInternal(BaseM targetObject) => throw new NotImplementedException();
 
         public List<BaseM> characters { get; set; }
         public List<BaseM> items { get; set; }

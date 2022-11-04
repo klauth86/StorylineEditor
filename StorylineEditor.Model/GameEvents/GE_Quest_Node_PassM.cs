@@ -17,5 +17,12 @@ namespace StorylineEditor.Model.GameEvents
         public GE_Quest_Node_PassM(long additionalTicks) : base(additionalTicks) { }
 
         public GE_Quest_Node_PassM() : this(0) { }
+
+        public override BaseM Clone(long additionalTicks)
+        {
+            GE_Quest_Node_PassM clone = new GE_Quest_Node_PassM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
     }
 }

@@ -21,6 +21,16 @@ namespace StorylineEditor.Model.Predicates
 
         public P_BaseM() : this(0) { }
 
+        protected override void CloneInternal(BaseM targetObject)
+        {
+            base.CloneInternal(targetObject);
+
+            if (targetObject is P_BaseM casted)
+            {
+                casted.isInversed = isInversed;
+            }
+        }
+
         public bool isInversed { get; set; }
     }
 }

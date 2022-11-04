@@ -23,6 +23,18 @@ namespace StorylineEditor.Model.Nodes
 
         public Node_BaseM() : this(0) { }
 
+        protected override void CloneInternal(BaseM targetObject)
+        {
+            base.CloneInternal(targetObject);
+
+            if (targetObject is Node_BaseM casted)
+            {
+                casted.gender = gender;
+                casted.positionX = positionX;
+                casted.positionY = positionY;
+            }
+        }
+
         public byte gender { get; set; }
         public double positionX { get; set; }
         public double positionY { get; set; }

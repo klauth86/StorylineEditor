@@ -21,6 +21,22 @@ namespace StorylineEditor.Model.Predicates
 
         public P_Item_HasM() : this(0) { }
 
+        public override BaseM Clone(long additionalTicks)
+        {
+            P_Item_HasM clone = new P_Item_HasM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
+        protected override void CloneInternal(BaseM targetObject)
+        {
+            base.CloneInternal(targetObject);
+
+            if (targetObject is P_Item_HasM casted)
+            {
+                casted.itemId = itemId;
+            }
+        }
+
         public string itemId { get; set; }
     }
 }

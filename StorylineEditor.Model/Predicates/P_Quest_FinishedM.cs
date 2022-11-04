@@ -17,5 +17,12 @@ namespace StorylineEditor.Model.Predicates
         public P_Quest_FinishedM(long additionalTicks) : base(additionalTicks) { }
 
         public P_Quest_FinishedM() : this(0) { }
+
+        public override BaseM Clone(long additionalTicks)
+        {
+            P_Quest_FinishedM clone = new P_Quest_FinishedM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
     }
 }

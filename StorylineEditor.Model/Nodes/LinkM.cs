@@ -22,6 +22,23 @@ namespace StorylineEditor.Model.Nodes
 
         public LinkM() : this(0) { }
 
+        public override BaseM Clone(long additionalTicks)
+        {
+            LinkM clone = new LinkM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
+        protected override void CloneInternal(BaseM targetObject)
+        {
+            base.CloneInternal(targetObject);
+
+            if (targetObject is LinkM casted)
+            {
+                casted.fromNodeId = fromNodeId;
+                casted.toNodeId = toNodeId;
+            }
+        }
+
         public string fromNodeId { get; set; }
         public string toNodeId { get; set; }
     }

@@ -26,6 +26,24 @@ namespace StorylineEditor.Model.Nodes
 
         public Node_InteractiveM() : this(0) { }
 
+        protected override void CloneInternal(BaseM targetObject)
+        {
+            base.CloneInternal(targetObject);
+
+            if (targetObject is Node_InteractiveM casted)
+            {
+                for (int i = 0; i < predicates.Count; i++)
+                {
+                    casted.predicates.Add(predicates[i].CloneAs<P_BaseM>(i));
+                }
+
+                for (int i = 0; i < gameEvents.Count; i++)
+                {
+                    casted.gameEvents.Add(gameEvents[i].CloneAs<GE_BaseM>(i));
+                }
+            }
+        }
+
         public List<P_BaseM> predicates { get; set; }
         public List<GE_BaseM> gameEvents { get; set; }
     }
@@ -35,6 +53,13 @@ namespace StorylineEditor.Model.Nodes
         public Node_RandomM(long additionalTicks) : base(additionalTicks) { }
 
         public Node_RandomM() : this(0) { }
+
+        public override BaseM Clone(long additionalTicks)
+        {
+            Node_RandomM clone = new Node_RandomM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
     }
 
     public class Node_TransitM : Node_InteractiveM
@@ -42,5 +67,12 @@ namespace StorylineEditor.Model.Nodes
         public Node_TransitM(long additionalTicks) : base(additionalTicks) { }
 
         public Node_TransitM() : this(0) { }
+
+        public override BaseM Clone(long additionalTicks)
+        {
+            Node_TransitM clone = new Node_TransitM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
     }
 }

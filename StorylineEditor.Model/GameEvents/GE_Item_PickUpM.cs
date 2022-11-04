@@ -21,6 +21,22 @@ namespace StorylineEditor.Model.GameEvents
 
         public GE_Item_PickUpM() : this(0) { }
 
+        public override BaseM Clone(long additionalTicks)
+        {
+            GE_Item_PickUpM clone = new GE_Item_PickUpM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
+        protected override void CloneInternal(BaseM targetObject)
+        {
+            base.CloneInternal(targetObject);
+
+            if (targetObject is GE_Item_PickUpM casted)
+            {
+                casted.itemId = itemId;
+            }
+        }
+
         public string itemId { get; set; }
     }
 }

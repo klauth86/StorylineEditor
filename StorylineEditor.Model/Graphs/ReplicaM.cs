@@ -17,5 +17,12 @@ namespace StorylineEditor.Model.Graphs
         public ReplicaM(long additionalTicks) : base(additionalTicks) { }
 
         public ReplicaM() : this(0) { }
+
+        public override BaseM Clone(long additionalTicks)
+        {
+            ReplicaM clone = new ReplicaM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
     }
 }

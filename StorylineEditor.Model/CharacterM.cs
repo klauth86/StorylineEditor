@@ -22,6 +22,23 @@ namespace StorylineEditor.Model
 
         public CharacterM() : this(0) { }
 
+        public override BaseM Clone(long additionalTicks)
+        {
+            CharacterM clone = new CharacterM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
+        protected override void CloneInternal(BaseM targetObject)
+        {
+            base.CloneInternal(targetObject);
+
+            if (targetObject is CharacterM casted)
+            {
+                casted.initialRelation = initialRelation;
+                casted.initialRelationFemale = initialRelationFemale;
+            }
+        }
+
         public float initialRelation { get; set; }
         public float initialRelationFemale { get; set; }
     }

@@ -23,6 +23,25 @@ namespace StorylineEditor.Model
 
         public FolderM() : this(0) { }
 
+        public override BaseM Clone(long additionalTicks)
+        {
+            FolderM clone = new FolderM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
+        protected override void CloneInternal(BaseM targetObject)
+        {
+            base.CloneInternal(targetObject);
+
+            if (targetObject is FolderM casted)
+            {
+                for (int i = 0; i < content.Count; i++)
+                {
+                    casted.content.Add(content[i].Clone(i));
+                }
+            }
+        }
+
         public List<BaseM> content { get; set; }
     }
 }

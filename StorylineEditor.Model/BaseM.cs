@@ -26,6 +26,14 @@ namespace StorylineEditor.Model
 
         public BaseM() : this(0) { }
 
+        public T CloneAs<T>(long additionalTicks) where T : BaseM { return (T)Clone(additionalTicks); }
+        public abstract BaseM Clone(long additionalTicks);
+        protected virtual void CloneInternal(BaseM targetObject)
+        {
+            targetObject.name = name;
+            targetObject.description = description;
+        }
+
         public DateTime createdAt { get; set; }
         public string id { get; set; }
         public string name { get; set; }

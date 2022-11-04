@@ -25,6 +25,33 @@ namespace StorylineEditor.Model.Graphs
 
         public GraphM() : this(0) { }
 
+        protected override void CloneInternal(BaseM targetObject)
+        {
+            base.CloneInternal(targetObject);
+
+            if (targetObject is GraphM casted)
+            {
+                Dictionary<string, string> mapping = new Dictionary<string, string>();
+
+                for (int i = 0; i < nodes.Count; i++)
+                {
+                    casted.nodes.Add(nodes[i].CloneAs<Node_BaseM>(i));
+                    mapping.Add(nodes[i].id, casted.nodes[i].id);
+                }
+
+                for (int i = 0; i < links.Count; i++)
+                {
+                    casted.links.Add(links[i].CloneAs<LinkM>(i));
+                }
+
+                foreach (var linkModel in casted.links)
+                {
+                    linkModel.fromNodeId = mapping[linkModel.fromNodeId];
+                    linkModel.toNodeId = mapping[linkModel.toNodeId];
+                }
+            }
+        }
+
         public List<Node_BaseM> nodes { get; set; }
         public List<LinkM> links { get; set; }
     }

@@ -21,6 +21,22 @@ namespace StorylineEditor.Model.Graphs
 
         public DialogM() : this(0) { }
 
+        public override BaseM Clone(long additionalTicks)
+        {
+            DialogM clone = new DialogM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
+        protected override void CloneInternal(BaseM targetObject)
+        {
+            base.CloneInternal(targetObject);
+
+            if (targetObject is DialogM casted)
+            {
+                casted.npcId = npcId;
+            }
+        }
+
         public string npcId { get; set; }
     }
 }

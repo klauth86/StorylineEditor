@@ -17,5 +17,12 @@ namespace StorylineEditor.Model.GameEvents
         public GE_Item_DropM(long additionalTicks) : base(additionalTicks) { }
 
         public GE_Item_DropM() : this(0) { }
+
+        public override BaseM Clone(long additionalTicks)
+        {
+            GE_Item_PickUpM clone = new GE_Item_PickUpM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
     }
 }

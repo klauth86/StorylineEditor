@@ -22,6 +22,23 @@ namespace StorylineEditor.Model.GameEvents
 
         public GE_Relation_ChangeM() : this(0) { }
 
+        public override BaseM Clone(long additionalTicks)
+        {
+            GE_Relation_ChangeM clone = new GE_Relation_ChangeM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
+        protected override void CloneInternal(BaseM targetObject)
+        {
+            base.CloneInternal(targetObject);
+
+            if (targetObject is GE_Relation_ChangeM casted)
+            {
+                casted.npcId = npcId;
+                casted.value = value;
+            }
+        }
+
         public string npcId { get; set; }
         public float value { get; set; }
     }

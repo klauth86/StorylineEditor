@@ -21,6 +21,16 @@ namespace StorylineEditor.Model.GameEvents
 
         public GE_BaseM() : this(0) { }
 
+        protected override void CloneInternal(BaseM targetObject)
+        {
+            base.CloneInternal(targetObject);
+
+            if (targetObject is GE_BaseM casted)
+            {
+                casted.executionMode = executionMode;
+            }
+        }
+
         public byte executionMode { get; set; }
     }
 }
