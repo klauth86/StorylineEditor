@@ -459,14 +459,22 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmg:QuestEditorVM}">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="7*"></ColumnDefinition>
-                <ColumnDefinition Width="auto"></ColumnDefinition>
-                <ColumnDefinition Width="3*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
+        <TabControl>
+            <TabItem Header="{StaticResource String_Tag_Graph_Tab_Props}">
+                <StackPanel Orientation="Vertical">
+                    <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_Name}"></TextBox>
+                    <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="{StaticResource String_Tag_Graph_Tab_View}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7*"></ColumnDefinition>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
 
-            <ItemsControl x:Name="ic_Canvas" Background="LightGray" ItemsPanel="{StaticResource IPT_Canvas}" ItemsSource="{Binding ItemsVMs}"
+                    <ItemsControl x:Name="ic_Canvas" Background="LightGray" ItemsPanel="{StaticResource IPT_Canvas}" ItemsSource="{Binding ItemsVMs}"
                           bhvrs:MouseExtBehavior.MouseEnterCommand="{Binding RegisterContextCommand}"
                           bhvrs:MouseExtBehavior.MouseLeaveCommand="{Binding UnregisterContextCommand}"
                           bhvrs:MouseExtBehavior.MouseRightButtonDownCommand="{Binding DragCommand}"
@@ -479,33 +487,33 @@ StorylineEditor распространяется в надежде, что он�
                           bhvrs:RenderSizeBehavior.ActualWidth="{Binding Path=(vm:StorylineVM.ViewWidth), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
                           bhvrs:RenderSizeBehavior.ActualHeight="{Binding Path=(vm:StorylineVM.ViewHeight), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
                           bhvrs:RenderSizeBehavior.SizeChangedFlag="{Binding SizeChangedFlag, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}">
-                <ItemsControl.ItemContainerStyle>
-                    <Style TargetType="ContentPresenter">
-                        <Setter Property="Canvas.ZIndex" Value="{Binding ZIndex, UpdateSourceTrigger=PropertyChanged}"/>
-                        <Setter Property="Canvas.Left" Value="{Binding Left, UpdateSourceTrigger=PropertyChanged}"/>
-                        <Setter Property="Canvas.Top" Value="{Binding Top, UpdateSourceTrigger=PropertyChanged}"/>
-                    </Style>
-                </ItemsControl.ItemContainerStyle>
-            </ItemsControl>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="ContentPresenter">
+                                <Setter Property="Canvas.ZIndex" Value="{Binding ZIndex, UpdateSourceTrigger=PropertyChanged}"/>
+                                <Setter Property="Canvas.Left" Value="{Binding Left, UpdateSourceTrigger=PropertyChanged}"/>
+                                <Setter Property="Canvas.Top" Value="{Binding Top, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                    </ItemsControl>
 
-            <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                
-                <StackPanel Orientation="Horizontal">
-                    <Button x:Name="btn_selectable_Step" Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Node_Step}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_StepM}"></Button>
-                    <Button x:Name="btn_selectable_Alternative" Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Node_Alternative}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_AlternativeM}"></Button>
-                    <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
-                    <Button Style="{StaticResource S_Button_Base}" Content="⏪" Command="{Binding PrevRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_PrevRootNode_Tooltip}"></Button>
-                    <Button Style="{StaticResource S_Button_Base}" Content="⏩" Command="{Binding NextRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_NextRootNode_Tooltip}"></Button>
-                    <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
-                    <Button Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Graph_Origin}" Command="{Binding GoToOriginCommand}" ToolTip="{StaticResource String_GraphMenu_GoToOrigin_Tooltip}"></Button>
-                    <Button Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Graph_Reset}" Command="{Binding ResetScaleCommand}" ToolTip="{StaticResource String_GraphMenu_ResetScale_Tooltip}"></Button>
-                </StackPanel>
-                
-                <TextBlock Grid.Row="1" Style="{StaticResource S_TextBlock_Graph}">
+                    <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="btn_selectable_Step" Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Node_Step}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_StepM}"></Button>
+                            <Button x:Name="btn_selectable_Alternative" Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Node_Alternative}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_AlternativeM}"></Button>
+                            <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
+                            <Button Style="{StaticResource S_Button_Base}" Content="⏪" Command="{Binding PrevRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_PrevRootNode_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Base}" Content="⏩" Command="{Binding NextRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_NextRootNode_Tooltip}"></Button>
+                            <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
+                            <Button Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Graph_Origin}" Command="{Binding GoToOriginCommand}" ToolTip="{StaticResource String_GraphMenu_GoToOrigin_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Graph_Reset}" Command="{Binding ResetScaleCommand}" ToolTip="{StaticResource String_GraphMenu_ResetScale_Tooltip}"></Button>
+                        </StackPanel>
+
+                        <TextBlock Grid.Row="1" Style="{StaticResource S_TextBlock_Graph}">
                     <Run Text="{Binding SelectedNodeTypeName, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"></Run>
                     <Run Text="{Binding Scale, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></Run>
                     <Run Text="("></Run>
@@ -513,22 +521,24 @@ StorylineEditor распространяется в надежде, что он�
                     <Run Text=","></Run>
                     <Run Text="{Binding OffsetY, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"></Run>
                     <Run Text=")"></Run>
-                </TextBlock>
-            </Grid>
+                        </TextBlock>
+                    </Grid>
 
-            <Grid HorizontalAlignment="Right" VerticalAlignment="Top">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition MinWidth="{StaticResource Double_TextBox_Graph_MinWidth}" Width="*"></ColumnDefinition>
-                    <ColumnDefinition MinWidth="{StaticResource Double_TextBox_Graph_MinWidth}" Width="*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0" x:Name="tb_SelectionNodePositionX" Style="{StaticResource S_TextBox_Graph}" Text="{Binding SelectionNode.PositionX, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" ></TextBox>
-                <TextBox Grid.Column="1" x:Name="tb_SelectionNodePositionY" Style="{StaticResource S_TextBox_Graph}" Text="{Binding SelectionNode.PositionY, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" ></TextBox>
-            </Grid>
+                    <Grid HorizontalAlignment="Right" VerticalAlignment="Top">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition MinWidth="{StaticResource Double_TextBox_Graph_MinWidth}" Width="*"></ColumnDefinition>
+                            <ColumnDefinition MinWidth="{StaticResource Double_TextBox_Graph_MinWidth}" Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" x:Name="tb_SelectionNodePositionX" Style="{StaticResource S_TextBox_Graph}" Text="{Binding SelectionNode.PositionX, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" ></TextBox>
+                        <TextBox Grid.Column="1" x:Name="tb_SelectionNodePositionY" Style="{StaticResource S_TextBox_Graph}" Text="{Binding SelectionNode.PositionY, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" ></TextBox>
+                    </Grid>
 
-            <GridSplitter Grid.Column="1"></GridSplitter>
+                    <GridSplitter Grid.Column="1"></GridSplitter>
 
-            <ContentControl Grid.Column="2" Content="{Binding SelectionEditor, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
-        </Grid>
+                    <ContentControl Grid.Column="2" Content="{Binding SelectionEditor, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+                </Grid>
+            </TabItem>
+        </TabControl>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_StepM}">
                 <Setter TargetName="btn_selectable_Step" Property="Style" Value="{StaticResource S_Button_Selected}"></Setter>
