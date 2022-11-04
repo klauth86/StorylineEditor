@@ -467,16 +467,18 @@ StorylineEditor распространяется в надежде, что он�
             </Grid.ColumnDefinitions>
 
             <ItemsControl x:Name="ic_Canvas" Background="LightGray" ItemsPanel="{StaticResource IPT_Canvas}" ItemsSource="{Binding ItemsVMs}"
-                              bhvrs:MouseExtBehavior.MouseRightButtonDownCommand="{Binding DragCommand}"
-                              bhvrs:MouseExtBehavior.MouseLeftButtonDownCommand="{Binding AddCommand}"
-                              bhvrs:MouseExtBehavior.MouseLeftButtonUpCommand="{Binding LinkCommand}"
-                              bhvrs:MouseExtBehavior.MouseMoveCommand="{Binding MoveCommand}"
-                              bhvrs:MouseExtBehavior.MouseWheelCommand="{Binding ScaleCommand}"
-                              bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding InitCommand}"
-                              bhvrs:RenderSizeBehavior.IsEnabled="true"
-                              bhvrs:RenderSizeBehavior.ActualWidth="{Binding Path=(vm:StorylineVM.ViewWidth), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
-                              bhvrs:RenderSizeBehavior.ActualHeight="{Binding Path=(vm:StorylineVM.ViewHeight), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
-                              bhvrs:RenderSizeBehavior.SizeChangedFlag="{Binding SizeChangedFlag, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}">
+                          bhvrs:MouseExtBehavior.MouseEnterCommand="{Binding RegisterContextCommand}"
+                          bhvrs:MouseExtBehavior.MouseLeaveCommand="{Binding UnregisterContextCommand}"
+                          bhvrs:MouseExtBehavior.MouseRightButtonDownCommand="{Binding DragCommand}"
+                          bhvrs:MouseExtBehavior.MouseLeftButtonDownCommand="{Binding AddCommand}"
+                          bhvrs:MouseExtBehavior.MouseLeftButtonUpCommand="{Binding LinkCommand}"
+                          bhvrs:MouseExtBehavior.MouseMoveCommand="{Binding MoveCommand}"
+                          bhvrs:MouseExtBehavior.MouseWheelCommand="{Binding ScaleCommand}"
+                          bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding InitCommand}"
+                          bhvrs:RenderSizeBehavior.IsEnabled="true"
+                          bhvrs:RenderSizeBehavior.ActualWidth="{Binding Path=(vm:StorylineVM.ViewWidth), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                          bhvrs:RenderSizeBehavior.ActualHeight="{Binding Path=(vm:StorylineVM.ViewHeight), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                          bhvrs:RenderSizeBehavior.SizeChangedFlag="{Binding SizeChangedFlag, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}">
                 <ItemsControl.ItemContainerStyle>
                     <Style TargetType="ContentPresenter">
                         <Setter Property="Canvas.ZIndex" Value="{Binding ZIndex, UpdateSourceTrigger=PropertyChanged}"/>
@@ -658,13 +660,26 @@ StorylineEditor распространяется в надежде, что он�
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
 
+                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <Button.RenderTransform>
+                        <TranslateTransform X="{StaticResource Double_Icon_Gender_-Width/2}" Y="{StaticResource Double_Icon_Gender_-Height/2}"></TranslateTransform>
+                    </Button.RenderTransform>
+                </Button>
+
                 <Label Content="{StaticResource String_Icon_Node_Alternative}" Style="{StaticResource S_Label_Node}"></Label>
 
                 <TextBlock VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
-                <TextBlock Grid.ColumnSpan="2" Grid.Row="1" Style="{StaticResource S_TextBlock_Node_Description}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                <controls:TextBlockExt Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                                       Style="{StaticResource S_TextBlock_Node_Description}"></controls:TextBlockExt>
 
-                <TextBlock Grid.ColumnSpan="2" Grid.Row="1" Style="{StaticResource S_TextBlock_Node_Result}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                <TextBlock Grid.ColumnSpan="2" Grid.Row="2" Style="{StaticResource S_TextBlock_Node_Result}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+
+                <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <Button.RenderTransform>
+                        <TranslateTransform X="{StaticResource Double_Button_Node_Remove_Width/2}" Y="{StaticResource Double_Button_Node_Remove_-Height/2}"></TranslateTransform>
+                    </Button.RenderTransform>
+                </Button>
             </Grid>
         </Border>
     </DataTemplate>

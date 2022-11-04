@@ -50,5 +50,15 @@ namespace StorylineEditor.ViewModel.Common
         protected ICommand unregisterCommand;
         public ICommand UnregisterCommand => unregisterCommand ?? (unregisterCommand = new RelayCommand(() => UnregisterCommandInternal()));
         protected virtual void UnregisterCommandInternal() { ModelChangedEvent -= OnModelChangedHandler; }
+
+
+
+        protected ICommand registerContextCommand;
+        public ICommand RegisterContextCommand => registerContextCommand ?? (registerContextCommand = new RelayCommand(() => ActiveContextService.ActiveContext = this as IActiveContext));
+
+
+
+        protected ICommand unregisterContextCommand;
+        public ICommand UnregisterContextCommand => unregisterContextCommand ?? (unregisterContextCommand = new RelayCommand(() => ActiveContextService.ActiveContext = null));
     }
 }

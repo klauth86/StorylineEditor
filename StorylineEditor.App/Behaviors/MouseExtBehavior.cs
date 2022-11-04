@@ -231,5 +231,77 @@ namespace StorylineEditor.App.Behaviors
                 args.Handled = true;
             }
         }
+
+
+
+        private static readonly DependencyProperty MouseEnterCommandProperty = DependencyProperty.RegisterAttached
+            (
+            "MouseEnterCommand",
+            typeof(ICommand),
+            typeof(MouseExtBehavior),
+            new PropertyMetadata(MouseEnterCommandPropertyChanged)
+            );
+
+        public static void SetMouseEnterCommand(DependencyObject dp, ICommand value) { dp.SetValue(MouseEnterCommandProperty, value); }
+        public static ICommand GetMouseEnterCommand(DependencyObject dp) { return (ICommand)dp.GetValue(MouseEnterCommandProperty); }
+
+        private static void MouseEnterCommandPropertyChanged(DependencyObject dp, DependencyPropertyChangedEventArgs args)
+        {
+            if (dp is UIElement uIElement)
+            {
+                if (args.NewValue == DependencyProperty.UnsetValue || args.NewValue == null)
+                {
+                    uIElement.MouseEnter -= OnMouseEnter;
+                }
+                else
+                {
+                    uIElement.MouseEnter += OnMouseEnter;
+                }
+            }
+        }
+        private static void OnMouseEnter(object sender, MouseEventArgs args)
+        {
+            if (sender is DependencyObject dp)
+            {
+                GetMouseEnterCommand(dp)?.Execute(args);
+                args.Handled = true;
+            }
+        }
+
+
+
+        private static readonly DependencyProperty MouseLeaveCommandProperty = DependencyProperty.RegisterAttached
+            (
+            "MouseLeaveCommand",
+            typeof(ICommand),
+            typeof(MouseExtBehavior),
+            new PropertyMetadata(MouseLeaveCommandPropertyChanged)
+            );
+
+        public static void SetMouseLeaveCommand(DependencyObject dp, ICommand value) { dp.SetValue(MouseLeaveCommandProperty, value); }
+        public static ICommand GetMouseLeaveCommand(DependencyObject dp) { return (ICommand)dp.GetValue(MouseLeaveCommandProperty); }
+
+        private static void MouseLeaveCommandPropertyChanged(DependencyObject dp, DependencyPropertyChangedEventArgs args)
+        {
+            if (dp is UIElement uIElement)
+            {
+                if (args.NewValue == DependencyProperty.UnsetValue || args.NewValue == null)
+                {
+                    uIElement.MouseLeave -= OnMouseLeave;
+                }
+                else
+                {
+                    uIElement.MouseLeave += OnMouseLeave;
+                }
+            }
+        }
+        private static void OnMouseLeave(object sender, MouseEventArgs args)
+        {
+            if (sender is DependencyObject dp)
+            {
+                GetMouseLeaveCommand(dp)?.Execute(args);
+                args.Handled = true;
+            }
+        }
     }
 }

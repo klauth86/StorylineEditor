@@ -46,7 +46,7 @@ namespace StorylineEditor.ViewModel
                 (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((CharacterVM)viewModel).Model; },
                 (Notifier viewModel) => { });
             SelectionModel = Model.characters;
-        }, ()=> SelectionModel != Model.characters));
+        }, () => SelectionModel != Model.characters));
 
         private ICommand itemsTabCommand;
         public ICommand ItemsTabCommand => itemsTabCommand ?? (itemsTabCommand = new RelayCommand(() =>
@@ -184,5 +184,14 @@ namespace StorylineEditor.ViewModel
                 }
             }
         }
+
+        private ICommand abstractCopyCommand;
+        public ICommand AbstractCopyCommand => abstractCopyCommand ?? (abstractCopyCommand = new RelayCommand(() => { ActiveContextService.ActiveContext?.Copy(); }));
+
+        private ICommand abstractPasteCommand;
+        public ICommand AbstractPasteCommand => abstractPasteCommand ?? (abstractPasteCommand = new RelayCommand(() => { ActiveContextService.ActiveContext?.Paste(); }));
+
+        private ICommand abstractDeleteCommand;
+        public ICommand AbstractDeleteCommand => abstractDeleteCommand ?? (abstractDeleteCommand = new RelayCommand(() => { ActiveContextService.ActiveContext?.Delete(); }));
     }
 }

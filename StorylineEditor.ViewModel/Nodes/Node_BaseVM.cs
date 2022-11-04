@@ -15,7 +15,6 @@ using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Helpers;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Markup;
 
 namespace StorylineEditor.ViewModel.Nodes
 {

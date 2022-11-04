@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Collection_BaseVM.cs" />
+    <Compile Include="ActiveContextService.cs" />
     <Compile Include="Graphs\Graph_BaseVM.cs" />
     <Compile Include="Helpers\FlowDocumentHelpers.cs" />
     <Compile Include="Nodes\LinkVM.cs" />

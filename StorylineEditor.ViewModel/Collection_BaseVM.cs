@@ -55,11 +55,11 @@ namespace StorylineEditor.ViewModel
             
             AddToSelection(null, true);
 
-            foreach (var selectedViewModel in prevSelection)
+            foreach (var viewModel in prevSelection)
             {
-                BaseM model = _modelExtractor(selectedViewModel);
+                BaseM model = _modelExtractor(viewModel);
 
-                Remove(selectedViewModel, model, GetContext(model));
+                Remove(viewModel, model, GetContext(model));
             }
 
             CommandManager.InvalidateRequerySuggested();

@@ -19,7 +19,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -41,7 +40,7 @@ namespace StorylineEditor.ViewModel.Graphs
         Y = 2,
     }
 
-    public class Graph_BaseVM<T> : Collection_BaseVM<T, Point>, ICallbackContext where T : GraphM
+    public class Graph_BaseVM<T> : Collection_BaseVM<T, Point>, ICallbackContext, IActiveContext where T : GraphM
     {
         public Graph_BaseVM(T model, ICallbackContext callbackContext, Func<Type, Point, BaseM> modelCreator, Func<BaseM, ICallbackContext, Notifier> viewModelCreator,
             Func<Notifier, ICallbackContext, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Type defaultNodeType, Func<Type, string> typeDescriptor) : base(model, callbackContext,
@@ -278,23 +277,10 @@ namespace StorylineEditor.ViewModel.Graphs
                     position.Y = FromLocalToAbsoluteY(position.Y);
 
                     BaseM model = _modelCreator(SelectedNodeType, position);
-                    Add(model, null);
-
-                    Notifier viewModel = _viewModelCreator(model, this);
-
-                    NodesVMs.Add(model.id, viewModel);
-                    Add(null, viewModel);
-
-                    FromNodesLinks.Add(model.id, new HashSet<string>());
-                    ToNodesLinks.Add(model.id, new HashSet<string>());
-
-                    RootNodeIds.Add(model.id);
-                    ((INodeVM)NodesVMs[model.id]).IsRoot = true;
 
                     bool resetSelection = !Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
-                    AddToSelection(viewModel, resetSelection);
-
-                    if (resetSelection) fromNodeViewModel = viewModel as INodeVM;
+                    
+                    AddNode(model, resetSelection, true);
                 }
             }
         }));
@@ -535,6 +521,134 @@ namespace StorylineEditor.ViewModel.Graphs
                 SetScale(position.X, position.Y, Math.Max(Math.Min(Scale + args.Delta * 0.0002, 4), 1.0 / 64));
             }
         }));
+
+        public void Copy()
+        {
+            ////// TODO Move to Model Clone method
+
+            GraphM graphModel = new QuestM();
+
+            foreach (string selectedId in selection)
+            {
+                if (NodesVMs.ContainsKey(selectedId))
+                {
+                    if (_modelExtractor(NodesVMs[selectedId]) is Node_BaseM nodeModel)
+                    {
+                        graphModel.nodes.Add(nodeModel);
+                    }
+                }
+            }
+
+            foreach (string selectedId in selection)
+            {
+                foreach (var linkId in FromNodesLinks[selectedId])
+                {
+                    if (LinksVMs.ContainsKey(linkId))
+                    {
+                        if (selection.Contains(LinksVMs[linkId].ToNodeId))
+                        {
+                            graphModel.links.Add(LinksVMs[linkId].Model);
+                        }
+                    }
+                }
+            }
+
+            // Replace ids
+
+            Dictionary<string, string> idsMapping = new Dictionary<string, string>();
+
+            for (int i = 0; i < graphModel.nodes.Count; i++)
+            {
+                if (graphModel.nodes[i] is Node_StepM stepNodeModel)
+                {
+                    Node_StepM dummyStepNodeModel = new Node_StepM(i);
+                    idsMapping.Add(graphModel.nodes[i].id, dummyStepNodeModel.id);
+                    graphModel.nodes[i].id = dummyStepNodeModel.id;
+                }
+                else if (graphModel.nodes[i] is Node_AlternativeM alternativeNodeModel)
+                {
+                    Node_AlternativeM dummyAlternativeNodeModel = new Node_AlternativeM(i);
+                    idsMapping.Add(graphModel.nodes[i].id, dummyAlternativeNodeModel.id);
+                    graphModel.nodes[i].id = dummyAlternativeNodeModel.id;
+                }
+            }
+
+            for (int i = 0; i < graphModel.links.Count; i++)
+            {
+                LinkM dummyLinkModel = new LinkM(i);
+                graphModel.links[i].id = dummyLinkModel.id;
+                graphModel.links[i].fromNodeId = idsMapping[graphModel.links[i].fromNodeId];
+                graphModel.links[i].toNodeId = idsMapping[graphModel.links[i].toNodeId];
+            }
+
+
+        }
+
+        public void Paste()
+        {
+            object obj = null;
+
+            if (obj is GraphM graphModel)
+            {
+                bool resetSelection = true;
+
+                foreach (var model in graphModel.nodes)
+                {
+                    model.positionX += OffsetX;
+                    model.positionY += OffsetY;
+
+                    AddNode(model, resetSelection, false);
+                    resetSelection = false;
+                }
+
+                foreach (var model in graphModel.links)
+                {
+
+                }
+            }
+        }
+
+        void AddNode(BaseM model, bool resetSelection, bool tryStartLink)
+        {
+            Add(model, null);
+
+            Notifier viewModel = _viewModelCreator(model, this);
+
+            NodesVMs.Add(model.id, viewModel);
+            Add(null, viewModel);
+
+            FromNodesLinks.Add(model.id, new HashSet<string>());
+            ToNodesLinks.Add(model.id, new HashSet<string>());
+
+            RootNodeIds.Add(model.id);
+            ((INodeVM)NodesVMs[model.id]).IsRoot = true;
+
+            AddToSelection(viewModel, resetSelection);
+
+            if (resetSelection && tryStartLink) fromNodeViewModel = viewModel as INodeVM;
+        }
+
+        public void Delete()
+        {
+            List<string> prevSelection = new List<string>();
+            GetSelection(prevSelection);
+
+            foreach (string selectedId in prevSelection)
+            {
+                if (NodesVMs.ContainsKey(selectedId))
+                {
+                    if (NodesVMs[selectedId] is INodeVM nodeViewModel)
+                    {
+                        RemoveFromSelection(nodeViewModel);
+
+                        foreach (var fromlinkId in FromNodesLinks[nodeViewModel.Id].ToList()) RemoveLink(fromlinkId);
+                        foreach (var tolinkId in ToNodesLinks[nodeViewModel.Id].ToList()) RemoveLink(tolinkId);
+
+                        RemoveNode(nodeViewModel.Id);
+                    }
+                }
+            }
+        }
 
         void SetScale(double transformX, double transformY, double newScale)
         {
