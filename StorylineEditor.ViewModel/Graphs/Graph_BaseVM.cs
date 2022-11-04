@@ -522,26 +522,28 @@ namespace StorylineEditor.ViewModel.Graphs
             }
         }));
 
-        public void Copy()
+        public string Copy()
         {
-            ////// TODO Move to Model Clone method
-
             GraphM graphModel = new QuestM();
 
-            foreach (string selectedId in selection)
+            // nodes
+
+            foreach (string nodeId in selection)
             {
-                if (NodesVMs.ContainsKey(selectedId))
+                if (NodesVMs.ContainsKey(nodeId))
                 {
-                    if (_modelExtractor(NodesVMs[selectedId]) is Node_BaseM nodeModel)
+                    if (_modelExtractor(NodesVMs[nodeId]) is Node_BaseM nodeModel)
                     {
                         graphModel.nodes.Add(nodeModel);
                     }
                 }
             }
 
-            foreach (string selectedId in selection)
+            // links
+
+            foreach (string nodeId in selection)
             {
-                foreach (var linkId in FromNodesLinks[selectedId])
+                foreach (var linkId in FromNodesLinks[nodeId])
                 {
                     if (LinksVMs.ContainsKey(linkId))
                     {
@@ -553,57 +555,48 @@ namespace StorylineEditor.ViewModel.Graphs
                 }
             }
 
-            // Replace ids
+            GraphM graphModelCopy = graphModel.CloneAs<GraphM>(0);
 
-            Dictionary<string, string> idsMapping = new Dictionary<string, string>();
-
-            for (int i = 0; i < graphModel.nodes.Count; i++)
+            foreach (var nodeModel in graphModelCopy.nodes)
             {
-                if (graphModel.nodes[i] is Node_StepM stepNodeModel)
-                {
-                    Node_StepM dummyStepNodeModel = new Node_StepM(i);
-                    idsMapping.Add(graphModel.nodes[i].id, dummyStepNodeModel.id);
-                    graphModel.nodes[i].id = dummyStepNodeModel.id;
-                }
-                else if (graphModel.nodes[i] is Node_AlternativeM alternativeNodeModel)
-                {
-                    Node_AlternativeM dummyAlternativeNodeModel = new Node_AlternativeM(i);
-                    idsMapping.Add(graphModel.nodes[i].id, dummyAlternativeNodeModel.id);
-                    graphModel.nodes[i].id = dummyAlternativeNodeModel.id;
-                }
+                nodeModel.positionX -= OffsetX;
+                nodeModel.positionY -= OffsetY;
             }
-
-            for (int i = 0; i < graphModel.links.Count; i++)
-            {
-                LinkM dummyLinkModel = new LinkM(i);
-                graphModel.links[i].id = dummyLinkModel.id;
-                graphModel.links[i].fromNodeId = idsMapping[graphModel.links[i].fromNodeId];
-                graphModel.links[i].toNodeId = idsMapping[graphModel.links[i].toNodeId];
-            }
-
-
+            
+            return SerializeService.Serialize(graphModelCopy);
         }
 
-        public void Paste()
+        public void Paste(string clipboard)
         {
-            object obj = null;
-
-            if (obj is GraphM graphModel)
+            GraphM graphModel = SerializeService.Deserialize<GraphM>(clipboard);
+            
+            if (graphModel != null)
             {
+                GraphM graphModelCopy = graphModel.CloneAs<GraphM>(0);
+
                 bool resetSelection = true;
 
-                foreach (var model in graphModel.nodes)
+                foreach (var nodeModel in graphModelCopy.nodes)
                 {
-                    model.positionX += OffsetX;
-                    model.positionY += OffsetY;
-
-                    AddNode(model, resetSelection, false);
+                    nodeModel.positionX += OffsetX;
+                    nodeModel.positionY += OffsetY;
+                    AddNode(nodeModel, resetSelection, false);
                     resetSelection = false;
                 }
 
-                foreach (var model in graphModel.links)
+                foreach (var linkModel in graphModelCopy.links)
                 {
+                    Add(linkModel, null);
 
+                    INodeVM fromNodeViewModel = NodesVMs[linkModel.fromNodeId] as INodeVM;
+                    INodeVM toNodeViewModel = NodesVMs[linkModel.toNodeId] as INodeVM;
+
+                    AddLinkVM(linkModel,
+                        fromNodeViewModel.Id, fromNodeViewModel.PositionX, fromNodeViewModel.PositionY,
+                        toNodeViewModel.Id, toNodeViewModel.PositionX, toNodeViewModel.PositionY);
+
+                    toNodeViewModel.IsRoot = false;
+                    RootNodeIds.Remove(toNodeViewModel.Id);
                 }
             }
         }

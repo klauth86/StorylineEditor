@@ -118,7 +118,6 @@ namespace StorylineEditor.App.Behaviors
         {
             if (sender is DependencyObject dp)
             {
-                ICommand command = GetMouseRightButtonDownCommand(dp);
                 GetMouseRightButtonDownCommand(dp)?.Execute(args);
                 args.Handled = true;
             }

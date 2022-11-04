@@ -186,10 +186,16 @@ namespace StorylineEditor.ViewModel
         }
 
         private ICommand abstractCopyCommand;
-        public ICommand AbstractCopyCommand => abstractCopyCommand ?? (abstractCopyCommand = new RelayCommand(() => { ActiveContextService.ActiveContext?.Copy(); }));
+        public ICommand AbstractCopyCommand => abstractCopyCommand ?? (abstractCopyCommand = new RelayCommand(() =>
+        {
+            Clipboard.SetText(ActiveContextService.ActiveContext?.Copy());
+        }));
 
         private ICommand abstractPasteCommand;
-        public ICommand AbstractPasteCommand => abstractPasteCommand ?? (abstractPasteCommand = new RelayCommand(() => { ActiveContextService.ActiveContext?.Paste(); }));
+        public ICommand AbstractPasteCommand => abstractPasteCommand ?? (abstractPasteCommand = new RelayCommand(() =>
+        {
+            ActiveContextService.ActiveContext?.Paste(Clipboard.GetText());
+        }));
 
         private ICommand abstractDeleteCommand;
         public ICommand AbstractDeleteCommand => abstractDeleteCommand ?? (abstractDeleteCommand = new RelayCommand(() => { ActiveContextService.ActiveContext?.Delete(); }));

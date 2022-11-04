@@ -16,25 +16,25 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace StorylineEditor.App.SerializeService
+namespace StorylineEditor.ViewModel
 {
-    public class DefaultSerializeService : ISerializeService
+    public class SerializeService
     {
-        private static Type[] addonTypes = 
+        private static Type[] addonTypes =
             AppDomain.CurrentDomain.GetAssemblies().First((assembly) => assembly.GetName().Name.Contains("StorylineEditor.Model"))
             .GetTypes().Where((type) => !type.IsSealed).ToArray();
-        
+
         ////// We dont mark any of our class as sealed, so the only classes with this mark are static classes (marked automatically)
 
         // Universal
 
-        public void Serialize<T>(Stream stream, T obj)
+        public static void Serialize<T>(Stream stream, T obj)
         {
             XmlSerializer xmlSerializerInstance = new XmlSerializer(typeof(T), addonTypes);
             xmlSerializerInstance.Serialize(stream, obj);
         }
 
-        public T Deserialize<T>(Stream stream)
+        public static T Deserialize<T>(Stream stream)
         {
             XmlSerializer xmlSerializerInstance = new XmlSerializer(typeof(T), addonTypes);
             return (T)xmlSerializerInstance.Deserialize(stream);
@@ -42,7 +42,7 @@ namespace StorylineEditor.App.SerializeService
 
         // Clipboard
 
-        public string Serialize<T>(T obj)
+        public static string Serialize<T>(T obj)
         {
             using (var memoryStream = new MemoryStream())
             {
@@ -51,7 +51,7 @@ namespace StorylineEditor.App.SerializeService
             }
         }
 
-        public T Deserialize<T>(string str)
+        public static T Deserialize<T>(string str)
         {
             T result = default;
 

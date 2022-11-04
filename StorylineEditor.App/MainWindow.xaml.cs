@@ -55,7 +55,7 @@ namespace StorylineEditor.App
 
             using (var fileStream = File.Open(path, FileMode.Open))
             {
-                model = ServiceFacade.SerializeService.Deserialize<StorylineM>(fileStream);
+                model = SerializeService.Deserialize<StorylineM>(fileStream);
             }
 
             if (model != null)
@@ -74,7 +74,7 @@ namespace StorylineEditor.App
             {
                 using (var fileStream = File.Open(path, FileMode.Create))
                 {
-                    ServiceFacade.SerializeService.Serialize(fileStream, storylineVM.Model);
+                    SerializeService.Serialize(fileStream, storylineVM.Model);
                 }
             }
         }

@@ -14,8 +14,8 @@ namespace StorylineEditor.ViewModel
 {
     public interface IActiveContext
     {
-        void Copy();
-        void Paste();
+        string Copy();
+        void Paste(string clipboard);
         void Delete();
     }
 
