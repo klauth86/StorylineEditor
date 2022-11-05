@@ -10,14 +10,107 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Model;
 using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModel.Common;
+using System.ComponentModel;
+using System.Windows.Data;
 
 namespace StorylineEditor.ViewModel.Nodes
 {
     public abstract class Node_RegularVM<T> : Node_BaseVM<T> where T : Node_RegularM
     {
-        public Node_RegularVM(T model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+        public CollectionViewSource FilteredCharacterCVS { get; }
+
+        public Node_RegularVM(T model, ICallbackContext callbackContext) : base(model, callbackContext)
+        {
+            FilteredCharacterCVS = new CollectionViewSource() { Source = ActiveContextService.Characters };
+
+            if (FilteredCharacterCVS.View != null)
+            {
+                FilteredCharacterCVS.View.Filter = Filter;
+                FilteredCharacterCVS.View.SortDescriptions.Add(new SortDescription(nameof(BaseM.name), ListSortDirection.Ascending));
+                FilteredCharacterCVS.View.MoveCurrentTo(Character);
+            }
+        }
+
+        private bool Filter(object sender)
+        {
+            if (sender is BaseM model)
+            {
+                return
+                    string.IsNullOrEmpty(characterFilter) ||
+                    (model.name?.Contains(characterFilter) ?? false) ||
+                    (model.description?.Contains(characterFilter) ?? false);
+            }
+            return false;
+        }
+
+        protected string characterFilter;
+        public string CharacterFilter
+        {
+            set
+            {
+                if (value != characterFilter)
+                {
+                    characterFilter = value;
+                    FilteredCharacterCVS.View?.Refresh();
+                }
+            }
+        }
+
+        public BaseM Character
+        {
+            get => ActiveContextService.GetCharacter(Model.characterId);
+            set
+            {
+                if (value?.id != Model.characterId)
+                {
+                    Model.characterId = value?.id;
+                    OnModelChanged(Model, nameof(Character));
+                    Notify(nameof(Character));
+                }
+            }
+        }
+
+        public string OverrideName
+        {
+            get => Model.overrideName;
+            set
+            {
+                if (Model.overrideName != value)
+                {
+                    Model.overrideName = value;
+                    OnModelChanged(Model, nameof(OverrideName));
+                }
+            }
+        }
+
+        public string FileHttpRef
+        {
+            get => Model.fileHttpRef;
+            set
+            {
+                if (Model.fileHttpRef != value)
+                {
+                    Model.fileHttpRef = value;
+                    OnModelChanged(Model, nameof(FileHttpRef));
+                }
+            }
+        }
+
+        public string ShortDescription
+        {
+            get => Model.shortDescription;
+            set
+            {
+                if (Model.shortDescription != value)
+                {
+                    Model.shortDescription = value;
+                    OnModelChanged(Model, nameof(ShortDescription));
+                }
+            }
+        }
     }
 
     public class Node_ReplicaVM : Node_RegularVM<Node_ReplicaM>

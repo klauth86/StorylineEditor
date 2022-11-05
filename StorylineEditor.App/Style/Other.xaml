@@ -17,8 +17,10 @@ StorylineEditor распространяется в надежде, что он�
                     xmlns:vmn="clr-namespace:StorylineEditor.ViewModel.Nodes;assembly=StorylineEditor.ViewModel"
                     xmlns:m="clr-namespace:StorylineEditor.Model;assembly=StorylineEditor.Model"
                     xmlns:mn="clr-namespace:StorylineEditor.Model.Nodes;assembly=StorylineEditor.Model"
+                    xmlns:mp="clr-namespace:StorylineEditor.Model.Predicates;assembly=StorylineEditor.Model"
+                    xmlns:mge="clr-namespace:StorylineEditor.Model.GameEvents;assembly=StorylineEditor.Model"
                     xmlns:bhvrs="clr-namespace:StorylineEditor.App.Behaviors"
-                    xmlns:controls="clr-namespace:StorylineEditor.App.Controls">
+                    xmlns:controls="clr-namespace:StorylineEditor.App.Controls" xmlns:system="clr-namespace:System;assembly=mscorlib">
 
     <!-- COLLECTION CONTEXT (FOLDERS AND PATH) -->
     
@@ -122,6 +124,10 @@ StorylineEditor распространяется в надежде, что он�
 
     <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock_Node}" x:Key="S_TextBlock_Node_Description"></Style>
 
+    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock_Node}" x:Key="S_TextBlock_Node_ShortDescription">
+        <Setter Property="FontWeight" Value="Bold"></Setter>
+    </Style>
+    
     <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock_Node}" x:Key="S_TextBlock_Node_Result">
         <Setter Property="FontStyle" Value="Italic"></Setter>
     </Style>
@@ -582,6 +588,7 @@ StorylineEditor распространяется в надежде, что он�
                     <RowDefinition Height="auto"></RowDefinition>
                     <RowDefinition></RowDefinition>
                     <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
 
                 <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left">
@@ -592,12 +599,14 @@ StorylineEditor распространяется в надежде, что он�
 
                 <Label Content="{StaticResource String_Icon_Node_Step}" Style="{StaticResource S_Label_Node}"></Label>
 
-                <TextBlock VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                <TextBlock VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
                 <controls:TextBlockExt Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
                                        Style="{StaticResource S_TextBlock_Node_Description}"></controls:TextBlockExt>
 
-                <TextBlock Grid.ColumnSpan="2" Grid.Row="2" Style="{StaticResource S_TextBlock_Node_Result}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                <Separator Grid.ColumnSpan="2" Grid.Row="2"></Separator>
+                
+                <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_Result}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
                 <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
                     <Button.RenderTransform>
@@ -638,6 +647,7 @@ StorylineEditor распространяется в надежде, что он�
                     <RowDefinition Height="auto"></RowDefinition>
                     <RowDefinition></RowDefinition>
                     <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
 
                 <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left">
@@ -648,12 +658,14 @@ StorylineEditor распространяется в надежде, что он�
 
                 <Label Content="{StaticResource String_Icon_Node_Alternative}" Style="{StaticResource S_Label_Node}"></Label>
 
-                <TextBlock VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                <TextBlock VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
                 <controls:TextBlockExt Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
                                        Style="{StaticResource S_TextBlock_Node_Description}"></controls:TextBlockExt>
 
-                <TextBlock Grid.ColumnSpan="2" Grid.Row="2" Style="{StaticResource S_TextBlock_Node_Result}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                <Separator Grid.ColumnSpan="2" Grid.Row="2"></Separator>
+                
+                <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_Result}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
                 <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
                     <Button.RenderTransform>
@@ -703,12 +715,116 @@ StorylineEditor распространяется в надежде, что он�
         </Border>
     </DataTemplate>
 
+    <DataTemplate x:Key="DT_ContentControl_Predicates">
+        
+    </DataTemplate>
+
+    <DataTemplate x:Key="DT_ContentControl_GameEvents">
+
+    </DataTemplate>
+
+    <DataTemplate x:Key="DT_ComboBoxItem_Predicate">
+        <TextBlock x:Name="tb_Main"></TextBlock>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding}" Value="{x:Type mp:P_CompositeM}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_CompositeM_DisplayName}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="{x:Type mp:P_Dialog_HasM}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_HasM_DisplayName}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="{x:Type mp:P_Dialog_Node_Has_ActiveSession_CmpM}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_ActiveSession_CmpM_DisplayName}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="{x:Type mp:P_Dialog_Node_Has_ActiveSessionM}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_ActiveSessionM_DisplayName}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="{x:Type mp:P_Dialog_Node_Has_PrevSessions_CmpM}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_PrevSessions_CmpM_DisplayName}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="{x:Type mp:P_Dialog_Node_Has_PrevSessionsM}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_PrevSessionsM_DisplayName}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="{x:Type mp:P_Item_HasM}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Item_HasM_DisplayName}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="{x:Type mp:P_Quest_AddedM}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_AddedM_DisplayName}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="{x:Type mp:P_Quest_FinishedM}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_FinishedM_DisplayName}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="{x:Type mp:P_Quest_Node_AddedM}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_Node_AddedM_DisplayName}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="{x:Type mp:P_Quest_Node_PassedM}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_Node_PassedM_DisplayName}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="{x:Type mp:P_Relation_HasM}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Relation_HasM_DisplayName}"></Setter>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+    
+    <DataTemplate x:Key="DT_ContentControl_PredicatesHeader">
+        <controls:ComboBoxExt SelectedValue="{Binding SelectedPredicateType, UpdateSourceTrigger=PropertyChanged}"
+                              Tag="{StaticResource String_Tag_Node_Tab_Predicates}"
+                              Style="{StaticResource S_ComboBoxExt_Prop_Popup}" ItemTemplate="{StaticResource DT_ComboBoxItem_Predicate}">
+            <system:Type>mp:P_CompositeM</system:Type>
+            <system:Type>mp:P_Dialog_HasM</system:Type>
+            <system:Type>mp:P_Dialog_Node_Has_ActiveSession_CmpM</system:Type>
+            <system:Type>mp:P_Dialog_Node_Has_ActiveSessionM</system:Type>
+            <system:Type>mp:P_Dialog_Node_Has_PrevSessions_CmpM</system:Type>
+            <system:Type>mp:P_Dialog_Node_Has_PrevSessionsM</system:Type>
+            <system:Type>mp:P_Item_HasM</system:Type>
+            <system:Type>mp:P_Quest_AddedM</system:Type>
+            <system:Type>mp:P_Quest_FinishedM</system:Type>
+            <system:Type>mp:P_Quest_Node_AddedM</system:Type>
+            <system:Type>mp:P_Quest_Node_PassedM</system:Type>
+            <system:Type>mp:P_Relation_HasM</system:Type>
+        </controls:ComboBoxExt>
+    </DataTemplate>
+
+    <DataTemplate x:Key="DT_ComboBoxItem_GameEvent">
+        <TextBlock x:Name="tb_Main"></TextBlock>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding}" Value="{x:Type mge:GE_Item_DropM}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_GameEvent_GE_Item_DropM_DisplayName}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="{x:Type mge:GE_Item_PickUpM}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_GameEvent_GE_Item_PickUpM_DisplayName}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="{x:Type mge:GE_Quest_AddM}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_GameEvent_GE_Quest_AddM_DisplayName}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="{x:Type mge:GE_Quest_Node_AddM}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_GameEvent_GE_Quest_Node_AddM_DisplayName}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="{x:Type mge:GE_Quest_Node_PassM}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_GameEvent_GE_Quest_Node_PassM_DisplayName}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="{x:Type mge:GE_Relation_ChangeM}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_GameEvent_GE_Relation_ChangeM_DisplayName}"></Setter>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+    
+    <DataTemplate x:Key="DT_ContentControl_GameEventsHeader">
+        <controls:ComboBoxExt SelectedValue="{Binding SelectedGameEventType, UpdateSourceTrigger=PropertyChanged}"
+                              Tag="{StaticResource String_Tag_Node_Tab_GameEvents}"
+                              Style="{StaticResource S_ComboBoxExt_Prop_Popup}"  ItemTemplate="{StaticResource DT_ComboBoxItem_GameEvent}">
+            <system:Type>mge:GE_Item_DropM</system:Type>
+            <system:Type>mge:GE_Item_PickUpM</system:Type>
+            <system:Type>mge:GE_Quest_AddM</system:Type>
+            <system:Type>mge:GE_Quest_Node_AddM</system:Type>
+            <system:Type>mge:GE_Quest_Node_PassM</system:Type>
+            <system:Type>mge:GE_Relation_ChangeM</system:Type>
+        </controls:ComboBoxExt>
+    </DataTemplate>
+    
     <DataTemplate DataType="{x:Type vmn:Node_RandomEditorVM}">
         <TabControl>
-            <TabItem Header="{StaticResource String_Tag_Node_Tab_Predicates}">
-            </TabItem>
-            <TabItem Header="{StaticResource String_Tag_Node_Tab_GameEvents}">
-            </TabItem>
+            <TabItem ContentTemplate="{StaticResource DT_ContentControl_Predicates}" HeaderTemplate="{StaticResource DT_ContentControl_PredicatesHeader}" Header="{Binding}"></TabItem>
+            <TabItem ContentTemplate="{StaticResource DT_ContentControl_GameEvents}" HeaderTemplate="{StaticResource DT_ContentControl_GameEventsHeader}" Header="{Binding}"></TabItem>
         </TabControl>
     </DataTemplate>
 
@@ -736,13 +852,163 @@ StorylineEditor распространяется в надежде, что он�
 
     <DataTemplate DataType="{x:Type vmn:Node_TransitEditorVM}">
         <TabControl>
-            <TabItem Header="{StaticResource String_Tag_Node_Tab_Predicates}">
-            </TabItem>
-            <TabItem Header="{StaticResource String_Tag_Node_Tab_GameEvents}">
-            </TabItem>
+            <TabItem ContentTemplate="{StaticResource DT_ContentControl_Predicates}" HeaderTemplate="{StaticResource DT_ContentControl_PredicatesHeader}" Header="{Binding}"></TabItem>
+            <TabItem ContentTemplate="{StaticResource DT_ContentControl_GameEvents}" HeaderTemplate="{StaticResource DT_ContentControl_GameEventsHeader}" Header="{Binding}"></TabItem>
         </TabControl>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vmn:Node_ReplicaVM}">
+        <Border Style="{StaticResource S_Border_Node}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                
+                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <Button.RenderTransform>
+                        <TranslateTransform X="{StaticResource Double_Icon_Gender_-Width/2}" Y="{StaticResource Double_Icon_Gender_-Height/2}"></TranslateTransform>
+                    </Button.RenderTransform>
+                </Button>
+
+                <Label Content="{StaticResource String_Icon_Node_Replica}" Style="{StaticResource S_Label_Node}"></Label>
+
+                <TextBlock x:Name="tb_CharacterName" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Character.name, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"></TextBlock>
+                <TextBlock x:Name="tb_OverrideName" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                
+                <controls:TextBlockExt Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                                       Style="{StaticResource S_TextBlock_Node_Description}"></controls:TextBlockExt>
+
+                <Separator Grid.ColumnSpan="2" Grid.Row="2"></Separator>
+                
+                <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_ShortDescription}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+
+                <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <Button.RenderTransform>
+                        <TranslateTransform X="{StaticResource Double_Button_Node_Remove_Width/2}" Y="{StaticResource Double_Button_Node_Remove_-Height/2}"></TranslateTransform>
+                    </Button.RenderTransform>
+                </Button>
+            </Grid>
+        </Border>
+        <DataTemplate.Triggers>
+            <Trigger SourceName="tb_OverrideName" Property="Text" Value="">
+                <Setter TargetName="tb_OverrideName" Property="Visibility" Value="Collapsed"></Setter>
+                <Setter TargetName="tb_CharacterName" Property="Visibility" Value="Visible"></Setter>
+            </Trigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmn:Node_ReplicaEditorVM}">
+        <TabControl>
+            <TabItem Header="{StaticResource String_Tag_Node_Tab_Props}">
+                <Grid VerticalAlignment="Top">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <controls:ComboBoxExt SelectedValue="{Binding Character, UpdateSourceTrigger=PropertyChanged}"
+                                          Tag="{StaticResource String_Tag_Node_Regular_Character}"
+                                          ItemsSource="{Binding FilteredCharacterCVS.View}"
+                                          Filter="{Binding CharacterFilter, UpdateSourceTrigger=PropertyChanged}"
+                                          Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
+                    <TextBox Grid.Row="1" Style="{StaticResource S_TextBox_Prop}" Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_OverrideName}"></TextBox>
+                    <TextBox Grid.Row="2" Style="{StaticResource S_TextBox_Prop}" Text="{Binding FileHttpRef, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_FileHttpRef}"></TextBox>
+                    <TextBox Grid.Row="3" Style="{StaticResource S_TextBox_Prop_Rich}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Alternative_Description}"></TextBox>
+                    <TextBox Grid.Row="4" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_ShortDescription}"></TextBox>
+                </Grid>
+            </TabItem>
+            <TabItem ContentTemplate="{StaticResource DT_ContentControl_Predicates}" HeaderTemplate="{StaticResource DT_ContentControl_PredicatesHeader}" Header="{Binding}"></TabItem>
+            <TabItem ContentTemplate="{StaticResource DT_ContentControl_GameEvents}" HeaderTemplate="{StaticResource DT_ContentControl_GameEventsHeader}" Header="{Binding}"></TabItem>
+        </TabControl>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmn:Node_DialogVM}">
+        <Border Style="{StaticResource S_Border_Node}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <Button.RenderTransform>
+                        <TranslateTransform X="{StaticResource Double_Icon_Gender_-Width/2}" Y="{StaticResource Double_Icon_Gender_-Height/2}"></TranslateTransform>
+                    </Button.RenderTransform>
+                </Button>
+
+                <Label Content="{StaticResource String_Icon_Node_Dialog}" Style="{StaticResource S_Label_Node}"></Label>
+
+                <TextBlock x:Name="tb_CharacterName" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Character.name, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"></TextBlock>
+                <TextBlock x:Name="tb_OverrideName" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+
+                <controls:TextBlockExt Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                                       Style="{StaticResource S_TextBlock_Node_Description}"></controls:TextBlockExt>
+
+                <Separator Grid.ColumnSpan="2" Grid.Row="2"></Separator>
+
+                <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_ShortDescription}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+
+                <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <Button.RenderTransform>
+                        <TranslateTransform X="{StaticResource Double_Button_Node_Remove_Width/2}" Y="{StaticResource Double_Button_Node_Remove_-Height/2}"></TranslateTransform>
+                    </Button.RenderTransform>
+                </Button>
+            </Grid>
+        </Border>
+        <DataTemplate.Triggers>
+            <Trigger SourceName="tb_OverrideName" Property="Text" Value="">
+                <Setter TargetName="tb_OverrideName" Property="Visibility" Value="Collapsed"></Setter>
+                <Setter TargetName="tb_CharacterName" Property="Visibility" Value="Visible"></Setter>
+            </Trigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmn:Node_DialogEditorVM}">
+        <TabControl>
+            <TabItem Header="{StaticResource String_Tag_Node_Tab_Props}">
+                <Grid VerticalAlignment="Top">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <controls:ComboBoxExt SelectedValue="{Binding Character, UpdateSourceTrigger=PropertyChanged}"
+                                          Tag="{StaticResource String_Tag_Node_Regular_Character}"
+                                          ItemsSource="{Binding FilteredCharacterCVS.View}"
+                                          Filter="{Binding CharacterFilter, UpdateSourceTrigger=PropertyChanged}"
+                                          Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
+                    <TextBox Grid.Row="1" Style="{StaticResource S_TextBox_Prop}" Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_OverrideName}"></TextBox>
+                    <TextBox Grid.Row="2" Style="{StaticResource S_TextBox_Prop}" Text="{Binding FileHttpRef, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_FileHttpRef}"></TextBox>
+                    <TextBox Grid.Row="3" Style="{StaticResource S_TextBox_Prop_Rich}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Alternative_Description}"></TextBox>
+                    <TextBox Grid.Row="4" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_ShortDescription}"></TextBox>
+                </Grid>
+            </TabItem>
+            <TabItem ContentTemplate="{StaticResource DT_ContentControl_Predicates}" HeaderTemplate="{StaticResource DT_ContentControl_PredicatesHeader}" Header="{Binding}"></TabItem>
+            <TabItem ContentTemplate="{StaticResource DT_ContentControl_GameEvents}" HeaderTemplate="{StaticResource DT_ContentControl_GameEventsHeader}" Header="{Binding}"></TabItem>
+        </TabControl>
+    </DataTemplate>
+    
     <DataTemplate DataType="{x:Type vmg:DialogVM}">
         <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}"
                     bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
@@ -770,7 +1036,7 @@ StorylineEditor распространяется в надежде, что он�
                     <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_Name}"></TextBox>
                     <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
                     <controls:ComboBoxExt SelectedValue="{Binding DialogCharacter, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Node_Dialog_DialogCharacter}"
+                                          Tag="{StaticResource String_Tag_Dialog_DialogCharacter}"
                                           ItemsSource="{Binding FilteredDialogCharacterCVS.View}"
                                           Filter="{Binding DialogCharacterFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>

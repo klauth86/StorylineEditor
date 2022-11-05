@@ -41,6 +41,7 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 FilteredDialogCharacterCVS.View.Filter = Filter;
                 FilteredDialogCharacterCVS.View.SortDescriptions.Add(new SortDescription(nameof(BaseM.name), ListSortDirection.Ascending));
+                FilteredDialogCharacterCVS.View.MoveCurrentTo(DialogCharacter);
             }
         }
 

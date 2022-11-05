@@ -17,6 +17,9 @@ namespace StorylineEditor.Model.Nodes
         public Node_RegularM(long additionalTicks) : base(additionalTicks)
         {
             characterId = null;
+            overrideName = null;
+            fileHttpRef = null;
+            shortDescription = null;
         }
 
         public Node_RegularM() : this(0) { }
@@ -28,10 +31,16 @@ namespace StorylineEditor.Model.Nodes
             if (targetObject is Node_RegularM casted)
             {
                 casted.characterId = characterId;
+                casted.overrideName = overrideName;
+                casted.fileHttpRef = fileHttpRef;
+                casted.shortDescription = shortDescription;
             }
         }
 
         public string characterId { get; set; }
+        public string overrideName { get; set; }
+        public string fileHttpRef { get; set; }
+        public string shortDescription { get; set; }
     }
 
     public class Node_ReplicaM : Node_RegularM
