@@ -145,15 +145,62 @@ namespace StorylineEditor.ViewModel
         public ICommand ReplicasTabCommand => replicasTabCommand ?? (replicasTabCommand = new RelayCommand(() =>
         {
             Selection = new CollectionVM(Model.replicas,
-            (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new ReplicaM() { name = "Новая реплика" }; },
-            (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM, callbackContext); else return new ReplicaVM((ReplicaM)model, callbackContext); },
-            (Notifier viewModel, ICallbackContext callbackContext) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM, callbackContext); else return new ReplicaEditorVM((ReplicaVM)viewModel, callbackContext); },
-            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((ReplicaVM)viewModel).Model; },
-            (Notifier viewModel) => { });
+                (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new ReplicaM() { name = "Новый реплика" }; },
+                (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM, callbackContext); else return new ReplicaVM((ReplicaM)model, callbackContext); },
+                (Notifier viewModel, ICallbackContext callbackContext) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM, callbackContext); else return CreateReplicaEditorVM((ReplicaVM)viewModel, callbackContext); },
+                (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((ReplicaVM)viewModel).Model; },
+                (Notifier viewModel) => { });
             SelectionModel = Model.replicas;
         }, () => SelectionModel != Model.replicas));
 
+        private Notifier CreateReplicaEditorVM(ReplicaVM inViewModel, ICallbackContext outerCallbackContext)
+        {
+            return new ReplicaEditorVM(inViewModel, outerCallbackContext,
+            (Type type, Point position) =>
+            {
+                if (type == typeof(LinkM)) return new LinkM();
+                if (type == typeof(Node_ReplicaM)) return new Node_ReplicaM() { positionX = position.X, positionY = position.Y };
+                if (type == typeof(Node_RandomM)) return new Node_RandomM() { positionX = position.X, positionY = position.Y };
+                if (type == typeof(Node_TransitM)) return new Node_TransitM() { positionX = position.X, positionY = position.Y };
 
+                throw new ArgumentOutOfRangeException(nameof(type));
+            },
+            (BaseM model, ICallbackContext callbackContext) =>
+            {
+                if (model is LinkM modelLink) return new LinkVM(modelLink, callbackContext);
+                if (model is Node_ReplicaM replicaModel) return new Node_ReplicaVM(replicaModel, callbackContext);
+                if (model is Node_RandomM randomModel) return new Node_RandomVM(randomModel, callbackContext);
+                if (model is Node_TransitM transitModel) return new Node_TransitVM(transitModel, callbackContext);
+
+                throw new ArgumentOutOfRangeException(nameof(model));
+            },
+            (Notifier viewModel, ICallbackContext callbackContext) =>
+            {
+                if (viewModel is Node_ReplicaVM replicaViewModel) return new Node_ReplicaEditorVM(replicaViewModel);
+                if (viewModel is Node_RandomVM randomViewModel) return new Node_RandomEditorVM(randomViewModel);
+                if (viewModel is Node_TransitVM transitViewModel) return new Node_TransitEditorVM(transitViewModel);
+
+                throw new ArgumentOutOfRangeException(nameof(viewModel));
+            },
+            (Notifier viewModel) =>
+            {
+                if (viewModel is LinkVM viewModelLink) return viewModelLink.Model;
+                if (viewModel is Node_ReplicaVM replicaViewModel) return replicaViewModel.Model;
+                if (viewModel is Node_RandomVM randomViewModel) return randomViewModel.Model;
+                if (viewModel is Node_TransitVM transitViewModel) return transitViewModel.Model;
+
+                throw new ArgumentOutOfRangeException(nameof(viewModel));
+            },
+            typeof(Node_ReplicaVM),
+            (Type type) =>
+            {
+                if (type == typeof(Node_StepM)) return "Шаг";
+                if (type == typeof(Node_AlternativeM)) return "Альтернатива";
+
+                throw new ArgumentOutOfRangeException(nameof(type));
+            }
+            );
+        }
 
         public override string Id => Model.id;
 

@@ -31,6 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Nodes\Node_RegularVM.cs" />
+    <Compile Include="Nodes\Node_InteractiveVM.cs" />
     <Compile Include="SerializeService.cs" />
     <Compile Include="Collection_BaseVM.cs" />
     <Compile Include="ActiveContextService.cs" />

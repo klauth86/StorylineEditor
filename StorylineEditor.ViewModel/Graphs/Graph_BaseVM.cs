@@ -1117,5 +1117,34 @@ namespace StorylineEditor.ViewModel.Graphs
                 }
             }
         }
+
+
+
+        public string Name
+        {
+            get => Model.name;
+            set
+            {
+                if (Model.name != value)
+                {
+                    Model.name = value;
+                    OnModelChanged(Model, nameof(Name));
+                    CallbackContext?.Callback(this, nameof(Name));
+                }
+            }
+        }
+
+        public string Description
+        {
+            get => Model.description;
+            set
+            {
+                if (Model.description != value)
+                {
+                    Model.description = value;
+                    OnModelChanged(Model, nameof(Description));
+                }
+            }
+        }
     }
 }
