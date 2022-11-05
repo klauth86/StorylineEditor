@@ -451,7 +451,7 @@ StorylineEditor распространяется в надежде, что он�
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="📝" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+                <TextBlock Text="{StaticResource String_Icon_Quest}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
                 <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
                 <TextBlock Grid.Column="2" Style="{StaticResource S_TextBlock_Selector_Cut}"></TextBlock>
             </Grid>
@@ -566,7 +566,7 @@ StorylineEditor распространяется в надежде, что он�
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="💬" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+                <TextBlock Text="{StaticResource String_Icon_Dialog}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
                 <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
                 <TextBlock Grid.Column="2" Style="{StaticResource S_TextBlock_Selector_Cut}"></TextBlock>
             </Grid>
@@ -589,7 +589,7 @@ StorylineEditor распространяется в надежде, что он�
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="🗣" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+                <TextBlock Text="{StaticResource String_Icon_Replica}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
                 <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
                 <TextBlock Grid.Column="2" Style="{StaticResource S_TextBlock_Selector_Cut}"></TextBlock>
             </Grid>

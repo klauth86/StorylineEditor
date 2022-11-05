@@ -42,18 +42,32 @@ StorylineEditor распространяется в надежде, что он�
 
     <sys:String x:Key="String_Icon_Gender_Female">👩</sys:String>
 
-    <sys:String x:Key="String_Icon_Node_Step">✔</sys:String>
-
-    <sys:String x:Key="String_Icon_Node_Alternative">💡</sys:String>
-
     <sys:String x:Key="String_Icon_Graph_Origin">⌱</sys:String>
 
     <sys:String x:Key="String_Icon_Graph_Reset">⭯</sys:String>
 
     <sys:String x:Key="String_Icon_Character">👥</sys:String>
 
+    <sys:String x:Key="String_Icon_Item">💰</sys:String>
+    
     <sys:String x:Key="String_Icon_Actor">🧊</sys:String>
 
-    <sys:String x:Key="String_Icon_Item">💰</sys:String>
+    <sys:String x:Key="String_Icon_Quest">📝</sys:String>
+
+    <sys:String x:Key="String_Icon_Node_Step">✔</sys:String>
+
+    <sys:String x:Key="String_Icon_Node_Alternative">💡</sys:String>
+
+    <sys:String x:Key="String_Icon_Node_Random">⇝</sys:String>
+
+    <sys:String x:Key="String_Icon_Node_Transit">⇴</sys:String>
+
+    <sys:String x:Key="String_Icon_Node_Dialog">💬</sys:String>
+
+    <sys:String x:Key="String_Icon_Node_Replica">🗣</sys:String>
+
+    <sys:String x:Key="String_Icon_Dialog">💬</sys:String>
+    
+    <sys:String x:Key="String_Icon_Replica">🗣</sys:String>
 
 </ResourceDictionary>
