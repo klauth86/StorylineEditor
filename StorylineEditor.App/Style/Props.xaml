@@ -247,15 +247,15 @@ StorylineEditor распространяется в надежде, что он�
                             </Grid.ColumnDefinitions>
                             <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Margin="1" Placement="Bottom" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}">
                                 <theme:SystemDropShadowChrome x:Name="shadow" Color="Transparent" MinWidth="{Binding ActualWidth, ElementName=templateRoot}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"></RowDefinition>
-                                            <RowDefinition Height="*"></RowDefinition>
-                                        </Grid.RowDefinitions>
-                                        <TextBox Background="{StaticResource ComboBox.Static.Editable.Background}" Margin="0, 8, 0, 4" x:Name="tb_Filter" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}"></TextBox>
-                                        <TextBox Margin="0, 8, 0, 4" x:Name="tb_FilterPlaceholder" IsReadOnly="True" Background="Transparent" BorderBrush="Transparent" IsHitTestVisible="False" Text="{StaticResource String_Tag_ComboBoxExt_Filter_Tooltip}" Visibility="Collapsed"></TextBox>
-                                        <Border Grid.Row="1" x:Name="dropDownBorder" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" BorderThickness="1">
-                                            <ScrollViewer x:Name="DropDownScrollViewer">
+                                    <Border x:Name="dropDownBorder" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" BorderThickness="1">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"></RowDefinition>
+                                                <RowDefinition Height="*"></RowDefinition>
+                                            </Grid.RowDefinitions>
+                                            <TextBox Background="{StaticResource ComboBox.Static.Editable.Background}" Margin="0, 8, 0, 4" x:Name="tb_Filter" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}"></TextBox>
+                                            <TextBox Margin="0, 8, 0, 4" x:Name="tb_FilterPlaceholder" IsReadOnly="True" Background="Transparent" BorderBrush="Transparent" IsHitTestVisible="False" Text="{StaticResource String_Tag_ComboBoxExt_Filter_Tooltip}" Visibility="Collapsed"></TextBox>
+                                            <ScrollViewer Grid.Row="1" x:Name="DropDownScrollViewer">
                                                 <Grid x:Name="grid" RenderOptions.ClearTypeHint="Enabled">
                                                     <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
                                                         <Rectangle x:Name="opaqueRect" Fill="{Binding Background, ElementName=dropDownBorder}" Height="{Binding ActualHeight, ElementName=dropDownBorder}" Width="{Binding ActualWidth, ElementName=dropDownBorder}"/>
@@ -263,14 +263,12 @@ StorylineEditor распространяется в надежде, что он�
                                                     <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                                                 </Grid>
                                             </ScrollViewer>
-                                        </Border>
-                                    </Grid>
+                                        </Grid>
+                                    </Border>
                                 </theme:SystemDropShadowChrome>
                             </Popup>
                             <ToggleButton x:Name="toggleButton" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Grid.ColumnSpan="2" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Style="{StaticResource ComboBoxToggleButton}"/>
-                            <ContentControl Margin="2 1 2 1">
-                                <ContentPresenter x:Name="contentPresenter" ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" Content="{TemplateBinding SelectionBoxItem}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" IsHitTestVisible="false" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                            </ContentControl>
+                            <ContentPresenter x:Name="contentPresenter" ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" Content="{TemplateBinding SelectionBoxItem}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" IsHitTestVisible="false" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </Grid>
                     </GroupBox>
                     <ControlTemplate.Triggers>
