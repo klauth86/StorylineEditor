@@ -10,6 +10,11 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Model;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace StorylineEditor.ViewModel
 {
     public interface IActiveContext
@@ -23,5 +28,31 @@ namespace StorylineEditor.ViewModel
     {
         public static IActiveContext ActiveContext { get; set; }
         public static StorylineVM ActiveStoryline { get; set; }
+        public static IEnumerable<BaseM> GetEnumerator(List<BaseM> collection)
+        {
+            foreach (var item in collection)
+            {
+                if (item is FolderM folder)
+                {
+                    foreach (var contentItem in GetEnumerator(folder.content))
+                    {
+                        yield return contentItem;
+                    }
+                }
+                else
+                {
+                    yield return item;
+                }
+            }
+        }
+
+        public static IEnumerable<BaseM> Characters => GetEnumerator(ActiveStoryline?.Model.characters);
+        public static BaseM GetCharacter(string id) => Characters?.FirstOrDefault((model) => model.id == id);
+
+        public static IEnumerable<BaseM> Items => GetEnumerator(ActiveStoryline?.Model.items);
+        public static BaseM GetItem(string id) => Items?.FirstOrDefault((model) => model.id == id);
+
+        public static IEnumerable<BaseM> Actors => GetEnumerator(ActiveStoryline?.Model.actors);
+        public static BaseM GetActor(string id) => Actors?.FirstOrDefault((model) => model.id == id);
     }
 }

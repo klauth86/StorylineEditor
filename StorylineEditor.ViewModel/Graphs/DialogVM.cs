@@ -21,6 +21,8 @@ namespace StorylineEditor.ViewModel.Graphs
     public class DialogVM : BaseVM<DialogM>
     {
         public DialogVM(DialogM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+
+        public BaseM DialogCharacter => ActiveContextService.GetCharacter(Model.npcId);
     }
 
     public class DialogEditorVM : Graph_BaseVM<DialogM>
@@ -29,5 +31,19 @@ namespace StorylineEditor.ViewModel.Graphs
            Func<Notifier, ICallbackContext, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Type defaultNodeType) : base(viewModel.Model, callbackContext,
                 modelCreator, viewModelCreator, editorCreator, modelExtractor, defaultNodeType)
         { }
+
+        public BaseM DialogCharacter
+        {
+            get => ActiveContextService.GetCharacter(Model.npcId);
+            set
+            {
+                if (value?.id != Model.npcId)
+                {
+                    Model.npcId = value.id;
+                    OnModelChanged(Model, nameof(DialogVM.DialogCharacter));
+                    Notify(nameof(DialogCharacter));
+                }
+            }
+        }
     }
 }
