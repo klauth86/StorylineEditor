@@ -43,13 +43,12 @@ namespace StorylineEditor.ViewModel.Graphs
     public class Graph_BaseVM<T> : Collection_BaseVM<T, Point>, ICallbackContext, IActiveContext where T : GraphM
     {
         public Graph_BaseVM(T model, ICallbackContext callbackContext, Func<Type, Point, BaseM> modelCreator, Func<BaseM, ICallbackContext, Notifier> viewModelCreator,
-            Func<Notifier, ICallbackContext, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Type defaultNodeType, Func<Type, string> typeDescriptor) : base(model, callbackContext,
+            Func<Notifier, ICallbackContext, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Type defaultNodeType) : base(model, callbackContext,
                 modelCreator, viewModelCreator, editorCreator, modelExtractor)
         {
             offsetY = offsetX = 0;
             scale = 1;
             selectedNodeType = defaultNodeType;
-            _typeDescriptor = typeDescriptor ?? throw new ArgumentNullException(nameof(typeDescriptor));
 
             fromNodeViewModel = null;
             isDragging = false;
@@ -724,10 +723,6 @@ namespace StorylineEditor.ViewModel.Graphs
 
 
 
-        private readonly Func<Type, string> _typeDescriptor;
-
-
-
         protected double offsetX;
         public double OffsetX
         {
@@ -780,13 +775,11 @@ namespace StorylineEditor.ViewModel.Graphs
                 {
                     selectedNodeType = value;
                     Notify(nameof(SelectedNodeType));
-                    Notify(nameof(SelectedNodeTypeName));
 
                     CommandManager.InvalidateRequerySuggested();
                 }
             }
         }
-        public string SelectedNodeTypeName => _typeDescriptor(SelectedNodeType);
 
 
 

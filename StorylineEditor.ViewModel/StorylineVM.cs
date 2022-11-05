@@ -118,14 +118,7 @@ namespace StorylineEditor.ViewModel
 
                 throw new ArgumentOutOfRangeException(nameof(viewModel));
             },
-            typeof(Node_StepM),
-            (Type type) =>
-            {
-                if (type == typeof(Node_StepM)) return "Шаг";
-                if (type == typeof(Node_AlternativeM)) return "Альтернатива";
-
-                throw new ArgumentOutOfRangeException(nameof(type));
-            }
+            typeof(Node_StepM)
             );
         }
 
@@ -191,14 +184,7 @@ namespace StorylineEditor.ViewModel
 
                 throw new ArgumentOutOfRangeException(nameof(viewModel));
             },
-            typeof(Node_ReplicaVM),
-            (Type type) =>
-            {
-                if (type == typeof(Node_StepM)) return "Шаг";
-                if (type == typeof(Node_AlternativeM)) return "Альтернатива";
-
-                throw new ArgumentOutOfRangeException(nameof(type));
-            }
+            typeof(Node_ReplicaM)
             );
         }
 

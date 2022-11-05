@@ -28,8 +28,8 @@ namespace StorylineEditor.ViewModel.Graphs
     public class QuestEditorVM : Graph_BaseVM<QuestM>
     {
         public QuestEditorVM(QuestVM viewModel, ICallbackContext callbackContext, Func<Type, Point, BaseM> modelCreator, Func<BaseM, ICallbackContext, Notifier> viewModelCreator,
-           Func<Notifier, ICallbackContext, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Type defaultNodeType, Func<Type, string> typeDescriptor) : base(viewModel.Model, callbackContext,
-                modelCreator, viewModelCreator, editorCreator, modelExtractor, defaultNodeType, typeDescriptor)
+           Func<Notifier, ICallbackContext, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Type defaultNodeType) : base(viewModel.Model, callbackContext,
+                modelCreator, viewModelCreator, editorCreator, modelExtractor, defaultNodeType)
         { }
 
         protected override string CanLinkNodes(INodeVM from, INodeVM to)
