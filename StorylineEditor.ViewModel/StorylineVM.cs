@@ -126,19 +126,65 @@ namespace StorylineEditor.ViewModel
         public ICommand DialogsTabCommand => dialogsTabCommand ?? (dialogsTabCommand = new RelayCommand(() =>
         {
             Selection = new CollectionVM(Model.dialogs,
-            (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new DialogM() { name = "Новый диалог" }; },
-            (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM, callbackContext); else return new DialogVM((DialogM)model, callbackContext); },
-            (Notifier viewModel, ICallbackContext callbackContext) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM, callbackContext); else return new DialogEditorVM((DialogVM)viewModel, callbackContext); },
-            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((DialogVM)viewModel).Model; },
-            (Notifier viewModel) => { });
+                (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new DialogM() { name = "Новый диалог" }; },
+                (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM, callbackContext); else return new DialogVM((DialogM)model, callbackContext); },
+                (Notifier viewModel, ICallbackContext callbackContext) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM, callbackContext); else return CreateDialogEditorVM((DialogVM)viewModel, callbackContext); },
+                (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((DialogVM)viewModel).Model; },
+                (Notifier viewModel) => { });
             SelectionModel = Model.dialogs;
         }, () => SelectionModel != Model.dialogs));
+
+        private Notifier CreateDialogEditorVM(DialogVM inViewModel, ICallbackContext outerCallbackContext)
+        {
+            return new DialogEditorVM(inViewModel, outerCallbackContext,
+            (Type type, Point position) =>
+            {
+                if (type == typeof(LinkM)) return new LinkM();
+                if (type == typeof(Node_DialogM)) return new Node_DialogM() { positionX = position.X, positionY = position.Y };
+                if (type == typeof(Node_ReplicaM)) return new Node_ReplicaM() { positionX = position.X, positionY = position.Y };
+                if (type == typeof(Node_RandomM)) return new Node_RandomM() { positionX = position.X, positionY = position.Y };
+                if (type == typeof(Node_TransitM)) return new Node_TransitM() { positionX = position.X, positionY = position.Y };
+
+                throw new ArgumentOutOfRangeException(nameof(type));
+            },
+            (BaseM model, ICallbackContext callbackContext) =>
+            {
+                if (model is LinkM modelLink) return new LinkVM(modelLink, callbackContext);
+                if (model is Node_DialogM dialogModel) return new Node_DialogVM(dialogModel, callbackContext);
+                if (model is Node_ReplicaM replicaModel) return new Node_ReplicaVM(replicaModel, callbackContext);
+                if (model is Node_RandomM randomModel) return new Node_RandomVM(randomModel, callbackContext);
+                if (model is Node_TransitM transitModel) return new Node_TransitVM(transitModel, callbackContext);
+
+                throw new ArgumentOutOfRangeException(nameof(model));
+            },
+            (Notifier viewModel, ICallbackContext callbackContext) =>
+            {
+                if (viewModel is Node_DialogVM dialogViewModel) return new Node_DialogEditorVM(dialogViewModel);
+                if (viewModel is Node_ReplicaVM replicaViewModel) return new Node_ReplicaEditorVM(replicaViewModel);
+                if (viewModel is Node_RandomVM randomViewModel) return new Node_RandomEditorVM(randomViewModel);
+                if (viewModel is Node_TransitVM transitViewModel) return new Node_TransitEditorVM(transitViewModel);
+
+                throw new ArgumentOutOfRangeException(nameof(viewModel));
+            },
+            (Notifier viewModel) =>
+            {
+                if (viewModel is LinkVM viewModelLink) return viewModelLink.Model;
+                if (viewModel is Node_DialogVM dialogViewModel) return dialogViewModel.Model;
+                if (viewModel is Node_ReplicaVM replicaViewModel) return replicaViewModel.Model;
+                if (viewModel is Node_RandomVM randomViewModel) return randomViewModel.Model;
+                if (viewModel is Node_TransitVM transitViewModel) return transitViewModel.Model;
+
+                throw new ArgumentOutOfRangeException(nameof(viewModel));
+            },
+            typeof(Node_DialogM)
+            );
+        }
 
         private ICommand replicasTabCommand;
         public ICommand ReplicasTabCommand => replicasTabCommand ?? (replicasTabCommand = new RelayCommand(() =>
         {
             Selection = new CollectionVM(Model.replicas,
-                (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new ReplicaM() { name = "Новый реплика" }; },
+                (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new ReplicaM() { name = "Новая реплика" }; },
                 (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM, callbackContext); else return new ReplicaVM((ReplicaM)model, callbackContext); },
                 (Notifier viewModel, ICallbackContext callbackContext) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM, callbackContext); else return CreateReplicaEditorVM((ReplicaVM)viewModel, callbackContext); },
                 (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((ReplicaVM)viewModel).Model; },

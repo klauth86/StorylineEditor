@@ -688,6 +688,110 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmg:DialogEditorVM}">
+        <TabControl>
+            <TabItem Header="{StaticResource String_Tag_Graph_Tab_Props}">
+                <StackPanel Orientation="Vertical">
+                    <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_Name}"></TextBox>
+                    <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="{StaticResource String_Tag_Graph_Tab_View}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7*"></ColumnDefinition>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <ItemsControl x:Name="ic_Canvas" Background="LightGray" ItemsPanel="{StaticResource IPT_Canvas}" ItemsSource="{Binding ItemsVMs}"
+                          bhvrs:MouseExtBehavior.MouseEnterCommand="{Binding RegisterContextCommand}"
+                          bhvrs:MouseExtBehavior.MouseLeaveCommand="{Binding UnregisterContextCommand}"
+                          bhvrs:MouseExtBehavior.MouseRightButtonDownCommand="{Binding DragCommand}"
+                          bhvrs:MouseExtBehavior.MouseLeftButtonDownCommand="{Binding AddCommand}"
+                          bhvrs:MouseExtBehavior.MouseLeftButtonUpCommand="{Binding LinkCommand}"
+                          bhvrs:MouseExtBehavior.MouseMoveCommand="{Binding MoveCommand}"
+                          bhvrs:MouseExtBehavior.MouseWheelCommand="{Binding ScaleCommand}"
+                          bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding InitCommand}"
+                          bhvrs:RenderSizeBehavior.IsEnabled="true"
+                          bhvrs:RenderSizeBehavior.ActualWidth="{Binding Path=(vm:StorylineVM.ViewWidth), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                          bhvrs:RenderSizeBehavior.ActualHeight="{Binding Path=(vm:StorylineVM.ViewHeight), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                          bhvrs:RenderSizeBehavior.SizeChangedFlag="{Binding SizeChangedFlag, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}">
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="ContentPresenter">
+                                <Setter Property="Canvas.ZIndex" Value="{Binding ZIndex, UpdateSourceTrigger=PropertyChanged}"/>
+                                <Setter Property="Canvas.Left" Value="{Binding Left, UpdateSourceTrigger=PropertyChanged}"/>
+                                <Setter Property="Canvas.Top" Value="{Binding Top, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                    </ItemsControl>
+
+                    <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="btn_selectable_Dialog" Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Node_Dialog}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_DialogM}"></Button>
+                            <Button x:Name="btn_selectable_Replica" Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Node_Replica}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_ReplicaM}"></Button>
+                            <Button x:Name="btn_selectable_Random" Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Node_Random}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_RandomM}"></Button>
+                            <Button x:Name="btn_selectable_Transit" Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Node_Transit}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_TransitM}"></Button>
+                            <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
+                            <Button Style="{StaticResource S_Button_Base}" Content="⏪" Command="{Binding PrevRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_PrevRootNode_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Base}" Content="⏩" Command="{Binding NextRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_NextRootNode_Tooltip}"></Button>
+                            <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
+                            <Button Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Graph_Origin}" Command="{Binding GoToOriginCommand}" ToolTip="{StaticResource String_GraphMenu_GoToOrigin_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Graph_Reset}" Command="{Binding ResetScaleCommand}" ToolTip="{StaticResource String_GraphMenu_ResetScale_Tooltip}"></Button>
+                        </StackPanel>
+
+                        <TextBlock Grid.Row="1" Style="{StaticResource S_TextBlock_Graph}">
+                    <Run x:Name="r_SelectedNodeType"></Run>
+                    <Run Text="{Binding Scale, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></Run>
+                    <Run Text="("></Run>
+                    <Run Text="{Binding OffsetX, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"></Run>
+                    <Run Text=","></Run>
+                    <Run Text="{Binding OffsetY, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"></Run>
+                    <Run Text=")"></Run>
+                        </TextBlock>
+                    </Grid>
+
+                    <Grid HorizontalAlignment="Right" VerticalAlignment="Top">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition MinWidth="{StaticResource Double_TextBox_Graph_MinWidth}" Width="*"></ColumnDefinition>
+                            <ColumnDefinition MinWidth="{StaticResource Double_TextBox_Graph_MinWidth}" Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" x:Name="tb_SelectionNodePositionX" Style="{StaticResource S_TextBox_Graph}" Text="{Binding SelectionNode.PositionX, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" ></TextBox>
+                        <TextBox Grid.Column="1" x:Name="tb_SelectionNodePositionY" Style="{StaticResource S_TextBox_Graph}" Text="{Binding SelectionNode.PositionY, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" ></TextBox>
+                    </Grid>
+
+                    <GridSplitter Grid.Column="1"></GridSplitter>
+
+                    <ContentControl Grid.Column="2" Content="{Binding SelectionEditor, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_DialogM}">
+                <Setter TargetName="btn_selectable_Dialog" Property="Style" Value="{StaticResource S_Button_Selected}"></Setter>
+                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Dialog_Type}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_ReplicaM}">
+                <Setter TargetName="btn_selectable_Replica" Property="Style" Value="{StaticResource S_Button_Selected}"></Setter>
+                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Replica_Type}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_RandomM}">
+                <Setter TargetName="btn_selectable_Random" Property="Style" Value="{StaticResource S_Button_Selected}"></Setter>
+                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Random_Type}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_TransitM}">
+                <Setter TargetName="btn_selectable_Transit" Property="Style" Value="{StaticResource S_Button_Selected}"></Setter>
+                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Transit_Type}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding SelectionNode, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                <Setter TargetName="tb_SelectionNodePositionX" Property="Visibility" Value="Collapsed"></Setter>
+                <Setter TargetName="tb_SelectionNodePositionY" Property="Visibility" Value="Collapsed"></Setter>
+            </DataTrigger>
+        </DataTemplate.Triggers>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmg:ReplicaVM}">
