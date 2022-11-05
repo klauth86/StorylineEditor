@@ -22,5 +22,6 @@ namespace StorylineEditor.ViewModel
     public class ActiveContextService
     {
         public static IActiveContext ActiveContext { get; set; }
+        public static StorylineVM ActiveStoryline { get; set; }
     }
 }

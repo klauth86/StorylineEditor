@@ -201,12 +201,12 @@ StorylineEditor распространяется в надежде, что он�
 
     <DataTemplate DataType="{x:Type vm:StorylineVM}" x:Key="DT_StorylineVM_Tabs">
         <StackPanel Orientation="Horizontal">
-            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding CharactersTabCommand}">Characters</Button>
-            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding ItemsTabCommand}">Items</Button>
-            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding ActorsTabCommand}">Actors</Button>
-            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding JournalTabCommand}">Journal</Button>
-            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding DialogsTabCommand}">Dialogs</Button>
-            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding ReplicasTabCommand}">Replicas</Button>
+            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding CharactersTabCommand}" Content="{StaticResource String_Tag_MainMenu_Characters}"></Button>
+            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding ItemsTabCommand}" Content="{StaticResource String_Tag_MainMenu_Items}"></Button>
+            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding ActorsTabCommand}" Content="{StaticResource String_Tag_MainMenu_Actors}"></Button>
+            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding JournalTabCommand}" Content="{StaticResource String_Tag_MainMenu_Journal}"></Button>
+            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding DialogsTabCommand}" Content="{StaticResource String_Tag_MainMenu_Dialogs}"></Button>
+            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding ReplicasTabCommand}" Content="{StaticResource String_Tag_MainMenu_Replicas}"></Button>
         </StackPanel>
     </DataTemplate>
 

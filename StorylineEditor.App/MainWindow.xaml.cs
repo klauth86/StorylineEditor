@@ -29,7 +29,7 @@ namespace StorylineEditor.App
         {
             InitializeComponent();
 
-            DataContext = new StorylineVM(new StorylineM());
+            SetDataContext(new StorylineVM(new StorylineM()));
 
             var assemblyName = Assembly.GetExecutingAssembly().GetName();
             Title = string.Format("{0} [{1}]", assemblyName.Name, "new document");
@@ -49,7 +49,7 @@ namespace StorylineEditor.App
 
         private void OpenFile(string path)
         {
-            DataContext = null;
+            SetDataContext(null);
 
             StorylineM model = null;
 
@@ -60,7 +60,7 @@ namespace StorylineEditor.App
 
             if (model != null)
             {
-                DataContext = DataContext = new StorylineVM(model);
+                SetDataContext(new StorylineVM(model));
 
                 var assemblyName = Assembly.GetExecutingAssembly().GetName();
                 Title = string.Format("{0} [{1}]", assemblyName.Name, path);
@@ -77,6 +77,12 @@ namespace StorylineEditor.App
                     SerializeService.Serialize(fileStream, storylineVM.Model);
                 }
             }
+        }
+
+        private void SetDataContext(StorylineVM storylineViewModel)
+        {
+            ActiveContextService.ActiveStoryline = storylineViewModel;
+            DataContext = storylineViewModel;
         }
     }
 }
