@@ -109,6 +109,9 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="IsHitTestVisible" Value="False"></Setter>
     </Style>
 
+    <Style TargetType="Label" x:Key="S_Label_Node_Large" BasedOn="{StaticResource S_Label_Node}">
+    </Style>
+
     <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Node">
         <Setter Property="Margin" Value="{StaticResource Thickness_Margin_1x}"></Setter>
     </Style>
@@ -596,7 +599,7 @@ StorylineEditor распространяется в надежде, что он�
 
     <DataTemplate DataType="{x:Type vmn:Node_Journal_StepEditorVM}">
         <TabControl>
-            <TabItem Header="Основная">
+            <TabItem Header="{StaticResource String_Tag_Node_Tab_Props}">
                 <Grid VerticalAlignment="Top">
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
@@ -652,7 +655,7 @@ StorylineEditor распространяется в надежде, что он�
 
     <DataTemplate DataType="{x:Type vmn:Node_Journal_AlternativeEditorVM}">
         <TabControl>
-            <TabItem Header="Основная">
+            <TabItem Header="{StaticResource String_Tag_Node_Tab_Props}">
                 <Grid VerticalAlignment="Top">
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
@@ -666,7 +669,69 @@ StorylineEditor распространяется в надежде, что он�
             </TabItem>
         </TabControl>
     </DataTemplate>
-    
+
+    <DataTemplate DataType="{x:Type vmn:Node_RandomVM}">
+        <Border Style="{StaticResource S_Border_Node}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+            <Grid>
+                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <Button.RenderTransform>
+                        <TranslateTransform X="{StaticResource Double_Icon_Gender_-Width/2}" Y="{StaticResource Double_Icon_Gender_-Height/2}"></TranslateTransform>
+                    </Button.RenderTransform>
+                </Button>
+
+                <Label VerticalAlignment="Center" HorizontalAlignment="Center" Content="{StaticResource String_Icon_Node_Random}" Style="{StaticResource S_Label_Node_Large}"></Label>
+
+                <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <Button.RenderTransform>
+                        <TranslateTransform X="{StaticResource Double_Button_Node_Remove_Width/2}" Y="{StaticResource Double_Button_Node_Remove_-Height/2}"></TranslateTransform>
+                    </Button.RenderTransform>
+                </Button>
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmn:Node_RandomEditorVM}">
+        <TabControl>
+            <TabItem Header="{StaticResource String_Tag_Node_Tab_Predicates}">
+            </TabItem>
+            <TabItem Header="{StaticResource String_Tag_Node_Tab_GameEvents}">
+            </TabItem>
+        </TabControl>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmn:Node_TransitVM}">
+        <Border Style="{StaticResource S_Border_Node}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+            <Grid>
+                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <Button.RenderTransform>
+                        <TranslateTransform X="{StaticResource Double_Icon_Gender_-Width/2}" Y="{StaticResource Double_Icon_Gender_-Height/2}"></TranslateTransform>
+                    </Button.RenderTransform>
+                </Button>
+
+                <Label VerticalAlignment="Center" HorizontalAlignment="Center" Content="{StaticResource String_Icon_Node_Transit}" Style="{StaticResource S_Label_Node_Large}"></Label>
+
+                <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <Button.RenderTransform>
+                        <TranslateTransform X="{StaticResource Double_Button_Node_Remove_Width/2}" Y="{StaticResource Double_Button_Node_Remove_-Height/2}"></TranslateTransform>
+                    </Button.RenderTransform>
+                </Button>
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmn:Node_TransitEditorVM}">
+        <TabControl>
+            <TabItem Header="{StaticResource String_Tag_Node_Tab_Predicates}">
+            </TabItem>
+            <TabItem Header="{StaticResource String_Tag_Node_Tab_GameEvents}">
+            </TabItem>
+        </TabControl>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type vmg:DialogVM}">
         <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}"
                     bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
