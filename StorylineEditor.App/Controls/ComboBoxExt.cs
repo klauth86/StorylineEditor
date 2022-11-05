@@ -10,38 +10,20 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-namespace StorylineEditor.Model
+using System.Windows;
+using System.Windows.Controls;
+
+namespace StorylineEditor.App.Controls
 {
-    public class CharacterM : ActorM
+    public class ComboBoxExt : ComboBox
     {
-        public static readonly string PLAYER_ID = "PLAYER";
+        public static readonly DependencyProperty FilterProperty = DependencyProperty.Register(
+            "Filter", typeof(string), typeof(ComboBoxExt), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
-        public CharacterM(long additionalTicks) : base(additionalTicks)
+        public string Filter
         {
-            initialRelation = 0;
-            initialRelationFemale = 0;
+            get => GetValue(FilterProperty)?.ToString();
+            set { SetValue(FilterProperty, value); }
         }
-
-        public CharacterM() : this(0) { }
-
-        public override BaseM Clone(long additionalTicks)
-        {
-            CharacterM clone = new CharacterM(additionalTicks);
-            CloneInternal(clone);
-            return clone;
-        }
-        protected override void CloneInternal(BaseM targetObject)
-        {
-            base.CloneInternal(targetObject);
-
-            if (targetObject is CharacterM casted)
-            {
-                casted.initialRelation = initialRelation;
-                casted.initialRelationFemale = initialRelationFemale;
-            }
-        }
-
-        public float initialRelation { get; set; }
-        public float initialRelationFemale { get; set; }
     }
 }

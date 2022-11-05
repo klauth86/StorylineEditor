@@ -310,6 +310,17 @@ StorylineEditor распространяется в надежде, что он�
         </Border>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type m:CharacterM}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{StaticResource String_Icon_Character}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+            <TextBlock Grid.Column="1" Text="{Binding name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+        </Grid>
+    </DataTemplate>
+    
     <DataTemplate DataType="{x:Type vm:CharacterEditorVM}">
         <StackPanel Orientation="Vertical">
             <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_Name}"></TextBox>
@@ -758,6 +769,11 @@ StorylineEditor распространяется в надежде, что он�
                 <StackPanel Orientation="Vertical">
                     <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_Name}"></TextBox>
                     <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
+                    <controls:ComboBoxExt SelectedValue="{Binding DialogCharacter, UpdateSourceTrigger=PropertyChanged}"
+                                          Tag="{StaticResource String_Tag_Node_Dialog_DialogCharacter}"
+                                          ItemsSource="{Binding FilteredDialogCharacterCVS.View}"
+                                          Filter="{Binding DialogCharacterFilter, UpdateSourceTrigger=PropertyChanged}"
+                                          Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
                 </StackPanel>
             </TabItem>
             <TabItem Header="{StaticResource String_Tag_Graph_Tab_View}">

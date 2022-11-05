@@ -14,7 +14,9 @@ using StorylineEditor.Model;
 using StorylineEditor.Model.Graphs;
 using StorylineEditor.ViewModel.Common;
 using System;
+using System.ComponentModel;
 using System.Windows;
+using System.Windows.Data;
 
 namespace StorylineEditor.ViewModel.Graphs
 {
@@ -27,10 +29,46 @@ namespace StorylineEditor.ViewModel.Graphs
 
     public class DialogEditorVM : Graph_BaseVM<DialogM>
     {
+        public CollectionViewSource FilteredDialogCharacterCVS { get; }
+
         public DialogEditorVM(DialogVM viewModel, ICallbackContext callbackContext, Func<Type, Point, BaseM> modelCreator, Func<BaseM, ICallbackContext, Notifier> viewModelCreator,
            Func<Notifier, ICallbackContext, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Type defaultNodeType) : base(viewModel.Model, callbackContext,
                 modelCreator, viewModelCreator, editorCreator, modelExtractor, defaultNodeType)
-        { }
+        {
+            FilteredDialogCharacterCVS = new CollectionViewSource() { Source = ActiveContextService.Characters };
+            
+            if (FilteredDialogCharacterCVS.View != null)
+            {
+                FilteredDialogCharacterCVS.View.Filter = Filter;
+                FilteredDialogCharacterCVS.View.SortDescriptions.Add(new SortDescription(nameof(BaseM.name), ListSortDirection.Ascending));
+            }
+        }
+
+        private bool Filter(object sender)
+        {
+            if (sender is BaseM model)
+            {
+                return model.id != CharacterM.PLAYER_ID &&
+                    (
+                    string.IsNullOrEmpty(dialogCharacterFilter) ||
+                    (model.name?.Contains(dialogCharacterFilter) ?? false) ||
+                    (model.description?.Contains(dialogCharacterFilter) ?? false)
+                    );
+            }
+            return false;
+        }
+
+        protected string dialogCharacterFilter;
+        public string DialogCharacterFilter
+        {
+            set {
+                if (value != dialogCharacterFilter)
+                {
+                    dialogCharacterFilter = value;
+                    FilteredDialogCharacterCVS.View?.Refresh();
+                }
+            }
+        }
 
         public BaseM DialogCharacter
         {
@@ -39,7 +77,7 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 if (value?.id != Model.npcId)
                 {
-                    Model.npcId = value.id;
+                    Model.npcId = value?.id;
                     OnModelChanged(Model, nameof(DialogVM.DialogCharacter));
                     Notify(nameof(DialogCharacter));
                 }
