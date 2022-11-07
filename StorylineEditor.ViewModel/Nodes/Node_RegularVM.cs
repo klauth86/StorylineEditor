@@ -18,7 +18,7 @@ using System.Windows.Data;
 
 namespace StorylineEditor.ViewModel.Nodes
 {
-    public abstract class Node_RegularVM<T> : Node_BaseVM<T> where T : Node_RegularM
+    public abstract class Node_RegularVM<T> : Node_InteractiveVM<T> where T : Node_RegularM
     {
         public CollectionViewSource FilteredCharacterCVS { get; }
 
