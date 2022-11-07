@@ -185,6 +185,37 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="Background" Value="Red"></Setter>
     </Style>
 
+    <ItemsPanelTemplate x:Key="IPT_WrapPanel">
+        <WrapPanel></WrapPanel>
+    </ItemsPanelTemplate>
+
+    <ItemsPanelTemplate x:Key="IPT_Canvas">
+        <Canvas ClipToBounds="True"></Canvas>
+    </ItemsPanelTemplate>
+    
+    <Style TargetType="ItemsControl" x:Key="S_Canvas_Graph">
+        <Setter Property="Background" Value="LightGray"></Setter>
+        <Setter Property="ItemsPanel" Value="{StaticResource IPT_Canvas}"></Setter>
+        <Setter Property="ItemsSource" Value="{Binding ItemsVMs}"></Setter>
+        <Setter Property="bhvrs:MouseExtBehavior.MouseEnterCommand" Value="{Binding RegisterContextCommand}"></Setter>
+        <Setter Property="bhvrs:MouseExtBehavior.MouseLeaveCommand" Value="{Binding UnregisterContextCommand}"></Setter>
+        <Setter Property="bhvrs:MouseExtBehavior.MouseRightButtonDownCommand" Value="{Binding DragCommand}"></Setter>
+        <Setter Property="bhvrs:MouseExtBehavior.MouseLeftButtonDownCommand" Value="{Binding AddCommand}"></Setter>
+        <Setter Property="bhvrs:MouseExtBehavior.MouseLeftButtonUpCommand" Value="{Binding LinkCommand}"></Setter>
+        <Setter Property="bhvrs:MouseExtBehavior.MouseMoveCommand" Value="{Binding MoveCommand}"></Setter>
+        <Setter Property="bhvrs:MouseExtBehavior.MouseWheelCommand" Value="{Binding ScaleCommand}"></Setter>
+        <Setter Property="bhvrs:LoadUnloadExtBehavior.LoadedCommand" Value="{Binding InitCommand}"></Setter>
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="Canvas.ZIndex" Value="{Binding ZIndex, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Setter Property="Canvas.Left" Value="{Binding Left, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Setter Property="Canvas.Top" Value="{Binding Top, UpdateSourceTrigger=PropertyChanged}"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- Data Templates -->
 
     <DataTemplate DataType="{x:Type vm:FolderProxyM}">
@@ -196,14 +227,6 @@ StorylineEditor распространяется в надежде, что он�
             <TextBlock><Run Text="{Binding name}"></Run><Run Text="/"></Run></TextBlock>
         </Button>
     </DataTemplate>
-
-    <ItemsPanelTemplate x:Key="IPT_WrapPanel">
-        <WrapPanel></WrapPanel>
-    </ItemsPanelTemplate>
-
-    <ItemsPanelTemplate x:Key="IPT_Canvas">
-        <Canvas ClipToBounds="True"></Canvas>
-    </ItemsPanelTemplate>
 
     <DataTemplate DataType="{x:Type vm:StorylineVM}" x:Key="DT_StorylineVM_Tabs">
         <StackPanel Orientation="Horizontal">
@@ -478,6 +501,23 @@ StorylineEditor распространяется в надежде, что он�
         </Border>
     </DataTemplate>
 
+    <ControlTemplate TargetType="ContentControl" x:Key="CT_ContentControl_NodePosition">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="{StaticResource Double_TextBox_Graph_MinWidth}" Width="*"></ColumnDefinition>
+                <ColumnDefinition MinWidth="{StaticResource Double_TextBox_Graph_MinWidth}" Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" x:Name="tb_SelectionNodePositionX" Style="{StaticResource S_TextBox_Graph}" Text="{Binding SelectionNode.PositionX, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" ></TextBox>
+            <TextBox Grid.Column="1" x:Name="tb_SelectionNodePositionY" Style="{StaticResource S_TextBox_Graph}" Text="{Binding SelectionNode.PositionY, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" ></TextBox>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <DataTrigger Binding="{Binding SelectionNode, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                <Setter TargetName="tb_SelectionNodePositionX" Property="Visibility" Value="Collapsed"></Setter>
+                <Setter TargetName="tb_SelectionNodePositionY" Property="Visibility" Value="Collapsed"></Setter>
+            </DataTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    
     <DataTemplate DataType="{x:Type vmg:QuestEditorVM}">
         <TabControl>
             <TabItem Header="{StaticResource String_Tag_Graph_Tab_Props}">
@@ -494,26 +534,11 @@ StorylineEditor распространяется в надежде, что он�
                         <ColumnDefinition Width="3*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
-                    <ItemsControl x:Name="ic_Canvas" Background="LightGray" ItemsPanel="{StaticResource IPT_Canvas}" ItemsSource="{Binding ItemsVMs}"
-                          bhvrs:MouseExtBehavior.MouseEnterCommand="{Binding RegisterContextCommand}"
-                          bhvrs:MouseExtBehavior.MouseLeaveCommand="{Binding UnregisterContextCommand}"
-                          bhvrs:MouseExtBehavior.MouseRightButtonDownCommand="{Binding DragCommand}"
-                          bhvrs:MouseExtBehavior.MouseLeftButtonDownCommand="{Binding AddCommand}"
-                          bhvrs:MouseExtBehavior.MouseLeftButtonUpCommand="{Binding LinkCommand}"
-                          bhvrs:MouseExtBehavior.MouseMoveCommand="{Binding MoveCommand}"
-                          bhvrs:MouseExtBehavior.MouseWheelCommand="{Binding ScaleCommand}"
-                          bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding InitCommand}"
-                          bhvrs:RenderSizeBehavior.IsEnabled="true"
-                          bhvrs:RenderSizeBehavior.ActualWidth="{Binding Path=(vm:StorylineVM.ViewWidth), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
-                          bhvrs:RenderSizeBehavior.ActualHeight="{Binding Path=(vm:StorylineVM.ViewHeight), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
-                          bhvrs:RenderSizeBehavior.SizeChangedFlag="{Binding SizeChangedFlag, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}">
-                        <ItemsControl.ItemContainerStyle>
-                            <Style TargetType="ContentPresenter">
-                                <Setter Property="Canvas.ZIndex" Value="{Binding ZIndex, UpdateSourceTrigger=PropertyChanged}"/>
-                                <Setter Property="Canvas.Left" Value="{Binding Left, UpdateSourceTrigger=PropertyChanged}"/>
-                                <Setter Property="Canvas.Top" Value="{Binding Top, UpdateSourceTrigger=PropertyChanged}"/>
-                            </Style>
-                        </ItemsControl.ItemContainerStyle>
+                    <ItemsControl Style="{StaticResource S_Canvas_Graph}"
+                                  bhvrs:RenderSizeBehavior.IsEnabled="true"
+                                  bhvrs:RenderSizeBehavior.ActualWidth="{Binding Path=(vm:StorylineVM.ViewWidth), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                                  bhvrs:RenderSizeBehavior.ActualHeight="{Binding Path=(vm:StorylineVM.ViewHeight), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                                  bhvrs:RenderSizeBehavior.SizeChangedFlag="{Binding SizeChangedFlag, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}">
                     </ItemsControl>
 
                     <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
@@ -534,24 +559,17 @@ StorylineEditor распространяется в надежде, что он�
                         </StackPanel>
 
                         <TextBlock Grid.Row="1" Style="{StaticResource S_TextBlock_Graph}">
-                    <Run x:Name="r_SelectedNodeType"></Run>
-                    <Run Text="{Binding Scale, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></Run>
-                    <Run Text="("></Run>
-                    <Run Text="{Binding OffsetX, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"></Run>
-                    <Run Text=","></Run>
-                    <Run Text="{Binding OffsetY, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"></Run>
-                    <Run Text=")"></Run>
+                            <Run x:Name="r_SelectedNodeType"></Run>
+                            <Run Text="{Binding Scale, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></Run>
+                            <Run Text="("></Run>
+                            <Run Text="{Binding OffsetX, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"></Run>
+                            <Run Text=","></Run>
+                            <Run Text="{Binding OffsetY, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"></Run>
+                            <Run Text=")"></Run>
                         </TextBlock>
                     </Grid>
 
-                    <Grid HorizontalAlignment="Right" VerticalAlignment="Top">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition MinWidth="{StaticResource Double_TextBox_Graph_MinWidth}" Width="*"></ColumnDefinition>
-                            <ColumnDefinition MinWidth="{StaticResource Double_TextBox_Graph_MinWidth}" Width="*"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <TextBox Grid.Column="0" x:Name="tb_SelectionNodePositionX" Style="{StaticResource S_TextBox_Graph}" Text="{Binding SelectionNode.PositionX, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" ></TextBox>
-                        <TextBox Grid.Column="1" x:Name="tb_SelectionNodePositionY" Style="{StaticResource S_TextBox_Graph}" Text="{Binding SelectionNode.PositionY, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" ></TextBox>
-                    </Grid>
+                    <ContentControl Content="{Binding}" HorizontalAlignment="Right" VerticalAlignment="Top" Template="{StaticResource CT_ContentControl_NodePosition}"></ContentControl>
 
                     <GridSplitter Grid.Column="1"></GridSplitter>
 
@@ -567,10 +585,6 @@ StorylineEditor распространяется в надежде, что он�
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_AlternativeM}">
                 <Setter TargetName="btn_selectable_Alternative" Property="Style" Value="{StaticResource S_Button_Selected}"></Setter>
                 <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Alternative_Type}"></Setter>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding SelectionNode, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
-                <Setter TargetName="tb_SelectionNodePositionX" Property="Visibility" Value="Collapsed"></Setter>
-                <Setter TargetName="tb_SelectionNodePositionY" Property="Visibility" Value="Collapsed"></Setter>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
@@ -1054,26 +1068,11 @@ StorylineEditor распространяется в надежде, что он�
                         <ColumnDefinition Width="3*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
-                    <ItemsControl x:Name="ic_Canvas" Background="LightGray" ItemsPanel="{StaticResource IPT_Canvas}" ItemsSource="{Binding ItemsVMs}"
-                          bhvrs:MouseExtBehavior.MouseEnterCommand="{Binding RegisterContextCommand}"
-                          bhvrs:MouseExtBehavior.MouseLeaveCommand="{Binding UnregisterContextCommand}"
-                          bhvrs:MouseExtBehavior.MouseRightButtonDownCommand="{Binding DragCommand}"
-                          bhvrs:MouseExtBehavior.MouseLeftButtonDownCommand="{Binding AddCommand}"
-                          bhvrs:MouseExtBehavior.MouseLeftButtonUpCommand="{Binding LinkCommand}"
-                          bhvrs:MouseExtBehavior.MouseMoveCommand="{Binding MoveCommand}"
-                          bhvrs:MouseExtBehavior.MouseWheelCommand="{Binding ScaleCommand}"
-                          bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding InitCommand}"
-                          bhvrs:RenderSizeBehavior.IsEnabled="true"
-                          bhvrs:RenderSizeBehavior.ActualWidth="{Binding Path=(vm:StorylineVM.ViewWidth), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
-                          bhvrs:RenderSizeBehavior.ActualHeight="{Binding Path=(vm:StorylineVM.ViewHeight), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
-                          bhvrs:RenderSizeBehavior.SizeChangedFlag="{Binding SizeChangedFlag, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}">
-                        <ItemsControl.ItemContainerStyle>
-                            <Style TargetType="ContentPresenter">
-                                <Setter Property="Canvas.ZIndex" Value="{Binding ZIndex, UpdateSourceTrigger=PropertyChanged}"/>
-                                <Setter Property="Canvas.Left" Value="{Binding Left, UpdateSourceTrigger=PropertyChanged}"/>
-                                <Setter Property="Canvas.Top" Value="{Binding Top, UpdateSourceTrigger=PropertyChanged}"/>
-                            </Style>
-                        </ItemsControl.ItemContainerStyle>
+                    <ItemsControl Style="{StaticResource S_Canvas_Graph}"
+                                  bhvrs:RenderSizeBehavior.IsEnabled="true"
+                                  bhvrs:RenderSizeBehavior.ActualWidth="{Binding Path=(vm:StorylineVM.ViewWidth), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                                  bhvrs:RenderSizeBehavior.ActualHeight="{Binding Path=(vm:StorylineVM.ViewHeight), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                                  bhvrs:RenderSizeBehavior.SizeChangedFlag="{Binding SizeChangedFlag, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}">
                     </ItemsControl>
 
                     <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
@@ -1096,24 +1095,17 @@ StorylineEditor распространяется в надежде, что он�
                         </StackPanel>
 
                         <TextBlock Grid.Row="1" Style="{StaticResource S_TextBlock_Graph}">
-                    <Run x:Name="r_SelectedNodeType"></Run>
-                    <Run Text="{Binding Scale, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></Run>
-                    <Run Text="("></Run>
-                    <Run Text="{Binding OffsetX, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"></Run>
-                    <Run Text=","></Run>
-                    <Run Text="{Binding OffsetY, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"></Run>
-                    <Run Text=")"></Run>
+                            <Run x:Name="r_SelectedNodeType"></Run>
+                            <Run Text="{Binding Scale, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></Run>
+                            <Run Text="("></Run>
+                            <Run Text="{Binding OffsetX, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"></Run>
+                            <Run Text=","></Run>
+                            <Run Text="{Binding OffsetY, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"></Run>
+                            <Run Text=")"></Run>
                         </TextBlock>
                     </Grid>
 
-                    <Grid HorizontalAlignment="Right" VerticalAlignment="Top">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition MinWidth="{StaticResource Double_TextBox_Graph_MinWidth}" Width="*"></ColumnDefinition>
-                            <ColumnDefinition MinWidth="{StaticResource Double_TextBox_Graph_MinWidth}" Width="*"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <TextBox Grid.Column="0" x:Name="tb_SelectionNodePositionX" Style="{StaticResource S_TextBox_Graph}" Text="{Binding SelectionNode.PositionX, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" ></TextBox>
-                        <TextBox Grid.Column="1" x:Name="tb_SelectionNodePositionY" Style="{StaticResource S_TextBox_Graph}" Text="{Binding SelectionNode.PositionY, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" ></TextBox>
-                    </Grid>
+                    <ContentControl Content="{Binding}" HorizontalAlignment="Right" VerticalAlignment="Top" Template="{StaticResource CT_ContentControl_NodePosition}"></ContentControl>
 
                     <GridSplitter Grid.Column="1"></GridSplitter>
 
@@ -1137,10 +1129,6 @@ StorylineEditor распространяется в надежде, что он�
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_TransitM}">
                 <Setter TargetName="btn_selectable_Transit" Property="Style" Value="{StaticResource S_Button_Selected}"></Setter>
                 <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Transit_Type}"></Setter>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding SelectionNode, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
-                <Setter TargetName="tb_SelectionNodePositionX" Property="Visibility" Value="Collapsed"></Setter>
-                <Setter TargetName="tb_SelectionNodePositionY" Property="Visibility" Value="Collapsed"></Setter>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
@@ -1181,26 +1169,11 @@ StorylineEditor распространяется в надежде, что он�
                         <ColumnDefinition Width="3*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
-                    <ItemsControl x:Name="ic_Canvas" Background="LightGray" ItemsPanel="{StaticResource IPT_Canvas}" ItemsSource="{Binding ItemsVMs}"
-                          bhvrs:MouseExtBehavior.MouseEnterCommand="{Binding RegisterContextCommand}"
-                          bhvrs:MouseExtBehavior.MouseLeaveCommand="{Binding UnregisterContextCommand}"
-                          bhvrs:MouseExtBehavior.MouseRightButtonDownCommand="{Binding DragCommand}"
-                          bhvrs:MouseExtBehavior.MouseLeftButtonDownCommand="{Binding AddCommand}"
-                          bhvrs:MouseExtBehavior.MouseLeftButtonUpCommand="{Binding LinkCommand}"
-                          bhvrs:MouseExtBehavior.MouseMoveCommand="{Binding MoveCommand}"
-                          bhvrs:MouseExtBehavior.MouseWheelCommand="{Binding ScaleCommand}"
-                          bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding InitCommand}"
-                          bhvrs:RenderSizeBehavior.IsEnabled="true"
-                          bhvrs:RenderSizeBehavior.ActualWidth="{Binding Path=(vm:StorylineVM.ViewWidth), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
-                          bhvrs:RenderSizeBehavior.ActualHeight="{Binding Path=(vm:StorylineVM.ViewHeight), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
-                          bhvrs:RenderSizeBehavior.SizeChangedFlag="{Binding SizeChangedFlag, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}">
-                        <ItemsControl.ItemContainerStyle>
-                            <Style TargetType="ContentPresenter">
-                                <Setter Property="Canvas.ZIndex" Value="{Binding ZIndex, UpdateSourceTrigger=PropertyChanged}"/>
-                                <Setter Property="Canvas.Left" Value="{Binding Left, UpdateSourceTrigger=PropertyChanged}"/>
-                                <Setter Property="Canvas.Top" Value="{Binding Top, UpdateSourceTrigger=PropertyChanged}"/>
-                            </Style>
-                        </ItemsControl.ItemContainerStyle>
+                    <ItemsControl Style="{StaticResource S_Canvas_Graph}"
+                                  bhvrs:RenderSizeBehavior.IsEnabled="true"
+                                  bhvrs:RenderSizeBehavior.ActualWidth="{Binding Path=(vm:StorylineVM.ViewWidth), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                                  bhvrs:RenderSizeBehavior.ActualHeight="{Binding Path=(vm:StorylineVM.ViewHeight), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                                  bhvrs:RenderSizeBehavior.SizeChangedFlag="{Binding SizeChangedFlag, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}">
                     </ItemsControl>
 
                     <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
@@ -1222,24 +1195,17 @@ StorylineEditor распространяется в надежде, что он�
                         </StackPanel>
 
                         <TextBlock Grid.Row="1" Style="{StaticResource S_TextBlock_Graph}">
-                    <Run x:Name="r_SelectedNodeType"></Run>
-                    <Run Text="{Binding Scale, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></Run>
-                    <Run Text="("></Run>
-                    <Run Text="{Binding OffsetX, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"></Run>
-                    <Run Text=","></Run>
-                    <Run Text="{Binding OffsetY, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"></Run>
-                    <Run Text=")"></Run>
+                            <Run x:Name="r_SelectedNodeType"></Run>
+                            <Run Text="{Binding Scale, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></Run>
+                            <Run Text="("></Run>
+                            <Run Text="{Binding OffsetX, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"></Run>
+                            <Run Text=","></Run>
+                            <Run Text="{Binding OffsetY, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"></Run>
+                            <Run Text=")"></Run>
                         </TextBlock>
                     </Grid>
 
-                    <Grid HorizontalAlignment="Right" VerticalAlignment="Top">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition MinWidth="{StaticResource Double_TextBox_Graph_MinWidth}" Width="*"></ColumnDefinition>
-                            <ColumnDefinition MinWidth="{StaticResource Double_TextBox_Graph_MinWidth}" Width="*"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <TextBox Grid.Column="0" x:Name="tb_SelectionNodePositionX" Style="{StaticResource S_TextBox_Graph}" Text="{Binding SelectionNode.PositionX, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" ></TextBox>
-                        <TextBox Grid.Column="1" x:Name="tb_SelectionNodePositionY" Style="{StaticResource S_TextBox_Graph}" Text="{Binding SelectionNode.PositionY, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" ></TextBox>
-                    </Grid>
+                    <ContentControl Content="{Binding}" HorizontalAlignment="Right" VerticalAlignment="Top" Template="{StaticResource CT_ContentControl_NodePosition}"></ContentControl>
 
                     <GridSplitter Grid.Column="1"></GridSplitter>
 
@@ -1259,10 +1225,6 @@ StorylineEditor распространяется в надежде, что он�
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_TransitM}">
                 <Setter TargetName="btn_selectable_Transit" Property="Style" Value="{StaticResource S_Button_Selected}"></Setter>
                 <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Transit_Type}"></Setter>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding SelectionNode, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
-                <Setter TargetName="tb_SelectionNodePositionX" Property="Visibility" Value="Collapsed"></Setter>
-                <Setter TargetName="tb_SelectionNodePositionY" Property="Visibility" Value="Collapsed"></Setter>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
