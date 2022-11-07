@@ -716,11 +716,15 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
 
     <DataTemplate x:Key="DT_ContentControl_Predicates">
-        
+        <ScrollViewer>
+            <ItemsControl ItemsSource="{Binding Predicates}"></ItemsControl>
+        </ScrollViewer>
     </DataTemplate>
 
     <DataTemplate x:Key="DT_ContentControl_GameEvents">
-
+        <ScrollViewer>
+            <ItemsControl ItemsSource="{Binding GameEvents}"></ItemsControl>
+        </ScrollViewer>
     </DataTemplate>
 
     <DataTemplate x:Key="DT_ComboBoxItem_Predicate">
@@ -823,8 +827,8 @@ StorylineEditor распространяется в надежде, что он�
     
     <DataTemplate DataType="{x:Type vmn:Node_RandomEditorVM}">
         <TabControl>
-            <TabItem ContentTemplate="{StaticResource DT_ContentControl_Predicates}" HeaderTemplate="{StaticResource DT_ContentControl_PredicatesHeader}" Header="{Binding}"></TabItem>
-            <TabItem ContentTemplate="{StaticResource DT_ContentControl_GameEvents}" HeaderTemplate="{StaticResource DT_ContentControl_GameEventsHeader}" Header="{Binding}"></TabItem>
+            <TabItem ContentTemplate="{StaticResource DT_ContentControl_Predicates}" Content="{Binding}" HeaderTemplate="{StaticResource DT_ContentControl_PredicatesHeader}" Header="{Binding}"></TabItem>
+            <TabItem ContentTemplate="{StaticResource DT_ContentControl_GameEvents}" Content="{Binding}" HeaderTemplate="{StaticResource DT_ContentControl_GameEventsHeader}" Header="{Binding}"></TabItem>
         </TabControl>
     </DataTemplate>
 
@@ -852,8 +856,8 @@ StorylineEditor распространяется в надежде, что он�
 
     <DataTemplate DataType="{x:Type vmn:Node_TransitEditorVM}">
         <TabControl>
-            <TabItem ContentTemplate="{StaticResource DT_ContentControl_Predicates}" HeaderTemplate="{StaticResource DT_ContentControl_PredicatesHeader}" Header="{Binding}"></TabItem>
-            <TabItem ContentTemplate="{StaticResource DT_ContentControl_GameEvents}" HeaderTemplate="{StaticResource DT_ContentControl_GameEventsHeader}" Header="{Binding}"></TabItem>
+            <TabItem ContentTemplate="{StaticResource DT_ContentControl_Predicates}" Content="{Binding}" HeaderTemplate="{StaticResource DT_ContentControl_PredicatesHeader}" Header="{Binding}"></TabItem>
+            <TabItem ContentTemplate="{StaticResource DT_ContentControl_GameEvents}" Content="{Binding}" HeaderTemplate="{StaticResource DT_ContentControl_GameEventsHeader}" Header="{Binding}"></TabItem>
         </TabControl>
     </DataTemplate>
 
@@ -928,8 +932,8 @@ StorylineEditor распространяется в надежде, что он�
                     <TextBox Grid.Row="4" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_ShortDescription}"></TextBox>
                 </Grid>
             </TabItem>
-            <TabItem ContentTemplate="{StaticResource DT_ContentControl_Predicates}" HeaderTemplate="{StaticResource DT_ContentControl_PredicatesHeader}" Header="{Binding}"></TabItem>
-            <TabItem ContentTemplate="{StaticResource DT_ContentControl_GameEvents}" HeaderTemplate="{StaticResource DT_ContentControl_GameEventsHeader}" Header="{Binding}"></TabItem>
+            <TabItem ContentTemplate="{StaticResource DT_ContentControl_Predicates}" Content="{Binding}" HeaderTemplate="{StaticResource DT_ContentControl_PredicatesHeader}" Header="{Binding}"></TabItem>
+            <TabItem ContentTemplate="{StaticResource DT_ContentControl_GameEvents}" Content="{Binding}" HeaderTemplate="{StaticResource DT_ContentControl_GameEventsHeader}" Header="{Binding}"></TabItem>
         </TabControl>
     </DataTemplate>
 
@@ -1004,8 +1008,8 @@ StorylineEditor распространяется в надежде, что он�
                     <TextBox Grid.Row="4" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_ShortDescription}"></TextBox>
                 </Grid>
             </TabItem>
-            <TabItem ContentTemplate="{StaticResource DT_ContentControl_Predicates}" HeaderTemplate="{StaticResource DT_ContentControl_PredicatesHeader}" Header="{Binding}"></TabItem>
-            <TabItem ContentTemplate="{StaticResource DT_ContentControl_GameEvents}" HeaderTemplate="{StaticResource DT_ContentControl_GameEventsHeader}" Header="{Binding}"></TabItem>
+            <TabItem ContentTemplate="{StaticResource DT_ContentControl_Predicates}" Content="{Binding}" HeaderTemplate="{StaticResource DT_ContentControl_PredicatesHeader}" Header="{Binding}"></TabItem>
+            <TabItem ContentTemplate="{StaticResource DT_ContentControl_GameEvents}" Content="{Binding}" HeaderTemplate="{StaticResource DT_ContentControl_GameEventsHeader}" Header="{Binding}"></TabItem>
         </TabControl>
     </DataTemplate>
     

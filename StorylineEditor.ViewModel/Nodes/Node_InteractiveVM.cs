@@ -15,16 +15,15 @@ using StorylineEditor.Model.Nodes;
 using StorylineEditor.Model.Predicates;
 using StorylineEditor.ViewModel.Common;
 using System;
+using System.Collections.Generic;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Nodes
 {
     public abstract class Node_InteractiveVM<T> : Node_BaseVM<T> where T : Node_InteractiveM
     {
-        public Node_InteractiveVM(T model, ICallbackContext callbackContext) : base(model, callbackContext)
-        {
-
-        }
+        public Node_InteractiveVM(T model, ICallbackContext callbackContext) : base(model, callbackContext) { }
 
         public Type SelectedPredicateType
         {
@@ -32,21 +31,25 @@ namespace StorylineEditor.ViewModel.Nodes
             {
                 if (value != null)
                 {
-                    if (value.GetType() == typeof(P_CompositeM)) { }
-                    else if (value.GetType() == typeof(P_Dialog_HasM)) { }
-                    else if (value.GetType() == typeof(P_Dialog_Node_Has_ActiveSession_CmpM)) { }
-                    else if (value.GetType() == typeof(P_Dialog_Node_Has_ActiveSessionM)) { }
-                    else if (value.GetType() == typeof(P_Dialog_Node_Has_PrevSessions_CmpM)) { }
-                    else if (value.GetType() == typeof(P_Dialog_Node_Has_PrevSessionsM)) { }
-                    else if (value.GetType() == typeof(P_Item_HasM)) { }
-                    else if (value.GetType() == typeof(P_Quest_AddedM)) { }
-                    else if (value.GetType() == typeof(P_Quest_FinishedM)) { }
-                    else if (value.GetType() == typeof(P_Quest_Node_AddedM)) { }
-                    else if (value.GetType() == typeof(P_Quest_Node_PassedM)) { }
-                    else if (value.GetType() == typeof(P_Relation_HasM)) { }
+                    if (value == typeof(P_CompositeM)) Predicates.Add(new P_CompositeM(0));
+                    else if (value == typeof(P_Dialog_HasM)) Predicates.Add(new P_Dialog_HasM(0));
+                    else if (value == typeof(P_Dialog_Node_Has_ActiveSession_CmpM)) Predicates.Add(new P_Dialog_Node_Has_ActiveSession_CmpM(0));
+                    else if (value == typeof(P_Dialog_Node_Has_ActiveSessionM)) Predicates.Add(new P_Dialog_Node_Has_ActiveSessionM(0));
+                    else if (value == typeof(P_Dialog_Node_Has_PrevSessions_CmpM)) Predicates.Add(new P_Dialog_Node_Has_PrevSessions_CmpM(0));
+                    else if (value == typeof(P_Dialog_Node_Has_PrevSessionsM)) Predicates.Add(new P_Dialog_Node_Has_PrevSessionsM(0));
+                    else if (value == typeof(P_Item_HasM)) Predicates.Add(new P_Item_HasM(0));
+                    else if (value == typeof(P_Quest_AddedM)) Predicates.Add(new P_Quest_AddedM(0));
+                    else if (value == typeof(P_Quest_FinishedM)) Predicates.Add(new P_Quest_FinishedM(0));
+                    else if (value == typeof(P_Quest_Node_AddedM)) Predicates.Add(new P_Quest_Node_AddedM(0));
+                    else if (value == typeof(P_Quest_Node_PassedM)) Predicates.Add(new P_Quest_Node_PassedM(0));
+                    else if (value == typeof(P_Relation_HasM)) Predicates.Add(new P_Relation_HasM(0));
+
+                    CollectionViewSource.GetDefaultView(Predicates)?.Refresh();
                 }
             }      
         }
+
+        public List<P_BaseM> Predicates => Model.predicates;
 
         public Type SelectedGameEventType
         {
@@ -54,26 +57,33 @@ namespace StorylineEditor.ViewModel.Nodes
             {
                 if (value != null)
                 {
-                    if (value.GetType() == typeof(GE_Item_DropM)) { }
-                    else if (value.GetType() == typeof(GE_Item_PickUpM)) { }
-                    else if (value.GetType() == typeof(GE_Quest_AddM)) { }
-                    else if (value.GetType() == typeof(GE_Quest_Node_AddM)) { }
-                    else if (value.GetType() == typeof(GE_Quest_Node_PassM)) { }
-                    else if (value.GetType() == typeof(GE_Relation_ChangeM)) { }
+                    if (value == typeof(GE_Item_DropM)) GameEvents.Add(new GE_Item_DropM(0));
+                    else if (value == typeof(GE_Item_PickUpM)) GameEvents.Add(new GE_Item_PickUpM(0));
+                    else if (value == typeof(GE_Quest_AddM)) GameEvents.Add(new GE_Quest_AddM(0));
+                    else if (value == typeof(GE_Quest_Node_AddM)) GameEvents.Add(new GE_Quest_Node_AddM(0));
+                    else if (value == typeof(GE_Quest_Node_PassM)) GameEvents.Add(new GE_Quest_Node_PassM(0));
+                    else if (value == typeof(GE_Relation_ChangeM)) GameEvents.Add(new GE_Relation_ChangeM(0));
+
+                    CollectionViewSource.GetDefaultView(GameEvents)?.Refresh();
                 }
             }
         }
 
-        protected ICommand removePredicateCommand;
-        public ICommand RemovePredicateCommand => removePredicateCommand ?? (removePredicateCommand = new RelayCommand<object>((predicateViweModel) =>
+        public List<GE_BaseM> GameEvents => Model.gameEvents;
+
+        protected ICommand removeElementCommand;
+        public ICommand RemoveElementCommand => removeElementCommand ?? (removeElementCommand = new RelayCommand<object>((model) =>
         {
-
-        }));
-
-        protected ICommand removeGameEventCommand;
-        public ICommand RemoveGameEventCommand => removeGameEventCommand ?? (removeGameEventCommand = new RelayCommand<object>((gameEventViweModel) =>
-        {
-
+            if (model is P_BaseM predicate)
+            {
+                Predicates.Add(predicate);
+                CollectionViewSource.GetDefaultView(Predicates)?.Refresh();
+            }
+            else if (model is GE_BaseM gameEventModel)
+            {
+                GameEvents.Add(gameEventModel);
+                CollectionViewSource.GetDefaultView(GameEvents)?.Refresh();
+            }
         }));
     }
 
