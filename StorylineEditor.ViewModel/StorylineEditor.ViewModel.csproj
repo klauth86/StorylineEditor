@@ -33,6 +33,19 @@
   <ItemGroup>
     <Compile Include="Nodes\Node_RegularVM.cs" />
     <Compile Include="Nodes\Node_InteractiveVM.cs" />
+    <Compile Include="Predicates\P_BaseVM.cs" />
+    <Compile Include="Predicates\P_Quest_Node_PassedVM.cs" />
+    <Compile Include="Predicates\P_Relation_HasVM.cs" />
+    <Compile Include="Predicates\P_Quest_Node_AddedVM.cs" />
+    <Compile Include="Predicates\P_Quest_FinishedM.cs" />
+    <Compile Include="Predicates\P_Dialog_Node_Has_PrevSessions_CmpVM.cs" />
+    <Compile Include="Predicates\P_Dialog_Node_Has_PrevSessionsVM.cs" />
+    <Compile Include="Predicates\P_Item_HasVM.cs" />
+    <Compile Include="Predicates\P_Quest_AddedVM.cs" />
+    <Compile Include="Predicates\P_Dialog_Node_Has_ActiveSessionVM.cs" />
+    <Compile Include="Predicates\P_Dialog_Node_Has_ActiveSession_CmpVM.cs" />
+    <Compile Include="Predicates\P_Dialog_HasVM.cs" />
+    <Compile Include="Predicates\P_CompositeVM.cs" />
     <Compile Include="SerializeService.cs" />
     <Compile Include="Collection_BaseVM.cs" />
     <Compile Include="ActiveContextService.cs" />

@@ -28,20 +28,23 @@ namespace StorylineEditor.ViewModel
     {
         public static IActiveContext ActiveContext { get; set; }
         public static StorylineVM ActiveStoryline { get; set; }
-        public static IEnumerable<BaseM> GetEnumerator(List<BaseM> collection)
+        public static IEnumerable<BaseM> GetEnumerator(params List<BaseM>[] collectionSet)
         {
-            foreach (var item in collection)
+            for (int i = 0; i < collectionSet.Length; i++)
             {
-                if (item is FolderM folder)
+                foreach (var item in collectionSet[i])
                 {
-                    foreach (var contentItem in GetEnumerator(folder.content))
+                    if (item is FolderM folder)
                     {
-                        yield return contentItem;
+                        foreach (var contentItem in GetEnumerator(folder.content))
+                        {
+                            yield return contentItem;
+                        }
                     }
-                }
-                else
-                {
-                    yield return item;
+                    else
+                    {
+                        yield return item;
+                    }
                 }
             }
         }
@@ -54,5 +57,8 @@ namespace StorylineEditor.ViewModel
 
         public static IEnumerable<BaseM> Actors => GetEnumerator(ActiveStoryline?.Model.actors);
         public static BaseM GetActor(string id) => Actors?.FirstOrDefault((model) => model.id == id);
+
+        public static IEnumerable<BaseM> DialogsAndReplicas => GetEnumerator(ActiveStoryline?.Model.dialogs, ActiveStoryline?.Model.replicas);
+        public static BaseM GetDialogOrReplica(string id) => DialogsAndReplicas?.FirstOrDefault((model) => model.id == id);
     }
 }

@@ -140,4 +140,56 @@ StorylineEditor распространяется в надежде, что он�
 
     <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_DisplayName">Отношение: изменить</sys:String>
 
+    <sys:String x:Key="String_Tag_Predicate_P_CompositeM_Title">Составной</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_HasM_Title">Реплики и диалоги: имеет</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_ActiveSession_CmpM_Title">Реплики и диалоги: имеет вершину в активной сессии &lt;&gt;</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_ActiveSessionM_Title">Реплики и диалоги: имеет вершину в активной сессии</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_PrevSessions_CmpM_Title">Реплики и диалоги: имеет вершину в прошлых сессиях &lt;&gt;</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_PrevSessionsM_Title">Реплики и диалоги: имеет вершину в прошлых сессиях</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Item_HasM_Title">Предмет: имеет</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_AddedM_Title">Квест: добавлен</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_FinishedM_Title">Квест: выполнен</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_Node_AddedM_Title">Квест: добавлен/а шаг/альтернатива</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_Node_PassedM_Title">Квест: выполнен/а шаг/альтернатива</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Relation_HasM_Title">Отношение: имеет</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Item_DropM_Title">Предмет: потерять</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Item_PickUpM_Title">Предмет: получить</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_AddM_Title">Квест: добавить</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_AddM_Title">Квест: добавить шаг/альтернативу</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_PassM_Title">Квест: выполнить шаг/альтернативу</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_Title">Отношение: изменить</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_Compare">Условия</sys:String>
+
+    <sys:String x:Key="String_Tag_CompareType_Less">Меньше</sys:String>
+
+    <sys:String x:Key="String_Tag_CompareType_LessOrEqual">Меньше или равно</sys:String>
+
+    <sys:String x:Key="String_Tag_CompareType_Equal">Равно</sys:String>
+
+    <sys:String x:Key="String_Tag_CompareType_EqualOrGreater">Больше или равно</sys:String>
+
+    <sys:String x:Key="String_Tag_CompareType_Greater">Больше</sys:String>
+    
+    <sys:String x:Key="String_Tag_Predicate_DialogOrReplica">Диалог или реплика</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_Node">Вершина</sys:String>
+
 </ResourceDictionary>

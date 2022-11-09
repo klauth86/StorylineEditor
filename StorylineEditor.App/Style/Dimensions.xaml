@@ -14,6 +14,14 @@ StorylineEditor распространяется в надежде, что он�
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
+    <sys:Double x:Key="Double_Margin_1x">1</sys:Double>
+
+    <sys:Double x:Key="Double_Margin_2x">2</sys:Double>
+
+    <sys:Double x:Key="Double_Margin_4x">4</sys:Double>
+
+    <sys:Double x:Key="Double_Margin_8x">8</sys:Double>
+    
     <Thickness x:Key="Thickness_Margin_1x">1</Thickness>
 
     <Thickness x:Key="Thickness_Margin_2x">2</Thickness>

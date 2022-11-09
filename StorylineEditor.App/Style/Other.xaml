@@ -15,6 +15,7 @@ StorylineEditor распространяется в надежде, что он�
                     xmlns:vm="clr-namespace:StorylineEditor.ViewModel;assembly=StorylineEditor.ViewModel"
                     xmlns:vmg="clr-namespace:StorylineEditor.ViewModel.Graphs;assembly=StorylineEditor.ViewModel"
                     xmlns:vmn="clr-namespace:StorylineEditor.ViewModel.Nodes;assembly=StorylineEditor.ViewModel"
+                    xmlns:vmp="clr-namespace:StorylineEditor.ViewModel.Predicates;assembly=StorylineEditor.ViewModel"
                     xmlns:m="clr-namespace:StorylineEditor.Model;assembly=StorylineEditor.Model"
                     xmlns:mn="clr-namespace:StorylineEditor.Model.Nodes;assembly=StorylineEditor.Model"
                     xmlns:mp="clr-namespace:StorylineEditor.Model.Predicates;assembly=StorylineEditor.Model"
@@ -731,7 +732,66 @@ StorylineEditor распространяется в надежде, что он�
 
     <DataTemplate x:Key="DT_ContentControl_Predicates">
         <ScrollViewer>
-            <ItemsControl ItemsSource="{Binding Predicates}"></ItemsControl>
+            <ItemsControl ItemsSource="{Binding Predicates}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="{StaticResource ComboBox.Static.Border}" BorderThickness="{StaticResource Thickness_Margin_1x}"
+                                CornerRadius="{StaticResource CornerRadius_Common}">
+                            <Border.Margin>
+                                <Thickness Left="{StaticResource Double_Margin_2x}" Right="{StaticResource Double_Margin_2x}"
+                                           Top="{StaticResource Double_Margin_2x}" Bottom="{StaticResource Double_Button_Node_Remove_Width/2}"></Thickness>
+                            </Border.Margin>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"></RowDefinition>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <TextBlock x:Name="tb_Main" HorizontalAlignment="Center" Style="{StaticResource S_TextBlock}"></TextBlock>
+                                <ContentControl Grid.Row="1" Content="{Binding}"></ContentControl>
+                                <Button Grid.RowSpan="2" Style="{StaticResource S_Button_Node_Remove}" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
+                            </Grid>
+                        </Border>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding PredicateType}" Value="{x:Type mp:P_CompositeM}">
+                                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_CompositeM_Title}"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding PredicateType}" Value="{x:Type mp:P_Dialog_HasM}">
+                                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_HasM_Title}"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding PredicateType}" Value="{x:Type mp:P_Dialog_Node_Has_ActiveSession_CmpM}">
+                                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_ActiveSession_CmpM_Title}"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding PredicateType}" Value="{x:Type mp:P_Dialog_Node_Has_ActiveSessionM}">
+                                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_ActiveSessionM_Title}"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding PredicateType}" Value="{x:Type mp:P_Dialog_Node_Has_PrevSessions_CmpM}">
+                                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_PrevSessions_CmpM_Title}"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding PredicateType}" Value="{x:Type mp:P_Dialog_Node_Has_PrevSessionsM}">
+                                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_PrevSessionsM_Title}"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding PredicateType}" Value="{x:Type mp:P_Item_HasM}">
+                                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Item_HasM_Title}"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding PredicateType}" Value="{x:Type mp:P_Quest_AddedM}">
+                                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_AddedM_Title}"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding PredicateType}" Value="{x:Type mp:P_Quest_FinishedM}">
+                                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_FinishedM_Title}"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding PredicateType}" Value="{x:Type mp:P_Quest_Node_AddedM}">
+                                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_Node_AddedM_Title}"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding PredicateType}" Value="{x:Type mp:P_Quest_Node_PassedM}">
+                                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_Node_PassedM_Title}"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding PredicateType}" Value="{x:Type mp:P_Relation_HasM}">
+                                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Relation_HasM_Title}"></Setter>
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </ScrollViewer>
     </DataTemplate>
 
@@ -1299,5 +1359,77 @@ StorylineEditor распространяется в надежде, что он�
                       Stroke="{StaticResource Color_Link}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" StrokeDashArray="4, 8"></Line>
         </Grid>
     </DataTemplate>
+
+    <DataTemplate x:Key="DT_ComboBoxItem_DialogOrReplica">
+        <TextBlock>
+            <Run x:Name="r_Icon"></Run>
+            <Run Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></Run>
+        </TextBlock>
+        <DataTemplate.Triggers>
+            
+        </DataTemplate.Triggers>
+    </DataTemplate>
     
+    <DataTemplate DataType="{x:Type vmp:P_Dialog_HasVM}">
+        <controls:ComboBoxExt SelectedValue="{Binding DialogOrReplica, UpdateSourceTrigger=PropertyChanged}"
+                                          Tag="{StaticResource String_Tag_Predicate_DialogOrReplica}"
+                                          ItemsSource="{Binding DialogsAndReplicasCVS.View}"
+                                          Filter="{Binding DialogsAndReplicasFilter, UpdateSourceTrigger=PropertyChanged}"
+                                          Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmp:P_Dialog_Node_Has_PrevSessionsVM}">
+        <StackPanel Orientation="Vertical">
+            <controls:ComboBoxExt x:Name="cmb_DialogOrReplica" SelectedValue="{Binding DialogOrReplica, UpdateSourceTrigger=PropertyChanged}"
+                                          Tag="{StaticResource String_Tag_Predicate_DialogOrReplica}"
+                                          ItemsSource="{Binding DialogsAndReplicasCVS.View}"
+                                          Filter="{Binding DialogsAndReplicasFilter, UpdateSourceTrigger=PropertyChanged}"
+                                          Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
+            <controls:ComboBoxExt x:Name="cmb_Node" SelectedValue="{Binding Node, UpdateSourceTrigger=PropertyChanged}"
+                                          Tag="{StaticResource String_Tag_Predicate_Node}"
+                                          ItemsSource="{Binding NodesCVS.View}"
+                                          Filter="{Binding NodesFilter, UpdateSourceTrigger=PropertyChanged}"
+                                          Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
+        </StackPanel>
+        <DataTemplate.Triggers>
+            <Trigger SourceName="cmb_DialogOrReplica" Property="SelectedValue" Value="{x:Null}">
+                <Setter TargetName="cmb_Node" Property="Visibility" Value="Collapsed"></Setter>
+            </Trigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmp:P_Dialog_Node_Has_PrevSessions_CmpVM}">
+        <StackPanel Orientation="Vertical">
+            <controls:ComboBoxExt x:Name="cmb_DialogOrReplica" SelectedValue="{Binding DialogOrReplica, UpdateSourceTrigger=PropertyChanged}"
+                                          Tag="{StaticResource String_Tag_Predicate_DialogOrReplica}"
+                                          ItemsSource="{Binding DialogsAndReplicasCVS.View}"
+                                          Filter="{Binding DialogsAndReplicasFilter, UpdateSourceTrigger=PropertyChanged}"
+                                          Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
+            <controls:ComboBoxExt x:Name="cmb_Node" SelectedValue="{Binding Node, UpdateSourceTrigger=PropertyChanged}"
+                                          Tag="{StaticResource String_Tag_Predicate_Node}"
+                                          ItemsSource="{Binding NodesCVS.View}"
+                                          Filter="{Binding NodesFilter, UpdateSourceTrigger=PropertyChanged}"
+                                          Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
+            <GroupBox x:Name="gb_Compare" Header="{StaticResource String_Tag_Predicate_Compare}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <ContentControl VerticalAlignment="Center" Content="{Binding}" Template="{StaticResource CT_ContentControl_Comparer_List}"></ContentControl>
+
+                </Grid>
+            </GroupBox>
+        </StackPanel>
+        <DataTemplate.Triggers>
+            <Trigger SourceName="cmb_DialogOrReplica" Property="SelectedValue" Value="{x:Null}">
+                <Setter TargetName="cmb_Node" Property="Visibility" Value="Collapsed"></Setter>
+                <Setter TargetName="gb_Compare" Property="Visibility" Value="Collapsed"></Setter>
+            </Trigger>
+            <Trigger SourceName="cmb_Node" Property="SelectedValue" Value="{x:Null}">
+                <Setter TargetName="gb_Compare" Property="Visibility" Value="Collapsed"></Setter>
+            </Trigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
 </ResourceDictionary>
