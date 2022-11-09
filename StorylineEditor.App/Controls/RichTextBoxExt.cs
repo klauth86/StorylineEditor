@@ -23,7 +23,7 @@ namespace StorylineEditor.App.Controls
         {
             base.OnTextChanged(e);
 
-            Application.Current.Dispatcher.BeginInvoke(new Action(() => SetDocumentChangedFlag(this, !GetDocumentChangedFlag(this))));
+            Application.Current.Dispatcher.BeginInvoke(new Action(() => DocumentChangedFlag = !DocumentChangedFlag));
         }
 
         private static readonly DependencyProperty BindableDocumentProperty = DependencyProperty.Register
@@ -34,8 +34,11 @@ namespace StorylineEditor.App.Controls
             new PropertyMetadata(null, OnBindableDocumentPropertyChanged)
             );
 
-        public static void SetBindableDocument(DependencyObject dp, FlowDocument value) { dp.SetValue(BindableDocumentProperty, value); }
-        public static FlowDocument GetBindableDocument(DependencyObject dp) { return (FlowDocument)dp.GetValue(BindableDocumentProperty); }
+        public FlowDocument BindableDocument
+        {
+            get => (FlowDocument)GetValue(BindableDocumentProperty);
+            set => SetValue(BindableDocumentProperty, value);
+        }
 
         private static void OnBindableDocumentPropertyChanged(DependencyObject dp, DependencyPropertyChangedEventArgs args)
         {
@@ -59,7 +62,10 @@ namespace StorylineEditor.App.Controls
             new PropertyMetadata(false)
             );
 
-        public static void SetDocumentChangedFlag(DependencyObject dp, bool value) { dp.SetValue(DocumentChangedFlagProperty, value); }
-        public static bool GetDocumentChangedFlag(DependencyObject dp) { return (bool)dp.GetValue(DocumentChangedFlagProperty); }
+        public bool DocumentChangedFlag
+        {
+            get => (bool)GetValue(DocumentChangedFlagProperty);
+            set => SetValue(DocumentChangedFlagProperty, value);
+        }
     }
 }

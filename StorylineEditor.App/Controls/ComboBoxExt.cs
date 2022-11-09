@@ -23,7 +23,7 @@ namespace StorylineEditor.App.Controls
         public string Filter
         {
             get => GetValue(FilterProperty)?.ToString();
-            set { SetValue(FilterProperty, value); }
+            set => SetValue(FilterProperty, value);
         }
     }
 }

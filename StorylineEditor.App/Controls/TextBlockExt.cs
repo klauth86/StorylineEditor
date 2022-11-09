@@ -61,7 +61,10 @@ namespace StorylineEditor.App.Controls
             }
         }
 
-        public static void SetDocument(DependencyObject dp, string value) { dp.SetValue(DocumentProperty, value); }
-        public static string GetDocument(DependencyObject dp) { return dp.GetValue(DocumentProperty)?.ToString(); }
+        public string Document
+        {
+            get => GetValue(DocumentProperty)?.ToString();
+            set => SetValue(DocumentProperty, value);
+        }
     }
 }
