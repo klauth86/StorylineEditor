@@ -18,6 +18,7 @@ namespace StorylineEditor.ViewModel.Common
     public interface ICallbackContext
     {
         void Callback(object viewModelObj, string propName);
+        ModelType GetModel<ModelType>() where ModelType : class;
     }
 
     public abstract class SimpleVM<T> : Notifier where T : class

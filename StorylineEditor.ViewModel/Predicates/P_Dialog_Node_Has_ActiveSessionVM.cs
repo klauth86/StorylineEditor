@@ -10,15 +10,64 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Model;
+using StorylineEditor.Model.Graphs;
 using StorylineEditor.Model.Predicates;
 using StorylineEditor.ViewModel.Common;
+using System.Linq;
+using System.Windows.Data;
 
 namespace StorylineEditor.ViewModel.Predicates
 {
     public class P_Dialog_Node_Has_ActiveSessionVM : P_BaseVM<P_Dialog_Node_Has_ActiveSessionM>
     {
-        public P_Dialog_Node_Has_ActiveSessionVM(P_Dialog_Node_Has_ActiveSessionM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+        public CollectionViewSource NodesCVS { get; }
 
+        public P_Dialog_Node_Has_ActiveSessionVM(P_Dialog_Node_Has_ActiveSessionM model, ICallbackContext callbackContext) : base(model, callbackContext)
+        {
+            NodesCVS = new CollectionViewSource();
 
+            GraphM graph = CallbackContext?.GetModel<GraphM>();
+            
+            NodesCVS.Source = graph?.nodes;
+            if (NodesCVS.View != null) NodesCVS.View.Filter = OnNodesFilter;
+            NodesCVS.View?.MoveCurrentTo(Node != null && graph != null && graph.nodes.Contains(Node) ? Node : null);
+        }
+
+        private bool OnNodesFilter(object sender)
+        {
+            if (sender is BaseM model)
+            {
+                return string.IsNullOrEmpty(nodesFilter) ||
+                    (model.name?.Contains(nodesFilter) ?? false) ||
+                    (model.description?.Contains(nodesFilter) ?? false);
+            }
+            return false;
+        }
+
+        protected string nodesFilter;
+        public string NodesFilter
+        {
+            set
+            {
+                if (value != nodesFilter)
+                {
+                    nodesFilter = value;
+                    NodesCVS.View?.Refresh();
+                }
+            }
+        }
+        public BaseM Node
+        {
+            get => CallbackContext?.GetModel<GraphM>()?.nodes.FirstOrDefault((node) => node.id == Model.nodeId);
+            set
+            {
+                if (value?.id != Model.nodeId)
+                {
+                    Model.nodeId = value?.id;
+                    Notify(nameof(Node));
+                }
+            }
+        }
     }
 }

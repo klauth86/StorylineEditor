@@ -162,5 +162,6 @@ namespace StorylineEditor.ViewModel
                 CollectionViewSource.GetDefaultView(ItemsVMs)?.Refresh();
             }
         }
+        public ModelType GetModel<ModelType>() where ModelType : class { return null; }
     }
 }

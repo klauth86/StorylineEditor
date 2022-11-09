@@ -38,8 +38,8 @@ namespace StorylineEditor.ViewModel.Nodes
 
             if (predicateModel.GetType() == typeof(P_CompositeM)) Predicates.Add(new P_CompositeVM((P_CompositeM)predicateModel, null));
             else if (predicateModel.GetType() == typeof(P_Dialog_HasM)) Predicates.Add(new P_Dialog_HasVM((P_Dialog_HasM)predicateModel, null));
-            else if (predicateModel.GetType() == typeof(P_Dialog_Node_Has_ActiveSession_CmpM)) Predicates.Add(new P_Dialog_Node_Has_ActiveSession_CmpVM((P_Dialog_Node_Has_ActiveSession_CmpM)predicateModel, null));
-            else if (predicateModel.GetType() == typeof(P_Dialog_Node_Has_ActiveSessionM)) Predicates.Add(new P_Dialog_Node_Has_ActiveSessionVM((P_Dialog_Node_Has_ActiveSessionM)predicateModel, null));
+            else if (predicateModel.GetType() == typeof(P_Dialog_Node_Has_ActiveSession_CmpM)) Predicates.Add(new P_Dialog_Node_Has_ActiveSession_CmpVM((P_Dialog_Node_Has_ActiveSession_CmpM)predicateModel, CallbackContext));
+            else if (predicateModel.GetType() == typeof(P_Dialog_Node_Has_ActiveSessionM)) Predicates.Add(new P_Dialog_Node_Has_ActiveSessionVM((P_Dialog_Node_Has_ActiveSessionM)predicateModel, CallbackContext));
             else if (predicateModel.GetType() == typeof(P_Dialog_Node_Has_PrevSessions_CmpM)) Predicates.Add(new P_Dialog_Node_Has_PrevSessions_CmpVM((P_Dialog_Node_Has_PrevSessions_CmpM)predicateModel, null));
             else if (predicateModel.GetType() == typeof(P_Dialog_Node_Has_PrevSessionsM)) Predicates.Add(new P_Dialog_Node_Has_PrevSessionsVM((P_Dialog_Node_Has_PrevSessionsM)predicateModel, null));
             else if (predicateModel.GetType() == typeof(P_Item_HasM)) Predicates.Add(new P_Item_HasVM((P_Item_HasM)predicateModel, null));

@@ -831,6 +831,7 @@ namespace StorylineEditor.ViewModel.Graphs
                 else if (propName == nameof(INodeVM.PositionY)) UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.Y);
             }
         }
+        public ModelType GetModel<ModelType>() where ModelType : class { return Model as ModelType; }
 
         private void UpdateLocalPosition(INodeVM nodeViewModel, ENodeVMUpdate updateTarget)
         {

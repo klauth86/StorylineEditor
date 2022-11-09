@@ -1412,6 +1412,14 @@ StorylineEditor распространяется в надежде, что он�
         </DataTemplate.Triggers>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vmp:P_Dialog_Node_Has_ActiveSessionVM}">
+        <controls:ComboBoxExt SelectedValue="{Binding Node, UpdateSourceTrigger=PropertyChanged}"
+                                          Tag="{StaticResource String_Tag_Predicate_Node}"
+                                          ItemsSource="{Binding NodesCVS.View}"
+                                          Filter="{Binding NodesFilter, UpdateSourceTrigger=PropertyChanged}"
+                                          Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type vmp:P_Dialog_Node_Has_PrevSessions_CmpVM}">
         <StackPanel Orientation="Vertical">
             <controls:ComboBoxExt x:Name="cmb_DialogOrReplica" SelectedValue="{Binding DialogOrReplica, UpdateSourceTrigger=PropertyChanged}"
@@ -1443,6 +1451,34 @@ StorylineEditor распространяется в надежде, что он�
                 <Setter TargetName="cmb_Node" Property="Visibility" Value="Collapsed"></Setter>
                 <Setter TargetName="gb_Compare" Property="Visibility" Value="Collapsed"></Setter>
             </Trigger>
+            <Trigger SourceName="cmb_Node" Property="SelectedValue" Value="{x:Null}">
+                <Setter TargetName="gb_Compare" Property="Visibility" Value="Collapsed"></Setter>
+            </Trigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmp:P_Dialog_Node_Has_ActiveSession_CmpVM}">
+        <StackPanel Orientation="Vertical">
+            <controls:ComboBoxExt x:Name="cmb_Node" SelectedValue="{Binding Node, UpdateSourceTrigger=PropertyChanged}"
+                                          Tag="{StaticResource String_Tag_Predicate_Node}"
+                                          ItemsSource="{Binding NodesCVS.View}"
+                                          Filter="{Binding NodesFilter, UpdateSourceTrigger=PropertyChanged}"
+                                          Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
+            <GroupBox x:Name="gb_Compare" Header="{StaticResource String_Tag_Predicate_Compare}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <ContentControl Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Content="{Binding}" Template="{StaticResource CT_ContentControl_Comparer_List}"></ContentControl>
+                    <controls:NumericUpDown Margin="{StaticResource Thickness_Margin_1x}" Grid.Column="1" VerticalAlignment="Center" Value="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
+                                            ButtonIncStyle="{StaticResource S_Button_Base}" ButtonIncContent="{StaticResource String_Icon_Plus}"
+                                            ButtonDecStyle="{StaticResource S_Button_Base}" ButtonDecContent="{StaticResource String_Icon_Minus}"
+                                            MinValue="0" MaxValue="64" Step="1"></controls:NumericUpDown>
+                </Grid>
+            </GroupBox>
+        </StackPanel>
+        <DataTemplate.Triggers>
             <Trigger SourceName="cmb_Node" Property="SelectedValue" Value="{x:Null}">
                 <Setter TargetName="gb_Compare" Property="Visibility" Value="Collapsed"></Setter>
             </Trigger>

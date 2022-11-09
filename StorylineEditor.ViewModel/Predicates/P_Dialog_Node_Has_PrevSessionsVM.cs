@@ -98,7 +98,7 @@ namespace StorylineEditor.ViewModel.Predicates
                 if (value != nodesFilter)
                 {
                     nodesFilter = value;
-                    DialogsAndReplicasCVS.View?.Refresh();
+                    NodesCVS.View?.Refresh();
                 }
             }
         }
