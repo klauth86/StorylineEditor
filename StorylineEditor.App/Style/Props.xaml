@@ -123,19 +123,6 @@ StorylineEditor распространяется в надежде, что он�
         </StackPanel>
     </ControlTemplate>
 
-    <Style TargetType="TextBox" x:Key="S_TextBox_Prop_NumericUpDown_Float">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="TextBox">
-                    <StackPanel Orientation="Horizontal" Margin="{StaticResource Thickness_Margin_4x}">
-                        <ContentControl ContentTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}" Content="{TemplateBinding Tag}"></ContentControl>
-                        <ContentControl></ContentControl>
-                    </StackPanel>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
     <Style TargetType="CheckBox" x:Key="S_CheckBox_Prop">
         <Setter Property="Margin" Value="{StaticResource Thickness_Margin_2x}"></Setter>
         <Setter Property="FontWeight" Value="Bold"></Setter>

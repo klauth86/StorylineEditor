@@ -143,7 +143,7 @@ namespace StorylineEditor.ViewModel.Predicates
             get => Model.value;
             set
             {
-                if (value != CompareType)
+                if (value != Model.value)
                 {
                     Model.value = value;
                     Notify(nameof(Value));

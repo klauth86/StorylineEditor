@@ -365,8 +365,22 @@ StorylineEditor распространяется в надежде, что он�
             </Grid>
             <TextBox Text="{Binding ActorName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_ActorName}"></TextBox>
             <TextBox Text="{Binding ClassPathName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_ClassPathName}"></TextBox>
-            <TextBox Text="{Binding InitialRelation, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_NumericUpDown_Float}" Tag="{StaticResource String_Tag_Relation}"></TextBox>
-            <TextBox Text="{Binding InitialRelationFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_NumericUpDown_Float}" Tag="{StaticResource String_Tag_RelationFemale}"></TextBox>
+
+            <StackPanel Orientation="Horizontal" Margin="{StaticResource Thickness_Margin_1x}">
+                <ContentControl ContentTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}" Content="{TemplateBinding Tag}"></ContentControl>
+                <controls:NumericUpDown_Float Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Value="{Binding InitialRelation,UpdateSourceTrigger=PropertyChanged}"
+                                            ButtonIncStyle="{StaticResource S_Button_Base}" ButtonIncContent="{StaticResource String_Icon_Plus}"
+                                            ButtonDecStyle="{StaticResource S_Button_Base}" ButtonDecContent="{StaticResource String_Icon_Minus}"
+                                            MinValue="-10" MaxValue="10" Step="0.25" MinWidth="{StaticResource Double_Node_MinWidth}"></controls:NumericUpDown_Float>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="{StaticResource Thickness_Margin_1x}">
+                <ContentControl ContentTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}" Content="{TemplateBinding Tag}"></ContentControl>
+                <controls:NumericUpDown_Float Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Value="{Binding InitialRelationFemale,UpdateSourceTrigger=PropertyChanged}"
+                                            ButtonIncStyle="{StaticResource S_Button_Base}" ButtonIncContent="{StaticResource String_Icon_Plus}"
+                                            ButtonDecStyle="{StaticResource S_Button_Base}" ButtonDecContent="{StaticResource String_Icon_Minus}"
+                                            MinValue="-10" MaxValue="10" Step="0.25" MinWidth="{StaticResource Double_Node_MinWidth}"></controls:NumericUpDown_Float>
+            </StackPanel>
         </StackPanel>
         <DataTemplate.Triggers>
             <Trigger SourceName="cb_HasDescriptionFemale" Property="IsChecked" Value="true">
@@ -1416,8 +1430,11 @@ StorylineEditor распространяется в надежде, что он�
                         <ColumnDefinition></ColumnDefinition>
                         <ColumnDefinition></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <ContentControl VerticalAlignment="Center" Content="{Binding}" Template="{StaticResource CT_ContentControl_Comparer_List}"></ContentControl>
-
+                    <ContentControl Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Content="{Binding}" Template="{StaticResource CT_ContentControl_Comparer_List}"></ContentControl>
+                    <controls:NumericUpDown Margin="{StaticResource Thickness_Margin_1x}" Grid.Column="1" VerticalAlignment="Center" Value="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
+                                            ButtonIncStyle="{StaticResource S_Button_Base}" ButtonIncContent="{StaticResource String_Icon_Plus}"
+                                            ButtonDecStyle="{StaticResource S_Button_Base}" ButtonDecContent="{StaticResource String_Icon_Minus}"
+                                            MinValue="0" MaxValue="64" Step="1"></controls:NumericUpDown>
                 </Grid>
             </GroupBox>
         </StackPanel>
