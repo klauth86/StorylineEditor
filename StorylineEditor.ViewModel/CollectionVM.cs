@@ -28,8 +28,8 @@ namespace StorylineEditor.ViewModel
     public class CollectionVM : Collection_BaseVM<List<BaseM>, object>, ICallbackContext
     {
         public CollectionVM(List<BaseM> inModel, Func<Type, object, BaseM> modelCreator, Func<BaseM, ICallbackContext, Notifier> viewModelCreator,
-            Func<Notifier, ICallbackContext, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Action<Notifier> viewModelInformer) : base(inModel, null, modelCreator, viewModelCreator,
-                editorCreator, modelExtractor)
+            Func<Notifier, ICallbackContext, Notifier> editorCreator, Action<Notifier> viewModelInformer) : base(inModel, null, modelCreator, viewModelCreator,
+                editorCreator)
         {
             _viewModelInformer = viewModelInformer ?? throw new ArgumentNullException(nameof(viewModelInformer));
 
@@ -162,6 +162,5 @@ namespace StorylineEditor.ViewModel
                 CollectionViewSource.GetDefaultView(ItemsVMs)?.Refresh();
             }
         }
-        public ModelType GetModel<ModelType>() where ModelType : class { return null; }
     }
 }

@@ -43,7 +43,6 @@ namespace StorylineEditor.ViewModel
                 (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new CharacterM() { name = "Новый персонаж" }; },
                 (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM, callbackContext); else return new CharacterVM((CharacterM)model, callbackContext); },
                 (Notifier viewModel, ICallbackContext callbackContext) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM, callbackContext); else return new CharacterEditorVM((CharacterVM)viewModel, callbackContext); },
-                (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((CharacterVM)viewModel).Model; },
                 (Notifier viewModel) => { });
             SelectionModel = Model.characters;
         }, () => SelectionModel != Model.characters));
@@ -55,7 +54,6 @@ namespace StorylineEditor.ViewModel
             (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new ItemM() { name = "Новый предмет" }; },
             (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM, callbackContext); else return new ItemVM((ItemM)model, callbackContext); },
             (Notifier viewModel, ICallbackContext callbackContext) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM, callbackContext); else return new ItemEditorVM((ItemVM)viewModel, callbackContext); },
-            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((ItemVM)viewModel).Model; },
             (Notifier viewModel) => { });
             SelectionModel = Model.items;
         }, () => SelectionModel != Model.items));
@@ -67,7 +65,6 @@ namespace StorylineEditor.ViewModel
             (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new ActorM() { name = "Новый актор" }; },
             (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM, callbackContext); else return new ActorVM((ActorM)model, callbackContext); },
             (Notifier viewModel, ICallbackContext callbackContext) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM, callbackContext); else return new ActorEditorVM((ActorVM)viewModel, callbackContext); },
-            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((ActorVM)viewModel).Model; },
             (Notifier viewModel) => { });
             SelectionModel = Model.actors;
         }, () => SelectionModel != Model.actors));
@@ -79,7 +76,6 @@ namespace StorylineEditor.ViewModel
             (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new QuestM() { name = "Новый квест" }; },
             (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM, callbackContext); else return new QuestVM((QuestM)model, callbackContext); },
             (Notifier viewModel, ICallbackContext callbackContext) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM, callbackContext); else return CreateQuestEditorVM((QuestVM)viewModel, callbackContext); },
-            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((QuestVM)viewModel).Model; },
             (Notifier viewModel) => { });
             SelectionModel = Model.journal;
         }, () => SelectionModel != Model.journal));
@@ -110,14 +106,6 @@ namespace StorylineEditor.ViewModel
 
                 throw new ArgumentOutOfRangeException(nameof(viewModel));
             },
-            (Notifier viewModel) =>
-            {
-                if (viewModel is LinkVM viewModelLink) return viewModelLink.Model;
-                if (viewModel is Node_Journal_StepVM viewModelStep) return viewModelStep.Model;
-                if (viewModel is Node_Journal_AlternativeVM viewModelAlternative) return viewModelAlternative.Model;
-
-                throw new ArgumentOutOfRangeException(nameof(viewModel));
-            },
             typeof(Node_StepM)
             );
         }
@@ -129,7 +117,6 @@ namespace StorylineEditor.ViewModel
                 (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new DialogM() { name = "Новый диалог" }; },
                 (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM, callbackContext); else return new DialogVM((DialogM)model, callbackContext); },
                 (Notifier viewModel, ICallbackContext callbackContext) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM, callbackContext); else return CreateDialogEditorVM((DialogVM)viewModel, callbackContext); },
-                (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((DialogVM)viewModel).Model; },
                 (Notifier viewModel) => { });
             SelectionModel = Model.dialogs;
         }, () => SelectionModel != Model.dialogs));
@@ -166,16 +153,6 @@ namespace StorylineEditor.ViewModel
 
                 throw new ArgumentOutOfRangeException(nameof(viewModel));
             },
-            (Notifier viewModel) =>
-            {
-                if (viewModel is LinkVM viewModelLink) return viewModelLink.Model;
-                if (viewModel is Node_DialogVM dialogViewModel) return dialogViewModel.Model;
-                if (viewModel is Node_ReplicaVM replicaViewModel) return replicaViewModel.Model;
-                if (viewModel is Node_RandomVM randomViewModel) return randomViewModel.Model;
-                if (viewModel is Node_TransitVM transitViewModel) return transitViewModel.Model;
-
-                throw new ArgumentOutOfRangeException(nameof(viewModel));
-            },
             typeof(Node_DialogM)
             );
         }
@@ -187,7 +164,6 @@ namespace StorylineEditor.ViewModel
                 (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new ReplicaM() { name = "Новая реплика" }; },
                 (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM, callbackContext); else return new ReplicaVM((ReplicaM)model, callbackContext); },
                 (Notifier viewModel, ICallbackContext callbackContext) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM, callbackContext); else return CreateReplicaEditorVM((ReplicaVM)viewModel, callbackContext); },
-                (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return folderVM.Model; else return ((ReplicaVM)viewModel).Model; },
                 (Notifier viewModel) => { });
             SelectionModel = Model.replicas;
         }, () => SelectionModel != Model.replicas));
@@ -218,15 +194,6 @@ namespace StorylineEditor.ViewModel
                 if (viewModel is Node_ReplicaVM replicaViewModel) return new Node_ReplicaEditorVM(replicaViewModel);
                 if (viewModel is Node_RandomVM randomViewModel) return new Node_RandomEditorVM(randomViewModel);
                 if (viewModel is Node_TransitVM transitViewModel) return new Node_TransitEditorVM(transitViewModel);
-
-                throw new ArgumentOutOfRangeException(nameof(viewModel));
-            },
-            (Notifier viewModel) =>
-            {
-                if (viewModel is LinkVM viewModelLink) return viewModelLink.Model;
-                if (viewModel is Node_ReplicaVM replicaViewModel) return replicaViewModel.Model;
-                if (viewModel is Node_RandomVM randomViewModel) return randomViewModel.Model;
-                if (viewModel is Node_TransitVM transitViewModel) return transitViewModel.Model;
 
                 throw new ArgumentOutOfRangeException(nameof(viewModel));
             },

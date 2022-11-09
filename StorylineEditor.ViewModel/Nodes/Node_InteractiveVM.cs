@@ -10,6 +10,7 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Model.GameEvents;
 using StorylineEditor.Model.Nodes;
 using StorylineEditor.Model.Predicates;
 using StorylineEditor.ViewModel.Common;
@@ -96,17 +97,20 @@ namespace StorylineEditor.ViewModel.Nodes
         public ObservableCollection<Notifier> GameEvents { get; }
 
         protected ICommand removeElementCommand;
-        public ICommand RemoveElementCommand => removeElementCommand ?? (removeElementCommand = new RelayCommand<object>((model) =>
+        public ICommand RemoveElementCommand => removeElementCommand ?? (removeElementCommand = new RelayCommand<object>((obj) =>
         {
-            if (model is Notifier viewModel)
+            if (obj is Notifier viewModel)
             {
-                if (Predicates.Remove(viewModel))
+                if (viewModel is IWithModel withModel)
                 {
-
-                }
-                else if (GameEvents.Remove(viewModel))
-                {
-
+                    if (Predicates.Remove(viewModel))
+                    {
+                        Model.predicates.Remove(withModel.GetModel<P_BaseM>());
+                    }
+                    else if (GameEvents.Remove(viewModel))
+                    {
+                        Model.gameEvents.Remove(withModel.GetModel<GE_BaseM>());
+                    }
                 }
             }
         }));

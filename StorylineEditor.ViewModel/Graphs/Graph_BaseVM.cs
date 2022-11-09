@@ -43,8 +43,8 @@ namespace StorylineEditor.ViewModel.Graphs
     public class Graph_BaseVM<T> : Collection_BaseVM<T, Point>, ICallbackContext, IActiveContext where T : GraphM
     {
         public Graph_BaseVM(T model, ICallbackContext callbackContext, Func<Type, Point, BaseM> modelCreator, Func<BaseM, ICallbackContext, Notifier> viewModelCreator,
-            Func<Notifier, ICallbackContext, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor, Type defaultNodeType) : base(model, callbackContext,
-                modelCreator, viewModelCreator, editorCreator, modelExtractor)
+            Func<Notifier, ICallbackContext, Notifier> editorCreator, Type defaultNodeType) : base(model, callbackContext,
+                modelCreator, viewModelCreator, editorCreator)
         {
             offsetY = offsetX = 0;
             scale = 1;
@@ -531,7 +531,9 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 if (NodesVMs.ContainsKey(nodeId))
                 {
-                    if (_modelExtractor(NodesVMs[nodeId]) is Node_BaseM nodeModel)
+                    Node_BaseM nodeModel = (NodesVMs[nodeId] as IWithModel)?.GetModel<Node_BaseM>();
+                    
+                    if (nodeModel != null)
                     {
                         graphModel.nodes.Add(nodeModel);
                     }
@@ -688,7 +690,7 @@ namespace StorylineEditor.ViewModel.Graphs
                     FromNodesLinks.Remove(nodeId);
                     ToNodesLinks.Remove(nodeId);
 
-                    BaseM nodeModel = _modelExtractor(NodesVMs[nodeId]);
+                    BaseM nodeModel = (NodesVMs[nodeId] as IWithModel)?.GetModel<BaseM>();
 
                     Remove(NodesVMs[nodeId], null, null);
                     NodesVMs.Remove(nodeId);
@@ -706,7 +708,7 @@ namespace StorylineEditor.ViewModel.Graphs
                     FromNodesLinks[linkViewModel.FromNodeId].Remove(linkViewModel.Id);
                     ToNodesLinks[linkViewModel.ToNodeId].Remove(linkViewModel.Id);
 
-                    BaseM linkModel = _modelExtractor(LinksVMs[linkId]);
+                    BaseM linkModel = (LinksVMs[linkId] as IWithModel)?.GetModel<BaseM>();
 
                     Remove(LinksVMs[linkId], null, null);
                     LinksVMs.Remove(linkId);
@@ -831,7 +833,6 @@ namespace StorylineEditor.ViewModel.Graphs
                 else if (propName == nameof(INodeVM.PositionY)) UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.Y);
             }
         }
-        public ModelType GetModel<ModelType>() where ModelType : class { return Model as ModelType; }
 
         private void UpdateLocalPosition(INodeVM nodeViewModel, ENodeVMUpdate updateTarget)
         {
@@ -901,7 +902,7 @@ namespace StorylineEditor.ViewModel.Graphs
                     nodeRect.Width = absMaxHeight * 2;
                     nodeRect.Height = absMaxWidth * 2;
 
-                    (viewRect.IntersectsWith(nodeRect) ? keepMs : removeMs).Add(_modelExtractor(viewModel));
+                    (viewRect.IntersectsWith(nodeRect) ? keepMs : removeMs).Add((viewModel as IWithModel)?.GetModel<BaseM>());
                 }
             }
 

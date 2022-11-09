@@ -32,13 +32,11 @@ namespace StorylineEditor.ViewModel
     public abstract class Collection_BaseVM<T, U> : SimpleVM<T> where T : class
     {
         public Collection_BaseVM(T model, ICallbackContext callbackContext, Func<Type, U, BaseM> modelCreator, Func<BaseM, ICallbackContext, Notifier> viewModelCreator,
-            Func<Notifier, ICallbackContext, Notifier> editorCreator, Func<Notifier, BaseM> modelExtractor) : base(model, callbackContext)
+            Func<Notifier, ICallbackContext, Notifier> editorCreator) : base(model, callbackContext)
         {
             _modelCreator = modelCreator ?? throw new ArgumentNullException(nameof(modelCreator));
             _viewModelCreator = viewModelCreator ?? throw new ArgumentNullException(nameof(viewModelCreator));
             _editorCreator = editorCreator ?? throw new ArgumentNullException(nameof(editorCreator));
-
-            _modelExtractor = modelExtractor ?? throw new ArgumentNullException(nameof(modelExtractor));
 
             CutVMs = new ObservableCollection<CutEntryVM>();
 
@@ -57,8 +55,7 @@ namespace StorylineEditor.ViewModel
 
             foreach (var viewModel in prevSelection)
             {
-                BaseM model = _modelExtractor(viewModel);
-
+                BaseM model = (viewModel as IWithModel)?.GetModel<BaseM>();
                 Remove(viewModel, model, GetContext(model));
             }
 
@@ -77,7 +74,7 @@ namespace StorylineEditor.ViewModel
 
             foreach (var viewModel in selection)
             {
-                BaseM model = _modelExtractor(viewModel);
+                BaseM model = (viewModel as IWithModel)?.GetModel<BaseM>();
                 CutVMs.Add(new CutEntryVM() { Model = model, ViewModel = viewModel, Context = GetContext(model) });
                 viewModel.IsCut = true;
             }
@@ -126,7 +123,6 @@ namespace StorylineEditor.ViewModel
         protected readonly Func<Type, U, BaseM> _modelCreator;
         protected readonly Func<BaseM, ICallbackContext, Notifier> _viewModelCreator;
         protected readonly Func<Notifier, ICallbackContext, Notifier> _editorCreator;
-        protected readonly Func<Notifier, BaseM> _modelExtractor;
 
 
 

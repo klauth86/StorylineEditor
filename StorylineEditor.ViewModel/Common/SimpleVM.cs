@@ -18,10 +18,14 @@ namespace StorylineEditor.ViewModel.Common
     public interface ICallbackContext
     {
         void Callback(object viewModelObj, string propName);
+    }
+
+    public interface IWithModel
+    {
         ModelType GetModel<ModelType>() where ModelType : class;
     }
 
-    public abstract class SimpleVM<T> : Notifier where T : class
+    public abstract class SimpleVM<T> : Notifier, IWithModel where T : class
     {
         public static event Action<T, string> ModelChangedEvent = delegate { };
         public static void OnModelChanged(T model, string propName) => ModelChangedEvent?.Invoke(model, propName);
@@ -31,6 +35,8 @@ namespace StorylineEditor.ViewModel.Common
 
         private readonly ICallbackContext _callbackContext;
         public ICallbackContext CallbackContext => _callbackContext;
+
+        public ModelType GetModel<ModelType>() where ModelType : class { return Model as ModelType; }
 
         public SimpleVM(T model, ICallbackContext callbackContext)
         {

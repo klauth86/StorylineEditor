@@ -27,7 +27,7 @@ namespace StorylineEditor.ViewModel.Predicates
         {
             NodesCVS = new CollectionViewSource();
 
-            GraphM graph = CallbackContext?.GetModel<GraphM>();
+            GraphM graph = (CallbackContext as IWithModel)?.GetModel<GraphM>();
 
             NodesCVS.Source = graph?.nodes;
             if (NodesCVS.View != null) NodesCVS.View.Filter = OnNodesFilter;
@@ -59,7 +59,7 @@ namespace StorylineEditor.ViewModel.Predicates
         }
         public BaseM Node
         {
-            get => CallbackContext?.GetModel<GraphM>()?.nodes.FirstOrDefault((node) => node.id == Model.nodeId);
+            get => (CallbackContext as IWithModel)?.GetModel<GraphM>()?.nodes.FirstOrDefault((node) => node.id == Model.nodeId);
             set
             {
                 if (value?.id != Model.nodeId)
