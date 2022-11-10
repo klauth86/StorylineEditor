@@ -13,48 +13,51 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Model.Predicates;
 using StorylineEditor.ViewModel.Common;
 using System;
+using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Predicates
 {
     public class P_CompositeVM : P_BaseVM<P_CompositeM>
     {
-        public P_CompositeVM(P_CompositeM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
-
-        Type typeA;
-        public Type TypeA
+        public P_CompositeVM(P_CompositeM model, ICallbackContext callbackContext) : base(model, callbackContext)
         {
-            get => typeA;
+            IsFirstSelected = true;
+        }
+
+        Type subType;
+        public Type SubType
+        {
+            get => subType;
             set
             {
-                if (typeA != value)
+                if (subType != value)
                 {
-                    typeA = value;
-                    predicateA = null;
-                    Notify(nameof(PredicateA));
+                    subType = value;
+
+                    if (value != null)
+                    {
+                        if (IsFirstSelected)
+                        {
+                            PredicateA = PredicatesHelper.CreatePredicateByType(subType, CallbackContext);
+                            Model.predicateA = ((IWithModel)PredicateA).GetModel<P_BaseM>();
+                            Notify(nameof(PredicateA));
+                        }
+                        else
+                        {
+                            PredicateB = PredicatesHelper.CreatePredicateByType(subType, CallbackContext);
+                            Model.predicateB = ((IWithModel)PredicateB).GetModel<P_BaseM>();
+                            Notify(nameof(PredicateB));
+                        }
+                    }
                 }
             }
         }
 
-        Notifier predicateA;
-        public Notifier PredicateA => predicateA ?? (predicateA = (typeA != null ? PredicatesHelper.CreatePredicateByType(typeA, CallbackContext) : null));
+        public bool IsFirstSelected { get; set; }
 
-        Type typeB;
-        public Type TypeB
-        {
-            get => typeB;
-            set
-            {
-                if (typeB != value)
-                {
-                    typeB = value;
-                    predicateB = null;
-                    Notify(nameof(PredicateB));
-                }
-            }
-        }
+        public Notifier PredicateA { get; set; }
 
-        Notifier predicateB;
-        public Notifier PredicateB => predicateB ?? (predicateB = (typeB != null ? PredicatesHelper.CreatePredicateByType(typeB, CallbackContext) : null));
+        public Notifier PredicateB { get; set; }
 
         public byte CompositionType
         {
@@ -68,5 +71,16 @@ namespace StorylineEditor.ViewModel.Predicates
                 }
             }
         }
+
+
+        ICommand selectCommand;
+        public ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<bool>((isFirstSelected) =>
+        {
+            IsFirstSelected = isFirstSelected;
+            Notify(nameof(IsFirstSelected));
+
+            subType = IsFirstSelected ? Model.predicateA?.GetType() : Model.predicateB?.GetType();
+            Notify(nameof(SubType));
+        }));
     }
 }

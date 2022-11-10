@@ -844,6 +844,47 @@ StorylineEditor распространяется в надежде, что он�
         </Border>
     </DataTemplate>
 
+    <Style TargetType="TextBlock" x:Key="S_TextBlock_Predicate_Title" BasedOn="{StaticResource S_TextBlock}">
+        <Style.Triggers>
+            <Trigger Property="Tag" Value="{x:Type mp:P_CompositeM}">
+                <Setter  Property="Text" Value="{StaticResource String_Tag_Predicate_P_CompositeM_Title}"></Setter>
+            </Trigger>
+            <Trigger Property="Tag" Value="{x:Type mp:P_Dialog_HasM}">
+                <Setter  Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_HasM_Title}"></Setter>
+            </Trigger>
+            <Trigger Property="Tag" Value="{x:Type mp:P_Dialog_Node_Has_ActiveSession_CmpM}">
+                <Setter  Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_ActiveSession_CmpM_Title}"></Setter>
+            </Trigger>
+            <Trigger Property="Tag" Value="{x:Type mp:P_Dialog_Node_Has_ActiveSessionM}">
+                <Setter  Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_ActiveSessionM_Title}"></Setter>
+            </Trigger>
+            <Trigger Property="Tag" Value="{x:Type mp:P_Dialog_Node_Has_PrevSessions_CmpM}">
+                <Setter  Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_PrevSessions_CmpM_Title}"></Setter>
+            </Trigger>
+            <Trigger Property="Tag" Value="{x:Type mp:P_Dialog_Node_Has_PrevSessionsM}">
+                <Setter  Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_PrevSessionsM_Title}"></Setter>
+            </Trigger>
+            <Trigger Property="Tag" Value="{x:Type mp:P_Item_HasM}">
+                <Setter  Property="Text" Value="{StaticResource String_Tag_Predicate_P_Item_HasM_Title}"></Setter>
+            </Trigger>
+            <Trigger Property="Tag" Value="{x:Type mp:P_Quest_AddedM}">
+                <Setter  Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_AddedM_Title}"></Setter>
+            </Trigger>
+            <Trigger Property="Tag" Value="{x:Type mp:P_Quest_FinishedM}">
+                <Setter  Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_FinishedM_Title}"></Setter>
+            </Trigger>
+            <Trigger Property="Tag" Value="{x:Type mp:P_Quest_Node_AddedM}">
+                <Setter  Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_Node_AddedM_Title}"></Setter>
+            </Trigger>
+            <Trigger Property="Tag" Value="{x:Type mp:P_Quest_Node_PassedM}">
+                <Setter  Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_Node_PassedM_Title}"></Setter>
+            </Trigger>
+            <Trigger Property="Tag" Value="{x:Type mp:P_Relation_HasM}">
+                <Setter  Property="Text" Value="{StaticResource String_Tag_Predicate_P_Relation_HasM_Title}"></Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
     <DataTemplate x:Key="DT_ContentControl_Predicates">
         <ScrollViewer>
             <ItemsControl ItemsSource="{Binding Predicates}">
@@ -860,49 +901,11 @@ StorylineEditor распространяется в надежде, что он�
                                     <RowDefinition Height="auto"></RowDefinition>
                                     <RowDefinition Height="*"></RowDefinition>
                                 </Grid.RowDefinitions>
-                                <TextBlock x:Name="tb_Main" HorizontalAlignment="Center" Style="{StaticResource S_TextBlock}"></TextBlock>
+                                <TextBlock x:Name="tb_Main" HorizontalAlignment="Center" Tag="{Binding PredicateType}" Style="{StaticResource S_TextBlock_Predicate_Title}"></TextBlock>
                                 <ContentControl Grid.Row="1" Content="{Binding}"></ContentControl>
                                 <Button Grid.RowSpan="2" Style="{StaticResource S_Button_Node_Remove}" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
                             </Grid>
                         </Border>
-                        <DataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding PredicateType}" Value="{x:Type mp:P_CompositeM}">
-                                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_CompositeM_Title}"></Setter>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding PredicateType}" Value="{x:Type mp:P_Dialog_HasM}">
-                                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_HasM_Title}"></Setter>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding PredicateType}" Value="{x:Type mp:P_Dialog_Node_Has_ActiveSession_CmpM}">
-                                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_ActiveSession_CmpM_Title}"></Setter>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding PredicateType}" Value="{x:Type mp:P_Dialog_Node_Has_ActiveSessionM}">
-                                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_ActiveSessionM_Title}"></Setter>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding PredicateType}" Value="{x:Type mp:P_Dialog_Node_Has_PrevSessions_CmpM}">
-                                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_PrevSessions_CmpM_Title}"></Setter>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding PredicateType}" Value="{x:Type mp:P_Dialog_Node_Has_PrevSessionsM}">
-                                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_PrevSessionsM_Title}"></Setter>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding PredicateType}" Value="{x:Type mp:P_Item_HasM}">
-                                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Item_HasM_Title}"></Setter>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding PredicateType}" Value="{x:Type mp:P_Quest_AddedM}">
-                                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_AddedM_Title}"></Setter>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding PredicateType}" Value="{x:Type mp:P_Quest_FinishedM}">
-                                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_FinishedM_Title}"></Setter>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding PredicateType}" Value="{x:Type mp:P_Quest_Node_AddedM}">
-                                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_Node_AddedM_Title}"></Setter>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding PredicateType}" Value="{x:Type mp:P_Quest_Node_PassedM}">
-                                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_Node_PassedM_Title}"></Setter>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding PredicateType}" Value="{x:Type mp:P_Relation_HasM}">
-                                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Relation_HasM_Title}"></Setter>
-                            </DataTrigger>
-                        </DataTemplate.Triggers>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
@@ -1678,71 +1681,66 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmp:P_CompositeVM}">
-        <TabControl>
-            <TabItem Header="A">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                    </Grid.RowDefinitions>
-                    
-                    <ComboBox SelectedValue="{Binding TypeA, UpdateSourceTrigger=PropertyChanged}" ItemTemplate="{StaticResource DT_ComboBoxItem_Predicate}">
-                        <system:Type>mp:P_CompositeM</system:Type>
-                        <system:Type>mp:P_Dialog_HasM</system:Type>
-                        <system:Type>mp:P_Dialog_Node_Has_ActiveSession_CmpM</system:Type>
-                        <system:Type>mp:P_Dialog_Node_Has_ActiveSessionM</system:Type>
-                        <system:Type>mp:P_Dialog_Node_Has_PrevSessions_CmpM</system:Type>
-                        <system:Type>mp:P_Dialog_Node_Has_PrevSessionsM</system:Type>
-                        <system:Type>mp:P_Item_HasM</system:Type>
-                        <system:Type>mp:P_Quest_AddedM</system:Type>
-                        <system:Type>mp:P_Quest_FinishedM</system:Type>
-                        <system:Type>mp:P_Quest_Node_AddedM</system:Type>
-                        <system:Type>mp:P_Quest_Node_PassedM</system:Type>
-                        <system:Type>mp:P_Relation_HasM</system:Type>
-                    </ComboBox>
-                    
-                    <ContentControl Grid.Row="1" Content="{Binding PredicateA, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
-                </Grid>
-            </TabItem>
-            
-            <TabItem>
-                <TabItem.HeaderTemplate>
-                    <DataTemplate>
-                        <ComboBox SelectedValue="{Binding CompositionType}" SelectedIndex="0" ItemTemplate="{StaticResource DT_ListBoxItem_CompositionType}">
-                            <x:Static Member="m:COMPOSITION_TYPE.AND"></x:Static>
-                            <x:Static Member="m:COMPOSITION_TYPE.OR"></x:Static>
-                            <x:Static Member="m:COMPOSITION_TYPE.XOR"></x:Static>
-                        </ComboBox>
-                    </DataTemplate>
-                </TabItem.HeaderTemplate>
-            </TabItem>
-            
-            <TabItem Header="B">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                    </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
 
-                    <ComboBox SelectedValue="{Binding TypeB, UpdateSourceTrigger=PropertyChanged}" ItemTemplate="{StaticResource DT_ComboBoxItem_Predicate}">
-                        <system:Type>mp:P_CompositeM</system:Type>
-                        <system:Type>mp:P_Dialog_HasM</system:Type>
-                        <system:Type>mp:P_Dialog_Node_Has_ActiveSession_CmpM</system:Type>
-                        <system:Type>mp:P_Dialog_Node_Has_ActiveSessionM</system:Type>
-                        <system:Type>mp:P_Dialog_Node_Has_PrevSessions_CmpM</system:Type>
-                        <system:Type>mp:P_Dialog_Node_Has_PrevSessionsM</system:Type>
-                        <system:Type>mp:P_Item_HasM</system:Type>
-                        <system:Type>mp:P_Quest_AddedM</system:Type>
-                        <system:Type>mp:P_Quest_FinishedM</system:Type>
-                        <system:Type>mp:P_Quest_Node_AddedM</system:Type>
-                        <system:Type>mp:P_Quest_Node_PassedM</system:Type>
-                        <system:Type>mp:P_Relation_HasM</system:Type>
-                    </ComboBox>
+            <Button Grid.Row="0" Grid.Column="0" Content="{StaticResource String_Tag_Predicate_PredicateA}" Command="{Binding SelectCommand}" CommandParameter="{StaticResource True}"></Button>
+            <ComboBox Grid.Row="0" Grid.Column="1" SelectedValue="{Binding CompositionType}" SelectedIndex="0" ItemTemplate="{StaticResource DT_ListBoxItem_CompositionType}">
+                <x:Static Member="m:COMPOSITION_TYPE.AND"></x:Static>
+                <x:Static Member="m:COMPOSITION_TYPE.OR"></x:Static>
+                <x:Static Member="m:COMPOSITION_TYPE.XOR"></x:Static>
+            </ComboBox>
+            <Button Grid.Row="0" Grid.Column="2" Content="{StaticResource String_Tag_Predicate_PredicateB}" Command="{Binding SelectCommand}" CommandParameter="{StaticResource False}"></Button>
 
-                    <ContentControl Grid.Row="1" Content="{Binding PredicateB, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
-                </Grid>
-            </TabItem>
-        </TabControl>
+            <ComboBox x:Name="cmb_PredicateA" Grid.Row="1" Grid.ColumnSpan="3" SelectedValue="{Binding SubType, UpdateSourceTrigger=PropertyChanged}"
+                      ItemTemplate="{StaticResource DT_ComboBoxItem_Predicate}">
+                <system:Type>mp:P_CompositeM</system:Type>
+                <system:Type>mp:P_Dialog_HasM</system:Type>
+                <system:Type>mp:P_Dialog_Node_Has_ActiveSession_CmpM</system:Type>
+                <system:Type>mp:P_Dialog_Node_Has_ActiveSessionM</system:Type>
+                <system:Type>mp:P_Dialog_Node_Has_PrevSessions_CmpM</system:Type>
+                <system:Type>mp:P_Dialog_Node_Has_PrevSessionsM</system:Type>
+                <system:Type>mp:P_Item_HasM</system:Type>
+                <system:Type>mp:P_Quest_AddedM</system:Type>
+                <system:Type>mp:P_Quest_FinishedM</system:Type>
+                <system:Type>mp:P_Quest_Node_AddedM</system:Type>
+                <system:Type>mp:P_Quest_Node_PassedM</system:Type>
+                <system:Type>mp:P_Relation_HasM</system:Type>
+            </ComboBox>
+            
+            <Grid x:Name="gr_PredicateA" Grid.Row="2" Grid.ColumnSpan="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock HorizontalAlignment="Center" Tag="{Binding TypeA, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Predicate_Title}"></TextBlock>
+                <ContentControl Grid.Row="1" Content="{Binding PredicateA, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+            </Grid>
+
+            <Grid x:Name="gr_PredicateB" Grid.Row="2" Grid.ColumnSpan="3" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock HorizontalAlignment="Center" Tag="{Binding TypeB, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Predicate_Title}"></TextBlock>
+                <ContentControl Grid.Row="1" Content="{Binding PredicateB, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+            </Grid>
+        </Grid>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding IsFirstSelected, UpdateSourceTrigger=PropertyChanged}" Value="false">
+                <Setter TargetName="gr_PredicateA" Property="Visibility" Value="Collapsed"></Setter>
+                <Setter TargetName="gr_PredicateB" Property="Visibility" Value="Visible"></Setter>
+            </DataTrigger>
+        </DataTemplate.Triggers>
     </DataTemplate>
     
 </ResourceDictionary>
