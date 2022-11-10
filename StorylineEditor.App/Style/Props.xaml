@@ -96,7 +96,22 @@ StorylineEditor распространяется в надежде, что он�
             </Trigger>
         </DataTemplate.Triggers>
     </DataTemplate>
-    
+
+    <DataTemplate x:Key="DT_ListBoxItem_CompositionType">
+        <TextBlock x:Name="tb_Main"></TextBlock>
+        <DataTemplate.Triggers>
+            <Trigger SourceName="tb_Main" Property="DataContext" Value="{x:Static m:COMPOSITION_TYPE.AND}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_CompositionType_AND}"></Setter>
+            </Trigger>
+            <Trigger SourceName="tb_Main" Property="DataContext" Value="{x:Static m:COMPOSITION_TYPE.OR}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_CompositionType_OR}"></Setter>
+            </Trigger>
+            <Trigger SourceName="tb_Main" Property="DataContext" Value="{x:Static m:COMPOSITION_TYPE.XOR}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_CompositionType_XOR}"></Setter>
+            </Trigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
     <ControlTemplate TargetType="ContentControl" x:Key="CT_ContentControl_Comparer_List">
         <ListBox SelectedValue="{Binding CompareType}" SelectedIndex="0" ItemTemplate="{StaticResource DT_ListBoxItem_CompareType}">
             <x:Static Member="m:COMPARE_TYPE.LESS"></x:Static>

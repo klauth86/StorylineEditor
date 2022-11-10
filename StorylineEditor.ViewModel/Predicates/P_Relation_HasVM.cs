@@ -74,7 +74,7 @@ namespace StorylineEditor.ViewModel.Predicates
             get => Model.compareType;
             set
             {
-                if (value != CompareType)
+                if (value != Model.compareType)
                 {
                     Model.compareType = value;
                     Notify(nameof(CompareType));

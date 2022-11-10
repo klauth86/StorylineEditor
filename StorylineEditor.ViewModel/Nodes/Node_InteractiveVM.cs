@@ -26,29 +26,9 @@ namespace StorylineEditor.ViewModel.Nodes
         public Node_InteractiveVM(T model, ICallbackContext callbackContext) : base(model, callbackContext)
         {
             Predicates = new ObservableCollection<Notifier>();
-            foreach (var predicateModel in Model.predicates) AddPredicateVM(predicateModel, false);
+            foreach (var predicateModel in Model.predicates) Predicates.Add(PredicatesHelper.CreatePredicateByModel(predicateModel, CallbackContext));
 
             GameEvents = new ObservableCollection<Notifier>();
-        }
-
-        private void AddPredicateVM(P_BaseM predicateModel, bool addModel = true)
-        {
-            if (predicateModel == null) return;
-
-            if (addModel) Model.predicates.Add(predicateModel);
-
-            if (predicateModel.GetType() == typeof(P_CompositeM)) Predicates.Add(new P_CompositeVM((P_CompositeM)predicateModel, null));
-            else if (predicateModel.GetType() == typeof(P_Dialog_HasM)) Predicates.Add(new P_Dialog_HasVM((P_Dialog_HasM)predicateModel, null));
-            else if (predicateModel.GetType() == typeof(P_Dialog_Node_Has_ActiveSession_CmpM)) Predicates.Add(new P_Dialog_Node_Has_ActiveSession_CmpVM((P_Dialog_Node_Has_ActiveSession_CmpM)predicateModel, CallbackContext));
-            else if (predicateModel.GetType() == typeof(P_Dialog_Node_Has_ActiveSessionM)) Predicates.Add(new P_Dialog_Node_Has_ActiveSessionVM((P_Dialog_Node_Has_ActiveSessionM)predicateModel, CallbackContext));
-            else if (predicateModel.GetType() == typeof(P_Dialog_Node_Has_PrevSessions_CmpM)) Predicates.Add(new P_Dialog_Node_Has_PrevSessions_CmpVM((P_Dialog_Node_Has_PrevSessions_CmpM)predicateModel, null));
-            else if (predicateModel.GetType() == typeof(P_Dialog_Node_Has_PrevSessionsM)) Predicates.Add(new P_Dialog_Node_Has_PrevSessionsVM((P_Dialog_Node_Has_PrevSessionsM)predicateModel, null));
-            else if (predicateModel.GetType() == typeof(P_Item_HasM)) Predicates.Add(new P_Item_HasVM((P_Item_HasM)predicateModel, null));
-            else if (predicateModel.GetType() == typeof(P_Quest_AddedM)) Predicates.Add(new P_Quest_AddedVM((P_Quest_AddedM)predicateModel, null));
-            else if (predicateModel.GetType() == typeof(P_Quest_FinishedM)) Predicates.Add(new P_Quest_FinishedVM((P_Quest_FinishedM)predicateModel, null));
-            else if (predicateModel.GetType() == typeof(P_Quest_Node_AddedM)) Predicates.Add(new P_Quest_Node_AddedVM((P_Quest_Node_AddedM)predicateModel, null));
-            else if (predicateModel.GetType() == typeof(P_Quest_Node_PassedM)) Predicates.Add(new P_Quest_Node_PassedVM((P_Quest_Node_PassedM)predicateModel, null));
-            else if (predicateModel.GetType() == typeof(P_Relation_HasM)) Predicates.Add(new P_Relation_HasVM((P_Relation_HasM)predicateModel, null));
         }
 
         public Type SelectedPredicateType
@@ -58,18 +38,14 @@ namespace StorylineEditor.ViewModel.Nodes
             {
                 if (value != null)
                 {
-                    if (value == typeof(P_CompositeM)) AddPredicateVM(new P_CompositeM(0));
-                    else if (value == typeof(P_Dialog_HasM)) AddPredicateVM(new P_Dialog_HasM(0));
-                    else if (value == typeof(P_Dialog_Node_Has_ActiveSession_CmpM)) AddPredicateVM(new P_Dialog_Node_Has_ActiveSession_CmpM(0));
-                    else if (value == typeof(P_Dialog_Node_Has_ActiveSessionM)) AddPredicateVM(new P_Dialog_Node_Has_ActiveSessionM(0));
-                    else if (value == typeof(P_Dialog_Node_Has_PrevSessions_CmpM)) AddPredicateVM(new P_Dialog_Node_Has_PrevSessions_CmpM(0));
-                    else if (value == typeof(P_Dialog_Node_Has_PrevSessionsM)) AddPredicateVM(new P_Dialog_Node_Has_PrevSessionsM(0));
-                    else if (value == typeof(P_Item_HasM)) AddPredicateVM(new P_Item_HasM(0));
-                    else if (value == typeof(P_Quest_AddedM)) AddPredicateVM(new P_Quest_AddedM(0));
-                    else if (value == typeof(P_Quest_FinishedM)) AddPredicateVM(new P_Quest_FinishedM(0));
-                    else if (value == typeof(P_Quest_Node_AddedM)) AddPredicateVM(new P_Quest_Node_AddedM(0));
-                    else if (value == typeof(P_Quest_Node_PassedM)) AddPredicateVM(new P_Quest_Node_PassedM(0));
-                    else if (value == typeof(P_Relation_HasM)) AddPredicateVM(new P_Relation_HasM(0));
+                    Notifier viewModel = PredicatesHelper.CreatePredicateByType(value, CallbackContext);
+                    if (viewModel is IWithModel withModel)
+                    {
+                        P_BaseM predicateModel = withModel.GetModel<P_BaseM>();
+                        Model.predicates.Add(predicateModel);
+
+                        Predicates.Add(viewModel);
+                    }
                 }
 
                 Notify(nameof(SelectedPredicateType));

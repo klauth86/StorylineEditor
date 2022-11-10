@@ -176,6 +176,12 @@ StorylineEditor распространяется в надежде, что он�
 
     <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_Title">Отношение: изменить</sys:String>
 
+    <sys:String x:Key="String_Tag_CompositionType_AND">И</sys:String>
+
+    <sys:String x:Key="String_Tag_CompositionType_OR">ИЛИ</sys:String>
+
+    <sys:String x:Key="String_Tag_CompositionType_XOR">Исключающее ИЛИ</sys:String>
+    
     <sys:String x:Key="String_Tag_Predicate_Compare">Условия</sys:String>
 
     <sys:String x:Key="String_Tag_CompareType_Less">Меньше</sys:String>

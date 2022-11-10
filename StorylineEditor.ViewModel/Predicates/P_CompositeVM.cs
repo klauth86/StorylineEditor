@@ -12,6 +12,7 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model.Predicates;
 using StorylineEditor.ViewModel.Common;
+using System;
 
 namespace StorylineEditor.ViewModel.Predicates
 {
@@ -19,6 +20,53 @@ namespace StorylineEditor.ViewModel.Predicates
     {
         public P_CompositeVM(P_CompositeM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
 
+        Type typeA;
+        public Type TypeA
+        {
+            get => typeA;
+            set
+            {
+                if (typeA != value)
+                {
+                    typeA = value;
+                    predicateA = null;
+                    Notify(nameof(PredicateA));
+                }
+            }
+        }
 
+        Notifier predicateA;
+        public Notifier PredicateA => predicateA ?? (predicateA = (typeA != null ? PredicatesHelper.CreatePredicateByType(typeA, CallbackContext) : null));
+
+        Type typeB;
+        public Type TypeB
+        {
+            get => typeB;
+            set
+            {
+                if (typeB != value)
+                {
+                    typeB = value;
+                    predicateB = null;
+                    Notify(nameof(PredicateB));
+                }
+            }
+        }
+
+        Notifier predicateB;
+        public Notifier PredicateB => predicateB ?? (predicateB = (typeB != null ? PredicatesHelper.CreatePredicateByType(typeB, CallbackContext) : null));
+
+        public byte CompositionType
+        {
+            get => Model.compositionType;
+            set
+            {
+                if (value != Model.compositionType)
+                {
+                    Model.compositionType = value;
+                    Notify(nameof(CompositionType));
+                }
+            }
+        }
     }
 }

@@ -33,6 +33,7 @@
   <ItemGroup>
     <Compile Include="Nodes\Node_RegularVM.cs" />
     <Compile Include="Nodes\Node_InteractiveVM.cs" />
+    <Compile Include="Predicates\PredicatesHelper.cs" />
     <Compile Include="Predicates\P_BaseVM.cs" />
     <Compile Include="Predicates\P_Quest_Node_PassedVM.cs" />
     <Compile Include="Predicates\P_Relation_HasVM.cs" />

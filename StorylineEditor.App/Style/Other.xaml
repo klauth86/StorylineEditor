@@ -1676,5 +1676,73 @@ StorylineEditor распространяется в надежде, что он�
             </Trigger>
         </DataTemplate.Triggers>
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmp:P_CompositeVM}">
+        <TabControl>
+            <TabItem Header="A">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    
+                    <ComboBox SelectedValue="{Binding TypeA, UpdateSourceTrigger=PropertyChanged}" ItemTemplate="{StaticResource DT_ComboBoxItem_Predicate}">
+                        <system:Type>mp:P_CompositeM</system:Type>
+                        <system:Type>mp:P_Dialog_HasM</system:Type>
+                        <system:Type>mp:P_Dialog_Node_Has_ActiveSession_CmpM</system:Type>
+                        <system:Type>mp:P_Dialog_Node_Has_ActiveSessionM</system:Type>
+                        <system:Type>mp:P_Dialog_Node_Has_PrevSessions_CmpM</system:Type>
+                        <system:Type>mp:P_Dialog_Node_Has_PrevSessionsM</system:Type>
+                        <system:Type>mp:P_Item_HasM</system:Type>
+                        <system:Type>mp:P_Quest_AddedM</system:Type>
+                        <system:Type>mp:P_Quest_FinishedM</system:Type>
+                        <system:Type>mp:P_Quest_Node_AddedM</system:Type>
+                        <system:Type>mp:P_Quest_Node_PassedM</system:Type>
+                        <system:Type>mp:P_Relation_HasM</system:Type>
+                    </ComboBox>
+                    
+                    <ContentControl Grid.Row="1" Content="{Binding PredicateA, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+                </Grid>
+            </TabItem>
+            
+            <TabItem>
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <ComboBox SelectedValue="{Binding CompositionType}" SelectedIndex="0" ItemTemplate="{StaticResource DT_ListBoxItem_CompositionType}">
+                            <x:Static Member="m:COMPOSITION_TYPE.AND"></x:Static>
+                            <x:Static Member="m:COMPOSITION_TYPE.OR"></x:Static>
+                            <x:Static Member="m:COMPOSITION_TYPE.XOR"></x:Static>
+                        </ComboBox>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+            </TabItem>
+            
+            <TabItem Header="B">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <ComboBox SelectedValue="{Binding TypeB, UpdateSourceTrigger=PropertyChanged}" ItemTemplate="{StaticResource DT_ComboBoxItem_Predicate}">
+                        <system:Type>mp:P_CompositeM</system:Type>
+                        <system:Type>mp:P_Dialog_HasM</system:Type>
+                        <system:Type>mp:P_Dialog_Node_Has_ActiveSession_CmpM</system:Type>
+                        <system:Type>mp:P_Dialog_Node_Has_ActiveSessionM</system:Type>
+                        <system:Type>mp:P_Dialog_Node_Has_PrevSessions_CmpM</system:Type>
+                        <system:Type>mp:P_Dialog_Node_Has_PrevSessionsM</system:Type>
+                        <system:Type>mp:P_Item_HasM</system:Type>
+                        <system:Type>mp:P_Quest_AddedM</system:Type>
+                        <system:Type>mp:P_Quest_FinishedM</system:Type>
+                        <system:Type>mp:P_Quest_Node_AddedM</system:Type>
+                        <system:Type>mp:P_Quest_Node_PassedM</system:Type>
+                        <system:Type>mp:P_Relation_HasM</system:Type>
+                    </ComboBox>
+
+                    <ContentControl Grid.Row="1" Content="{Binding PredicateB, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </DataTemplate>
     
 </ResourceDictionary>
