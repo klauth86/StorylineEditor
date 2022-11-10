@@ -10,15 +10,65 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Model;
 using StorylineEditor.Model.Predicates;
 using StorylineEditor.ViewModel.Common;
+using System.ComponentModel;
+using System.Windows.Data;
 
 namespace StorylineEditor.ViewModel.Predicates
 {
     public class P_Quest_AddedVM : P_BaseVM<P_Quest_AddedM>
     {
-        public P_Quest_AddedVM(P_Quest_AddedM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+        public CollectionViewSource QuestsCVS { get; }
 
+        public P_Quest_AddedVM(P_Quest_AddedM model, ICallbackContext callbackContext) : base(model, callbackContext)
+        {
+            QuestsCVS = new CollectionViewSource() { Source = ActiveContextService.Quests };
 
+            if (QuestsCVS.View != null)
+            {
+                QuestsCVS.View.Filter = OnFilter;
+                QuestsCVS.View.SortDescriptions.Add(new SortDescription(nameof(BaseM.id), ListSortDirection.Ascending));
+                QuestsCVS.View.MoveCurrentTo(Quest);
+            }
+        }
+
+        private bool OnFilter(object sender)
+        {
+            if (sender is BaseM model)
+            {
+                return string.IsNullOrEmpty(questsFilter) ||
+                    (model.name?.Contains(questsFilter) ?? false) ||
+                    (model.description?.Contains(questsFilter) ?? false);
+            }
+            return false;
+        }
+
+        protected string questsFilter;
+        public string QuestsFilter
+        {
+            set
+            {
+                if (value != questsFilter)
+                {
+                    questsFilter = value;
+                    QuestsCVS.View?.Refresh();
+                }
+            }
+        }
+
+        public BaseM Quest
+        {
+            get => ActiveContextService.GetQuest(Model.questId);
+            set
+            {
+                if (value?.id != Model.questId)
+                {
+                    Model.questId = value?.id;
+                    Notify(nameof(Quest));
+                }
+            }
+        }
     }
 }

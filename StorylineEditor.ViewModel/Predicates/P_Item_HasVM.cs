@@ -10,15 +10,65 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Model;
 using StorylineEditor.Model.Predicates;
 using StorylineEditor.ViewModel.Common;
+using System.ComponentModel;
+using System.Windows.Data;
 
 namespace StorylineEditor.ViewModel.Predicates
 {
     public class P_Item_HasVM : P_BaseVM<P_Item_HasM>
     {
-        public P_Item_HasVM(P_Item_HasM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+        public CollectionViewSource ItemsCVS { get; }
 
+        public P_Item_HasVM(P_Item_HasM model, ICallbackContext callbackContext) : base(model, callbackContext)
+        {
+            ItemsCVS = new CollectionViewSource() { Source = ActiveContextService.Items };
 
+            if (ItemsCVS.View != null)
+            {
+                ItemsCVS.View.Filter = OnFilter;
+                ItemsCVS.View.SortDescriptions.Add(new SortDescription(nameof(BaseM.id), ListSortDirection.Ascending));
+                ItemsCVS.View.MoveCurrentTo(Item);
+            }
+        }
+
+        private bool OnFilter(object sender)
+        {
+            if (sender is BaseM model)
+            {
+                return string.IsNullOrEmpty(itemsFilter) ||
+                    (model.name?.Contains(itemsFilter) ?? false) ||
+                    (model.description?.Contains(itemsFilter) ?? false);
+            }
+            return false;
+        }
+
+        protected string itemsFilter;
+        public string ItemsFilter
+        {
+            set
+            {
+                if (value != itemsFilter)
+                {
+                    itemsFilter = value;
+                    ItemsCVS.View?.Refresh();
+                }
+            }
+        }
+
+        public BaseM Item
+        {
+            get => ActiveContextService.GetItem(Model.itemId);
+            set
+            {
+                if (value?.id != Model.itemId)
+                {
+                    Model.itemId = value?.id;
+                    Notify(nameof(Item));
+                }
+            }
+        }
     }
 }

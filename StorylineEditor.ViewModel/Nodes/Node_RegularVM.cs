@@ -28,13 +28,13 @@ namespace StorylineEditor.ViewModel.Nodes
 
             if (FilteredCharacterCVS.View != null)
             {
-                FilteredCharacterCVS.View.Filter = Filter;
+                FilteredCharacterCVS.View.Filter = OnFilter;
                 FilteredCharacterCVS.View.SortDescriptions.Add(new SortDescription(nameof(BaseM.name), ListSortDirection.Ascending));
                 FilteredCharacterCVS.View.MoveCurrentTo(Character);
             }
         }
 
-        private bool Filter(object sender)
+        private bool OnFilter(object sender)
         {
             if (sender is BaseM model)
             {

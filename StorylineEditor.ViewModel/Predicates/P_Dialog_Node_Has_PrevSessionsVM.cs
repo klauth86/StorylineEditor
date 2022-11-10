@@ -66,12 +66,12 @@ namespace StorylineEditor.ViewModel.Predicates
         }
         public BaseM DialogOrReplica
         {
-            get => ActiveContextService.GetDialogOrReplica(Model.id);
+            get => ActiveContextService.GetDialogOrReplica(Model.dialogId);
             set
             {
-                if (value?.id != Model.id)
+                if (value?.id != Model.dialogId)
                 {
-                    Model.id = value?.id;
+                    Model.dialogId = value?.id;
                     Notify(nameof(DialogOrReplica));
 
                     RefreshNodesCVS();

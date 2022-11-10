@@ -39,13 +39,13 @@ namespace StorylineEditor.ViewModel.Graphs
             
             if (FilteredDialogCharacterCVS.View != null)
             {
-                FilteredDialogCharacterCVS.View.Filter = Filter;
+                FilteredDialogCharacterCVS.View.Filter = OnFilter;
                 FilteredDialogCharacterCVS.View.SortDescriptions.Add(new SortDescription(nameof(BaseM.name), ListSortDirection.Ascending));
                 FilteredDialogCharacterCVS.View.MoveCurrentTo(DialogCharacter);
             }
         }
 
-        private bool Filter(object sender)
+        private bool OnFilter(object sender)
         {
             if (sender is BaseM model)
             {

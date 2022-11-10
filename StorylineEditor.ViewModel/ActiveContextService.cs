@@ -58,6 +58,9 @@ namespace StorylineEditor.ViewModel
         public static IEnumerable<BaseM> Actors => GetEnumerator(ActiveStoryline?.Model.actors);
         public static BaseM GetActor(string id) => Actors?.FirstOrDefault((model) => model.id == id);
 
+        public static IEnumerable<BaseM> Quests => GetEnumerator(ActiveStoryline?.Model.journal);
+        public static BaseM GetQuest(string id) => Quests?.FirstOrDefault((model) => model.id == id);
+
         public static IEnumerable<BaseM> DialogsAndReplicas => GetEnumerator(ActiveStoryline?.Model.dialogs, ActiveStoryline?.Model.replicas);
         public static BaseM GetDialogOrReplica(string id) => DialogsAndReplicas?.FirstOrDefault((model) => model.id == id);
     }

@@ -192,4 +192,10 @@ StorylineEditor распространяется в надежде, что он�
 
     <sys:String x:Key="String_Tag_Predicate_Node">Вершина</sys:String>
 
+    <sys:String x:Key="String_Tag_Predicate_Item">Предмет</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_Quest">Квест</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_Character">Персонаж</sys:String>
+
 </ResourceDictionary>
