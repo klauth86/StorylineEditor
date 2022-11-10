@@ -154,6 +154,7 @@ namespace StorylineEditor.ViewModel
         }
         public override void GetSelection(IList outSelection) { if (selection != null) outSelection.Add(selection); }
         public override bool HasSelection() => selection != null;
+        public override bool SelectionCanBeDeleted() { return selection.Id != CharacterM.PLAYER_ID; }
 
         public void Callback(object viewModelObj, string propName)
         {

@@ -24,6 +24,8 @@ namespace StorylineEditor.ViewModel.Nodes
 
         public Node_RegularVM(T model, ICallbackContext callbackContext) : base(model, callbackContext)
         {
+            Model.characterId = CharacterM.PLAYER_ID;
+
             FilteredCharacterCVS = new CollectionViewSource() { Source = ActiveContextService.Characters };
 
             if (FilteredCharacterCVS.View != null)
@@ -38,10 +40,7 @@ namespace StorylineEditor.ViewModel.Nodes
         {
             if (sender is BaseM model)
             {
-                return
-                    string.IsNullOrEmpty(characterFilter) ||
-                    (model.name?.Contains(characterFilter) ?? false) ||
-                    (model.description?.Contains(characterFilter) ?? false);
+                return string.IsNullOrEmpty(characterFilter) || model.PassFilter(characterFilter);
             }
             return false;
         }

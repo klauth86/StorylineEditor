@@ -52,6 +52,13 @@ namespace StorylineEditor.Model.Graphs
             }
         }
 
+        public override bool PassFilter(string filter)
+        {
+            return
+                !nodes.TrueForAll((node)=>!node.PassFilter(filter)) ||
+                base.PassFilter(filter);
+        }
+
         public List<Node_BaseM> nodes { get; set; }
         public List<LinkM> links { get; set; }
     }

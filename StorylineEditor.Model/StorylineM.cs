@@ -57,6 +57,8 @@ namespace StorylineEditor.Model
             journal = new List<BaseM>();
             dialogs = new List<BaseM>();
             replicas = new List<BaseM>();
+
+            characters.Add(new CharacterM() { id = CharacterM.PLAYER_ID, name = "Основной персонаж" });
         }
 
         public StorylineM() : this(0) { }

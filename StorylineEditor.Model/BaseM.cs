@@ -34,6 +34,13 @@ namespace StorylineEditor.Model
             targetObject.description = description;
         }
 
+        public virtual bool PassFilter(string filter)
+        {
+            return
+                ((name?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) ?? -1) >= 0) ||
+                ((description?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) ?? -1) >= 0);
+        }
+
         public DateTime createdAt { get; set; }
         public string id { get; set; }
         public string name { get; set; }

@@ -38,12 +38,7 @@ namespace StorylineEditor.ViewModel.Predicates
         {
             if (sender is BaseM model)
             {
-                return model.id != CharacterM.PLAYER_ID &&
-                    (
-                    string.IsNullOrEmpty(charactersFilter) ||
-                    (model.name?.Contains(charactersFilter) ?? false) ||
-                    (model.description?.Contains(charactersFilter) ?? false)
-                    );
+                return model.id != CharacterM.PLAYER_ID && (string.IsNullOrEmpty(charactersFilter) || model.PassFilter(charactersFilter));
             }
             return false;
         }

@@ -45,9 +45,7 @@ namespace StorylineEditor.ViewModel.Predicates
         {
             if (sender is BaseM model)
             {
-                return string.IsNullOrEmpty(dialogsAndReplicasFilter) ||
-                    (model.name?.Contains(dialogsAndReplicasFilter) ?? false) ||
-                    (model.description?.Contains(dialogsAndReplicasFilter) ?? false);
+                return string.IsNullOrEmpty(dialogsAndReplicasFilter) || model.PassFilter(dialogsAndReplicasFilter);
             }
             return false;
         }
@@ -83,9 +81,7 @@ namespace StorylineEditor.ViewModel.Predicates
         {
             if (sender is BaseM model)
             {
-                return string.IsNullOrEmpty(nodesFilter) ||
-                    (model.name?.Contains(nodesFilter) ?? false) ||
-                    (model.description?.Contains(nodesFilter) ?? false);
+                return string.IsNullOrEmpty(nodesFilter) || model.PassFilter(nodesFilter);
             }
             return false;
         }

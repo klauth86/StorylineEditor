@@ -10,6 +10,8 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using System;
+
 namespace StorylineEditor.Model.Nodes
 {
     public abstract class Node_JournalM : Node_InteractiveM
@@ -29,6 +31,13 @@ namespace StorylineEditor.Model.Nodes
             {
                 casted.result = result;
             }
+        }
+
+        public override bool PassFilter(string filter)
+        {
+            return
+                ((result?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) ?? -1) >= 0) ||
+                base.PassFilter(filter);
         }
 
         public string result { get; set; }

@@ -55,13 +55,15 @@ namespace StorylineEditor.ViewModel
 
             foreach (var viewModel in prevSelection)
             {
+                if (viewModel.Id == CharacterM.PLAYER_ID) continue;
+
                 BaseM model = (viewModel as IWithModel)?.GetModel<BaseM>();
                 Remove(viewModel, model, GetContext(model));
             }
 
             CommandManager.InvalidateRequerySuggested();
 
-        }, () => HasSelection()));
+        }, () => HasSelection() && SelectionCanBeDeleted()));
 
         private ICommand cutCommand;
         public ICommand CutCommand => cutCommand ?? (cutCommand = new RelayCommand(() =>
@@ -151,5 +153,6 @@ namespace StorylineEditor.ViewModel
         public abstract void AddToSelection(Notifier viewModel, bool resetSelection);
         public abstract void GetSelection(IList outSelection);
         public abstract bool HasSelection();
+        public abstract bool SelectionCanBeDeleted();
     }
 }

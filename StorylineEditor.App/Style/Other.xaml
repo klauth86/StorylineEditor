@@ -20,6 +20,7 @@ StorylineEditor распространяется в надежде, что он�
                     xmlns:mn="clr-namespace:StorylineEditor.Model.Nodes;assembly=StorylineEditor.Model"
                     xmlns:mp="clr-namespace:StorylineEditor.Model.Predicates;assembly=StorylineEditor.Model"
                     xmlns:mge="clr-namespace:StorylineEditor.Model.GameEvents;assembly=StorylineEditor.Model"
+                    xmlns:mg="clr-namespace:StorylineEditor.Model.Graphs;assembly=StorylineEditor.Model"
                     xmlns:bhvrs="clr-namespace:StorylineEditor.App.Behaviors"
                     xmlns:controls="clr-namespace:StorylineEditor.App.Controls" xmlns:system="clr-namespace:System;assembly=mscorlib">
 
@@ -348,6 +349,105 @@ StorylineEditor распространяется в надежде, что он�
             </Grid.ColumnDefinitions>
             <TextBlock Text="{StaticResource String_Icon_Character}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
             <TextBlock Grid.Column="1" Text="{Binding name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type m:ItemM}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{StaticResource String_Icon_Item}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+            <TextBlock Grid.Column="1" Text="{Binding name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type m:ActorM}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{StaticResource String_Icon_Actor}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+            <TextBlock Grid.Column="1" Text="{Binding name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type mg:DialogM}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{StaticResource String_Icon_Dialog}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+            <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type mg:ReplicaM}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{StaticResource String_Icon_Replica}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+            <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type mg:QuestM}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{StaticResource String_Icon_Quest}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+            <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type mn:Node_StepM}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{StaticResource String_Icon_Node_Step}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+            <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type mn:Node_AlternativeM}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{StaticResource String_Icon_Node_Alternative}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+            <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type mn:Node_ReplicaM}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{StaticResource String_Icon_Node_Replica}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+            <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type mn:Node_DialogM}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{StaticResource String_Icon_Node_Dialog}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+            <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
         </Grid>
     </DataTemplate>
     

@@ -49,12 +49,7 @@ namespace StorylineEditor.ViewModel.Graphs
         {
             if (sender is BaseM model)
             {
-                return model.id != CharacterM.PLAYER_ID &&
-                    (
-                    string.IsNullOrEmpty(dialogCharacterFilter) ||
-                    (model.name?.Contains(dialogCharacterFilter) ?? false) ||
-                    (model.description?.Contains(dialogCharacterFilter) ?? false)
-                    );
+                return model.id != CharacterM.PLAYER_ID && (string.IsNullOrEmpty(dialogCharacterFilter) || model.PassFilter(dialogCharacterFilter));
             }
             return false;
         }

@@ -38,9 +38,7 @@ namespace StorylineEditor.ViewModel.Predicates
         {
             if (sender is BaseM model)
             {
-                return string.IsNullOrEmpty(questsFilter) ||
-                    (model.name?.Contains(questsFilter) ?? false) ||
-                    (model.description?.Contains(questsFilter) ?? false);
+                return string.IsNullOrEmpty(questsFilter) || model.PassFilter(questsFilter);
             }
             return false;
         }

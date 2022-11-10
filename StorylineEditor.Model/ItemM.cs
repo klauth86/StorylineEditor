@@ -10,6 +10,8 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using System;
+
 namespace StorylineEditor.Model
 {
     public class ItemM : ActorM
@@ -41,6 +43,14 @@ namespace StorylineEditor.Model
                 casted.hasInternalDescriptionFemale = hasInternalDescriptionFemale;
                 casted.internalDescriptionFemale = internalDescriptionFemale;
             }
+        }
+
+        public override bool PassFilter(string filter)
+        {
+            return
+                ((internalDescription?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) ?? -1) >= 0) ||
+                ((internalDescriptionFemale?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) ?? -1) >= 0) ||
+                base.PassFilter(filter);
         }
 
         public bool hasInternalDescription { get; set; }

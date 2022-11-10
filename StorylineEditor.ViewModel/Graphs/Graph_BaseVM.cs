@@ -1009,7 +1009,7 @@ namespace StorylineEditor.ViewModel.Graphs
             foreach (var selectedViewModel in selection) outSelection.Add(selectedViewModel);
         }
         public override bool HasSelection() => selection.Count > 0;
-
+        public override bool SelectionCanBeDeleted() => true;
 
 
         protected INodeVM selectionNode;
