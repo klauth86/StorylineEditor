@@ -61,6 +61,8 @@ namespace StorylineEditor.ViewModels
                 model.id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss}_{2}_{3}", model.GetType().Name, model.createdAt, model.createdAt.Ticks, ticks);
             }
 
+            idReplacer.Add(id, model.id);
+
             return model;
         }
 

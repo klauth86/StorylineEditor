@@ -23,6 +23,8 @@ namespace StorylineEditor.ViewModels.Nodes
     [XmlRoot]
     public class NodePairVm : BaseVm<TreeVm>
     {
+        static Random Rnd = new Random();
+
         public NodePairVm(TreeVm Parent, long additionalTicks) : base(Parent, additionalTicks) { }
 
         public NodePairVm() : this(null, 0) { }
@@ -32,7 +34,7 @@ namespace StorylineEditor.ViewModels.Nodes
         {
             if (model != null) return model;
 
-            var linkModel = new LinkM(ticks)
+            var linkModel = new LinkM(Rnd.Next(0, int.MaxValue))
             {
                 fromNodeId = From?.GetModel(ticks, idReplacer)?.id,
                 toNodeId = To?.GetModel(ticks, idReplacer)?.id,
@@ -40,9 +42,11 @@ namespace StorylineEditor.ViewModels.Nodes
 
             model = linkModel;
 
-            var times = id.Replace("NodePairVm_", "").Substring(0, 19).Split('_');
-            model.createdAt = new System.DateTime(int.Parse(times[0]), int.Parse(times[1]), int.Parse(times[2]), int.Parse(times[3]), int.Parse(times[4]), int.Parse(times[5]));
-            model.id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss}_{2}_{3}", model.GetType().Name, model.createdAt, model.createdAt.Ticks, ticks);
+            //var times = id.Replace("NodePairVm_", "").Substring(0, 19).Split('_');
+            //model.createdAt = new System.DateTime(int.Parse(times[0]), int.Parse(times[1]), int.Parse(times[2]), int.Parse(times[3]), int.Parse(times[4]), int.Parse(times[5]));
+            //model.id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss}_{2}_{3}", model.GetType().Name, model.createdAt, model.createdAt.Ticks, ticks);
+
+            idReplacer.Add(model.id, model.id);
 
             return model;
         }

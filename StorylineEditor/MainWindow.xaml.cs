@@ -154,7 +154,6 @@ namespace StorylineEditor
                         {
                             var characterModel = character.GetModel(i, idReplacer);
                             storyline.characters.Add(characterModel);
-                            if (!idReplacer.ContainsKey(character.Id)) idReplacer.Add(character.Id, characterModel.id);
                         }
                         i++;
                     }
@@ -166,7 +165,6 @@ namespace StorylineEditor
                         {
                             var itemModel = item.GetModel(i, idReplacer);
                             storyline.items.Add(itemModel);
-                            if (!idReplacer.ContainsKey(item.Id)) idReplacer.Add(item.Id, itemModel.id);
                         }
                         i++;
                     }
@@ -178,7 +176,6 @@ namespace StorylineEditor
                         {
                             var actorModel = actor.GetModel(i, idReplacer);
                             storyline.actors.Add(actorModel);
-                            if (!idReplacer.ContainsKey(actor.Id)) idReplacer.Add(actor.Id, actorModel.id);
                         }
                         i++;
                     }
@@ -190,7 +187,6 @@ namespace StorylineEditor
                         {
                             var questModel = quest.GetModel(i, idReplacer);
                             storyline.journal.Add(questModel);
-                            if (!idReplacer.ContainsKey(quest.Id)) idReplacer.Add(quest.Id, questModel.id);
                         }
                         i++;
                     }
@@ -202,7 +198,6 @@ namespace StorylineEditor
                         {
                             var dialogModel = dialog.GetModel(i, idReplacer);
                             storyline.dialogs.Add(dialogModel);
-                            if (!idReplacer.ContainsKey(dialog.Id)) idReplacer.Add(dialog.Id, dialogModel.id);
                         }
                         i++;
                     }
@@ -214,7 +209,6 @@ namespace StorylineEditor
                         {
                             var replicaModel = replica.GetModel(i, idReplacer);
                             storyline.replicas.Add(replicaModel);
-                            if (!idReplacer.ContainsKey(replica.Id)) idReplacer.Add(replica.Id, replicaModel.id);
                         }
                         i++;
                     }

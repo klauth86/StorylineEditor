@@ -59,6 +59,14 @@ namespace StorylineEditor.ViewModels
                     description = Description,
                 };
 
+                model = newQuest;
+
+                var times = id.Replace("TreeVm_", "").Substring(0, 19).Split('_');
+                model.createdAt = new System.DateTime(int.Parse(times[0]), int.Parse(times[1]), int.Parse(times[2]), int.Parse(times[3]), int.Parse(times[4]), int.Parse(times[5]));
+                model.id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss}_{2}_{3}", model.GetType().Name, model.createdAt, model.createdAt.Ticks, ticks);
+
+                idReplacer.Add(id, model.id);
+
                 int j = 0;
                 foreach (var link in Links)
                 {
@@ -66,7 +74,6 @@ namespace StorylineEditor.ViewModels
                     {
                         var linkModel = link.GetModel(j, idReplacer);
                         newQuest.links.Add((LinkM)linkModel);
-                        if (!idReplacer.ContainsKey(link.Id)) idReplacer.Add(link.Id, linkModel.id);
                         j++;
                     }
                 }
@@ -78,12 +85,9 @@ namespace StorylineEditor.ViewModels
                     {
                         var nodeModel = node.GetModel(j, idReplacer);
                         newQuest.nodes.Add((Node_BaseM)nodeModel);
-                        if (!idReplacer.ContainsKey(node.Id)) idReplacer.Add(node.Id, nodeModel.id);
                         j++;
                     }
                 }
-
-                model = newQuest;
             }
             else if (Parent is PlayerDialogsTabVm)
             {
@@ -93,6 +97,14 @@ namespace StorylineEditor.ViewModels
                     description = Description,
                 };
 
+                model = newDialog;
+
+                var times = id.Replace("TreeVm_", "").Substring(0, 19).Split('_');
+                model.createdAt = new System.DateTime(int.Parse(times[0]), int.Parse(times[1]), int.Parse(times[2]), int.Parse(times[3]), int.Parse(times[4]), int.Parse(times[5]));
+                model.id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss}_{2}_{3}", model.GetType().Name, model.createdAt, model.createdAt.Ticks, ticks);
+
+                idReplacer.Add(id, model.id);
+
                 int j = 0;
                 foreach (var link in Links)
                 {
@@ -100,7 +112,6 @@ namespace StorylineEditor.ViewModels
                     {
                         var linkModel = link.GetModel(j, idReplacer);
                         newDialog.links.Add((LinkM)linkModel);
-                        if (!idReplacer.ContainsKey(link.Id)) idReplacer.Add(link.Id, linkModel.id);
                         j++;
                     }
                 }
@@ -112,12 +123,9 @@ namespace StorylineEditor.ViewModels
                     {
                         var nodeModel = node.GetModel(j, idReplacer);
                         newDialog.nodes.Add((Node_BaseM)nodeModel);
-                        if (!idReplacer.ContainsKey(node.Id)) idReplacer.Add(node.Id, nodeModel.id);
                         j++;
                     }
                 }
-
-                model = newDialog;
 
                 newDialog.npcId = (Interlocutor as CharacterVm)?.GetModel(ticks, idReplacer)?.id;
             }
@@ -129,6 +137,14 @@ namespace StorylineEditor.ViewModels
                     description = Description,
                 };
 
+                model = newReplica;
+
+                var times = id.Replace("TreeVm_", "").Substring(0, 19).Split('_');
+                model.createdAt = new System.DateTime(int.Parse(times[0]), int.Parse(times[1]), int.Parse(times[2]), int.Parse(times[3]), int.Parse(times[4]), int.Parse(times[5]));
+                model.id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss}_{2}_{3}", model.GetType().Name, model.createdAt, model.createdAt.Ticks, ticks);
+
+                idReplacer.Add(id, model.id);
+
                 int j = 0;
                 foreach (var link in Links)
                 {
@@ -136,7 +152,6 @@ namespace StorylineEditor.ViewModels
                     {
                         var linkModel = link.GetModel(j, idReplacer);
                         newReplica.links.Add((LinkM)linkModel);
-                        if (!idReplacer.ContainsKey(link.Id)) idReplacer.Add(link.Id, linkModel.id);
                         j++;
                     }
                 }
@@ -148,17 +163,10 @@ namespace StorylineEditor.ViewModels
                     {
                         var nodeModel = node.GetModel(j, idReplacer);
                         newReplica.nodes.Add((Node_BaseM)nodeModel);
-                        if (!idReplacer.ContainsKey(node.Id)) idReplacer.Add(node.Id, nodeModel.id);
                         j++;
                     }
                 }
-
-                model = newReplica;
             }
-
-            var times = id.Replace("TreeVm_", "").Substring(0, 19).Split('_');
-            model.createdAt = new System.DateTime(int.Parse(times[0]), int.Parse(times[1]), int.Parse(times[2]), int.Parse(times[3]), int.Parse(times[4]), int.Parse(times[5]));
-            model.id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss}_{2}_{3}", model.GetType().Name, model.createdAt, model.createdAt.Ticks, ticks);
 
             return model;
         }

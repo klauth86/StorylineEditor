@@ -63,6 +63,14 @@ namespace StorylineEditor.ViewModels.Nodes
                 positionY = PositionY,
             };
 
+            model = newNode;
+
+            var times = id.Replace("DNode_CharacterVm_", "").Substring(0, 19).Split('_');
+            model.createdAt = new System.DateTime(int.Parse(times[0]), int.Parse(times[1]), int.Parse(times[2]), int.Parse(times[3]), int.Parse(times[4]), int.Parse(times[5]));
+            model.id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss}_{2}_{3}", model.GetType().Name, model.createdAt, model.createdAt.Ticks, ticks);
+
+            idReplacer.Add(id, model.id);
+
             int k = 0;
             foreach (var gameEvent in GameEvents)
             {
@@ -70,7 +78,6 @@ namespace StorylineEditor.ViewModels.Nodes
                 {
                     var gameEventModel = gameEvent.GetModel(k, idReplacer);
                     newNode.gameEvents.Add((GE_BaseM)gameEventModel);
-                    if (!idReplacer.ContainsKey(gameEvent.Id)) idReplacer.Add(gameEvent.Id, gameEventModel.id);
                 }
                 k++;
             }
@@ -82,16 +89,9 @@ namespace StorylineEditor.ViewModels.Nodes
                 {
                     var predicateModel = predicate.GetModel(k, idReplacer);
                     newNode.predicates.Add((P_BaseM)predicateModel);
-                    if (!idReplacer.ContainsKey(predicate.Id)) idReplacer.Add(predicate.Id, predicateModel.id);
                 }
                 k++;
             }
-
-            model = newNode;
-
-            var times = id.Replace("DNode_CharacterVm_", "").Substring(0, 19).Split('_');
-            model.createdAt = new System.DateTime(int.Parse(times[0]), int.Parse(times[1]), int.Parse(times[2]), int.Parse(times[3]), int.Parse(times[4]), int.Parse(times[5]));
-            model.id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss}_{2}_{3}", model.GetType().Name, model.createdAt, model.createdAt.Ticks, ticks);
 
             return model;
         }

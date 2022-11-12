@@ -37,14 +37,16 @@ namespace StorylineEditor.ViewModels.GameEvents
             var newGE = new GE_Item_DropM(ticks);
             model = newGE;
 
+            var times = id.Replace(GetType().Name + "_", "").Substring(0, 19).Split('_');
+            model.createdAt = new System.DateTime(int.Parse(times[0]), int.Parse(times[1]), int.Parse(times[2]), int.Parse(times[3]), int.Parse(times[4]), int.Parse(times[5]));
+            model.id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss}_{2}_{3}", model.GetType().Name, model.createdAt, model.createdAt.Ticks, ticks);
+
+            idReplacer.Add(id, model.id);
+
             newGE.name = Name;
             newGE.description = Description;
             newGE.executionMode = ExecuteWhenLeaveDialogNode ? EXECUTION_MODE.ON_LEAVE : EXECUTION_MODE.ON_ENTER;
             newGE.itemId = Item?.GetModel(ticks, idReplacer)?.id;
-
-            var times = id.Replace(GetType().Name + "_", "").Substring(0, 19).Split('_');
-            model.createdAt = new System.DateTime(int.Parse(times[0]), int.Parse(times[1]), int.Parse(times[2]), int.Parse(times[3]), int.Parse(times[4]), int.Parse(times[5]));
-            model.id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss}_{2}_{3}", model.GetType().Name, model.createdAt, model.createdAt.Ticks, ticks);
 
             return model;
         }
