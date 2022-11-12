@@ -152,7 +152,7 @@ namespace StorylineEditor
                     {
                         if (character != null)
                         {
-                            var characterModel = character.GetModel(i, null);
+                            var characterModel = character.GetModel(i, idReplacer);
                             storyline.characters.Add(characterModel);
                             if (!idReplacer.ContainsKey(character.Id)) idReplacer.Add(character.Id, characterModel.id);
                         }
@@ -164,7 +164,7 @@ namespace StorylineEditor
                     {
                         if (item != null)
                         {
-                            var itemModel = item.GetModel(i, null);
+                            var itemModel = item.GetModel(i, idReplacer);
                             storyline.items.Add(itemModel);
                             if (!idReplacer.ContainsKey(item.Id)) idReplacer.Add(item.Id, itemModel.id);
                         }
@@ -176,7 +176,7 @@ namespace StorylineEditor
                     {
                         if (actor != null)
                         {
-                            var actorModel = actor.GetModel(i, null);
+                            var actorModel = actor.GetModel(i, idReplacer);
                             storyline.actors.Add(actorModel);
                             if (!idReplacer.ContainsKey(actor.Id)) idReplacer.Add(actor.Id, actorModel.id);
                         }

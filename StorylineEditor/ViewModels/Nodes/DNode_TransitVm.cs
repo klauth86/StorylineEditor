@@ -45,6 +45,30 @@ namespace StorylineEditor.ViewModels.Nodes
                 positionY = PositionY,
             };
 
+            int k = 0;
+            foreach (var gameEvent in GameEvents)
+            {
+                if (gameEvent != null)
+                {
+                    var gameEventModel = gameEvent.GetModel(k, idReplacer);
+                    newNode.gameEvents.Add((GE_BaseM)gameEventModel);
+                    if (!idReplacer.ContainsKey(gameEvent.Id)) idReplacer.Add(gameEvent.Id, gameEventModel.id);
+                }
+                k++;
+            }
+
+            k = 0;
+            foreach (var predicate in Predicates)
+            {
+                if (predicate != null)
+                {
+                    var predicateModel = predicate.GetModel(k, idReplacer);
+                    newNode.predicates.Add((P_BaseM)predicateModel);
+                    if (!idReplacer.ContainsKey(predicate.Id)) idReplacer.Add(predicate.Id, predicateModel.id);
+                }
+                k++;
+            }
+
             model = newNode;
 
             var times = id.Replace("DNode_TransitVm_", "").Substring(0, 19).Split('_');

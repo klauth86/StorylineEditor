@@ -14,6 +14,7 @@ using StorylineEditor.Common;
 using StorylineEditor.Model;
 using StorylineEditor.Model.Predicates;
 using StorylineEditor.ViewModels.Nodes;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
@@ -38,22 +39,26 @@ namespace StorylineEditor.ViewModels.Predicates
         public P_HasRelationVm() : this(null, 0) { }
 
         protected BaseM model = null;
-        //////public override BaseM GetModel()
-        //////{
-        //////    if (model != null) return model;
+        public override BaseM GetModel(long ticks, Dictionary<string, string> idReplacer)
+        {
+            if (model != null) return model;
 
-        //////    var newP = new P_Relation_HasM();
-        //////    model = newP;
+            var newP = new P_Relation_HasM(ticks);
+            model = newP;
 
-        //////    newP.name = Name;
-        //////    newP.description = Description;
-        //////    newP.isInversed = IsInversed;
-        //////    newP.npcId = Character?.GetModel()?.id;
-        //////    newP.compareType = GetCompareType();
-        //////    newP.value = Relation;
+            newP.name = Name;
+            newP.description = Description;
+            newP.isInversed = IsInversed;
+            newP.npcId = Character?.GetModel(ticks, idReplacer)?.id;
+            newP.compareType = GetCompareType();
+            newP.value = Relation;
 
-        //////    return model;
-        //////}
+            var times = id.Replace(GetType().Name + "_", "").Substring(0, 19).Split('_');
+            model.createdAt = new System.DateTime(int.Parse(times[0]), int.Parse(times[1]), int.Parse(times[2]), int.Parse(times[3]), int.Parse(times[4]), int.Parse(times[5]));
+            model.id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss}_{2}_{3}", model.GetType().Name, model.createdAt, model.createdAt.Ticks, ticks);
+
+            return model;
+        }
 
         protected byte GetCompareType()
         {

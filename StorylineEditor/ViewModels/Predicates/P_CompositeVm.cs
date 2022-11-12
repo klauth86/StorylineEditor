@@ -15,6 +15,7 @@ using StorylineEditor.Model;
 using StorylineEditor.Model.Predicates;
 using StorylineEditor.ViewModels.Nodes;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Xml.Serialization;
 
@@ -35,22 +36,26 @@ namespace StorylineEditor.ViewModels.Predicates
         public P_CompositeVm() : this(null, 0) { }
 
         protected BaseM model = null;
-        //////public override BaseM GetModel()
-        //////{
-        //////    if (model != null) return model;
+        public override BaseM GetModel(long ticks, Dictionary<string, string> idReplacer)
+        {
+            if (model != null) return model;
 
-        //////    var newP = new P_CompositeM();
-        //////    model = newP;
+            var newP = new P_CompositeM(ticks);
+            model = newP;
 
-        //////    newP.name = Name;
-        //////    newP.description = Description;
-        //////    newP.isInversed = IsInversed;
-        //////    newP.compositionType = GetCompositionType();
-        //////    newP.predicateA = itemA?.GetModel() as P_BaseM;
-        //////    newP.predicateB = itemB?.GetModel() as P_BaseM;
+            newP.name = Name;
+            newP.description = Description;
+            newP.isInversed = IsInversed;
+            newP.compositionType = GetCompositionType();
+            newP.predicateA = itemA?.GetModel(ticks, idReplacer) as P_BaseM;
+            newP.predicateB = itemB?.GetModel(ticks, idReplacer) as P_BaseM;
 
-        //////    return model;
-        //////}
+            var times = id.Replace(GetType().Name + "_", "").Substring(0, 19).Split('_');
+            model.createdAt = new System.DateTime(int.Parse(times[0]), int.Parse(times[1]), int.Parse(times[2]), int.Parse(times[3]), int.Parse(times[4]), int.Parse(times[5]));
+            model.id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss}_{2}_{3}", model.GetType().Name, model.createdAt, model.createdAt.Ticks, ticks);
+
+            return model;
+        }
 
         protected byte GetCompositionType()
         {

@@ -14,6 +14,7 @@ using StorylineEditor.Common;
 using StorylineEditor.Model;
 using StorylineEditor.Model.Predicates;
 using StorylineEditor.ViewModels.Nodes;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
@@ -36,22 +37,26 @@ namespace StorylineEditor.ViewModels.Predicates
         public P_HasActiveDialogNodeMoreLessVm() : this(null, 0) { }
 
         protected BaseM model = null;
-        //////public override BaseM GetModel()
-        //////{
-        //////    if (model != null) return model;
+        public override BaseM GetModel(long ticks, Dictionary<string, string> idReplacer)
+        {
+            if (model != null) return model;
 
-        //////    var newP = new P_Dialog_Node_Has_ActiveSession_CmpM();
-        //////    model = newP;
+            var newP = new P_Dialog_Node_Has_ActiveSession_CmpM(ticks);
+            model = newP;
 
-        //////    newP.name = Name;
-        //////    newP.description = Description;
-        //////    newP.isInversed = IsInversed;
-        //////    newP.nodeId = DialogNode?.GetModel()?.id;
-        //////    newP.compareType = GetCompareType();
-        //////    newP.value = num;
+            newP.name = Name;
+            newP.description = Description;
+            newP.isInversed = IsInversed;
+            newP.nodeId = DialogNode?.GetModel(ticks, idReplacer)?.id;
+            newP.compareType = GetCompareType();
+            newP.value = num;
 
-        //////    return model;
-        //////}
+            var times = id.Replace(GetType().Name + "_", "").Substring(0, 19).Split('_');
+            model.createdAt = new System.DateTime(int.Parse(times[0]), int.Parse(times[1]), int.Parse(times[2]), int.Parse(times[3]), int.Parse(times[4]), int.Parse(times[5]));
+            model.id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss}_{2}_{3}", model.GetType().Name, model.createdAt, model.createdAt.Ticks, ticks);
+
+            return model;
+        }
 
         protected byte GetCompareType()
         {

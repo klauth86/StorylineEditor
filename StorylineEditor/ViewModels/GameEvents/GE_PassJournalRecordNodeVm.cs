@@ -14,6 +14,7 @@ using StorylineEditor.Common;
 using StorylineEditor.Model;
 using StorylineEditor.Model.GameEvents;
 using StorylineEditor.ViewModels.Nodes;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
@@ -33,21 +34,25 @@ namespace StorylineEditor.ViewModels.GameEvents
         public GE_PassJournalRecordNodeVm() : this(null, 0) { }
 
         protected BaseM model = null;
-        //////public override BaseM GetModel()
-        //////{
-        //////    if (model != null) return model;
+        public override BaseM GetModel(long ticks, Dictionary<string, string> idReplacer)
+        {
+            if (model != null) return model;
 
-        //////    var newGE = new GE_Quest_Node_PassM();
-        //////    model = newGE;
+            var newGE = new GE_Quest_Node_PassM(ticks);
+            model = newGE;
 
-        //////    newGE.name = Name;
-        //////    newGE.description = Description;
-        //////    newGE.executionMode = ExecuteWhenLeaveDialogNode ? EXECUTION_MODE.ON_LEAVE : EXECUTION_MODE.ON_ENTER;
-        //////    newGE.questId = JournalRecord?.GetModel()?.id;
-        //////    newGE.nodeId = JournalRecordNode?.GetModel()?.id;
+            newGE.name = Name;
+            newGE.description = Description;
+            newGE.executionMode = ExecuteWhenLeaveDialogNode ? EXECUTION_MODE.ON_LEAVE : EXECUTION_MODE.ON_ENTER;
+            newGE.questId = JournalRecord?.GetModel(ticks, idReplacer)?.id;
+            newGE.nodeId = JournalRecordNode?.GetModel(ticks, idReplacer)?.id;
 
-        //////    return model;
-        //////}
+            var times = id.Replace(GetType().Name + "_", "").Substring(0, 19).Split('_');
+            model.createdAt = new System.DateTime(int.Parse(times[0]), int.Parse(times[1]), int.Parse(times[2]), int.Parse(times[3]), int.Parse(times[4]), int.Parse(times[5]));
+            model.id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss}_{2}_{3}", model.GetType().Name, model.createdAt, model.createdAt.Ticks, ticks);
+
+            return model;
+        }
 
         public override bool IsValid => base.IsValid && JournalRecord != null && JournalRecordNode != null;
 
