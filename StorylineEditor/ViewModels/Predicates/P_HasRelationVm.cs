@@ -38,22 +38,22 @@ namespace StorylineEditor.ViewModels.Predicates
         public P_HasRelationVm() : this(null, 0) { }
 
         protected BaseM model = null;
-        public override BaseM GetModel()
-        {
-            if (model != null) return model;
+        //////public override BaseM GetModel()
+        //////{
+        //////    if (model != null) return model;
 
-            var newP = new P_Relation_HasM();
-            model = newP;
+        //////    var newP = new P_Relation_HasM();
+        //////    model = newP;
 
-            newP.name = Name;
-            newP.description = Description;
-            newP.isInversed = IsInversed;
-            newP.npcId = Character?.GetModel()?.id;
-            newP.compareType = GetCompareType();
-            newP.value = Relation;
+        //////    newP.name = Name;
+        //////    newP.description = Description;
+        //////    newP.isInversed = IsInversed;
+        //////    newP.npcId = Character?.GetModel()?.id;
+        //////    newP.compareType = GetCompareType();
+        //////    newP.value = Relation;
 
-            return model;
-        }
+        //////    return model;
+        //////}
 
         protected byte GetCompareType()
         {

@@ -46,10 +46,9 @@ namespace StorylineEditor.App.Controls
                     {
                         foreach (var inline in paragraph.Inlines)
                         {
-                            string text = XamlWriter.Save(inline);
-                            using (Stream ms = new MemoryStream(ASCIIEncoding.Default.GetBytes(XamlWriter.Save(inline))))
+                            if (inline is Run run)
                             {
-                                textBlock.Inlines.Add(XamlReader.Load(ms) as Inline);
+                                textBlock.Inlines.Add(new Run(run.Text));
                             }
                         }
 

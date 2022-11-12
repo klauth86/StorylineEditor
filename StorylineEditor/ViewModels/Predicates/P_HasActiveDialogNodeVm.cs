@@ -31,20 +31,20 @@ namespace StorylineEditor.ViewModels.Predicates
         public P_HasActiveDialogNodeVm() : this(null, 0) { }
 
         protected BaseM model = null;
-        public override BaseM GetModel()
-        {
-            if (model != null) return model;
+        //////public override BaseM GetModel()
+        //////{
+        //////    if (model != null) return model;
 
-            var newP = new P_Dialog_Node_Has_ActiveSessionM();
-            model = newP;
+        //////    var newP = new P_Dialog_Node_Has_ActiveSessionM();
+        //////    model = newP;
 
-            newP.name = Name;
-            newP.description = Description;
-            newP.isInversed = IsInversed;
-            newP.nodeId = DialogNode?.GetModel()?.id;
+        //////    newP.name = Name;
+        //////    newP.description = Description;
+        //////    newP.isInversed = IsInversed;
+        //////    newP.nodeId = DialogNode?.GetModel()?.id;
 
-            return model;
-        }
+        //////    return model;
+        //////}
 
         public override bool IsValid => base.IsValid && DialogNode != null;
 

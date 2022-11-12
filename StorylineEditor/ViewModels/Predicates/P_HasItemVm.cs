@@ -31,20 +31,20 @@ namespace StorylineEditor.ViewModels.Predicates
         public P_HasItemVm() : this(null, 0) { }
 
         protected BaseM model = null;
-        public override BaseM GetModel()
-        {
-            if (model != null) return model;
+        //////public override BaseM GetModel()
+        //////{
+        //////    if (model != null) return model;
 
-            var newP = new P_Item_HasM();
-            model = newP;
+        //////    var newP = new P_Item_HasM();
+        //////    model = newP;
 
-            newP.name = Name;
-            newP.description = Description;
-            newP.isInversed = IsInversed;
-            newP.itemId = Item?.GetModel()?.id;
+        //////    newP.name = Name;
+        //////    newP.description = Description;
+        //////    newP.isInversed = IsInversed;
+        //////    newP.itemId = Item?.GetModel()?.id;
 
-            return model;
-        }
+        //////    return model;
+        //////}
 
         public override bool IsValid => base.IsValid && Item != null;
 

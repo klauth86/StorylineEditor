@@ -35,22 +35,22 @@ namespace StorylineEditor.ViewModels.Predicates
         public P_CompositeVm() : this(null, 0) { }
 
         protected BaseM model = null;
-        public override BaseM GetModel()
-        {
-            if (model != null) return model;
+        //////public override BaseM GetModel()
+        //////{
+        //////    if (model != null) return model;
 
-            var newP = new P_CompositeM();
-            model = newP;
+        //////    var newP = new P_CompositeM();
+        //////    model = newP;
 
-            newP.name = Name;
-            newP.description = Description;
-            newP.isInversed = IsInversed;
-            newP.compositionType = GetCompositionType();
-            newP.predicateA = itemA?.GetModel() as P_BaseM;
-            newP.predicateB = itemB?.GetModel() as P_BaseM;
+        //////    newP.name = Name;
+        //////    newP.description = Description;
+        //////    newP.isInversed = IsInversed;
+        //////    newP.compositionType = GetCompositionType();
+        //////    newP.predicateA = itemA?.GetModel() as P_BaseM;
+        //////    newP.predicateB = itemB?.GetModel() as P_BaseM;
 
-            return model;
-        }
+        //////    return model;
+        //////}
 
         protected byte GetCompositionType()
         {

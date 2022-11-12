@@ -33,19 +33,19 @@ namespace StorylineEditor.ViewModels
         public TreeFolderVm() : this(null, 0) { }
 
         protected BaseM model = null;
-        public override BaseM GetModel()
-        {
-            if (model != null) return model;
+        //////public override BaseM GetModel()
+        //////{
+        //////    if (model != null) return model;
 
-            var newFolder = new FolderM();
-            model = newFolder;
+        //////    var newFolder = new FolderM();
+        //////    model = newFolder;
 
-            newFolder.name = Name;
-            newFolder.description = Description;
-            newFolder.content = Items.Select((fold) => fold.GetModel()).ToList();
+        //////    newFolder.name = Name;
+        //////    newFolder.description = Description;
+        //////    newFolder.content = Items.Select((fold) => fold.GetModel()).ToList();
 
-            return model;
-        }
+        //////    return model;
+        //////}
 
         public ObservableCollection<FolderedVm> Items { get; }
 

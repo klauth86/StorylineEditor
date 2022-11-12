@@ -12,6 +12,7 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model;
 using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace StorylineEditor.Common
@@ -111,7 +112,7 @@ namespace StorylineEditor.Common
 
         #endregion
 
-        public virtual BaseM GetModel() => throw new NotImplementedException();
+        public virtual BaseM GetModel(long ticks, Dictionary<string, string> idReplacer) => throw new NotImplementedException();
 
         public virtual bool IsValid => !string.IsNullOrEmpty(id);
 

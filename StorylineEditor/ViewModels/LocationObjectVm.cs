@@ -13,6 +13,7 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Common;
 using StorylineEditor.Model;
 using StorylineEditor.ViewModels.Tabs;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels
@@ -28,7 +29,7 @@ namespace StorylineEditor.ViewModels
         public LocationObjectVm() : this(null, 0) { }
 
         protected BaseM model = null;
-        public override BaseM GetModel()
+        public override BaseM GetModel(long ticks, Dictionary<string, string> idReplacer)
         {
             if (model != null) return model;
 
@@ -39,8 +40,12 @@ namespace StorylineEditor.ViewModels
                 hasDescriptionFemale = false,
                 descriptionFemale = null,
                 actorName = ActorName,
-                classPathName = ClassPathName, 
+                classPathName = ClassPathName,
             };
+
+            var times = id.Replace("LocationObjectVm_", "").Substring(0, 19).Split('_');
+            model.createdAt = new System.DateTime(int.Parse(times[0]), int.Parse(times[1]), int.Parse(times[2]), int.Parse(times[3]), int.Parse(times[4]), int.Parse(times[5]));
+            model.id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss}_{2}_{3}", model.GetType().Name, model.createdAt, model.createdAt.Ticks, ticks);
 
             return model;
         }

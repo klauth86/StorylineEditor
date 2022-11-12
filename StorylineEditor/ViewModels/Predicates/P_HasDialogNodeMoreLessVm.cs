@@ -37,23 +37,23 @@ namespace StorylineEditor.ViewModels.Predicates
         public P_HasDialogNodeMoreLessVm() : this(null, 0) { }
 
         protected BaseM model = null;
-        public override BaseM GetModel()
-        {
-            if (model != null) return model;
+        //////public override BaseM GetModel()
+        //////{
+        //////    if (model != null) return model;
 
-            var newP = new P_Dialog_Node_Has_PrevSessions_CmpM();
-            model = newP;
+        //////    var newP = new P_Dialog_Node_Has_PrevSessions_CmpM();
+        //////    model = newP;
 
-            newP.name = Name;
-            newP.description = Description;
-            newP.isInversed = IsInversed;
-            newP.dialogId = Dialog?.GetModel()?.id;
-            newP.nodeId = DialogNode?.GetModel()?.id;
-            newP.compareType = GetCompareType();
-            newP.value = num;
+        //////    newP.name = Name;
+        //////    newP.description = Description;
+        //////    newP.isInversed = IsInversed;
+        //////    newP.dialogId = Dialog?.GetModel()?.id;
+        //////    newP.nodeId = DialogNode?.GetModel()?.id;
+        //////    newP.compareType = GetCompareType();
+        //////    newP.value = num;
 
-            return model;
-        }
+        //////    return model;
+        //////}
 
         protected byte GetCompareType()
         {

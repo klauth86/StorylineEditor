@@ -38,6 +38,7 @@ namespace StorylineEditor.ViewModels
                 if (InterlocutorId != value?.Id)
                 {
                     InterlocutorId = value?.Id;
+                    
                     NotifyWithCallerPropName();
 
                     Notify(nameof(NameAndCharacter));
@@ -46,41 +47,69 @@ namespace StorylineEditor.ViewModels
         }
 
         protected BaseM model = null;
-        public override BaseM GetModel()
+        public override BaseM GetModel(long ticks, Dictionary<string, string> idReplacer)
         {
             if (model != null) return model;
 
             if (Parent is JournalRecordsTabVm)
             {
-                var newQuest = new QuestM();
+                var newQuest = new QuestM()
+                {
+                    name = Name,
+                    description = Description,
+                };
+
+                int j = 0;
+                foreach (var link in Links)
+                {
+                    if (link != null)
+                    {
+                        var linkModel = link.GetModel(j, idReplacer);
+                        newQuest.links.Add((LinkM)linkModel);
+                        if (!idReplacer.ContainsKey(link.Id)) idReplacer.Add(link.Id, linkModel.id);
+                        j++;
+                    }
+                }
+
+                j = 0;
+                foreach (var node in Nodes)
+                {
+                    if (node != null)
+                    {
+                        var nodeModel = node.GetModel(j, idReplacer);
+                        newQuest.nodes.Add((Node_BaseM)nodeModel);
+                        if (!idReplacer.ContainsKey(node.Id)) idReplacer.Add(node.Id, nodeModel.id);
+                        j++;
+                    }
+                }
+
                 model = newQuest;
-
-                newQuest.name = Name;
-                newQuest.description = Description;
-                newQuest.links = Links.Select((link) => (LinkM)(link.GetModel())).ToList();
-                newQuest.nodes = Nodes.Select((node) => (Node_BaseM)(node.GetModel())).ToList();
             }
-            else if (Parent is PlayerDialogsTabVm)
-            {
-                var newDialog = new DialogM();
-                model = newDialog;
+            //////    else if (Parent is PlayerDialogsTabVm)
+            //////    {
+            //////        var newDialog = new DialogM();
+            //////        model = newDialog;
 
-                newDialog.name = Name;
-                newDialog.description = Description;
-                newDialog.links = Links.Select((link) => (LinkM)(link.GetModel())).ToList();
-                newDialog.nodes = Nodes.Select((node) => (Node_BaseM)(node.GetModel())).ToList();
-                newDialog.npcId = Interlocutor?.GetModel()?.id;
-            }
-            else if (Parent is ReplicasTabVm)
-            {
-                var newReplica = new ReplicaM();
-                model = newReplica;
+            //////        newDialog.name = Name;
+            //////        newDialog.description = Description;
+            //////        newDialog.links = Links.Select((link) => (LinkM)(link.GetModel())).ToList();
+            //////        newDialog.nodes = Nodes.Select((node) => (Node_BaseM)(node.GetModel())).ToList();
+            //////        newDialog.npcId = Interlocutor?.GetModel()?.id;
+            //////    }
+            //////    else if (Parent is ReplicasTabVm)
+            //////    {
+            //////        var newReplica = new ReplicaM();
+            //////        model = newReplica;
 
-                newReplica.name = Name;
-                newReplica.description = Description;
-                newReplica.links = Links.Select((link) => (LinkM)(link.GetModel())).ToList();
-                newReplica.nodes = Nodes.Select((node) => (Node_BaseM)(node.GetModel())).ToList();
-            }
+            //////        newReplica.name = Name;
+            //////        newReplica.description = Description;
+            //////        newReplica.links = Links.Select((link) => (LinkM)(link.GetModel())).ToList();
+            //////        newReplica.nodes = Nodes.Select((node) => (Node_BaseM)(node.GetModel())).ToList();
+            //////    }
+
+            var times = id.Replace("TreeVm_", "").Substring(0, 19).Split('_');
+            model.createdAt = new System.DateTime(int.Parse(times[0]), int.Parse(times[1]), int.Parse(times[2]), int.Parse(times[3]), int.Parse(times[4]), int.Parse(times[5]));
+            model.id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss}_{2}_{3}", model.GetType().Name, model.createdAt, model.createdAt.Ticks, ticks);
 
             return model;
         }

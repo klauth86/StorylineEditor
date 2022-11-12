@@ -14,8 +14,11 @@ using StorylineEditor.Model;
 using StorylineEditor.Model.GameEvents;
 using StorylineEditor.Model.Nodes;
 using StorylineEditor.Model.Predicates;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Documents;
+using System.Windows.Markup;
 using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.Nodes
@@ -28,21 +31,34 @@ namespace StorylineEditor.ViewModels.Nodes
 
         public JNode_BaseVm() : this(null, 0) { }
 
-        public override BaseM GetModel()
+        public override BaseM GetModel(long ticks, Dictionary<string, string> idReplacer)
         {
             if (model != null) return model;
 
-            model = new Node_StepM()
+            var documentDescription = Description;
+
+            if (!string.IsNullOrEmpty(documentDescription) && !documentDescription.Contains("FlowDocument"))
+            {
+                var document = new FlowDocument();
+                document.Blocks.Add(new Paragraph(new Run(Description)));
+                documentDescription = XamlWriter.Save(document);
+            }
+
+            var newNode = new Node_StepM()
             {
                 name = Name,
-                description = Description,
+                description = documentDescription,
                 gender = (byte)Gender,
                 positionX = PositionX,
                 positionY = PositionY,
-                gameEvents = GameEvents.Select((ge) => (GE_BaseM)ge.GetModel()).ToList(),
-                predicates = Predicates.Select((p) => (P_BaseM)p.GetModel()).ToList(), 
-                result = null
+                result = null,
             };
+
+            model = newNode;
+
+            var times = id.Replace("JNode_BaseVm_", "").Substring(0, 19).Split('_');
+            model.createdAt = new System.DateTime(int.Parse(times[0]), int.Parse(times[1]), int.Parse(times[2]), int.Parse(times[3]), int.Parse(times[4]), int.Parse(times[5]));
+            model.id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss}_{2}_{3}", model.GetType().Name, model.createdAt, model.createdAt.Ticks, ticks);
 
             return model;
         }

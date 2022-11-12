@@ -28,24 +28,24 @@ namespace StorylineEditor.ViewModels.Nodes
             finInteractivePart = false;
         }
 
-        public override BaseM GetModel()
-        {
-            if (model != null) return model;
+        //////public override BaseM GetModel()
+        //////{
+        //////    if (model != null) return model;
 
-            model = new Node_DialogM()
-            {
-                name = Name,
-                description = Description,
-                gender = (byte)Gender,
-                positionX = PositionX,
-                positionY = PositionY,
-                gameEvents = GameEvents.Select((ge) => (GE_BaseM)ge.GetModel()).ToList(),
-                predicates = Predicates.Select((p) => (P_BaseM)p.GetModel()).ToList(),
-                characterId = Owner?.GetModel()?.id, 
-            };
+        //////    model = new Node_DialogM()
+        //////    {
+        //////        name = Name,
+        //////        description = Description,
+        //////        gender = (byte)Gender,
+        //////        positionX = PositionX,
+        //////        positionY = PositionY,
+        //////        gameEvents = GameEvents.Select((ge) => (GE_BaseM)ge.GetModel()).ToList(),
+        //////        predicates = Predicates.Select((p) => (P_BaseM)p.GetModel()).ToList(),
+        //////        characterId = Owner?.GetModel()?.id, 
+        //////    };
 
-            return model;
-        }
+        //////    return model;
+        //////}
 
         public DNode_DialogVm() : this(null, 0) { }
 

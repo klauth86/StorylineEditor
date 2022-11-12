@@ -34,24 +34,24 @@ namespace StorylineEditor.ViewModels.Nodes
 
 
         protected BaseM model = null;
-        public override BaseM GetModel()
-        {
-            if (model != null) return model;
+        //////public override BaseM GetModel()
+        //////{
+        //////    if (model != null) return model;
 
-            model = new Node_ReplicaM()
-            {
-                name = Name,
-                description = Description,
-                gender = (byte)Gender,
-                positionX = PositionX,
-                positionY = PositionY,
-                gameEvents = GameEvents.Select((ge) => (GE_BaseM)ge.GetModel()).ToList(),
-                predicates = Predicates.Select((p) => (P_BaseM)p.GetModel()).ToList(),
-                characterId = Owner?.GetModel()?.id, 
-            };
+        //////    model = new Node_ReplicaM()
+        //////    {
+        //////        name = Name,
+        //////        description = Description,
+        //////        gender = (byte)Gender,
+        //////        positionX = PositionX,
+        //////        positionY = PositionY,
+        //////        gameEvents = GameEvents.Select((ge) => (GE_BaseM)ge.GetModel()).ToList(),
+        //////        predicates = Predicates.Select((p) => (P_BaseM)p.GetModel()).ToList(),
+        //////        characterId = Owner?.GetModel()?.id, 
+        //////    };
 
-            return model;
-        }
+        //////    return model;
+        //////}
 
         public string OwnerId { get; set; }
 

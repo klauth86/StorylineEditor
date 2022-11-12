@@ -118,13 +118,13 @@ namespace StorylineEditor.ViewModels
         {
             get
             {
-                foreach (FolderedVm foldered in ItemsTab.Items)
-                {
-                    foreach (var subFoldered in foldered.FoldersTraversal())
-                    {
-                        yield return subFoldered;
-                    }
-                }
+                //////foreach (FolderedVm foldered in ItemsTab.Items)
+                //////{
+                //////    foreach (var subFoldered in foldered.FoldersTraversal())
+                //////    {
+                //////        yield return subFoldered;
+                //////    }
+                //////}
                 foreach (FolderedVm foldered in LocationObjectsTab.Items)
                 {
                     foreach (var subFoldered in foldered.FoldersTraversal())
@@ -132,7 +132,7 @@ namespace StorylineEditor.ViewModels
                         yield return subFoldered;
                     }
                 }
-                foreach (var item in CharactersTab.Items) yield return item;
+                //////foreach (var item in CharactersTab.Items) yield return item;
             }
         }
 

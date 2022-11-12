@@ -33,22 +33,22 @@ namespace StorylineEditor.ViewModels.Nodes
             Predicates.All(predicate => predicate?.IsValid ?? false);
 
         protected BaseM model = null;
-        public override BaseM GetModel()
-        {
-            if (model != null) return model;
+        //////public override BaseM GetModel()
+        //////{
+        //////    if (model != null) return model;
 
-            model = new Node_TransitM()
-            {
-                name = Name,
-                description = Description,
-                gender = (byte)Gender,
-                positionX = PositionX,
-                positionY = PositionY,
-                gameEvents = GameEvents.Select((ge) => (GE_BaseM)ge.GetModel()).ToList(),
-                predicates = Predicates.Select((p) => (P_BaseM)p.GetModel()).ToList(),  
-            };
+        //////    model = new Node_TransitM()
+        //////    {
+        //////        name = Name,
+        //////        description = Description,
+        //////        gender = (byte)Gender,
+        //////        positionX = PositionX,
+        //////        positionY = PositionY,
+        //////        gameEvents = GameEvents.Select((ge) => (GE_BaseM)ge.GetModel()).ToList(),
+        //////        predicates = Predicates.Select((p) => (P_BaseM)p.GetModel()).ToList(),  
+        //////    };
 
-            return model;
-        }
+        //////    return model;
+        //////}
     }
 }

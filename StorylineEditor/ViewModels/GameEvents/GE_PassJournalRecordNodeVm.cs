@@ -33,21 +33,21 @@ namespace StorylineEditor.ViewModels.GameEvents
         public GE_PassJournalRecordNodeVm() : this(null, 0) { }
 
         protected BaseM model = null;
-        public override BaseM GetModel()
-        {
-            if (model != null) return model;
+        //////public override BaseM GetModel()
+        //////{
+        //////    if (model != null) return model;
 
-            var newGE = new GE_Quest_Node_PassM();
-            model = newGE;
+        //////    var newGE = new GE_Quest_Node_PassM();
+        //////    model = newGE;
 
-            newGE.name = Name;
-            newGE.description = Description;
-            newGE.executionMode = ExecuteWhenLeaveDialogNode ? EXECUTION_MODE.ON_LEAVE : EXECUTION_MODE.ON_ENTER;
-            newGE.questId = JournalRecord?.GetModel()?.id;
-            newGE.nodeId = JournalRecordNode?.GetModel()?.id;
+        //////    newGE.name = Name;
+        //////    newGE.description = Description;
+        //////    newGE.executionMode = ExecuteWhenLeaveDialogNode ? EXECUTION_MODE.ON_LEAVE : EXECUTION_MODE.ON_ENTER;
+        //////    newGE.questId = JournalRecord?.GetModel()?.id;
+        //////    newGE.nodeId = JournalRecordNode?.GetModel()?.id;
 
-            return model;
-        }
+        //////    return model;
+        //////}
 
         public override bool IsValid => base.IsValid && JournalRecord != null && JournalRecordNode != null;
 

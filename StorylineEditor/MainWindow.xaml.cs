@@ -11,6 +11,7 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Reflection;
@@ -142,35 +143,67 @@ namespace StorylineEditor
                 {
                     var storyline = new StorylineM();
 
-                    foreach (var character in fullContext.CharactersTab.Items)
+                    string test = "";
+
+                    Dictionary<string, string> idReplacer = new Dictionary<string, string>();
+
+                    int i = 0;
+                    foreach (var character in fullContext.Characters)
                     {
-                        if (character != null) storyline.characters.Add(character.GetModel());
+                        if (character != null)
+                        {
+                            var characterModel = character.GetModel(i, null);
+                            storyline.characters.Add(characterModel);
+                            if (!idReplacer.ContainsKey(character.Id)) idReplacer.Add(character.Id, characterModel.id);
+                        }
+                        i++;
                     }
 
-                    foreach (var item in fullContext.ItemsTab.Items)
+                    i = 0;
+                    foreach (var item in fullContext.Items)
                     {
-                        if (item != null) storyline.items.Add(item.GetModel());
+                        if (item != null)
+                        {
+                            var itemModel = item.GetModel(i, null);
+                            storyline.items.Add(itemModel);
+                            if (!idReplacer.ContainsKey(item.Id)) idReplacer.Add(item.Id, itemModel.id);
+                        }
+                        i++;
                     }
 
-                    foreach (var actor in fullContext.LocationObjectsTab.Items)
+                    i = 0;
+                    foreach (var actor in fullContext.AllActors)
                     {
-                        if (actor != null) storyline.actors.Add(actor.GetModel());
+                        if (actor != null)
+                        {
+                            var actorModel = actor.GetModel(i, null);
+                            storyline.actors.Add(actorModel);
+                            if (!idReplacer.ContainsKey(actor.Id)) idReplacer.Add(actor.Id, actorModel.id);
+                        }
+                        i++;
                     }
 
-                    foreach (var quest in fullContext.JournalRecordsTab.Items)
+                    i = 0;
+                    foreach (var quest in fullContext.JournalRecords)
                     {
-                        if (quest != null) storyline.journal.Add(quest.GetModel());
+                        if (quest != null)
+                        {
+                            var questModel = quest.GetModel(i, idReplacer);
+                            storyline.journal.Add(questModel);
+                            if (!idReplacer.ContainsKey(quest.Id)) idReplacer.Add(quest.Id, questModel.id);
+                        }
+                        i++;
                     }
 
-                    foreach (var dialog in fullContext.PlayerDialogsTab.Items)
-                    {
-                        if (dialog != null) storyline.dialogs.Add(dialog.GetModel());
-                    }
+                    //foreach (var dialog in fullContext.PlayerDialogsTab.Items)
+                    //{
+                    //    if (dialog != null) storyline.dialogs.Add(dialog.GetModel());
+                    //}
 
-                    foreach (var replica in fullContext.ReplicasTab.Items)
-                    {
-                        if (replica != null) storyline.replicas.Add(replica.GetModel());
-                    }
+                    //foreach (var replica in fullContext.ReplicasTab.Items)
+                    //{
+                    //    if (replica != null) storyline.replicas.Add(replica.GetModel());
+                    //}
 
                     App.SerializeXml<StorylineM>(fileStream, storyline);
                 }

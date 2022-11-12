@@ -33,21 +33,21 @@ namespace StorylineEditor.ViewModels.GameEvents
         public GE_ChangeRelationVm() : this(null, 0) { }
 
         protected BaseM model = null;
-        public override BaseM GetModel()
-        {
-            if (model != null) return model;
+        //////public override BaseM GetModel()
+        //////{
+        //////    if (model != null) return model;
 
-            var newGE = new GE_Relation_ChangeM();
-            model = newGE;
+        //////    var newGE = new GE_Relation_ChangeM();
+        //////    model = newGE;
 
-            newGE.name = Name;
-            newGE.description = Description;
-            newGE.executionMode = ExecuteWhenLeaveDialogNode ? EXECUTION_MODE.ON_LEAVE : EXECUTION_MODE.ON_ENTER;
-            newGE.npcId = Character?.GetModel()?.id;
-            newGE.value = DeltaRelation;
+        //////    newGE.name = Name;
+        //////    newGE.description = Description;
+        //////    newGE.executionMode = ExecuteWhenLeaveDialogNode ? EXECUTION_MODE.ON_LEAVE : EXECUTION_MODE.ON_ENTER;
+        //////    newGE.npcId = Character?.GetModel()?.id;
+        //////    newGE.value = DeltaRelation;
 
-            return model;
-        }
+        //////    return model;
+        //////}
 
         public override bool IsValid => base.IsValid && Character != null && deltaRelation != 0;
 
