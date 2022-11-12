@@ -32,7 +32,7 @@ namespace StorylineEditor.ViewModels.Nodes
         {
             if (model != null) return model;
 
-            var linkModel = new LinkM()
+            var linkModel = new LinkM(ticks)
             {
                 fromNodeId = From?.GetModel(ticks, idReplacer)?.id,
                 toNodeId = To?.GetModel(ticks, idReplacer)?.id,

@@ -195,15 +195,29 @@ namespace StorylineEditor
                         i++;
                     }
 
-                    //foreach (var dialog in fullContext.PlayerDialogsTab.Items)
-                    //{
-                    //    if (dialog != null) storyline.dialogs.Add(dialog.GetModel());
-                    //}
+                    i = 0;
+                    foreach (var dialog in fullContext.Dialogs)
+                    {
+                        if (dialog != null)
+                        {
+                            var dialogModel = dialog.GetModel(i, idReplacer);
+                            storyline.dialogs.Add(dialogModel);
+                            if (!idReplacer.ContainsKey(dialog.Id)) idReplacer.Add(dialog.Id, dialogModel.id);
+                        }
+                        i++;
+                    }
 
-                    //foreach (var replica in fullContext.ReplicasTab.Items)
-                    //{
-                    //    if (replica != null) storyline.replicas.Add(replica.GetModel());
-                    //}
+                    i = 0;
+                    foreach (var replica in fullContext.Replicas)
+                    {
+                        if (replica != null)
+                        {
+                            var replicaModel = replica.GetModel(i, idReplacer);
+                            storyline.replicas.Add(replicaModel);
+                            if (!idReplacer.ContainsKey(replica.Id)) idReplacer.Add(replica.Id, replicaModel.id);
+                        }
+                        i++;
+                    }
 
                     App.SerializeXml<StorylineM>(fileStream, storyline);
                 }

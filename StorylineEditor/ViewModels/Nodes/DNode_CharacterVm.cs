@@ -15,8 +15,11 @@ using StorylineEditor.Model;
 using StorylineEditor.Model.GameEvents;
 using StorylineEditor.Model.Nodes;
 using StorylineEditor.Model.Predicates;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Documents;
+using System.Windows.Markup;
 using System.Xml.Serialization;
 
 namespace StorylineEditor.ViewModels.Nodes
@@ -34,24 +37,40 @@ namespace StorylineEditor.ViewModels.Nodes
 
 
         protected BaseM model = null;
-        //////public override BaseM GetModel()
-        //////{
-        //////    if (model != null) return model;
+        public override BaseM GetModel(long ticks, Dictionary<string, string> idReplacer)
+        {
+            if (model != null) return model;
 
-        //////    model = new Node_ReplicaM()
-        //////    {
-        //////        name = Name,
-        //////        description = Description,
-        //////        gender = (byte)Gender,
-        //////        positionX = PositionX,
-        //////        positionY = PositionY,
-        //////        gameEvents = GameEvents.Select((ge) => (GE_BaseM)ge.GetModel()).ToList(),
-        //////        predicates = Predicates.Select((p) => (P_BaseM)p.GetModel()).ToList(),
-        //////        characterId = Owner?.GetModel()?.id, 
-        //////    };
+            var documentDescription = Name;
 
-        //////    return model;
-        //////}
+            if (!string.IsNullOrEmpty(documentDescription) && !documentDescription.Contains("FlowDocument"))
+            {
+                var document = new FlowDocument();
+                document.Blocks.Add(new Paragraph(new Run(Name)));
+                documentDescription = XamlWriter.Save(document);
+            }
+
+            var newNode = new Node_ReplicaM(ticks)
+            {
+                name = null,
+                characterId = Owner?.GetModel(ticks, idReplacer)?.id,
+                overrideName = OverrideOwnerName,
+                fileHttpRef = AttachedFile,
+                description = documentDescription,
+                shortDescription = description,
+                gender = (byte)Gender,
+                positionX = PositionX,
+                positionY = PositionY,
+            };
+
+            model = newNode;
+
+            var times = id.Replace("DNode_CharacterVm_", "").Substring(0, 19).Split('_');
+            model.createdAt = new System.DateTime(int.Parse(times[0]), int.Parse(times[1]), int.Parse(times[2]), int.Parse(times[3]), int.Parse(times[4]), int.Parse(times[5]));
+            model.id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss}_{2}_{3}", model.GetType().Name, model.createdAt, model.createdAt.Ticks, ticks);
+
+            return model;
+        }
 
         public string OwnerId { get; set; }
 

@@ -53,7 +53,7 @@ namespace StorylineEditor.ViewModels
 
             if (Parent is JournalRecordsTabVm)
             {
-                var newQuest = new QuestM()
+                var newQuest = new QuestM(ticks)
                 {
                     name = Name,
                     description = Description,
@@ -85,27 +85,76 @@ namespace StorylineEditor.ViewModels
 
                 model = newQuest;
             }
-            //////    else if (Parent is PlayerDialogsTabVm)
-            //////    {
-            //////        var newDialog = new DialogM();
-            //////        model = newDialog;
+            else if (Parent is PlayerDialogsTabVm)
+            {
+                var newDialog = new DialogM(ticks)
+                {
+                    name = Name,
+                    description = Description,
+                };
 
-            //////        newDialog.name = Name;
-            //////        newDialog.description = Description;
-            //////        newDialog.links = Links.Select((link) => (LinkM)(link.GetModel())).ToList();
-            //////        newDialog.nodes = Nodes.Select((node) => (Node_BaseM)(node.GetModel())).ToList();
-            //////        newDialog.npcId = Interlocutor?.GetModel()?.id;
-            //////    }
-            //////    else if (Parent is ReplicasTabVm)
-            //////    {
-            //////        var newReplica = new ReplicaM();
-            //////        model = newReplica;
+                int j = 0;
+                foreach (var link in Links)
+                {
+                    if (link != null)
+                    {
+                        var linkModel = link.GetModel(j, idReplacer);
+                        newDialog.links.Add((LinkM)linkModel);
+                        if (!idReplacer.ContainsKey(link.Id)) idReplacer.Add(link.Id, linkModel.id);
+                        j++;
+                    }
+                }
 
-            //////        newReplica.name = Name;
-            //////        newReplica.description = Description;
-            //////        newReplica.links = Links.Select((link) => (LinkM)(link.GetModel())).ToList();
-            //////        newReplica.nodes = Nodes.Select((node) => (Node_BaseM)(node.GetModel())).ToList();
-            //////    }
+                j = 0;
+                foreach (var node in Nodes)
+                {
+                    if (node != null)
+                    {
+                        var nodeModel = node.GetModel(j, idReplacer);
+                        newDialog.nodes.Add((Node_BaseM)nodeModel);
+                        if (!idReplacer.ContainsKey(node.Id)) idReplacer.Add(node.Id, nodeModel.id);
+                        j++;
+                    }
+                }
+
+                model = newDialog;
+
+                newDialog.npcId = (Interlocutor as CharacterVm)?.GetModel(ticks, idReplacer)?.id;
+            }
+            else if (Parent is ReplicasTabVm)
+            {
+                var newReplica = new ReplicaM(ticks)
+                {
+                    name = Name,
+                    description = Description,
+                };
+
+                int j = 0;
+                foreach (var link in Links)
+                {
+                    if (link != null)
+                    {
+                        var linkModel = link.GetModel(j, idReplacer);
+                        newReplica.links.Add((LinkM)linkModel);
+                        if (!idReplacer.ContainsKey(link.Id)) idReplacer.Add(link.Id, linkModel.id);
+                        j++;
+                    }
+                }
+
+                j = 0;
+                foreach (var node in Nodes)
+                {
+                    if (node != null)
+                    {
+                        var nodeModel = node.GetModel(j, idReplacer);
+                        newReplica.nodes.Add((Node_BaseM)nodeModel);
+                        if (!idReplacer.ContainsKey(node.Id)) idReplacer.Add(node.Id, nodeModel.id);
+                        j++;
+                    }
+                }
+
+                model = newReplica;
+            }
 
             var times = id.Replace("TreeVm_", "").Substring(0, 19).Split('_');
             model.createdAt = new System.DateTime(int.Parse(times[0]), int.Parse(times[1]), int.Parse(times[2]), int.Parse(times[3]), int.Parse(times[4]), int.Parse(times[5]));

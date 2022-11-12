@@ -44,7 +44,7 @@ namespace StorylineEditor.ViewModels.Nodes
                 documentDescription = XamlWriter.Save(document);
             }
 
-            var newNode = new Node_StepM()
+            var newNode = new Node_StepM(ticks)
             {
                 name = Name,
                 description = documentDescription,

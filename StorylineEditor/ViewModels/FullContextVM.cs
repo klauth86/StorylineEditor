@@ -163,6 +163,19 @@ namespace StorylineEditor.ViewModels
                 }
             }
         }
+        public IEnumerable<FolderedVm> Dialogs
+        {
+            get
+            {
+                foreach (FolderedVm foldered in PlayerDialogsTab.Items)
+                {
+                    foreach (var subFoldered in foldered.FoldersTraversal())
+                    {
+                        yield return subFoldered;
+                    }
+                }
+            }
+        }
         public IEnumerable<FolderedVm> DialogsAndReplicas
         {
             get

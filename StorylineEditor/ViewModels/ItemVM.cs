@@ -38,7 +38,7 @@ namespace StorylineEditor.ViewModels
         {
             if (model != null) return model;
 
-            model = new ItemM()
+            model = new ItemM(ticks)
             {
                 name = Name,
                 description = Description,
