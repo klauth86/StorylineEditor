@@ -29,7 +29,10 @@ namespace StorylineEditor.App
         {
             InitializeComponent();
 
-            SetDataContext(new StorylineVM(new StorylineM()));
+            StorylineM storylineModel = new StorylineM();
+            storylineModel.characters.Add(new CharacterM() { id = CharacterM.PLAYER_ID, name = "Основной персонаж" });
+            
+            SetDataContext(new StorylineVM(storylineModel));
 
             var assemblyName = Assembly.GetExecutingAssembly().GetName();
             Title = string.Format("{0} [{1}]", assemblyName.Name, "new document");
