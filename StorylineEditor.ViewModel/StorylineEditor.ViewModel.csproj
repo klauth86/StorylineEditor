@@ -31,6 +31,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GameEvents\GE_Relation_ChangeVM.cs" />
+    <Compile Include="GameEvents\GE_Quest_Node_PassVM.cs" />
+    <Compile Include="GameEvents\GE_Quest_Node_AddVM.cs" />
+    <Compile Include="GameEvents\GE_Quest_AddVM.cs" />
+    <Compile Include="GameEvents\GE_Item_PickUpVM.cs" />
+    <Compile Include="GameEvents\GE_Item_DropVM.cs" />
+    <Compile Include="GameEvents\GE_BaseVM.cs" />
     <Compile Include="Nodes\Node_RegularVM.cs" />
     <Compile Include="Nodes\Node_InteractiveVM.cs" />
     <Compile Include="Predicates\PredicatesHelper.cs" />

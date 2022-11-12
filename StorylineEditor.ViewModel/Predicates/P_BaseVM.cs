@@ -21,5 +21,19 @@ namespace StorylineEditor.ViewModel.Predicates
         public P_BaseVM(T model, ICallbackContext callbackContext) : base(model, callbackContext) { }
 
         public Type PredicateType => Model?.GetType();
+
+        public bool IsInversed
+        {
+            get => Model.isInversed;
+            set
+            {
+                if (Model.isInversed != value)
+                {
+                    Model.isInversed = value;
+                    Notify(nameof(IsInversed));
+                }
+            
+            }
+        }
     }
 }

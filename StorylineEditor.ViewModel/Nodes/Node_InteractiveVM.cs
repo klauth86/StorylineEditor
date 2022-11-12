@@ -29,6 +29,7 @@ namespace StorylineEditor.ViewModel.Nodes
             foreach (var predicateModel in Model.predicates) Predicates.Add(PredicatesHelper.CreatePredicateByModel(predicateModel, CallbackContext));
 
             GameEvents = new ObservableCollection<Notifier>();
+            foreach (var gameEventModel in Model.gameEvents) GameEvents.Add(PredicatesHelper.CreateGameEventByModel(gameEventModel, CallbackContext));
         }
 
         public Type SelectedPredicateType
@@ -60,13 +61,17 @@ namespace StorylineEditor.ViewModel.Nodes
             {
                 if (value != null)
                 {
-                    //if (value == typeof(GE_Item_DropM)) GameEvents.Add(new GE_Item_DropM(0));
-                    //else if (value == typeof(GE_Item_PickUpM)) GameEvents.Add(new GE_Item_PickUpM(0));
-                    //else if (value == typeof(GE_Quest_AddM)) GameEvents.Add(new GE_Quest_AddM(0));
-                    //else if (value == typeof(GE_Quest_Node_AddM)) GameEvents.Add(new GE_Quest_Node_AddM(0));
-                    //else if (value == typeof(GE_Quest_Node_PassM)) GameEvents.Add(new GE_Quest_Node_PassM(0));
-                    //else if (value == typeof(GE_Relation_ChangeM)) GameEvents.Add(new GE_Relation_ChangeM(0));
+                    Notifier viewModel = PredicatesHelper.CreateGameEventByType(value, CallbackContext);
+                    if (viewModel is IWithModel withModel)
+                    {
+                        GE_BaseM gameEventModel = withModel.GetModel<GE_BaseM>();
+                        Model.gameEvents.Add(gameEventModel);
+
+                        GameEvents.Add(viewModel);
+                    }
                 }
+
+                Notify(nameof(SelectedGameEventType));
             }
         }
 

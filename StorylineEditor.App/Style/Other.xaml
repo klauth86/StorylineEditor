@@ -16,6 +16,7 @@ StorylineEditor распространяется в надежде, что он�
                     xmlns:vmg="clr-namespace:StorylineEditor.ViewModel.Graphs;assembly=StorylineEditor.ViewModel"
                     xmlns:vmn="clr-namespace:StorylineEditor.ViewModel.Nodes;assembly=StorylineEditor.ViewModel"
                     xmlns:vmp="clr-namespace:StorylineEditor.ViewModel.Predicates;assembly=StorylineEditor.ViewModel"
+                    xmlns:vmge="clr-namespace:StorylineEditor.ViewModel.GameEvents;assembly=StorylineEditor.ViewModel"
                     xmlns:m="clr-namespace:StorylineEditor.Model;assembly=StorylineEditor.Model"
                     xmlns:mn="clr-namespace:StorylineEditor.Model.Nodes;assembly=StorylineEditor.Model"
                     xmlns:mp="clr-namespace:StorylineEditor.Model.Predicates;assembly=StorylineEditor.Model"
@@ -847,40 +848,63 @@ StorylineEditor распространяется в надежде, что он�
     <Style TargetType="TextBlock" x:Key="S_TextBlock_Predicate_Title" BasedOn="{StaticResource S_TextBlock}">
         <Style.Triggers>
             <Trigger Property="Tag" Value="{x:Type mp:P_CompositeM}">
-                <Setter  Property="Text" Value="{StaticResource String_Tag_Predicate_P_CompositeM_Title}"></Setter>
+                <Setter Property="Text" Value="{StaticResource String_Tag_Predicate_P_CompositeM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mp:P_Dialog_HasM}">
-                <Setter  Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_HasM_Title}"></Setter>
+                <Setter Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_HasM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mp:P_Dialog_Node_Has_ActiveSession_CmpM}">
-                <Setter  Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_ActiveSession_CmpM_Title}"></Setter>
+                <Setter Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_ActiveSession_CmpM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mp:P_Dialog_Node_Has_ActiveSessionM}">
-                <Setter  Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_ActiveSessionM_Title}"></Setter>
+                <Setter Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_ActiveSessionM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mp:P_Dialog_Node_Has_PrevSessions_CmpM}">
-                <Setter  Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_PrevSessions_CmpM_Title}"></Setter>
+                <Setter Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_PrevSessions_CmpM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mp:P_Dialog_Node_Has_PrevSessionsM}">
-                <Setter  Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_PrevSessionsM_Title}"></Setter>
+                <Setter Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_PrevSessionsM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mp:P_Item_HasM}">
-                <Setter  Property="Text" Value="{StaticResource String_Tag_Predicate_P_Item_HasM_Title}"></Setter>
+                <Setter Property="Text" Value="{StaticResource String_Tag_Predicate_P_Item_HasM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mp:P_Quest_AddedM}">
-                <Setter  Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_AddedM_Title}"></Setter>
+                <Setter Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_AddedM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mp:P_Quest_FinishedM}">
-                <Setter  Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_FinishedM_Title}"></Setter>
+                <Setter Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_FinishedM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mp:P_Quest_Node_AddedM}">
-                <Setter  Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_Node_AddedM_Title}"></Setter>
+                <Setter Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_Node_AddedM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mp:P_Quest_Node_PassedM}">
-                <Setter  Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_Node_PassedM_Title}"></Setter>
+                <Setter Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_Node_PassedM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mp:P_Relation_HasM}">
-                <Setter  Property="Text" Value="{StaticResource String_Tag_Predicate_P_Relation_HasM_Title}"></Setter>
+                <Setter Property="Text" Value="{StaticResource String_Tag_Predicate_P_Relation_HasM_Title}"></Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="TextBlock" x:Key="S_TextBlock_GameEvent_Title" BasedOn="{StaticResource S_TextBlock}">
+        <Style.Triggers>
+            <Trigger Property="Tag" Value="{x:Type mge:GE_Item_DropM}">
+                <Setter Property="Text" Value="{StaticResource String_Tag_GameEvent_GE_Item_DropM_Title}"></Setter>
+            </Trigger>
+            <Trigger Property="Tag" Value="{x:Type mge:GE_Item_PickUpM}">
+                <Setter Property="Text" Value="{StaticResource String_Tag_GameEvent_GE_Item_PickUpM_Title}"></Setter>
+            </Trigger>
+            <Trigger Property="Tag" Value="{x:Type mge:GE_Quest_AddM}">
+                <Setter Property="Text" Value="{StaticResource String_Tag_GameEvent_GE_Quest_AddM_Title}"></Setter>
+            </Trigger>
+            <Trigger Property="Tag" Value="{x:Type mge:GE_Quest_Node_AddM}">
+                <Setter Property="Text" Value="{StaticResource String_Tag_GameEvent_GE_Quest_Node_AddM_Title}"></Setter>
+            </Trigger>
+            <Trigger Property="Tag" Value="{x:Type mge:GE_Quest_Node_PassM}">
+                <Setter Property="Text" Value="{StaticResource String_Tag_GameEvent_GE_Quest_Node_PassM_Title}"></Setter>
+            </Trigger>
+            <Trigger Property="Tag" Value="{x:Type mge:GE_Relation_ChangeM}">
+                <Setter Property="Text" Value="{StaticResource String_Tag_GameEvent_GE_Relation_ChangeM_Title}"></Setter>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -901,7 +925,7 @@ StorylineEditor распространяется в надежде, что он�
                                     <RowDefinition Height="auto"></RowDefinition>
                                     <RowDefinition Height="*"></RowDefinition>
                                 </Grid.RowDefinitions>
-                                <TextBlock x:Name="tb_Main" HorizontalAlignment="Center" Tag="{Binding PredicateType}" Style="{StaticResource S_TextBlock_Predicate_Title}"></TextBlock>
+                                <TextBlock HorizontalAlignment="Center" Tag="{Binding PredicateType}" Style="{StaticResource S_TextBlock_Predicate_Title}"></TextBlock>
                                 <ContentControl Grid.Row="1" Content="{Binding}"></ContentControl>
                                 <Button Grid.RowSpan="2" Style="{StaticResource S_Button_Node_Remove}" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
                             </Grid>
@@ -914,7 +938,28 @@ StorylineEditor распространяется в надежде, что он�
 
     <DataTemplate x:Key="DT_ContentControl_GameEvents">
         <ScrollViewer>
-            <ItemsControl ItemsSource="{Binding GameEvents}"></ItemsControl>
+            <ItemsControl ItemsSource="{Binding GameEvents}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="{StaticResource ComboBox.Static.Border}" BorderThickness="{StaticResource Thickness_Margin_1x}"
+                                CornerRadius="{StaticResource CornerRadius_Common}">
+                            <Border.Margin>
+                                <Thickness Left="{StaticResource Double_Margin_2x}" Right="{StaticResource Double_Margin_2x}"
+                                           Top="{StaticResource Double_Margin_2x}" Bottom="{StaticResource Double_Button_Node_Remove_Width/2}"></Thickness>
+                            </Border.Margin>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"></RowDefinition>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <TextBlock HorizontalAlignment="Center" Tag="{Binding GameEventType}" Style="{StaticResource S_TextBlock_GameEvent_Title}"></TextBlock>
+                                <ContentControl Grid.Row="1" Content="{Binding}"></ContentControl>
+                                <Button Grid.RowSpan="2" Style="{StaticResource S_Button_Node_Remove}" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </ScrollViewer>
     </DataTemplate>
 
@@ -1740,6 +1785,98 @@ StorylineEditor распространяется в надежде, что он�
                 <Setter TargetName="gr_PredicateA" Property="Visibility" Value="Collapsed"></Setter>
                 <Setter TargetName="gr_PredicateB" Property="Visibility" Value="Visible"></Setter>
             </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmge:GE_Item_DropVM}">
+        <controls:ComboBoxExt SelectedValue="{Binding Item, UpdateSourceTrigger=PropertyChanged}"
+                                          Tag="{StaticResource String_Tag_Predicate_Item}"
+                                          ItemsSource="{Binding ItemsCVS.View}"
+                                          Filter="{Binding ItemsFilter, UpdateSourceTrigger=PropertyChanged}"
+                                          Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmge:GE_Item_PickUpVM}">
+        <controls:ComboBoxExt SelectedValue="{Binding Item, UpdateSourceTrigger=PropertyChanged}"
+                                          Tag="{StaticResource String_Tag_Predicate_Item}"
+                                          ItemsSource="{Binding ItemsCVS.View}"
+                                          Filter="{Binding ItemsFilter, UpdateSourceTrigger=PropertyChanged}"
+                                          Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmge:GE_Quest_AddVM}">
+        <controls:ComboBoxExt SelectedValue="{Binding Quest, UpdateSourceTrigger=PropertyChanged}"
+                                          Tag="{StaticResource String_Tag_Predicate_Quest}"
+                                          ItemsSource="{Binding QuestsCVS.View}"
+                                          Filter="{Binding QuestsFilter, UpdateSourceTrigger=PropertyChanged}"
+                                          Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmge:GE_Quest_Node_AddVM}">
+        <StackPanel Orientation="Vertical">
+            <controls:ComboBoxExt x:Name="cmb_Quest" SelectedValue="{Binding Quest, UpdateSourceTrigger=PropertyChanged}"
+                                          Tag="{StaticResource String_Tag_Predicate_Quest}"
+                                          ItemsSource="{Binding QuestsCVS.View}"
+                                          Filter="{Binding QuestsFilter, UpdateSourceTrigger=PropertyChanged}"
+                                          Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
+            <controls:ComboBoxExt x:Name="cmb_Node" SelectedValue="{Binding Node, UpdateSourceTrigger=PropertyChanged}"
+                                          Tag="{StaticResource String_Tag_Predicate_Node}"
+                                          ItemsSource="{Binding NodesCVS.View}"
+                                          Filter="{Binding NodesFilter, UpdateSourceTrigger=PropertyChanged}"
+                                          Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
+        </StackPanel>
+        <DataTemplate.Triggers>
+            <Trigger SourceName="cmb_Quest" Property="SelectedValue" Value="{x:Null}">
+                <Setter TargetName="cmb_Node" Property="Visibility" Value="Collapsed"></Setter>
+            </Trigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmge:GE_Quest_Node_PassVM}">
+        <StackPanel Orientation="Vertical">
+            <controls:ComboBoxExt x:Name="cmb_Quest" SelectedValue="{Binding Quest, UpdateSourceTrigger=PropertyChanged}"
+                                          Tag="{StaticResource String_Tag_Predicate_Quest}"
+                                          ItemsSource="{Binding QuestsCVS.View}"
+                                          Filter="{Binding QuestsFilter, UpdateSourceTrigger=PropertyChanged}"
+                                          Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
+            <controls:ComboBoxExt x:Name="cmb_Node" SelectedValue="{Binding Node, UpdateSourceTrigger=PropertyChanged}"
+                                          Tag="{StaticResource String_Tag_Predicate_Node}"
+                                          ItemsSource="{Binding NodesCVS.View}"
+                                          Filter="{Binding NodesFilter, UpdateSourceTrigger=PropertyChanged}"
+                                          Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
+        </StackPanel>
+        <DataTemplate.Triggers>
+            <Trigger SourceName="cmb_Quest" Property="SelectedValue" Value="{x:Null}">
+                <Setter TargetName="cmb_Node" Property="Visibility" Value="Collapsed"></Setter>
+            </Trigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmge:GE_Relation_ChangeVM}">
+        <StackPanel Orientation="Vertical">
+            <controls:ComboBoxExt x:Name="cmb_Characters" SelectedValue="{Binding Character, UpdateSourceTrigger=PropertyChanged}"
+                                          Tag="{StaticResource String_Tag_Predicate_Character}"
+                                          ItemsSource="{Binding CharactersCVS.View}"
+                                          Filter="{Binding CharactersFilter, UpdateSourceTrigger=PropertyChanged}"
+                                          Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
+            <GroupBox x:Name="gb_Compare" Header="{StaticResource String_Tag_Predicate_Compare}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <ContentControl Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Content="{Binding}" Template="{StaticResource CT_ContentControl_Comparer_List}"></ContentControl>
+                    <controls:NumericUpDown_Float Margin="{StaticResource Thickness_Margin_1x}" Grid.Column="1" VerticalAlignment="Center" Value="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
+                                            ButtonIncStyle="{StaticResource S_Button_Base}" ButtonIncContent="{StaticResource String_Icon_Plus}"
+                                            ButtonDecStyle="{StaticResource S_Button_Base}" ButtonDecContent="{StaticResource String_Icon_Minus}"
+                                            MinValue="-20" MaxValue="20" Step="0.25"></controls:NumericUpDown_Float>
+                </Grid>
+            </GroupBox>
+        </StackPanel>
+        <DataTemplate.Triggers>
+            <Trigger SourceName="cmb_Characters" Property="SelectedValue" Value="{x:Null}">
+                <Setter TargetName="gb_Compare" Property="Visibility" Value="Collapsed"></Setter>
+            </Trigger>
         </DataTemplate.Triggers>
     </DataTemplate>
     

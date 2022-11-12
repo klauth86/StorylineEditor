@@ -1,5 +1,7 @@
-﻿using StorylineEditor.Model.Predicates;
+﻿using StorylineEditor.Model.GameEvents;
+using StorylineEditor.Model.Predicates;
 using StorylineEditor.ViewModel.Common;
+using StorylineEditor.ViewModel.GameEvents;
 using System;
 
 namespace StorylineEditor.ViewModel.Predicates
@@ -38,6 +40,30 @@ namespace StorylineEditor.ViewModel.Predicates
             else if (model.GetType() == typeof(P_Quest_Node_AddedM)) return new P_Quest_Node_AddedVM((P_Quest_Node_AddedM)model, null);
             else if (model.GetType() == typeof(P_Quest_Node_PassedM)) return new P_Quest_Node_PassedVM((P_Quest_Node_PassedM)model, null);
             else if (model.GetType() == typeof(P_Relation_HasM)) return new P_Relation_HasVM((P_Relation_HasM)model, null);
+
+            return null;
+        }
+
+        public static Notifier CreateGameEventByType(Type type, ICallbackContext callbackContext)
+        {
+            if (type == typeof(GE_Item_DropM)) return new GE_Item_DropVM(new GE_Item_DropM(0), callbackContext);
+            if (type == typeof(GE_Item_PickUpM)) return new GE_Item_PickUpVM(new GE_Item_PickUpM(0), callbackContext);
+            if (type == typeof(GE_Quest_AddM)) return new GE_Quest_AddVM(new GE_Quest_AddM(0), callbackContext);
+            if (type == typeof(GE_Quest_Node_AddM)) return new GE_Quest_Node_AddVM(new GE_Quest_Node_AddM(0), callbackContext);
+            if (type == typeof(GE_Quest_Node_PassM)) return new GE_Quest_Node_PassVM(new GE_Quest_Node_PassM(0), callbackContext);
+            if (type == typeof(GE_Relation_ChangeM)) return new GE_Relation_ChangeVM(new GE_Relation_ChangeM(0), callbackContext);
+
+            return null;
+        }
+
+        public static Notifier CreateGameEventByModel(GE_BaseM model, ICallbackContext callbackContext)
+        {
+            if (model.GetType() == typeof(GE_Item_DropM)) return new GE_Item_DropVM(new GE_Item_DropM(0), callbackContext);
+            if (model.GetType() == typeof(GE_Item_PickUpM)) return new GE_Item_PickUpVM(new GE_Item_PickUpM(0), callbackContext);
+            if (model.GetType() == typeof(GE_Quest_AddM)) return new GE_Quest_AddVM(new GE_Quest_AddM(0), callbackContext);
+            if (model.GetType() == typeof(GE_Quest_Node_AddM)) return new GE_Quest_Node_AddVM(new GE_Quest_Node_AddM(0), callbackContext);
+            if (model.GetType() == typeof(GE_Quest_Node_PassM)) return new GE_Quest_Node_PassVM(new GE_Quest_Node_PassM(0), callbackContext);
+            if (model.GetType() == typeof(GE_Relation_ChangeM)) return new GE_Relation_ChangeVM(new GE_Relation_ChangeM(0), callbackContext);
 
             return null;
         }
