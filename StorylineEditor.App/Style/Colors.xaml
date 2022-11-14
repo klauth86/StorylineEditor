@@ -31,12 +31,16 @@ StorylineEditor распространяется в надежде, что он�
 
     <SolidColorBrush x:Key="Color_Link_Foreground" Color="White" />
 
-    <SolidColorBrush x:Key="Color_Link_Remove" Color="Red" />
-
     <SolidColorBrush x:Key="Color_Graph_Node_Background" Color="White" />
 
     <SolidColorBrush x:Key="Color_Graph_Background" Color="Gray"/>
 
     <SolidColorBrush x:Key="Color_Separator" Color="DarkGray" />
+
+    <SolidColorBrush x:Key="Color_Add" Color="Green" />
+
+    <SolidColorBrush x:Key="Color_AddFolder" Color="Goldenrod" />
+    
+    <SolidColorBrush x:Key="Color_Remove" Color="Red" />
 
 </ResourceDictionary>

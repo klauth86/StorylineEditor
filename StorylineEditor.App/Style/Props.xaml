@@ -291,9 +291,9 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
-                    <Border CornerRadius="{StaticResource CornerRadius_Common}" x:Name="templateRoot" Background="{StaticResource ComboBox.Static.Background}" BorderBrush="{StaticResource ComboBox.Static.Border}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
-                        <Border CornerRadius="{StaticResource CornerRadius_Common}" x:Name="splitBorder" BorderBrush="Transparent" BorderThickness="1" HorizontalAlignment="Right" Margin="0" SnapsToDevicePixels="true" Width="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}">
-                            <TextBlock x:Name="plus" Text="{StaticResource String_Icon_Add}"></TextBlock>
+                    <Border CornerRadius="{StaticResource CornerRadius_Common}" x:Name="templateRoot" Background="{StaticResource Color_Add}" BorderBrush="{StaticResource ComboBox.Static.Border}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                        <Border CornerRadius="{StaticResource CornerRadius_Common}" x:Name="splitBorder" BorderBrush="Transparent" BorderThickness="1" Margin="0" SnapsToDevicePixels="true">
+                            <TextBlock x:Name="plus" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{StaticResource String_Icon_Plus}" Foreground="{StaticResource Color_Link_Foreground}"></TextBlock>
                         </Border>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -471,7 +471,7 @@ StorylineEditor распространяется в надежде, что он�
                                 </Border>
                             </theme:SystemDropShadowChrome>
                         </Popup>
-                        <ToggleButton x:Name="toggleButton" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Grid.Column="1" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Style="{StaticResource ComboBoxToggleButtonPopup}"/>
+                        <ToggleButton Width="{StaticResource Double_Size_16x}" Height="{StaticResource Double_Size_16x}" x:Name="toggleButton" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Grid.Column="1" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Style="{StaticResource ComboBoxToggleButtonPopup}"/>
                         <ContentPresenter x:Name="contentPresenter" Content="{TemplateBinding Tag}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" IsHitTestVisible="false" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Grid>
                     <ControlTemplate.Triggers>

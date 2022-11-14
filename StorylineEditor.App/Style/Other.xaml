@@ -188,7 +188,7 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="Command" Value="{Binding Path=DataContext.RemoveElementCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"></Setter>
         <Setter Property="CommandParameter" Value="{Binding}"></Setter>
         <Setter Property="Foreground" Value="{StaticResource Color_Link_Foreground}"></Setter>
-        <Setter Property="Background" Value="{StaticResource Color_Link_Remove}"></Setter>
+        <Setter Property="Background" Value="{StaticResource Color_Remove}"></Setter>
     </Style>
 
     <Style TargetType="Button" x:Key="S_Button_Node_Remove" BasedOn="{StaticResource S_Button_Remove}">
@@ -272,14 +272,9 @@ StorylineEditor распространяется в надежде, что он�
                 </Grid.RowDefinitions>
 
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="{StaticResource String_Icon_Add}" ToolTip="{StaticResource String_TabMenu_Add_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding AddCommand}" CommandParameter="{StaticResource False}"></Button>
-                    <Button ToolTip="{StaticResource String_TabMenu_AddFolder_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding AddCommand}" CommandParameter="{StaticResource True}">
-                        <Grid>
-                            <TextBlock Text="{StaticResource String_Icon_Open}"></TextBlock>
-                            <TextBlock Text="{StaticResource String_Icon_AddSmall}"></TextBlock>
-                        </Grid>
-                    </Button>
-                    <Button Content="{StaticResource String_Icon_Remove}" ToolTip="{StaticResource String_TabMenu_Remove_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding RemoveCommand}"></Button>
+                    <Button Background="{StaticResource Color_Add}" Foreground="{StaticResource Color_Link_Foreground}" Content="{StaticResource String_Icon_Add}" ToolTip="{StaticResource String_TabMenu_Add_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding AddCommand}" CommandParameter="{StaticResource False}"></Button>
+                    <Button Background="{StaticResource Color_AddFolder}" Foreground="{StaticResource Color_Link_Foreground}" Content="{StaticResource String_Icon_Add}" ToolTip="{StaticResource String_TabMenu_AddFolder_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding AddCommand}" CommandParameter="{StaticResource True}"></Button>
+                    <Button Background="{StaticResource Color_Remove}" Foreground="{StaticResource Color_Link_Foreground}" Content="{StaticResource String_Icon_Remove}" ToolTip="{StaticResource String_TabMenu_Remove_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding RemoveCommand}"></Button>
 
                     <Button Content="{StaticResource String_Icon_Cut}" ToolTip="{StaticResource String_TabMenu_Cut_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding CutCommand}"></Button>
                     <Button Content="{StaticResource String_Icon_Paste}" ToolTip="{StaticResource String_TabMenu_Paste_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding PasteCommand}"></Button>
@@ -1453,7 +1448,7 @@ StorylineEditor распространяется в надежде, что он�
                   bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
             <Polygon IsHitTestVisible="False" Points="{Binding StepPoints}" Stroke="{StaticResource Color_Link}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" Fill="{StaticResource Color_Link}"></Polygon>
             <Polygon Points="{Binding RemovePoints}" Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" 
-                         Fill="{StaticResource Color_Link_Remove}">
+                         Fill="{StaticResource Color_Remove}">
                 <Polygon.InputBindings>
                     <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.RemoveElementCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
                 </Polygon.InputBindings>
