@@ -85,8 +85,8 @@ namespace StorylineEditor.ViewModel.Graphs
             foreach (var linkModel in Model.links)
             {
                 AddLinkVM(linkModel,
-                    linkModel.fromNodeId, nodesPositions[linkModel.fromNodeId].Item2, nodesPositions[linkModel.fromNodeId].Item1,
-                    linkModel.toNodeId, nodesPositions[linkModel.toNodeId].Item2, nodesPositions[linkModel.toNodeId].Item1);
+                    linkModel.fromNodeId, nodesPositions[linkModel.fromNodeId].Item1, nodesPositions[linkModel.fromNodeId].Item2,
+                    linkModel.toNodeId, nodesPositions[linkModel.toNodeId].Item1, nodesPositions[linkModel.toNodeId].Item2);
             }
 
             foreach (var nodeModel in Model.nodes)
