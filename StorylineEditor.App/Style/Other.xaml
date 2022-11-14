@@ -142,7 +142,7 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="MaxHeight" Value="{StaticResource Double_Node_MaxHeight}"></Setter>
         <Setter Property="MaxWidth" Value="{StaticResource Double_Node_MaxWidth}"></Setter>
         <Setter Property="ToolTip" Value="{Binding Id, Mode=OneTime}"></Setter>
-        <Setter Property="Background" Value="White"></Setter>
+        <Setter Property="Background" Value="{StaticResource Color_Graph_Node_Background}"></Setter>
         <Setter Property="bhvrs:RenderSizeBehavior.ActualWidth" Value="{Binding Width, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"></Setter>
         <Setter Property="bhvrs:RenderSizeBehavior.ActualHeight" Value="{Binding Height, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"></Setter>
         <Setter Property="bhvrs:RenderSizeBehavior.IsEnabled" Value="true"></Setter>
@@ -184,8 +184,8 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="Content" Value="{StaticResource String_Icon_Remove}"></Setter>
         <Setter Property="Command" Value="{Binding Path=DataContext.RemoveElementCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"></Setter>
         <Setter Property="CommandParameter" Value="{Binding}"></Setter>
-        <Setter Property="Foreground" Value="White"></Setter>
-        <Setter Property="Background" Value="Red"></Setter>
+        <Setter Property="Foreground" Value="{StaticResource Color_Link_Foreground}"></Setter>
+        <Setter Property="Background" Value="{StaticResource Color_Link_Remove}"></Setter>
     </Style>
 
     <ItemsPanelTemplate x:Key="IPT_WrapPanel">
@@ -197,7 +197,7 @@ StorylineEditor распространяется в надежде, что он�
     </ItemsPanelTemplate>
     
     <Style TargetType="ItemsControl" x:Key="S_Canvas_Graph">
-        <Setter Property="Background" Value="LightGray"></Setter>
+        <Setter Property="Background" Value="{StaticResource Color_Graph_Background}"></Setter>
         <Setter Property="ItemsPanel" Value="{StaticResource IPT_Canvas}"></Setter>
         <Setter Property="ItemsSource" Value="{Binding ItemsVMs}"></Setter>
         <Setter Property="bhvrs:MouseExtBehavior.MouseEnterCommand" Value="{Binding RegisterContextCommand}"></Setter>
