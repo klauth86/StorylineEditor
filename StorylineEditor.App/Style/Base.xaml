@@ -32,7 +32,10 @@ StorylineEditor распространяется в надежде, что он�
     </Style>
     
     <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Graph"></Style>
-    
+
+    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Graph_Bold">
+        <Setter Property="FontWeight" Value="Bold"></Setter>
+    </Style>
     
     <Style TargetType="TextBox" x:Key="S_TextBox">
         <Setter Property="TextWrapping" Value="Wrap"></Setter>

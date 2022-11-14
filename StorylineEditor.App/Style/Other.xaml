@@ -641,13 +641,7 @@ StorylineEditor распространяется в надежде, что он�
     </ControlTemplate>
     
     <DataTemplate DataType="{x:Type vmg:QuestEditorVM}">
-        <TabControl>
-            <TabItem Header="{StaticResource String_Tag_Graph_Tab_Props}">
-                <StackPanel Orientation="Vertical">
-                    <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_Name}"></TextBox>
-                    <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
-                </StackPanel>
-            </TabItem>
+        <TabControl Padding="0" Margin="0">
             <TabItem Header="{StaticResource String_Tag_Graph_Tab_View}">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -680,7 +674,7 @@ StorylineEditor распространяется в надежде, что он�
                             <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Graph_Reset}" Command="{Binding ResetScaleCommand}" ToolTip="{StaticResource String_GraphMenu_ResetScale_Tooltip}"></Button>
                         </StackPanel>
 
-                        <TextBlock Grid.Row="1" Style="{StaticResource S_TextBlock_Graph}">
+                        <TextBlock Grid.Row="1" Style="{StaticResource S_TextBlock_Graph_Bold}" Margin="{StaticResource Thickness_Margin_2x}">
                             <Run x:Name="r_SelectedNodeType"></Run>
                             <Run Text="{Binding Scale, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></Run>
                             <Run Text="("></Run>
@@ -697,6 +691,12 @@ StorylineEditor распространяется в надежде, что он�
 
                     <ContentControl Grid.Column="2" Content="{Binding SelectionEditor, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
                 </Grid>
+            </TabItem>
+            <TabItem Header="{StaticResource String_Tag_Graph_Tab_Props}">
+                <StackPanel Orientation="Vertical">
+                    <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_Name}"></TextBox>
+                    <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
+                </StackPanel>
             </TabItem>
         </TabControl>
         <DataTemplate.Triggers>
@@ -1228,18 +1228,7 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmg:DialogEditorVM}">
-        <TabControl>
-            <TabItem Header="{StaticResource String_Tag_Graph_Tab_Props}">
-                <StackPanel Orientation="Vertical">
-                    <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_Name}"></TextBox>
-                    <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
-                    <controls:ComboBoxExt SelectedValue="{Binding DialogCharacter, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Dialog_DialogCharacter}"
-                                          ItemsSource="{Binding FilteredDialogCharacterCVS.View}"
-                                          Filter="{Binding DialogCharacterFilter, UpdateSourceTrigger=PropertyChanged}"
-                                          Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
-                </StackPanel>
-            </TabItem>
+        <TabControl Padding="0" Margin="0">
             <TabItem Header="{StaticResource String_Tag_Graph_Tab_View}">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -1274,7 +1263,7 @@ StorylineEditor распространяется в надежде, что он�
                             <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Graph_Reset}" Command="{Binding ResetScaleCommand}" ToolTip="{StaticResource String_GraphMenu_ResetScale_Tooltip}"></Button>
                         </StackPanel>
 
-                        <TextBlock Grid.Row="1" Style="{StaticResource S_TextBlock_Graph}">
+                        <TextBlock Grid.Row="1" Style="{StaticResource S_TextBlock_Graph_Bold}" Margin="{StaticResource Thickness_Margin_2x}">
                             <Run x:Name="r_SelectedNodeType"></Run>
                             <Run Text="{Binding Scale, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></Run>
                             <Run Text="("></Run>
@@ -1291,6 +1280,17 @@ StorylineEditor распространяется в надежде, что он�
 
                     <ContentControl Grid.Column="2" Content="{Binding SelectionEditor, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
                 </Grid>
+            </TabItem>
+            <TabItem Header="{StaticResource String_Tag_Graph_Tab_Props}">
+                <StackPanel Orientation="Vertical">
+                    <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_Name}"></TextBox>
+                    <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
+                    <controls:ComboBoxExt SelectedValue="{Binding DialogCharacter, UpdateSourceTrigger=PropertyChanged}"
+                                          Tag="{StaticResource String_Tag_Dialog_DialogCharacter}"
+                                          ItemsSource="{Binding FilteredDialogCharacterCVS.View}"
+                                          Filter="{Binding DialogCharacterFilter, UpdateSourceTrigger=PropertyChanged}"
+                                          Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
+                </StackPanel>
             </TabItem>
         </TabControl>
         <DataTemplate.Triggers>
@@ -1334,13 +1334,7 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmg:ReplicaEditorVM}">
-        <TabControl>
-            <TabItem Header="{StaticResource String_Tag_Graph_Tab_Props}">
-                <StackPanel Orientation="Vertical">
-                    <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_Name}"></TextBox>
-                    <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
-                </StackPanel>
-            </TabItem>
+        <TabControl Padding="0" Margin="0">
             <TabItem Header="{StaticResource String_Tag_Graph_Tab_View}">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -1374,7 +1368,7 @@ StorylineEditor распространяется в надежде, что он�
                             <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Graph_Reset}" Command="{Binding ResetScaleCommand}" ToolTip="{StaticResource String_GraphMenu_ResetScale_Tooltip}"></Button>
                         </StackPanel>
 
-                        <TextBlock Grid.Row="1" Style="{StaticResource S_TextBlock_Graph}">
+                        <TextBlock Grid.Row="1" Style="{StaticResource S_TextBlock_Graph_Bold}" Margin="{StaticResource Thickness_Margin_2x}">
                             <Run x:Name="r_SelectedNodeType"></Run>
                             <Run Text="{Binding Scale, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></Run>
                             <Run Text="("></Run>
@@ -1391,6 +1385,12 @@ StorylineEditor распространяется в надежде, что он�
 
                     <ContentControl Grid.Column="2" Content="{Binding SelectionEditor, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
                 </Grid>
+            </TabItem>
+            <TabItem Header="{StaticResource String_Tag_Graph_Tab_Props}">
+                <StackPanel Orientation="Vertical">
+                    <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_Name}"></TextBox>
+                    <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
+                </StackPanel>
             </TabItem>
         </TabControl>
         <DataTemplate.Triggers>
