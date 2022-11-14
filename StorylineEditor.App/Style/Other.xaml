@@ -164,7 +164,7 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="Command" Value="{Binding ToggleGenderCommand}"></Setter>
         <Setter Property="RenderTransform">
             <Setter.Value>
-                <TranslateTransform X="{StaticResource Double_Size_12x-}" Y="{StaticResource Double_Size_12x-}"></TranslateTransform>
+                <TranslateTransform X="{StaticResource Double_Size_16x-}" Y="{StaticResource Double_Size_16x-}"></TranslateTransform>
             </Setter.Value>
         </Setter>
         <Style.Triggers>
@@ -180,15 +180,23 @@ StorylineEditor распространяется в надежде, что он�
         </Style.Triggers>
     </Style>
 
-    <Style TargetType="Button" x:Key="S_Button_Node_Remove">
+    <Style TargetType="Button" x:Key="S_Button_Remove">
         <Setter Property="FontSize" Value="{StaticResource FontSize_VerySmall}"></Setter>
-        <Setter Property="Width" Value="{StaticResource Double_Button_Node_Remove_Width}"></Setter>
-        <Setter Property="Height" Value="{StaticResource Double_Button_Node_Remove_Height}"></Setter>
+        <Setter Property="Width" Value="{StaticResource Double_Size_16x}"></Setter>
+        <Setter Property="Height" Value="{StaticResource Double_Size_16x}"></Setter>
         <Setter Property="Content" Value="{StaticResource String_Icon_Remove}"></Setter>
         <Setter Property="Command" Value="{Binding Path=DataContext.RemoveElementCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"></Setter>
         <Setter Property="CommandParameter" Value="{Binding}"></Setter>
         <Setter Property="Foreground" Value="{StaticResource Color_Link_Foreground}"></Setter>
         <Setter Property="Background" Value="{StaticResource Color_Link_Remove}"></Setter>
+    </Style>
+
+    <Style TargetType="Button" x:Key="S_Button_Node_Remove" BasedOn="{StaticResource S_Button_Remove}">
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <TranslateTransform X="{StaticResource Double_Size_12x}" Y="{StaticResource Double_Size_12x-}"></TranslateTransform>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <ItemsPanelTemplate x:Key="IPT_WrapPanel">
@@ -736,12 +744,8 @@ StorylineEditor распространяется в надежде, что он�
                 <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_Result}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
                 <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
-                
-                <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
-                    <Button.RenderTransform>
-                        <TranslateTransform X="{StaticResource Double_Button_Node_Remove_Width/2}" Y="{StaticResource Double_Button_Node_Remove_-Height/2}"></TranslateTransform>
-                    </Button.RenderTransform>
-                </Button>
+
+                <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
             </Grid>
         </Border>
     </DataTemplate>
@@ -791,12 +795,8 @@ StorylineEditor распространяется в надежде, что он�
                 <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_Result}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
                 <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
-                
-                <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
-                    <Button.RenderTransform>
-                        <TranslateTransform X="{StaticResource Double_Button_Node_Remove_Width/2}" Y="{StaticResource Double_Button_Node_Remove_-Height/2}"></TranslateTransform>
-                    </Button.RenderTransform>
-                </Button>
+
+                <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
             </Grid>
         </Border>
     </DataTemplate>
@@ -826,12 +826,8 @@ StorylineEditor распространяется в надежде, что он�
                 <Label VerticalAlignment="Center" HorizontalAlignment="Center" Content="{StaticResource String_Icon_Node_Random}" Style="{StaticResource S_Label_Node_Large}"></Label>
 
                 <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
-                
-                <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
-                    <Button.RenderTransform>
-                        <TranslateTransform X="{StaticResource Double_Button_Node_Remove_Width/2}" Y="{StaticResource Double_Button_Node_Remove_-Height/2}"></TranslateTransform>
-                    </Button.RenderTransform>
-                </Button>
+
+                <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
             </Grid>
         </Border>
     </DataTemplate>
@@ -909,7 +905,7 @@ StorylineEditor распространяется в надежде, что он�
                                 CornerRadius="{StaticResource CornerRadius_Common}">
                             <Border.Margin>
                                 <Thickness Left="{StaticResource Double_Margin_2x}" Right="{StaticResource Double_Margin_2x}"
-                                           Top="{StaticResource Double_Margin_2x}" Bottom="{StaticResource Double_Button_Node_Remove_Width/2}"></Thickness>
+                                           Top="{StaticResource Double_Margin_2x}" Bottom="{StaticResource Double_Size_8x}"></Thickness>
                             </Border.Margin>
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -918,7 +914,7 @@ StorylineEditor распространяется в надежде, что он�
                                 </Grid.RowDefinitions>
                                 <TextBlock HorizontalAlignment="Center" Tag="{Binding PredicateType}" Style="{StaticResource S_TextBlock_Predicate_Title}"></TextBlock>
                                 <ContentControl Grid.Row="1" Content="{Binding}"></ContentControl>
-                                <Button Grid.RowSpan="2" Style="{StaticResource S_Button_Node_Remove}" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
+                                <Button Grid.RowSpan="2" Style="{StaticResource S_Button_Remove}" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
                             </Grid>
                         </Border>
                     </DataTemplate>
@@ -936,7 +932,7 @@ StorylineEditor распространяется в надежде, что он�
                                 CornerRadius="{StaticResource CornerRadius_Common}">
                             <Border.Margin>
                                 <Thickness Left="{StaticResource Double_Margin_2x}" Right="{StaticResource Double_Margin_2x}"
-                                           Top="{StaticResource Double_Margin_2x}" Bottom="{StaticResource Double_Button_Node_Remove_Width/2}"></Thickness>
+                                           Top="{StaticResource Double_Margin_2x}" Bottom="{StaticResource Double_Size_8x}"></Thickness>
                             </Border.Margin>
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -945,7 +941,7 @@ StorylineEditor распространяется в надежде, что он�
                                 </Grid.RowDefinitions>
                                 <TextBlock HorizontalAlignment="Center" Tag="{Binding GameEventType}" Style="{StaticResource S_TextBlock_GameEvent_Title}"></TextBlock>
                                 <ContentControl Grid.Row="1" Content="{Binding}"></ContentControl>
-                                <Button Grid.RowSpan="2" Style="{StaticResource S_Button_Node_Remove}" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
+                                <Button Grid.RowSpan="2" Style="{StaticResource S_Button_Remove}" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
                             </Grid>
                         </Border>
                     </DataTemplate>
@@ -1067,12 +1063,8 @@ StorylineEditor распространяется в надежде, что он�
                 <Label VerticalAlignment="Center" HorizontalAlignment="Center" Content="{StaticResource String_Icon_Node_Transit}" Style="{StaticResource S_Label_Node_Large}"></Label>
 
                 <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
-                
-                <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
-                    <Button.RenderTransform>
-                        <TranslateTransform X="{StaticResource Double_Button_Node_Remove_Width/2}" Y="{StaticResource Double_Button_Node_Remove_-Height/2}"></TranslateTransform>
-                    </Button.RenderTransform>
-                </Button>
+
+                <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
             </Grid>
         </Border>
     </DataTemplate>
@@ -1113,12 +1105,8 @@ StorylineEditor распространяется в надежде, что он�
                 <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_ShortDescription}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
                 <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
-                
-                <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
-                    <Button.RenderTransform>
-                        <TranslateTransform X="{StaticResource Double_Button_Node_Remove_Width/2}" Y="{StaticResource Double_Button_Node_Remove_-Height/2}"></TranslateTransform>
-                    </Button.RenderTransform>
-                </Button>
+
+                <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
             </Grid>
         </Border>
         <DataTemplate.Triggers>
@@ -1185,12 +1173,8 @@ StorylineEditor распространяется в надежде, что он�
                 <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_ShortDescription}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
                 <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
-                
-                <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
-                    <Button.RenderTransform>
-                        <TranslateTransform X="{StaticResource Double_Button_Node_Remove_Width/2}" Y="{StaticResource Double_Button_Node_Remove_-Height/2}"></TranslateTransform>
-                    </Button.RenderTransform>
-                </Button>
+
+                <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
             </Grid>
         </Border>
         <DataTemplate.Triggers>

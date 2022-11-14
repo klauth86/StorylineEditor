@@ -30,7 +30,7 @@ StorylineEditor распространяется в надежде, что он�
                 <Button x:Name="btn_Open" ToolTip="{StaticResource String_MainMenu_Open_Tooltip}" Style="{StaticResource S_Button_Square_32x}" Click="btn_Open_Click" Content="{StaticResource String_Icon_Open}"></Button>
                 <Button Grid.Column="1" x:Name="btn_Save"  ToolTip="{StaticResource String_MainMenu_Save_Tooltip}" Style="{StaticResource S_Button_Square_32x}" Click="btn_Save_Click" Content="{StaticResource String_Icon_Save}"></Button>
                 <Rectangle Grid.Column="2" Style="{StaticResource S_Rectangle_MainMenu}"></Rectangle>
-                <ContentControl Grid.Column="3" Content="{Binding UpdateSourceTrigger=PropertyChanged}" ContentTemplate="{StaticResource DT_StorylineVM_Tabs}"></ContentControl>
+                <ContentControl VerticalAlignment="Bottom" Grid.Column="3" Content="{Binding UpdateSourceTrigger=PropertyChanged}" ContentTemplate="{StaticResource DT_StorylineVM_Tabs}"></ContentControl>
                 <Rectangle Grid.Column="4" Style="{StaticResource S_Rectangle_MainMenu}"></Rectangle>
                 <TextBox Grid.Column="5" Style="{StaticResource S_TextBox_Filter}" Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" MaxLength="128"></TextBox>
             </Grid>
