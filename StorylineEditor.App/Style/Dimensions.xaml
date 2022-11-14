@@ -40,8 +40,14 @@ StorylineEditor распространяется в надежде, что он�
 
     <Thickness x:Key="Thickness_Padding_LeftRight" Left="4" Right="4"></Thickness>
 
-    <sys:Double x:Key="Double_MinWidth_Selector_Icon">32</sys:Double>
+    <sys:Double x:Key="Double_Size_32x">32</sys:Double>
 
+    <sys:Double x:Key="Double_Size_24x">24</sys:Double>
+
+    <sys:Double x:Key="Double_Size_12x-">-12</sys:Double>
+
+    <sys:Double x:Key="Double_Size_16x">16</sys:Double>
+    
     <sys:Double x:Key="Double_Node_MinHeight">64</sys:Double>
 
     <sys:Double x:Key="Double_Node_MinWidth">96</sys:Double>
@@ -57,14 +63,6 @@ StorylineEditor распространяется в надежде, что он�
     <sys:Double x:Key="Double_Button_Node_Remove_-Height/2">-8</sys:Double>
 
     <sys:Double x:Key="Double_Button_Node_Remove_Width/2">8</sys:Double>
-
-    <sys:Double x:Key="Double_Icon_Gender_Height">20</sys:Double>
-
-    <sys:Double x:Key="Double_Icon_Gender_Width">20</sys:Double>
-
-    <sys:Double x:Key="Double_Icon_Gender_-Height/2">-10</sys:Double>
-
-    <sys:Double x:Key="Double_Icon_Gender_-Width/2">-10</sys:Double>
 
     <CornerRadius x:Key="CornerRadius_Common" TopLeft="2" TopRight="2" BottomRight="2" BottomLeft="2"></CornerRadius>
 

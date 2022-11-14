@@ -71,10 +71,10 @@ StorylineEditor распространяется в надежде, что он�
     </Style>
 
     <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Selector_Icon">
-        <Setter Property="MinWidth" Value="{StaticResource Double_MinWidth_Selector_Icon}"></Setter>
+        <Setter Property="MinWidth" Value="{StaticResource Double_Size_32x}"></Setter>
         <Setter Property="TextAlignment" Value="Center"></Setter>
         <Setter Property="VerticalAlignment" Value="Center"></Setter>
-        <Setter Property="FontSize" Value="{StaticResource FontSize_Selector_Icon}"></Setter>
+        <Setter Property="FontSize" Value="{StaticResource FontSize_VeryLarge}"></Setter>
         <Setter Property="Margin" Value="{StaticResource Thickness_Margin_2x}"></Setter>
     </Style>
 
@@ -160,10 +160,13 @@ StorylineEditor распространяется в надежде, что он�
         </Style.Triggers>
     </Style>
 
-    <Style TargetType="Button" x:Key="S_Button_Node_Gender" BasedOn="{StaticResource {x:Type Button}}">
-        <Setter Property="Width" Value="{StaticResource Double_Icon_Gender_Width}"></Setter>
-        <Setter Property="Height" Value="{StaticResource Double_Icon_Gender_Height}"></Setter>
+    <Style TargetType="Button" x:Key="S_Button_Node_Gender" BasedOn="{StaticResource S_Button_Square_24x}">
         <Setter Property="Command" Value="{Binding ToggleGenderCommand}"></Setter>
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <TranslateTransform X="{StaticResource Double_Size_12x-}" Y="{StaticResource Double_Size_12x-}"></TranslateTransform>
+            </Setter.Value>
+        </Setter>
         <Style.Triggers>
             <DataTrigger Binding="{Binding Gender, UpdateSourceTrigger=PropertyChanged}" Value="{x:Static m:GENDER.UNSET}">
                 <Setter Property="Content" Value="{StaticResource String_Icon_Gender_Unset}"></Setter>
@@ -178,7 +181,7 @@ StorylineEditor распространяется в надежде, что он�
     </Style>
 
     <Style TargetType="Button" x:Key="S_Button_Node_Remove">
-        <Setter Property="FontSize" Value="{StaticResource FontSize_Button_Node_Remove}"></Setter>
+        <Setter Property="FontSize" Value="{StaticResource FontSize_VerySmall}"></Setter>
         <Setter Property="Width" Value="{StaticResource Double_Button_Node_Remove_Width}"></Setter>
         <Setter Property="Height" Value="{StaticResource Double_Button_Node_Remove_Height}"></Setter>
         <Setter Property="Content" Value="{StaticResource String_Icon_Remove}"></Setter>
@@ -222,7 +225,7 @@ StorylineEditor распространяется в надежде, что он�
     <!-- Data Templates -->
 
     <DataTemplate DataType="{x:Type vm:FolderProxyM}">
-        <Button Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Up}" Command="{Binding Path=DataContext.UpContextCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"></Button>
+        <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Up}" Command="{Binding Path=DataContext.UpContextCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"></Button>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type m:FolderM}">
@@ -261,19 +264,19 @@ StorylineEditor распространяется в надежде, что он�
                 </Grid.RowDefinitions>
 
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="{StaticResource String_Icon_Add}" ToolTip="{StaticResource String_TabMenu_Add_Tooltip}" Style="{StaticResource S_Button_Base}" Command="{Binding AddCommand}" CommandParameter="{StaticResource False}"></Button>
-                    <Button ToolTip="{StaticResource String_TabMenu_AddFolder_Tooltip}" Style="{StaticResource S_Button_Base}" Command="{Binding AddCommand}" CommandParameter="{StaticResource True}">
+                    <Button Content="{StaticResource String_Icon_Add}" ToolTip="{StaticResource String_TabMenu_Add_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding AddCommand}" CommandParameter="{StaticResource False}"></Button>
+                    <Button ToolTip="{StaticResource String_TabMenu_AddFolder_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding AddCommand}" CommandParameter="{StaticResource True}">
                         <Grid>
                             <TextBlock Text="{StaticResource String_Icon_Open}"></TextBlock>
                             <TextBlock Text="{StaticResource String_Icon_AddSmall}"></TextBlock>
                         </Grid>
                     </Button>
-                    <Button Content="{StaticResource String_Icon_Remove}" ToolTip="{StaticResource String_TabMenu_Remove_Tooltip}" Style="{StaticResource S_Button_Base}" Command="{Binding RemoveCommand}"></Button>
+                    <Button Content="{StaticResource String_Icon_Remove}" ToolTip="{StaticResource String_TabMenu_Remove_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding RemoveCommand}"></Button>
 
-                    <Button Content="{StaticResource String_Icon_Cut}" ToolTip="{StaticResource String_TabMenu_Cut_Tooltip}" Style="{StaticResource S_Button_Base}" Command="{Binding CutCommand}"></Button>
-                    <Button Content="{StaticResource String_Icon_Paste}" ToolTip="{StaticResource String_TabMenu_Paste_Tooltip}" Style="{StaticResource S_Button_Base}" Command="{Binding PasteCommand}"></Button>
+                    <Button Content="{StaticResource String_Icon_Cut}" ToolTip="{StaticResource String_TabMenu_Cut_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding CutCommand}"></Button>
+                    <Button Content="{StaticResource String_Icon_Paste}" ToolTip="{StaticResource String_TabMenu_Paste_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding PasteCommand}"></Button>
 
-                    <Button Content="{StaticResource String_Icon_Info}" ToolTip="{StaticResource String_TabMenu_Info_Tooltip}" Style="{StaticResource S_Button_Base}" Command="{Binding InfoCommand}"></Button>
+                    <Button Content="{StaticResource String_Icon_Info}" ToolTip="{StaticResource String_TabMenu_Info_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding InfoCommand}"></Button>
                 </StackPanel>
 
                 <GroupBox Grid.Row="1">
@@ -470,16 +473,16 @@ StorylineEditor распространяется в надежде, что он�
             <StackPanel Orientation="Horizontal" Margin="{StaticResource Thickness_Margin_1x}">
                 <ContentControl ContentTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}" Content="{TemplateBinding Tag}"></ContentControl>
                 <controls:NumericUpDown_Float Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Value="{Binding InitialRelation,UpdateSourceTrigger=PropertyChanged}"
-                                            ButtonIncStyle="{StaticResource S_Button_Base}" ButtonIncContent="{StaticResource String_Icon_Plus}"
-                                            ButtonDecStyle="{StaticResource S_Button_Base}" ButtonDecContent="{StaticResource String_Icon_Minus}"
+                                            ButtonIncStyle="{StaticResource S_Button_Square_Auto}" ButtonIncContent="{StaticResource String_Icon_Plus}"
+                                            ButtonDecStyle="{StaticResource S_Button_Square_Auto}" ButtonDecContent="{StaticResource String_Icon_Minus}"
                                             MinValue="-10" MaxValue="10" Step="0.25" MinWidth="{StaticResource Double_Node_MinWidth}"></controls:NumericUpDown_Float>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="{StaticResource Thickness_Margin_1x}">
                 <ContentControl ContentTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}" Content="{TemplateBinding Tag}"></ContentControl>
                 <controls:NumericUpDown_Float Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Value="{Binding InitialRelationFemale,UpdateSourceTrigger=PropertyChanged}"
-                                            ButtonIncStyle="{StaticResource S_Button_Base}" ButtonIncContent="{StaticResource String_Icon_Plus}"
-                                            ButtonDecStyle="{StaticResource S_Button_Base}" ButtonDecContent="{StaticResource String_Icon_Minus}"
+                                            ButtonIncStyle="{StaticResource S_Button_Square_Auto}" ButtonIncContent="{StaticResource String_Icon_Plus}"
+                                            ButtonDecStyle="{StaticResource S_Button_Square_Auto}" ButtonDecContent="{StaticResource String_Icon_Minus}"
                                             MinValue="-10" MaxValue="10" Step="0.25" MinWidth="{StaticResource Double_Node_MinWidth}"></controls:NumericUpDown_Float>
             </StackPanel>
         </StackPanel>
@@ -664,14 +667,14 @@ StorylineEditor распространяется в надежде, что он�
                         </Grid.RowDefinitions>
 
                         <StackPanel Orientation="Horizontal">
-                            <Button x:Name="btn_selectable_Step" Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Node_Step}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_StepM}"></Button>
-                            <Button x:Name="btn_selectable_Alternative" Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Node_Alternative}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_AlternativeM}"></Button>
+                            <Button x:Name="btn_selectable_Step" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Step}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_StepM}"></Button>
+                            <Button x:Name="btn_selectable_Alternative" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Alternative}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_AlternativeM}"></Button>
                             <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
-                            <Button Style="{StaticResource S_Button_Base}" Content="⏪" Command="{Binding PrevRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_PrevRootNode_Tooltip}"></Button>
-                            <Button Style="{StaticResource S_Button_Base}" Content="⏩" Command="{Binding NextRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_NextRootNode_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="⏪" Command="{Binding PrevRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_PrevRootNode_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="⏩" Command="{Binding NextRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_NextRootNode_Tooltip}"></Button>
                             <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
-                            <Button Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Graph_Origin}" Command="{Binding GoToOriginCommand}" ToolTip="{StaticResource String_GraphMenu_GoToOrigin_Tooltip}"></Button>
-                            <Button Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Graph_Reset}" Command="{Binding ResetScaleCommand}" ToolTip="{StaticResource String_GraphMenu_ResetScale_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Graph_Origin}" Command="{Binding GoToOriginCommand}" ToolTip="{StaticResource String_GraphMenu_GoToOrigin_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Graph_Reset}" Command="{Binding ResetScaleCommand}" ToolTip="{StaticResource String_GraphMenu_ResetScale_Tooltip}"></Button>
                         </StackPanel>
 
                         <TextBlock Grid.Row="1" Style="{StaticResource S_TextBlock_Graph}">
@@ -695,11 +698,11 @@ StorylineEditor распространяется в надежде, что он�
         </TabControl>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_StepM}">
-                <Setter TargetName="btn_selectable_Step" Property="Style" Value="{StaticResource S_Button_Selected}"></Setter>
+                <Setter TargetName="btn_selectable_Step" Property="Style" Value="{StaticResource S_Button_24x_Selected}"></Setter>
                 <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Step_Type}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_AlternativeM}">
-                <Setter TargetName="btn_selectable_Alternative" Property="Style" Value="{StaticResource S_Button_Selected}"></Setter>
+                <Setter TargetName="btn_selectable_Alternative" Property="Style" Value="{StaticResource S_Button_24x_Selected}"></Setter>
                 <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Alternative_Type}"></Setter>
             </DataTrigger>
         </DataTemplate.Triggers>
@@ -721,12 +724,6 @@ StorylineEditor распространяется в надежде, что он�
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
 
-                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left">
-                    <Button.RenderTransform>
-                        <TranslateTransform X="{StaticResource Double_Icon_Gender_-Width/2}" Y="{StaticResource Double_Icon_Gender_-Height/2}"></TranslateTransform>
-                    </Button.RenderTransform>
-                </Button>
-
                 <Label Content="{StaticResource String_Icon_Node_Step}" Style="{StaticResource S_Label_Node}"></Label>
 
                 <TextBlock VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
@@ -738,6 +735,8 @@ StorylineEditor распространяется в надежде, что он�
                 
                 <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_Result}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
+                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+                
                 <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
                     <Button.RenderTransform>
                         <TranslateTransform X="{StaticResource Double_Button_Node_Remove_Width/2}" Y="{StaticResource Double_Button_Node_Remove_-Height/2}"></TranslateTransform>
@@ -780,12 +779,6 @@ StorylineEditor распространяется в надежде, что он�
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
 
-                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left">
-                    <Button.RenderTransform>
-                        <TranslateTransform X="{StaticResource Double_Icon_Gender_-Width/2}" Y="{StaticResource Double_Icon_Gender_-Height/2}"></TranslateTransform>
-                    </Button.RenderTransform>
-                </Button>
-
                 <Label Content="{StaticResource String_Icon_Node_Alternative}" Style="{StaticResource S_Label_Node}"></Label>
 
                 <TextBlock VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
@@ -797,6 +790,8 @@ StorylineEditor распространяется в надежде, что он�
                 
                 <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_Result}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
+                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+                
                 <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
                     <Button.RenderTransform>
                         <TranslateTransform X="{StaticResource Double_Button_Node_Remove_Width/2}" Y="{StaticResource Double_Button_Node_Remove_-Height/2}"></TranslateTransform>
@@ -828,14 +823,10 @@ StorylineEditor распространяется в надежде, что он�
                     bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
                     bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
             <Grid>
-                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left">
-                    <Button.RenderTransform>
-                        <TranslateTransform X="{StaticResource Double_Icon_Gender_-Width/2}" Y="{StaticResource Double_Icon_Gender_-Height/2}"></TranslateTransform>
-                    </Button.RenderTransform>
-                </Button>
-
                 <Label VerticalAlignment="Center" HorizontalAlignment="Center" Content="{StaticResource String_Icon_Node_Random}" Style="{StaticResource S_Label_Node_Large}"></Label>
 
+                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+                
                 <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
                     <Button.RenderTransform>
                         <TranslateTransform X="{StaticResource Double_Button_Node_Remove_Width/2}" Y="{StaticResource Double_Button_Node_Remove_-Height/2}"></TranslateTransform>
@@ -1073,14 +1064,10 @@ StorylineEditor распространяется в надежде, что он�
                     bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
                     bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
             <Grid>
-                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left">
-                    <Button.RenderTransform>
-                        <TranslateTransform X="{StaticResource Double_Icon_Gender_-Width/2}" Y="{StaticResource Double_Icon_Gender_-Height/2}"></TranslateTransform>
-                    </Button.RenderTransform>
-                </Button>
-
                 <Label VerticalAlignment="Center" HorizontalAlignment="Center" Content="{StaticResource String_Icon_Node_Transit}" Style="{StaticResource S_Label_Node_Large}"></Label>
 
+                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+                
                 <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
                     <Button.RenderTransform>
                         <TranslateTransform X="{StaticResource Double_Button_Node_Remove_Width/2}" Y="{StaticResource Double_Button_Node_Remove_-Height/2}"></TranslateTransform>
@@ -1112,12 +1099,6 @@ StorylineEditor распространяется в надежде, что он�
                     <RowDefinition></RowDefinition>
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
-                
-                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left">
-                    <Button.RenderTransform>
-                        <TranslateTransform X="{StaticResource Double_Icon_Gender_-Width/2}" Y="{StaticResource Double_Icon_Gender_-Height/2}"></TranslateTransform>
-                    </Button.RenderTransform>
-                </Button>
 
                 <Label Content="{StaticResource String_Icon_Node_Replica}" Style="{StaticResource S_Label_Node}"></Label>
 
@@ -1131,6 +1112,8 @@ StorylineEditor распространяется в надежде, что он�
                 
                 <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_ShortDescription}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
+                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+                
                 <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
                     <Button.RenderTransform>
                         <TranslateTransform X="{StaticResource Double_Button_Node_Remove_Width/2}" Y="{StaticResource Double_Button_Node_Remove_-Height/2}"></TranslateTransform>
@@ -1189,12 +1172,6 @@ StorylineEditor распространяется в надежде, что он�
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
 
-                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left">
-                    <Button.RenderTransform>
-                        <TranslateTransform X="{StaticResource Double_Icon_Gender_-Width/2}" Y="{StaticResource Double_Icon_Gender_-Height/2}"></TranslateTransform>
-                    </Button.RenderTransform>
-                </Button>
-
                 <Label Content="{StaticResource String_Icon_Node_Dialog}" Style="{StaticResource S_Label_Node}"></Label>
 
                 <TextBlock x:Name="tb_CharacterName" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Character.name, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"></TextBlock>
@@ -1207,6 +1184,8 @@ StorylineEditor распространяется в надежде, что он�
 
                 <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_ShortDescription}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
+                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+                
                 <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
                     <Button.RenderTransform>
                         <TranslateTransform X="{StaticResource Double_Button_Node_Remove_Width/2}" Y="{StaticResource Double_Button_Node_Remove_-Height/2}"></TranslateTransform>
@@ -1304,16 +1283,16 @@ StorylineEditor распространяется в надежде, что он�
                         </Grid.RowDefinitions>
 
                         <StackPanel Orientation="Horizontal">
-                            <Button x:Name="btn_selectable_Dialog" Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Node_Dialog}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_DialogM}"></Button>
-                            <Button x:Name="btn_selectable_Replica" Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Node_Replica}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_ReplicaM}"></Button>
-                            <Button x:Name="btn_selectable_Random" Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Node_Random}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_RandomM}"></Button>
-                            <Button x:Name="btn_selectable_Transit" Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Node_Transit}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_TransitM}"></Button>
+                            <Button x:Name="btn_selectable_Dialog" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Dialog}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_DialogM}"></Button>
+                            <Button x:Name="btn_selectable_Replica" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Replica}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_ReplicaM}"></Button>
+                            <Button x:Name="btn_selectable_Random" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Random}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_RandomM}"></Button>
+                            <Button x:Name="btn_selectable_Transit" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Transit}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_TransitM}"></Button>
                             <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
-                            <Button Style="{StaticResource S_Button_Base}" Content="⏪" Command="{Binding PrevRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_PrevRootNode_Tooltip}"></Button>
-                            <Button Style="{StaticResource S_Button_Base}" Content="⏩" Command="{Binding NextRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_NextRootNode_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="⏪" Command="{Binding PrevRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_PrevRootNode_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="⏩" Command="{Binding NextRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_NextRootNode_Tooltip}"></Button>
                             <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
-                            <Button Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Graph_Origin}" Command="{Binding GoToOriginCommand}" ToolTip="{StaticResource String_GraphMenu_GoToOrigin_Tooltip}"></Button>
-                            <Button Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Graph_Reset}" Command="{Binding ResetScaleCommand}" ToolTip="{StaticResource String_GraphMenu_ResetScale_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Graph_Origin}" Command="{Binding GoToOriginCommand}" ToolTip="{StaticResource String_GraphMenu_GoToOrigin_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Graph_Reset}" Command="{Binding ResetScaleCommand}" ToolTip="{StaticResource String_GraphMenu_ResetScale_Tooltip}"></Button>
                         </StackPanel>
 
                         <TextBlock Grid.Row="1" Style="{StaticResource S_TextBlock_Graph}">
@@ -1337,19 +1316,19 @@ StorylineEditor распространяется в надежде, что он�
         </TabControl>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_DialogM}">
-                <Setter TargetName="btn_selectable_Dialog" Property="Style" Value="{StaticResource S_Button_Selected}"></Setter>
+                <Setter TargetName="btn_selectable_Dialog" Property="Style" Value="{StaticResource S_Button_24x_Selected}"></Setter>
                 <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Dialog_Type}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_ReplicaM}">
-                <Setter TargetName="btn_selectable_Replica" Property="Style" Value="{StaticResource S_Button_Selected}"></Setter>
+                <Setter TargetName="btn_selectable_Replica" Property="Style" Value="{StaticResource S_Button_24x_Selected}"></Setter>
                 <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Replica_Type}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_RandomM}">
-                <Setter TargetName="btn_selectable_Random" Property="Style" Value="{StaticResource S_Button_Selected}"></Setter>
+                <Setter TargetName="btn_selectable_Random" Property="Style" Value="{StaticResource S_Button_24x_Selected}"></Setter>
                 <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Random_Type}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_TransitM}">
-                <Setter TargetName="btn_selectable_Transit" Property="Style" Value="{StaticResource S_Button_Selected}"></Setter>
+                <Setter TargetName="btn_selectable_Transit" Property="Style" Value="{StaticResource S_Button_24x_Selected}"></Setter>
                 <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Transit_Type}"></Setter>
             </DataTrigger>
         </DataTemplate.Triggers>
@@ -1405,15 +1384,15 @@ StorylineEditor распространяется в надежде, что он�
                         </Grid.RowDefinitions>
 
                         <StackPanel Orientation="Horizontal">
-                            <Button x:Name="btn_selectable_Replica" Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Node_Replica}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_ReplicaM}"></Button>
-                            <Button x:Name="btn_selectable_Random" Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Node_Random}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_RandomM}"></Button>
-                            <Button x:Name="btn_selectable_Transit" Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Node_Transit}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_TransitM}"></Button>
+                            <Button x:Name="btn_selectable_Replica" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Replica}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_ReplicaM}"></Button>
+                            <Button x:Name="btn_selectable_Random" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Random}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_RandomM}"></Button>
+                            <Button x:Name="btn_selectable_Transit" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Transit}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_TransitM}"></Button>
                             <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
-                            <Button Style="{StaticResource S_Button_Base}" Content="⏪" Command="{Binding PrevRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_PrevRootNode_Tooltip}"></Button>
-                            <Button Style="{StaticResource S_Button_Base}" Content="⏩" Command="{Binding NextRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_NextRootNode_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="⏪" Command="{Binding PrevRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_PrevRootNode_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="⏩" Command="{Binding NextRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_NextRootNode_Tooltip}"></Button>
                             <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
-                            <Button Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Graph_Origin}" Command="{Binding GoToOriginCommand}" ToolTip="{StaticResource String_GraphMenu_GoToOrigin_Tooltip}"></Button>
-                            <Button Style="{StaticResource S_Button_Base}" Content="{StaticResource String_Icon_Graph_Reset}" Command="{Binding ResetScaleCommand}" ToolTip="{StaticResource String_GraphMenu_ResetScale_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Graph_Origin}" Command="{Binding GoToOriginCommand}" ToolTip="{StaticResource String_GraphMenu_GoToOrigin_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Graph_Reset}" Command="{Binding ResetScaleCommand}" ToolTip="{StaticResource String_GraphMenu_ResetScale_Tooltip}"></Button>
                         </StackPanel>
 
                         <TextBlock Grid.Row="1" Style="{StaticResource S_TextBlock_Graph}">
@@ -1437,15 +1416,15 @@ StorylineEditor распространяется в надежде, что он�
         </TabControl>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_ReplicaM}">
-                <Setter TargetName="btn_selectable_Replica" Property="Style" Value="{StaticResource S_Button_Selected}"></Setter>
+                <Setter TargetName="btn_selectable_Replica" Property="Style" Value="{StaticResource S_Button_24x_Selected}"></Setter>
                 <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Replica_Type}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_RandomM}">
-                <Setter TargetName="btn_selectable_Random" Property="Style" Value="{StaticResource S_Button_Selected}"></Setter>
+                <Setter TargetName="btn_selectable_Random" Property="Style" Value="{StaticResource S_Button_24x_Selected}"></Setter>
                 <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Random_Type}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_TransitM}">
-                <Setter TargetName="btn_selectable_Transit" Property="Style" Value="{StaticResource S_Button_Selected}"></Setter>
+                <Setter TargetName="btn_selectable_Transit" Property="Style" Value="{StaticResource S_Button_24x_Selected}"></Setter>
                 <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Transit_Type}"></Setter>
             </DataTrigger>
         </DataTemplate.Triggers>
@@ -1588,8 +1567,8 @@ StorylineEditor распространяется в надежде, что он�
                     </Grid.ColumnDefinitions>
                     <ContentControl Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Content="{Binding}" Template="{StaticResource CT_ContentControl_Comparer_List}"></ContentControl>
                     <controls:NumericUpDown Margin="{StaticResource Thickness_Margin_1x}" Grid.Column="1" VerticalAlignment="Center" Value="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
-                                            ButtonIncStyle="{StaticResource S_Button_Base}" ButtonIncContent="{StaticResource String_Icon_Plus}"
-                                            ButtonDecStyle="{StaticResource S_Button_Base}" ButtonDecContent="{StaticResource String_Icon_Minus}"
+                                            ButtonIncStyle="{StaticResource S_Button_Square_Auto}" ButtonIncContent="{StaticResource String_Icon_Plus}"
+                                            ButtonDecStyle="{StaticResource S_Button_Square_Auto}" ButtonDecContent="{StaticResource String_Icon_Minus}"
                                             MinValue="0" MaxValue="64" Step="1"></controls:NumericUpDown>
                 </Grid>
             </GroupBox>
@@ -1620,8 +1599,8 @@ StorylineEditor распространяется в надежде, что он�
                     </Grid.ColumnDefinitions>
                     <ContentControl Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Content="{Binding}" Template="{StaticResource CT_ContentControl_Comparer_List}"></ContentControl>
                     <controls:NumericUpDown Margin="{StaticResource Thickness_Margin_1x}" Grid.Column="1" VerticalAlignment="Center" Value="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
-                                            ButtonIncStyle="{StaticResource S_Button_Base}" ButtonIncContent="{StaticResource String_Icon_Plus}"
-                                            ButtonDecStyle="{StaticResource S_Button_Base}" ButtonDecContent="{StaticResource String_Icon_Minus}"
+                                            ButtonIncStyle="{StaticResource S_Button_Square_Auto}" ButtonIncContent="{StaticResource String_Icon_Plus}"
+                                            ButtonDecStyle="{StaticResource S_Button_Square_Auto}" ButtonDecContent="{StaticResource String_Icon_Minus}"
                                             MinValue="0" MaxValue="64" Step="1"></controls:NumericUpDown>
                 </Grid>
             </GroupBox>
@@ -1672,8 +1651,8 @@ StorylineEditor распространяется в надежде, что он�
                     </Grid.ColumnDefinitions>
                     <ContentControl Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Content="{Binding}" Template="{StaticResource CT_ContentControl_Comparer_List}"></ContentControl>
                     <controls:NumericUpDown_Float Margin="{StaticResource Thickness_Margin_1x}" Grid.Column="1" VerticalAlignment="Center" Value="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
-                                            ButtonIncStyle="{StaticResource S_Button_Base}" ButtonIncContent="{StaticResource String_Icon_Plus}"
-                                            ButtonDecStyle="{StaticResource S_Button_Base}" ButtonDecContent="{StaticResource String_Icon_Minus}"
+                                            ButtonIncStyle="{StaticResource S_Button_Square_Auto}" ButtonIncContent="{StaticResource String_Icon_Plus}"
+                                            ButtonDecStyle="{StaticResource S_Button_Square_Auto}" ButtonDecContent="{StaticResource String_Icon_Minus}"
                                             MinValue="-10" MaxValue="10" Step="0.25"></controls:NumericUpDown_Float>
                 </Grid>
             </GroupBox>
@@ -1867,8 +1846,8 @@ StorylineEditor распространяется в надежде, что он�
                     </Grid.ColumnDefinitions>
                     <ContentControl Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Content="{Binding}" Template="{StaticResource CT_ContentControl_Comparer_List}"></ContentControl>
                     <controls:NumericUpDown_Float Margin="{StaticResource Thickness_Margin_1x}" Grid.Column="1" VerticalAlignment="Center" Value="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
-                                            ButtonIncStyle="{StaticResource S_Button_Base}" ButtonIncContent="{StaticResource String_Icon_Plus}"
-                                            ButtonDecStyle="{StaticResource S_Button_Base}" ButtonDecContent="{StaticResource String_Icon_Minus}"
+                                            ButtonIncStyle="{StaticResource S_Button_Square_Auto}" ButtonIncContent="{StaticResource String_Icon_Plus}"
+                                            ButtonDecStyle="{StaticResource S_Button_Square_Auto}" ButtonDecContent="{StaticResource String_Icon_Minus}"
                                             MinValue="-20" MaxValue="20" Step="0.25"></controls:NumericUpDown_Float>
                 </Grid>
             </GroupBox>

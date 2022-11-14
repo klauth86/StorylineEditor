@@ -24,7 +24,7 @@ StorylineEditor распространяется в надежде, что он�
         <TextBlock Margin="{StaticResource Thickness_Margin_1x}" Text="{Binding UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" TextWrapping="Wrap"></TextBlock>
     </DataTemplate>
 
-    <Style TargetType="Button" x:Key="S_Button_Prop_Rich_Command" BasedOn="{StaticResource S_Button_Square}">
+    <Style TargetType="Button" x:Key="S_Button_Prop_Rich_Command" BasedOn="{StaticResource S_Button_Square_Auto}">
         <Setter Property="FontFamily" Value="{StaticResource FontFamily_Button_Prop_Rich_Command}"></Setter>
         <Setter Property="CommandTarget" Value="{Binding ElementName=rtb_FlowDocument}"></Setter>
     </Style>
@@ -124,17 +124,17 @@ StorylineEditor распространяется в надежде, что он�
 
     <ControlTemplate TargetType="ContentControl" x:Key="CT_ContentControl_Comparer_Value_Int">
         <StackPanel Orientation="Horizontal">
-            <TextBox Margin="{StaticResource Thickness_Margin_1x}" MinWidth="{StaticResource Double_MinWidth_Selector_Icon}" Text="{Binding Text, RelativeSource={RelativeSource Mode=TemplatedParent}, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            <Button Style="{StaticResource S_Button_Base}" Grid.Column="1" Content="{StaticResource String_Icon_Plus}"></Button>
-            <Button Style="{StaticResource S_Button_Base}" Grid.Column="2" Content="{StaticResource String_Icon_Minus}"></Button>
+            <TextBox Margin="{StaticResource Thickness_Margin_1x}" MinWidth="{StaticResource Double_Size_32x}" Text="{Binding Text, RelativeSource={RelativeSource Mode=TemplatedParent}, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <Button Style="{StaticResource S_Button_Square_Auto}" Grid.Column="1" Content="{StaticResource String_Icon_Plus}"></Button>
+            <Button Style="{StaticResource S_Button_Square_Auto}" Grid.Column="2" Content="{StaticResource String_Icon_Minus}"></Button>
         </StackPanel>
     </ControlTemplate>
 
     <ControlTemplate TargetType="ContentControl" x:Key="CT_ContentControl_Comparer_Value_Float">
         <StackPanel Orientation="Horizontal">
-            <TextBox Margin="{StaticResource Thickness_Margin_1x}" MinWidth="{StaticResource Double_MinWidth_Selector_Icon}" Text="{Binding Text, RelativeSource={RelativeSource Mode=TemplatedParent}, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            <Button Style="{StaticResource S_Button_Base}" Grid.Column="1" Content="{StaticResource String_Icon_Plus}"></Button>
-            <Button Style="{StaticResource S_Button_Base}" Grid.Column="2" Content="{StaticResource String_Icon_Minus}"></Button>
+            <TextBox Margin="{StaticResource Thickness_Margin_1x}" MinWidth="{StaticResource Double_Size_32x}" Text="{Binding Text, RelativeSource={RelativeSource Mode=TemplatedParent}, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <Button Style="{StaticResource S_Button_Square_Auto}" Grid.Column="1" Content="{StaticResource String_Icon_Plus}"></Button>
+            <Button Style="{StaticResource S_Button_Square_Auto}" Grid.Column="2" Content="{StaticResource String_Icon_Minus}"></Button>
         </StackPanel>
     </ControlTemplate>
 

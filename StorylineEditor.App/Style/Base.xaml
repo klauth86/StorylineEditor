@@ -48,15 +48,34 @@ StorylineEditor распространяется в надежде, что он�
         </Style.Resources>
     </Style>
 
-    <Style TargetType="Button" x:Key="S_Button_Square" BasedOn="{StaticResource {x:Type Button}}">
+    <Style TargetType="Button" x:Key="S_Button_Square_Auto" BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="Width" Value="{Binding ActualHeight, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=Self}}"></Setter>
+        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_1x}"></Setter>
+        <Setter Property="FontSize" Value="{StaticResource FontSize_VerySmall}"></Setter>
     </Style>
-
-    <Style TargetType="Button" x:Key="S_Button_Base" BasedOn="{StaticResource S_Button_Square}">
+    
+    <Style TargetType="Button" x:Key="S_Button_Square_32x" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Width" Value="{StaticResource Double_Size_32x}"></Setter>
+        <Setter Property="Height" Value="{StaticResource Double_Size_32x}"></Setter>
+        <Setter Property="FontSize" Value="{StaticResource FontSize_VeryLarge}"></Setter>
         <Setter Property="Margin" Value="{StaticResource Thickness_Margin_1x}"></Setter>
     </Style>
 
-    <Style TargetType="Button" x:Key="S_Button_Selected" BasedOn="{StaticResource S_Button_Base}">
+    <Style TargetType="Button" x:Key="S_Button_Square_24x" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Width" Value="{StaticResource Double_Size_24x}"></Setter>
+        <Setter Property="Height" Value="{StaticResource Double_Size_24x}"></Setter>
+        <Setter Property="FontSize" Value="{StaticResource FontSize_Medium}"></Setter>
+        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_1x}"></Setter>
+    </Style>
+    
+    <Style TargetType="Button" x:Key="S_Button_Square_16x" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Width" Value="{StaticResource Double_Size_16x}"></Setter>
+        <Setter Property="Height" Value="{StaticResource Double_Size_16x}"></Setter>
+        <Setter Property="FontSize" Value="{StaticResource FontSize_Medium}"></Setter>
+        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_1x}"></Setter>
+    </Style>
+
+    <Style TargetType="Button" x:Key="S_Button_24x_Selected" BasedOn="{StaticResource S_Button_Square_24x}">
         <Setter Property="Background" Value="{StaticResource Color_Selection_Border}"></Setter>
     </Style>
 
@@ -64,7 +83,7 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="Width" Value="1"></Setter>
         <Setter Property="VerticalAlignment" Value="Stretch"></Setter>
         <Setter Property="Margin" Value="{StaticResource Thickness_Margin_1x}"></Setter>
-        <Setter Property="Fill" Value="{StaticResource Color_Selection_Inactive}"></Setter>
+        <Setter Property="Fill" Value="{StaticResource Color_Separator}"></Setter>
     </Style>
 
     <Style TargetType="controls:ComboBoxExt">
