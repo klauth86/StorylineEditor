@@ -15,7 +15,7 @@ StorylineEditor распространяется в надежде, что он�
     
     <SolidColorBrush x:Key="Color_HitVisible" Color="#01ffffff"/>
 
-    <SolidColorBrush x:Key="Color_Selection_Inactive" Color="Gray"/>
+    <SolidColorBrush x:Key="Color_Selection_Inactive" Color="Silver"/>
 
     <SolidColorBrush x:Key="Color_Selection_Unselected" Color="Silver"/>
 
@@ -39,7 +39,7 @@ StorylineEditor распространяется в надежде, что он�
 
     <SolidColorBrush x:Key="Color_Graph_Background" Color="Gray"/>
 
-    <SolidColorBrush x:Key="Color_Separator" Color="DarkGray" />
+    <SolidColorBrush x:Key="Color_Separator" Color="Silver" />
 
     <SolidColorBrush x:Key="Color_Add" Color="Green" />
 
