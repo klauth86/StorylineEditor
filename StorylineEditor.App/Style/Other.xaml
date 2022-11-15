@@ -135,10 +135,12 @@ StorylineEditor распространяется в надежде, что он�
     </Style>
 
     <Style TargetType="Border" x:Key="S_Border_Node">
+        <Setter Property="Padding" Value="{StaticResource Thickness_Margin_4x}"></Setter>
+        <Setter Property="CornerRadius" Value="{StaticResource CornerRadius_Common}"></Setter>
+        <Setter Property="BorderBrush" Value="{StaticResource Color_Selection_Unselected}"></Setter>
         <Setter Property="BorderThickness" Value="4"></Setter>
         <Setter Property="MinHeight" Value="{StaticResource Double_Node_MinHeight}"></Setter>
         <Setter Property="MinWidth" Value="{StaticResource Double_Node_MinWidth}"></Setter>
-        <Setter Property="MaxHeight" Value="{StaticResource Double_Node_MaxHeight}"></Setter>
         <Setter Property="MaxWidth" Value="{StaticResource Double_Node_MaxWidth}"></Setter>
         <Setter Property="ToolTip" Value="{Binding Id, Mode=OneTime}"></Setter>
         <Setter Property="Background" Value="{StaticResource Color_Graph_Node_Background}"></Setter>
@@ -162,11 +164,11 @@ StorylineEditor распространяется в надежде, что он�
         </Style.Triggers>
     </Style>
 
-    <Style TargetType="Button" x:Key="S_Button_Node_Gender" BasedOn="{StaticResource S_Button_Square_24x}">
+    <Style TargetType="Button" x:Key="S_Button_Node_Gender" BasedOn="{StaticResource S_Button_Square_32x}">
         <Setter Property="Command" Value="{Binding ToggleGenderCommand}"></Setter>
         <Setter Property="RenderTransform">
             <Setter.Value>
-                <TranslateTransform X="{StaticResource Double_Size_16x-}" Y="{StaticResource Double_Size_16x-}"></TranslateTransform>
+                <TranslateTransform X="{StaticResource Double_Size_24x-}" Y="{StaticResource Double_Size_24x-}"></TranslateTransform>
             </Setter.Value>
         </Setter>
         <Style.Triggers>

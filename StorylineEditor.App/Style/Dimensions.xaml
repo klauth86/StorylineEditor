@@ -44,6 +44,8 @@ StorylineEditor распространяется в надежде, что он�
 
     <sys:Double x:Key="Double_Size_24x">24</sys:Double>
 
+    <sys:Double x:Key="Double_Size_24x-">-24</sys:Double>
+    
     <sys:Double x:Key="Double_Size_12x">12</sys:Double>
     
     <sys:Double x:Key="Double_Size_12x-">-12</sys:Double>
