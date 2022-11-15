@@ -96,7 +96,7 @@ StorylineEditor распространяется в надежде, что он�
                 <Setter Property="FontWeight" Value="Bold"></Setter>
             </Trigger>
             <Trigger Property="IsMouseOver" Value="true">
-                <Setter TargetName="br_Main" Property="BorderBrush" Value="{StaticResource Color_Selection_Inactive}"></Setter>
+                <Setter TargetName="br_Main" Property="BorderBrush" Value="{StaticResource Color_Selection_Unselected}"></Setter>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
