@@ -23,8 +23,6 @@ using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel
 {
-    public class FolderProxyM : FolderM { }
-
     public class CollectionVM : Collection_BaseVM<List<BaseM>, object>, ICallbackContext
     {
         public CollectionVM(List<BaseM> inModel, Func<Type, object, BaseM> modelCreator, Func<BaseM, ICallbackContext, Notifier> viewModelCreator,
@@ -43,7 +41,6 @@ namespace StorylineEditor.ViewModel
             }
 
             Context = new ObservableCollection<FolderM>();
-            Context.Add(new FolderProxyM());
             Context.Add(new FolderM() { name = "root", content = inModel });
 
             foreach (var model in Model) { Add(null, _viewModelCreator(model, null)); }
@@ -63,18 +60,6 @@ namespace StorylineEditor.ViewModel
         private ICommand selectCommand;
         public override ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<Notifier>((viewModel) => AddToSelection(viewModel, true), (viewModel) => viewModel != null));
 
-        private ICommand infoCommand;
-        public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<Notifier>((viewModel) => _viewModelInformer(viewModel), (viewModel) => viewModel != null));
-
-        private ICommand upContextCommand;
-        public ICommand UpContextCommand => upContextCommand ?? (upContextCommand = new RelayCommand(() =>
-        {
-            Context.RemoveAt(Context.Count - 1);
-
-            RefreshItemsVMs();
-
-        }, () => Context.Count > 2));
-
         private ICommand setContextCommand;
         public ICommand SetContextCommand => setContextCommand ?? (setContextCommand = new RelayCommand<FolderM>((folderM) =>
         {
@@ -90,10 +75,7 @@ namespace StorylineEditor.ViewModel
 
             if (cutIndex >= 0 && cutIndex + 1 < Context.Count)
             {
-                for (int i = cutIndex + 1; i < Context.Count; i++)
-                {
-                    Context.RemoveAt(i);
-                }
+                for (int i = Context.Count - 1; i > cutIndex; i--) Context.RemoveAt(i);
             }
             else
             {

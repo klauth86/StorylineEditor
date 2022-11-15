@@ -34,8 +34,7 @@ StorylineEditor распространяется в надежде, что он�
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="true">
-                <Setter TargetName="br_Main" Property="BorderBrush" Value="{StaticResource Color_Selection_Border}"></Setter>
-                <Setter Property="Foreground" Value="{StaticResource Color_Selection_Border}"></Setter>
+                <Setter TargetName="br_Main" Property="BorderBrush" Value="{StaticResource Color_Path}"></Setter>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -200,7 +199,7 @@ StorylineEditor распространяется в надежде, что он�
     </Style>
 
     <ItemsPanelTemplate x:Key="IPT_WrapPanel">
-        <WrapPanel></WrapPanel>
+        <WrapPanel Orientation="Horizontal"></WrapPanel>
     </ItemsPanelTemplate>
 
     <ItemsPanelTemplate x:Key="IPT_Canvas">
@@ -232,13 +231,9 @@ StorylineEditor распространяется в надежде, что он�
 
     <!-- Data Templates -->
 
-    <DataTemplate DataType="{x:Type vm:FolderProxyM}">
-        <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Up}" Command="{Binding Path=DataContext.UpContextCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"></Button>
-    </DataTemplate>
-
     <DataTemplate DataType="{x:Type m:FolderM}">
         <Button VerticalAlignment="Center" Template="{StaticResource CT_Button_Path}" Command="{Binding Path=DataContext.SetContextCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}">
-            <TextBlock><Run Text="{Binding name}"></Run><Run Text="/"></Run></TextBlock>
+            <TextBlock Foreground="{StaticResource Color_Path}" FontSize="{StaticResource FontSize_Small}"><Run Text="{Binding name}"></Run><Run Text="/"></Run></TextBlock>
         </Button>
     </DataTemplate>
 
@@ -268,29 +263,24 @@ StorylineEditor распространяется в надежде, что он�
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
                 </Grid.RowDefinitions>
 
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Margin="{StaticResource Thickness_Margin_1x}" Orientation="Horizontal">
                     <Button Background="{StaticResource Color_Add}" Foreground="{StaticResource Color_Link_Foreground}" Content="{StaticResource String_Icon_Add}" ToolTip="{StaticResource String_TabMenu_Add_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding AddCommand}" CommandParameter="{StaticResource False}"></Button>
                     <Button Background="{StaticResource Color_AddFolder}" Foreground="{StaticResource Color_Link_Foreground}" Content="{StaticResource String_Icon_Add}" ToolTip="{StaticResource String_TabMenu_AddFolder_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding AddCommand}" CommandParameter="{StaticResource True}"></Button>
                     <Button Background="{StaticResource Color_Remove}" Foreground="{StaticResource Color_Link_Foreground}" Content="{StaticResource String_Icon_Remove}" ToolTip="{StaticResource String_TabMenu_Remove_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding RemoveCommand}"></Button>
 
                     <Button Content="{StaticResource String_Icon_Cut}" ToolTip="{StaticResource String_TabMenu_Cut_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding CutCommand}"></Button>
                     <Button Content="{StaticResource String_Icon_Paste}" ToolTip="{StaticResource String_TabMenu_Paste_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding PasteCommand}"></Button>
-
-                    <Button Content="{StaticResource String_Icon_Info}" ToolTip="{StaticResource String_TabMenu_Info_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding InfoCommand}"></Button>
                 </StackPanel>
 
-                <GroupBox Grid.Row="1">
-                    <GroupBox.Header>
-                        <ItemsControl ItemsPanel="{StaticResource IPT_WrapPanel}" ItemsSource="{Binding Context}"></ItemsControl>
-                    </GroupBox.Header>
+                <ItemsControl BorderBrush="{StaticResource Color_Path}" BorderThickness="{StaticResource Thickness_Margin_1x}" Margin="{StaticResource Thickness_Margin_1x}" Grid.Row="1" ItemsPanel="{StaticResource IPT_WrapPanel}" ItemsSource="{Binding Context}"></ItemsControl>
 
-                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                        <ItemsControl ItemsSource="{Binding ItemsVMs}"></ItemsControl>
-                    </ScrollViewer>
-                </GroupBox>
+                <ScrollViewer Margin="{StaticResource Thickness_Margin_1x}" Grid.Row="2" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding ItemsVMs}"></ItemsControl>
+                </ScrollViewer>
             </Grid>
 
             <GridSplitter Grid.Column="1"></GridSplitter>
