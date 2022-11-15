@@ -49,28 +49,53 @@ namespace StorylineEditor.ViewModel.Graphs
 
         protected override void PreLinkNodes(INodeVM from, INodeVM to)
         {
-            if (from is Node_Journal_AlternativeVM) // Remove all if linking Alternative to smth
+            if (from is Node_Journal_AlternativeVM) // Remove all if linking Alternative to smth (with respect to Gender)
             {
-                foreach (var fromlinkId in FromNodesLinks[from.Id].ToList()) RemoveLink(fromlinkId);
-            }
-            else
-            {
-                if (to is Node_Journal_AlternativeVM) // Remove all Steps if linking Step to Alternative
+                foreach (var fromlinkId in FromNodesLinks[from.Id].ToList())
                 {
-                    foreach (var fromlinkId in FromNodesLinks[from.Id].ToList())
+                    if (LinksVMs.ContainsKey(fromlinkId))
                     {
-                        if (LinksVMs.ContainsKey(fromlinkId))
+                        if (NodesVMs.ContainsKey(LinksVMs[fromlinkId].ToNodeId))
                         {
-                            if (NodesVMs.ContainsKey(LinksVMs[fromlinkId].ToNodeId))
+                            if (NodesVMs[LinksVMs[fromlinkId].ToNodeId] is Node_Journal_StepVM existingTo)
                             {
-                                if (NodesVMs[LinksVMs[fromlinkId].ToNodeId] is Node_Journal_StepVM) RemoveLink(fromlinkId);
+                                if (existingTo.Gender * to.Gender == 0 || existingTo.Gender == to.Gender) RemoveLink(fromlinkId);
                             }
                         }
                     }
                 }
-                else // Remove all if linking Step to Step
+            }
+            else if (to is Node_Journal_AlternativeVM) // Remove all Steps if linking Step to Alternative
+            {
+                foreach (var fromlinkId in FromNodesLinks[from.Id].ToList())
                 {
-                    foreach (var fromlinkId in FromNodesLinks[from.Id].ToList()) RemoveLink(fromlinkId);
+                    if (LinksVMs.ContainsKey(fromlinkId))
+                    {
+                        if (NodesVMs.ContainsKey(LinksVMs[fromlinkId].ToNodeId))
+                        {
+                            if (NodesVMs[LinksVMs[fromlinkId].ToNodeId] is Node_Journal_StepVM) RemoveLink(fromlinkId);
+                        }
+                    }
+                }
+            }
+            else // Remove all if linking Step to Step (with respect to Gender)
+            {
+                foreach (var fromlinkId in FromNodesLinks[from.Id].ToList())
+                {
+                    if (LinksVMs.ContainsKey(fromlinkId))
+                    {
+                        if (NodesVMs.ContainsKey(LinksVMs[fromlinkId].ToNodeId))
+                        {
+                            if (NodesVMs[LinksVMs[fromlinkId].ToNodeId] is Node_Journal_StepVM existingTo)
+                            {
+                                if (existingTo.Gender * to.Gender == 0 || existingTo.Gender == to.Gender) RemoveLink(fromlinkId);
+                            }
+                            else if (NodesVMs[LinksVMs[fromlinkId].ToNodeId] is Node_Journal_AlternativeVM existingAlternativeTo)
+                            {
+                                RemoveLink(fromlinkId);
+                            }
+                        }
+                    }
                 }
             }
         }

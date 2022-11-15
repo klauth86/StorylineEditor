@@ -13,6 +13,7 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Model;
 using StorylineEditor.Model.Graphs;
 using StorylineEditor.ViewModel.Common;
+using StorylineEditor.ViewModel.Nodes;
 using System;
 using System.Windows;
 
@@ -29,5 +30,7 @@ namespace StorylineEditor.ViewModel.Graphs
            Func<Notifier, ICallbackContext, Notifier> editorCreator, Type defaultNodeType) : base(viewModel.Model, callbackContext,
                 modelCreator, viewModelCreator, editorCreator, defaultNodeType)
         { }
+
+        protected override string CanLinkNodes(INodeVM from, INodeVM to) { return string.Empty; }
     }
 }

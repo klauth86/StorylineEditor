@@ -33,6 +33,8 @@ StorylineEditor распространяется в надежде, что он�
 
     <SolidColorBrush x:Key="Color_Graph_Node_Background" Color="White" />
 
+    <SolidColorBrush x:Key="Color_Graph_Node_Background_Player" Color="LightGreen" />
+
     <SolidColorBrush x:Key="Color_Graph_Background" Color="Gray"/>
 
     <SolidColorBrush x:Key="Color_Separator" Color="DarkGray" />

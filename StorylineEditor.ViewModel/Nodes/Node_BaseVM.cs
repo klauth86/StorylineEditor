@@ -31,6 +31,7 @@ namespace StorylineEditor.ViewModel.Nodes
         double Top { get; set; }
 
         string Id { get; }
+        byte Gender { get; }
         bool IsSelected { get; }
         bool IsRoot { get; set; }
     }

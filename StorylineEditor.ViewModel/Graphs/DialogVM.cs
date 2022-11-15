@@ -13,6 +13,7 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Model;
 using StorylineEditor.Model.Graphs;
 using StorylineEditor.ViewModel.Common;
+using StorylineEditor.ViewModel.Nodes;
 using System;
 using System.ComponentModel;
 using System.Windows;
@@ -44,6 +45,8 @@ namespace StorylineEditor.ViewModel.Graphs
                 FilteredDialogCharacterCVS.View.MoveCurrentTo(DialogCharacter);
             }
         }
+
+        protected override string CanLinkNodes(INodeVM from, INodeVM to) { return string.Empty; }
 
         private bool OnFilter(object sender)
         {
