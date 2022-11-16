@@ -416,7 +416,7 @@ StorylineEditor распространяется в надежде, что он�
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <TextBlock Text="{StaticResource String_Icon_Node_Step}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
-            <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+            <TextBlock Grid.Column="1" Text="{Binding name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
         </Grid>
     </DataTemplate>
 
@@ -427,7 +427,7 @@ StorylineEditor распространяется в надежде, что он�
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <TextBlock Text="{StaticResource String_Icon_Node_Alternative}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
-            <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+            <TextBlock Grid.Column="1" Text="{Binding name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
         </Grid>
     </DataTemplate>
 
@@ -438,7 +438,7 @@ StorylineEditor распространяется в надежде, что он�
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <TextBlock Text="{StaticResource String_Icon_Node_Replica}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
-            <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+            <TextBlock Grid.Column="1" Text="{Binding name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
         </Grid>
     </DataTemplate>
 
@@ -449,7 +449,7 @@ StorylineEditor распространяется в надежде, что он�
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <TextBlock Text="{StaticResource String_Icon_Node_Dialog}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
-            <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+            <TextBlock Grid.Column="1" Text="{Binding name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
         </Grid>
     </DataTemplate>
     
