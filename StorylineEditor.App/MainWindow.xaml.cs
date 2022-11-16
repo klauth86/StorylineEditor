@@ -78,6 +78,9 @@ namespace StorylineEditor.App
                 using (var fileStream = File.Open(path, FileMode.Create))
                 {
                     SerializeService.Serialize(fileStream, storylineVM.Model);
+
+                    var assemblyName = Assembly.GetExecutingAssembly().GetName();
+                    Title = string.Format("{0} [{1}]", assemblyName.Name, path);
                 }
             }
         }
