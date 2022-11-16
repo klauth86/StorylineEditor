@@ -13,6 +13,7 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Helpers;
+using System;
 using System.Windows.Documents;
 using System.Windows.Input;
 
@@ -187,9 +188,14 @@ namespace StorylineEditor.ViewModel.Nodes
                 if (value != documentChangedFlag)
                 {
                     documentChangedFlag = value;
-                    if (DescriptionFlow != null) Description = FlowDocumentHelper.ConvertTo(DescriptionFlow);
+                    
+                    Description = DescriptionFlow != null ? FlowDocumentHelper.ConvertTo(DescriptionFlow) : null;
+
+                    RefreshModelName();
                 }
             }
         }
+
+        protected virtual void RefreshModelName() { }
     }
 }

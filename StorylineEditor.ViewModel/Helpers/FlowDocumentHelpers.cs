@@ -8,10 +8,9 @@ namespace StorylineEditor.ViewModel.Helpers
 {
     public static class FlowDocumentHelper
     {
-        public static string ConvertTo(FlowDocument document)
-        {
-            return XamlWriter.Save(document);
-        }
+        public static string GetTextFromFlowDoc(FlowDocument document) { return document != null ? new TextRange(document.ContentStart, document.ContentEnd).Text : null; }
+
+        public static string ConvertTo(FlowDocument document) { return XamlWriter.Save(document); }
 
         public static FlowDocument ConvertBack(string value)
         {

@@ -77,11 +77,22 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="Margin" Value="{StaticResource Thickness_Margin_2x}"></Setter>
     </Style>
 
+    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Selector_Icon_Mini">
+        <Setter Property="MinWidth" Value="{StaticResource Double_Size_16x}"></Setter>
+        <Setter Property="TextAlignment" Value="Center"></Setter>
+        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+        <Setter Property="FontSize" Value="{StaticResource FontSize_Large}"></Setter>
+        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_2x}"></Setter>
+    </Style>
+    
     <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Selector_Name">
         <Setter Property="VerticalAlignment" Value="Center"></Setter>
     </Style>
 
-
+    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Selector_Name_Mini">
+        <Setter Property="FontSize" Value="{StaticResource FontSize_Small}"></Setter>
+        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+    </Style>
 
     <!-- MAIN MENU -->
 
@@ -409,14 +420,36 @@ StorylineEditor распространяется в надежде, что он�
         </Grid>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type mn:Node_TransitM}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{StaticResource String_Icon_Node_Transit}" Style="{StaticResource S_TextBlock_Selector_Icon_Mini}"></TextBlock>
+            <TextBlock Grid.Column="1" Text="{Binding id, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name_Mini}"></TextBlock>
+        </Grid>
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type mn:Node_RandomM}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{StaticResource String_Icon_Node_Random}" Style="{StaticResource S_TextBlock_Selector_Icon_Mini}"></TextBlock>
+            <TextBlock Grid.Column="1" Text="{Binding id, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name_Mini}"></TextBlock>
+        </Grid>
+    </DataTemplate>
+    
     <DataTemplate DataType="{x:Type mn:Node_StepM}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="{StaticResource String_Icon_Node_Step}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
-            <TextBlock Grid.Column="1" Text="{Binding name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+            <TextBlock Text="{StaticResource String_Icon_Node_Step}" Style="{StaticResource S_TextBlock_Selector_Icon_Mini}"></TextBlock>
+            <TextBlock Grid.Column="1" Text="{Binding name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name_Mini}"></TextBlock>
         </Grid>
     </DataTemplate>
 
@@ -426,8 +459,8 @@ StorylineEditor распространяется в надежде, что он�
                 <ColumnDefinition Width="auto"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="{StaticResource String_Icon_Node_Alternative}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
-            <TextBlock Grid.Column="1" Text="{Binding name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+            <TextBlock Text="{StaticResource String_Icon_Node_Alternative}" Style="{StaticResource S_TextBlock_Selector_Icon_Mini}"></TextBlock>
+            <TextBlock Grid.Column="1" Text="{Binding name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name_Mini}"></TextBlock>
         </Grid>
     </DataTemplate>
 
@@ -437,8 +470,8 @@ StorylineEditor распространяется в надежде, что он�
                 <ColumnDefinition Width="auto"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="{StaticResource String_Icon_Node_Replica}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
-            <TextBlock Grid.Column="1" Text="{Binding name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+            <TextBlock Text="{StaticResource String_Icon_Node_Replica}" Style="{StaticResource S_TextBlock_Selector_Icon_Mini}"></TextBlock>
+            <TextBlock Grid.Column="1" Text="{Binding name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name_Mini}"></TextBlock>
         </Grid>
     </DataTemplate>
 
@@ -448,8 +481,8 @@ StorylineEditor распространяется в надежде, что он�
                 <ColumnDefinition Width="auto"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="{StaticResource String_Icon_Node_Dialog}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
-            <TextBlock Grid.Column="1" Text="{Binding name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+            <TextBlock Text="{StaticResource String_Icon_Node_Dialog}" Style="{StaticResource S_TextBlock_Selector_Icon_Mini}"></TextBlock>
+            <TextBlock Grid.Column="1" Text="{Binding name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name_Mini}"></TextBlock>
         </Grid>
     </DataTemplate>
     
@@ -693,6 +726,7 @@ StorylineEditor распространяется в надежде, что он�
                     <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
                 </StackPanel>
             </TabItem>
+            <TabItem Header="{StaticResource String_Tag_Graph_Tab_Stats}"></TabItem>
         </TabControl>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_StepM}">
@@ -1287,6 +1321,7 @@ StorylineEditor распространяется в надежде, что он�
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
                 </StackPanel>
             </TabItem>
+            <TabItem Header="{StaticResource String_Tag_Graph_Tab_Stats}"></TabItem>
         </TabControl>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_DialogM}">
@@ -1387,6 +1422,7 @@ StorylineEditor распространяется в надежде, что он�
                     <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
                 </StackPanel>
             </TabItem>
+            <TabItem Header="{StaticResource String_Tag_Graph_Tab_Stats}"></TabItem>
         </TabControl>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_ReplicaM}">

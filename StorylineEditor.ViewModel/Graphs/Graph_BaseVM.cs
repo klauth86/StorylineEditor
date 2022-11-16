@@ -14,6 +14,7 @@ using StorylineEditor.Model;
 using StorylineEditor.Model.Graphs;
 using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModel.Common;
+using StorylineEditor.ViewModel.Helpers;
 using StorylineEditor.ViewModel.Nodes;
 using System;
 using System.Collections;
@@ -80,6 +81,19 @@ namespace StorylineEditor.ViewModel.Graphs
                 if (!FromNodesLinks.ContainsKey(nodeModel.id)) FromNodesLinks.Add(nodeModel.id, new HashSet<string>());
                 if (!ToNodesLinks.ContainsKey(nodeModel.id)) ToNodesLinks.Add(nodeModel.id, new HashSet<string>());
                 if (!nodesPositions.ContainsKey(nodeModel.id)) nodesPositions.Add(nodeModel.id, new Tuple<double, double>(nodeModel.positionX, nodeModel.positionY));
+
+                if (nodeModel is Node_ReplicaM replicaNodeModel)
+                {
+                    var flow = FlowDocumentHelper.ConvertBack(replicaNodeModel.description);
+                    var flowDocText = FlowDocumentHelper.GetTextFromFlowDoc(flow);
+                    replicaNodeModel.name = string.Format("[{0}]: {1}", ActiveContextService.GetCharacter(replicaNodeModel.characterId)?.name ?? "???", flowDocText);
+                }
+                else if (nodeModel is Node_DialogM dialogNodeModel)
+                {
+                    var flow = FlowDocumentHelper.ConvertBack(dialogNodeModel.description);
+                    var flowDocText = FlowDocumentHelper.GetTextFromFlowDoc(flow);
+                    dialogNodeModel.name = string.Format("[{0}]: {1}", ActiveContextService.GetCharacter(dialogNodeModel.characterId)?.name ?? "???", flowDocText);
+                }
             }
 
             foreach (var linkModel in Model.links)

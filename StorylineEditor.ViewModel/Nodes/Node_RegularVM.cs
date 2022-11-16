@@ -13,6 +13,7 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Model;
 using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModel.Common;
+using StorylineEditor.ViewModel.Helpers;
 using System.ComponentModel;
 using System.Windows.Data;
 
@@ -68,6 +69,8 @@ namespace StorylineEditor.ViewModel.Nodes
                     Model.characterId = value?.id;
                     OnModelChanged(Model, nameof(Character));
                     Notify(nameof(Character));
+
+                    RefreshModelName();
                 }
             }
         }
@@ -115,6 +118,8 @@ namespace StorylineEditor.ViewModel.Nodes
     public class Node_ReplicaVM : Node_RegularVM<Node_ReplicaM>
     {
         public Node_ReplicaVM(Node_ReplicaM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+
+        protected override void RefreshModelName() { Name = string.Format("[{0}]: {1}", Character?.name ?? "???", FlowDocumentHelper.GetTextFromFlowDoc(DescriptionFlow)); }
     }
 
     public class Node_ReplicaEditorVM : Node_ReplicaVM
@@ -125,6 +130,8 @@ namespace StorylineEditor.ViewModel.Nodes
     public class Node_DialogVM : Node_RegularVM<Node_DialogM>
     {
         public Node_DialogVM(Node_DialogM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+
+        protected override void RefreshModelName() { Name = string.Format("[{0}]: {1}", Character?.name ?? "???", FlowDocumentHelper.GetTextFromFlowDoc(DescriptionFlow)); }
     }
 
     public class Node_DialogEditorVM : Node_DialogVM
