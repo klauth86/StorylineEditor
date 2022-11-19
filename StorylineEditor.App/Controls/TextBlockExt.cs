@@ -48,7 +48,7 @@ namespace StorylineEditor.App.Controls
                         {
                             if (inline is Run run)
                             {
-                                textBlock.Inlines.Add(new Run(run.Text));
+                                textBlock.Inlines.Add(new Run(run.Text) { FontWeight = run.FontWeight, FontStyle = run.FontStyle, TextDecorations = run.TextDecorations });
                             }
                         }
 
