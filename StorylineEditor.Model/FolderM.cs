@@ -43,5 +43,15 @@ namespace StorylineEditor.Model
         }
 
         public List<BaseM> content { get; set; }
+
+        public override bool PassFilter(string filter)
+        {
+            for (int i = 0; i < content.Count; i++)
+            {
+                if (content[i].PassFilter(filter)) return true;
+            }
+
+            return base.PassFilter(filter);
+        }
     }
 }

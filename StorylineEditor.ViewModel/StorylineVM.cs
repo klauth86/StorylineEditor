@@ -231,6 +231,12 @@ namespace StorylineEditor.ViewModel
             }
         }
 
+        private ICommand abstractCutCommand;
+        public ICommand AbstractCutCommand => abstractCutCommand ?? (abstractCutCommand = new RelayCommand(() =>
+        {
+
+        }));
+
         private ICommand abstractCopyCommand;
         public ICommand AbstractCopyCommand => abstractCopyCommand ?? (abstractCopyCommand = new RelayCommand(() =>
         {
@@ -245,5 +251,7 @@ namespace StorylineEditor.ViewModel
 
         private ICommand abstractDeleteCommand;
         public ICommand AbstractDeleteCommand => abstractDeleteCommand ?? (abstractDeleteCommand = new RelayCommand(() => { ActiveContextService.ActiveContext?.Delete(); }));
+
+        public string GlobalFilter { set { Notifier.Filter = value; } }
     }
 }

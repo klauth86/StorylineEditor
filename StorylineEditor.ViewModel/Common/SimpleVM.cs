@@ -10,6 +10,7 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Model;
 using System;
 using System.Windows.Input;
 
@@ -42,21 +43,40 @@ namespace StorylineEditor.ViewModel.Common
         {
             _model = model ?? throw new ArgumentNullException(nameof(model));
             _callbackContext = callbackContext;
+
+            IsFilterPassed = true;
         }
 
         private void OnModelChangedHandler(T model, string propName) { if (Model != null && Model == model) Notify(propName); }
 
-
+        private void OnFilterChangedHandler(string filter)
+        {
+            if (Model is BaseM baseModel)
+            {
+                IsFilterPassed = string.IsNullOrEmpty(filter) || baseModel.PassFilter(filter);
+                Notify(nameof(IsFilterPassed));
+            }
+        }
 
         protected ICommand registerCommand;
         public ICommand RegisterCommand => registerCommand ?? (registerCommand = new RelayCommand(() => RegisterCommandInternal()));
-        protected virtual void RegisterCommandInternal() { ModelChangedEvent += OnModelChangedHandler; }
+        protected virtual void RegisterCommandInternal()
+        {
+            OnFilterChangedHandler(Filter);
+
+            FilterChangedEvent += OnFilterChangedHandler;
+            ModelChangedEvent += OnModelChangedHandler;
+        }
 
 
 
         protected ICommand unregisterCommand;
         public ICommand UnregisterCommand => unregisterCommand ?? (unregisterCommand = new RelayCommand(() => UnregisterCommandInternal()));
-        protected virtual void UnregisterCommandInternal() { ModelChangedEvent -= OnModelChangedHandler; }
+        protected virtual void UnregisterCommandInternal()
+        {
+            ModelChangedEvent -= OnModelChangedHandler;
+            FilterChangedEvent -= OnFilterChangedHandler;
+        }
 
 
 
@@ -67,5 +87,7 @@ namespace StorylineEditor.ViewModel.Common
 
         protected ICommand unregisterContextCommand;
         public ICommand UnregisterContextCommand => unregisterContextCommand ?? (unregisterContextCommand = new RelayCommand(() => ActiveContextService.ActiveContext = null));
+
+        public bool IsFilterPassed { get; set; }
     }
 }

@@ -240,6 +240,11 @@ StorylineEditor распространяется в надежде, что он�
                     <Setter Property="Canvas.ZIndex" Value="{Binding ZIndex, UpdateSourceTrigger=PropertyChanged}"/>
                     <Setter Property="Canvas.Left" Value="{Binding Left, UpdateSourceTrigger=PropertyChanged}"/>
                     <Setter Property="Canvas.Top" Value="{Binding Top, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsFilterPassed, UpdateSourceTrigger=PropertyChanged}" Value="false">
+                            <Setter Property="Control.Visibility" Value="Collapsed"></Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
                 </Style>
             </Setter.Value>
         </Setter>
@@ -295,7 +300,17 @@ StorylineEditor распространяется в надежде, что он�
                 <ItemsControl BorderBrush="{StaticResource Color_Path}" BorderThickness="{StaticResource Thickness_Margin_1x}" Margin="{StaticResource Thickness_Margin_1x}" Grid.Row="1" ItemsPanel="{StaticResource IPT_WrapPanel}" ItemsSource="{Binding Context}"></ItemsControl>
 
                 <ScrollViewer Margin="{StaticResource Thickness_Margin_1x}" Grid.Row="2" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                    <ItemsControl ItemsSource="{Binding ItemsVMs}"></ItemsControl>
+                    <ItemsControl ItemsSource="{Binding ItemsVMs}">
+                        <ItemsControl.ItemContainerStyle>
+                            <Style>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsFilterPassed, UpdateSourceTrigger=PropertyChanged}" Value="false">
+                                        <Setter Property="Control.Visibility" Value="Collapsed"></Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                    </ItemsControl>
                 </ScrollViewer>
             </Grid>
 
