@@ -252,6 +252,14 @@ namespace StorylineEditor.ViewModel
         private ICommand abstractDeleteCommand;
         public ICommand AbstractDeleteCommand => abstractDeleteCommand ?? (abstractDeleteCommand = new RelayCommand(() => { ActiveContextService.ActiveContext?.Delete(); }));
 
-        public string GlobalFilter { set { Notifier.Filter = value; } }
+        public string GlobalFilter
+        {
+            get => Notifier.Filter;
+            set
+            {
+                Notifier.Filter = value;
+                Notify(nameof(GlobalFilter));
+            }
+        }
     }
 }

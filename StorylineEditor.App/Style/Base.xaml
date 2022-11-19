@@ -41,6 +41,13 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="TextWrapping" Value="Wrap"></Setter>
     </Style>
 
+    <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}" x:Key="S_TextBox_Filter_ToolTip">
+        <Setter Property="IsHitTestVisible" Value="False"></Setter>
+        <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="BorderBrush" Value="Transparent"></Setter>
+        <Setter Property="Foreground" Value="{StaticResource Color_ToolTip}"></Setter>
+    </Style>
+    
     <Style TargetType="TextBox" BasedOn="{StaticResource S_TextBox}" x:Key="S_TextBox_Graph"></Style>
 
     <Style TargetType="Button">

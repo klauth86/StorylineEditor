@@ -398,7 +398,7 @@ StorylineEditor распространяется в надежде, что он�
                                                 <RowDefinition Height="*"></RowDefinition>
                                             </Grid.RowDefinitions>
                                             <TextBox Background="{StaticResource ComboBox.Static.Editable.Background}" Margin="0, 8, 0, 4" x:Name="tb_Filter" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}"></TextBox>
-                                            <TextBox Margin="0, 8, 0, 4" x:Name="tb_FilterPlaceholder" IsReadOnly="True" Background="Transparent" BorderBrush="Transparent" IsHitTestVisible="False" Text="{StaticResource String_Tag_ComboBoxExt_Filter_Tooltip}" Visibility="Collapsed"></TextBox>
+                                            <TextBox Margin="0, 8, 0, 4" x:Name="tb_FilterPlaceholder" Style="{StaticResource S_TextBox_Filter_ToolTip}" Text="{StaticResource String_Tag_ComboBoxExt_Filter_Tooltip}" Visibility="Collapsed"></TextBox>
                                             <ScrollViewer Grid.Row="1" x:Name="DropDownScrollViewer">
                                                 <Grid x:Name="grid" RenderOptions.ClearTypeHint="Enabled">
                                                     <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">

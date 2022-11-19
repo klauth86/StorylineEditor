@@ -15,29 +15,41 @@ StorylineEditor распространяется в надежде, что он�
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:vmc="clr-namespace:StorylineEditor.ViewModel.Common;assembly=StorylineEditor.ViewModel"
-        mc:Ignorable="d" Title="MainWindow" WindowState="Maximized">
-    <DockPanel>
-        <Border DockPanel.Dock="Top" BorderThickness="0,0,0,0.5" BorderBrush="Black" Margin="0,0,0,2">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Button x:Name="btn_Open" ToolTip="{StaticResource String_MainMenu_Open_Tooltip}" Style="{StaticResource S_Button_Square_32x}" Click="btn_Open_Click" Content="{StaticResource String_Icon_Open}"></Button>
-                <Button Grid.Column="1" x:Name="btn_Save"  ToolTip="{StaticResource String_MainMenu_Save_Tooltip}" Style="{StaticResource S_Button_Square_32x}" Click="btn_Save_Click" Content="{StaticResource String_Icon_Save}"></Button>
-                <Rectangle Grid.Column="2" Style="{StaticResource S_Rectangle_MainMenu}"></Rectangle>
-                <ContentControl VerticalAlignment="Bottom" Grid.Column="3" Content="{Binding UpdateSourceTrigger=PropertyChanged}" ContentTemplate="{StaticResource DT_StorylineVM_Tabs}"></ContentControl>
-                <Rectangle Grid.Column="4" Style="{StaticResource S_Rectangle_MainMenu}"></Rectangle>
-                <TextBox VerticalAlignment="Bottom" Grid.Column="5" Style="{StaticResource S_TextBox_Filter}" Text="{Binding GlobalFilter, UpdateSourceTrigger=PropertyChanged}" MaxLength="128"></TextBox>
-            </Grid>
-        </Border>
-        <ContentControl Content="{Binding UpdateSourceTrigger=PropertyChanged}" ContentTemplate="{StaticResource DT_StorylineVM_Selection}"></ContentControl>
-    </DockPanel>
+        mc:Ignorable="d" Title="MainWindow" WindowState="Maximized" Content="{Binding}">
+    <Window.ContentTemplate>
+        <DataTemplate>
+            <DockPanel>
+                <Border DockPanel.Dock="Top" BorderThickness="0,0,0,0.5" BorderBrush="Black">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="btn_Open" ToolTip="{StaticResource String_MainMenu_Open_Tooltip}" Style="{StaticResource S_Button_Square_32x}" Click="btn_Open_Click" Content="{StaticResource String_Icon_Open}"></Button>
+                        <Button Grid.Column="1" x:Name="btn_Save"  ToolTip="{StaticResource String_MainMenu_Save_Tooltip}" Style="{StaticResource S_Button_Square_32x}" Click="btn_Save_Click" Content="{StaticResource String_Icon_Save}"></Button>
+                        <Rectangle Grid.Column="2" Style="{StaticResource S_Rectangle_MainMenu}"></Rectangle>
+                        <ContentControl VerticalAlignment="Bottom" Grid.Column="3" Content="{Binding UpdateSourceTrigger=PropertyChanged}" ContentTemplate="{StaticResource DT_StorylineVM_Tabs}"></ContentControl>
+                        <Rectangle Grid.Column="4" Style="{StaticResource S_Rectangle_MainMenu}"></Rectangle>
+                        <TextBox VerticalAlignment="Bottom" Grid.Column="5" Style="{StaticResource S_TextBox_Filter}" Text="{Binding GlobalFilter, UpdateSourceTrigger=PropertyChanged}" MaxLength="128"></TextBox>
+                        <TextBox VerticalAlignment="Bottom" Grid.Column="5" x:Name="tb_FilterPlaceholder" Style="{StaticResource S_TextBox_Filter_ToolTip}" Text="{StaticResource String_Tag_GlobalFilter_Tooltip}" Visibility="Collapsed"></TextBox>
+                    </Grid>
+                </Border>
+                <ContentControl Content="{Binding UpdateSourceTrigger=PropertyChanged}" ContentTemplate="{StaticResource DT_StorylineVM_Selection}"></ContentControl>
+            </DockPanel>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding GlobalFilter, UpdateSourceTrigger=PropertyChanged}" Value="">
+                    <Setter TargetName="tb_FilterPlaceholder" Property="Visibility" Value="Visible"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding GlobalFilter, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                    <Setter TargetName="tb_FilterPlaceholder" Property="Visibility" Value="Visible"></Setter>
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+    </Window.ContentTemplate>
     <Window.InputBindings>
         <KeyBinding Key="X" Command="{Binding AbstractCutCommand}" Modifiers="Ctrl"></KeyBinding>
         <KeyBinding Key="C" Command="{Binding AbstractCopyCommand}" Modifiers="Ctrl"></KeyBinding>
