@@ -24,21 +24,19 @@ StorylineEditor распространяется в надежде, что он�
         <TextBlock Margin="{StaticResource Thickness_Margin_1x}" Text="{Binding UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" TextWrapping="Wrap"></TextBlock>
     </DataTemplate>
 
-    <Style TargetType="Button" x:Key="S_Button_Prop_Rich_Command" BasedOn="{StaticResource S_Button_Square_Auto}">
-        <Setter Property="FontFamily" Value="{StaticResource FontFamily_Button_Prop_Rich_Command}"></Setter>
-        <Setter Property="CommandTarget" Value="{Binding ElementName=rtb_FlowDocument}"></Setter>
-    </Style>
-
     <DataTemplate x:Key="DT_GroupBox_HeaderTemplate_Prop_Rich">
         <StackPanel Orientation="Horizontal">
             <TextBlock Margin="{StaticResource Thickness_Margin_1x}" Text="{Binding UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" TextWrapping="Wrap"></TextBlock>
-            <Button Style="{StaticResource S_Button_Prop_Rich_Command}" Command="EditingCommands.ToggleBold" ToolTip="Bold">
+            <Button Style="{StaticResource S_Button_Square_Auto}" Command="EditingCommands.ToggleBold" ToolTip="Bold" FontFamily="{StaticResource FontFamily_Button_Prop_Rich_Command}"
+                    CommandTarget="{Binding Tag, RelativeSource={RelativeSource AncestorType=GroupBox}}">
                 <TextBlock FontWeight="Bold">B</TextBlock>
             </Button>
-            <Button Style="{StaticResource S_Button_Prop_Rich_Command}" Command="EditingCommands.ToggleItalic" ToolTip="Italic">
+            <Button Style="{StaticResource S_Button_Square_Auto}" Command="EditingCommands.ToggleItalic" ToolTip="Italic" FontFamily="{StaticResource FontFamily_Button_Prop_Rich_Command}"
+                    CommandTarget="{Binding Tag, RelativeSource={RelativeSource AncestorType=GroupBox}}">
                 <TextBlock FontStyle="Italic" FontWeight="Bold">I</TextBlock>
             </Button>
-            <Button Style="{StaticResource S_Button_Prop_Rich_Command}" Command="EditingCommands.ToggleUnderline" ToolTip="Underline">
+            <Button Style="{StaticResource S_Button_Square_Auto}" Command="EditingCommands.ToggleUnderline" ToolTip="Underline" FontFamily="{StaticResource FontFamily_Button_Prop_Rich_Command}"
+                    CommandTarget="{Binding Tag, RelativeSource={RelativeSource AncestorType=GroupBox}}">
                 <TextBlock TextDecorations="Underline" FontWeight="Bold">U</TextBlock>
             </Button>
         </StackPanel>
@@ -66,7 +64,7 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TextBox">
-                    <GroupBox Style="{StaticResource S_GroupBox_Prop}" Header="{TemplateBinding Tag}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                    <GroupBox Style="{StaticResource S_GroupBox_Prop}" Header="{TemplateBinding Tag}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}" Tag="{Binding ElementName=rtb_FlowDocument}">
                         <controls:RichTextBoxExt x:Name="rtb_FlowDocument" MinHeight="{StaticResource Double_Node_MinHeight}"
                                                  BindableDocument="{Binding DescriptionFlow, UpdateSourceTrigger=PropertyChanged}"
                                                  DocumentChangedFlag="{Binding DocumentChangedFlag, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></controls:RichTextBoxExt>

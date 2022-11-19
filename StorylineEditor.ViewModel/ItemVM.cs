@@ -12,6 +12,8 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model;
 using StorylineEditor.ViewModel.Common;
+using StorylineEditor.ViewModel.Helpers;
+using System.Windows.Documents;
 
 namespace StorylineEditor.ViewModel
 {
@@ -124,6 +126,126 @@ namespace StorylineEditor.ViewModel
                 {
                     Model.internalDescriptionFemale = value;
                     OnModelChanged(Model, nameof(InternalDescriptionFemale));
+                }
+            }
+        }
+
+        protected FlowDocument descriptionFlow;
+        public FlowDocument DescriptionFlow
+        {
+            get
+            {
+                if (descriptionFlow == null)
+                {
+                    descriptionFlow = FlowDocumentHelper.ConvertBack(Description);
+                    descriptionFlow.Name = Id;
+                }
+
+                return descriptionFlow;
+            }
+        }
+
+        protected bool documentChangedFlag;
+        public bool DocumentChangedFlag
+        {
+            get => documentChangedFlag;
+            set
+            {
+                if (value != documentChangedFlag)
+                {
+                    documentChangedFlag = value;
+
+                    Description = DescriptionFlow != null ? FlowDocumentHelper.ConvertTo(DescriptionFlow) : null;
+                }
+            }
+        }
+
+        protected FlowDocument descriptionFlowFemale;
+        public FlowDocument DescriptionFlowFemale
+        {
+            get
+            {
+                if (descriptionFlowFemale == null)
+                {
+                    descriptionFlowFemale = FlowDocumentHelper.ConvertBack(DescriptionFemale);
+                    descriptionFlowFemale.Name = Id;
+                }
+
+                return descriptionFlowFemale;
+            }
+        }
+
+        protected bool documentChangedFlagFemale;
+        public bool DocumentChangedFlagFemale
+        {
+            get => documentChangedFlagFemale;
+            set
+            {
+                if (value != documentChangedFlagFemale)
+                {
+                    documentChangedFlagFemale = value;
+
+                    DescriptionFemale = DescriptionFlowFemale != null ? FlowDocumentHelper.ConvertTo(DescriptionFlowFemale) : null;
+                }
+            }
+        }
+
+        protected FlowDocument internalDescriptionFlow;
+        public FlowDocument InternalDescriptionFlow
+        {
+            get
+            {
+                if (internalDescriptionFlow == null)
+                {
+                    internalDescriptionFlow = FlowDocumentHelper.ConvertBack(InternalDescription);
+                    internalDescriptionFlow.Name = Id;
+                }
+
+                return internalDescriptionFlow;
+            }
+        }
+
+        protected bool internalDocumentChangedFlag;
+        public bool InternalDocumentChangedFlag
+        {
+            get => internalDocumentChangedFlag;
+            set
+            {
+                if (value != internalDocumentChangedFlag)
+                {
+                    internalDocumentChangedFlag = value;
+
+                    InternalDescription = InternalDescriptionFlow != null ? FlowDocumentHelper.ConvertTo(InternalDescriptionFlow) : null;
+                }
+            }
+        }
+
+        protected FlowDocument internalDescriptionFlowFemale;
+        public FlowDocument InternalDescriptionFlowFemale
+        {
+            get
+            {
+                if (internalDescriptionFlowFemale == null)
+                {
+                    internalDescriptionFlowFemale = FlowDocumentHelper.ConvertBack(InternalDescriptionFemale);
+                    internalDescriptionFlowFemale.Name = Id;
+                }
+
+                return internalDescriptionFlowFemale;
+            }
+        }
+
+        protected bool internalDocumentChangedFlagFemale;
+        public bool InternalDocumentChangedFlagFemale
+        {
+            get => internalDocumentChangedFlagFemale;
+            set
+            {
+                if (value != internalDocumentChangedFlagFemale)
+                {
+                    internalDocumentChangedFlagFemale = value;
+
+                    InternalDescriptionFemale = InternalDescriptionFlowFemale != null ? FlowDocumentHelper.ConvertTo(InternalDescriptionFlowFemale) : null;
                 }
             }
         }

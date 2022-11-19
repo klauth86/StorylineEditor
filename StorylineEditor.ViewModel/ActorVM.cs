@@ -12,6 +12,8 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model;
 using StorylineEditor.ViewModel.Common;
+using StorylineEditor.ViewModel.Helpers;
+using System.Windows.Documents;
 
 namespace StorylineEditor.ViewModel
 {
@@ -72,6 +74,66 @@ namespace StorylineEditor.ViewModel
                 {
                     Model.classPathName = value;
                     OnModelChanged(Model, nameof(ClassPathName));
+                }
+            }
+        }
+
+        protected FlowDocument descriptionFlow;
+        public FlowDocument DescriptionFlow
+        {
+            get
+            {
+                if (descriptionFlow == null)
+                {
+                    descriptionFlow = FlowDocumentHelper.ConvertBack(Description);
+                    descriptionFlow.Name = Id;
+                }
+
+                return descriptionFlow;
+            }
+        }
+
+        protected bool documentChangedFlag;
+        public bool DocumentChangedFlag
+        {
+            get => documentChangedFlag;
+            set
+            {
+                if (value != documentChangedFlag)
+                {
+                    documentChangedFlag = value;
+
+                    Description = DescriptionFlow != null ? FlowDocumentHelper.ConvertTo(DescriptionFlow) : null;
+                }
+            }
+        }
+
+        protected FlowDocument descriptionFlowFemale;
+        public FlowDocument DescriptionFlowFemale
+        {
+            get
+            {
+                if (descriptionFlowFemale == null)
+                {
+                    descriptionFlowFemale = FlowDocumentHelper.ConvertBack(DescriptionFemale);
+                    descriptionFlowFemale.Name = Id;
+                }
+
+                return descriptionFlowFemale;
+            }
+        }
+
+        protected bool documentChangedFlagFemale;
+        public bool DocumentChangedFlagFemale
+        {
+            get => documentChangedFlagFemale;
+            set
+            {
+                if (value != documentChangedFlagFemale)
+                {
+                    documentChangedFlagFemale = value;
+
+                    DescriptionFemale = DescriptionFlowFemale != null ? FlowDocumentHelper.ConvertTo(DescriptionFlowFemale) : null;
                 }
             }
         }

@@ -495,8 +495,16 @@ StorylineEditor распространяется в надежде, что он�
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition x:Name="cd_DescriptionFemale" Width="0"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <TextBox x:Name="tb_Description" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
-                <TextBox Grid.Column="1" Text="{Binding DescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_DescriptionFemale}"></TextBox>
+                <GroupBox x:Name="gb_Description" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}" Tag="{Binding ElementName=rtb_FlowDocument}">
+                    <controls:RichTextBoxExt x:Name="rtb_FlowDocument" MinHeight="{StaticResource Double_Node_MinHeight}"
+                                                 BindableDocument="{Binding DescriptionFlow, UpdateSourceTrigger=PropertyChanged}"
+                                                 DocumentChangedFlag="{Binding DocumentChangedFlag, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></controls:RichTextBoxExt>
+                </GroupBox>
+                <GroupBox Grid.Column="1" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_DescriptionFemale}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}" Tag="{Binding ElementName=rtb_FlowDocumentFemale}">
+                    <controls:RichTextBoxExt x:Name="rtb_FlowDocumentFemale" MinHeight="{StaticResource Double_Node_MinHeight}"
+                                                 BindableDocument="{Binding DescriptionFlowFemale, UpdateSourceTrigger=PropertyChanged}"
+                                                 DocumentChangedFlag="{Binding DocumentChangedFlagFemale, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></controls:RichTextBoxExt>
+                </GroupBox>
             </Grid>
             <TextBox Text="{Binding ActorName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_ActorName}"></TextBox>
             <TextBox Text="{Binding ClassPathName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_ClassPathName}"></TextBox>
@@ -519,7 +527,7 @@ StorylineEditor распространяется в надежде, что он�
         </StackPanel>
         <DataTemplate.Triggers>
             <Trigger SourceName="cb_HasDescriptionFemale" Property="IsChecked" Value="true">
-                <Setter TargetName="tb_Description" Property="Tag" Value="{StaticResource String_Tag_DescriptionMale}"></Setter>
+                <Setter TargetName="gb_Description" Property="Header" Value="{StaticResource String_Tag_DescriptionMale}"></Setter>
                 <Setter TargetName="cd_DescriptionFemale" Property="Width" Value="*"></Setter>
             </Trigger>
         </DataTemplate.Triggers>
@@ -554,15 +562,23 @@ StorylineEditor распространяется в надежде, что он�
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition x:Name="cd_DescriptionFemale" Width="0"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <TextBox x:Name="tb_Description" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
-                <TextBox Grid.Column="1" Text="{Binding DescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_DescriptionFemale}"></TextBox>
+                <GroupBox x:Name="gb_Description" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}" Tag="{Binding ElementName=rtb_FlowDocument}">
+                    <controls:RichTextBoxExt x:Name="rtb_FlowDocument" MinHeight="{StaticResource Double_Node_MinHeight}"
+                                                 BindableDocument="{Binding DescriptionFlow, UpdateSourceTrigger=PropertyChanged}"
+                                                 DocumentChangedFlag="{Binding DocumentChangedFlag, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></controls:RichTextBoxExt>
+                </GroupBox>
+                <GroupBox Grid.Column="1" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_DescriptionFemale}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}" Tag="{Binding ElementName=rtb_FlowDocumentFemale}">
+                    <controls:RichTextBoxExt x:Name="rtb_FlowDocumentFemale" MinHeight="{StaticResource Double_Node_MinHeight}"
+                                                 BindableDocument="{Binding DescriptionFlowFemale, UpdateSourceTrigger=PropertyChanged}"
+                                                 DocumentChangedFlag="{Binding DocumentChangedFlagFemale, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></controls:RichTextBoxExt>
+                </GroupBox>
             </Grid>
             <TextBox Text="{Binding ActorName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_ActorName}"></TextBox>
             <TextBox Text="{Binding ClassPathName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_ClassPathName}"></TextBox>
         </StackPanel>
         <DataTemplate.Triggers>
             <Trigger SourceName="cb_HasDescriptionFemale" Property="IsChecked" Value="true">
-                <Setter TargetName="tb_Description" Property="Tag" Value="{StaticResource String_Tag_DescriptionMale}"></Setter>
+                <Setter TargetName="gb_Description" Property="Header" Value="{StaticResource String_Tag_DescriptionMale}"></Setter>
                 <Setter TargetName="cd_DescriptionFemale" Property="Width" Value="*"></Setter>
             </Trigger>
         </DataTemplate.Triggers>
@@ -597,8 +613,16 @@ StorylineEditor распространяется в надежде, что он�
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition x:Name="cd_DescriptionFemale" Width="0"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <TextBox x:Name="tb_Description" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
-                <TextBox Grid.Column="1" Text="{Binding DescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_DescriptionFemale}"></TextBox>
+                <GroupBox x:Name="gb_Description" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}" Tag="{Binding ElementName=rtb_FlowDocument}">
+                    <controls:RichTextBoxExt x:Name="rtb_FlowDocument" MinHeight="{StaticResource Double_Node_MinHeight}"
+                                                 BindableDocument="{Binding DescriptionFlow, UpdateSourceTrigger=PropertyChanged}"
+                                                 DocumentChangedFlag="{Binding DocumentChangedFlag, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></controls:RichTextBoxExt>
+                </GroupBox>
+                <GroupBox Grid.Column="1" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_DescriptionFemale}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}" Tag="{Binding ElementName=rtb_FlowDocumentFemale}">
+                    <controls:RichTextBoxExt x:Name="rtb_FlowDocumentFemale" MinHeight="{StaticResource Double_Node_MinHeight}"
+                                                 BindableDocument="{Binding DescriptionFlowFemale, UpdateSourceTrigger=PropertyChanged}"
+                                                 DocumentChangedFlag="{Binding DocumentChangedFlagFemale, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></controls:RichTextBoxExt>
+                </GroupBox>
             </Grid>
 
             <CheckBox x:Name="cb_HasInternalDescription" IsChecked="{Binding HasInternalDescription, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_CheckBox_Prop}" Tag="{StaticResource String_Tag_HasInternalDescription}"></CheckBox>
@@ -608,8 +632,16 @@ StorylineEditor распространяется в надежде, что он�
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition x:Name="cd_InternalDescriptionFemale" Width="0"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <TextBox x:Name="tb_InternalDescription" Text="{Binding InternalDescription, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_InternalDescription}"></TextBox>
-                <TextBox Grid.Column="1" Text="{Binding InternalDescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_InternalDescriptionFemale}"></TextBox>
+                <GroupBox x:Name="gb_InternalDescription" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_InternalDescription}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}" Tag="{Binding ElementName=rtb_InternalFlowDocument}">
+                    <controls:RichTextBoxExt x:Name="rtb_InternalFlowDocument" MinHeight="{StaticResource Double_Node_MinHeight}"
+                                                 BindableDocument="{Binding InternalDescriptionFlow, UpdateSourceTrigger=PropertyChanged}"
+                                                 DocumentChangedFlag="{Binding InternalDocumentChangedFlag, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></controls:RichTextBoxExt>
+                </GroupBox>
+                <GroupBox Grid.Column="1" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_InternalDescriptionFemale}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}" Tag="{Binding ElementName=rtb_InternalFlowDocumentFemale}">
+                    <controls:RichTextBoxExt x:Name="rtb_InternalFlowDocumentFemale" MinHeight="{StaticResource Double_Node_MinHeight}"
+                                                 BindableDocument="{Binding InternalDescriptionFlowFemale, UpdateSourceTrigger=PropertyChanged}"
+                                                 DocumentChangedFlag="{Binding InternalDocumentChangedFlagFemale, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></controls:RichTextBoxExt>
+                </GroupBox>
             </Grid>
 
             <TextBox Text="{Binding ActorName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_ActorName}"></TextBox>
@@ -617,7 +649,7 @@ StorylineEditor распространяется в надежде, что он�
         </StackPanel>
         <DataTemplate.Triggers>
             <Trigger SourceName="cb_HasDescriptionFemale" Property="IsChecked" Value="true">
-                <Setter TargetName="tb_Description" Property="Tag" Value="{StaticResource String_Tag_DescriptionMale}"></Setter>
+                <Setter TargetName="gb_Description" Property="Header" Value="{StaticResource String_Tag_DescriptionMale}"></Setter>
                 <Setter TargetName="cd_DescriptionFemale" Property="Width" Value="*"></Setter>
             </Trigger>
             <Trigger SourceName="cb_HasInternalDescription" Property="IsChecked" Value="false">
@@ -625,7 +657,7 @@ StorylineEditor распространяется в надежде, что он�
                 <Setter TargetName="gr_InternalDescription" Property="Visibility" Value="Collapsed"></Setter>
             </Trigger>
             <Trigger SourceName="cb_HasInternalDescriptionFemale" Property="IsChecked" Value="true">
-                <Setter TargetName="tb_InternalDescription" Property="Tag" Value="{StaticResource String_Tag_InternalDescriptionMale}"></Setter>
+                <Setter TargetName="gb_InternalDescription" Property="Header" Value="{StaticResource String_Tag_InternalDescriptionMale}"></Setter>
                 <Setter TargetName="cd_InternalDescriptionFemale" Property="Width" Value="*"></Setter>
             </Trigger>
         </DataTemplate.Triggers>
