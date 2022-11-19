@@ -18,6 +18,8 @@ namespace StorylineEditor.ViewModel.Nodes
     {
         public SelectionBoxVM() : base()
         {
+            IsFilterPassed = true;
+
             zIndex = 20000;
             strokeThicknessBase = 1;
         }
