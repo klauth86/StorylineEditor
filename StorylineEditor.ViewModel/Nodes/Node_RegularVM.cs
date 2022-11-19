@@ -25,7 +25,7 @@ namespace StorylineEditor.ViewModel.Nodes
 
         public Node_RegularVM(T model, ICallbackContext callbackContext) : base(model, callbackContext)
         {
-            Model.characterId = CharacterM.PLAYER_ID;
+            Model.characterId = Model.characterId ?? CharacterM.PLAYER_ID;
 
             FilteredCharacterCVS = new CollectionViewSource() { Source = ActiveContextService.Characters };
 
