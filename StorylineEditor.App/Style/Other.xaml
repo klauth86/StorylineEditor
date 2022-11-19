@@ -234,6 +234,7 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="bhvrs:MouseExtBehavior.MouseMoveCommand" Value="{Binding MoveCommand}"></Setter>
         <Setter Property="bhvrs:MouseExtBehavior.MouseWheelCommand" Value="{Binding ScaleCommand}"></Setter>
         <Setter Property="bhvrs:LoadUnloadExtBehavior.LoadedCommand" Value="{Binding InitCommand}"></Setter>
+        <Setter Property="bhvrs:LoadUnloadExtBehavior.UnloadedCommand" Value="{Binding UnInitCommand}"></Setter>
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
                 <Style TargetType="ContentPresenter">

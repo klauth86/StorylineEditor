@@ -519,7 +519,20 @@ namespace StorylineEditor.ViewModel.Graphs
         }));
 
         protected ICommand initCommand;
-        public ICommand InitCommand => initCommand ?? (initCommand = new RelayCommand<RoutedEventArgs>((args) => TranslateView(0, 0), (args) => args != null));
+        public ICommand InitCommand => initCommand ?? (initCommand = new RelayCommand<RoutedEventArgs>((args) =>
+        {
+            TranslateView(0, 0);
+
+            OnPostFilterChangedHandler(Filter);
+
+            PostFilterChangedEvent += OnPostFilterChangedHandler;
+        }, (args) => args != null));
+
+        protected ICommand unInitCommand;
+        public ICommand UnInitCommand => unInitCommand ?? (unInitCommand = new RelayCommand<RoutedEventArgs>((args) =>
+        {
+            PostFilterChangedEvent -= OnPostFilterChangedHandler;
+        }));
 
         protected ICommand scaleCommand;
         public ICommand ScaleCommand => scaleCommand ?? (scaleCommand = new RelayCommand<MouseWheelEventArgs>((args) =>
@@ -1152,6 +1165,17 @@ namespace StorylineEditor.ViewModel.Graphs
                 {
                     Model.description = value;
                     OnModelChanged(Model, nameof(Description));
+                }
+            }
+        }
+
+        protected void OnPostFilterChangedHandler(string filter)
+        {
+            foreach (var linkEntry in LinksVMs)
+            {
+                if (NodesVMs.ContainsKey(linkEntry.Value.FromNodeId) && NodesVMs.ContainsKey(linkEntry.Value.ToNodeId))
+                {
+                    linkEntry.Value.IsFilterPassed = NodesVMs[linkEntry.Value.FromNodeId].IsFilterPassed && NodesVMs[linkEntry.Value.ToNodeId].IsFilterPassed;
                 }
             }
         }

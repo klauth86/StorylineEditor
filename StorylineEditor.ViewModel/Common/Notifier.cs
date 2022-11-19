@@ -22,6 +22,8 @@ namespace StorylineEditor.ViewModel.Common
 
         public static event Action<string> FilterChangedEvent = delegate { };
 
+        public static event Action<string> PostFilterChangedEvent = delegate { };
+
         protected static string filter;
         public static string Filter
         {
@@ -32,6 +34,7 @@ namespace StorylineEditor.ViewModel.Common
                 {
                     filter = value;
                     FilterChangedEvent?.Invoke(filter);
+                    PostFilterChangedEvent?.Invoke(filter);
                 }
             }
         }
@@ -63,6 +66,20 @@ namespace StorylineEditor.ViewModel.Common
                 {
                     isCut = value;
                     Notify(nameof(IsCut));
+                }
+            }
+        }
+
+        protected bool isFilterPassed;
+        public bool IsFilterPassed
+        {
+            get => isFilterPassed;
+            set
+            {
+                if (value != isFilterPassed)
+                {
+                    isFilterPassed = value;
+                    Notify(nameof(IsFilterPassed));
                 }
             }
         }

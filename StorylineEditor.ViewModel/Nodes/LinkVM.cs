@@ -246,6 +246,8 @@ namespace StorylineEditor.ViewModel.Nodes
             Notify(nameof(Cross2_X2));
             Notify(nameof(Cross2_Y2));
         }
+
+        protected override void OnFilterChangedHandler(string filter) { } ////// Links visibility are calculated by Graph on the basis of their from-Node and To-Node
     }
 
     public class PreviewLinkVM : LinkVM {

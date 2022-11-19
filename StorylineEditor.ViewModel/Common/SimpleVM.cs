@@ -49,13 +49,9 @@ namespace StorylineEditor.ViewModel.Common
 
         private void OnModelChangedHandler(T model, string propName) { if (Model != null && Model == model) Notify(propName); }
 
-        private void OnFilterChangedHandler(string filter)
+        protected virtual void OnFilterChangedHandler(string filter)
         {
-            if (Model is BaseM baseModel)
-            {
-                IsFilterPassed = string.IsNullOrEmpty(filter) || baseModel.PassFilter(filter);
-                Notify(nameof(IsFilterPassed));
-            }
+            if (Model is BaseM baseModel) IsFilterPassed = string.IsNullOrEmpty(filter) || baseModel.PassFilter(filter);
         }
 
         protected ICommand registerCommand;
@@ -87,7 +83,5 @@ namespace StorylineEditor.ViewModel.Common
 
         protected ICommand unregisterContextCommand;
         public ICommand UnregisterContextCommand => unregisterContextCommand ?? (unregisterContextCommand = new RelayCommand(() => ActiveContextService.ActiveContext = null));
-
-        public bool IsFilterPassed { get; set; }
     }
 }
