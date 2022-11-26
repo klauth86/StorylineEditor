@@ -18,6 +18,8 @@ StorylineEditor распространяется в надежде, что он�
 
     <sys:String x:Key="String_Icon_Save">🖫</sys:String>
 
+    <sys:String x:Key="String_Icon_Config">⚙</sys:String>
+    
     <sys:String x:Key="String_Icon_Up">↑</sys:String>
 
     <sys:String x:Key="String_Icon_Remove">❌</sys:String>

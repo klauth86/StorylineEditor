@@ -60,6 +60,8 @@
     <Compile Include="Behaviors\NumericUpDownBehavior.cs" />
     <Compile Include="Behaviors\RenderSizeBehavior.cs" />
     <Compile Include="Behaviors\MouseExtBehavior.cs" />
+    <Compile Include="Config\ConfigVM.cs" />
+    <Compile Include="Config\UserActionVM.cs" />
     <Compile Include="Controls\ComboBoxExt.cs" />
     <Compile Include="Controls\NumericUpDown.xaml.cs">
       <DependentUpon>NumericUpDown.xaml</DependentUpon>
@@ -69,12 +71,19 @@
     </Compile>
     <Compile Include="Controls\RichTextBoxExt.cs" />
     <Compile Include="Controls\TextBlockExt.cs" />
+    <Compile Include="DlgWindow.xaml.cs">
+      <DependentUpon>DlgWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ServiceFacade.cs" />
     <Page Include="Controls\NumericUpDown.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\NumericUpDown_Float.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DlgWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

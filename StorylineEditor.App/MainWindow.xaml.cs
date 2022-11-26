@@ -10,8 +10,11 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.App.Config;
 using StorylineEditor.Model;
 using StorylineEditor.ViewModel;
+using StorylineEditor.ViewModel.Common;
+using StorylineEditor.ViewModel.Config;
 using System.IO;
 using System.Reflection;
 using System.Windows;
@@ -21,9 +24,31 @@ namespace StorylineEditor.App
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, ICallbackContext
     {
         const string xmlFilter = "XML files (*.xml)|*.xml";
+
+        static MainWindow()
+        {
+            string configPath = string.Format("{0}.xml", nameof(ConfigM));
+
+            if (File.Exists(configPath))
+            {
+                using (var fileStream = File.Open(configPath, FileMode.Open))
+                {
+                    ConfigM.Config = SerializeService.Deserialize<ConfigM>(fileStream);
+                }
+            }
+            else
+            {
+                ConfigM.InitDefaultConfig();
+
+                using (var fileStream = File.Open(configPath, FileMode.Create))
+                {
+                    SerializeService.Serialize(fileStream, ConfigM.Config);
+                }
+            }
+        }
 
         public MainWindow()
         {
@@ -31,7 +56,7 @@ namespace StorylineEditor.App
 
             StorylineM storylineModel = new StorylineM();
             storylineModel.characters.Add(new CharacterM() { id = CharacterM.PLAYER_ID, name = "Основной персонаж" });
-            
+
             SetDataContext(new StorylineVM(storylineModel));
 
             var assemblyName = Assembly.GetExecutingAssembly().GetName();
@@ -89,6 +114,22 @@ namespace StorylineEditor.App
         {
             ActiveContextService.ActiveStoryline = storylineViewModel;
             DataContext = storylineViewModel;
+        }
+
+        private void btn_Config_Click(object sender, RoutedEventArgs e)
+        {
+            new DlgWindow() {
+                DataContext = new ConfigVM(ConfigM.Config, this),
+                SizeToContent = SizeToContent.WidthAndHeight,
+                WindowStyle = WindowStyle.ToolWindow,
+                MinWidth = 256, MinHeight = 256, ResizeMode = ResizeMode.NoResize,
+                Title = App.Current.Resources["String_Tag_Config_Title"]?.ToString()
+            }.ShowDialog();
+        }
+
+        public void Callback(object viewModelObj, string propName)
+        {
+
         }
     }
 }

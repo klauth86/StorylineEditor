@@ -20,6 +20,8 @@ StorylineEditor распространяется в надежде, что он�
 
     <sys:String x:Key="String_MainMenu_Save_Tooltip">Сохранить</sys:String>
 
+    <sys:String x:Key="String_MainMenu_Condig_Tooltip">Настройки</sys:String>
+    
     <!--TabMenu-->
 
     <sys:String x:Key="String_TabMenu_Up_Tooltip">На уровень выше</sys:String>
