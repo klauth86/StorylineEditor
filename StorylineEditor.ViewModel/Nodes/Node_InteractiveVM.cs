@@ -116,4 +116,24 @@ namespace StorylineEditor.ViewModel.Nodes
     {
         public Node_TransitEditorVM(Node_TransitVM viewModel) : base(viewModel.Model, viewModel.CallbackContext) { }
     }
+
+    public class Node_GateVM : Node_InteractiveVM<Node_GateM>
+    {
+        public Node_GateVM(Node_GateM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+    }
+
+    public class Node_GateEditorVM : Node_GateVM
+    {
+        public Node_GateEditorVM(Node_GateVM viewModel) : base(viewModel.Model, viewModel.CallbackContext) { }
+    }
+
+    public class Node_ExitVM : Node_BaseVM<Node_ExitM>
+    {
+        public Node_ExitVM(Node_ExitM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+    }
+
+    public class Node_ExitEditorVM : Node_ExitVM
+    {
+        public Node_ExitEditorVM(Node_ExitVM viewModel) : base(viewModel.Model, viewModel.CallbackContext) { }
+    }
 }

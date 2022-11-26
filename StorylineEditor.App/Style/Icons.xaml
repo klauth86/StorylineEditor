@@ -60,6 +60,10 @@ StorylineEditor распространяется в надежде, что он�
 
     <sys:String x:Key="String_Icon_Node_Transit">⇴</sys:String>
 
+    <sys:String x:Key="String_Icon_Node_Gate">⎆</sys:String>
+
+    <sys:String x:Key="String_Icon_Node_Exit">🚪</sys:String>
+
     <sys:String x:Key="String_Icon_Node_Dialog">💬</sys:String>
 
     <sys:String x:Key="String_Icon_Node_Replica">🗣</sys:String>

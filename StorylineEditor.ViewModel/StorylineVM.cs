@@ -131,6 +131,8 @@ namespace StorylineEditor.ViewModel
                 if (type == typeof(Node_ReplicaM)) return new Node_ReplicaM() { positionX = position.X, positionY = position.Y };
                 if (type == typeof(Node_RandomM)) return new Node_RandomM() { positionX = position.X, positionY = position.Y };
                 if (type == typeof(Node_TransitM)) return new Node_TransitM() { positionX = position.X, positionY = position.Y };
+                if (type == typeof(Node_GateM)) return new Node_GateM() { positionX = position.X, positionY = position.Y };
+                if (type == typeof(Node_ExitM)) return new Node_ExitM() { positionX = position.X, positionY = position.Y };
 
                 throw new ArgumentOutOfRangeException(nameof(type));
             },
@@ -141,6 +143,8 @@ namespace StorylineEditor.ViewModel
                 if (model is Node_ReplicaM replicaModel) return new Node_ReplicaVM(replicaModel, callbackContext);
                 if (model is Node_RandomM randomModel) return new Node_RandomVM(randomModel, callbackContext);
                 if (model is Node_TransitM transitModel) return new Node_TransitVM(transitModel, callbackContext);
+                if (model is Node_GateM gateModel) return new Node_GateVM(gateModel, callbackContext);
+                if (model is Node_ExitM exitModel) return new Node_ExitVM(exitModel, callbackContext);
 
                 throw new ArgumentOutOfRangeException(nameof(model));
             },
@@ -150,6 +154,8 @@ namespace StorylineEditor.ViewModel
                 if (viewModel is Node_ReplicaVM replicaViewModel) return new Node_ReplicaEditorVM(replicaViewModel);
                 if (viewModel is Node_RandomVM randomViewModel) return new Node_RandomEditorVM(randomViewModel);
                 if (viewModel is Node_TransitVM transitViewModel) return new Node_TransitEditorVM(transitViewModel);
+                if (viewModel is Node_GateVM gateViewModel) return new Node_GateEditorVM(gateViewModel);
+                if (viewModel is Node_ExitVM exitViewModel) return new Node_ExitEditorVM(exitViewModel);
 
                 throw new ArgumentOutOfRangeException(nameof(viewModel));
             },

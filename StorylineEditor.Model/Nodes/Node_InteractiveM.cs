@@ -75,4 +75,32 @@ namespace StorylineEditor.Model.Nodes
             return clone;
         }
     }
+
+    public class Node_GateM : Node_InteractiveM
+    {
+        public Node_GateM(long additionalTicks) : base(additionalTicks) { }
+
+        public Node_GateM() : this(0) { }
+
+        public override BaseM Clone(long additionalTicks)
+        {
+            Node_GateM clone = new Node_GateM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
+    }
+
+    public class Node_ExitM : Node_BaseM
+    {
+        public Node_ExitM(long additionalTicks) : base(additionalTicks) { }
+
+        public Node_ExitM() : this(0) { }
+
+        public override BaseM Clone(long additionalTicks)
+        {
+            Node_ExitM clone = new Node_ExitM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
+    }
 }
