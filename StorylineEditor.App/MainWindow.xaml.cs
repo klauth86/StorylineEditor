@@ -27,14 +27,13 @@ namespace StorylineEditor.App
     public partial class MainWindow : Window, ICallbackContext
     {
         const string xmlFilter = "XML files (*.xml)|*.xml";
+        const string configXmlPath = nameof(ConfigM) + ".xml";
 
         static MainWindow()
         {
-            string configPath = string.Format("{0}.xml", nameof(ConfigM));
-
-            if (File.Exists(configPath))
+            if (File.Exists(configXmlPath))
             {
-                using (var fileStream = File.Open(configPath, FileMode.Open))
+                using (var fileStream = File.Open(configXmlPath, FileMode.Open))
                 {
                     ConfigM.Config = SerializeService.Deserialize<ConfigM>(fileStream);
                 }
@@ -43,10 +42,15 @@ namespace StorylineEditor.App
             {
                 ConfigM.InitDefaultConfig();
 
-                using (var fileStream = File.Open(configPath, FileMode.Create))
-                {
-                    SerializeService.Serialize(fileStream, ConfigM.Config);
-                }
+                SaveConfig();
+            }
+        }
+
+        private static void SaveConfig()
+        {
+            using (var fileStream = File.Open(configXmlPath, FileMode.Create))
+            {
+                SerializeService.Serialize(fileStream, ConfigM.Config);
             }
         }
 
@@ -127,9 +131,6 @@ namespace StorylineEditor.App
             }.ShowDialog();
         }
 
-        public void Callback(object viewModelObj, string propName)
-        {
-
-        }
+        public void Callback(object viewModelObj, string propName) { SaveConfig(); }
     }
 }

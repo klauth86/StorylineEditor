@@ -18,6 +18,7 @@ namespace StorylineEditor.App.Config
                 if (value != Model.MouseButton)
                 {
                     Model.MouseButton = value;
+                    CallbackContext?.Callback(this, nameof(MouseButton));
                     Notify(nameof(MouseButton));
                 }
             }
@@ -37,6 +38,7 @@ namespace StorylineEditor.App.Config
                     Model.ModifierKeys &= ~ModifierKeys.Alt;
                 }
 
+                CallbackContext?.Callback(this, nameof(IsAlt));
                 Notify(nameof(IsAlt));
             }
         }
@@ -55,6 +57,7 @@ namespace StorylineEditor.App.Config
                     Model.ModifierKeys &= ~ModifierKeys.Control;
                 }
 
+                CallbackContext?.Callback(this, nameof(IsControl));
                 Notify(nameof(IsControl));
             }
         }
@@ -73,6 +76,7 @@ namespace StorylineEditor.App.Config
                     Model.ModifierKeys &= ~ModifierKeys.Shift;
                 }
 
+                CallbackContext?.Callback(this, nameof(IsShift));
                 Notify(nameof(IsShift));
             }
         }
