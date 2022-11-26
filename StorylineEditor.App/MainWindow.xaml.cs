@@ -122,11 +122,13 @@ namespace StorylineEditor.App
 
         private void btn_Config_Click(object sender, RoutedEventArgs e)
         {
-            new DlgWindow() {
+            new DlgWindow()
+            {
                 DataContext = new ConfigVM(ConfigM.Config, this),
                 SizeToContent = SizeToContent.WidthAndHeight,
                 WindowStyle = WindowStyle.ToolWindow,
-                MinWidth = 256, MinHeight = 256, ResizeMode = ResizeMode.NoResize,
+                MinWidth = 256,
+                ResizeMode = ResizeMode.NoResize,
                 Title = App.Current.Resources["String_Tag_Config_Title"]?.ToString()
             }.ShowDialog();
         }
