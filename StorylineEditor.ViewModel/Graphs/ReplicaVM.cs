@@ -16,12 +16,19 @@ using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Nodes;
 using System;
 using System.Windows;
+using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Graphs
 {
     public class ReplicaVM : BaseVM<ReplicaM>
     {
         public ReplicaVM(ReplicaM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+
+        protected ICommand infoCommand;
+        public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<Notifier>((viewModel) =>
+        {
+            CallbackContext?.Callback(this, nameof(ICallbackContext));
+        }));
     }
 
     public class ReplicaEditorVM : Graph_BaseVM<ReplicaM>

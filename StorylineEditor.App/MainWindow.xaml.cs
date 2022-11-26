@@ -61,7 +61,7 @@ namespace StorylineEditor.App
             StorylineM storylineModel = new StorylineM();
             storylineModel.characters.Add(new CharacterM() { id = CharacterM.PLAYER_ID, name = "Основной персонаж" });
 
-            SetDataContext(new StorylineVM(storylineModel));
+            SetDataContext(new StorylineVM(storylineModel, this));
 
             var assemblyName = Assembly.GetExecutingAssembly().GetName();
             Title = string.Format("{0} [{1}]", assemblyName.Name, "new document");
@@ -92,7 +92,7 @@ namespace StorylineEditor.App
 
             if (model != null)
             {
-                SetDataContext(new StorylineVM(model));
+                SetDataContext(new StorylineVM(model, this));
 
                 var assemblyName = Assembly.GetExecutingAssembly().GetName();
                 Title = string.Format("{0} [{1}]", assemblyName.Name, path);
@@ -131,6 +131,16 @@ namespace StorylineEditor.App
             }.ShowDialog();
         }
 
-        public void Callback(object viewModelObj, string propName) { SaveConfig(); }
+        public void Callback(object viewModelObj, string propName)
+        {
+            if (propName == nameof(ICallbackContext))
+            {
+
+            }
+            else
+            {
+                SaveConfig();
+            }
+        }
     }
 }

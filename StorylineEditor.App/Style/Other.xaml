@@ -688,6 +688,7 @@ StorylineEditor распространяется в надежде, что он�
                     bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
             <Border.InputBindings>
                 <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
+                <MouseBinding Gesture="RightClick" Command="{Binding InfoCommand}" CommandParameter="{Binding}"></MouseBinding>
             </Border.InputBindings>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -777,7 +778,6 @@ StorylineEditor распространяется в надежде, что он�
                     <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
                 </StackPanel>
             </TabItem>
-            <TabItem Header="{StaticResource String_Tag_Graph_Tab_Stats}"></TabItem>
         </TabControl>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_StepM}">
@@ -1335,6 +1335,7 @@ StorylineEditor распространяется в надежде, что он�
                     bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
             <Border.InputBindings>
                 <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
+                <MouseBinding Gesture="RightClick" Command="{Binding InfoCommand}" CommandParameter="{Binding}"></MouseBinding>
             </Border.InputBindings>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -1416,7 +1417,6 @@ StorylineEditor распространяется в надежде, что он�
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
                 </StackPanel>
             </TabItem>
-            <TabItem Header="{StaticResource String_Tag_Graph_Tab_Stats}"></TabItem>
         </TabControl>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_DialogM}">
@@ -1452,6 +1452,7 @@ StorylineEditor распространяется в надежде, что он�
                     bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
             <Border.InputBindings>
                 <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
+                <MouseBinding Gesture="RightClick" Command="{Binding InfoCommand}" CommandParameter="{Binding}"></MouseBinding>
             </Border.InputBindings>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -1525,7 +1526,6 @@ StorylineEditor распространяется в надежде, что он�
                     <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
                 </StackPanel>
             </TabItem>
-            <TabItem Header="{StaticResource String_Tag_Graph_Tab_Stats}"></TabItem>
         </TabControl>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_ReplicaM}">

@@ -18,6 +18,7 @@ using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Graphs
 {
@@ -26,6 +27,12 @@ namespace StorylineEditor.ViewModel.Graphs
         public DialogVM(DialogM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
 
         public BaseM DialogCharacter => ActiveContextService.GetCharacter(Model.npcId);
+
+        protected ICommand infoCommand;
+        public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<Notifier>((viewModel) =>
+        {
+            CallbackContext?.Callback(this, nameof(ICallbackContext));
+        }));
     }
 
     public class DialogEditorVM : Graph_BaseVM<DialogM>

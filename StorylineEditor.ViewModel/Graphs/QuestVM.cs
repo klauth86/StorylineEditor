@@ -17,12 +17,19 @@ using StorylineEditor.ViewModel.Nodes;
 using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Graphs
 {
     public class QuestVM : BaseVM<QuestM>
     {
         public QuestVM(QuestM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+
+        protected ICommand infoCommand;
+        public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<Notifier>((viewModel) =>
+        {
+            CallbackContext?.Callback(this, nameof(ICallbackContext));
+        }));
     }
 
     public class QuestEditorVM : Graph_BaseVM<QuestM>

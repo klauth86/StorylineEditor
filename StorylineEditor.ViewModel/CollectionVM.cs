@@ -25,12 +25,10 @@ namespace StorylineEditor.ViewModel
 {
     public class CollectionVM : Collection_BaseVM<List<BaseM>, object>, ICallbackContext
     {
-        public CollectionVM(List<BaseM> inModel, Func<Type, object, BaseM> modelCreator, Func<BaseM, ICallbackContext, Notifier> viewModelCreator,
-            Func<Notifier, ICallbackContext, Notifier> editorCreator, Action<Notifier> viewModelInformer) : base(inModel, null, modelCreator, viewModelCreator,
+        public CollectionVM(List<BaseM> inModel, ICallbackContext callbackContext, Func<Type, object, BaseM> modelCreator, Func<BaseM, ICallbackContext, Notifier> viewModelCreator,
+            Func<Notifier, ICallbackContext, Notifier> editorCreator) : base(inModel, callbackContext, modelCreator, viewModelCreator,
                 editorCreator)
         {
-            _viewModelInformer = viewModelInformer ?? throw new ArgumentNullException(nameof(viewModelInformer));
-
             ICollectionView view = CollectionViewSource.GetDefaultView(ItemsVMs);
 
             if (view != null)
@@ -43,14 +41,14 @@ namespace StorylineEditor.ViewModel
             Context = new ObservableCollection<FolderM>();
             Context.Add(new FolderM() { name = "root", content = inModel });
 
-            foreach (var model in Model) { Add(null, _viewModelCreator(model, null)); }
+            foreach (var model in Model) { Add(null, _viewModelCreator(model, this)); }
         }
 
         private ICommand addCommand;
         public override ICommand AddCommand => addCommand ?? (addCommand = new RelayCommand<bool>((isFolder) =>
         {
             BaseM model = _modelCreator(isFolder ? typeof(FolderM) : null, null);
-            Notifier viewModel = _viewModelCreator(model, null);
+            Notifier viewModel = _viewModelCreator(model, this);
 
             Add(model, viewModel);
 
@@ -97,15 +95,13 @@ namespace StorylineEditor.ViewModel
 
             foreach (var model in Context.Last().content)
             {
-                Notifier viewModel = _viewModelCreator(model, null);
+                Notifier viewModel = _viewModelCreator(model, this);
                 viewModel.IsCut = cutViewModels.Contains(viewModel.Id);
                 Add(null, viewModel);
             }
 
             CommandManager.InvalidateRequerySuggested();
         }
-
-        private readonly Action<Notifier> _viewModelInformer;
 
 
 
@@ -140,9 +136,16 @@ namespace StorylineEditor.ViewModel
 
         public void Callback(object viewModelObj, string propName)
         {
-            if (viewModelObj != null && propName == nameof(BaseVM<BaseM>.Name))
+            if (propName == nameof(ICallbackContext))
             {
-                CollectionViewSource.GetDefaultView(ItemsVMs)?.Refresh();
+                CallbackContext?.Callback(viewModelObj, propName);
+            }
+            else
+            {
+                if (viewModelObj != null && propName == nameof(BaseVM<BaseM>.Name))
+                {
+                    CollectionViewSource.GetDefaultView(ItemsVMs)?.Refresh();
+                }
             }
         }
     }

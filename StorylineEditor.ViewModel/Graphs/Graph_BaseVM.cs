@@ -974,10 +974,17 @@ namespace StorylineEditor.ViewModel.Graphs
 
         public void Callback(object viewModelObj, string propName)
         {
-            if (viewModelObj is INodeVM nodeViewModel)
+            if (propName == nameof(ICallbackContext))
             {
-                if (propName == nameof(INodeVM.PositionX)) UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.X);
-                else if (propName == nameof(INodeVM.PositionY)) UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.Y);
+                CallbackContext?.Callback(viewModelObj, propName);
+            }
+            else
+            {
+                if (viewModelObj is INodeVM nodeViewModel)
+                {
+                    if (propName == nameof(INodeVM.PositionX)) UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.X);
+                    else if (propName == nameof(INodeVM.PositionY)) UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.Y);
+                }
             }
         }
 
