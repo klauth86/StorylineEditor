@@ -14,6 +14,7 @@ using StorylineEditor.Model;
 using StorylineEditor.Model.Graphs;
 using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModel.Common;
+using StorylineEditor.ViewModel.Config;
 using StorylineEditor.ViewModel.Helpers;
 using StorylineEditor.ViewModel.Nodes;
 using System;
@@ -51,20 +52,17 @@ namespace StorylineEditor.ViewModel.Graphs
             scale = 1;
             selectedNodeType = defaultNodeType;
 
-            fromNodeViewModel = null;
-            isDragging = false;
-            draggedNodeViewModel = null;
+            targetNodeViewModel = null;
 
-            previewLinkIsAdded = false;
             previewLink = new PreviewLinkVM(new LinkM(), this);
 
-            selectionBoxIsAdded = false;
             selectionBox = new SelectionBoxVM();
 
             viewRect = new Rect();
             nodeRect = new Rect();
             absMaxHeight = (double)Application.Current.FindResource("Double_Node_MaxHeight");
             absMaxWidth = (double)Application.Current.FindResource("Double_Node_MaxWidth");
+            UserAction = null;
 
             NodesVMs = new Dictionary<string, Notifier>();
             LinksVMs = new Dictionary<string, LinkVM>();
@@ -116,7 +114,7 @@ namespace StorylineEditor.ViewModel.Graphs
             selection = new HashSet<string>();
         }
 
-        protected bool cancelFlag;        
+        protected bool cancelFlag;
         protected Task activeTask;
         protected double targetPositionX;
         protected double targetPositionY;
@@ -240,7 +238,7 @@ namespace StorylineEditor.ViewModel.Graphs
         public ICommand NextRootNodeCommand => nextRootNodeCommand ?? (nextRootNodeCommand = new RelayCommand(() =>
         {
             RootNodeIndex = (RootNodeIndex - 1 + RootNodeIds.Count) % RootNodeIds.Count;
-            
+
             if (RootNodeIds.Count > 0 && RootNodeIndex >= 0 && RootNodeIndex < RootNodeIds.Count)
             {
                 Node_BaseM targetNodeModel = Model.nodes.FirstOrDefault((nodeModel) => nodeModel?.id == RootNodeIds[RootNodeIndex]);
@@ -252,51 +250,7 @@ namespace StorylineEditor.ViewModel.Graphs
                     StartScrollingTask();
                 }
             }
-        }, ()=> RootNodeIds.Count > 0));
-
-        protected ICommand addCommand;
-        public override ICommand AddCommand => addCommand ?? (addCommand = new RelayCommand<MouseButtonEventArgs>((args) =>
-        {
-            if (isDragging) return;
-
-            if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
-            {
-                if (args.Source is IInputElement inputElement)
-                {
-                    prevPosition = args.GetPosition(null);
-
-                    Point position = args.GetPosition(inputElement);
-
-                    double positionX = FromLocalToAbsoluteX(position.X);
-                    double positionY = FromLocalToAbsoluteY(position.Y);
-
-                    ShowSelectionBox(positionX, positionY);
-                }
-            }
-            else if ((args.OriginalSource as FrameworkElement)?.DataContext is INodeVM nodeViewModel)
-            {
-                bool resetSelection = !Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
-                AddToSelection((Notifier)nodeViewModel, resetSelection);
-
-                if (resetSelection) fromNodeViewModel = nodeViewModel;
-            }
-            else if (args.Source is IInputElement inputElement)
-            {
-                if (SelectedNodeType != null)
-                {
-                    Point position = args.GetPosition(inputElement);
-
-                    position.X = FromLocalToAbsoluteX(position.X);
-                    position.Y = FromLocalToAbsoluteY(position.Y);
-
-                    BaseM model = _modelCreator(SelectedNodeType, position);
-
-                    bool resetSelection = !Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
-                    
-                    AddNode(model, resetSelection, true);
-                }
-            }
-        }));
+        }, () => RootNodeIds.Count > 0));
 
         protected ICommand resetScaleCommand;
         public ICommand ResetScaleCommand => resetScaleCommand ?? (resetScaleCommand = new RelayCommand(() => StartScalingTask()));
@@ -312,49 +266,6 @@ namespace StorylineEditor.ViewModel.Graphs
 
         protected ICommand selectCommand;
         public override ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<Notifier>((viewModel) => { }));
-
-        protected ICommand linkCommand;
-        public ICommand LinkCommand => linkCommand ?? (linkCommand = new RelayCommand<MouseButtonEventArgs>((args) =>
-        {
-            if (selectionBoxIsAdded)
-            {
-                ProcessSelectionBox();
-                HideSelectionBox();
-            }
-            else if (previewLinkIsAdded)
-            {
-                if (fromNodeViewModel != null)
-                {
-                    if ((args.OriginalSource as FrameworkElement)?.DataContext is INodeVM toNodeViewModel)
-                    {
-                        string message = CanLinkNodes(fromNodeViewModel, toNodeViewModel);
-                        if (message == string.Empty)
-                        {
-                            PreLinkNodes(fromNodeViewModel, toNodeViewModel);
-
-                            LinkM model = (LinkM)_modelCreator(typeof(LinkM), new Point());
-                            model.fromNodeId = fromNodeViewModel.Id;
-                            model.toNodeId = toNodeViewModel.Id;
-
-                            Add(model, null);
-
-                            AddLinkVM(model,
-                                fromNodeViewModel.Id, fromNodeViewModel.PositionX, fromNodeViewModel.PositionY, 
-                                toNodeViewModel.Id, toNodeViewModel.PositionX, toNodeViewModel.PositionY);
-
-                            toNodeViewModel.IsRoot = false;
-                            RootNodeIds.Remove(toNodeViewModel.Id);
-
-                            CommandManager.InvalidateRequerySuggested();
-                        }
-                    }
-
-                    HidePreviewLink();
-
-                    fromNodeViewModel = null;
-                }
-            }
-        }));
         protected void AddLinkVM(LinkM model, string fromId, double fromX, double fromY, string toId, double toX, double toY)
         {
             LinkVM viewModel = (LinkVM)_viewModelCreator(model, this);
@@ -373,115 +284,34 @@ namespace StorylineEditor.ViewModel.Graphs
             UpdateLinkLocalPosition(LinksVMs[model.id], ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
         }
 
-        protected INodeVM fromNodeViewModel;
-        protected bool isDragging;
-        protected INodeVM draggedNodeViewModel;
+        protected INodeVM targetNodeViewModel;
         protected Point prevPosition;
-        protected bool previewLinkIsAdded;
         protected LinkVM previewLink;
-        protected bool selectionBoxIsAdded;
         protected SelectionBoxVM selectionBox;
         protected Rect viewRect;
         protected Rect nodeRect;
         protected readonly double absMaxHeight;
         protected readonly double absMaxWidth;
-
-        protected ICommand dragCommand;
-        public ICommand DragCommand => dragCommand ?? (dragCommand = new RelayCommand<MouseButtonEventArgs>((args) =>
-        {
-            if (fromNodeViewModel != null || selectionBoxIsAdded) return;
-
-            prevPosition = args.GetPosition(null);
-
-            draggedNodeViewModel = (args.OriginalSource as FrameworkElement)?.DataContext as INodeVM;
-            isDragging = true;
-
-            CommandManager.InvalidateRequerySuggested();
-        }));
+        protected UserActionM UserAction;
 
         protected ICommand moveCommand;
         public ICommand MoveCommand => moveCommand ?? (moveCommand = new RelayCommand<MouseEventArgs>((args) =>
         {
-            if (selectionBoxIsAdded)
+            if (UserAction == null) return;
+
+            if (!HasActiveInput(UserAction))
             {
-                Point position = args.GetPosition(null);
-
-                if (Mouse.LeftButton != MouseButtonState.Pressed)
-                {
-                    ProcessSelectionBox();
-                    HideSelectionBox();
-                }
-                else
-                {
-                    double deltaX = (position.X - prevPosition.X) / Scale;
-                    double deltaY = (position.Y - prevPosition.Y) / Scale;
-
-                    selectionBox.ToX += deltaX;
-                    selectionBox.ToY += deltaY;
-
-                    UpdateSelectionBoxLocalPosition(selectionBox, ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
-                }
-
-                prevPosition = position;
+                FinishUserAction(args);
+                return;
             }
-            else if (isDragging)
+
+            if (UserAction.UserActionType == USER_ACTION_TYPE.LINK)
             {
-                Point position = args.GetPosition(null);
-
-                if (Mouse.RightButton != MouseButtonState.Pressed)
-                {
-                    isDragging = false;
-                    draggedNodeViewModel = null;
-                }
-                else
-                {
-                    double deltaX = (position.X - prevPosition.X) / Scale;
-                    double deltaY = (position.Y - prevPosition.Y) / Scale;
-
-                    if (draggedNodeViewModel != null)
-                    {
-                        if (!draggedNodeViewModel.IsSelected)
-                        {
-                            draggedNodeViewModel.PositionX += deltaX;
-                            draggedNodeViewModel.PositionY += deltaY;
-                        }
-
-                        foreach (string selectedId in selection)
-                        {
-                            if (NodesVMs.ContainsKey(selectedId))
-                            {
-                                if (NodesVMs[selectedId] is INodeVM nodeViewModel)
-                                {
-                                    nodeViewModel.PositionX += deltaX;
-                                    nodeViewModel.PositionY += deltaY;
-                                }
-                            }
-                            else
-                            {
-                                Node_BaseM nodeModel = Model.nodes.FirstOrDefault((node) => node.id == selectedId); ////// TODO Cache if will be slow
-                                if (nodeModel != null)
-                                {
-                                    nodeModel.positionX += deltaX;
-                                    nodeModel.positionY += deltaY;
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        TranslateView(deltaX, deltaY);
-                    }
-                }
-
-                prevPosition = position;
-            }
-            else if (fromNodeViewModel != null)
-            {
-                if (Mouse.LeftButton == MouseButtonState.Pressed)
+                if (targetNodeViewModel != null)
                 {
                     if ((args.OriginalSource as FrameworkElement)?.DataContext is INodeVM toNodeViewModel)
                     {
-                        if (fromNodeViewModel == toNodeViewModel)
+                        if (targetNodeViewModel == toNodeViewModel)
                         {
                             HidePreviewLink();
                         }
@@ -491,9 +321,9 @@ namespace StorylineEditor.ViewModel.Graphs
                             previewLink.ToY = toNodeViewModel.PositionY;
                             UpdateLinkLocalPosition(previewLink, ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
 
-                            previewLink.Description = CanLinkNodes(fromNodeViewModel, toNodeViewModel);
+                            previewLink.Description = CanLinkNodes(targetNodeViewModel, toNodeViewModel);
 
-                            ShowPreviewLink(fromNodeViewModel);
+                            ShowPreviewLink(targetNodeViewModel);
                         }
                     }
                     else
@@ -506,15 +336,68 @@ namespace StorylineEditor.ViewModel.Graphs
 
                         previewLink.Description = null;
 
-                        ShowPreviewLink(fromNodeViewModel);
+                        ShowPreviewLink(targetNodeViewModel);
+                    }
+                }
+            }
+
+            if (UserAction.UserActionType == USER_ACTION_TYPE.DRAG_AND_SCROLL)
+            {
+                Point position = args.GetPosition(null);
+
+                double deltaX = (position.X - prevPosition.X) / Scale;
+                double deltaY = (position.Y - prevPosition.Y) / Scale;
+
+                if (targetNodeViewModel != null)
+                {
+                    if (!targetNodeViewModel.IsSelected)
+                    {
+                        targetNodeViewModel.PositionX += deltaX;
+                        targetNodeViewModel.PositionY += deltaY;
+                    }
+
+                    foreach (string selectedId in selection)
+                    {
+                        if (NodesVMs.ContainsKey(selectedId))
+                        {
+                            if (NodesVMs[selectedId] is INodeVM nodeViewModel)
+                            {
+                                nodeViewModel.PositionX += deltaX;
+                                nodeViewModel.PositionY += deltaY;
+                            }
+                        }
+                        else
+                        {
+                            Node_BaseM nodeModel = Model.nodes.FirstOrDefault((node) => node.id == selectedId); ////// TODO Cache if will be slow
+                            if (nodeModel != null)
+                            {
+                                nodeModel.positionX += deltaX;
+                                nodeModel.positionY += deltaY;
+                            }
+                        }
                     }
                 }
                 else
                 {
-                    HidePreviewLink();
-
-                    fromNodeViewModel = null;
+                    TranslateView(deltaX, deltaY);
                 }
+
+                prevPosition = position;
+            }
+
+            if (UserAction.UserActionType == USER_ACTION_TYPE.SELECTION_BOX)
+            {
+                Point position = args.GetPosition(null);
+
+                double deltaX = (position.X - prevPosition.X) / Scale;
+                double deltaY = (position.Y - prevPosition.Y) / Scale;
+
+                selectionBox.ToX += deltaX;
+                selectionBox.ToY += deltaY;
+
+                UpdateSelectionBoxLocalPosition(selectionBox, ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
+
+                prevPosition = position;
             }
         }));
 
@@ -537,16 +420,201 @@ namespace StorylineEditor.ViewModel.Graphs
         protected ICommand scaleCommand;
         public ICommand ScaleCommand => scaleCommand ?? (scaleCommand = new RelayCommand<MouseWheelEventArgs>((args) =>
         {
-            if (fromNodeViewModel != null || selectionBoxIsAdded) return;
-
-            if (isDragging) return;
+            if (UserAction != null) return;
 
             if (args.Source is UIElement uiElement)
             {
-                Point position = args.GetPosition(uiElement);                
+                Point position = args.GetPosition(uiElement);
                 SetScale(position.X, position.Y, Math.Max(Math.Min(Scale + args.Delta * 0.0002, 4), 1.0 / 64));
             }
         }));
+
+        protected ICommand facadeCommand;
+        public ICommand FacadeCommand => facadeCommand ?? (facadeCommand = new RelayCommand<MouseButtonEventArgs>((args) =>
+        {
+            if (args.ButtonState == MouseButtonState.Pressed && UserAction == null)
+            {
+                List<UserActionM> possibleUserActions = ConfigM.Config.UserActions
+                .Where((userAction) => IsMatching(args, userAction))
+                .Where((userAction) => CanExec(args, userAction.UserActionType)).ToList();
+
+                if (possibleUserActions.Count > 0)
+                {
+                    if (possibleUserActions.Count > 1)
+                    {
+                        ////// TODO
+                    }
+                    else if (possibleUserActions[0] != null)
+                    {
+                        switch (possibleUserActions[0].UserActionType)
+                        {
+                            case USER_ACTION_TYPE.CREATE_NODE: CreateNodeImpl(args); break;
+                            case USER_ACTION_TYPE.DUPLICATE_NODE: DuplicateNodeImpl(args); break;
+                            case USER_ACTION_TYPE.LINK: StartLinkImpl(args); break;
+                            case USER_ACTION_TYPE.DRAG_AND_SCROLL: StartDragImpl(args); break;
+                            case USER_ACTION_TYPE.SELECTION_SIMPLE: SelectionSimple(args); break;
+                            case USER_ACTION_TYPE.SELECTION_ADDITIVE: SelectionAdditive(args); break;
+                            case USER_ACTION_TYPE.SELECTION_BOX: StartSelectionBox(args); break;
+                        }
+                    }
+                }
+            }
+            else if (args.ButtonState == MouseButtonState.Released && UserAction != null)
+            {
+                if (args.ChangedButton == UserAction.MouseButton) FinishUserAction(args);
+            }
+        }));
+
+        private void CreateNodeImpl(MouseButtonEventArgs args)
+        {
+            Point position = args.GetPosition((IInputElement)args.Source);
+
+            position.X = FromLocalToAbsoluteX(position.X);
+            position.Y = FromLocalToAbsoluteY(position.Y);
+
+            BaseM model = _modelCreator(SelectedNodeType, position);
+
+            AddNode(model, true, false);
+        }
+
+        private void DuplicateNodeImpl(MouseButtonEventArgs args)
+        {
+            ////if ((args.OriginalSource as FrameworkElement).DataContext nodeViewModel)
+            ////{
+            ////    prevPosition = args.GetPosition(null);
+
+            ////    draggedNodeViewModel = (args.OriginalSource as FrameworkElement)?.DataContext as INodeVM;
+            ////    isDragging = true;
+
+            ////    CommandManager.InvalidateRequerySuggested();
+            ////}
+        }
+
+        private void StartLinkImpl(MouseButtonEventArgs args)
+        {
+            targetNodeViewModel = (INodeVM)(args.OriginalSource as FrameworkElement).DataContext;
+
+            UserAction = ConfigM.Config.UserActions.First((userAction) => userAction.UserActionType == USER_ACTION_TYPE.LINK);
+        }
+
+        private void StartDragImpl(MouseButtonEventArgs args)
+        {
+            prevPosition = args.GetPosition(null);
+
+            targetNodeViewModel = (args.OriginalSource as FrameworkElement)?.DataContext as INodeVM;
+
+            UserAction = ConfigM.Config.UserActions.First((userAction) => userAction.UserActionType == USER_ACTION_TYPE.DRAG_AND_SCROLL);
+
+            CommandManager.InvalidateRequerySuggested();
+        }
+
+        private void SelectionSimple(MouseButtonEventArgs args)
+        {
+            AddToSelection((Notifier)(args.OriginalSource as FrameworkElement).DataContext, true);
+        }
+
+        private void SelectionAdditive(MouseButtonEventArgs args)
+        {
+            AddToSelection((Notifier)(args.OriginalSource as FrameworkElement).DataContext, false);
+        }
+
+        private void StartSelectionBox(MouseButtonEventArgs args)
+        {
+            prevPosition = args.GetPosition(null);
+
+            Point position = args.GetPosition((IInputElement)args.Source);
+
+            double positionX = FromLocalToAbsoluteX(position.X);
+            double positionY = FromLocalToAbsoluteY(position.Y);
+
+            ShowSelectionBox(positionX, positionY);
+
+            UserAction = ConfigM.Config.UserActions.First((userAction) => userAction.UserActionType == USER_ACTION_TYPE.SELECTION_BOX);
+        }
+
+        private void FinishUserAction(MouseEventArgs args)
+        {
+            switch (UserAction.UserActionType)
+            {
+                //case USER_ACTION_TYPE.DUPLICATE_NODE: DuplicateNodeImpl(args); break;
+                case USER_ACTION_TYPE.LINK:
+                    {
+                        if (targetNodeViewModel != null)
+                        {
+                            if ((args.OriginalSource as FrameworkElement)?.DataContext is INodeVM toNodeViewModel)
+                            {
+                                string message = CanLinkNodes(targetNodeViewModel, toNodeViewModel);
+                                if (message == string.Empty)
+                                {
+                                    PreLinkNodes(targetNodeViewModel, toNodeViewModel);
+
+                                    LinkM model = (LinkM)_modelCreator(typeof(LinkM), new Point());
+                                    model.fromNodeId = targetNodeViewModel.Id;
+                                    model.toNodeId = toNodeViewModel.Id;
+
+                                    Add(model, null);
+
+                                    AddLinkVM(model,
+                                        targetNodeViewModel.Id, targetNodeViewModel.PositionX, targetNodeViewModel.PositionY,
+                                        toNodeViewModel.Id, toNodeViewModel.PositionX, toNodeViewModel.PositionY);
+
+                                    toNodeViewModel.IsRoot = false;
+                                    RootNodeIds.Remove(toNodeViewModel.Id);
+
+                                    CommandManager.InvalidateRequerySuggested();
+                                }
+                            }
+                        }
+
+                        HidePreviewLink();
+                        targetNodeViewModel = null;
+                        UserAction = null;
+                    }
+                    break;
+                case USER_ACTION_TYPE.DRAG_AND_SCROLL:
+                    {
+                        targetNodeViewModel = null;
+                        UserAction = null;
+                    }
+                    break;
+                    case USER_ACTION_TYPE.SELECTION_BOX:
+                    {
+                        ProcessSelectionBox();
+                        HideSelectionBox();
+                        UserAction = null;
+                    }
+                    break;
+            }
+        }
+
+        private bool IsMatching(MouseButtonEventArgs args, UserActionM userAction) { return args.ChangedButton == userAction.MouseButton && Keyboard.Modifiers == userAction.ModifierKeys; }
+
+        private bool CanExec(MouseEventArgs args, byte userActiontype)
+        {
+            if (userActiontype == USER_ACTION_TYPE.CREATE_NODE) return !((args.OriginalSource as FrameworkElement)?.DataContext is INodeVM) && args.Source is IInputElement && SelectedNodeType != null;
+
+            if (userActiontype == USER_ACTION_TYPE.DUPLICATE_NODE) return (args.OriginalSource as FrameworkElement)?.DataContext is INodeVM;
+
+            if (userActiontype == USER_ACTION_TYPE.LINK) return (args.OriginalSource as FrameworkElement)?.DataContext is INodeVM;
+
+            if (userActiontype == USER_ACTION_TYPE.DRAG_AND_SCROLL) return true;
+            
+            if (userActiontype == USER_ACTION_TYPE.SELECTION_SIMPLE) return (args.OriginalSource as FrameworkElement)?.DataContext is INodeVM;
+
+            if (userActiontype == USER_ACTION_TYPE.SELECTION_ADDITIVE) return (args.OriginalSource as FrameworkElement)?.DataContext is INodeVM;
+
+            if (userActiontype == USER_ACTION_TYPE.SELECTION_BOX) return args.Source is IInputElement;
+
+            return false;
+        }
+
+        private bool HasActiveInput(UserActionM userAction)
+        {
+            if (userAction.MouseButton == MouseButton.Left) return Mouse.LeftButton == MouseButtonState.Pressed;
+            if (userAction.MouseButton == MouseButton.Right) return Mouse.RightButton == MouseButtonState.Pressed;
+
+            return false;
+        }
 
         public string Copy()
         {
@@ -646,7 +714,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
             AddToSelection(viewModel, resetSelection);
 
-            if (resetSelection && tryStartLink) fromNodeViewModel = viewModel as INodeVM;
+            if (resetSelection && tryStartLink) targetNodeViewModel = viewModel as INodeVM;
         }
 
         public void Delete()
@@ -1060,83 +1128,58 @@ namespace StorylineEditor.ViewModel.Graphs
 
         protected void ShowPreviewLink(INodeVM nodeViewModel)
         {
-            if (!previewLinkIsAdded)
-            {
-                previewLink.FromX = nodeViewModel.PositionX;
-                previewLink.FromY = nodeViewModel.PositionY;
-                UpdateLinkLocalPosition(previewLink, ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.Scale);
+            previewLink.FromX = nodeViewModel.PositionX;
+            previewLink.FromY = nodeViewModel.PositionY;
+            UpdateLinkLocalPosition(previewLink, ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.Scale);
 
-                previewLinkIsAdded = true;
-                ItemsVMs.Add(previewLink);
-            }
+            ItemsVMs.Add(previewLink);
         }
-        protected void HidePreviewLink()
-        {
-            if (previewLinkIsAdded)
-            {
-                previewLinkIsAdded = false;
-                ItemsVMs.Remove(previewLink);
-            }
-        }
+        protected void HidePreviewLink() { ItemsVMs.Remove(previewLink); }
 
         protected void ShowSelectionBox(double positionX, double positionY)
         {
-            if (!previewLinkIsAdded)
-            {
-                selectionBox.FromX = positionX;
-                selectionBox.FromY = positionY;
-                selectionBox.ToX = positionX;
-                selectionBox.ToY = positionY;
-                UpdateSelectionBoxLocalPosition(selectionBox, ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
+            selectionBox.FromX = positionX;
+            selectionBox.FromY = positionY;
+            selectionBox.ToX = positionX;
+            selectionBox.ToY = positionY;
+            UpdateSelectionBoxLocalPosition(selectionBox, ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
 
-                selectionBoxIsAdded = true;
-                ItemsVMs.Add(selectionBox);
-            }
+            ItemsVMs.Add(selectionBox);
         }
-        protected void HideSelectionBox()
-        {
-            if (selectionBoxIsAdded)
-            {
-                selectionBoxIsAdded = false;
-                ItemsVMs.Remove(selectionBox);
-            }
-        }
+        protected void HideSelectionBox() { ItemsVMs.Remove(selectionBox); }
 
         protected void ProcessSelectionBox()
         {
-            if (selectionBoxIsAdded)
+            HashSet<Notifier> selectionBoxCapture = new HashSet<Notifier>();
+
+            Rect selectionRect = new Rect
             {
-                HashSet<Notifier> selectionBoxCapture = new HashSet<Notifier>();
+                X = Math.Min(selectionBox.FromX, selectionBox.ToX),
+                Y = Math.Min(selectionBox.FromY, selectionBox.ToY)
+            };
+            selectionRect.Width = Math.Max(selectionBox.FromX, selectionBox.ToX) - selectionRect.X;
+            selectionRect.Height = Math.Max(selectionBox.FromY, selectionBox.ToY) - selectionRect.Y;
 
-                Rect selectionRect = new Rect
+            foreach (var entry in NodesVMs)
+            {
+                var viewModel = entry.Value;
+
+                if (viewModel is INodeVM nodeViewModel)
                 {
-                    X = Math.Min(selectionBox.FromX, selectionBox.ToX),
-                    Y = Math.Min(selectionBox.FromY, selectionBox.ToY)
-                };
-                selectionRect.Width = Math.Max(selectionBox.FromX, selectionBox.ToX) - selectionRect.X;
-                selectionRect.Height = Math.Max(selectionBox.FromY, selectionBox.ToY) - selectionRect.Y;
+                    nodeRect.X = nodeViewModel.PositionX - nodeViewModel.Width / 2;
+                    nodeRect.Y = nodeViewModel.PositionY - nodeViewModel.Height / 2;
+                    nodeRect.Width = nodeViewModel.Width;
+                    nodeRect.Height = nodeViewModel.Height;
 
-                foreach (var entry in NodesVMs)
-                {
-                    var viewModel = entry.Value;
-
-                    if (viewModel is INodeVM nodeViewModel)
-                    {
-                        nodeRect.X = nodeViewModel.PositionX - nodeViewModel.Width / 2;
-                        nodeRect.Y = nodeViewModel.PositionY - nodeViewModel.Height / 2;
-                        nodeRect.Width = nodeViewModel.Width;
-                        nodeRect.Height = nodeViewModel.Height;
-
-                        if (selectionRect.IntersectsWith(nodeRect)) selectionBoxCapture.Add(viewModel);
-                    }
+                    if (selectionRect.IntersectsWith(nodeRect)) selectionBoxCapture.Add(viewModel);
                 }
+            }
 
-                bool resetSelection = true;
-                foreach (var viewModel in selectionBoxCapture)
-                {
-                    AddToSelection(viewModel, resetSelection);
-                    resetSelection = false;
-                }
+            bool resetSelection = true;
+            foreach (var viewModel in selectionBoxCapture)
+            {
+                AddToSelection(viewModel, resetSelection);
+                resetSelection = false;
             }
         }
 

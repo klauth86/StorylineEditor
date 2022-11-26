@@ -230,9 +230,10 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="ItemsSource" Value="{Binding ItemsVMs}"></Setter>
         <Setter Property="bhvrs:MouseExtBehavior.MouseEnterCommand" Value="{Binding RegisterContextCommand}"></Setter>
         <Setter Property="bhvrs:MouseExtBehavior.MouseLeaveCommand" Value="{Binding UnregisterContextCommand}"></Setter>
-        <Setter Property="bhvrs:MouseExtBehavior.MouseRightButtonDownCommand" Value="{Binding DragCommand}"></Setter>
-        <Setter Property="bhvrs:MouseExtBehavior.MouseLeftButtonDownCommand" Value="{Binding AddCommand}"></Setter>
-        <Setter Property="bhvrs:MouseExtBehavior.MouseLeftButtonUpCommand" Value="{Binding LinkCommand}"></Setter>
+        <Setter Property="bhvrs:MouseExtBehavior.MouseRightButtonDownCommand" Value="{Binding FacadeCommand}"></Setter>
+        <Setter Property="bhvrs:MouseExtBehavior.MouseRightButtonUpCommand" Value="{Binding FacadeCommand}"></Setter>
+        <Setter Property="bhvrs:MouseExtBehavior.MouseLeftButtonDownCommand" Value="{Binding FacadeCommand}"></Setter>
+        <Setter Property="bhvrs:MouseExtBehavior.MouseLeftButtonUpCommand" Value="{Binding FacadeCommand}"></Setter>
         <Setter Property="bhvrs:MouseExtBehavior.MouseMoveCommand" Value="{Binding MoveCommand}"></Setter>
         <Setter Property="bhvrs:MouseExtBehavior.MouseWheelCommand" Value="{Binding ScaleCommand}"></Setter>
         <Setter Property="bhvrs:LoadUnloadExtBehavior.LoadedCommand" Value="{Binding InitCommand}"></Setter>
@@ -1989,7 +1990,6 @@ StorylineEditor распространяется в надежде, что он�
 
             <ComboBox FontSize="{StaticResource FontSize_VerySmall}" Grid.Column="1" SelectedValue="{Binding MouseButton, UpdateSourceTrigger=PropertyChanged}"  VerticalAlignment="Center" Margin="{StaticResource Thickness_Padding_LeftRight}">
                 <x:Static Member="MouseButton.Left"></x:Static>
-                <x:Static Member="MouseButton.Middle"></x:Static>
                 <x:Static Member="MouseButton.Right"></x:Static>
             </ComboBox>
 
@@ -2000,18 +2000,27 @@ StorylineEditor распространяется в надежде, что он�
             </StackPanel>
         </Grid>
         <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_MODE.CREATE_NODE}">
+            <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.CREATE_NODE}">
                 <Setter TargetName="tb_UserActionName" Property="Text" Value="{StaticResource String_Tag_Config_UserActions_CreateNode}"></Setter>
             </DataTrigger>
-            <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_MODE.DRAG_AND_SCROLL}">
-                <Setter TargetName="tb_UserActionName" Property="Text" Value="{StaticResource String_Tag_Config_UserActions_DragAndScroll}"></Setter>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_MODE.DUPLICATE_NODE}">
+            <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.DUPLICATE_NODE}">
                 <Setter TargetName="tb_UserActionName" Property="Text" Value="{StaticResource String_Tag_Config_UserActions_DuplicateNode}"></Setter>
             </DataTrigger>
-            <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_MODE.LINK}">
+            <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.LINK}">
                 <Setter TargetName="tb_UserActionName" Property="Text" Value="{StaticResource String_Tag_Config_UserActions_Link}"></Setter>
             </DataTrigger>
+            <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.DRAG_AND_SCROLL}">
+                <Setter TargetName="tb_UserActionName" Property="Text" Value="{StaticResource String_Tag_Config_UserActions_DragAndScroll}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.SELECTION_SIMPLE}">
+                <Setter TargetName="tb_UserActionName" Property="Text" Value="{StaticResource String_Tag_Config_UserActions_SelectionSimple}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.SELECTION_ADDITIVE}">
+                <Setter TargetName="tb_UserActionName" Property="Text" Value="{StaticResource String_Tag_Config_UserActions_SelectionAdditive}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.SELECTION_BOX}">
+                <Setter TargetName="tb_UserActionName" Property="Text" Value="{StaticResource String_Tag_Config_UserActions_SelectionBox}"></Setter>
+            </DataTrigger>            
         </DataTemplate.Triggers>
     </DataTemplate>
 </ResourceDictionary>

@@ -43,7 +43,7 @@ namespace StorylineEditor.ViewModel
             ItemsVMs = new ObservableCollection<Notifier>();
         }
 
-        public abstract ICommand AddCommand { get; }
+        public virtual ICommand AddCommand => null;
 
         private ICommand removeCommand;
         public ICommand RemoveCommand => removeCommand ?? (removeCommand = new RelayCommand(() =>
