@@ -343,6 +343,46 @@ namespace StorylineEditor.ViewModel.Graphs
                 }
             }
 
+            if (UserAction.UserActionType == USER_ACTION_TYPE.DUPLICATE_NODE)
+            {
+                Point position = args.GetPosition(null);
+
+                double deltaX = (position.X - prevPosition.X) / Scale;
+                double deltaY = (position.Y - prevPosition.Y) / Scale;
+
+                if (targetNodeViewModel != null)
+                {
+                    if (!targetNodeViewModel.IsSelected)
+                    {
+                        targetNodeViewModel.PositionX += deltaX;
+                        targetNodeViewModel.PositionY += deltaY;
+                    }
+
+                    foreach (string selectedId in selection)
+                    {
+                        if (NodesVMs.ContainsKey(selectedId))
+                        {
+                            if (NodesVMs[selectedId] is INodeVM nodeViewModel)
+                            {
+                                nodeViewModel.PositionX += deltaX;
+                                nodeViewModel.PositionY += deltaY;
+                            }
+                        }
+                        else
+                        {
+                            Node_BaseM nodeModel = Model.nodes.FirstOrDefault((node) => node.id == selectedId); ////// TODO Cache if will be slow
+                            if (nodeModel != null)
+                            {
+                                nodeModel.positionX += deltaX;
+                                nodeModel.positionY += deltaY;
+                            }
+                        }
+                    }
+                }
+
+                prevPosition = position;
+            }
+
             if (UserAction.UserActionType == USER_ACTION_TYPE.DRAG_AND_SCROLL)
             {
                 Point position = args.GetPosition(null);
@@ -481,15 +521,20 @@ namespace StorylineEditor.ViewModel.Graphs
 
         private void DuplicateNodeImpl(MouseButtonEventArgs args)
         {
-            ////if ((args.OriginalSource as FrameworkElement).DataContext nodeViewModel)
-            ////{
-            ////    prevPosition = args.GetPosition(null);
+            IWithModel sourceObject = (IWithModel)(args.OriginalSource as FrameworkElement).DataContext;
+            BaseM sourceModel = sourceObject.GetModel<BaseM>();
+            
+            BaseM model = sourceModel.Clone(0);
 
-            ////    draggedNodeViewModel = (args.OriginalSource as FrameworkElement)?.DataContext as INodeVM;
-            ////    isDragging = true;
+            AddNode(model, true);
 
-            ////    CommandManager.InvalidateRequerySuggested();
-            ////}
+            prevPosition = args.GetPosition(null);
+
+            targetNodeViewModel = selectionNode;
+
+            UserAction = ConfigM.Config.UserActions.First((userAction) => userAction.UserActionType == USER_ACTION_TYPE.DUPLICATE_NODE);
+
+            CommandManager.InvalidateRequerySuggested();
         }
 
         private void StartLinkImpl(MouseButtonEventArgs args)
@@ -540,7 +585,12 @@ namespace StorylineEditor.ViewModel.Graphs
         {
             switch (UserAction.UserActionType)
             {
-                //case USER_ACTION_TYPE.DUPLICATE_NODE: DuplicateNodeImpl(args); break;
+                case USER_ACTION_TYPE.DUPLICATE_NODE:
+                    {
+                        targetNodeViewModel = null;
+                        UserAction = null;
+                    }
+                    break;
                 case USER_ACTION_TYPE.LINK:
                     {
                         if (targetNodeViewModel != null)
