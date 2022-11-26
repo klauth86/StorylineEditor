@@ -33,10 +33,10 @@ namespace StorylineEditor.ViewModel.Config
 
             Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.CREATE_NODE, MouseButton = MouseButton.Left });
             Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.DUPLICATE_NODE, MouseButton = MouseButton.Right, ModifierKeys = ModifierKeys.Shift });
-            Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.LINK, MouseButton = MouseButton.Left });
-            Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.DRAG_AND_SCROLL, MouseButton = MouseButton.Right });
+            Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.LINK, MouseButton = MouseButton.Right });
+            Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.DRAG_AND_SCROLL, MouseButton = MouseButton.Right, ModifierKeys = ModifierKeys.Control });
             Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.SELECTION_SIMPLE, MouseButton = MouseButton.Left });
-            Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.SELECTION_ADDITIVE, MouseButton = MouseButton.Left });
+            Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.SELECTION_ADDITIVE, MouseButton = MouseButton.Left, ModifierKeys = ModifierKeys.Control });
             Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.SELECTION_BOX, MouseButton = MouseButton.Left, ModifierKeys = ModifierKeys.Shift });
         }
 

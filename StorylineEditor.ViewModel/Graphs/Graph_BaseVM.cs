@@ -313,7 +313,13 @@ namespace StorylineEditor.ViewModel.Graphs
                     {
                         if (targetNodeViewModel == toNodeViewModel)
                         {
-                            HidePreviewLink();
+                            Point position = args.GetPosition(args.Source as UIElement);
+
+                            previewLink.ToX = FromLocalToAbsoluteX(position.X);
+                            previewLink.ToY = FromLocalToAbsoluteY(position.Y);
+                            UpdateLinkLocalPosition(previewLink, ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
+
+                            previewLink.Description = null;
                         }
                         else
                         {
@@ -322,8 +328,6 @@ namespace StorylineEditor.ViewModel.Graphs
                             UpdateLinkLocalPosition(previewLink, ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
 
                             previewLink.Description = CanLinkNodes(targetNodeViewModel, toNodeViewModel);
-
-                            ShowPreviewLink(targetNodeViewModel);
                         }
                     }
                     else
@@ -335,8 +339,6 @@ namespace StorylineEditor.ViewModel.Graphs
                         UpdateLinkLocalPosition(previewLink, ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
 
                         previewLink.Description = null;
-
-                        ShowPreviewLink(targetNodeViewModel);
                     }
                 }
             }
@@ -474,7 +476,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
             BaseM model = _modelCreator(SelectedNodeType, position);
 
-            AddNode(model, true, false);
+            AddNode(model, true);
         }
 
         private void DuplicateNodeImpl(MouseButtonEventArgs args)
@@ -493,6 +495,8 @@ namespace StorylineEditor.ViewModel.Graphs
         private void StartLinkImpl(MouseButtonEventArgs args)
         {
             targetNodeViewModel = (INodeVM)(args.OriginalSource as FrameworkElement).DataContext;
+
+            ShowPreviewLink(targetNodeViewModel);
 
             UserAction = ConfigM.Config.UserActions.First((userAction) => userAction.UserActionType == USER_ACTION_TYPE.LINK);
         }
@@ -676,7 +680,7 @@ namespace StorylineEditor.ViewModel.Graphs
                 {
                     nodeModel.positionX += OffsetX;
                     nodeModel.positionY += OffsetY;
-                    AddNode(nodeModel, resetSelection, false);
+                    AddNode(nodeModel, resetSelection);
                     resetSelection = false;
                 }
 
@@ -697,7 +701,7 @@ namespace StorylineEditor.ViewModel.Graphs
             }
         }
 
-        void AddNode(BaseM model, bool resetSelection, bool tryStartLink)
+        void AddNode(BaseM model, bool resetSelection)
         {
             Add(model, null);
 
@@ -713,8 +717,6 @@ namespace StorylineEditor.ViewModel.Graphs
             ((INodeVM)NodesVMs[model.id]).IsRoot = true;
 
             AddToSelection(viewModel, resetSelection);
-
-            if (resetSelection && tryStartLink) targetNodeViewModel = viewModel as INodeVM;
         }
 
         public void Delete()
@@ -1130,7 +1132,9 @@ namespace StorylineEditor.ViewModel.Graphs
         {
             previewLink.FromX = nodeViewModel.PositionX;
             previewLink.FromY = nodeViewModel.PositionY;
-            UpdateLinkLocalPosition(previewLink, ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.Scale);
+            previewLink.ToX = nodeViewModel.PositionX;
+            previewLink.ToY = nodeViewModel.PositionY;
+            UpdateLinkLocalPosition(previewLink, ELinkVMUpdate.FromX | ELinkVMUpdate.FromY  | ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
 
             ItemsVMs.Add(previewLink);
         }
