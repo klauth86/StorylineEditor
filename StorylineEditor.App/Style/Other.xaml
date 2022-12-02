@@ -1454,6 +1454,11 @@ StorylineEditor распространяется в надежде, что он�
                                           ItemsSource="{Binding FilteredDialogCharacterCVS.View}"
                                           Filter="{Binding DialogCharacterFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
+                    <controls:ComboBoxExt SelectedValue="{Binding DialogLocation, UpdateSourceTrigger=PropertyChanged}"
+                                          Tag="{StaticResource String_Tag_Dialog_DialogLocation}"
+                                          ItemsSource="{Binding FilteredDialogLocationCVS.View}"
+                                          Filter="{Binding DialogLocationFilter, UpdateSourceTrigger=PropertyChanged}"
+                                          Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
                 </StackPanel>
             </TabItem>
         </TabControl>
@@ -1563,6 +1568,11 @@ StorylineEditor распространяется в надежде, что он�
                 <StackPanel Orientation="Vertical">
                     <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_Name}"></TextBox>
                     <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
+                    <controls:ComboBoxExt SelectedValue="{Binding ReplicaLocation, UpdateSourceTrigger=PropertyChanged}"
+                                          Tag="{StaticResource String_Tag_Dialog_ReplicaLocation}"
+                                          ItemsSource="{Binding FilteredReplicaLocationCVS.View}"
+                                          Filter="{Binding ReplicaLocationFilter, UpdateSourceTrigger=PropertyChanged}"
+                                          Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
                 </StackPanel>
             </TabItem>
         </TabControl>

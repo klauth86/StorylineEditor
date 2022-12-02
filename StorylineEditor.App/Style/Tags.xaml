@@ -120,6 +120,10 @@ StorylineEditor распространяется в надежде, что он�
 
     <sys:String x:Key="String_Tag_Dialog_DialogCharacter">Персонаж</sys:String>
 
+    <sys:String x:Key="String_Tag_Dialog_DialogLocation">Локация</sys:String>
+
+    <sys:String x:Key="String_Tag_Dialog_ReplicaLocation">Локация</sys:String>
+
     <sys:String x:Key="String_Tag_Node_Regular_Character">Владелец</sys:String>
 
     <sys:String x:Key="String_Tag_Node_Regular_OverrideName">Иное отображаемое имя</sys:String>

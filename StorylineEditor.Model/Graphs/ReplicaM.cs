@@ -14,7 +14,10 @@ namespace StorylineEditor.Model.Graphs
 {
     public class ReplicaM : GraphM
     {
-        public ReplicaM(long additionalTicks) : base(additionalTicks) { }
+        public ReplicaM(long additionalTicks) : base(additionalTicks)
+        {
+            locationId = null;
+        }
 
         public ReplicaM() : this(0) { }
 
@@ -24,5 +27,16 @@ namespace StorylineEditor.Model.Graphs
             CloneInternal(clone);
             return clone;
         }
+        protected override void CloneInternal(BaseM targetObject)
+        {
+            base.CloneInternal(targetObject);
+
+            if (targetObject is ReplicaM casted)
+            {
+                casted.locationId = locationId;
+            }
+        }
+
+        public string locationId { get; set; }
     }
 }

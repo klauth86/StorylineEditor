@@ -17,6 +17,7 @@ namespace StorylineEditor.Model.Graphs
         public DialogM(long additionalTicks) : base(additionalTicks)
         {
             npcId = null;
+            locationId = null;
         }
 
         public DialogM() : this(0) { }
@@ -34,9 +35,11 @@ namespace StorylineEditor.Model.Graphs
             if (targetObject is DialogM casted)
             {
                 casted.npcId = npcId;
+                casted.locationId = locationId;
             }
         }
 
         public string npcId { get; set; }
+        public string locationId { get; set; }
     }
 }

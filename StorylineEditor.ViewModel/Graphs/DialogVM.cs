@@ -27,6 +27,7 @@ namespace StorylineEditor.ViewModel.Graphs
         public DialogVM(DialogM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
 
         public BaseM DialogCharacter => ActiveContextService.GetCharacter(Model.npcId);
+        public BaseM DialogLocation => ActiveContextService.GetLocation(Model.locationId);
 
         protected ICommand infoCommand;
         public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<Notifier>((viewModel) =>
@@ -38,7 +39,7 @@ namespace StorylineEditor.ViewModel.Graphs
     public class DialogEditorVM : Graph_BaseVM<DialogM>
     {
         public CollectionViewSource FilteredDialogCharacterCVS { get; }
-
+        public CollectionViewSource FilteredDialogLocationCVS { get; }
         public DialogEditorVM(DialogVM viewModel, ICallbackContext callbackContext, Func<Type, Point, BaseM> modelCreator, Func<BaseM, ICallbackContext, Notifier> viewModelCreator,
            Func<Notifier, ICallbackContext, Notifier> editorCreator, Type defaultNodeType) : base(viewModel.Model, callbackContext,
                 modelCreator, viewModelCreator, editorCreator, defaultNodeType)
@@ -47,15 +48,24 @@ namespace StorylineEditor.ViewModel.Graphs
             
             if (FilteredDialogCharacterCVS.View != null)
             {
-                FilteredDialogCharacterCVS.View.Filter = OnFilter;
+                FilteredDialogCharacterCVS.View.Filter = OnCharacterFilter;
                 FilteredDialogCharacterCVS.View.SortDescriptions.Add(new SortDescription(nameof(BaseM.name), ListSortDirection.Ascending));
                 FilteredDialogCharacterCVS.View.MoveCurrentTo(DialogCharacter);
+            }
+
+            FilteredDialogLocationCVS = new CollectionViewSource() { Source = ActiveContextService.Locations };
+
+            if (FilteredDialogLocationCVS.View != null)
+            {
+                FilteredDialogLocationCVS.View.Filter = OnLocationFilter;
+                FilteredDialogLocationCVS.View.SortDescriptions.Add(new SortDescription(nameof(BaseM.name), ListSortDirection.Ascending));
+                FilteredDialogLocationCVS.View.MoveCurrentTo(DialogLocation);
             }
         }
 
         protected override string CanLinkNodes(INodeVM from, INodeVM to) { return string.Empty; }
 
-        private bool OnFilter(object sender)
+        private bool OnCharacterFilter(object sender)
         {
             if (sender is BaseM model)
             {
@@ -67,7 +77,8 @@ namespace StorylineEditor.ViewModel.Graphs
         protected string dialogCharacterFilter;
         public string DialogCharacterFilter
         {
-            set {
+            set
+            {
                 if (value != dialogCharacterFilter)
                 {
                     dialogCharacterFilter = value;
@@ -86,6 +97,42 @@ namespace StorylineEditor.ViewModel.Graphs
                     Model.npcId = value?.id;
                     OnModelChanged(Model, nameof(DialogVM.DialogCharacter));
                     Notify(nameof(DialogCharacter));
+                }
+            }
+        }
+
+        private bool OnLocationFilter(object sender)
+        {
+            if (sender is BaseM model)
+            {
+                return string.IsNullOrEmpty(dialogLocationFilter) || model.PassFilter(dialogLocationFilter);
+            }
+            return false;
+        }
+
+        protected string dialogLocationFilter;
+        public string DialogLocationFilter
+        {
+            set
+            {
+                if (value != dialogLocationFilter)
+                {
+                    dialogLocationFilter = value;
+                    FilteredDialogLocationCVS.View?.Refresh();
+                }
+            }
+        }
+
+        public BaseM DialogLocation
+        {
+            get => ActiveContextService.GetLocation(Model.locationId);
+            set
+            {
+                if (value?.id != Model.locationId)
+                {
+                    Model.locationId = value?.id;
+                    OnModelChanged(Model, nameof(DialogVM.DialogLocation));
+                    Notify(nameof(DialogLocation));
                 }
             }
         }
