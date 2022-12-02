@@ -51,6 +51,7 @@ namespace StorylineEditor.Model
     {
         public StorylineM(long additionalTicks) : base(additionalTicks)
         {
+            locations = new List<BaseM>();
             characters = new List<BaseM>();
             items = new List<BaseM>();
             actors = new List<BaseM>();
@@ -64,6 +65,7 @@ namespace StorylineEditor.Model
         public override BaseM Clone(long additionalTicks) => throw new NotImplementedException();
         protected override void CloneInternal(BaseM targetObject) => throw new NotImplementedException();
 
+        public List<BaseM> locations { get; set; }
         public List<BaseM> characters { get; set; }
         public List<BaseM> items { get; set; }
         public List<BaseM> actors { get; set; }

@@ -264,6 +264,7 @@ StorylineEditor распространяется в надежде, что он�
 
     <DataTemplate DataType="{x:Type vm:StorylineVM}" x:Key="DT_StorylineVM_Tabs">
         <StackPanel Orientation="Horizontal">
+            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding LocationsTabCommand}" Content="{StaticResource String_Tag_MainMenu_Locations}"></Button>
             <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding CharactersTabCommand}" Content="{StaticResource String_Tag_MainMenu_Characters}"></Button>
             <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding ItemsTabCommand}" Content="{StaticResource String_Tag_MainMenu_Items}"></Button>
             <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding ActorsTabCommand}" Content="{StaticResource String_Tag_MainMenu_Actors}"></Button>
@@ -339,7 +340,7 @@ StorylineEditor распространяется в надежде, что он�
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="🗀" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+                <TextBlock Text="{StaticResource String_Icon_Open}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
                 <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
                 <TextBlock Grid.Column="2" Style="{StaticResource S_TextBlock_Selector_Cut}"></TextBlock>
             </Grid>
@@ -353,6 +354,44 @@ StorylineEditor распространяется в надежде, что он�
         </StackPanel>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vm:LocationVM}">
+        <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+            <Border.InputBindings>
+                <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}"></MouseBinding>
+            </Border.InputBindings>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{StaticResource String_Icon_Location}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+                <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+                <TextBlock Grid.Column="2" Style="{StaticResource S_TextBlock_Selector_Cut}"></TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:LocationEditorVM}">
+        <StackPanel Orientation="Vertical">
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_Name}"></TextBox>
+            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type m:LocationM}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{StaticResource String_Icon_Location}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+            <TextBlock Grid.Column="1" Text="{Binding name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
+        </Grid>
+    </DataTemplate>
+    
     <DataTemplate DataType="{x:Type vm:CharacterVM}">
         <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}"
                     bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"

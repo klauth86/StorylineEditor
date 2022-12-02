@@ -47,6 +47,7 @@
     <Compile Include="Graphs\QuestM.cs" />
     <Compile Include="Graphs\ReplicaM.cs" />
     <Compile Include="ItemM.cs" />
+    <Compile Include="LocationM.cs" />
     <Compile Include="Nodes\LinkM.cs" />
     <Compile Include="Nodes\Node_BaseM.cs" />
     <Compile Include="Nodes\Node_InteractiveM.cs" />

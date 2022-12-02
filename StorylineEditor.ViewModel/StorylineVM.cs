@@ -36,6 +36,16 @@ namespace StorylineEditor.ViewModel
 
 
 
+        private ICommand locationsTabCommand;
+        public ICommand LocationsTabCommand => locationsTabCommand ?? (locationsTabCommand = new RelayCommand(() =>
+        {
+            Selection = new CollectionVM(Model.locations, this,
+                (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new LocationM() { name = "Новая локация" }; },
+                (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM, callbackContext); else return new LocationVM((LocationM)model, callbackContext); },
+                (Notifier viewModel, ICallbackContext callbackContext) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM, callbackContext); else return new LocationEditorVM((LocationVM)viewModel, callbackContext); });
+            SelectionModel = Model.locations;
+        }, () => SelectionModel != Model.locations));
+
         private ICommand charactersTabCommand;
         public ICommand CharactersTabCommand => charactersTabCommand ?? (charactersTabCommand = new RelayCommand(() =>
         {

@@ -49,6 +49,9 @@ namespace StorylineEditor.ViewModel
             }
         }
 
+        public static IEnumerable<BaseM> Locations => GetEnumerator(ActiveStoryline?.Model.locations);
+        public static BaseM GetLocation(string id) => Locations?.FirstOrDefault((model) => model.id == id);
+
         public static IEnumerable<BaseM> Characters => GetEnumerator(ActiveStoryline?.Model.characters);
         public static BaseM GetCharacter(string id) => Characters?.FirstOrDefault((model) => model.id == id);
 
