@@ -257,6 +257,15 @@ StorylineEditor распространяется в надежде, что он�
 
     <!-- Data Templates -->
 
+    <DataTemplate x:Key="DT_Graph_Stats">
+        <StackPanel Background="{StaticResource Color_Stats_Background}" Orientation="Vertical">
+            <TextBlock Margin="{StaticResource Thickness_Margin_4x}" Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock}" 
+                       HorizontalAlignment="Center" FontWeight="Bold"></TextBlock>
+            <TextBlock Margin="{StaticResource Thickness_Margin_4x}" Text="{Binding Stats, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock}"
+                   FontFamily="Courier New"></TextBlock>
+        </StackPanel>
+    </DataTemplate>
+    
     <DataTemplate x:Key="DT_HasPredicates_Mini">
         <Grid Width="{StaticResource Double_Size_16x}" Height="{StaticResource Double_Size_16x}" ToolTip="{StaticResource String_HasPredicates_Tooltip}">
             <Grid.RenderTransform>

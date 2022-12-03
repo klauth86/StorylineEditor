@@ -12,10 +12,13 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model;
 using StorylineEditor.Model.Graphs;
+using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Nodes;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -34,6 +37,73 @@ namespace StorylineEditor.ViewModel.Graphs
         {
             CallbackContext?.Callback(this, nameof(ICallbackContext));
         }));
+
+        public override string Stats
+        {
+            get
+            {
+                string result = "";
+
+                Dictionary<string, Dictionary<string, int>> countByCharacter = new Dictionary<string, Dictionary<string, int>>();
+                Dictionary<string, int> countByTypeDescription = new Dictionary<string, int>();
+
+                int characterNameMaxLength = 0;
+
+                foreach (var node in Model.nodes)
+                {
+                    string characterName = "N/A";
+
+                    if (node is Node_RegularM regularNode)
+                    {
+                        characterName = ActiveContextService.GetCharacter(regularNode.characterId)?.name;
+                        characterNameMaxLength = Math.Max(characterName?.Length ?? 0, characterNameMaxLength);
+                    }
+
+                    string gender = " ";
+
+                    if (node.gender == GENDER.MALE) gender = "👨";
+                    if (node.gender == GENDER.FEMALE) gender = "👩";
+
+                    if (!countByCharacter.ContainsKey(characterName))
+                    {
+                        countByCharacter.Add(characterName, new Dictionary<string, int>() { { " ", 0 }, { "👨", 0 }, { "👩", 0 } });
+                    }
+
+                    countByCharacter[characterName][gender]++;
+
+                    var typeDescription = node.GetType().Name;
+                    if (!countByTypeDescription.ContainsKey(typeDescription)) countByTypeDescription.Add(typeDescription, 0);
+                    countByTypeDescription[typeDescription]++;
+                }
+
+                if (countByCharacter.Count > 0)
+                {
+                    // Delimiter
+                    result += Environment.NewLine;
+
+                    result += "ВЕРШИНЫ ПО ПЕРСОНАЖАМ:" + Environment.NewLine;
+                    result += Environment.NewLine;
+
+                    foreach (var entry in countByCharacter.OrderBy(pair => pair.Key))
+                    {
+                        result += string.Format("{0, -" + (characterNameMaxLength + 6) + "}{1}", "- " + entry.Key + ":", string.Join("\t", entry.Value.Select(pair => string.Format("{0}{1, -6}", pair.Key, pair.Value)))) + Environment.NewLine;
+                    }
+                }
+
+                if (countByTypeDescription.Count > 0)
+                {
+                    // Delimiter
+                    result += Environment.NewLine;
+
+                    result += "ВЕРШИНЫ ПО ТИПАМ:" + Environment.NewLine;
+                    result += Environment.NewLine;
+
+                    foreach (var entry in countByTypeDescription.OrderBy(pair => pair.Key)) result += "- " + entry.Key + ": " + entry.Value + Environment.NewLine;
+                }
+
+                return result;
+            }
+        }
     }
 
     public class DialogEditorVM : Graph_BaseVM<DialogM>
@@ -136,5 +206,9 @@ namespace StorylineEditor.ViewModel.Graphs
                 }
             }
         }
+
+        public override string Title => null;
+
+        public override string Stats => null;
     }
 }

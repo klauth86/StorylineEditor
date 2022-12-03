@@ -80,5 +80,9 @@ namespace StorylineEditor.App.Config
                 Notify(nameof(IsShift));
             }
         }
+
+        public override string Title => null;
+
+        public override string Stats => null;
     }
 }

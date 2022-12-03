@@ -279,5 +279,9 @@ namespace StorylineEditor.ViewModel
                 CallbackContext?.Callback(viewModelObj, propName);
             }
         }
+
+        public override string Title => null;
+
+        public override string Stats => null;
     }
 }

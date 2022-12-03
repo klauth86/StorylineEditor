@@ -30,6 +30,10 @@ namespace StorylineEditor.ViewModel.Common
                     Model.name = value;
                     OnModelChanged(Model, nameof(Name));
                     CallbackContext?.Callback(this, nameof(Name));
+
+                    OnModelChanged(Model, nameof(Title));
+
+                    OnModelChanged(Model, nameof(Stats));
                 }
             }
         }
@@ -43,8 +47,14 @@ namespace StorylineEditor.ViewModel.Common
                 {
                     Model.description = value;
                     OnModelChanged(Model, nameof(Description));
+
+                    OnModelChanged(Model, nameof(Stats));
                 }
             }
         }
+
+        public override string Title => Name;
+
+        public override string Stats => Description;
     }
 }

@@ -57,4 +57,6 @@ StorylineEditor распространяется в надежде, что он�
 
     <SolidColorBrush x:Key="Color_HasGameEvents_Foreground" Color="White" />
 
+    <SolidColorBrush x:Key="Color_Stats_Background" Color="LightGray"/>
+
 </ResourceDictionary>

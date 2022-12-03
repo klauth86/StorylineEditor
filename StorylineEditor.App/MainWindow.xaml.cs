@@ -124,6 +124,7 @@ namespace StorylineEditor.App
         {
             new DlgWindow()
             {
+                Owner = this,
                 DataContext = new ConfigVM(ConfigM.Config, this),
                 SizeToContent = SizeToContent.WidthAndHeight,
                 WindowStyle = WindowStyle.ToolWindow,
@@ -137,7 +138,16 @@ namespace StorylineEditor.App
         {
             if (propName == nameof(ICallbackContext))
             {
-
+                new DlgWindow()
+                {
+                    Owner = this,
+                    DataContext = viewModelObj,
+                    SizeToContent = SizeToContent.WidthAndHeight,
+                    WindowStyle = WindowStyle.ToolWindow,
+                    MinWidth = 256,
+                    ResizeMode = ResizeMode.NoResize,
+                    ContentTemplate = App.Current.Resources["DT_Graph_Stats"] as DataTemplate
+                }.Show();
             }
             else
             {
