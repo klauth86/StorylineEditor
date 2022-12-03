@@ -88,6 +88,20 @@ namespace StorylineEditor.Model.Nodes
             CloneInternal(clone);
             return clone;
         }
+
+        protected override void CloneInternal(BaseM targetObject)
+        {
+            base.CloneInternal(targetObject);
+
+            if (targetObject is Node_GateM casted)
+            {
+                casted.dialogId = dialogId;
+                casted.exitNodeId = exitNodeId;
+            }
+        }
+
+        public string dialogId { get; set; }
+        public string exitNodeId { get; set; }
     }
 
     public class Node_ExitM : Node_BaseM

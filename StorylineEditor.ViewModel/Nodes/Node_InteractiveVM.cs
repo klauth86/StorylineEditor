@@ -10,13 +10,18 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Model;
 using StorylineEditor.Model.GameEvents;
+using StorylineEditor.Model.Graphs;
 using StorylineEditor.Model.Nodes;
 using StorylineEditor.Model.Predicates;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Predicates;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Nodes
@@ -125,11 +130,116 @@ namespace StorylineEditor.ViewModel.Nodes
     public class Node_GateVM : Node_InteractiveVM<Node_GateM>
     {
         public Node_GateVM(Node_GateM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+
+        public BaseM TargetDialog => ActiveContextService.GetDialog(Model.dialogId);
+
+        public BaseM TargetExitNode => (TargetDialog as GraphM)?.nodes.FirstOrDefault((node) => node.id == Model.exitNodeId);
     }
 
-    public class Node_GateEditorVM : Node_GateVM
+    public class Node_GateEditorVM : Node_InteractiveVM<Node_GateM>
     {
-        public Node_GateEditorVM(Node_GateVM viewModel) : base(viewModel.Model, viewModel.CallbackContext) { }
+        public CollectionViewSource DialogsCVS { get; }
+        public CollectionViewSource NodesCVS { get; }
+
+        public Node_GateEditorVM(Node_GateVM viewModel) : base(viewModel.Model, viewModel.CallbackContext)
+        {
+            DialogsCVS = new CollectionViewSource() { Source = ActiveContextService.Dialogs };
+
+            if (DialogsCVS.View != null)
+            {
+                DialogsCVS.View.Filter = OnDialogFilter;
+                DialogsCVS.View.SortDescriptions.Add(new SortDescription(nameof(BaseM.id), ListSortDirection.Ascending));
+                DialogsCVS.View.MoveCurrentTo(TargetDialog);
+            }
+
+            NodesCVS = new CollectionViewSource();
+
+            RefreshNodesCVS();
+        }
+
+        private bool OnDialogFilter(object sender)
+        {
+            if (sender is BaseM model)
+            {
+                return string.IsNullOrEmpty(targetDialogFilter) || model.PassFilter(targetDialogFilter);
+            }
+            return false;
+        }
+
+        protected string targetDialogFilter;
+        public string TargetDialogFilter
+        {
+            set
+            {
+                if (value != targetDialogFilter)
+                {
+                    targetDialogFilter = value;
+                    DialogsCVS.View?.Refresh();
+                }
+            }
+        }
+
+        public BaseM TargetDialog
+        {
+            get => ActiveContextService.GetDialog(Model.dialogId);
+            set
+            {
+                if (value?.id != Model.dialogId)
+                {
+                    Model.dialogId = value?.id;
+                    OnModelChanged(Model, nameof(TargetDialog));
+                    Notify(nameof(TargetDialog));
+
+                    RefreshNodesCVS();
+                }
+            }
+        }
+
+        private bool OnNodesFilter(object sender)
+        {
+            if (sender is BaseM model)
+            {
+                return (string.IsNullOrEmpty(nodesFilter) || model.PassFilter(nodesFilter)) && model is Node_ExitM;
+            }
+            return false;
+        }
+
+        protected string nodesFilter;
+        public string NodesFilter
+        {
+            set
+            {
+                if (value != nodesFilter)
+                {
+                    nodesFilter = value;
+                    NodesCVS.View?.Refresh();
+                }
+            }
+        }
+
+        public BaseM TargetExitNode
+        {
+            get => (TargetDialog as GraphM)?.nodes.FirstOrDefault((node) => node.id == Model.exitNodeId);
+            set
+            {
+                if (value?.id != Model.exitNodeId)
+                {
+                    Model.exitNodeId = value?.id;
+                    OnModelChanged(Model, nameof(TargetExitNode));
+                    Notify(nameof(TargetExitNode));
+                }
+            }
+        }
+
+        private void RefreshNodesCVS()
+        {
+            if (TargetDialog is GraphM graph)
+            {
+                NodesCVS.Source = graph.nodes;
+                if (NodesCVS.View != null) NodesCVS.View.Filter = OnNodesFilter;
+                NodesCVS.View?.MoveCurrentTo(TargetExitNode != null && graph.nodes.Contains(TargetExitNode) ? TargetExitNode : null);
+            }
+        }
     }
 
     public class Node_ExitVM : Node_BaseVM<Node_ExitM>

@@ -126,6 +126,10 @@ StorylineEditor распространяется в надежде, что он�
 
     <sys:String x:Key="String_Tag_Node_Regular_Character">Владелец</sys:String>
 
+    <sys:String x:Key="String_Tag_Node_Gate_TargetDialog">Диалог</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Gate_TargetExitNode">Выход</sys:String>
+    
     <sys:String x:Key="String_Tag_Node_Regular_OverrideName">Иное отображаемое имя</sys:String>
 
     <sys:String x:Key="String_Tag_Node_Regular_FileHttpRef">Ссылка на аудио</sys:String>
