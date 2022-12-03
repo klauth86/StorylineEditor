@@ -208,10 +208,11 @@ StorylineEditor распространяется в надежде, что он�
         <Setter Property="Background" Value="{StaticResource Color_Remove}"></Setter>
     </Style>
 
-    <Style TargetType="Button" x:Key="S_Button_Node_Remove" BasedOn="{StaticResource S_Button_Remove}">
+    <Style TargetType="StackPanel" x:Key="S_StackPanel_Node_TopRightPanel">
+        <Setter Property="Orientation" Value="Horizontal"></Setter>
         <Setter Property="RenderTransform">
             <Setter.Value>
-                <TranslateTransform X="{StaticResource Double_Size_12x}" Y="{StaticResource Double_Size_12x-}"></TranslateTransform>
+                <TranslateTransform X="{StaticResource Double_Size_12x}" Y="{StaticResource Double_Size_24x-}"></TranslateTransform>
             </Setter.Value>
         </Setter>
     </Style>
@@ -255,6 +256,36 @@ StorylineEditor распространяется в надежде, что он�
     </Style>
 
     <!-- Data Templates -->
+
+    <DataTemplate x:Key="DT_HasPredicates">
+        <Grid x:Name="gr_Main" Width="{StaticResource Double_Size_24x}" Height="{StaticResource Double_Size_24x}">
+            <Grid.RenderTransform>
+                <TranslateTransform></TranslateTransform>
+            </Grid.RenderTransform>
+            <Ellipse Fill="{StaticResource Color_HasPredicates_Fill}" Stroke="{StaticResource Color_Link}" StrokeThickness="{StaticResource Double_Margin_1x}"></Ellipse>
+            <Label FontSize="{StaticResource FontSize_VerySmall}" VerticalAlignment="Center" HorizontalAlignment="Center" Content="{StaticResource String_Icon_HasPredicates}"></Label>
+        </Grid>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding HasPredicates, UpdateSourceTrigger=PropertyChanged}" Value="false">
+                <Setter TargetName="gr_Main" Property="Visibility" Value="Hidden"></Setter>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate x:Key="DT_HasGameEvents">
+        <Grid x:Name="gr_Main" Width="{StaticResource Double_Size_24x}" Height="{StaticResource Double_Size_24x}">
+            <Grid.RenderTransform>
+                <TranslateTransform></TranslateTransform>
+            </Grid.RenderTransform>
+            <Ellipse Fill="{StaticResource Color_HasPredicates_Fill}" Stroke="{StaticResource Color_Link}" StrokeThickness="{StaticResource Double_Margin_1x}"></Ellipse>
+            <Label FontSize="{StaticResource FontSize_VerySmall}" VerticalAlignment="Center" HorizontalAlignment="Center" Content="{StaticResource String_Icon_HasGameEvents}"></Label>
+        </Grid>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding HasGameEvents, UpdateSourceTrigger=PropertyChanged}" Value="false">
+                <Setter TargetName="gr_Main" Property="Visibility" Value="Hidden"></Setter>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
 
     <DataTemplate DataType="{x:Type m:FolderM}">
         <Button VerticalAlignment="Center" Template="{StaticResource CT_Button_Path}" Command="{Binding Path=DataContext.SetContextCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}">
@@ -859,7 +890,9 @@ StorylineEditor распространяется в надежде, что он�
 
                 <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
 
-                <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
+                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <Button Style="{StaticResource S_Button_Remove}"></Button>
+                </StackPanel>
             </Grid>
         </Border>
     </DataTemplate>
@@ -910,7 +943,9 @@ StorylineEditor распространяется в надежде, что он�
 
                 <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
 
-                <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
+                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <Button Style="{StaticResource S_Button_Remove}"></Button>
+                </StackPanel>
             </Grid>
         </Border>
     </DataTemplate>
@@ -941,7 +976,11 @@ StorylineEditor распространяется в надежде, что он�
 
                 <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
 
-                <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
+                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
+                    <ContentControl ContentTemplate="{StaticResource DT_HasGameEvents}" Content="{Binding}"></ContentControl>
+                    <Button Style="{StaticResource S_Button_Remove}"></Button>
+                </StackPanel>
             </Grid>
         </Border>
     </DataTemplate>
@@ -1178,7 +1217,11 @@ StorylineEditor распространяется в надежде, что он�
 
                 <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
 
-                <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
+                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
+                    <ContentControl ContentTemplate="{StaticResource DT_HasGameEvents}" Content="{Binding}"></ContentControl>
+                    <Button Style="{StaticResource S_Button_Remove}"></Button>
+                </StackPanel>
             </Grid>
         </Border>
     </DataTemplate>
@@ -1199,7 +1242,11 @@ StorylineEditor распространяется в надежде, что он�
 
                 <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
 
-                <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
+                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
+                    <ContentControl ContentTemplate="{StaticResource DT_HasGameEvents}" Content="{Binding}"></ContentControl>
+                    <Button Style="{StaticResource S_Button_Remove}"></Button>
+                </StackPanel>
             </Grid>
         </Border>
     </DataTemplate>
@@ -1220,7 +1267,9 @@ StorylineEditor распространяется в надежде, что он�
 
                 <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
 
-                <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
+                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <Button Style="{StaticResource S_Button_Remove}"></Button>
+                </StackPanel>
             </Grid>
         </Border>
     </DataTemplate>
@@ -1262,7 +1311,11 @@ StorylineEditor распространяется в надежде, что он�
 
                 <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
 
-                <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
+                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
+                    <ContentControl ContentTemplate="{StaticResource DT_HasGameEvents}" Content="{Binding}"></ContentControl>
+                    <Button Style="{StaticResource S_Button_Remove}"></Button>
+                </StackPanel>
             </Grid>
         </Border>
         <DataTemplate.Triggers>
@@ -1330,7 +1383,11 @@ StorylineEditor распространяется в надежде, что он�
 
                 <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
 
-                <Button Style="{StaticResource S_Button_Node_Remove}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
+                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
+                    <ContentControl ContentTemplate="{StaticResource DT_HasGameEvents}" Content="{Binding}"></ContentControl>
+                    <Button Style="{StaticResource S_Button_Remove}"></Button>
+                </StackPanel>
             </Grid>
         </Border>
         <DataTemplate.Triggers>

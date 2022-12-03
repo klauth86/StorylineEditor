@@ -46,14 +46,15 @@ namespace StorylineEditor.ViewModel.Nodes
                         Model.predicates.Add(predicateModel);
 
                         Predicates.Add(viewModel);
+                        OnModelChanged(Model, nameof(HasPredicates));
                     }
                 }
 
                 Notify(nameof(SelectedPredicateType));
             }
         }
-
         public ObservableCollection<Notifier> Predicates { get; }
+        public bool HasPredicates => Model.predicates.Count > 0;
 
         public Type SelectedGameEventType
         {
@@ -68,14 +69,16 @@ namespace StorylineEditor.ViewModel.Nodes
                         Model.gameEvents.Add(gameEventModel);
 
                         GameEvents.Add(viewModel);
+                        OnModelChanged(Model, nameof(HasGameEvents));
                     }
                 }
 
                 Notify(nameof(SelectedGameEventType));
             }
         }
-
         public ObservableCollection<Notifier> GameEvents { get; }
+        public bool HasGameEvents => Model.gameEvents.Count > 0;
+
 
         protected ICommand removeElementCommand;
         public ICommand RemoveElementCommand => removeElementCommand ?? (removeElementCommand = new RelayCommand<object>((obj) =>
@@ -87,10 +90,12 @@ namespace StorylineEditor.ViewModel.Nodes
                     if (Predicates.Remove(viewModel))
                     {
                         Model.predicates.Remove(withModel.GetModel<P_BaseM>());
+                        OnModelChanged(Model, nameof(HasPredicates));
                     }
                     else if (GameEvents.Remove(viewModel))
                     {
                         Model.gameEvents.Remove(withModel.GetModel<GE_BaseM>());
+                        OnModelChanged(Model, nameof(HasGameEvents));
                     }
                 }
             }
