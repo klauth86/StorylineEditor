@@ -7,6 +7,8 @@
     <sys:Double x:Key="FontSize_Small">10</sys:Double>
     
     <sys:Double x:Key="FontSize_Medium">12</sys:Double>
+
+    <sys:Double x:Key="FontSize_Large">14</sys:Double>
     
     <sys:Double x:Key="FontSize_VeryLarge">16</sys:Double>
 
