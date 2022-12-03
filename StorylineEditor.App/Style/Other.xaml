@@ -258,12 +258,12 @@ StorylineEditor распространяется в надежде, что он�
     <!-- Data Templates -->
 
     <DataTemplate x:Key="DT_HasPredicates">
-        <Grid x:Name="gr_Main" Width="{StaticResource Double_Size_24x}" Height="{StaticResource Double_Size_24x}">
+        <Grid x:Name="gr_Main" Width="{StaticResource Double_Size_24x}" Height="{StaticResource Double_Size_24x}" ToolTip="{StaticResource String_HasPredicates_Tooltip}">
             <Grid.RenderTransform>
                 <TranslateTransform></TranslateTransform>
             </Grid.RenderTransform>
-            <Ellipse Fill="{StaticResource Color_HasPredicates_Fill}" Stroke="{StaticResource Color_Link}" StrokeThickness="{StaticResource Double_Margin_1x}"></Ellipse>
-            <Label FontSize="{StaticResource FontSize_VerySmall}" VerticalAlignment="Center" HorizontalAlignment="Center" Content="{StaticResource String_Icon_HasPredicates}"></Label>
+            <Ellipse Fill="{StaticResource Color_HasPredicates_Fill}" StrokeThickness="{StaticResource Double_Margin_1x}" Stroke="{StaticResource Color_Separator}"></Ellipse>
+            <TextBlock FontWeight="Bold" Foreground="{StaticResource Color_HasPredicates_Foreground}" FontSize="{StaticResource FontSize_VeryLarge}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{StaticResource String_Icon_HasPredicates}"></TextBlock>
         </Grid>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding HasPredicates, UpdateSourceTrigger=PropertyChanged}" Value="false">
@@ -273,12 +273,12 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
 
     <DataTemplate x:Key="DT_HasGameEvents">
-        <Grid x:Name="gr_Main" Width="{StaticResource Double_Size_24x}" Height="{StaticResource Double_Size_24x}">
+        <Grid x:Name="gr_Main" Width="{StaticResource Double_Size_24x}" Height="{StaticResource Double_Size_24x}" ToolTip="{StaticResource String_HasGameEvents_Tooltip}">
             <Grid.RenderTransform>
                 <TranslateTransform></TranslateTransform>
             </Grid.RenderTransform>
-            <Ellipse Fill="{StaticResource Color_HasPredicates_Fill}" Stroke="{StaticResource Color_Link}" StrokeThickness="{StaticResource Double_Margin_1x}"></Ellipse>
-            <Label FontSize="{StaticResource FontSize_VerySmall}" VerticalAlignment="Center" HorizontalAlignment="Center" Content="{StaticResource String_Icon_HasGameEvents}"></Label>
+            <Ellipse Fill="{StaticResource Color_HasGameEvents_Fill}" StrokeThickness="{StaticResource Double_Margin_1x}" Stroke="{StaticResource Color_Separator}"></Ellipse>
+            <TextBlock FontWeight="Bold" Foreground="{StaticResource Color_HasPredicates_Foreground}" FontSize="{StaticResource FontSize_VeryLarge}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{StaticResource String_Icon_HasGameEvents}"></TextBlock>
         </Grid>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding HasGameEvents, UpdateSourceTrigger=PropertyChanged}" Value="false">
