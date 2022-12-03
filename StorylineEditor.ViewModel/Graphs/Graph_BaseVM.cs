@@ -767,6 +767,8 @@ namespace StorylineEditor.ViewModel.Graphs
             ((INodeVM)NodesVMs[model.id]).IsRoot = true;
 
             AddToSelection(viewModel, resetSelection);
+
+            OnModelChanged(Model, nameof(Stats));
         }
 
         public void Delete()
@@ -842,6 +844,8 @@ namespace StorylineEditor.ViewModel.Graphs
                     Remove(NodesVMs[nodeId], null, null);
                     NodesVMs.Remove(nodeId);
                     Remove(null, nodeModel, GetContext(nodeModel));
+
+                    OnModelChanged(Model, nameof(Stats));
                 }
             }
         }
@@ -984,6 +988,7 @@ namespace StorylineEditor.ViewModel.Graphs
                 {
                     if (propName == nameof(INodeVM.PositionX)) UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.X);
                     else if (propName == nameof(INodeVM.PositionY)) UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.Y);
+                    else if (propName == nameof(INodeVM.Gender)) OnModelChanged(Model, nameof(Stats));
                 }
             }
         }

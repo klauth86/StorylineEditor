@@ -54,6 +54,7 @@ namespace StorylineEditor.ViewModel.Nodes
                 {
                     Model.gender = value;
                     OnModelChanged(Model, nameof(Gender));
+                    CallbackContext?.Callback(this, nameof(Gender));
                 }
             }
         }
