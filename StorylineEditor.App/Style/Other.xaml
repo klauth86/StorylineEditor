@@ -1473,14 +1473,22 @@ StorylineEditor распространяется в надежде, что он�
                 <MouseBinding Gesture="RightClick" Command="{Binding InfoCommand}" CommandParameter="{Binding}"></MouseBinding>
             </Border.InputBindings>
             <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="{StaticResource String_Icon_Dialog}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+                <TextBlock Grid.RowSpan="2" Text="{StaticResource String_Icon_Dialog}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
                 <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
-                <TextBlock Grid.Column="2" Style="{StaticResource S_TextBlock_Selector_Cut}"></TextBlock>
+                <TextBlock Grid.Column="1" Grid.Row="1" FontStyle="Italic" FontSize="{StaticResource FontSize_Small}">
+                    <Run Text="{Binding DialogCharacter.name, UpdateSourceTrigger=PropertyChanged}"></Run>
+                    <Run FontWeight="Bold" Text="{Binding DialogLocation.name, UpdateSourceTrigger=PropertyChanged, StringFormat=[{0}]}"></Run>
+                </TextBlock>
+                <TextBlock Grid.Column="2" Grid.RowSpan="2" Style="{StaticResource S_TextBlock_Selector_Cut}"></TextBlock>
             </Grid>
         </Border>
     </DataTemplate>
@@ -1595,14 +1603,21 @@ StorylineEditor распространяется в надежде, что он�
                 <MouseBinding Gesture="RightClick" Command="{Binding InfoCommand}" CommandParameter="{Binding}"></MouseBinding>
             </Border.InputBindings>
             <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="{StaticResource String_Icon_Replica}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
+                <TextBlock Grid.RowSpan="2" Text="{StaticResource String_Icon_Replica}" Style="{StaticResource S_TextBlock_Selector_Icon}"></TextBlock>
                 <TextBlock Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name}"></TextBlock>
-                <TextBlock Grid.Column="2" Style="{StaticResource S_TextBlock_Selector_Cut}"></TextBlock>
+                <TextBlock Grid.Column="1" Grid.Row="1" FontStyle="Italic" FontSize="{StaticResource FontSize_Small}" FontWeight="Bold"
+                           Text="{Binding ReplicaLocation.name, UpdateSourceTrigger=PropertyChanged, StringFormat=[{0}]}">
+                </TextBlock>
+                <TextBlock Grid.Column="2" Grid.RowSpan="2" Style="{StaticResource S_TextBlock_Selector_Cut}"></TextBlock>
             </Grid>
         </Border>
     </DataTemplate>
@@ -2127,7 +2142,7 @@ StorylineEditor распространяется в надежде, что он�
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="Auto" MinWidth="64"></ColumnDefinition>
+                <ColumnDefinition Width="auto" MinWidth="64"></ColumnDefinition>
                 <ColumnDefinition Width="auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
