@@ -89,25 +89,7 @@ StorylineEditor распространяется в надежде, что он�
     <sys:String x:Key="String_Icon_Bwd">⏪</sys:String>
 
     <sys:String x:Key="String_Icon_Fwd">⏩</sys:String>
-    
-    <sys:String x:Key="String_Stats_Characters">ПО ПЕРСОНАЖАМ:</sys:String>
 
-    <sys:String x:Key="String_Stats_Types">ПО ТИПАМ:</sys:String>
-
-    <sys:String x:Key="String_Stats_Node_StepM_TmpDescription">✔ Шаг</sys:String>
-
-    <sys:String x:Key="String_Stats_Node_AlternativeM_TmpDescription">💡 Альтернатива</sys:String>
-
-    <sys:String x:Key="String_Stats_Node_RandomM_TmpDescription">⇝ Случайная</sys:String>
-
-    <sys:String x:Key="String_Stats_Node_TransitM_TmpDescription">⇴ Переход</sys:String>
-
-    <sys:String x:Key="String_Stats_Node_GateM_TmpDescription">⎆ Врата</sys:String>
-
-    <sys:String x:Key="String_Stats_Node_ExitM_TmpDescription">🚪 Выход</sys:String>
-
-    <sys:String x:Key="String_Stats_Node_DialogM_TmpDescription">💬 Диалог</sys:String>
-
-    <sys:String x:Key="String_Stats_Node_ReplicaM_TmpDescription">🗣 Реплика</sys:String>
+    <sys:String x:Key="String_Icon_Player_Transition">⏳</sys:String>
 
 </ResourceDictionary>

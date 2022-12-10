@@ -2287,9 +2287,33 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
     
     <DataTemplate DataType="{x:Type vm:PlayerContext_TransitionVM}">
-        <TextBlock Style="{StaticResource S_TextBlock_Node_Icon_Large}" Text="{StaticResource String_Tag_Player_Transition}"></TextBlock>
+        <TextBlock Style="{StaticResource S_TextBlock_Node_Icon_Large}" Text="{StaticResource String_Icon_Player_Transition}"></TextBlock>
     </DataTemplate>
-    
+
+    <DataTemplate DataType="{x:Type vm:PlayerContext_Node_ReplicaVM}">
+        <TextBlock Style="{StaticResource S_TextBlock_Node_Icon_Large}" Text="{StaticResource String_Icon_Node_Replica}"></TextBlock>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:PlayerContext_Node_DialogVM}">
+        <TextBlock Style="{StaticResource S_TextBlock_Node_Icon_Large}" Text="{StaticResource String_Icon_Node_Dialog}"></TextBlock>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:PlayerContext_Node_RandomVM}">
+        <TextBlock Style="{StaticResource S_TextBlock_Node_Icon_Large}" Text="{StaticResource String_Icon_Node_Random}"></TextBlock>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:PlayerContext_Node_TransitVM}">
+        <TextBlock Style="{StaticResource S_TextBlock_Node_Icon_Large}" Text="{StaticResource String_Icon_Node_Transit}"></TextBlock>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:PlayerContext_Node_GateVM}">
+        <TextBlock Style="{StaticResource S_TextBlock_Node_Icon_Large}" Text="{StaticResource String_Icon_Node_Gate}"></TextBlock>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:PlayerContext_Node_ExitVM}">
+        <TextBlock Style="{StaticResource S_TextBlock_Node_Icon_Large}" Text="{StaticResource String_Icon_Node_Exit}"></TextBlock>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type vm:HistoryVM}">
         <TabControl>
 
@@ -2650,4 +2674,5 @@ StorylineEditor распространяется в надежде, что он�
             
         </TabControl>
     </DataTemplate>
+    
 </ResourceDictionary>

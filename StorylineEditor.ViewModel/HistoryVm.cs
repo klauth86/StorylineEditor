@@ -44,6 +44,49 @@ namespace StorylineEditor.ViewModel
         public override string Stats => null;
     }
 
+    public class PlayerContext_Node_BaseVM : SimpleVM<HistoryVM>
+    {
+        public PlayerContext_Node_BaseVM(HistoryVM parent, ICallbackContext callbackContext, Notifier node) : base(parent, callbackContext)
+        {
+            Node = node;
+        }
+
+        public Notifier Node { get; set; }
+
+        public override string Id => null;
+        public override string Title => null;
+        public override string Stats => null;
+    }
+
+    public class PlayerContext_Node_ReplicaVM : PlayerContext_Node_BaseVM {
+        public PlayerContext_Node_ReplicaVM(HistoryVM parent, ICallbackContext callbackContext, Notifier node) : base(parent, callbackContext, node) { }
+    }
+
+    public class PlayerContext_Node_DialogVM : PlayerContext_Node_BaseVM
+    {
+        public PlayerContext_Node_DialogVM(HistoryVM parent, ICallbackContext callbackContext, Notifier node) : base(parent, callbackContext, node) { }
+    }
+
+    public class PlayerContext_Node_RandomVM : PlayerContext_Node_BaseVM
+    {
+        public PlayerContext_Node_RandomVM(HistoryVM parent, ICallbackContext callbackContext, Notifier node) : base(parent, callbackContext, node) { }
+    }
+
+    public class PlayerContext_Node_TransitVM : PlayerContext_Node_BaseVM
+    {
+        public PlayerContext_Node_TransitVM(HistoryVM parent, ICallbackContext callbackContext, Notifier node) : base(parent, callbackContext, node) { }
+    }
+
+    public class PlayerContext_Node_GateVM : PlayerContext_Node_BaseVM
+    {
+        public PlayerContext_Node_GateVM(HistoryVM parent, ICallbackContext callbackContext, Notifier node) : base(parent, callbackContext, node) { }
+    }
+
+    public class PlayerContext_Node_ExitVM : PlayerContext_Node_BaseVM
+    {
+        public PlayerContext_Node_ExitVM(HistoryVM parent, ICallbackContext callbackContext, Notifier node) : base(parent, callbackContext, node) { }
+    }
+
     public class TreePathVM : SimpleVM<HistoryVM>
     {
         public TreePathVM(HistoryVM parent, ICallbackContext callbackContext) : base(parent, callbackContext)
