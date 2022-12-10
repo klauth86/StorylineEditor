@@ -755,6 +755,8 @@ namespace StorylineEditor.ViewModel.Graphs
         {
             Add(model, null);
 
+            if (model is Node_ExitM) UpdateExitNames(model);
+
             Notifier viewModel = _viewModelCreator(model, this);
 
             NodesVMs.Add(model.id, viewModel);
@@ -846,6 +848,8 @@ namespace StorylineEditor.ViewModel.Graphs
                     Remove(null, nodeModel, GetContext(nodeModel));
 
                     OnModelChanged(Model, nameof(Stats));
+
+                    if (nodeModel is Node_ExitM) UpdateExitNames(null);
                 }
             }
         }
@@ -1049,10 +1053,10 @@ namespace StorylineEditor.ViewModel.Graphs
             HashSet<BaseM> addMs = new HashSet<BaseM>();
             HashSet<BaseM> removeMs = new HashSet<BaseM>();
 
-            foreach (var entry in NodesVMs)
+            foreach (var nodeEntry in NodesVMs)
             {
-                var model = entry.Key;
-                var viewModel = entry.Value;
+                var model = nodeEntry.Key;
+                var viewModel = nodeEntry.Value;
 
                 if (viewModel is INodeVM nodeViewModel)
                 {
@@ -1226,9 +1230,9 @@ namespace StorylineEditor.ViewModel.Graphs
             selectionRect.Width = Math.Max(selectionBox.FromX, selectionBox.ToX) - selectionRect.X;
             selectionRect.Height = Math.Max(selectionBox.FromY, selectionBox.ToY) - selectionRect.Y;
 
-            foreach (var entry in NodesVMs)
+            foreach (var nodeEntry in NodesVMs)
             {
-                var viewModel = entry.Value;
+                var viewModel = nodeEntry.Value;
 
                 if (viewModel is INodeVM nodeViewModel)
                 {
@@ -1378,6 +1382,38 @@ namespace StorylineEditor.ViewModel.Graphs
             }
 
             return result;
+        }
+
+        protected void UpdateExitNames(BaseM model)
+        {
+            if (model != null)
+            {
+                int count = Model.nodes.Count(node => node is Node_ExitM);
+                model.name = (count).ToString();
+            }
+            else
+            {
+                int i = 1;
+                foreach (Node_BaseM node in Model.nodes)
+                {
+                    if (node is Node_ExitM)
+                    {
+                        if (NodesVMs.ContainsKey(node.id))
+                        {
+                            if (NodesVMs[node.id] is INodeVM nodeViewModel)
+                            {
+                                nodeViewModel.Name = (i).ToString();
+                            }
+                        }
+                        else
+                        {
+                            node.name = (i).ToString();
+                        }
+
+                        i++;
+                    }
+                }
+            }
         }
     }
 }

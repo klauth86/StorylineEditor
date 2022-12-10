@@ -119,6 +119,10 @@ namespace StorylineEditor.ViewModel.Predicates
                 if (NodesCVS.View != null) NodesCVS.View.Filter = OnNodesFilter;
                 NodesCVS.View?.MoveCurrentTo(Node != null && graph.nodes.Contains(Node) ? Node : null);
             }
+            else
+            {
+                NodesCVS.View?.MoveCurrentTo(null);
+            }
         }
     }
 }

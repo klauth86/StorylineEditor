@@ -191,6 +191,8 @@ namespace StorylineEditor.ViewModel.Nodes
                     Notify(nameof(TargetDialog));
 
                     RefreshNodesCVS();
+
+                    Name = TargetDialog?.name;
                 }
             }
         }
@@ -227,6 +229,8 @@ namespace StorylineEditor.ViewModel.Nodes
                     Model.exitNodeId = value?.id;
                     OnModelChanged(Model, nameof(TargetExitNode));
                     Notify(nameof(TargetExitNode));
+
+                    Description = TargetExitNode?.name;
                 }
             }
         }
@@ -238,6 +242,10 @@ namespace StorylineEditor.ViewModel.Nodes
                 NodesCVS.Source = graph.nodes;
                 if (NodesCVS.View != null) NodesCVS.View.Filter = OnNodesFilter;
                 NodesCVS.View?.MoveCurrentTo(TargetExitNode != null && graph.nodes.Contains(TargetExitNode) ? TargetExitNode : null);
+            }
+            else
+            {
+                NodesCVS.View?.MoveCurrentTo(null);
             }
         }
     }

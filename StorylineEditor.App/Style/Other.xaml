@@ -122,15 +122,16 @@ StorylineEditor распространяется в надежде, что он�
 
     <!-- Node -->
 
-    <Style TargetType="Label" x:Key="S_Label_Node">
+    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Node">
+        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_1x}"></Setter>
+    </Style>
+
+    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock_Node}" x:Key="S_TextBlock_Node_Icon">
         <Setter Property="IsHitTestVisible" Value="False"></Setter>
     </Style>
 
-    <Style TargetType="Label" x:Key="S_Label_Node_Large" BasedOn="{StaticResource S_Label_Node}">
-    </Style>
-
-    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock}" x:Key="S_TextBlock_Node">
-        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_1x}"></Setter>
+    <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock_Node_Icon}" x:Key="S_TextBlock_Node_Icon_Large">
+        <Setter Property="FontSize" Value="{StaticResource FontSize_VeryLarge}"></Setter>
     </Style>
 
     <Style TargetType="TextBlock" BasedOn="{StaticResource S_TextBlock_Node}" x:Key="S_TextBlock_Node_Header">
@@ -556,7 +557,13 @@ StorylineEditor распространяется в надежде, что он�
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <TextBlock Text="{StaticResource String_Icon_Node_Gate}" Style="{StaticResource S_TextBlock_Selector_Icon_Mini}"></TextBlock>
-            <TextBlock Grid.Column="1" Text="{Binding id, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name_Mini}"></TextBlock>
+            <TextBlock Grid.Column="1" Style="{StaticResource S_TextBlock_Selector_Name_Mini}">
+                <Run Text="{Binding name, UpdateSourceTrigger=PropertyChanged}"></Run>
+                <Run Text="["></Run>
+                <Run Text="{StaticResource String_Icon_Node_Exit}"></Run>
+                <Run Text="{Binding description, UpdateSourceTrigger=PropertyChanged}"></Run>
+                <Run Text="]"></Run>
+            </TextBlock>
         </Grid>
     </DataTemplate>
 
@@ -567,7 +574,7 @@ StorylineEditor распространяется в надежде, что он�
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <TextBlock Text="{StaticResource String_Icon_Node_Exit}" Style="{StaticResource S_TextBlock_Selector_Icon_Mini}"></TextBlock>
-            <TextBlock Grid.Column="1" Text="{Binding id, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name_Mini}"></TextBlock>
+            <TextBlock Grid.Column="1" Text="{Binding name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name_Mini}"></TextBlock>
         </Grid>
     </DataTemplate>
     
@@ -928,7 +935,7 @@ StorylineEditor распространяется в надежде, что он�
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
 
-                <Label Content="{StaticResource String_Icon_Node_Step}" Style="{StaticResource S_Label_Node}"></Label>
+                <TextBlock Text="{StaticResource String_Icon_Node_Step}" Style="{StaticResource S_TextBlock_Node_Icon}"></TextBlock>
 
                 <TextBlock VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
@@ -939,9 +946,9 @@ StorylineEditor распространяется в надежде, что он�
                 
                 <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_Result}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
-                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
 
-                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
+                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Right">
                     <Button Style="{StaticResource S_Button_Remove}"></Button>
                 </StackPanel>
             </Grid>
@@ -981,7 +988,7 @@ StorylineEditor распространяется в надежде, что он�
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
 
-                <Label Content="{StaticResource String_Icon_Node_Alternative}" Style="{StaticResource S_Label_Node}"></Label>
+                <TextBlock Text="{StaticResource String_Icon_Node_Alternative}" Style="{StaticResource S_TextBlock_Node_Icon}"></TextBlock>
 
                 <TextBlock VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
@@ -992,9 +999,9 @@ StorylineEditor распространяется в надежде, что он�
                 
                 <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_Result}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
-                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
 
-                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
+                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Right">
                     <Button Style="{StaticResource S_Button_Remove}"></Button>
                 </StackPanel>
             </Grid>
@@ -1023,11 +1030,11 @@ StorylineEditor распространяется в надежде, что он�
                     bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
                     bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
             <Grid>
-                <Label VerticalAlignment="Center" HorizontalAlignment="Center" Content="{StaticResource String_Icon_Node_Random}" Style="{StaticResource S_Label_Node_Large}"></Label>
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{StaticResource String_Icon_Node_Random}" Style="{StaticResource S_TextBlock_Node_Icon_Large}"></TextBlock>
 
-                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+                <Button Style="{StaticResource S_Button_Node_Gender}" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
 
-                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
+                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" VerticalAlignment="Top" HorizontalAlignment="Right">
                     <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
                     <ContentControl ContentTemplate="{StaticResource DT_HasGameEvents}" Content="{Binding}"></ContentControl>
                     <Button Style="{StaticResource S_Button_Remove}"></Button>
@@ -1274,11 +1281,11 @@ StorylineEditor распространяется в надежде, что он�
                     bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
                     bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
             <Grid>
-                <Label VerticalAlignment="Center" HorizontalAlignment="Center" Content="{StaticResource String_Icon_Node_Transit}" Style="{StaticResource S_Label_Node_Large}"></Label>
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{StaticResource String_Icon_Node_Transit}" Style="{StaticResource S_TextBlock_Node_Icon_Large}"></TextBlock>
 
-                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+                <Button Style="{StaticResource S_Button_Node_Gender}" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
 
-                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
+                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" VerticalAlignment="Top" HorizontalAlignment="Right">
                     <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
                     <ContentControl ContentTemplate="{StaticResource DT_HasGameEvents}" Content="{Binding}"></ContentControl>
                     <Button Style="{StaticResource S_Button_Remove}"></Button>
@@ -1299,11 +1306,21 @@ StorylineEditor распространяется в надежде, что он�
                     bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
                     bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
             <Grid>
-                <Label VerticalAlignment="Center" HorizontalAlignment="Center" Content="{StaticResource String_Icon_Node_Gate}" Style="{StaticResource S_Label_Node_Large}"></Label>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                
+                <TextBlock Style="{StaticResource S_TextBlock_Node_Icon_Large}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{StaticResource String_Icon_Node_Gate}"></TextBlock>
 
-                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+                <TextBlock FontSize="{StaticResource FontSize_Medium}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
-                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
+                <TextBlock FontSize="{StaticResource FontSize_Large}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, StringFormat=[{0}], TargetNullValue=???}"></TextBlock>
+                
+                <Button Grid.RowSpan="3" Style="{StaticResource S_Button_Node_Gender}" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+
+                <StackPanel Grid.RowSpan="3" Style="{StaticResource S_StackPanel_Node_TopRightPanel}" VerticalAlignment="Top" HorizontalAlignment="Right">
                     <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
                     <ContentControl ContentTemplate="{StaticResource DT_HasGameEvents}" Content="{Binding}"></ContentControl>
                     <Button Style="{StaticResource S_Button_Remove}"></Button>
@@ -1347,11 +1364,12 @@ StorylineEditor распространяется в надежде, что он�
                     bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
                     bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
             <Grid>
-                <Label VerticalAlignment="Center" HorizontalAlignment="Center" Content="{StaticResource String_Icon_Node_Exit}" Style="{StaticResource S_Label_Node_Large}"></Label>
+                <TextBlock Style="{StaticResource S_TextBlock_Node_Icon_Large}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Run Text="{StaticResource String_Icon_Node_Exit}"></Run>
+                    <Run Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></Run>
+                </TextBlock>
 
-                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
-
-                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
+                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" VerticalAlignment="Top" HorizontalAlignment="Right">
                     <Button Style="{StaticResource S_Button_Remove}"></Button>
                 </StackPanel>
             </Grid>
@@ -1359,10 +1377,6 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmn:Node_ExitEditorVM}">
-        <TabControl>
-            <TabItem ContentTemplate="{StaticResource DT_ContentControl_Predicates}" Content="{Binding}" HeaderTemplate="{StaticResource DT_ContentControl_PredicatesHeader}" Header="{Binding}"></TabItem>
-            <TabItem ContentTemplate="{StaticResource DT_ContentControl_GameEvents}" Content="{Binding}" HeaderTemplate="{StaticResource DT_ContentControl_GameEventsHeader}" Header="{Binding}"></TabItem>
-        </TabControl>
     </DataTemplate>
     
     <DataTemplate DataType="{x:Type vmn:Node_ReplicaVM}">
@@ -1381,7 +1395,7 @@ StorylineEditor распространяется в надежде, что он�
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
 
-                <Label Content="{StaticResource String_Icon_Node_Replica}" Style="{StaticResource S_Label_Node}"></Label>
+                <TextBlock Text="{StaticResource String_Icon_Node_Replica}" Style="{StaticResource S_TextBlock_Node_Icon}"></TextBlock>
 
                 <TextBlock x:Name="tb_CharacterName" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Character.name, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"></TextBlock>
                 <TextBlock x:Name="tb_OverrideName" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
@@ -1393,9 +1407,9 @@ StorylineEditor распространяется в надежде, что он�
                 
                 <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_ShortDescription}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
-                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
 
-                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
+                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Right">
                     <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
                     <ContentControl ContentTemplate="{StaticResource DT_HasGameEvents}" Content="{Binding}"></ContentControl>
                     <Button Style="{StaticResource S_Button_Remove}"></Button>
@@ -1453,7 +1467,7 @@ StorylineEditor распространяется в надежде, что он�
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
 
-                <Label Content="{StaticResource String_Icon_Node_Dialog}" Style="{StaticResource S_Label_Node}"></Label>
+                <TextBlock Text="{StaticResource String_Icon_Node_Dialog}" Style="{StaticResource S_TextBlock_Node_Icon}"></TextBlock>
 
                 <TextBlock x:Name="tb_CharacterName" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Character.name, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"></TextBlock>
                 <TextBlock x:Name="tb_OverrideName" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
@@ -1465,9 +1479,9 @@ StorylineEditor распространяется в надежде, что он�
 
                 <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_ShortDescription}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
-                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
 
-                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right">
+                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Right">
                     <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
                     <ContentControl ContentTemplate="{StaticResource DT_HasGameEvents}" Content="{Binding}"></ContentControl>
                     <Button Style="{StaticResource S_Button_Remove}"></Button>
