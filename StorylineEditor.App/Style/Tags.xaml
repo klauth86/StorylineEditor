@@ -15,6 +15,8 @@ StorylineEditor распространяется в надежде, что он�
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <sys:String x:Key="String_Tag_Config_Title">⚙ Настройки</sys:String>
+
+    <sys:String x:Key="String_Tag_Player_Title">▶ Проигрыватель</sys:String>
     
     <sys:String x:Key="String_Tag_Config_UserActions">Горячие клавиши и мышь</sys:String>
 

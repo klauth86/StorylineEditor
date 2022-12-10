@@ -30,9 +30,12 @@ namespace StorylineEditor.ViewModel
         private static double viewHeight;
         public static double ViewHeight { get => viewHeight; set => viewHeight = value > 0 ? value : viewHeight; }
 
+        public HistoryVM History { get; }
 
-
-        public StorylineVM(StorylineM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+        public StorylineVM(StorylineM model, ICallbackContext callbackContext) : base(model, callbackContext)
+        {
+            History = new HistoryVM(this, this);
+        }
 
 
 
@@ -277,6 +280,10 @@ namespace StorylineEditor.ViewModel
             if (propName == nameof(ICallbackContext))
             {
                 CallbackContext?.Callback(viewModelObj, propName);
+            }
+            else if (propName == nameof(HistoryVM))
+            {
+                CallbackContext?.Callback(History, propName);
             }
         }
 

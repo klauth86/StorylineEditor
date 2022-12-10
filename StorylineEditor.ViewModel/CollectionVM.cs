@@ -136,7 +136,7 @@ namespace StorylineEditor.ViewModel
 
         public void Callback(object viewModelObj, string propName)
         {
-            if (propName == nameof(ICallbackContext))
+            if (propName == nameof(ICallbackContext) || propName == nameof(HistoryVM))
             {
                 CallbackContext?.Callback(viewModelObj, propName);
             }
@@ -150,7 +150,6 @@ namespace StorylineEditor.ViewModel
         }
 
         public override string Title => null;
-
         public override string Stats => null;
     }
 }

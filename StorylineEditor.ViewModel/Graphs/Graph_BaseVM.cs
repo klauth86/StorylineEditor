@@ -264,6 +264,9 @@ namespace StorylineEditor.ViewModel.Graphs
             StartScrollingTask();
         }));
 
+        protected ICommand playCommand;
+        public ICommand PlayCommand => playCommand ?? (playCommand = new RelayCommand(() => { CallbackContext?.Callback(this, nameof(HistoryVM)); }, () => HasSelection()));
+
         protected ICommand selectCommand;
         public override ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<Notifier>((viewModel) => { }));
         protected void AddLinkVM(LinkM model, string fromId, double fromX, double fromY, string toId, double toX, double toY)
@@ -982,7 +985,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
         public void Callback(object viewModelObj, string propName)
         {
-            if (propName == nameof(ICallbackContext))
+            if (propName == nameof(ICallbackContext) || propName == nameof(HistoryVM))
             {
                 CallbackContext?.Callback(viewModelObj, propName);
             }

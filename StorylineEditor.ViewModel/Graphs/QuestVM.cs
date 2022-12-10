@@ -110,7 +110,6 @@ namespace StorylineEditor.ViewModel.Graphs
         }
 
         public override string Title => null;
-
         public override string Stats => null;
     }
 }

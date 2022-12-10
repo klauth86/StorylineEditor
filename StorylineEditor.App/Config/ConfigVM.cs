@@ -21,7 +21,6 @@ namespace StorylineEditor.App.Config
         public List<UserActionVM> UserActions { get; }
 
         public override string Title => null;
-
         public override string Stats => null;
     }
 }

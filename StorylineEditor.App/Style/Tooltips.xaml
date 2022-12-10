@@ -45,7 +45,9 @@ StorylineEditor распространяется в надежде, что он�
     <sys:String x:Key="String_GraphMenu_ResetScale_Tooltip">Сбросить масштаб</sys:String>
 
     <sys:String x:Key="String_GraphMenu_GoToOrigin_Tooltip">Вернуться в начало координат</sys:String>
-    
+
+    <sys:String x:Key="String_GraphMenu_Play_Tooltip">Воспроизвести</sys:String>
+
     <sys:String x:Key="String_HasPredicates_Tooltip">Имеет предикаты</sys:String>
 
     <sys:String x:Key="String_HasGameEvents_Tooltip">Имеет события</sys:String>

@@ -33,6 +33,7 @@
   <ItemGroup>
     <Compile Include="Config\ConfigM.cs" />
     <Compile Include="Config\UserActionM.cs" />
+    <Compile Include="HistoryVm.cs" />
     <Compile Include="LocationVM.cs" />
     <Compile Include="GameEvents\GE_Relation_ChangeVM.cs" />
     <Compile Include="GameEvents\GE_Quest_Node_PassVM.cs" />

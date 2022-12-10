@@ -149,6 +149,19 @@ namespace StorylineEditor.App
                     ContentTemplate = App.Current.Resources["DT_Graph_Stats"] as DataTemplate
                 }.Show();
             }
+            else if (propName == nameof(HistoryVM))
+            {
+                new DlgWindow()
+                {
+                    Owner = this,
+                    DataContext = viewModelObj,
+                    SizeToContent = SizeToContent.WidthAndHeight,
+                    WindowStyle = WindowStyle.ToolWindow,
+                    MinWidth = 256,
+                    ResizeMode = ResizeMode.NoResize,
+                    Title = App.Current.Resources["String_Tag_Player_Title"]?.ToString()
+                }.ShowDialog();
+            }
             else
             {
                 SaveConfig();
