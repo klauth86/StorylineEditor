@@ -2250,6 +2250,46 @@ StorylineEditor распространяется в надежде, что он�
         </DataTemplate.Triggers>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vm:PlayerContext_ErrorVM}">
+        <StackPanel Orientation="Vertical">
+            <TextBlock VerticalAlignment="Center" Text="{StaticResource String_Tag_Player_Error}" Style="{StaticResource S_TextBlock_Graph_Bold}" Foreground="{StaticResource Color_Player_Error}"></TextBlock>
+            <TextBlock Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Graph}" Foreground="{StaticResource Color_Player_Error}"></TextBlock>
+        </StackPanel>
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type vm:PlayerContext_ChoiceVM}">
+        <ScrollViewer x:Name="sv_Main">
+            <ItemsControl ItemsSource="{Binding NodesPaths.Keys}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Margin="{StaticResource Thickness_Margin_1x}" FontSize="{StaticResource FontSize_Medium}"
+                                                        Command="{Binding ElementName=sv_Main, Path=DataContext.SelectNodeCommand}" CommandParameter="{Binding}"
+                                                        HorizontalContentAlignment="Stretch">
+                            <Grid ToolTip="{Binding Id}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"></RowDefinition>
+                                    <RowDefinition Height="auto"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                
+                                <!--<Label FontSize="12" FontWeight="Normal" Style="{StaticResource S_Label_NodeType}"></Label>
+                                <TextBlock Grid.Column="1" Grid.Row="0" FontWeight="Bold" Text="{Binding OwnerName, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
+                                <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" nodes:RTBHelper.Document="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>-->
+                            </Grid>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type vm:PlayerContext_TransitionVM}">
+        <TextBlock Style="{StaticResource S_TextBlock_Node_Icon_Large}" Text="{StaticResource String_Tag_Player_Transition}"></TextBlock>
+    </DataTemplate>
+    
     <DataTemplate DataType="{x:Type vm:HistoryVM}">
         <TabControl>
 
@@ -2277,51 +2317,10 @@ StorylineEditor распространяется в надежде, что он�
                             <TextBlock Style="{StaticResource S_TextBlock_Graph_Bold}" Text="{Binding StateTimeLeft, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
                         </StackPanel>
                     </Grid>
-                    <!--<ContentControl Grid.Row="1" Padding="{StaticResource MarginPaddingThickness}" Margin="{StaticResource MarginPaddingThickness}" Content="{Binding TreeCanvas.ActiveContext, UpdateSourceTrigger=PropertyChanged}">
-                        <ContentControl.Resources>
-                            <DataTemplate DataType="{x:Type viewModels:TreePlayerContext_ErrorVm}">
-                                <StackPanel Margin="{StaticResource MarginPaddingThickness}">
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        <Image VerticalAlignment="Center" Width="32" Height="32" Source="{Binding Source={x:Static draw:SystemIcons.Error}, Converter={StaticResource IconToImageSourceConverter}, Mode=OneWay}"/>
-                                        <TextBlock VerticalAlignment="Center" Text="ОШИБКА" Style="{StaticResource S_TextBlock_HeaderBold}" Foreground="DarkRed"></TextBlock>
-                                    </StackPanel>
-                                    <TextBlock Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}" Foreground="DarkRed"></TextBlock>
-                                </StackPanel>
-                            </DataTemplate>
-                            <DataTemplate DataType="{x:Type viewModels:TreePlayerContext_ChoiceVm}">
-                                <ScrollViewer x:Name="sv_Main">
-                                    <ItemsControl ItemsSource="{Binding NodesPaths.Keys}">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <Button Margin="{StaticResource MarginPaddingThickness}" Padding="{StaticResource MarginPaddingThickness}"
-                                            Command="{Binding ElementName=sv_Main, Path=DataContext.SelectNodeCommand}" CommandParameter="{Binding}"
-                                            HorizontalContentAlignment="Stretch">
-                                                    <Grid ToolTip="{Binding Id}">
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="auto"></ColumnDefinition>
-                                                            <ColumnDefinition></ColumnDefinition>
-                                                        </Grid.ColumnDefinitions>
-                                                        <Grid.RowDefinitions>
-                                                            <RowDefinition Height="auto"></RowDefinition>
-                                                            <RowDefinition Height="auto"></RowDefinition>
-                                                        </Grid.RowDefinitions>
-
-                                                        <Label FontSize="12" FontWeight="Normal" Style="{StaticResource S_Label_NodeType}"></Label>
-
-                                                        <TextBlock Grid.Column="1" Grid.Row="0" FontWeight="Bold" Text="{Binding OwnerName, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
-
-                                                        <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" nodes:RTBHelper.Document="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
-                                                    </Grid>
-                                                </Button>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </ScrollViewer>
-                            </DataTemplate>
-                            <DataTemplate DataType="{x:Type viewModels:TreePlayerContext_TransitionVm}">
-                                <fa:ImageAwesome Icon="Cog" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center" Spin="True" SpinDuration="4" />
-                            </DataTemplate>
-                            <DataTemplate DataType="{x:Type viewModelsNodes:DNode_TransitVm}">
+                    
+                    <ContentControl Grid.Row="1" Margin="{StaticResource Thickness_Margin_1x}" Content="{Binding ActiveContext, UpdateSourceTrigger=PropertyChanged}">
+                        <!--<ContentControl.Resources>
+                            --><!--<DataTemplate DataType="{x:Type viewModelsNodes:DNode_TransitVm}">
                                 <Label HorizontalAlignment="Center" Style="{StaticResource S_Label_NodeType}"></Label>
                             </DataTemplate>
                             <DataTemplate DataType="{x:Type viewModelsNodes:DNode_RandomVm}">
@@ -2374,9 +2373,9 @@ StorylineEditor распространяется в надежде, что он�
                                         <Setter TargetName="tb_ShortDescription" Property="Visibility" Value="Visible"></Setter>
                                     </DataTrigger>
                                 </DataTemplate.Triggers>
-                            </DataTemplate>
-                        </ContentControl.Resources>
-                    </ContentControl>-->
+                            </DataTemplate>--><!--
+                        </ContentControl.Resources>-->
+                    </ContentControl>
                 </DockPanel>
             </TabItem>
 
@@ -2648,6 +2647,7 @@ StorylineEditor распространяется в надежде, что он�
                     </ItemsControl>
                 </ScrollViewer>
             </TabItem>-->
+            
         </TabControl>
     </DataTemplate>
 </ResourceDictionary>

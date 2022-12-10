@@ -1,10 +1,49 @@
 ﻿using StorylineEditor.Model;
 using StorylineEditor.ViewModel.Common;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel
 {
+    public class PlayerContext_ChoiceVM : SimpleVM<HistoryVM>
+    {
+        public PlayerContext_ChoiceVM(HistoryVM parent, ICallbackContext callbackContext, Dictionary<Notifier, List<Notifier>> nodesPaths) : base(parent, callbackContext)
+        {
+            NodesPaths = nodesPaths;
+        }
+
+        public Dictionary<Notifier, List<Notifier>> NodesPaths { get; set; }
+
+        protected ICommand selectNodeCommand;
+        public ICommand SelectNodeCommand => selectNodeCommand ?? (selectNodeCommand = new RelayCommand<Notifier>((node) =>
+        {
+            //TreeCanvas?.PrepareAndStartTransition(node, NodesPaths[node]);
+        }, (node) => node != null && NodesPaths.ContainsKey(node)));
+
+        public override string Id => null;
+        public override string Title => null;
+        public override string Stats => null;
+    }
+
+    public class PlayerContext_ErrorVM : SimpleVM<HistoryVM>
+    {
+        public PlayerContext_ErrorVM(HistoryVM parent, ICallbackContext callbackContext) : base(parent, callbackContext) { }
+
+        public override string Id => null;
+        public override string Title => null;
+        public override string Stats => null;
+    }
+
+    public class PlayerContext_TransitionVM : SimpleVM<HistoryVM>
+    {
+        public PlayerContext_TransitionVM(HistoryVM parent, ICallbackContext callbackContext) : base(parent, callbackContext) { }
+
+        public override string Id => null;
+        public override string Title => null;
+        public override string Stats => null;
+    }
+
     public class TreePathVM : SimpleVM<HistoryVM>
     {
         public TreePathVM(HistoryVM parent, ICallbackContext callbackContext) : base(parent, callbackContext)
@@ -160,6 +199,7 @@ namespace StorylineEditor.ViewModel
             Characters = new ObservableCollection<Notifier>();
 
             Gender = GENDER.MALE;
+            FullMode = false;
             TimeLeft = 0;
             Duration = 4;
         }
@@ -346,6 +386,20 @@ namespace StorylineEditor.ViewModel
                 {
                     duration = value;
                     Notify(nameof(Duration));
+                }
+            }
+        }
+
+        protected object activeContext;
+        public object ActiveContext
+        {
+            get => activeContext;
+            set
+            {
+                if (value != activeContext)
+                {
+                    activeContext = value;
+                    Notify(nameof(ActiveContext));
                 }
             }
         }

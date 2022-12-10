@@ -59,4 +59,6 @@ StorylineEditor распространяется в надежде, что он�
 
     <SolidColorBrush x:Key="Color_Stats_Background" Color="LightGray"/>
 
+    <SolidColorBrush x:Key="Color_Player_Error" Color="DarkRed"/>
+
 </ResourceDictionary>

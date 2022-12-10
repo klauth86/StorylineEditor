@@ -249,5 +249,9 @@ StorylineEditor распространяется в надежде, что он�
     <sys:String x:Key="String_Tag_Player_Tab_Props">Основная</sys:String>
 
     <sys:String x:Key="String_Tag_Player_FullMode">Полный режим</sys:String>
+    
+    <sys:String x:Key="String_Tag_Player_Error">ОШИБКА</sys:String>
+
+    <sys:String x:Key="String_Tag_Player_Transition">⏳</sys:String>
 
 </ResourceDictionary>
