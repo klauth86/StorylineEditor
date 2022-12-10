@@ -28,6 +28,8 @@ StorylineEditor распространяется в надежде, что он�
                     xmlns:controls="clr-namespace:StorylineEditor.App.Controls" xmlns:system="clr-namespace:System;assembly=mscorlib">
 
     <!-- COLLECTION CONTEXT (FOLDERS AND PATH) -->
+
+    <vmn:CanvasDataTemplateSelector x:Key="canvasDataTemplateSelector"></vmn:CanvasDataTemplateSelector>
     
     <ControlTemplate TargetType="Button" x:Key="CT_Button_Path">
         <Border x:Name="br_Main" Margin="{StaticResource Thickness_Margin_1x}" Background="{StaticResource Color_HitVisible}" 
@@ -257,6 +259,7 @@ StorylineEditor распространяется в надежде, что он�
                 </Style>
             </Setter.Value>
         </Setter>
+        <Setter Property="ItemTemplateSelector" Value="{StaticResource canvasDataTemplateSelector}"></Setter>
     </Style>
 
     <!-- Data Templates -->
@@ -922,40 +925,166 @@ StorylineEditor распространяется в надежде, что он�
         </DataTemplate.Triggers>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type vmn:Node_Journal_StepVM}">
-        <Border Style="{StaticResource S_Border_Node}"
+    <DataTemplate x:Key="Node_Journal_StepVM_ItemTemplate">
+        <Grid>
+            <Button Style="{StaticResource S_Button_Node_Gender_Offset}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+
+            <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" VerticalAlignment="Top" HorizontalAlignment="Right">
+                <Button Style="{StaticResource S_Button_Remove}"></Button>
+            </StackPanel>
+
+            <Border Style="{StaticResource S_Border_Node}"
                     bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
                     bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
+                <ContentControl Content="{Binding}"></ContentControl>
+            </Border>
+        </Grid>
+    </DataTemplate>
 
-                <TextBlock Text="{StaticResource String_Icon_Node_Step}" Style="{StaticResource S_TextBlock_Node_Icon}"></TextBlock>
+    <DataTemplate x:Key="Node_Journal_AlternativeVM_ItemTemplate">
+        <Grid>
+            <Button Style="{StaticResource S_Button_Node_Gender_Offset}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
 
-                <TextBlock VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+            <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" VerticalAlignment="Top" HorizontalAlignment="Right">
+                <Button Style="{StaticResource S_Button_Remove}"></Button>
+            </StackPanel>
 
-                <controls:TextBlockExt IsHitTestVisible="False" Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+            <Border Style="{StaticResource S_Border_Node}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+                <ContentControl Content="{Binding}"></ContentControl>
+            </Border>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="Node_ReplicaVM_ItemTemplate">
+        <Grid>
+            <Button Style="{StaticResource S_Button_Node_Gender_Offset}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+
+            <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" VerticalAlignment="Top" HorizontalAlignment="Right">
+                <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
+                <ContentControl ContentTemplate="{StaticResource DT_HasGameEvents}" Content="{Binding}"></ContentControl>
+                <Button Style="{StaticResource S_Button_Remove}"></Button>
+            </StackPanel>
+
+            <Border Style="{StaticResource S_Border_Node}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+                <ContentControl Content="{Binding}"></ContentControl>
+            </Border>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="Node_DialogVM_ItemTemplate">
+        <Grid>
+            <Button Style="{StaticResource S_Button_Node_Gender_Offset}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+
+            <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" VerticalAlignment="Top" HorizontalAlignment="Right">
+                <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
+                <ContentControl ContentTemplate="{StaticResource DT_HasGameEvents}" Content="{Binding}"></ContentControl>
+                <Button Style="{StaticResource S_Button_Remove}"></Button>
+            </StackPanel>
+
+            <Border Style="{StaticResource S_Border_Node}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+                <ContentControl Content="{Binding}"></ContentControl>
+            </Border>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="Node_RandomVM_ItemTemplate">
+        <Grid>
+            <Button Style="{StaticResource S_Button_Node_Gender_Offset}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+
+            <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" VerticalAlignment="Top" HorizontalAlignment="Right">
+                <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
+                <ContentControl ContentTemplate="{StaticResource DT_HasGameEvents}" Content="{Binding}"></ContentControl>
+                <Button Style="{StaticResource S_Button_Remove}"></Button>
+            </StackPanel>
+
+            <Border Style="{StaticResource S_Border_Node}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+                <ContentControl Content="{Binding}"></ContentControl>
+            </Border>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="Node_TransitVM_ItemTemplate">
+        <Grid>
+            <Button Style="{StaticResource S_Button_Node_Gender_Offset}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+
+            <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" VerticalAlignment="Top" HorizontalAlignment="Right">
+                <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
+                <ContentControl ContentTemplate="{StaticResource DT_HasGameEvents}" Content="{Binding}"></ContentControl>
+                <Button Style="{StaticResource S_Button_Remove}"></Button>
+            </StackPanel>
+
+            <Border Style="{StaticResource S_Border_Node}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+                <ContentControl Content="{Binding}"></ContentControl>
+            </Border>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="Node_GateVM_ItemTemplate">
+        <Grid>
+            <Button Style="{StaticResource S_Button_Node_Gender_Offset}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+
+            <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" VerticalAlignment="Top" HorizontalAlignment="Right">
+                <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
+                <ContentControl ContentTemplate="{StaticResource DT_HasGameEvents}" Content="{Binding}"></ContentControl>
+                <Button Style="{StaticResource S_Button_Remove}"></Button>
+            </StackPanel>
+
+            <Border Style="{StaticResource S_Border_Node}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+                <ContentControl Content="{Binding}"></ContentControl>
+            </Border>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="Node_ExitVM_ItemTemplate">
+        <Grid>
+            <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" VerticalAlignment="Top" HorizontalAlignment="Right">
+                <Button Style="{StaticResource S_Button_Remove}"></Button>
+            </StackPanel>
+
+            <Border Style="{StaticResource S_Border_Node}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+                <ContentControl Content="{Binding}"></ContentControl>
+            </Border>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmn:Node_Journal_StepVM}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="{StaticResource String_Icon_Node_Step}" Style="{StaticResource S_TextBlock_Node_Icon}"></TextBlock>
+
+            <TextBlock VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+
+            <controls:TextBlockExt IsHitTestVisible="False" Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
                                        Style="{StaticResource S_TextBlock_Node_Description}"></controls:TextBlockExt>
 
-                <Separator Grid.ColumnSpan="2" Grid.Row="2"></Separator>
-                
-                <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_Result}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+            <Separator Grid.ColumnSpan="2" Grid.Row="2"></Separator>
 
-                <Button Style="{StaticResource S_Button_Node_Gender_Offset}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
-
-                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Right">
-                    <Button Style="{StaticResource S_Button_Remove}"></Button>
-                </StackPanel>
-            </Grid>
-        </Border>
+            <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_Result}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+        </Grid>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmn:Node_Journal_StepEditorVM}">
@@ -976,39 +1105,29 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmn:Node_Journal_AlternativeVM}">
-        <Border Style="{StaticResource S_Border_Node}"
-                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
-                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
 
-                <TextBlock Text="{StaticResource String_Icon_Node_Alternative}" Style="{StaticResource S_TextBlock_Node_Icon}"></TextBlock>
+            <TextBlock Text="{StaticResource String_Icon_Node_Alternative}" Style="{StaticResource S_TextBlock_Node_Icon}"></TextBlock>
 
-                <TextBlock VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+            <TextBlock VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
-                <controls:TextBlockExt IsHitTestVisible="False" Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+            <controls:TextBlockExt IsHitTestVisible="False" Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
                                        Style="{StaticResource S_TextBlock_Node_Description}"></controls:TextBlockExt>
 
-                <Separator Grid.ColumnSpan="2" Grid.Row="2"></Separator>
-                
-                <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_Result}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+            <Separator Grid.ColumnSpan="2" Grid.Row="2"></Separator>
 
-                <Button Style="{StaticResource S_Button_Node_Gender_Offset}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
-
-                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Right">
-                    <Button Style="{StaticResource S_Button_Remove}"></Button>
-                </StackPanel>
-            </Grid>
-        </Border>
+            <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_Result}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+        </Grid>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmn:Node_Journal_AlternativeEditorVM}">
@@ -1029,21 +1148,7 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmn:Node_RandomVM}">
-        <Border Style="{StaticResource S_Border_Node}"
-                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
-                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
-            <Grid>
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{StaticResource String_Icon_Node_Random}" Style="{StaticResource S_TextBlock_Node_Icon_Large}"></TextBlock>
-
-                <Button Style="{StaticResource S_Button_Node_Gender_Offset}" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
-
-                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" VerticalAlignment="Top" HorizontalAlignment="Right">
-                    <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
-                    <ContentControl ContentTemplate="{StaticResource DT_HasGameEvents}" Content="{Binding}"></ContentControl>
-                    <Button Style="{StaticResource S_Button_Remove}"></Button>
-                </StackPanel>
-            </Grid>
-        </Border>
+        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{StaticResource String_Icon_Node_Random}" Style="{StaticResource S_TextBlock_Node_Icon_Large}"></TextBlock>
     </DataTemplate>
 
     <Style TargetType="TextBlock" x:Key="S_TextBlock_Predicate_Title" BasedOn="{StaticResource S_TextBlock}">
@@ -1280,21 +1385,7 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmn:Node_TransitVM}">
-        <Border Style="{StaticResource S_Border_Node}"
-                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
-                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
-            <Grid>
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{StaticResource String_Icon_Node_Transit}" Style="{StaticResource S_TextBlock_Node_Icon_Large}"></TextBlock>
-
-                <Button Style="{StaticResource S_Button_Node_Gender_Offset}" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
-
-                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" VerticalAlignment="Top" HorizontalAlignment="Right">
-                    <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
-                    <ContentControl ContentTemplate="{StaticResource DT_HasGameEvents}" Content="{Binding}"></ContentControl>
-                    <Button Style="{StaticResource S_Button_Remove}"></Button>
-                </StackPanel>
-            </Grid>
-        </Border>
+        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{StaticResource String_Icon_Node_Transit}" Style="{StaticResource S_TextBlock_Node_Icon_Large}"></TextBlock>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmn:Node_TransitEditorVM}">
@@ -1305,31 +1396,19 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmn:Node_GateVM}">
-        <Border Style="{StaticResource S_Border_Node}"
-                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
-                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                
-                <TextBlock Style="{StaticResource S_TextBlock_Node_Icon_Large}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{StaticResource String_Icon_Node_Gate}"></TextBlock>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
 
-                <TextBlock FontSize="{StaticResource FontSize_Medium}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+            <TextBlock Style="{StaticResource S_TextBlock_Node_Icon_Large}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{StaticResource String_Icon_Node_Gate}"></TextBlock>
 
-                <TextBlock FontSize="{StaticResource FontSize_Large}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, StringFormat=[{0}], TargetNullValue=???}"></TextBlock>
+            <TextBlock FontSize="{StaticResource FontSize_Medium}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
-                <Button Grid.RowSpan="3" Style="{StaticResource S_Button_Node_Gender_Offset}" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
-
-                <StackPanel Grid.RowSpan="3" Style="{StaticResource S_StackPanel_Node_TopRightPanel}" VerticalAlignment="Top" HorizontalAlignment="Right">
-                    <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
-                    <ContentControl ContentTemplate="{StaticResource DT_HasGameEvents}" Content="{Binding}"></ContentControl>
-                    <Button Style="{StaticResource S_Button_Remove}"></Button>
-                </StackPanel>
-            </Grid>
-        </Border>
+            <TextBlock FontSize="{StaticResource FontSize_Large}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, StringFormat=[{0}], TargetNullValue=???}"></TextBlock>
+        </Grid>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmn:Node_GateEditorVM}">
@@ -1363,62 +1442,40 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmn:Node_ExitVM}">
-        <Border Style="{StaticResource S_Border_Node}"
-                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
-                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
-            <Grid>
-                <TextBlock Style="{StaticResource S_TextBlock_Node_Icon_Large}" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <TextBlock Style="{StaticResource S_TextBlock_Node_Icon_Large}" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <Run Text="{StaticResource String_Icon_Node_Exit}"></Run>
                     <Run Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></Run>
-                </TextBlock>
-
-                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" VerticalAlignment="Top" HorizontalAlignment="Right">
-                    <Button Style="{StaticResource S_Button_Remove}"></Button>
-                </StackPanel>
-            </Grid>
-        </Border>
+        </TextBlock>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmn:Node_ExitEditorVM}">
     </DataTemplate>
-    
+
     <DataTemplate DataType="{x:Type vmn:Node_ReplicaVM}">
-        <Border Style="{StaticResource S_Border_Node}"
-                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
-                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
 
-                <TextBlock Text="{StaticResource String_Icon_Node_Replica}" Style="{StaticResource S_TextBlock_Node_Icon}"></TextBlock>
+            <TextBlock Text="{StaticResource String_Icon_Node_Replica}" Style="{StaticResource S_TextBlock_Node_Icon}"></TextBlock>
 
-                <TextBlock x:Name="tb_CharacterName" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Character.name, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"></TextBlock>
-                <TextBlock x:Name="tb_OverrideName" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+            <TextBlock x:Name="tb_CharacterName" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Character.name, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"></TextBlock>
+            <TextBlock x:Name="tb_OverrideName" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
-                <controls:TextBlockExt IsHitTestVisible="False" Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+            <controls:TextBlockExt IsHitTestVisible="False" Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
                                        Style="{StaticResource S_TextBlock_Node_Description}"></controls:TextBlockExt>
 
-                <Separator Grid.ColumnSpan="2" Grid.Row="2"></Separator>
-                
-                <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_ShortDescription}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+            <Separator Grid.ColumnSpan="2" Grid.Row="2"></Separator>
 
-                <Button Style="{StaticResource S_Button_Node_Gender_Offset}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
-
-                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Right">
-                    <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
-                    <ContentControl ContentTemplate="{StaticResource DT_HasGameEvents}" Content="{Binding}"></ContentControl>
-                    <Button Style="{StaticResource S_Button_Remove}"></Button>
-                </StackPanel>
-            </Grid>
-        </Border>
+            <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_ShortDescription}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+        </Grid>
         <DataTemplate.Triggers>
             <Trigger SourceName="tb_OverrideName" Property="Text" Value="">
                 <Setter TargetName="tb_OverrideName" Property="Visibility" Value="Collapsed"></Setter>
@@ -1455,42 +1512,30 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmn:Node_DialogVM}">
-        <Border Style="{StaticResource S_Border_Node}"
-                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
-                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
 
-                <TextBlock Text="{StaticResource String_Icon_Node_Dialog}" Style="{StaticResource S_TextBlock_Node_Icon}"></TextBlock>
+            <TextBlock Text="{StaticResource String_Icon_Node_Dialog}" Style="{StaticResource S_TextBlock_Node_Icon}"></TextBlock>
 
-                <TextBlock x:Name="tb_CharacterName" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Character.name, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"></TextBlock>
-                <TextBlock x:Name="tb_OverrideName" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+            <TextBlock x:Name="tb_CharacterName" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Character.name, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"></TextBlock>
+            <TextBlock x:Name="tb_OverrideName" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
-                <controls:TextBlockExt IsHitTestVisible="False" Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+            <controls:TextBlockExt IsHitTestVisible="False" Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
                                        Style="{StaticResource S_TextBlock_Node_Description}"></controls:TextBlockExt>
 
-                <Separator Grid.ColumnSpan="2" Grid.Row="2"></Separator>
+            <Separator Grid.ColumnSpan="2" Grid.Row="2"></Separator>
 
-                <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_ShortDescription}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-
-                <Button Style="{StaticResource S_Button_Node_Gender_Offset}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
-
-                <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Right">
-                    <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
-                    <ContentControl ContentTemplate="{StaticResource DT_HasGameEvents}" Content="{Binding}"></ContentControl>
-                    <Button Style="{StaticResource S_Button_Remove}"></Button>
-                </StackPanel>
-            </Grid>
-        </Border>
+            <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_ShortDescription}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+        </Grid>
         <DataTemplate.Triggers>
             <Trigger SourceName="tb_OverrideName" Property="Text" Value="">
                 <Setter TargetName="tb_OverrideName" Property="Visibility" Value="Collapsed"></Setter>
@@ -2285,33 +2330,9 @@ StorylineEditor распространяется в надежде, что он�
             </ItemsControl>
         </ScrollViewer>
     </DataTemplate>
-    
+
     <DataTemplate DataType="{x:Type vm:PlayerContext_TransitionVM}">
         <TextBlock Style="{StaticResource S_TextBlock_Node_Icon_Large}" Text="{StaticResource String_Icon_Player_Transition}"></TextBlock>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:PlayerContext_Node_ReplicaVM}">
-        <TextBlock Style="{StaticResource S_TextBlock_Node_Icon_Large}" Text="{StaticResource String_Icon_Node_Replica}"></TextBlock>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:PlayerContext_Node_DialogVM}">
-        <TextBlock Style="{StaticResource S_TextBlock_Node_Icon_Large}" Text="{StaticResource String_Icon_Node_Dialog}"></TextBlock>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:PlayerContext_Node_RandomVM}">
-        <TextBlock Style="{StaticResource S_TextBlock_Node_Icon_Large}" Text="{StaticResource String_Icon_Node_Random}"></TextBlock>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:PlayerContext_Node_TransitVM}">
-        <TextBlock Style="{StaticResource S_TextBlock_Node_Icon_Large}" Text="{StaticResource String_Icon_Node_Transit}"></TextBlock>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:PlayerContext_Node_GateVM}">
-        <TextBlock Style="{StaticResource S_TextBlock_Node_Icon_Large}" Text="{StaticResource String_Icon_Node_Gate}"></TextBlock>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:PlayerContext_Node_ExitVM}">
-        <TextBlock Style="{StaticResource S_TextBlock_Node_Icon_Large}" Text="{StaticResource String_Icon_Node_Exit}"></TextBlock>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:HistoryVM}">
