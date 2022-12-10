@@ -80,6 +80,10 @@ StorylineEditor распространяется в надежде, что он�
     
     <sys:String x:Key="String_Icon_Replica">🗣</sys:String>
 
+    <sys:String x:Key="String_Icon_Stop">■</sys:String>
+
+    <sys:String x:Key="String_Icon_Pause">⏸</sys:String>
+    
     <sys:String x:Key="String_Icon_Play">▶</sys:String>
     
     <sys:String x:Key="String_Icon_Bwd">⏪</sys:String>

@@ -159,7 +159,9 @@ namespace StorylineEditor.ViewModel
             RelationEntries = new ObservableCollection<RelationEntryVM>();
             Characters = new ObservableCollection<Notifier>();
 
-            GenderToPlay = 1;
+            Gender = GENDER.MALE;
+            TimeLeft = 0;
+            Duration = 4;
         }
 
         public ObservableCollection<Notifier> Inventory { get; }
@@ -244,7 +246,7 @@ namespace StorylineEditor.ViewModel
         {
             if (viewModel is CharacterVM characterViewModel)
             {
-                float result = genderToPlay == GENDER.MALE ? characterViewModel.Model.initialRelation : characterViewModel.Model.initialRelationFemale;
+                float result = gender == GENDER.MALE ? characterViewModel.Model.initialRelation : characterViewModel.Model.initialRelationFemale;
 
                 if (Characters.Contains(viewModel))
                 {
@@ -289,16 +291,61 @@ namespace StorylineEditor.ViewModel
         protected ICommand removeRelationEntryCommand;
         public ICommand RemoveRelationEntryCommand => removeRelationEntryCommand ?? (removeRelationEntryCommand = new RelayCommand<RelationEntryVM>((relationEntry) => RemoveRelationEntry(relationEntry), (relationEntry) => relationEntry != null));
 
-        protected int genderToPlay;
-        public int GenderToPlay
+        protected byte gender;
+        public byte Gender
         {
-            get => genderToPlay;
+            get => gender;
             set
             {
-                if (value != genderToPlay)
+                if (value != gender)
                 {
-                    genderToPlay = value;
-                    Notify(nameof(GenderToPlay));
+                    gender = value;
+                    Notify(nameof(Gender));
+                }
+            }
+        }
+
+        protected ICommand toggleGenderCommand;
+        public ICommand ToggleGenderCommand => toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand(() => Gender = (byte)(3 - Gender), () => true));
+
+        protected bool fullMode;
+        public bool FullMode
+        {
+            get => fullMode;
+            set
+            {
+                if (value != fullMode)
+                {
+                    fullMode = value;
+                    Notify(nameof(FullMode));
+                }
+            }
+        }
+
+        protected double timeLeft;
+        public double TimeLeft
+        {
+            get => timeLeft;
+            set
+            {
+                if (value != timeLeft)
+                {
+                    timeLeft = value;
+                    Notify(nameof(TimeLeft));
+                }
+            }
+        }
+
+        protected double duration;
+        public double Duration
+        {
+            get => duration;
+            set
+            {
+                if (value != duration)
+                {
+                    duration = value;
+                    Notify(nameof(Duration));
                 }
             }
         }

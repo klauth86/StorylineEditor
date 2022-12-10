@@ -178,13 +178,8 @@ StorylineEditor распространяется в надежде, что он�
         </Style.Triggers>
     </Style>
 
-    <Style TargetType="Button" x:Key="S_Button_Node_Gender" BasedOn="{StaticResource S_Button_Square_32x}">
+    <Style TargetType="Button" x:Key="S_Button_Node_Gender" BasedOn="{StaticResource S_Button_Square_24x}">
         <Setter Property="Command" Value="{Binding ToggleGenderCommand}"></Setter>
-        <Setter Property="RenderTransform">
-            <Setter.Value>
-                <TranslateTransform X="{StaticResource Double_Size_24x-}" Y="{StaticResource Double_Size_24x-}"></TranslateTransform>
-            </Setter.Value>
-        </Setter>
         <Style.Triggers>
             <DataTrigger Binding="{Binding Gender, UpdateSourceTrigger=PropertyChanged}" Value="{x:Static m:GENDER.UNSET}">
                 <Setter Property="Content" Value="{StaticResource String_Icon_Gender_Unset}"></Setter>
@@ -196,6 +191,14 @@ StorylineEditor распространяется в надежде, что он�
                 <Setter Property="Content" Value="{StaticResource String_Icon_Gender_Female}"></Setter>
             </DataTrigger>
         </Style.Triggers>
+    </Style>
+
+    <Style TargetType="Button" x:Key="S_Button_Node_Gender_Offset" BasedOn="{StaticResource S_Button_Node_Gender}">
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <TranslateTransform X="{StaticResource Double_Size_24x-}" Y="{StaticResource Double_Size_24x-}"></TranslateTransform>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style TargetType="Button" x:Key="S_Button_Remove">
@@ -946,7 +949,7 @@ StorylineEditor распространяется в надежде, что он�
                 
                 <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_Result}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
-                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+                <Button Style="{StaticResource S_Button_Node_Gender_Offset}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
 
                 <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Right">
                     <Button Style="{StaticResource S_Button_Remove}"></Button>
@@ -999,7 +1002,7 @@ StorylineEditor распространяется в надежде, что он�
                 
                 <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_Result}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
-                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+                <Button Style="{StaticResource S_Button_Node_Gender_Offset}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
 
                 <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Right">
                     <Button Style="{StaticResource S_Button_Remove}"></Button>
@@ -1032,7 +1035,7 @@ StorylineEditor распространяется в надежде, что он�
             <Grid>
                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{StaticResource String_Icon_Node_Random}" Style="{StaticResource S_TextBlock_Node_Icon_Large}"></TextBlock>
 
-                <Button Style="{StaticResource S_Button_Node_Gender}" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+                <Button Style="{StaticResource S_Button_Node_Gender_Offset}" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
 
                 <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" VerticalAlignment="Top" HorizontalAlignment="Right">
                     <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
@@ -1283,7 +1286,7 @@ StorylineEditor распространяется в надежде, что он�
             <Grid>
                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{StaticResource String_Icon_Node_Transit}" Style="{StaticResource S_TextBlock_Node_Icon_Large}"></TextBlock>
 
-                <Button Style="{StaticResource S_Button_Node_Gender}" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+                <Button Style="{StaticResource S_Button_Node_Gender_Offset}" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
 
                 <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" VerticalAlignment="Top" HorizontalAlignment="Right">
                     <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
@@ -1317,8 +1320,8 @@ StorylineEditor распространяется в надежде, что он�
                 <TextBlock FontSize="{StaticResource FontSize_Medium}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
                 <TextBlock FontSize="{StaticResource FontSize_Large}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, StringFormat=[{0}], TargetNullValue=???}"></TextBlock>
-                
-                <Button Grid.RowSpan="3" Style="{StaticResource S_Button_Node_Gender}" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+
+                <Button Grid.RowSpan="3" Style="{StaticResource S_Button_Node_Gender_Offset}" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
 
                 <StackPanel Grid.RowSpan="3" Style="{StaticResource S_StackPanel_Node_TopRightPanel}" VerticalAlignment="Top" HorizontalAlignment="Right">
                     <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
@@ -1407,7 +1410,7 @@ StorylineEditor распространяется в надежде, что он�
                 
                 <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_ShortDescription}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
-                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+                <Button Style="{StaticResource S_Button_Node_Gender_Offset}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
 
                 <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Right">
                     <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
@@ -1479,7 +1482,7 @@ StorylineEditor распространяется в надежде, что он�
 
                 <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_ShortDescription}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
-                <Button Style="{StaticResource S_Button_Node_Gender}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
+                <Button Style="{StaticResource S_Button_Node_Gender_Offset}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Left"></Button>
 
                 <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}" Grid.ColumnSpan="2" Grid.RowSpan="4" VerticalAlignment="Top" HorizontalAlignment="Right">
                     <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
@@ -2250,7 +2253,7 @@ StorylineEditor распространяется в надежде, что он�
     <DataTemplate DataType="{x:Type vm:HistoryVM}">
         <TabControl>
 
-            <!--<TabItem Header="Воспроизведение" FontSize="10">
+            <TabItem Header="{StaticResource String_Tag_Player_Tab_Props}">
                 <DockPanel>
                     <Grid DockPanel.Dock="Top" Grid.Row="2">
                         <Grid.RowDefinitions>
@@ -2258,17 +2261,23 @@ StorylineEditor распространяется в надежде, что он�
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
 
-                        <CheckBox IsChecked="{Binding TreeCanvas.FullMode}" IsEnabled="{Binding ElementName=btn_ToggleGenderToPlay, Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}">Полный режим</CheckBox>
+                        <CheckBox IsChecked="{Binding FullMode}" Content="{StaticResource String_Tag_Player_FullMode}"></CheckBox>
 
                         <StackPanel Grid.Row="1" Orientation="Horizontal">
-                            <Button Style="{StaticResource S_Button_TreePlayer_Play}"></Button>
-                            <Button Style="{StaticResource S_Button_TreePlayer_Stop}"></Button>
-                            <Button x:Name="btn_ToggleGenderToPlay" Style="{StaticResource S_Button_TreePlayer_ToggleGenderToPlay}"></Button>
-                            <xctk:IntegerUpDown Padding="{StaticResource MarginPaddingThickness}" Margin="{StaticResource MarginPaddingThickness}" Minimum="1" MinWidth="64" Maximum="60" Value="{Binding TreeCanvas.StateDuration, UpdateSourceTrigger=PropertyChanged}" AllowTextInput="False" CultureInfo="ru-RU"></xctk:IntegerUpDown>
-                            <TextBlock Style="{StaticResource S_TextBlock_Header}" Text="{Binding TreeCanvas.StateTimeLeft, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Stop}" ToolTip="{StaticResource String_Player_Stop_Tooltip}" Command="{Binding StopCommand}"></Button>
+                            <Grid>
+                                <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Pause}" ToolTip="{StaticResource String_Player_Pause_Tooltip}" Command="{Binding PauseCommand}"></Button>
+                                <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Play}" ToolTip="{StaticResource String_Player_Play_Tooltip}" Command="{Binding StartCommand}"></Button>
+                            </Grid>
+                            <Button Style="{StaticResource S_Button_Node_Gender}"></Button>
+                            <controls:NumericUpDown_Float Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Value="{Binding Duration,UpdateSourceTrigger=PropertyChanged}"
+                                            ButtonIncStyle="{StaticResource S_Button_Square_Auto}" ButtonIncContent="{StaticResource String_Icon_Plus}"
+                                            ButtonDecStyle="{StaticResource S_Button_Square_Auto}" ButtonDecContent="{StaticResource String_Icon_Minus}"
+                                            MinValue="1" MaxValue="60" Step="1" MinWidth="{StaticResource Double_Node_MinWidth}"></controls:NumericUpDown_Float>
+                            <TextBlock Style="{StaticResource S_TextBlock_Graph_Bold}" Text="{Binding StateTimeLeft, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
                         </StackPanel>
                     </Grid>
-                    <ContentControl Grid.Row="1" Padding="{StaticResource MarginPaddingThickness}" Margin="{StaticResource MarginPaddingThickness}" Content="{Binding TreeCanvas.ActiveContext, UpdateSourceTrigger=PropertyChanged}">
+                    <!--<ContentControl Grid.Row="1" Padding="{StaticResource MarginPaddingThickness}" Margin="{StaticResource MarginPaddingThickness}" Content="{Binding TreeCanvas.ActiveContext, UpdateSourceTrigger=PropertyChanged}">
                         <ContentControl.Resources>
                             <DataTemplate DataType="{x:Type viewModels:TreePlayerContext_ErrorVm}">
                                 <StackPanel Margin="{StaticResource MarginPaddingThickness}">
@@ -2367,11 +2376,11 @@ StorylineEditor распространяется в надежде, что он�
                                 </DataTemplate.Triggers>
                             </DataTemplate>
                         </ContentControl.Resources>
-                    </ContentControl>
+                    </ContentControl>-->
                 </DockPanel>
             </TabItem>
 
-            <TabItem x:Name="ti_Inventory" IsEnabled="{Binding TreeCanvas.FullMode, UpdateSourceTrigger=PropertyChanged}">
+            <!--<TabItem x:Name="ti_Inventory" IsEnabled="{Binding TreeCanvas.FullMode, UpdateSourceTrigger=PropertyChanged}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Инвентарь" Style="{StaticResource S_TextBlock_Base}" FontSize="10"></TextBlock>
