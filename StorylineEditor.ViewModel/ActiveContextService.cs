@@ -11,7 +11,6 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Model;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,6 +18,7 @@ namespace StorylineEditor.ViewModel
 {
     public interface IActiveContext
     {
+        SelectionType GetSelection<SelectionType>() where SelectionType : class;
         string Copy();
         void Paste(string clipboard);
         void Delete();

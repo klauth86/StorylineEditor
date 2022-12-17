@@ -1,5 +1,6 @@
 ﻿using StorylineEditor.Model;
 using StorylineEditor.ViewModel.Common;
+using StorylineEditor.ViewModel.Graphs;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -184,9 +185,9 @@ namespace StorylineEditor.ViewModel
         public override string Stats => null;
     }
 
-    public class HistoryVM : SimpleVM<StorylineVM>
+    public class HistoryVM : Notifier
     {
-        public HistoryVM(StorylineVM parent, ICallbackContext callbackContext) : base(parent, callbackContext)
+        public HistoryVM()
         {
             Inventory = new ObservableCollection<Notifier>();
 
@@ -239,7 +240,7 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        public Notifier DialogOrReplicaToAdd { get => null; set { if (value != null) AddDialogTree(new TreePathVM(this, Model) { Graph = value }); } }
+        public Notifier DialogOrReplicaToAdd { get => null; set { if (value != null) AddDialogTree(new TreePathVM(this, null) { Graph = value }); } }
 
         protected ICommand removeDialogsAndReplicasCommand;
         public ICommand RemoveDialogsAndReplicasCommand => removeDialogsAndReplicasCommand ?? (removeDialogsAndReplicasCommand = new RelayCommand<TreePathVM>((treePath) => RemoveDialogTreePath(treePath), (treePath) => treePath != null));
@@ -253,7 +254,7 @@ namespace StorylineEditor.ViewModel
             {
                 JournalRecords.Add(tree);
 
-                JournalEntryVM journalEntry = new JournalEntryVM(this, Model) { Quest = tree };
+                JournalEntryVM journalEntry = new JournalEntryVM(this, null) { Quest = tree };
                 JournalEntries.Add(journalEntry);
 
                 //ShowAvailabilityAdorners();
@@ -305,7 +306,7 @@ namespace StorylineEditor.ViewModel
             {
                 Characters.Add(viewModel);
 
-                RelationEntryVM relationEntry = new RelationEntryVM(this, Model) { Character = viewModel };
+                RelationEntryVM relationEntry = new RelationEntryVM(this, null) { Character = viewModel };
                 RelationEntries.Add(relationEntry);
 
                 //ShowAvailabilityAdorners();
@@ -346,7 +347,7 @@ namespace StorylineEditor.ViewModel
         }
 
         protected ICommand toggleGenderCommand;
-        public ICommand ToggleGenderCommand => toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand(() => Gender = (byte)(3 - Gender), () => true));
+        public ICommand ToggleGenderCommand => toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand(() => Gender = (byte)(3 - Gender), () => ActiveContext == null));
 
         protected bool fullMode;
         public bool FullMode
@@ -400,12 +401,35 @@ namespace StorylineEditor.ViewModel
                 {
                     activeContext = value;
                     Notify(nameof(ActiveContext));
+
+                    CommandManager.InvalidateRequerySuggested();
                 }
             }
         }
 
+        protected ICommand playCommand;
+        public ICommand PlayCommand => playCommand ?? (playCommand = new RelayCommand(() =>
+        {
+            if (ActiveContextService.ActiveContext is DialogVM dialogViewModel)
+            {
+                StartGraph = dialogViewModel;
+            }
+            else if (ActiveContextService.ActiveContext is ReplicaVM replicaViewModel)
+            {
+                StartGraph = replicaViewModel;
+            }
+
+        }, () => ActiveContext == null));
+
+        protected ICommand pauseCommand;
+        public ICommand PauseCommand => pauseCommand ?? (pauseCommand = new RelayCommand(() => { }, () => ActiveContext != null));
+
+        protected ICommand stopCommand;
+        public ICommand StopCommand => stopCommand ?? (stopCommand = new RelayCommand(() => { }, () => ActiveContext != null));
+
+        public Notifier StartGraph { get; set; }
+        public Notifier StartNode { get; set; }
+
         public override string Id => null;
-        public override string Title => null;
-        public override string Stats => null;
     }
 }

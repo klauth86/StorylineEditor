@@ -665,6 +665,8 @@ namespace StorylineEditor.ViewModel.Graphs
             return false;
         }
 
+        public SelectionType GetSelection<SelectionType>() where SelectionType : class { return SelectionNode as SelectionType; }
+
         public string Copy()
         {
             GraphM graphModel = new QuestM();

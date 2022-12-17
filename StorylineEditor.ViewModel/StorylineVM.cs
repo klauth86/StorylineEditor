@@ -34,7 +34,7 @@ namespace StorylineEditor.ViewModel
 
         public StorylineVM(StorylineM model, ICallbackContext callbackContext) : base(model, callbackContext)
         {
-            History = new HistoryVM(this, this);
+            History = new HistoryVM();
         }
 
 
