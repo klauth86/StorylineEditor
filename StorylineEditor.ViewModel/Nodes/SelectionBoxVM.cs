@@ -92,5 +92,7 @@ namespace StorylineEditor.ViewModel.Nodes
 
         protected double strokeThicknessBase;
         public double StrokeThickness => strokeThicknessBase;
+
+        public bool IsUnscalable => true;
     }
 }

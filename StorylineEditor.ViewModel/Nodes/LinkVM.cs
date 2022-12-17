@@ -248,6 +248,8 @@ namespace StorylineEditor.ViewModel.Nodes
         }
 
         protected override void OnFilterChangedHandler(string filter) { } ////// Links visibility are calculated by Graph on the basis of their from-Node and To-Node
+
+        public bool IsUnscalable => true;
     }
 
     public class PreviewLinkVM : LinkVM {

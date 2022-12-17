@@ -271,6 +271,9 @@ StorylineEditor распространяется в надежде, что он�
                         <DataTrigger Binding="{Binding IsFilterPassed, UpdateSourceTrigger=PropertyChanged}" Value="false">
                             <Setter Property="Control.Visibility" Value="Collapsed"></Setter>
                         </DataTrigger>
+                        <DataTrigger Binding="{Binding IsUnscalable, UpdateSourceTrigger=PropertyChanged}" Value="true">
+                            <Setter Property="RenderTransform" Value="{x:Null}"></Setter>
+                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </Setter.Value>
