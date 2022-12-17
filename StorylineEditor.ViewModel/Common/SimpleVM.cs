@@ -11,6 +11,7 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Model;
+using StorylineEditor.ViewModel.Interface;
 using System;
 using System.Windows.Input;
 
@@ -77,12 +78,12 @@ namespace StorylineEditor.ViewModel.Common
 
 
         protected ICommand registerContextCommand;
-        public ICommand RegisterContextCommand => registerContextCommand ?? (registerContextCommand = new RelayCommand(() => ActiveContextService.ActiveContext = this as IActiveContext));
+        public ICommand RegisterContextCommand => registerContextCommand ?? (registerContextCommand = new RelayCommand(() => ActiveContextService.ActiveCopyPaste = this as ICopyPaste));
 
 
 
         protected ICommand unregisterContextCommand;
-        public ICommand UnregisterContextCommand => unregisterContextCommand ?? (unregisterContextCommand = new RelayCommand(() => ActiveContextService.ActiveContext = null));
+        public ICommand UnregisterContextCommand => unregisterContextCommand ?? (unregisterContextCommand = new RelayCommand(() => ActiveContextService.ActiveCopyPaste = null));
 
         public abstract string Title { get; }
 

@@ -16,6 +16,7 @@ using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Config;
 using StorylineEditor.ViewModel.Helpers;
+using StorylineEditor.ViewModel.Interface;
 using StorylineEditor.ViewModel.Nodes;
 using System;
 using System.Collections;
@@ -42,7 +43,7 @@ namespace StorylineEditor.ViewModel.Graphs
         Y = 2,
     }
 
-    public abstract class Graph_BaseVM<T> : Collection_BaseVM<T, Point>, ICallbackContext, IActiveContext where T : GraphM
+    public abstract class Graph_BaseVM<T> : Collection_BaseVM<T, Point>, ICallbackContext, ICopyPaste, IGraph where T : GraphM
     {
         public Graph_BaseVM(T model, ICallbackContext callbackContext, Func<Type, Point, BaseM> modelCreator, Func<BaseM, ICallbackContext, Notifier> viewModelCreator,
             Func<Notifier, ICallbackContext, Notifier> editorCreator, Type defaultNodeType) : base(model, callbackContext,
@@ -112,10 +113,8 @@ namespace StorylineEditor.ViewModel.Graphs
 
         protected bool cancelFlag;
         protected Task activeTask;
-        protected double targetPositionX;
-        protected double targetPositionY;
 
-        async void StartScrollingTask()
+        async void StartScrollingTask(IPositioned targetPosition, Action<INode> callbackAction)
         {
             const int waitDurationMsec = 8;
 
@@ -144,8 +143,8 @@ namespace StorylineEditor.ViewModel.Graphs
 
                     if (cancelFlag) return;
 
-                    targetOffsetX = targetPositionX - StorylineVM.ViewWidth / 2 / Scale;
-                    targetOffsetY = targetPositionY - StorylineVM.ViewHeight / 2 / Scale;
+                    targetOffsetX = targetPosition.PositionX - StorylineVM.ViewWidth / 2 / Scale;
+                    targetOffsetY = targetPosition.PositionY - StorylineVM.ViewHeight / 2 / Scale;
 
                     double stepX = (OffsetX - targetOffsetX) * currentAlpha;
                     double stepY = (OffsetY - targetOffsetY) * currentAlpha;
@@ -159,12 +158,14 @@ namespace StorylineEditor.ViewModel.Graphs
                     await Task.Delay(stepDuration);
                 }
 
-                targetOffsetX = targetPositionX - StorylineVM.ViewWidth / 2 / Scale;
-                targetOffsetY = targetPositionY - StorylineVM.ViewHeight / 2 / Scale;
+                targetOffsetX = targetPosition.PositionX - StorylineVM.ViewWidth / 2 / Scale;
+                targetOffsetY = targetPosition.PositionY - StorylineVM.ViewHeight / 2 / Scale;
 
                 double lastStepX = (OffsetX - targetOffsetX);
                 double lastStepY = (OffsetY - targetOffsetY);
                 Application.Current?.Dispatcher?.Invoke(new Action(() => { TranslateView(lastStepX, lastStepY); }));
+
+                if (callbackAction != null && targetPosition is INode targetNode) callbackAction.Invoke(targetNode);
             });
         }
 
@@ -219,13 +220,9 @@ namespace StorylineEditor.ViewModel.Graphs
 
             if (RootNodeIds.Count > 0 && RootNodeIndex >= 0 && RootNodeIndex < RootNodeIds.Count)
             {
-                Node_BaseM targetNodeModel = Model.nodes.FirstOrDefault((nodeModel) => nodeModel?.id == RootNodeIds[RootNodeIndex]);
-                if (targetNodeModel != null)
+                if (NodesVMs.ContainsKey(RootNodeIds[RootNodeIndex]))
                 {
-                    targetPositionX = targetNodeModel.positionX;
-                    targetPositionY = targetNodeModel.positionY;
-
-                    StartScrollingTask();
+                    StartScrollingTask(NodesVMs[RootNodeIds[RootNodeIndex]] as INode, null);
                 }
             }
         }, () => RootNodeIds.Count > 0));
@@ -237,13 +234,9 @@ namespace StorylineEditor.ViewModel.Graphs
 
             if (RootNodeIds.Count > 0 && RootNodeIndex >= 0 && RootNodeIndex < RootNodeIds.Count)
             {
-                Node_BaseM targetNodeModel = Model.nodes.FirstOrDefault((nodeModel) => nodeModel?.id == RootNodeIds[RootNodeIndex]);
-                if (targetNodeModel != null)
+                if (NodesVMs.ContainsKey(RootNodeIds[RootNodeIndex]))
                 {
-                    targetPositionX = targetNodeModel.positionX;
-                    targetPositionY = targetNodeModel.positionY;
-
-                    StartScrollingTask();
+                    StartScrollingTask(NodesVMs[RootNodeIds[RootNodeIndex]] as INode, null);
                 }
             }
         }, () => RootNodeIds.Count > 0));
@@ -252,13 +245,7 @@ namespace StorylineEditor.ViewModel.Graphs
         public ICommand ResetScaleCommand => resetScaleCommand ?? (resetScaleCommand = new RelayCommand(() => StartScalingTask()));
 
         protected ICommand goToOriginCommand;
-        public ICommand GoToOriginCommand => goToOriginCommand ?? (goToOriginCommand = new RelayCommand(() =>
-        {
-            targetPositionX = StorylineVM.ViewWidth / 2 / Scale;
-            targetPositionY = StorylineVM.ViewHeight / 2 / Scale;
-
-            StartScrollingTask();
-        }));
+        public ICommand GoToOriginCommand => goToOriginCommand ?? (goToOriginCommand = new RelayCommand(() => StartScrollingTask(OriginVM.GetOrigin(), null)));
 
         protected ICommand playCommand;
         public ICommand PlayCommand => playCommand ?? (playCommand = new RelayCommand(() => { CallbackContext?.Callback(this, nameof(HistoryVM)); }, () => HasSelection()));
@@ -1193,7 +1180,7 @@ namespace StorylineEditor.ViewModel.Graphs
             }
         }
 
-
+        public void MoveTo(INode node, Action<INode> callbackAction) { if (node != null) { StartScrollingTask(node, callbackAction); } }
 
         protected virtual string CanLinkNodes(INode from, INode to) { return nameof(NotImplementedException); }
         protected virtual void PreLinkNodes(INode from, INode to) { }

@@ -2359,7 +2359,7 @@ StorylineEditor распространяется в надежде, что он�
                             <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Stop}" ToolTip="{StaticResource String_Player_Stop_Tooltip}" Command="{Binding StopCommand}"></Button>
                             <Grid>
                                 <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Pause}" ToolTip="{StaticResource String_Player_Pause_Tooltip}" Command="{Binding PauseCommand}"></Button>
-                                <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Play}" ToolTip="{StaticResource String_Player_Play_Tooltip}" Command="{Binding StartCommand}"></Button>
+                                <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Play}" ToolTip="{StaticResource String_Player_Play_Tooltip}" Command="{Binding PlayCommand}"></Button>
                             </Grid>
                             <Button Style="{StaticResource S_Button_Gender}"></Button>
                             <controls:NumericUpDown_Float Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Value="{Binding Duration,UpdateSourceTrigger=PropertyChanged}"
@@ -2370,7 +2370,7 @@ StorylineEditor распространяется в надежде, что он�
                         </StackPanel>
                     </Grid>
                     
-                    <ContentControl Grid.Row="1" Margin="{StaticResource Thickness_Margin_1x}" Content="{Binding ActiveContext, UpdateSourceTrigger=PropertyChanged}">
+                    <ContentControl Grid.Row="1" Margin="{StaticResource Thickness_Margin_1x}" Content="{Binding PlayerContext, UpdateSourceTrigger=PropertyChanged}">
                         <!--<ContentControl.Resources>
                             --><!--<DataTemplate DataType="{x:Type viewModelsNodes:DNode_TransitVm}">
                                 <Label HorizontalAlignment="Center" Style="{StaticResource S_Label_NodeType}"></Label>

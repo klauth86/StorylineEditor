@@ -13,30 +13,12 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Helpers;
+using StorylineEditor.ViewModel.Interface;
 using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Nodes
 {
-    public interface INode
-    {
-        // Absoulute
-        double PositionX { get; set; }
-        double PositionY { get; set; }
-        double Width { get; set; }
-        double Height { get; set; }
-
-        // Local
-        double Left { get; set; }
-        double Top { get; set; }
-
-        string Id { get; }
-        string Name { get; set; }
-        byte Gender { get; }
-        bool IsSelected { get; }
-        bool IsRoot { get; set; }
-    }
-
     public abstract class Node_BaseVM<T> : BaseVM<T>, INode where T : Node_BaseM
     {
         public Node_BaseVM(T model, ICallbackContext callbackContext) : base(model, callbackContext)

@@ -11,22 +11,15 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Model;
+using StorylineEditor.ViewModel.Interface;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace StorylineEditor.ViewModel
 {
-    public interface IActiveContext
+    public static class ActiveContextService
     {
-        SelectionType GetSelection<SelectionType>() where SelectionType : class;
-        string Copy();
-        void Paste(string clipboard);
-        void Delete();
-    }
-
-    public class ActiveContextService
-    {
-        public static IActiveContext ActiveContext { get; set; }
+        public static ICopyPaste ActiveCopyPaste { get; set; }
         public static StorylineVM ActiveStoryline { get; set; }
         public static IEnumerable<BaseM> GetEnumerator(params List<BaseM>[] collectionSet)
         {

@@ -1,6 +1,7 @@
 ﻿using StorylineEditor.Model;
 using StorylineEditor.ViewModel.Common;
-using StorylineEditor.ViewModel.Graphs;
+using StorylineEditor.ViewModel.Interface;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -36,13 +37,11 @@ namespace StorylineEditor.ViewModel
         public override string Stats => null;
     }
 
-    public class PlayerContext_TransitionVM : SimpleVM<HistoryVM>
-    {
-        public PlayerContext_TransitionVM(HistoryVM parent, ICallbackContext callbackContext) : base(parent, callbackContext) { }
+    public class PlayerContext_TransitionVM { }
 
-        public override string Id => null;
-        public override string Title => null;
-        public override string Stats => null;
+    public class PlayerContext_NodeVM
+    {
+
     }
 
     public class TreePathVM : SimpleVM<HistoryVM>
@@ -347,7 +346,7 @@ namespace StorylineEditor.ViewModel
         }
 
         protected ICommand toggleGenderCommand;
-        public ICommand ToggleGenderCommand => toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand(() => Gender = (byte)(3 - Gender), () => ActiveContext == null));
+        public ICommand ToggleGenderCommand => toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand(() => Gender = (byte)(3 - Gender), () => PlayerContext == null));
 
         protected bool fullMode;
         public bool FullMode
@@ -391,16 +390,16 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        protected object activeContext;
-        public object ActiveContext
+        protected object playerContext;
+        public object PlayerContext
         {
-            get => activeContext;
+            get => playerContext;
             set
             {
-                if (value != activeContext)
+                if (value != playerContext)
                 {
-                    activeContext = value;
-                    Notify(nameof(ActiveContext));
+                    playerContext = value;
+                    Notify(nameof(PlayerContext));
 
                     CommandManager.InvalidateRequerySuggested();
                 }
@@ -410,25 +409,31 @@ namespace StorylineEditor.ViewModel
         protected ICommand playCommand;
         public ICommand PlayCommand => playCommand ?? (playCommand = new RelayCommand(() =>
         {
-            if (ActiveContextService.ActiveContext is DialogVM dialogViewModel)
-            {
-                StartGraph = dialogViewModel;
-            }
-            else if (ActiveContextService.ActiveContext is ReplicaVM replicaViewModel)
-            {
-                StartGraph = replicaViewModel;
-            }
+            StartGraph = ActiveContextService.ActiveCopyPaste as IGraph;
+            StartNode = StartGraph.SelectionNode;
 
-        }, () => ActiveContext == null));
+            PlayerContext = new PlayerContext_TransitionVM();
+
+            StartGraph.MoveTo(StartNode, OnFinishMovement);
+
+        }, () => PlayerContext == null));
+
+        private void OnFinishMovement(INode node)
+        {
+            ActiveNode = node;
+
+            PlayerContext = new PlayerContext_NodeVM();
+        }
 
         protected ICommand pauseCommand;
-        public ICommand PauseCommand => pauseCommand ?? (pauseCommand = new RelayCommand(() => { }, () => ActiveContext != null));
+        public ICommand PauseCommand => pauseCommand ?? (pauseCommand = new RelayCommand(() => { }, () => PlayerContext != null));
 
         protected ICommand stopCommand;
-        public ICommand StopCommand => stopCommand ?? (stopCommand = new RelayCommand(() => { }, () => ActiveContext != null));
+        public ICommand StopCommand => stopCommand ?? (stopCommand = new RelayCommand(() => { }, () => PlayerContext != null));
 
-        public Notifier StartGraph { get; set; }
-        public Notifier StartNode { get; set; }
+        public IGraph StartGraph { get; set; }
+        public INode StartNode { get; set; }
+        public INode ActiveNode { get; set; }
 
         public override string Id => null;
     }

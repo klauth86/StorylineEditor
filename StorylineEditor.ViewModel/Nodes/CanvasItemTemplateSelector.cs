@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using StorylineEditor.ViewModel.Interface;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace StorylineEditor.ViewModel.Nodes
