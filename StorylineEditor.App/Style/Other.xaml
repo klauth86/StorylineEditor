@@ -239,8 +239,8 @@ StorylineEditor распространяется в надежде, что он�
     <ItemsPanelTemplate x:Key="IPT_Canvas">
         <Canvas ClipToBounds="True"></Canvas>
     </ItemsPanelTemplate>
-    
-    <Style TargetType="ItemsControl" x:Key="S_Canvas_Graph">
+
+    <Style TargetType="ItemsControl" x:Key="S_ItemsControl_Graph">
         <Setter Property="Background" Value="{StaticResource Color_Graph_Background}"></Setter>
         <Setter Property="ItemsPanel" Value="{StaticResource IPT_Canvas}"></Setter>
         <Setter Property="ItemsSource" Value="{Binding ItemsVMs}"></Setter>
@@ -868,7 +868,7 @@ StorylineEditor распространяется в надежде, что он�
                         <ColumnDefinition Width="3*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
-                    <ItemsControl Style="{StaticResource S_Canvas_Graph}"
+                    <ItemsControl Style="{StaticResource S_ItemsControl_Graph}"
                                   bhvrs:RenderSizeBehavior.IsEnabled="true"
                                   bhvrs:RenderSizeBehavior.ActualWidth="{Binding Path=(vm:StorylineVM.ViewWidth), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
                                   bhvrs:RenderSizeBehavior.ActualHeight="{Binding Path=(vm:StorylineVM.ViewHeight), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
@@ -882,8 +882,8 @@ StorylineEditor распространяется в надежде, что он�
                         </Grid.RowDefinitions>
 
                         <StackPanel Orientation="Horizontal">
-                            <Button x:Name="btn_selectable_Step" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Step}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_StepM}"></Button>
-                            <Button x:Name="btn_selectable_Alternative" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Alternative}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_AlternativeM}"></Button>
+                            <Button x:Name="btn_selectable_Step" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Step}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_StepM}" ToolTip="{StaticResource String_Tag_Node_Step_Type}"></Button>
+                            <Button x:Name="btn_selectable_Alternative" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Alternative}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_AlternativeM}" ToolTip="{StaticResource String_Tag_Node_Alternative_Type}"></Button>
                             <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
                             <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Bwd}" Command="{Binding PrevRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_PrevRootNode_Tooltip}"></Button>
                             <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Fwd}" Command="{Binding NextRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_NextRootNode_Tooltip}"></Button>
@@ -1614,7 +1614,7 @@ StorylineEditor распространяется в надежде, что он�
                         <ColumnDefinition Width="3*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
-                    <ItemsControl Style="{StaticResource S_Canvas_Graph}"
+                    <ItemsControl Style="{StaticResource S_ItemsControl_Graph}"
                                   bhvrs:RenderSizeBehavior.IsEnabled="true"
                                   bhvrs:RenderSizeBehavior.ActualWidth="{Binding Path=(vm:StorylineVM.ViewWidth), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
                                   bhvrs:RenderSizeBehavior.ActualHeight="{Binding Path=(vm:StorylineVM.ViewHeight), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
@@ -1628,12 +1628,12 @@ StorylineEditor распространяется в надежде, что он�
                         </Grid.RowDefinitions>
 
                         <StackPanel Orientation="Horizontal">
-                            <Button x:Name="btn_selectable_Dialog" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Dialog}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_DialogM}"></Button>
-                            <Button x:Name="btn_selectable_Replica" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Replica}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_ReplicaM}"></Button>
-                            <Button x:Name="btn_selectable_Random" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Random}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_RandomM}"></Button>
-                            <Button x:Name="btn_selectable_Transit" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Transit}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_TransitM}"></Button>
-                            <Button x:Name="btn_selectable_Gate" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Gate}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_GateM}"></Button>
-                            <Button x:Name="btn_selectable_Exit" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Exit}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_ExitM}"></Button>
+                            <Button x:Name="btn_selectable_Dialog" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Dialog}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_DialogM}" ToolTip="{StaticResource String_Tag_Node_Dialog_Type}"></Button>
+                            <Button x:Name="btn_selectable_Replica" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Replica}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_ReplicaM}" ToolTip="{StaticResource String_Tag_Node_Replica_Type}"></Button>
+                            <Button x:Name="btn_selectable_Random" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Random}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_RandomM}" ToolTip="{StaticResource String_Tag_Node_Random_Type}"></Button>
+                            <Button x:Name="btn_selectable_Transit" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Transit}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_TransitM}" ToolTip="{StaticResource String_Tag_Node_Transit_Type}"></Button>
+                            <Button x:Name="btn_selectable_Gate" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Gate}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_GateM}" ToolTip="{StaticResource String_Tag_Node_Gate_Type}"></Button>
+                            <Button x:Name="btn_selectable_Exit" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Exit}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_ExitM}" ToolTip="{StaticResource String_Tag_Node_Exit_Type}"></Button>
                             <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
                             <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Bwd}" Command="{Binding PrevRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_PrevRootNode_Tooltip}"></Button>
                             <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Fwd}" Command="{Binding NextRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_NextRootNode_Tooltip}"></Button>
@@ -1745,7 +1745,7 @@ StorylineEditor распространяется в надежде, что он�
                         <ColumnDefinition Width="3*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
-                    <ItemsControl Style="{StaticResource S_Canvas_Graph}"
+                    <ItemsControl Style="{StaticResource S_ItemsControl_Graph}"
                                   bhvrs:RenderSizeBehavior.IsEnabled="true"
                                   bhvrs:RenderSizeBehavior.ActualWidth="{Binding Path=(vm:StorylineVM.ViewWidth), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
                                   bhvrs:RenderSizeBehavior.ActualHeight="{Binding Path=(vm:StorylineVM.ViewHeight), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
@@ -1759,9 +1759,9 @@ StorylineEditor распространяется в надежде, что он�
                         </Grid.RowDefinitions>
 
                         <StackPanel Orientation="Horizontal">
-                            <Button x:Name="btn_selectable_Replica" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Replica}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_ReplicaM}"></Button>
-                            <Button x:Name="btn_selectable_Random" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Random}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_RandomM}"></Button>
-                            <Button x:Name="btn_selectable_Transit" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Transit}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_TransitM}"></Button>
+                            <Button x:Name="btn_selectable_Replica" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Replica}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_ReplicaM}" ToolTip="{StaticResource String_Tag_Node_Replica_Type}"></Button>
+                            <Button x:Name="btn_selectable_Random" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Random}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_RandomM}" ToolTip="{StaticResource String_Tag_Node_Random_Type}"></Button>
+                            <Button x:Name="btn_selectable_Transit" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Transit}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_TransitM}" ToolTip="{StaticResource String_Tag_Node_Transit_Type}"></Button>
                             <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
                             <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Bwd}" Command="{Binding PrevRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_PrevRootNode_Tooltip}"></Button>
                             <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Fwd}" Command="{Binding NextRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_NextRootNode_Tooltip}"></Button>
