@@ -58,10 +58,6 @@ namespace StorylineEditor.ViewModel.Graphs
 
             selectionBox = new SelectionBoxVM();
 
-            viewRect = new Rect();
-            nodeRect = new Rect();
-            absMaxHeight = (double)Application.Current.FindResource("Double_Node_MaxHeight");
-            absMaxWidth = (double)Application.Current.FindResource("Double_Node_MaxWidth");
             UserAction = null;
 
             NodesVMs = new Dictionary<string, Notifier>();
@@ -291,10 +287,6 @@ namespace StorylineEditor.ViewModel.Graphs
         protected Point prevPosition;
         protected LinkVM previewLink;
         protected SelectionBoxVM selectionBox;
-        protected Rect viewRect;
-        protected Rect nodeRect;
-        protected readonly double absMaxHeight;
-        protected readonly double absMaxWidth;
         protected UserActionM UserAction;
 
         protected ICommand moveCommand;
@@ -1047,28 +1039,34 @@ namespace StorylineEditor.ViewModel.Graphs
             OffsetX -= absoluteDeltaX;
             OffsetY -= absoluteDeltaY;
 
-            viewRect.X = OffsetX;
-            viewRect.Y = OffsetY;
-            viewRect.Width = StorylineVM.ViewWidth / Scale;
-            viewRect.Height = StorylineVM.ViewHeight / Scale;
+            double maxWidth = (double)Application.Current.FindResource("Double_Node_MaxWidth");
+
+            double viewportLeft = OffsetX;
+            double viewportRight = viewportLeft + StorylineVM.ViewWidth / Scale;
+            double viewportBottom = OffsetY;
+            double viewportTop = viewportBottom + StorylineVM.ViewHeight / Scale;
 
             HashSet<BaseM> keepMs = new HashSet<BaseM>();
             HashSet<BaseM> addMs = new HashSet<BaseM>();
             HashSet<BaseM> removeMs = new HashSet<BaseM>();
 
+            double multiplier = 0.625;// 0.5 * 1.25;
+
             foreach (var nodeEntry in NodesVMs)
             {
-                var model = nodeEntry.Key;
-                var viewModel = nodeEntry.Value;
-
-                if (viewModel is INodeVM nodeViewModel)
+                if (nodeEntry.Value is INodeVM nodeViewModel)
                 {
-                    nodeRect.X = nodeViewModel.PositionX - absMaxHeight;
-                    nodeRect.Y = nodeViewModel.PositionY - absMaxWidth;
-                    nodeRect.Width = absMaxHeight * 2;
-                    nodeRect.Height = absMaxWidth * 2;
-
-                    (viewRect.IntersectsWith(nodeRect) ? keepMs : removeMs).Add((viewModel as IWithModel)?.GetModel<BaseM>());
+                    if (nodeViewModel.PositionX - nodeViewModel.Width * multiplier <= viewportRight &&
+                       nodeViewModel.PositionX + nodeViewModel.Width * multiplier >= viewportLeft &&
+                       nodeViewModel.PositionY - nodeViewModel.Height * multiplier <= viewportTop &&
+                       nodeViewModel.PositionY + nodeViewModel.Height * multiplier >= viewportBottom)
+                    { 
+                        keepMs.Add((nodeViewModel as IWithModel)?.GetModel<BaseM>());
+                    }
+                    else
+                    {
+                        removeMs.Add((nodeViewModel as IWithModel)?.GetModel<BaseM>());
+                    }
                 }
             }
 
@@ -1078,12 +1076,13 @@ namespace StorylineEditor.ViewModel.Graphs
 
                 if (removeMs.Contains(nodeModel)) continue;
 
-                nodeRect.X = nodeModel.positionX - absMaxHeight;
-                nodeRect.Y = nodeModel.positionY - absMaxWidth;
-                nodeRect.Width = absMaxHeight * 2;
-                nodeRect.Height = absMaxWidth * 2;
-
-                if (viewRect.IntersectsWith(nodeRect)) addMs.Add(nodeModel);
+                if (nodeModel.positionX - maxWidth * multiplier <= viewportRight &&
+                    nodeModel.positionX + maxWidth * multiplier >= viewportLeft &&
+                    nodeModel.positionY - 2 * maxWidth * multiplier <= viewportTop &&
+                    nodeModel.positionY + 2 * maxWidth * multiplier * multiplier >= viewportBottom)
+                {
+                    addMs.Add(nodeModel);
+                }
             }
 
             foreach (var model in removeMs)
@@ -1225,13 +1224,12 @@ namespace StorylineEditor.ViewModel.Graphs
         {
             HashSet<Notifier> selectionBoxCapture = new HashSet<Notifier>();
 
-            Rect selectionRect = new Rect
-            {
-                X = Math.Min(selectionBox.FromX, selectionBox.ToX),
-                Y = Math.Min(selectionBox.FromY, selectionBox.ToY)
-            };
-            selectionRect.Width = Math.Max(selectionBox.FromX, selectionBox.ToX) - selectionRect.X;
-            selectionRect.Height = Math.Max(selectionBox.FromY, selectionBox.ToY) - selectionRect.Y;
+            double selectionLeft = Math.Min(selectionBox.FromX, selectionBox.ToX);
+            double selectionRight = Math.Max(selectionBox.FromX, selectionBox.ToX);
+            double selectionBottom = Math.Min(selectionBox.FromY, selectionBox.ToY);
+            double selectionTop = Math.Max(selectionBox.FromY, selectionBox.ToY);
+
+            double multiplier = 0.5;// 0.5 * 1;
 
             foreach (var nodeEntry in NodesVMs)
             {
@@ -1239,12 +1237,13 @@ namespace StorylineEditor.ViewModel.Graphs
 
                 if (viewModel is INodeVM nodeViewModel)
                 {
-                    nodeRect.X = nodeViewModel.PositionX - nodeViewModel.Width / 2;
-                    nodeRect.Y = nodeViewModel.PositionY - nodeViewModel.Height / 2;
-                    nodeRect.Width = nodeViewModel.Width;
-                    nodeRect.Height = nodeViewModel.Height;
-
-                    if (selectionRect.IntersectsWith(nodeRect)) selectionBoxCapture.Add(viewModel);
+                    if (nodeViewModel.PositionX - nodeViewModel.Width * multiplier <= selectionRight &&
+                        nodeViewModel.PositionX + nodeViewModel.Width * multiplier >= selectionLeft &&
+                        nodeViewModel.PositionY - nodeViewModel.Height * multiplier <= selectionTop &&
+                        nodeViewModel.PositionY + nodeViewModel.Height * multiplier >= selectionBottom)
+                    {
+                        selectionBoxCapture.Add(viewModel);
+                    }
                 }
             }
 
