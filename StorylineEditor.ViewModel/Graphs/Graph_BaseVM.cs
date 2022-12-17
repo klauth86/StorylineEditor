@@ -283,7 +283,7 @@ namespace StorylineEditor.ViewModel.Graphs
             UpdateLinkLocalPosition(LinksVMs[model.id], ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
         }
 
-        protected INodeVM targetNodeViewModel;
+        protected INode targetNodeViewModel;
         protected Point prevPosition;
         protected LinkVM previewLink;
         protected SelectionBoxVM selectionBox;
@@ -304,7 +304,7 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 if (targetNodeViewModel != null)
                 {
-                    if ((args.OriginalSource as FrameworkElement)?.DataContext is INodeVM toNodeViewModel)
+                    if ((args.OriginalSource as FrameworkElement)?.DataContext is INode toNodeViewModel)
                     {
                         if (targetNodeViewModel == toNodeViewModel)
                         {
@@ -357,7 +357,7 @@ namespace StorylineEditor.ViewModel.Graphs
                     {
                         if (NodesVMs.ContainsKey(selectedId))
                         {
-                            if (NodesVMs[selectedId] is INodeVM nodeViewModel)
+                            if (NodesVMs[selectedId] is INode nodeViewModel)
                             {
                                 nodeViewModel.PositionX += deltaX;
                                 nodeViewModel.PositionY += deltaY;
@@ -397,7 +397,7 @@ namespace StorylineEditor.ViewModel.Graphs
                     {
                         if (NodesVMs.ContainsKey(selectedId))
                         {
-                            if (NodesVMs[selectedId] is INodeVM nodeViewModel)
+                            if (NodesVMs[selectedId] is INode nodeViewModel)
                             {
                                 nodeViewModel.PositionX += deltaX;
                                 nodeViewModel.PositionY += deltaY;
@@ -534,7 +534,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
         private void StartLinkImpl(MouseButtonEventArgs args)
         {
-            targetNodeViewModel = (INodeVM)(args.OriginalSource as FrameworkElement).DataContext;
+            targetNodeViewModel = (INode)(args.OriginalSource as FrameworkElement).DataContext;
 
             ShowPreviewLink(targetNodeViewModel);
 
@@ -545,7 +545,7 @@ namespace StorylineEditor.ViewModel.Graphs
         {
             prevPosition = args.GetPosition(null);
 
-            targetNodeViewModel = (args.OriginalSource as FrameworkElement)?.DataContext as INodeVM;
+            targetNodeViewModel = (args.OriginalSource as FrameworkElement)?.DataContext as INode;
 
             UserAction = ConfigM.Config.UserActions.First((userAction) => userAction.UserActionType == USER_ACTION_TYPE.DRAG_AND_SCROLL);
 
@@ -590,7 +590,7 @@ namespace StorylineEditor.ViewModel.Graphs
                     {
                         if (targetNodeViewModel != null)
                         {
-                            if ((args.OriginalSource as FrameworkElement)?.DataContext is INodeVM toNodeViewModel)
+                            if ((args.OriginalSource as FrameworkElement)?.DataContext is INode toNodeViewModel)
                             {
                                 string message = CanLinkNodes(targetNodeViewModel, toNodeViewModel);
                                 if (message == string.Empty)
@@ -640,17 +640,17 @@ namespace StorylineEditor.ViewModel.Graphs
 
         private bool CanExec(MouseEventArgs args, byte userActiontype)
         {
-            if (userActiontype == USER_ACTION_TYPE.CREATE_NODE) return !((args.OriginalSource as FrameworkElement)?.DataContext is INodeVM) && args.Source is IInputElement && SelectedNodeType != null;
+            if (userActiontype == USER_ACTION_TYPE.CREATE_NODE) return !((args.OriginalSource as FrameworkElement)?.DataContext is INode) && args.Source is IInputElement && SelectedNodeType != null;
 
-            if (userActiontype == USER_ACTION_TYPE.DUPLICATE_NODE) return (args.OriginalSource as FrameworkElement)?.DataContext is INodeVM;
+            if (userActiontype == USER_ACTION_TYPE.DUPLICATE_NODE) return (args.OriginalSource as FrameworkElement)?.DataContext is INode;
 
-            if (userActiontype == USER_ACTION_TYPE.LINK) return (args.OriginalSource as FrameworkElement)?.DataContext is INodeVM;
+            if (userActiontype == USER_ACTION_TYPE.LINK) return (args.OriginalSource as FrameworkElement)?.DataContext is INode;
 
             if (userActiontype == USER_ACTION_TYPE.DRAG_AND_SCROLL) return true;
 
-            if (userActiontype == USER_ACTION_TYPE.SELECTION_SIMPLE) return (args.OriginalSource as FrameworkElement)?.DataContext is INodeVM;
+            if (userActiontype == USER_ACTION_TYPE.SELECTION_SIMPLE) return (args.OriginalSource as FrameworkElement)?.DataContext is INode;
 
-            if (userActiontype == USER_ACTION_TYPE.SELECTION_ADDITIVE) return (args.OriginalSource as FrameworkElement)?.DataContext is INodeVM;
+            if (userActiontype == USER_ACTION_TYPE.SELECTION_ADDITIVE) return (args.OriginalSource as FrameworkElement)?.DataContext is INode;
 
             if (userActiontype == USER_ACTION_TYPE.SELECTION_BOX) return args.Source is IInputElement;
 
@@ -735,8 +735,8 @@ namespace StorylineEditor.ViewModel.Graphs
                 {
                     Add(linkModel, null);
 
-                    INodeVM fromNodeViewModel = NodesVMs[linkModel.fromNodeId] as INodeVM;
-                    INodeVM toNodeViewModel = NodesVMs[linkModel.toNodeId] as INodeVM;
+                    INode fromNodeViewModel = NodesVMs[linkModel.fromNodeId] as INode;
+                    INode toNodeViewModel = NodesVMs[linkModel.toNodeId] as INode;
 
                     AddLinkVM(linkModel,
                         fromNodeViewModel.Id, fromNodeViewModel.PositionX, fromNodeViewModel.PositionY,
@@ -763,7 +763,7 @@ namespace StorylineEditor.ViewModel.Graphs
             ToNodesLinks.Add(model.id, new HashSet<string>());
 
             RootNodeIds.Add(model.id);
-            ((INodeVM)NodesVMs[model.id]).IsRoot = true;
+            ((INode)NodesVMs[model.id]).IsRoot = true;
 
             AddToSelection(viewModel, resetSelection);
 
@@ -779,7 +779,7 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 if (NodesVMs.ContainsKey(selectedId))
                 {
-                    if (NodesVMs[selectedId] is INodeVM nodeViewModel)
+                    if (NodesVMs[selectedId] is INode nodeViewModel)
                     {
                         RemoveFromSelection(nodeViewModel);
 
@@ -808,7 +808,7 @@ namespace StorylineEditor.ViewModel.Graphs
         protected ICommand removeElementCommand;
         public ICommand RemoveElementCommand => removeElementCommand ?? (removeElementCommand = new RelayCommand<Notifier>((viewModel) =>
         {
-            if (viewModel is INodeVM nodeViewModel)
+            if (viewModel is INode nodeViewModel)
             {
                 RemoveFromSelection(nodeViewModel);
 
@@ -831,7 +831,7 @@ namespace StorylineEditor.ViewModel.Graphs
         {
             if (NodesVMs.ContainsKey(nodeId))
             {
-                if (NodesVMs[nodeId] is INodeVM)
+                if (NodesVMs[nodeId] is INode)
                 {
                     RootNodeIds.Remove(nodeId);
 
@@ -869,7 +869,7 @@ namespace StorylineEditor.ViewModel.Graphs
                     if (ToNodesLinks[linkViewModel.ToNodeId].Count == 0)
                     {
                         RootNodeIds.Add(linkViewModel.ToNodeId);
-                        if (NodesVMs.ContainsKey(linkViewModel.ToNodeId)) ((INodeVM)NodesVMs[linkViewModel.ToNodeId]).IsRoot = true;
+                        if (NodesVMs.ContainsKey(linkViewModel.ToNodeId)) ((INode)NodesVMs[linkViewModel.ToNodeId]).IsRoot = true;
                     }
                 }
             }
@@ -985,16 +985,16 @@ namespace StorylineEditor.ViewModel.Graphs
             }
             else
             {
-                if (viewModelObj is INodeVM nodeViewModel)
+                if (viewModelObj is INode nodeViewModel)
                 {
-                    if (propName == nameof(INodeVM.PositionX)) UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.X);
-                    else if (propName == nameof(INodeVM.PositionY)) UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.Y);
-                    else if (propName == nameof(INodeVM.Gender)) OnModelChanged(Model, nameof(Stats));
+                    if (propName == nameof(INode.PositionX)) UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.X);
+                    else if (propName == nameof(INode.PositionY)) UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.Y);
+                    else if (propName == nameof(INode.Gender)) OnModelChanged(Model, nameof(Stats));
                 }
             }
         }
 
-        private void UpdateLocalPosition(INodeVM nodeViewModel, ENodeVMUpdate updateTarget)
+        private void UpdateLocalPosition(INode nodeViewModel, ENodeVMUpdate updateTarget)
         {
             if ((updateTarget & ENodeVMUpdate.X) > 0) nodeViewModel.Left = FromAbsoluteToLocalX(nodeViewModel.PositionX) - nodeViewModel.Width / 2;
             if ((updateTarget & ENodeVMUpdate.Y) > 0) nodeViewModel.Top = FromAbsoluteToLocalY(nodeViewModel.PositionY) - nodeViewModel.Height / 2;
@@ -1056,7 +1056,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
             foreach (var nodeEntry in NodesVMs)
             {
-                if (nodeEntry.Value is INodeVM nodeViewModel)
+                if (nodeEntry.Value is INode nodeViewModel)
                 {
                     if (nodeViewModel.PositionX - nodeViewModel.Width * multiplier <= viewportRight &&
                        nodeViewModel.PositionX + nodeViewModel.Width * multiplier >= viewportLeft &&
@@ -1102,14 +1102,14 @@ namespace StorylineEditor.ViewModel.Graphs
                 {
                     Notifier viewModel = _viewModelCreator(model, this);
                     viewModel.IsSelected = selection.Contains(model.id);
-                    ((INodeVM)viewModel).IsRoot = RootNodeIds.Contains(model.id);
+                    ((INode)viewModel).IsRoot = RootNodeIds.Contains(model.id);
 
                     NodesVMs.Add(model.id, viewModel);
                     Add(null, viewModel);
                 }
             }
 
-            foreach (var nodeEntry in NodesVMs) UpdateLocalPosition((INodeVM)nodeEntry.Value, ENodeVMUpdate.X | ENodeVMUpdate.Y);
+            foreach (var nodeEntry in NodesVMs) UpdateLocalPosition((INode)nodeEntry.Value, ENodeVMUpdate.X | ENodeVMUpdate.Y);
             foreach (var linkEntry in LinksVMs) UpdateLinkLocalPosition(linkEntry.Value, ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
         }
 
@@ -1150,13 +1150,13 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 SelectionEditor = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? _editorCreator(NodesVMs[selection.First()], this) : null;
 
-                SelectionNode = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? (INodeVM)NodesVMs[selection.First()] : null;
+                SelectionNode = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? (INode)NodesVMs[selection.First()] : null;
 
                 CommandManager.InvalidateRequerySuggested();
             }
         }
 
-        void RemoveFromSelection(INodeVM nodeViewModel)
+        void RemoveFromSelection(INode nodeViewModel)
         {
             if (nodeViewModel != null)
             {
@@ -1164,7 +1164,7 @@ namespace StorylineEditor.ViewModel.Graphs
                 {
                     SelectionEditor = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? _editorCreator(NodesVMs[selection.First()], this) : null;
 
-                    SelectionNode = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? (INodeVM)NodesVMs[selection.First()] : null;
+                    SelectionNode = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? (INode)NodesVMs[selection.First()] : null;
 
                     CommandManager.InvalidateRequerySuggested();
                 }
@@ -1179,8 +1179,8 @@ namespace StorylineEditor.ViewModel.Graphs
         public override bool SelectionCanBeDeleted() => true;
 
 
-        protected INodeVM selectionNode;
-        public INodeVM SelectionNode
+        protected INode selectionNode;
+        public INode SelectionNode
         {
             get => selectionNode;
             set
@@ -1195,10 +1195,10 @@ namespace StorylineEditor.ViewModel.Graphs
 
 
 
-        protected virtual string CanLinkNodes(INodeVM from, INodeVM to) { return nameof(NotImplementedException); }
-        protected virtual void PreLinkNodes(INodeVM from, INodeVM to) { }
+        protected virtual string CanLinkNodes(INode from, INode to) { return nameof(NotImplementedException); }
+        protected virtual void PreLinkNodes(INode from, INode to) { }
 
-        protected void ShowPreviewLink(INodeVM nodeViewModel)
+        protected void ShowPreviewLink(INode nodeViewModel)
         {
             previewLink.FromX = nodeViewModel.PositionX;
             previewLink.FromY = nodeViewModel.PositionY;
@@ -1237,7 +1237,7 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 var viewModel = nodeEntry.Value;
 
-                if (viewModel is INodeVM nodeViewModel)
+                if (viewModel is INode nodeViewModel)
                 {
                     if (nodeViewModel.PositionX - nodeViewModel.Width * multiplier <= selectionRight &&
                         nodeViewModel.PositionX + nodeViewModel.Width * multiplier >= selectionLeft &&
@@ -1404,7 +1404,7 @@ namespace StorylineEditor.ViewModel.Graphs
                     {
                         if (NodesVMs.ContainsKey(node.id))
                         {
-                            if (NodesVMs[node.id] is INodeVM nodeViewModel)
+                            if (NodesVMs[node.id] is INode nodeViewModel)
                             {
                                 nodeViewModel.Name = (i).ToString();
                             }

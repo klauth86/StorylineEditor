@@ -7,7 +7,7 @@ namespace StorylineEditor.ViewModel.Nodes
     {
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            return (item is INodeVM)
+            return (item is INode)
                 ? Application.Current.FindResource(string.Format("{0}_ItemTemplate", item.GetType().Name)) as DataTemplate
                 : base.SelectTemplate(item, container);
         }

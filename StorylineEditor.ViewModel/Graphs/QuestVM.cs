@@ -41,7 +41,7 @@ namespace StorylineEditor.ViewModel.Graphs
                 modelCreator, viewModelCreator, editorCreator, defaultNodeType)
         { }
 
-        protected override string CanLinkNodes(INodeVM from, INodeVM to)
+        protected override string CanLinkNodes(INode from, INode to)
         {
             if (from == to) return nameof(ArgumentException);
 
@@ -58,7 +58,7 @@ namespace StorylineEditor.ViewModel.Graphs
             return string.Empty;
         }
 
-        protected override void PreLinkNodes(INodeVM from, INodeVM to)
+        protected override void PreLinkNodes(INode from, INode to)
         {
             if (from is Node_Journal_AlternativeVM) // Remove all if linking Alternative to smth (with respect to Gender)
             {
