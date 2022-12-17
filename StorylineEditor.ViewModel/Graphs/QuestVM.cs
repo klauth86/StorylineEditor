@@ -43,6 +43,8 @@ namespace StorylineEditor.ViewModel.Graphs
 
         protected override string CanLinkNodes(INodeVM from, INodeVM to)
         {
+            if (from == to) return nameof(ArgumentException);
+
             if (from is Node_Journal_AlternativeVM && to is Node_Journal_AlternativeVM) return nameof(NotImplementedException);
 
             foreach (var linkId in FromNodesLinks[from.Id])

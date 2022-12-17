@@ -65,7 +65,7 @@ namespace StorylineEditor.ViewModel.Graphs
             }
         }
 
-        protected override string CanLinkNodes(INodeVM from, INodeVM to) { return string.Empty; }
+        protected override string CanLinkNodes(INodeVM from, INodeVM to) { if (from == to) return nameof(ArgumentException); return string.Empty; }
 
         private bool OnCharacterFilter(object sender)
         {
