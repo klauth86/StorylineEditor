@@ -11,12 +11,9 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.ViewModel.Helpers;
-using System.IO;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Markup;
 
 namespace StorylineEditor.App.Controls
 {
