@@ -12,9 +12,13 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.App.Config;
 using StorylineEditor.Model;
+using StorylineEditor.Model.Graphs;
+using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModel;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Config;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Windows;
@@ -88,6 +92,7 @@ namespace StorylineEditor.App
             using (var fileStream = File.Open(path, FileMode.Open))
             {
                 model = SerializeService.Deserialize<StorylineM>(fileStream);
+                ValidateModel(model);
             }
 
             if (model != null)
@@ -132,6 +137,83 @@ namespace StorylineEditor.App
                 ResizeMode = ResizeMode.NoResize,
                 Title = App.Current.Resources["String_Tag_Config_Title"]?.ToString()
             }.ShowDialog();
+        }
+
+        private void IterateThrough(List<BaseM> modelCollection, Dictionary<string, int> idsDictionary, List<string> invalidLinks)
+        {
+            foreach (var itemModel in modelCollection)
+            {
+                if (!idsDictionary.ContainsKey(itemModel.id)) idsDictionary.Add(itemModel.id, 0);
+                idsDictionary[itemModel.id]++;
+
+                if (itemModel is FolderM folderModel)
+                {
+                    IterateThrough(folderModel.content, idsDictionary, invalidLinks);
+                }
+                else if (itemModel is GraphM graphModel)
+                {
+                    foreach (var linkModel in graphModel.links)
+                    {
+                        if (!idsDictionary.ContainsKey(linkModel.id)) idsDictionary.Add(linkModel.id, 0);
+                        idsDictionary[linkModel.id]++;
+
+                        if (linkModel.fromNodeId == linkModel.toNodeId) invalidLinks.Add(linkModel.id);
+                    }
+
+                    foreach (var nodeModel in graphModel.nodes)
+                    {
+                        if (!idsDictionary.ContainsKey(nodeModel.id)) idsDictionary.Add(nodeModel.id, 0);
+                        idsDictionary[nodeModel.id]++;
+
+                        if (nodeModel is Node_InteractiveM interactiveNodeModel)
+                        {
+                            foreach (var predicateModel in interactiveNodeModel.predicates)
+                            {
+                                if (!idsDictionary.ContainsKey(predicateModel.id)) idsDictionary.Add(predicateModel.id, 0);
+                                idsDictionary[predicateModel.id]++;
+                            }
+
+                            foreach (var gameEventsModel in interactiveNodeModel.gameEvents)
+                            {
+                                if (!idsDictionary.ContainsKey(gameEventsModel.id)) idsDictionary.Add(gameEventsModel.id, 0);
+                                idsDictionary[gameEventsModel.id]++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void ValidateModel(StorylineM storylineModel)
+        {
+            Dictionary<string, int> idsDictionary = new Dictionary<string, int>();
+            idsDictionary.Add(storylineModel.id, 1);
+
+            List<string> invalidLinks = new List<string>();
+
+            IterateThrough(storylineModel.locations, idsDictionary, invalidLinks);
+            IterateThrough(storylineModel.characters, idsDictionary, invalidLinks);
+            IterateThrough(storylineModel.items, idsDictionary, invalidLinks);
+            IterateThrough(storylineModel.actors, idsDictionary, invalidLinks);
+            IterateThrough(storylineModel.journal, idsDictionary, invalidLinks);
+            IterateThrough(storylineModel.dialogs, idsDictionary, invalidLinks);
+            IterateThrough(storylineModel.replicas, idsDictionary, invalidLinks);
+
+            List<string> duplicateIds = new List<string>();
+
+            foreach (var idsEntry in idsDictionary)
+            {
+                if (idsEntry.Value > 1) duplicateIds.Add(idsEntry.Key);
+            }
+
+            string invalidLinksStr = string.Join(Environment.NewLine, invalidLinks);
+            string duplicateIdsStr = string.Join(Environment.NewLine, duplicateIds);
+
+            if (duplicateIds.Count + invalidLinks.Count > 0)
+            {
+                MessageBox.Show("Invalid data!", "Error", MessageBoxButton.OK);
+                Application.Current.Shutdown();
+            }
         }
 
         public void Callback(object viewModelObj, string propName)
