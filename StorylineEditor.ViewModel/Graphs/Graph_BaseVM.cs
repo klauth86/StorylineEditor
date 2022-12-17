@@ -1182,6 +1182,41 @@ namespace StorylineEditor.ViewModel.Graphs
 
         public void MoveTo(INode node, Action<INode> callbackAction) { if (node != null) { StartScrollingTask(node, callbackAction); } }
 
+        public Dictionary<INode, List<INode>> GetChildNodesPaths(string nodeId)
+        {
+            //Dictionary<IPositioned, List<IPositioned>> result = new Dictionary<IPositioned, List<IPositioned>>();
+
+            //List<string> nodeIds = Model.links.Where(link => link.fromNodeId == nodeId).Select(link => link.toNodeId).ToList();
+
+            //List<Node_BaseM> nonTransitNodes = Model.nodes.Where((otherNode) => nodeIds.Contains(otherNode.id) && !(otherNode is Node_TransitM)).ToList();
+
+            //foreach (var nonTransitNode in nonTransitNodes) { result.Add(nonTransitNode, null); }
+
+            //foreach (var transitNode in Tree.Nodes.Where((otherNode) => nodeIds.Contains(otherNode.Id) && !nonTransitNodes.Contains(otherNode)))
+            //{
+            //    if (transitNode.Gender > 0 && transitNode.Gender != Tree.Parent.Parent.TreePlayerHistory.GenderToPlay) continue;
+            //    Dictionary<Node_BaseVm, List<Node_BaseVm>> childResult = GetChildNodesPaths(transitNode);
+
+            //    foreach (var childResultEntry in childResult)
+            //    {
+            //        if (result.ContainsKey(childResultEntry.Key))
+            //        {
+            //            continue; // One path to nonTransit node is enough
+            //        }
+            //        else
+            //        {
+            //            List<Node_BaseVm> nodesPath = childResultEntry.Value ?? new List<Node_BaseVm>();
+            //            nodesPath.Insert(0, transitNode);
+            //            result.Add(childResultEntry.Key, nodesPath);
+            //        }
+            //    }
+            //}
+
+            //return result;
+
+            return null;
+        }
+
         protected virtual string CanLinkNodes(INode from, INode to) { return nameof(NotImplementedException); }
         protected virtual void PreLinkNodes(INode from, INode to) { }
 

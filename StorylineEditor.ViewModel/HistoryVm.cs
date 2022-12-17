@@ -409,7 +409,7 @@ namespace StorylineEditor.ViewModel
         protected ICommand playCommand;
         public ICommand PlayCommand => playCommand ?? (playCommand = new RelayCommand(() =>
         {
-            StartGraph = ActiveContextService.ActiveCopyPaste as IGraph;
+            StartGraph = ActiveContextService.ActiveGraph;
             StartNode = StartGraph.SelectionNode;
 
             PlayerContext = new PlayerContext_TransitionVM();

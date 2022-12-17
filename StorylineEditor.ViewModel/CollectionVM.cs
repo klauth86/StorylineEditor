@@ -12,6 +12,7 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model;
 using StorylineEditor.ViewModel.Common;
+using StorylineEditor.ViewModel.Interface;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -116,6 +117,7 @@ namespace StorylineEditor.ViewModel
         {
             if (selection != null)
             {
+                ActiveContextService.ActiveGraph = null;
                 SelectionEditor = null;
                 selection.IsSelected = false;
             }
@@ -126,6 +128,7 @@ namespace StorylineEditor.ViewModel
             {
                 selection.IsSelected = true;
                 SelectionEditor = _editorCreator(selection, this);
+                ActiveContextService.ActiveGraph = SelectionEditor as IGraph;
             }
 
             CommandManager.InvalidateRequerySuggested();

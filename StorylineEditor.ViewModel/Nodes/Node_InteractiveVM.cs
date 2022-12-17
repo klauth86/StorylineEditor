@@ -16,6 +16,7 @@ using StorylineEditor.Model.Graphs;
 using StorylineEditor.Model.Nodes;
 using StorylineEditor.Model.Predicates;
 using StorylineEditor.ViewModel.Common;
+using StorylineEditor.ViewModel.GameEvents;
 using StorylineEditor.ViewModel.Predicates;
 using System;
 using System.Collections.ObjectModel;
@@ -30,11 +31,11 @@ namespace StorylineEditor.ViewModel.Nodes
     {
         public Node_InteractiveVM(T model, ICallbackContext callbackContext) : base(model, callbackContext)
         {
-            Predicates = new ObservableCollection<Notifier>();
+            Predicates = new ObservableCollection<IWithModel>();
             foreach (var predicateModel in Model.predicates) Predicates.Add(PredicatesHelper.CreatePredicateByModel(predicateModel, CallbackContext));
 
-            GameEvents = new ObservableCollection<Notifier>();
-            foreach (var gameEventModel in Model.gameEvents) GameEvents.Add(PredicatesHelper.CreateGameEventByModel(gameEventModel, CallbackContext));
+            GameEvents = new ObservableCollection<IWithModel>();
+            foreach (var gameEventModel in Model.gameEvents) GameEvents.Add(GameEventsHelper.CreateGameEventByModel(gameEventModel, CallbackContext));
         }
 
         public Type SelectedPredicateType
@@ -44,21 +45,17 @@ namespace StorylineEditor.ViewModel.Nodes
             {
                 if (value != null)
                 {
-                    Notifier viewModel = PredicatesHelper.CreatePredicateByType(value, CallbackContext);
-                    if (viewModel is IWithModel withModel)
-                    {
-                        P_BaseM predicateModel = withModel.GetModel<P_BaseM>();
-                        Model.predicates.Add(predicateModel);
+                    IWithModel viewModel = PredicatesHelper.CreatePredicateByType(value, CallbackContext);
+                    Model.predicates.Add(viewModel.GetModel<P_BaseM>());
+                    Predicates.Add(viewModel);
 
-                        Predicates.Add(viewModel);
-                        OnModelChanged(Model, nameof(HasPredicates));
-                    }
+                    OnModelChanged(Model, nameof(HasPredicates));
                 }
 
                 Notify(nameof(SelectedPredicateType));
             }
         }
-        public ObservableCollection<Notifier> Predicates { get; }
+        public ObservableCollection<IWithModel> Predicates { get; }
         public bool HasPredicates => Model.predicates.Count > 0;
 
         public Type SelectedGameEventType
@@ -67,42 +64,33 @@ namespace StorylineEditor.ViewModel.Nodes
             {
                 if (value != null)
                 {
-                    Notifier viewModel = PredicatesHelper.CreateGameEventByType(value, CallbackContext);
-                    if (viewModel is IWithModel withModel)
-                    {
-                        GE_BaseM gameEventModel = withModel.GetModel<GE_BaseM>();
-                        Model.gameEvents.Add(gameEventModel);
+                    IWithModel viewModel = GameEventsHelper.CreateGameEventByType(value, CallbackContext);
+                    Model.gameEvents.Add(viewModel.GetModel<GE_BaseM>());
+                    GameEvents.Add(viewModel);
 
-                        GameEvents.Add(viewModel);
-                        OnModelChanged(Model, nameof(HasGameEvents));
-                    }
+                    OnModelChanged(Model, nameof(HasGameEvents));
                 }
 
                 Notify(nameof(SelectedGameEventType));
             }
         }
-        public ObservableCollection<Notifier> GameEvents { get; }
+        public ObservableCollection<IWithModel> GameEvents { get; }
         public bool HasGameEvents => Model.gameEvents.Count > 0;
 
 
         protected ICommand removeElementCommand;
-        public ICommand RemoveElementCommand => removeElementCommand ?? (removeElementCommand = new RelayCommand<object>((obj) =>
+        public ICommand RemoveElementCommand => removeElementCommand ?? (removeElementCommand = new RelayCommand<IWithModel>((viewModel) =>
         {
-            if (obj is Notifier viewModel)
+            if (Predicates.Remove(viewModel))
             {
-                if (viewModel is IWithModel withModel)
-                {
-                    if (Predicates.Remove(viewModel))
-                    {
-                        Model.predicates.Remove(withModel.GetModel<P_BaseM>());
-                        OnModelChanged(Model, nameof(HasPredicates));
-                    }
-                    else if (GameEvents.Remove(viewModel))
-                    {
-                        Model.gameEvents.Remove(withModel.GetModel<GE_BaseM>());
-                        OnModelChanged(Model, nameof(HasGameEvents));
-                    }
-                }
+                Model.predicates.Remove(viewModel.GetModel<P_BaseM>());
+                OnModelChanged(Model, nameof(HasPredicates));
+            }
+            
+            if (GameEvents.Remove(viewModel))
+            {
+                Model.gameEvents.Remove(viewModel.GetModel<GE_BaseM>());
+                OnModelChanged(Model, nameof(HasGameEvents));
             }
         }));
     }

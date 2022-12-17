@@ -19,8 +19,9 @@ namespace StorylineEditor.ViewModel
 {
     public static class ActiveContextService
     {
-        public static ICopyPaste ActiveCopyPaste { get; set; }
         public static StorylineVM ActiveStoryline { get; set; }
+        public static ICopyPaste ActiveCopyPaste { get; set; }
+        public static IGraph ActiveGraph { get; set; }
         public static IEnumerable<BaseM> GetEnumerator(params List<BaseM>[] collectionSet)
         {
             for (int i = 0; i < collectionSet.Length; i++)

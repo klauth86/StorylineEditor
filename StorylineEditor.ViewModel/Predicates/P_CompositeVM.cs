@@ -55,9 +55,9 @@ namespace StorylineEditor.ViewModel.Predicates
 
         public bool IsFirstSelected { get; set; }
 
-        public Notifier PredicateA { get; set; }
+        public IWithModel PredicateA { get; set; }
 
-        public Notifier PredicateB { get; set; }
+        public IWithModel PredicateB { get; set; }
 
         public byte CompositionType
         {
