@@ -11,6 +11,7 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using System;
+using System.Collections.Generic;
 
 namespace StorylineEditor.ViewModel.Interface
 {
@@ -34,6 +35,8 @@ namespace StorylineEditor.ViewModel.Interface
     public interface IGraph
     {
         INode SelectionNode { get; }
-        void MoveTo(INode node, Action<INode> callbackAction);
+        void MoveTo(IPositioned positioned, Action<IPositioned> callbackAction);
+        void MoveTo(string positionedId, Action<IPositioned> callbackAction);
+        Dictionary<string, List<IPositioned>> GetNext(string nodeId);
     }
 }

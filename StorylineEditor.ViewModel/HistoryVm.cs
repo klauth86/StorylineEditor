@@ -15,6 +15,7 @@ using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Interface;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel
@@ -423,17 +424,50 @@ namespace StorylineEditor.ViewModel
             StartGraph = ActiveContextService.ActiveGraph;
             StartNode = StartGraph.SelectionNode;
 
+            ActiveGraph = StartGraph;
+            ActiveNode = null;
+
             PlayerContext = new PlayerContext_TransitionVM();
 
             StartGraph.MoveTo(StartNode, OnFinishMovement);
 
         }, () => PlayerContext == null));
 
-        private void OnFinishMovement(INode node)
+        private void OnFinishMovement(IPositioned positioned)
         {
-            ActiveNode = node;
+            if (positioned is INode node)
+            {
+                ActiveNode = node;
 
-            PlayerContext = new PlayerContext_NodeVM();
+                PlayerContext = new PlayerContext_NodeVM();
+
+                NextPaths = ActiveGraph.GetNext(ActiveNode.Id);
+
+                if (NextPaths.Count > 0)
+                {
+                    // TODO Selector dependent on node type
+
+                    TargetId = NextPaths.First().Key;
+
+                    if (NextPaths[TargetId].Count > 0)
+                    {
+                        ActiveGraph.MoveTo(NextPaths[TargetId].First(), OnFinishMovement);
+                    }
+                    else
+                    {
+                        ActiveGraph.MoveTo(TargetId, OnFinishMovement);
+                    }
+                }
+                else
+                { 
+                
+                }
+            }
+            else
+            {
+                NextPaths[TargetId].Remove(positioned);
+                ActiveGraph.MoveTo(NextPaths[TargetId].First(), OnFinishMovement);
+            }
         }
 
         protected ICommand pauseCommand;
@@ -444,7 +478,11 @@ namespace StorylineEditor.ViewModel
 
         public IGraph StartGraph { get; set; }
         public INode StartNode { get; set; }
+        public IGraph ActiveGraph { get; set; }
         public INode ActiveNode { get; set; }
+
+        Dictionary<string, List<IPositioned>> NextPaths { get; set; }
+        public string TargetId { get; set; }
 
         public override string Id => null;
     }

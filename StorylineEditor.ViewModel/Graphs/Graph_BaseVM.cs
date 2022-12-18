@@ -114,7 +114,7 @@ namespace StorylineEditor.ViewModel.Graphs
         protected bool cancelFlag;
         protected Task activeTask;
 
-        async void StartScrollingTask(IPositioned targetPosition, Action<INode> callbackAction)
+        async void StartScrollingTask(IPositioned positioned, Action<IPositioned> callbackAction)
         {
             const int waitDurationMsec = 8;
 
@@ -143,8 +143,8 @@ namespace StorylineEditor.ViewModel.Graphs
 
                     if (cancelFlag) return;
 
-                    targetOffsetX = targetPosition.PositionX - StorylineVM.ViewWidth / 2 / Scale;
-                    targetOffsetY = targetPosition.PositionY - StorylineVM.ViewHeight / 2 / Scale;
+                    targetOffsetX = positioned.PositionX - StorylineVM.ViewWidth / 2 / Scale;
+                    targetOffsetY = positioned.PositionY - StorylineVM.ViewHeight / 2 / Scale;
 
                     double stepX = (OffsetX - targetOffsetX) * currentAlpha;
                     double stepY = (OffsetY - targetOffsetY) * currentAlpha;
@@ -158,14 +158,14 @@ namespace StorylineEditor.ViewModel.Graphs
                     await Task.Delay(stepDuration);
                 }
 
-                targetOffsetX = targetPosition.PositionX - StorylineVM.ViewWidth / 2 / Scale;
-                targetOffsetY = targetPosition.PositionY - StorylineVM.ViewHeight / 2 / Scale;
+                targetOffsetX = positioned.PositionX - StorylineVM.ViewWidth / 2 / Scale;
+                targetOffsetY = positioned.PositionY - StorylineVM.ViewHeight / 2 / Scale;
 
                 double lastStepX = (OffsetX - targetOffsetX);
                 double lastStepY = (OffsetY - targetOffsetY);
                 Application.Current?.Dispatcher?.Invoke(new Action(() => { TranslateView(lastStepX, lastStepY); }));
 
-                if (callbackAction != null && targetPosition is INode targetNode) callbackAction.Invoke(targetNode);
+                if (callbackAction != null) callbackAction.Invoke(positioned);
             });
         }
 
@@ -1180,41 +1180,48 @@ namespace StorylineEditor.ViewModel.Graphs
             }
         }
 
-        public void MoveTo(INode node, Action<INode> callbackAction) { if (node != null) { StartScrollingTask(node, callbackAction); } }
+        public void MoveTo(IPositioned positioned, Action<IPositioned> callbackAction) { if (positioned != null) { StartScrollingTask(positioned, callbackAction); } }
 
-        public Dictionary<INode, List<INode>> GetChildNodesPaths(string nodeId)
+        public void MoveTo(string positionedId, Action<IPositioned> callbackAction)
         {
-            //Dictionary<IPositioned, List<IPositioned>> result = new Dictionary<IPositioned, List<IPositioned>>();
+            Node_BaseM targetNode = Model.nodes.FirstOrDefault(node => node.id == positionedId);
+            if (targetNode != null) { }
+        }
 
-            //List<string> nodeIds = Model.links.Where(link => link.fromNodeId == nodeId).Select(link => link.toNodeId).ToList();
+        public Dictionary<string, List<IPositioned>> GetNext(string nodeId)
+        {
+            Dictionary<string, List<IPositioned>> result = new Dictionary<string, List<IPositioned>>();
 
-            //List<Node_BaseM> nonTransitNodes = Model.nodes.Where((otherNode) => nodeIds.Contains(otherNode.id) && !(otherNode is Node_TransitM)).ToList();
+            List<string> nodeIds = Model.links.Where(link => link.fromNodeId == nodeId).Select(link => link.toNodeId).ToList();
 
-            //foreach (var nonTransitNode in nonTransitNodes) { result.Add(nonTransitNode, null); }
+            List<Node_BaseM> nonTransitNodes = Model.nodes.Where((otherNode) => nodeIds.Contains(otherNode.id) && !(otherNode is Node_TransitM)).ToList();
 
-            //foreach (var transitNode in Tree.Nodes.Where((otherNode) => nodeIds.Contains(otherNode.Id) && !nonTransitNodes.Contains(otherNode)))
-            //{
-            //    if (transitNode.Gender > 0 && transitNode.Gender != Tree.Parent.Parent.TreePlayerHistory.GenderToPlay) continue;
-            //    Dictionary<Node_BaseVm, List<Node_BaseVm>> childResult = GetChildNodesPaths(transitNode);
+            foreach (var nonTransitNode in nonTransitNodes)
+            {
+                if (!result.ContainsKey(nonTransitNode.id)) result.Add(nonTransitNode.id, new List<IPositioned>());
+                result[nonTransitNode.id].Add(new PositionVM(nonTransitNode.positionX, nonTransitNode.positionY));
+            }
 
-            //    foreach (var childResultEntry in childResult)
-            //    {
-            //        if (result.ContainsKey(childResultEntry.Key))
-            //        {
-            //            continue; // One path to nonTransit node is enough
-            //        }
-            //        else
-            //        {
-            //            List<Node_BaseVm> nodesPath = childResultEntry.Value ?? new List<Node_BaseVm>();
-            //            nodesPath.Insert(0, transitNode);
-            //            result.Add(childResultEntry.Key, nodesPath);
-            //        }
-            //    }
-            //}
+            foreach (var transitNode in Model.nodes.Where((otherNode) => nodeIds.Contains(otherNode.id) && !nonTransitNodes.Contains(otherNode)))
+            {
+                Dictionary<string, List<IPositioned>> childResult = GetNext(transitNode.id);
 
-            //return result;
+                foreach (var childResultEntry in childResult)
+                {
+                    if (result.ContainsKey(childResultEntry.Key))
+                    {
+                        continue; // One path to nonTransit node is enough
+                    }
+                    else
+                    {
+                        List<IPositioned> nodesPath = childResultEntry.Value ?? new List<IPositioned>();
+                        nodesPath.Insert(0, new PositionVM(transitNode.positionX, transitNode.positionY));
+                        result.Add(childResultEntry.Key, nodesPath);
+                    }
+                }
+            }
 
-            return null;
+            return result;
         }
 
         protected virtual string CanLinkNodes(INode from, INode to) { return nameof(NotImplementedException); }

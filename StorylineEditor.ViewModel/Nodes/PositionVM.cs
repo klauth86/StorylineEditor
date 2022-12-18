@@ -10,19 +10,23 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-namespace StorylineEditor.Model
+using StorylineEditor.ViewModel.Interface;
+using System;
+
+namespace StorylineEditor.ViewModel.Nodes
 {
-    public class LocationM : BaseM
+    public class PositionVM : IPositioned
     {
-        public LocationM(long additionalTicks) : base(additionalTicks) { }
-
-        public LocationM() : this(0) { }
-
-        public override BaseM Clone(long additionalTicks)
+        public PositionVM(double inPositionX, double inPositionY)
         {
-            LocationM clone = new LocationM(additionalTicks);
-            CloneInternal(clone);
-            return clone;
+            positionX = inPositionX;
+            positionY = inPositionY;
         }
+
+        protected readonly double positionX;
+        public double PositionX { get => positionX; set => throw new NotImplementedException(); }
+
+        protected readonly double positionY;
+        public double PositionY { get => positionY; set => throw new NotImplementedException(); }
     }
 }

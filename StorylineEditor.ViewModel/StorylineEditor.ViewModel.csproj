@@ -50,6 +50,7 @@
     <Compile Include="Nodes\Node_RegularVM.cs" />
     <Compile Include="Nodes\Node_InteractiveVM.cs" />
     <Compile Include="Nodes\OriginVM.cs" />
+    <Compile Include="Nodes\PositionVM.cs" />
     <Compile Include="Predicates\PredicatesHelper.cs" />
     <Compile Include="Predicates\P_BaseVM.cs" />
     <Compile Include="Predicates\P_Quest_Node_PassedVM.cs" />
