@@ -13,9 +13,11 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Model;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Interface;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel
@@ -50,11 +52,6 @@ namespace StorylineEditor.ViewModel
     }
 
     public class PlayerContext_TransitionVM { }
-
-    public class PlayerContext_NodeVM
-    {
-
-    }
 
     public class TreePathVM : SimpleVM<HistoryVM>
     {
@@ -430,7 +427,6 @@ namespace StorylineEditor.ViewModel
             PlayerContext = new PlayerContext_TransitionVM();
 
             StartGraph.MoveTo(StartNode, OnFinishMovement);
-
         }, () => PlayerContext == null));
 
         private void OnFinishMovement(IPositioned positioned)
@@ -438,35 +434,51 @@ namespace StorylineEditor.ViewModel
             if (positioned is INode node)
             {
                 ActiveNode = node;
+                PlayerContext = node;
 
-                PlayerContext = new PlayerContext_NodeVM();
-
-                NextPaths = ActiveGraph.GetNext(ActiveNode.Id);
-
-                if (NextPaths.Count > 0)
-                {
-                    // TODO Selector dependent on node type
-
-                    TargetId = NextPaths.First().Key;
-
-                    if (NextPaths[TargetId].Count > 0)
-                    {
-                        ActiveGraph.MoveTo(NextPaths[TargetId].First(), OnFinishMovement);
-                    }
-                    else
-                    {
-                        ActiveGraph.MoveTo(TargetId, OnFinishMovement);
-                    }
-                }
-                else
-                { 
-                
-                }
+                PlayNodeAndGoNext();
             }
             else
             {
                 NextPaths[TargetId].Remove(positioned);
+
+                MoveThroughPath();
+            }
+        }
+
+        private async void PlayNodeAndGoNext()
+        {
+            await Task.Delay(TimeSpan.FromSeconds(Duration));
+
+            NextPaths = ActiveGraph.GetNext(ActiveNode.Id);
+
+            // TODO Filter nodes and paths that are not available in current context for full mode
+
+            if (NextPaths.Count > 0)
+            {
+                // TODO Selector dependent on node type
+
+                TargetId = NextPaths.First().Key;
+
+                MoveThroughPath();
+            }
+            else
+            {
+                // TODO Stop (no next nodes)
+            }
+        }
+
+        private void MoveThroughPath()
+        {
+            PlayerContext = new PlayerContext_TransitionVM();
+
+            if (NextPaths[TargetId].Count > 0)
+            {
                 ActiveGraph.MoveTo(NextPaths[TargetId].First(), OnFinishMovement);
+            }
+            else
+            {
+                ActiveGraph.MoveTo(TargetId, OnFinishMovement);
             }
         }
 

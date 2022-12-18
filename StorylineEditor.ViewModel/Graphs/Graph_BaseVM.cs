@@ -165,7 +165,7 @@ namespace StorylineEditor.ViewModel.Graphs
                 double lastStepY = (OffsetY - targetOffsetY);
                 Application.Current?.Dispatcher?.Invoke(new Action(() => { TranslateView(lastStepX, lastStepY); }));
 
-                if (callbackAction != null) callbackAction.Invoke(positioned);
+                if (callbackAction != null) callbackAction.Invoke(positioned.Id != null && NodesVMs.ContainsKey(positioned.Id) ? (NodesVMs[positioned.Id] as INode) : positioned);
             });
         }
 
@@ -1182,10 +1182,10 @@ namespace StorylineEditor.ViewModel.Graphs
 
         public void MoveTo(IPositioned positioned, Action<IPositioned> callbackAction) { if (positioned != null) { StartScrollingTask(positioned, callbackAction); } }
 
-        public void MoveTo(string positionedId, Action<IPositioned> callbackAction)
+        public void MoveTo(string targetId, Action<IPositioned> callbackAction)
         {
-            Node_BaseM targetNode = Model.nodes.FirstOrDefault(node => node.id == positionedId);
-            if (targetNode != null) { }
+            Node_BaseM targetNode = Model.nodes.FirstOrDefault(node => node.id == targetId);
+            if (targetNode != null) MoveTo(new PositionVM(targetNode.positionX, targetNode.positionY, targetId), callbackAction);
         }
 
         public Dictionary<string, List<IPositioned>> GetNext(string nodeId)
@@ -1199,7 +1199,7 @@ namespace StorylineEditor.ViewModel.Graphs
             foreach (var nonTransitNode in nonTransitNodes)
             {
                 if (!result.ContainsKey(nonTransitNode.id)) result.Add(nonTransitNode.id, new List<IPositioned>());
-                result[nonTransitNode.id].Add(new PositionVM(nonTransitNode.positionX, nonTransitNode.positionY));
+                result[nonTransitNode.id].Add(new PositionVM(nonTransitNode.positionX, nonTransitNode.positionY, null));
             }
 
             foreach (var transitNode in Model.nodes.Where((otherNode) => nodeIds.Contains(otherNode.id) && !nonTransitNodes.Contains(otherNode)))
@@ -1215,7 +1215,7 @@ namespace StorylineEditor.ViewModel.Graphs
                     else
                     {
                         List<IPositioned> nodesPath = childResultEntry.Value ?? new List<IPositioned>();
-                        nodesPath.Insert(0, new PositionVM(transitNode.positionX, transitNode.positionY));
+                        nodesPath.Insert(0, new PositionVM(transitNode.positionX, transitNode.positionY, null));
                         result.Add(childResultEntry.Key, nodesPath);
                     }
                 }

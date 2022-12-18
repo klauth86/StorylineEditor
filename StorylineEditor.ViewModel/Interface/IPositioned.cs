@@ -16,5 +16,6 @@ namespace StorylineEditor.ViewModel.Interface
     {
         double PositionX { get; set; }
         double PositionY { get; set; }
+        string Id { get; }
     }
 }

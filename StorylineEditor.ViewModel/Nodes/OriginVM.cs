@@ -20,7 +20,8 @@ namespace StorylineEditor.ViewModel.Nodes
         public static OriginVM GetOrigin() { return _instance ?? (_instance = new OriginVM()); }
         public double PositionX { get => 0; set => throw new NotImplementedException(); }
         public double PositionY { get => 0; set => throw new NotImplementedException(); }
-        
+        public string Id => null;
+
         private OriginVM() { }
 
         private static OriginVM _instance;

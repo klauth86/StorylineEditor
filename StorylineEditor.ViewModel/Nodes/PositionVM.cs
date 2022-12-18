@@ -17,10 +17,11 @@ namespace StorylineEditor.ViewModel.Nodes
 {
     public class PositionVM : IPositioned
     {
-        public PositionVM(double inPositionX, double inPositionY)
+        public PositionVM(double inPositionX, double inPositionY, string inId)
         {
             positionX = inPositionX;
             positionY = inPositionY;
+            id = inId;
         }
 
         protected readonly double positionX;
@@ -28,5 +29,8 @@ namespace StorylineEditor.ViewModel.Nodes
 
         protected readonly double positionY;
         public double PositionY { get => positionY; set => throw new NotImplementedException(); }
+
+        protected readonly string id;
+        public string Id { get => id; }
     }
 }
