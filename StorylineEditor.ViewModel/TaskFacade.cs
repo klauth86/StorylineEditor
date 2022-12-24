@@ -6,7 +6,7 @@ namespace StorylineEditor.ViewModel
 {
     public static class TaskFacade
     {
-        private static bool hasMonoTask = false;
+        private static readonly object locker = new object();
 
         private static CancellationTokenSource cancellationTokenSource;
 
@@ -20,19 +20,24 @@ namespace StorylineEditor.ViewModel
         {
             StopMonoTask();
 
-            while (hasMonoTask)
+            Monitor.Enter(locker);
+            System.Diagnostics.Trace.WriteLine("Monitor.Enter(locker)", "@@@");
+
+            Task task = null;
+            try
             {
-                await Task.Delay(TimeSpan.FromMilliseconds(10));
+                task = CreateAndRun((cancellationTokenSource = new CancellationTokenSource()).Token, tickAction, tickTimeSpan, alphaStep, finAction);
+                await task;
             }
+            catch (TaskCanceledException taskCanceledException) { }
+            catch (Exception exception) { } // TODO
+            finally
+            {
+                System.Diagnostics.Trace.WriteLine("Monitor.Exit(locker)", "@@@");
+                Monitor.Exit(locker);
 
-            hasMonoTask = true;
-
-            Task task = CreateAndRun((cancellationTokenSource = new CancellationTokenSource()).Token, tickAction, tickTimeSpan, alphaStep, finAction);
-            await task;
-
-            hasMonoTask = false;
-
-            callbackAction?.Invoke(task.Status);
+                if (task != null) callbackAction?.Invoke(task.Status);
+            }
         }
 
         private static async Task CreateAndRun(CancellationToken token, Func<CancellationToken, double, TaskStatus> tickAction, TimeSpan tickTimeSpan, double alphaStep, Action<TaskStatus> finAction)
@@ -45,7 +50,7 @@ namespace StorylineEditor.ViewModel
                 tickStatus = tickAction(token, alpha);
                 alpha += alphaStep;
 
-                await Task.Delay(tickTimeSpan);
+                await Task.Delay(tickTimeSpan, token);
             }
             while (tickStatus == TaskStatus.Running);
 

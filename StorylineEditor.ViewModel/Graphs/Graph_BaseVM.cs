@@ -127,7 +127,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
                 if (Math.Abs(stepX) < 0.01) return TaskStatus.RanToCompletion;
 
-                Application.Current?.Dispatcher?.Invoke(new Action(() => TranslateView(stepX * alpha, stepY * alpha)));
+                TranslateView(stepX * alpha, stepY * alpha);
 
                 return TaskStatus.Running;
             },
@@ -140,7 +140,7 @@ namespace StorylineEditor.ViewModel.Graphs
                     double stepX = OffsetX - (positioned.PositionX - StorylineVM.ViewWidth / 2 / Scale);
                     double stepY = OffsetY - (positioned.PositionY - StorylineVM.ViewHeight / 2 / Scale);
 
-                    Application.Current?.Dispatcher?.Invoke(new Action(() => TranslateView(stepX, stepY)));
+                    TranslateView(stepX, stepY);
                 }
             }, null);
         }
@@ -159,7 +159,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
                 if (Math.Abs(newScale - 1) < 0.01) return TaskStatus.RanToCompletion;
 
-                Application.Current?.Dispatcher?.Invoke(new Action(() => SetScale(StorylineVM.ViewWidth / 2, StorylineVM.ViewHeight / 2, newScale)));
+                SetScale(StorylineVM.ViewWidth / 2, StorylineVM.ViewHeight / 2, newScale);
 
                 return TaskStatus.Running;
             },
@@ -169,7 +169,7 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 if (tickStatus == TaskStatus.RanToCompletion)
                 {
-                    Application.Current?.Dispatcher?.Invoke(new Action(() => SetScale(StorylineVM.ViewWidth / 2, StorylineVM.ViewHeight / 2, 1)));
+                    SetScale(StorylineVM.ViewWidth / 2, StorylineVM.ViewHeight / 2, 1);
                 }
             }, null);
         }
