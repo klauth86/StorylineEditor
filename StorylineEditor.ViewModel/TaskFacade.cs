@@ -6,7 +6,7 @@ namespace StorylineEditor.ViewModel
 {
     public static class TaskFacade
     {
-        private static Semaphore semaphoreObject = new Semaphore(initialCount: 1, maximumCount: 1);
+        private static bool hasMonoTask = false;
 
         private static CancellationTokenSource cancellationTokenSource;
 
@@ -20,12 +20,17 @@ namespace StorylineEditor.ViewModel
         {
             StopMonoTask();
 
-            semaphoreObject.WaitOne();
+            while (hasMonoTask)
+            {
+                await Task.Delay(TimeSpan.FromMilliseconds(10));
+            }
+
+            hasMonoTask = true;
 
             Task task = CreateAndRun((cancellationTokenSource = new CancellationTokenSource()).Token, tickAction, tickTimeSpan, alphaStep, finAction);
             await task;
 
-            semaphoreObject.Release();
+            hasMonoTask = false;
 
             callbackAction?.Invoke(task.Status);
         }
