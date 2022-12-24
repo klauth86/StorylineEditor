@@ -69,7 +69,7 @@ namespace StorylineEditor.ViewModel.Nodes
             }
         }
 
-
+        public string CharacterId => null;
 
         protected double width;
         public double Width

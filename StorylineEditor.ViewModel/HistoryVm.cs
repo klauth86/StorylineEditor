@@ -13,6 +13,7 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Model;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Interface;
+using StorylineEditor.ViewModel.Nodes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,33 +23,37 @@ using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel
 {
-    public class PlayerContext_ChoiceVM : SimpleVM<HistoryVM>
+    public class PlayerContext_ChoiceVM : Notifier
     {
-        public PlayerContext_ChoiceVM(HistoryVM parent, ICallbackContext callbackContext, Dictionary<Notifier, List<Notifier>> nodesPaths) : base(parent, callbackContext)
+        protected readonly HistoryVM _parent;
+
+        public PlayerContext_ChoiceVM(HistoryVM parent, HashSet<INode> choices)
         {
-            NodesPaths = nodesPaths;
+            _parent = parent;
+            Choices = choices;
         }
 
-        public Dictionary<Notifier, List<Notifier>> NodesPaths { get; set; }
+        public override string Id => null;
+
+        public HashSet<INode> Choices { get; set; }
 
         protected ICommand selectNodeCommand;
-        public ICommand SelectNodeCommand => selectNodeCommand ?? (selectNodeCommand = new RelayCommand<Notifier>((node) =>
-        {
-            //TreeCanvas?.PrepareAndStartTransition(node, NodesPaths[node]);
-        }, (node) => node != null && NodesPaths.ContainsKey(node)));
-
-        public override string Id => null;
-        public override string Title => null;
-        public override string Stats => null;
+        public ICommand SelectNodeCommand => selectNodeCommand ?? (selectNodeCommand = new RelayCommand<INode>((node) => { _parent.TargetId = node.Id; }, (node) => node != null && Choices.Contains(node)));
     }
 
-    public class PlayerContext_ErrorVM : SimpleVM<HistoryVM>
+    public class PlayerContext_ErrorVM : Notifier
     {
-        public PlayerContext_ErrorVM(HistoryVM parent, ICallbackContext callbackContext) : base(parent, callbackContext) { }
+        protected readonly HistoryVM _parent;
+
+        public PlayerContext_ErrorVM(HistoryVM parent, string description)
+        {
+            _parent = parent;
+            Description = description;
+        }
 
         public override string Id => null;
-        public override string Title => null;
-        public override string Stats => null;
+
+        public string Description { get; set; }
     }
 
     public class PlayerContext_TransitionVM { }
@@ -195,6 +200,8 @@ namespace StorylineEditor.ViewModel
 
     public class HistoryVM : Notifier
     {
+        public static readonly Random Random = new Random();
+
         public HistoryVM()
         {
             Inventory = new ObservableCollection<Notifier>();
@@ -488,13 +495,57 @@ namespace StorylineEditor.ViewModel
 
             // TODO Filter nodes and paths that are not available in current context for full mode
 
-            if (NextPaths.Count > 0)
+            if (NextPaths.Count == 1)
             {
-                // TODO Selector dependent on node type
-
                 TargetId = NextPaths.First().Key;
+            }
+            else if (NextPaths.Count > 0)
+            {
+                if (ActiveNode is Node_RandomVM randomNode)
+                {
+                    var targetIds = NextPaths.Keys.ToList();
+                    TargetId = targetIds[Random.Next(targetIds.Count)];
+                }
+                else if (ActiveNode is Node_GateVM gateNode)
+                {
+                    if (gateNode.TargetDialog != null && gateNode.TargetExitNode != null)
+                    {
+                        // TODO Gates
+                    }
+                }
+                else if (NextPaths.All((pair) => pair.Value.Last().CharacterId == CharacterM.PLAYER_ID))
+                {
+                    HashSet<INode> choices = new HashSet<INode>();
 
-                MoveThroughPath();
+                    foreach (var key in NextPaths.Keys)
+                    {
+                        INode node = ActiveGraph.FindNode(key);
+                        if (node != null)
+                        {
+                            choices.Add(node);
+                        }
+                    }
+
+                    PlayerContext = new PlayerContext_ChoiceVM(this, choices);
+                }
+                else
+                {
+                    ////// TODO
+
+                    string description = "Дочерние вершины не подходят ни под одну из ситуаций:" + Environment.NewLine;
+                    description += Environment.NewLine;
+
+                    description += "- " + "После Случайной вершины (⇝) возможен любой состав дочерних вершин..." + Environment.NewLine;
+                    description += Environment.NewLine;
+
+                    description += "- " + "Если НЕ Случайная вершина (💬, ⇴) имеет одну актуальную (удовлетворяющую полу и своим предикатам) дочернюю вершину, то этой вершиной может быть любая вершина кроме вершины Транзит (⇴) с несколькими актуальными (удовлетворяющие полу и своим предикатам) дочерними вершинами..." + Environment.NewLine;
+                    description += Environment.NewLine;
+
+                    description += "- " + "Если НЕ Случайная вершина (💬, ⇴) имеет более одной актуальной (удовлетворяющей полу и своим предикатам) дочерней вершины, то эти вершины должны быть либо вершинами Основного персонажа (💬), либо Транзитом (⇴) на вершины Основного персонажа (💬) (ситуация ВЫБОР ИГРОКА)..." + Environment.NewLine;
+                    description += Environment.NewLine;
+
+                    PlayerContext = new PlayerContext_ErrorVM(this, description);
+                }
             }
             else
             {
@@ -525,7 +576,20 @@ namespace StorylineEditor.ViewModel
         public INode ActiveNode { get; set; }
 
         Dictionary<string, List<IPositioned>> NextPaths { get; set; }
-        public string TargetId { get; set; }
+
+        private string targetId;
+        public string TargetId
+        {
+            get => targetId;
+            set
+            {
+                if (targetId != value)
+                {
+                    targetId = value;
+                    MoveThroughPath();
+                }
+            }
+        }
 
         public override string Id => null;
     }

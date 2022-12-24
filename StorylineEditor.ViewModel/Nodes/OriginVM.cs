@@ -21,7 +21,7 @@ namespace StorylineEditor.ViewModel.Nodes
         public double PositionX { get => 0; set => throw new NotImplementedException(); }
         public double PositionY { get => 0; set => throw new NotImplementedException(); }
         public string Id => null;
-
+        public string CharacterId => null;
         private OriginVM() { }
 
         private static OriginVM _instance;

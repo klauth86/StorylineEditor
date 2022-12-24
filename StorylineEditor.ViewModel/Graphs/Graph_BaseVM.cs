@@ -187,7 +187,8 @@ namespace StorylineEditor.ViewModel.Graphs
                 Node_BaseM rootNodeModel = Model.nodes.FirstOrDefault(nodeModel => nodeModel.id == RootNodeIds[RootNodeIndex]);
                 if (rootNodeModel != null)
                 {
-                    StartScrollingTask(new PositionVM(rootNodeModel.positionX, rootNodeModel.positionY, rootNodeModel.id), null);
+                    string characterId = rootNodeModel is Node_RegularM regularNodeModel ? regularNodeModel.characterId : null;
+                    StartScrollingTask(new PositionVM(rootNodeModel.positionX, rootNodeModel.positionY, rootNodeModel.id, characterId), null);
                 }
             }
         }, () => RootNodeIds.Count > 0));
@@ -202,7 +203,8 @@ namespace StorylineEditor.ViewModel.Graphs
                 Node_BaseM rootNodeModel = Model.nodes.FirstOrDefault(nodeModel => nodeModel.id == RootNodeIds[RootNodeIndex]);
                 if (rootNodeModel != null)
                 {
-                    StartScrollingTask(new PositionVM(rootNodeModel.positionX, rootNodeModel.positionY, rootNodeModel.id), null);
+                    string characterId = rootNodeModel is Node_RegularM regularNodeModel ? regularNodeModel.characterId : null;
+                    StartScrollingTask(new PositionVM(rootNodeModel.positionX, rootNodeModel.positionY, rootNodeModel.id, characterId), null);
                 }
             }
         }, () => RootNodeIds.Count > 0));
@@ -1165,10 +1167,11 @@ namespace StorylineEditor.ViewModel.Graphs
 
         public void MoveTo(string targetId, Action<TaskStatus> callbackAction)
         {
-            Node_BaseM targetNode = Model.nodes.FirstOrDefault(node => node.id == targetId);
-            if (targetNode != null)
+            Node_BaseM targetNodeModel = Model.nodes.FirstOrDefault(node => node.id == targetId);
+            if (targetNodeModel != null)
             {
-                MoveTo(new PositionVM(targetNode.positionX, targetNode.positionY, targetId), callbackAction);
+                string characterId = targetNodeModel is Node_RegularM regularNodeModel ? regularNodeModel.characterId : null;
+                MoveTo(new PositionVM(targetNodeModel.positionX, targetNodeModel.positionY, targetId, characterId), callbackAction);
             }
             else
             {
@@ -1184,10 +1187,11 @@ namespace StorylineEditor.ViewModel.Graphs
 
             List<Node_BaseM> nonTransitNodes = Model.nodes.Where((otherNode) => nodeIds.Contains(otherNode.id) && !(otherNode is Node_TransitM)).ToList();
 
-            foreach (var nonTransitNode in nonTransitNodes)
+            foreach (var nonTransitNodeModel in nonTransitNodes)
             {
-                if (!result.ContainsKey(nonTransitNode.id)) result.Add(nonTransitNode.id, new List<IPositioned>());
-                result[nonTransitNode.id].Add(new PositionVM(nonTransitNode.positionX, nonTransitNode.positionY, null));
+                if (!result.ContainsKey(nonTransitNodeModel.id)) result.Add(nonTransitNodeModel.id, new List<IPositioned>());
+                string characterId = nonTransitNodeModel is Node_RegularM regularNodeModel ? regularNodeModel.characterId : null;
+                result[nonTransitNodeModel.id].Add(new PositionVM(nonTransitNodeModel.positionX, nonTransitNodeModel.positionY, nonTransitNodeModel.id, characterId));
             }
 
             foreach (var transitNode in Model.nodes.Where((otherNode) => nodeIds.Contains(otherNode.id) && !nonTransitNodes.Contains(otherNode)))
@@ -1203,7 +1207,7 @@ namespace StorylineEditor.ViewModel.Graphs
                     else
                     {
                         List<IPositioned> nodesPath = childResultEntry.Value ?? new List<IPositioned>();
-                        nodesPath.Insert(0, new PositionVM(transitNode.positionX, transitNode.positionY, null));
+                        nodesPath.Insert(0, new PositionVM(transitNode.positionX, transitNode.positionY, null, null));
                         result.Add(childResultEntry.Key, nodesPath);
                     }
                 }

@@ -6,21 +6,27 @@ namespace StorylineEditor.ViewModel
 {
     public static class TaskFacade
     {
-        private static readonly object locker = new object();
+        private static bool _isPaused = false;
 
-        private static CancellationTokenSource cancellationTokenSource;
+        private static readonly object _locker = new object();
+
+        private static CancellationTokenSource _cancellationTokenSource;
 
         public static void StopMonoTask()
         {
-            cancellationTokenSource?.Cancel();
-            cancellationTokenSource = null;
+            _isPaused = false; // cancellation should be consiedered inside tickAction
+
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource = null;
         }
+
+        public static void PauseUnpauseMonoTask(bool isPaused) { _isPaused = isPaused; }
 
         public static async void StartMonoTask(Func<CancellationToken, double, TaskStatus> tickAction, TimeSpan tickTimeSpan, double alphaStep, Action<TaskStatus> finAction, Action<TaskStatus> callbackAction)
         {
             StopMonoTask();
 
-            Monitor.Enter(locker);
+            Monitor.Enter(_locker);
             System.Diagnostics.Trace.WriteLine("Monitor.Enter(locker)", "@@@");
 
             TaskStatus taskStatus = TaskStatus.WaitingForActivation;
@@ -28,14 +34,17 @@ namespace StorylineEditor.ViewModel
 
             try
             {
-                cancellationTokenSource = new CancellationTokenSource();
+                _cancellationTokenSource = new CancellationTokenSource();
 
                 do
                 {
-                    taskStatus = tickAction(cancellationTokenSource.Token, alpha);
-                    alpha += alphaStep;
+                    if (!_isPaused)
+                    {
+                        taskStatus = tickAction(_cancellationTokenSource.Token, alpha);
+                        alpha += alphaStep;
+                    }
 
-                    await Task.Delay(tickTimeSpan, cancellationTokenSource.Token);
+                    await Task.Delay(tickTimeSpan, _cancellationTokenSource.Token);
                 }
                 while (taskStatus == TaskStatus.Running);
 
@@ -46,7 +55,7 @@ namespace StorylineEditor.ViewModel
             finally
             {
                 System.Diagnostics.Trace.WriteLine("Monitor.Exit(locker)", "@@@");
-                Monitor.Exit(locker);
+                Monitor.Exit(_locker);
 
                 callbackAction?.Invoke(taskStatus);
             }
