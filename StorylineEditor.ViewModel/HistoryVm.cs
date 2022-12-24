@@ -451,13 +451,13 @@ namespace StorylineEditor.ViewModel
             const int stepCount = 256;
             int stepDuration = Convert.ToInt32(Math.Round(Duration * 1000) / stepCount);
 
-            TaskFacade.StartMonoTask((token) =>
-            {
-                for (int i = 1; i < stepCount; i++)
-                {
-                    Task.Delay(stepDuration).Wait();
-                }
-            }, (wasCancelled) => { if (!wasCancelled) GoNext(); });
+            //TaskFacade.StartMonoTask((token) =>
+            //{
+            //    for (int i = 1; i < stepCount; i++)
+            //    {
+            //        Task.Delay(stepDuration).Wait();
+            //    }
+            //}, (wasCancelled) => { if (!wasCancelled) GoNext(); });
         }
 
         private void GoNext()

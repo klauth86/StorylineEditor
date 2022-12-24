@@ -118,40 +118,31 @@ namespace StorylineEditor.ViewModel.Graphs
             const int stepCount = 256;
             const int stepDuration = durationMsec / stepCount;
 
-            TaskFacade.StartMonoTask(async (token) =>
+            TaskFacade.StartMonoTask((token, alpha) =>
             {
-                double targetOffsetX;
-                double targetOffsetY;
+                if (token.IsCancellationRequested) return TaskStatus.Canceled;
 
-                double deltaAlpha = 1.0 / stepCount;
-                double currentAlpha = deltaAlpha;
+                double stepX = OffsetX - (positioned.PositionX - StorylineVM.ViewWidth / 2 / Scale);
+                double stepY = OffsetY - (positioned.PositionY - StorylineVM.ViewHeight / 2 / Scale);
 
-                for (int i = 1; i < stepCount; i++)
+                if (Math.Abs(stepX) < 0.01) return TaskStatus.RanToCompletion;
+
+                Application.Current?.Dispatcher?.Invoke(new Action(() => TranslateView(stepX * alpha, stepY * alpha)));
+
+                return TaskStatus.Running;
+            },
+            TimeSpan.FromMilliseconds(stepDuration),
+            1.0 / stepCount,
+            (tickStatus) =>
+            {
+                if (tickStatus == TaskStatus.RanToCompletion)
                 {
-                    if (token.IsCancellationRequested) return;
+                    double stepX = OffsetX - (positioned.PositionX - StorylineVM.ViewWidth / 2 / Scale);
+                    double stepY = OffsetY - (positioned.PositionY - StorylineVM.ViewHeight / 2 / Scale);
 
-                    targetOffsetX = positioned.PositionX - StorylineVM.ViewWidth / 2 / Scale;
-                    targetOffsetY = positioned.PositionY - StorylineVM.ViewHeight / 2 / Scale;
-
-                    double stepX = (OffsetX - targetOffsetX) * currentAlpha;
-                    double stepY = (OffsetY - targetOffsetY) * currentAlpha;
-
-                    if (Math.Abs(stepX) < 0.01) break;
-
-                    Application.Current?.Dispatcher?.Invoke(new Action(() => { TranslateView(stepX, stepY); }));
-
-                    currentAlpha += deltaAlpha;
-                    await Task.Delay(stepDuration);
+                    Application.Current?.Dispatcher?.Invoke(new Action(() => TranslateView(stepX, stepY)));
                 }
-
-                targetOffsetX = positioned.PositionX - StorylineVM.ViewWidth / 2 / Scale;
-                targetOffsetY = positioned.PositionY - StorylineVM.ViewHeight / 2 / Scale;
-
-                double lastStepX = (OffsetX - targetOffsetX);
-                double lastStepY = (OffsetY - targetOffsetY);
-                Application.Current?.Dispatcher?.Invoke(new Action(() => { TranslateView(lastStepX, lastStepY); }));
-
-            }, callbackAction);
+            }, null);
         }
 
         void StartScalingTask()
@@ -160,26 +151,26 @@ namespace StorylineEditor.ViewModel.Graphs
             const int stepCount = 256;
             const int stepDuration = durationMsec / stepCount;
 
-            TaskFacade.StartMonoTask(async (token) =>
+            TaskFacade.StartMonoTask((token, alpha) =>
             {
-                double deltaAlpha = 1.0 / stepCount;
-                double currentAlpha = deltaAlpha;
+                if (token.IsCancellationRequested) return TaskStatus.Canceled;
 
-                for (int i = 1; i < stepCount; i++)
+                double newScale = Scale * (1 - alpha) + alpha;
+
+                if (Math.Abs(newScale - 1) < 0.01) return TaskStatus.RanToCompletion;
+
+                Application.Current?.Dispatcher?.Invoke(new Action(() => SetScale(StorylineVM.ViewWidth / 2, StorylineVM.ViewHeight / 2, newScale)));
+
+                return TaskStatus.Running;
+            },
+            TimeSpan.FromMilliseconds(stepDuration),
+            1.0 / stepCount,
+            (tickStatus) =>
+            {
+                if (tickStatus == TaskStatus.RanToCompletion)
                 {
-                    if (token.IsCancellationRequested) return;
-
-                    double newScale = Scale * (1 - currentAlpha) + currentAlpha;
-
-                    if (Math.Abs(newScale - 1) < 0.01) break;
-
-                    Application.Current?.Dispatcher?.Invoke(new Action(() => { SetScale(StorylineVM.ViewWidth / 2, StorylineVM.ViewHeight / 2, newScale); }));
-
-                    currentAlpha += deltaAlpha;
-                    await Task.Delay(stepDuration);
+                    Application.Current?.Dispatcher?.Invoke(new Action(() => SetScale(StorylineVM.ViewWidth / 2, StorylineVM.ViewHeight / 2, 1)));
                 }
-
-                Application.Current?.Dispatcher?.Invoke(new Action(() => { SetScale(StorylineVM.ViewWidth / 2, StorylineVM.ViewHeight / 2, 1); }));
             }, null);
         }
 

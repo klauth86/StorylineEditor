@@ -10,20 +10,41 @@ namespace StorylineEditor.ViewModel
 
         private static CancellationTokenSource cancellationTokenSource;
 
-        public static async void StartMonoTask(Action<CancellationToken> action, Action<bool> callbackAction)
+        public static void StopMonoTask()
         {
             cancellationTokenSource?.Cancel();
-            cancellationTokenSource = new CancellationTokenSource();
+            cancellationTokenSource = null;
+        }
+
+        public static async void StartMonoTask(Func<CancellationToken, double, TaskStatus> tickAction, TimeSpan tickTimeSpan, double alphaStep, Action<TaskStatus> finAction, Action<TaskStatus> callbackAction)
+        {
+            StopMonoTask();
 
             semaphoreObject.WaitOne();
-            System.Diagnostics.Trace.WriteLine("@@@ semaphoreObject.WaitOne");
 
-            await Task.Run(() => action(cancellationTokenSource.Token));
-            
-            System.Diagnostics.Trace.WriteLine("@@@ semaphoreObject.Release");
+            Task task = CreateAndRun((cancellationTokenSource = new CancellationTokenSource()).Token, tickAction, tickTimeSpan, alphaStep, finAction);
+            await task;
+
             semaphoreObject.Release();
 
-            callbackAction?.Invoke(cancellationTokenSource.Token.IsCancellationRequested);
+            callbackAction?.Invoke(task.Status);
+        }
+
+        private static async Task CreateAndRun(CancellationToken token, Func<CancellationToken, double, TaskStatus> tickAction, TimeSpan tickTimeSpan, double alphaStep, Action<TaskStatus> finAction)
+        {
+            TaskStatus tickStatus;
+            double alpha = 0;
+
+            do
+            {
+                tickStatus = tickAction(token, alpha);
+                alpha += alphaStep;
+
+                await Task.Delay(tickTimeSpan);
+            }
+            while (tickStatus == TaskStatus.Running);
+
+            finAction(tickStatus);
         }
     }
 }
