@@ -180,7 +180,6 @@ namespace StorylineEditor.ViewModel.Graphs
                 }
 
                 Application.Current?.Dispatcher?.Invoke(new Action(() => { SetScale(StorylineVM.ViewWidth / 2, StorylineVM.ViewHeight / 2, 1); }));
-
             }, null);
         }
 
