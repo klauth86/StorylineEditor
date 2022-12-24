@@ -36,6 +36,7 @@ namespace StorylineEditor.ViewModel.Interface
     {
         INode SelectionNode { get; }
         INode FindNode(string nodeId);
+        INode GenerateNode(string nodeId);
         void MoveTo(IPositioned positioned, Action<TaskStatus> callbackAction);
         void MoveTo(string positionedId, Action<TaskStatus> callbackAction);
         Dictionary<string, List<IPositioned>> GetNext(string nodeId);

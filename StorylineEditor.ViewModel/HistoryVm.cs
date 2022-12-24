@@ -441,6 +441,7 @@ namespace StorylineEditor.ViewModel
             if (positioned is INode node)
             {
                 ActiveNode = node;
+                
                 PlayerContext = node;
 
                 PlayNode();
@@ -519,7 +520,7 @@ namespace StorylineEditor.ViewModel
 
                     foreach (var key in NextPaths.Keys)
                     {
-                        INode node = ActiveGraph.FindNode(key);
+                        INode node = ActiveGraph.GenerateNode(key);
                         if (node != null)
                         {
                             choices.Add(node);
@@ -568,7 +569,20 @@ namespace StorylineEditor.ViewModel
         public ICommand PauseCommand => pauseCommand ?? (pauseCommand = new RelayCommand(() => { }, () => PlayerContext != null));
 
         protected ICommand stopCommand;
-        public ICommand StopCommand => stopCommand ?? (stopCommand = new RelayCommand(() => { }, () => PlayerContext != null));
+        public ICommand StopCommand => stopCommand ?? (stopCommand = new RelayCommand(() => { Stop(); }, () => PlayerContext != null));
+
+        private void Stop()
+        {
+            TaskFacade.StopMonoTask();
+
+            TargetId = null;
+            NextPaths.Clear();
+
+            PlayerContext = null;
+
+            ActiveNode = null;
+            ActiveGraph = null;
+        }
 
         public IGraph StartGraph { get; set; }
         public INode StartNode { get; set; }
@@ -586,7 +600,7 @@ namespace StorylineEditor.ViewModel
                 if (targetId != value)
                 {
                     targetId = value;
-                    MoveThroughPath();
+                    if (targetId != null) MoveThroughPath();
                 }
             }
         }

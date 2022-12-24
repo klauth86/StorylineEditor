@@ -1153,6 +1153,17 @@ namespace StorylineEditor.ViewModel.Graphs
             return NodesVMs.ContainsKey(nodeId) ? (NodesVMs[nodeId] as INode) : null;
         }
 
+        public INode GenerateNode(string nodeId)
+        {
+            Node_BaseM targetNodeModel = Model.nodes.FirstOrDefault((nodeModel) => nodeModel.id == nodeId);
+            if (targetNodeModel != null)
+            {
+                return _viewModelCreator(targetNodeModel, this) as INode;
+            }
+
+            return null;
+        }
+
         public void MoveTo(IPositioned positioned, Action<TaskStatus> callbackAction)
         {
             if (positioned != null)
