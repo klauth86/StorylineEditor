@@ -417,6 +417,8 @@ namespace StorylineEditor.ViewModel
                     playerContext = value;
                     Notify(nameof(PlayerContext));
 
+                    ActiveGraph?.SetPlayerContext(playerContext);
+
                     CommandManager.InvalidateRequerySuggested();
                 }
             }
@@ -433,7 +435,7 @@ namespace StorylineEditor.ViewModel
 
             PlayerContext = new PlayerContext_TransitionVM();
 
-            StartGraph.MoveTo(StartNode, (taskStatus) => { if (taskStatus == TaskStatus.RanToCompletion) { OnFinishMovement(StartNode); } });
+            ActiveGraph.MoveTo(StartNode, (taskStatus) => { if (taskStatus == TaskStatus.RanToCompletion) { OnFinishMovement(StartNode); } });
         }, () => PlayerContext == null));
 
         private void OnFinishMovement(IPositioned positioned)
@@ -468,26 +470,33 @@ namespace StorylineEditor.ViewModel
 
         private void PlayNode()
         {
-            const int stepCount = 256;
-            int stepDuration = Convert.ToInt32(Math.Round(Duration * 1000) / stepCount);
-
-            TaskFacade.StartMonoTask((token, alpha) =>
+            if (ActiveNode is Node_DialogVM dialogNodeViewModel || ActiveNode is Node_ReplicaVM replciaNodeViewModel)
             {
-                if (token.IsCancellationRequested) return TaskStatus.Canceled;
+                const int stepCount = 256;
+                int stepDuration = Convert.ToInt32(Math.Round(Duration * 1000) / stepCount);
 
-                if (Math.Abs(alpha - 1) < 0.01) return TaskStatus.RanToCompletion;
-
-                return TaskStatus.Running;
-            },
-            TimeSpan.FromMilliseconds(stepDuration),
-            1.0 / stepCount,
-            (taskStatus) =>
-            {
-                if (taskStatus == TaskStatus.RanToCompletion)
+                TaskFacade.StartMonoTask((token, alpha) =>
                 {
-                    GoNext();
-                }
-            }, null);
+                    if (token.IsCancellationRequested) return TaskStatus.Canceled;
+
+                    if (Math.Abs(alpha - 1) < 0.01) return TaskStatus.RanToCompletion;
+
+                    return TaskStatus.Running;
+                },
+                TimeSpan.FromMilliseconds(stepDuration),
+                1.0 / stepCount,
+                (taskStatus) =>
+                {
+                    if (taskStatus == TaskStatus.RanToCompletion)
+                    {
+                        GoNext();
+                    }
+                }, null);
+            }
+            else
+            {
+                GoNext();
+            }
         }
 
         private void GoNext()
@@ -550,7 +559,7 @@ namespace StorylineEditor.ViewModel
             }
             else
             {
-                // TODO Stop (no next nodes)
+                Stop();
             }
         }
 

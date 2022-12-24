@@ -22,7 +22,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -59,6 +58,8 @@ namespace StorylineEditor.ViewModel.Graphs
             previewLink = new PreviewLinkVM(new LinkM(), this);
 
             selectionBox = new SelectionBoxVM();
+
+            playerIndicator = new PlayerIndicatorVM();
 
             UserAction = null;
 
@@ -242,6 +243,7 @@ namespace StorylineEditor.ViewModel.Graphs
         protected Point prevPosition;
         protected LinkVM previewLink;
         protected SelectionBoxVM selectionBox;
+        protected PlayerIndicatorVM playerIndicator;
         protected UserActionM UserAction;
 
         protected ICommand moveCommand;
@@ -1227,6 +1229,22 @@ namespace StorylineEditor.ViewModel.Graphs
             return result;
         }
 
+        public void SetPlayerContext(object playerContext)
+        {
+            if (playerContext is INode node)
+            {
+                ShowPlayerIndicator(node);
+            }
+            else if (playerContext != null)
+            {
+
+            }
+            else
+            {
+                HidePlayerIndicator();
+            }
+        }
+
         protected virtual string CanLinkNodes(INode from, INode to) { return nameof(NotImplementedException); }
         protected virtual void PreLinkNodes(INode from, INode to) { }
 
@@ -1253,6 +1271,19 @@ namespace StorylineEditor.ViewModel.Graphs
             ItemsVMs.Add(selectionBox);
         }
         protected void HideSelectionBox() { ItemsVMs.Remove(selectionBox); }
+
+        protected void ShowPlayerIndicator(INode nodeViewModel)
+        {
+            const double overlayMultiplier = 1.25;
+            playerIndicator.Left = nodeViewModel.PositionX - nodeViewModel.Width * overlayMultiplier / 2;
+            playerIndicator.Top = nodeViewModel.PositionY - nodeViewModel.Height * overlayMultiplier / 2;
+            playerIndicator.Width = nodeViewModel.Width * overlayMultiplier;
+            playerIndicator.Height = nodeViewModel.Height * overlayMultiplier;
+            UpdateLinkLocalPosition(previewLink, ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
+
+            ItemsVMs.Add(playerIndicator);
+        }
+        protected void HidePlayerIndicator() { ItemsVMs.Remove(playerIndicator); }
 
         protected void ProcessSelectionBox()
         {
