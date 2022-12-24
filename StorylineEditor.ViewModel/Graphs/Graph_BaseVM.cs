@@ -118,7 +118,7 @@ namespace StorylineEditor.ViewModel.Graphs
             const int stepCount = 256;
             const int stepDuration = durationMsec / stepCount;
 
-            TaskFacade.StartMonoTask((token) =>
+            TaskFacade.StartMonoTask(async (token) =>
             {
                 double targetOffsetX;
                 double targetOffsetY;
@@ -128,11 +128,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
                 for (int i = 1; i < stepCount; i++)
                 {
-                    if (token.IsCancellationRequested)
-                    {
-                        MessageBox.Show("IsCancellationRequested");
-                        return;
-                    }
+                    if (token.IsCancellationRequested) return;
 
                     targetOffsetX = positioned.PositionX - StorylineVM.ViewWidth / 2 / Scale;
                     targetOffsetY = positioned.PositionY - StorylineVM.ViewHeight / 2 / Scale;
@@ -145,8 +141,7 @@ namespace StorylineEditor.ViewModel.Graphs
                     Application.Current?.Dispatcher?.Invoke(new Action(() => { TranslateView(stepX, stepY); }));
 
                     currentAlpha += deltaAlpha;
-
-                    Task.Delay(stepDuration).Wait();
+                    await Task.Delay(stepDuration);
                 }
 
                 targetOffsetX = positioned.PositionX - StorylineVM.ViewWidth / 2 / Scale;
@@ -155,6 +150,7 @@ namespace StorylineEditor.ViewModel.Graphs
                 double lastStepX = (OffsetX - targetOffsetX);
                 double lastStepY = (OffsetY - targetOffsetY);
                 Application.Current?.Dispatcher?.Invoke(new Action(() => { TranslateView(lastStepX, lastStepY); }));
+
             }, callbackAction);
         }
 
@@ -164,7 +160,7 @@ namespace StorylineEditor.ViewModel.Graphs
             const int stepCount = 256;
             const int stepDuration = durationMsec / stepCount;
 
-            TaskFacade.StartMonoTask((token) =>
+            TaskFacade.StartMonoTask(async (token) =>
             {
                 double deltaAlpha = 1.0 / stepCount;
                 double currentAlpha = deltaAlpha;
@@ -180,11 +176,11 @@ namespace StorylineEditor.ViewModel.Graphs
                     Application.Current?.Dispatcher?.Invoke(new Action(() => { SetScale(StorylineVM.ViewWidth / 2, StorylineVM.ViewHeight / 2, newScale); }));
 
                     currentAlpha += deltaAlpha;
-
-                    Task.Delay(stepDuration).Wait();
+                    await Task.Delay(stepDuration);
                 }
 
                 Application.Current?.Dispatcher?.Invoke(new Action(() => { SetScale(StorylineVM.ViewWidth / 2, StorylineVM.ViewHeight / 2, 1); }));
+
             }, null);
         }
 
@@ -1166,14 +1162,21 @@ namespace StorylineEditor.ViewModel.Graphs
             }
             else
             {
-                
+                callbackAction(false);
             }
         }
 
         public void MoveTo(string targetId, Action<bool> callbackAction)
         {
             Node_BaseM targetNode = Model.nodes.FirstOrDefault(node => node.id == targetId);
-            if (targetNode != null) MoveTo(new PositionVM(targetNode.positionX, targetNode.positionY, targetId), callbackAction);
+            if (targetNode != null)
+            {
+                MoveTo(new PositionVM(targetNode.positionX, targetNode.positionY, targetId), callbackAction);
+            }
+            else
+            {
+                callbackAction(false);
+            }
         }
 
         public Dictionary<string, List<IPositioned>> GetNext(string nodeId)

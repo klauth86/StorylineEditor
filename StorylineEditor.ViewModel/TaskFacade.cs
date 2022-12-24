@@ -16,7 +16,11 @@ namespace StorylineEditor.ViewModel
             cancellationTokenSource = new CancellationTokenSource();
 
             semaphoreObject.WaitOne();
+            System.Diagnostics.Trace.WriteLine("@@@ semaphoreObject.WaitOne");
+
             await Task.Run(() => action(cancellationTokenSource.Token));
+            
+            System.Diagnostics.Trace.WriteLine("@@@ semaphoreObject.Release");
             semaphoreObject.Release();
 
             callbackAction?.Invoke(cancellationTokenSource.Token.IsCancellationRequested);
