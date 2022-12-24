@@ -34,8 +34,8 @@ namespace StorylineEditor.ViewModel.Interface
     public interface IGraph
     {
         INode SelectionNode { get; }
-        void MoveTo(IPositioned positioned, Action<IPositioned> callbackAction);
-        void MoveTo(string positionedId, Action<IPositioned> callbackAction);
+        void MoveTo(IPositioned positioned, Action<bool> callbackAction);
+        void MoveTo(string positionedId, Action<bool> callbackAction);
         Dictionary<string, List<IPositioned>> GetNext(string nodeId);
     }
 }

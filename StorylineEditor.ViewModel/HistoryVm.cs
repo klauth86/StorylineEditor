@@ -426,7 +426,7 @@ namespace StorylineEditor.ViewModel
 
             PlayerContext = new PlayerContext_TransitionVM();
 
-            StartGraph.MoveTo(StartNode, OnFinishMovement);
+            StartGraph.MoveTo(StartNode, (wasCancelled) => { if (!wasCancelled) { OnFinishMovement(StartNode); } });
         }, () => PlayerContext == null));
 
         private void OnFinishMovement(IPositioned positioned)
@@ -436,7 +436,7 @@ namespace StorylineEditor.ViewModel
                 ActiveNode = node;
                 PlayerContext = node;
 
-                PlayNodeAndGoNext();
+                PlayNode();
             }
             else
             {
@@ -446,10 +446,22 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        private async void PlayNodeAndGoNext()
+        private void PlayNode()
         {
-            await Task.Delay(TimeSpan.FromSeconds(Duration));
+            const int stepCount = 256;
+            int stepDuration = Convert.ToInt32(Math.Round(Duration * 1000) / stepCount);
 
+            TaskFacade.StartMonoTask((token) =>
+            {
+                for (int i = 1; i < stepCount; i++)
+                {
+                    Task.Delay(stepDuration).Wait();
+                }
+            }, (wasCancelled) => { if (!wasCancelled) GoNext(); });
+        }
+
+        private void GoNext()
+        {
             NextPaths = ActiveGraph.GetNext(ActiveNode.Id);
 
             // TODO Filter nodes and paths that are not available in current context for full mode
@@ -474,11 +486,12 @@ namespace StorylineEditor.ViewModel
 
             if (NextPaths[TargetId].Count > 0)
             {
-                ActiveGraph.MoveTo(NextPaths[TargetId].First(), OnFinishMovement);
+                IPositioned next = NextPaths[TargetId].First();
+                ActiveGraph.MoveTo(next, (wasCancelled) => { if (!wasCancelled) OnFinishMovement(next); });
             }
             else
             {
-                ActiveGraph.MoveTo(TargetId, OnFinishMovement);
+                // TODO Stop (no next nodes)
             }
         }
 

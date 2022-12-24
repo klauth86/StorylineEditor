@@ -112,13 +112,13 @@ namespace StorylineEditor.ViewModel.Graphs
             selection = new HashSet<string>();
         }
 
-        void StartScrollingTask(IPositioned positioned, Action<IPositioned> callbackAction)
+        void StartScrollingTask(IPositioned positioned, Action<bool> callbackAction)
         {
             const int durationMsec = 256;
             const int stepCount = 256;
             const int stepDuration = durationMsec / stepCount;
 
-            TaskFacade.StartMonoTask(async (token) =>
+            TaskFacade.StartMonoTask((token) =>
             {
                 double targetOffsetX;
                 double targetOffsetY;
@@ -128,7 +128,11 @@ namespace StorylineEditor.ViewModel.Graphs
 
                 for (int i = 1; i < stepCount; i++)
                 {
-                    if (token.IsCancellationRequested) return;
+                    if (token.IsCancellationRequested)
+                    {
+                        MessageBox.Show("IsCancellationRequested");
+                        return;
+                    }
 
                     targetOffsetX = positioned.PositionX - StorylineVM.ViewWidth / 2 / Scale;
                     targetOffsetY = positioned.PositionY - StorylineVM.ViewHeight / 2 / Scale;
@@ -142,7 +146,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
                     currentAlpha += deltaAlpha;
 
-                    await Task.Delay(stepDuration);
+                    Task.Delay(stepDuration).Wait();
                 }
 
                 targetOffsetX = positioned.PositionX - StorylineVM.ViewWidth / 2 / Scale;
@@ -151,9 +155,7 @@ namespace StorylineEditor.ViewModel.Graphs
                 double lastStepX = (OffsetX - targetOffsetX);
                 double lastStepY = (OffsetY - targetOffsetY);
                 Application.Current?.Dispatcher?.Invoke(new Action(() => { TranslateView(lastStepX, lastStepY); }));
-
-                if (callbackAction != null) callbackAction.Invoke(positioned.Id != null && NodesVMs.ContainsKey(positioned.Id) ? (NodesVMs[positioned.Id] as INode) : positioned);
-            });
+            }, callbackAction);
         }
 
         void StartScalingTask()
@@ -162,7 +164,7 @@ namespace StorylineEditor.ViewModel.Graphs
             const int stepCount = 256;
             const int stepDuration = durationMsec / stepCount;
 
-            TaskFacade.StartMonoTask(async (token) =>
+            TaskFacade.StartMonoTask((token) =>
             {
                 double deltaAlpha = 1.0 / stepCount;
                 double currentAlpha = deltaAlpha;
@@ -179,11 +181,11 @@ namespace StorylineEditor.ViewModel.Graphs
 
                     currentAlpha += deltaAlpha;
 
-                    await Task.Delay(stepDuration);
+                    Task.Delay(stepDuration).Wait();
                 }
 
                 Application.Current?.Dispatcher?.Invoke(new Action(() => { SetScale(StorylineVM.ViewWidth / 2, StorylineVM.ViewHeight / 2, 1); }));
-            });
+            }, null);
         }
 
         protected ICommand selectNodeTypeCommand;
@@ -1156,9 +1158,19 @@ namespace StorylineEditor.ViewModel.Graphs
             }
         }
 
-        public void MoveTo(IPositioned positioned, Action<IPositioned> callbackAction) { if (positioned != null) { StartScrollingTask(positioned, callbackAction); } }
+        public void MoveTo(IPositioned positioned, Action<bool> callbackAction)
+        {
+            if (positioned != null)
+            {
+                StartScrollingTask(positioned, callbackAction);
+            }
+            else
+            {
+                
+            }
+        }
 
-        public void MoveTo(string targetId, Action<IPositioned> callbackAction)
+        public void MoveTo(string targetId, Action<bool> callbackAction)
         {
             Node_BaseM targetNode = Model.nodes.FirstOrDefault(node => node.id == targetId);
             if (targetNode != null) MoveTo(new PositionVM(targetNode.positionX, targetNode.positionY, targetId), callbackAction);
