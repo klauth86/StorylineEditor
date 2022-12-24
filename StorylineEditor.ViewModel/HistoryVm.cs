@@ -426,7 +426,7 @@ namespace StorylineEditor.ViewModel
 
             PlayerContext = new PlayerContext_TransitionVM();
 
-            StartGraph.MoveTo(StartNode, (wasCancelled) => { if (!wasCancelled) { OnFinishMovement(StartNode); } });
+            StartGraph.MoveTo(StartNode, (taskStatus) => { if (taskStatus == TaskStatus.RanToCompletion) { OnFinishMovement(StartNode); } });
         }, () => PlayerContext == null));
 
         private void OnFinishMovement(IPositioned positioned)
@@ -440,9 +440,21 @@ namespace StorylineEditor.ViewModel
             }
             else
             {
-                NextPaths[TargetId].Remove(positioned);
-
-                MoveThroughPath();
+                if (NextPaths[TargetId].Remove(positioned))
+                {
+                    if (NextPaths[TargetId].Count > 0)
+                    {
+                        MoveThroughPath();
+                    }
+                    else
+                    {
+                        INode targetNode = ActiveGraph.FindNode(TargetId);
+                        if (targetNode != null)
+                        {
+                            OnFinishMovement(targetNode);
+                        }
+                    }
+                }
             }
         }
 
@@ -451,13 +463,23 @@ namespace StorylineEditor.ViewModel
             const int stepCount = 256;
             int stepDuration = Convert.ToInt32(Math.Round(Duration * 1000) / stepCount);
 
-            //TaskFacade.StartMonoTask((token) =>
-            //{
-            //    for (int i = 1; i < stepCount; i++)
-            //    {
-            //        Task.Delay(stepDuration).Wait();
-            //    }
-            //}, (wasCancelled) => { if (!wasCancelled) GoNext(); });
+            TaskFacade.StartMonoTask((token, alpha) =>
+            {
+                if (token.IsCancellationRequested) return TaskStatus.Canceled;
+
+                if (Math.Abs(alpha - 1) < 0.01) return TaskStatus.RanToCompletion;
+
+                return TaskStatus.Running;
+            },
+            TimeSpan.FromMilliseconds(stepDuration),
+            1.0 / stepCount,
+            (taskStatus) =>
+            {
+                if (taskStatus == TaskStatus.RanToCompletion)
+                {
+                    GoNext();
+                }
+            }, null);
         }
 
         private void GoNext()
@@ -487,11 +509,7 @@ namespace StorylineEditor.ViewModel
             if (NextPaths[TargetId].Count > 0)
             {
                 IPositioned next = NextPaths[TargetId].First();
-                ActiveGraph.MoveTo(next, (wasCancelled) => { if (!wasCancelled) OnFinishMovement(next); });
-            }
-            else
-            {
-                // TODO Stop (no next nodes)
+                ActiveGraph.MoveTo(next, (taskStatus) => { if (taskStatus == TaskStatus.RanToCompletion) OnFinishMovement(next); });
             }
         }
 

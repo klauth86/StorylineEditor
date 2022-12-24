@@ -23,11 +23,23 @@ namespace StorylineEditor.ViewModel
             Monitor.Enter(locker);
             System.Diagnostics.Trace.WriteLine("Monitor.Enter(locker)", "@@@");
 
-            Task task = null;
+            TaskStatus taskStatus = TaskStatus.WaitingForActivation;
+            double alpha = 0;
+
             try
             {
-                task = CreateAndRun((cancellationTokenSource = new CancellationTokenSource()).Token, tickAction, tickTimeSpan, alphaStep, finAction);
-                await task;
+                cancellationTokenSource = new CancellationTokenSource();
+
+                do
+                {
+                    taskStatus = tickAction(cancellationTokenSource.Token, alpha);
+                    alpha += alphaStep;
+
+                    await Task.Delay(tickTimeSpan, cancellationTokenSource.Token);
+                }
+                while (taskStatus == TaskStatus.Running);
+
+                finAction(taskStatus);
             }
             catch (TaskCanceledException taskCanceledException) { }
             catch (Exception exception) { } // TODO
@@ -36,25 +48,8 @@ namespace StorylineEditor.ViewModel
                 System.Diagnostics.Trace.WriteLine("Monitor.Exit(locker)", "@@@");
                 Monitor.Exit(locker);
 
-                if (task != null) callbackAction?.Invoke(task.Status);
+                callbackAction?.Invoke(taskStatus);
             }
-        }
-
-        private static async Task CreateAndRun(CancellationToken token, Func<CancellationToken, double, TaskStatus> tickAction, TimeSpan tickTimeSpan, double alphaStep, Action<TaskStatus> finAction)
-        {
-            TaskStatus tickStatus;
-            double alpha = 0;
-
-            do
-            {
-                tickStatus = tickAction(token, alpha);
-                alpha += alphaStep;
-
-                await Task.Delay(tickTimeSpan, token);
-            }
-            while (tickStatus == TaskStatus.Running);
-
-            finAction(tickStatus);
         }
     }
 }

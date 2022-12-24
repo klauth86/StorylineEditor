@@ -112,7 +112,7 @@ namespace StorylineEditor.ViewModel.Graphs
             selection = new HashSet<string>();
         }
 
-        void StartScrollingTask(IPositioned positioned, Action<bool> callbackAction)
+        void StartScrollingTask(IPositioned positioned, Action<TaskStatus> callbackAction)
         {
             const int durationMsec = 256;
             const int stepCount = 256;
@@ -133,16 +133,16 @@ namespace StorylineEditor.ViewModel.Graphs
             },
             TimeSpan.FromMilliseconds(stepDuration),
             1.0 / stepCount,
-            (tickStatus) =>
+            (taskStatus) =>
             {
-                if (tickStatus == TaskStatus.RanToCompletion)
+                if (taskStatus == TaskStatus.RanToCompletion)
                 {
                     double stepX = OffsetX - (positioned.PositionX - StorylineVM.ViewWidth / 2 / Scale);
                     double stepY = OffsetY - (positioned.PositionY - StorylineVM.ViewHeight / 2 / Scale);
 
                     TranslateView(stepX, stepY);
                 }
-            }, null);
+            }, callbackAction);
         }
 
         void StartScalingTask()
@@ -165,9 +165,9 @@ namespace StorylineEditor.ViewModel.Graphs
             },
             TimeSpan.FromMilliseconds(stepDuration),
             1.0 / stepCount,
-            (tickStatus) =>
+            (taskStatus) =>
             {
-                if (tickStatus == TaskStatus.RanToCompletion)
+                if (taskStatus == TaskStatus.RanToCompletion)
                 {
                     SetScale(StorylineVM.ViewWidth / 2, StorylineVM.ViewHeight / 2, 1);
                 }
@@ -184,9 +184,10 @@ namespace StorylineEditor.ViewModel.Graphs
 
             if (RootNodeIds.Count > 0 && RootNodeIndex >= 0 && RootNodeIndex < RootNodeIds.Count)
             {
-                if (NodesVMs.ContainsKey(RootNodeIds[RootNodeIndex]))
+                Node_BaseM rootNodeModel = Model.nodes.FirstOrDefault(nodeModel => nodeModel.id == RootNodeIds[RootNodeIndex]);
+                if (rootNodeModel != null)
                 {
-                    StartScrollingTask(NodesVMs[RootNodeIds[RootNodeIndex]] as INode, null);
+                    StartScrollingTask(new PositionVM(rootNodeModel.positionX, rootNodeModel.positionY, rootNodeModel.id), null);
                 }
             }
         }, () => RootNodeIds.Count > 0));
@@ -198,9 +199,10 @@ namespace StorylineEditor.ViewModel.Graphs
 
             if (RootNodeIds.Count > 0 && RootNodeIndex >= 0 && RootNodeIndex < RootNodeIds.Count)
             {
-                if (NodesVMs.ContainsKey(RootNodeIds[RootNodeIndex]))
+                Node_BaseM rootNodeModel = Model.nodes.FirstOrDefault(nodeModel => nodeModel.id == RootNodeIds[RootNodeIndex]);
+                if (rootNodeModel != null)
                 {
-                    StartScrollingTask(NodesVMs[RootNodeIds[RootNodeIndex]] as INode, null);
+                    StartScrollingTask(new PositionVM(rootNodeModel.positionX, rootNodeModel.positionY, rootNodeModel.id), null);
                 }
             }
         }, () => RootNodeIds.Count > 0));
@@ -1144,7 +1146,12 @@ namespace StorylineEditor.ViewModel.Graphs
             }
         }
 
-        public void MoveTo(IPositioned positioned, Action<bool> callbackAction)
+        public INode FindNode(string nodeId)
+        {
+            return NodesVMs.ContainsKey(nodeId) ? (NodesVMs[nodeId] as INode) : null;
+        }
+
+        public void MoveTo(IPositioned positioned, Action<TaskStatus> callbackAction)
         {
             if (positioned != null)
             {
@@ -1152,11 +1159,11 @@ namespace StorylineEditor.ViewModel.Graphs
             }
             else
             {
-                callbackAction(false);
+                callbackAction(TaskStatus.WaitingForActivation);
             }
         }
 
-        public void MoveTo(string targetId, Action<bool> callbackAction)
+        public void MoveTo(string targetId, Action<TaskStatus> callbackAction)
         {
             Node_BaseM targetNode = Model.nodes.FirstOrDefault(node => node.id == targetId);
             if (targetNode != null)
@@ -1165,7 +1172,7 @@ namespace StorylineEditor.ViewModel.Graphs
             }
             else
             {
-                callbackAction(false);
+                callbackAction(TaskStatus.WaitingForActivation);
             }
         }
 
