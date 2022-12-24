@@ -40,6 +40,6 @@ namespace StorylineEditor.ViewModel.Interface
         void MoveTo(IPositioned positioned, Action<TaskStatus> callbackAction);
         void MoveTo(string positionedId, Action<TaskStatus> callbackAction);
         Dictionary<string, List<IPositioned>> GetNext(string nodeId);
-        void SetPlayerContext(object nodeViewModel);
+        void SetPlayerContext(object oldPlayerContext, object newPlayerContext);
     }
 }

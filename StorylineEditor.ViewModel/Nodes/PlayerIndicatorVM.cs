@@ -1,14 +1,19 @@
 ﻿using StorylineEditor.ViewModel.Common;
+using StorylineEditor.ViewModel.Interface;
+using System.Windows;
 
 namespace StorylineEditor.ViewModel.Nodes
 {
     public class PlayerIndicatorVM : Notifier
     {
-        public PlayerIndicatorVM() : base()
+        public PlayerIndicatorVM(double paddingMultiplier, double sizeAlpha) : base()
         {
             IsFilterPassed = true;
 
             zIndex = -20000;
+
+            _paddingMultiplier = paddingMultiplier;
+            _sizeAlpha = sizeAlpha;
         }
 
         public override string Id => null;
@@ -71,5 +76,42 @@ namespace StorylineEditor.ViewModel.Nodes
 
         protected int zIndex;
         public int ZIndex => zIndex;
+
+        protected readonly double _paddingMultiplier;
+
+        protected object _playerContext;
+        public object PlayerContext
+        {
+            get => _playerContext;
+            set
+            {
+                if (_playerContext != value)
+                {
+                    _playerContext = value;
+
+                    if (_playerContext is INode node)
+                    {
+                        _targetWidth = node.Width * _paddingMultiplier;
+                        _targetHeight = node.Height * _paddingMultiplier;
+                        CurrentSizeAlpha = _sizeAlpha;
+                    }
+                    else
+                    {
+                        _targetWidth = (double)Application.Current.FindResource("Double_Size_16x");
+                        _targetHeight = (double)Application.Current.FindResource("Double_Size_16x");
+                        CurrentSizeAlpha = _sizeAlpha;
+                    }
+                }
+            }
+        }
+
+        protected double _targetWidth;
+        public double TargetWidth => _targetWidth;
+
+        protected double _targetHeight;
+        public double TargetHeight => _targetHeight;
+
+        protected double _sizeAlpha;
+        public double CurrentSizeAlpha { get; set; }
     }
 }

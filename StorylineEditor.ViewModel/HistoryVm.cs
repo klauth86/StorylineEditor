@@ -414,10 +414,10 @@ namespace StorylineEditor.ViewModel
             {
                 if (value != playerContext)
                 {
+                    ActiveGraph?.SetPlayerContext(playerContext, value);
+
                     playerContext = value;
                     Notify(nameof(PlayerContext));
-
-                    ActiveGraph?.SetPlayerContext(playerContext);
 
                     CommandManager.InvalidateRequerySuggested();
                 }
@@ -585,7 +585,7 @@ namespace StorylineEditor.ViewModel
             TaskFacade.StopMonoTask();
 
             TargetId = null;
-            NextPaths.Clear();
+            NextPaths?.Clear();
 
             PlayerContext = null;
 
