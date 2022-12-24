@@ -22,6 +22,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -111,25 +112,13 @@ namespace StorylineEditor.ViewModel.Graphs
             selection = new HashSet<string>();
         }
 
-        protected bool cancelFlag;
-        protected Task activeTask;
-
-        async void StartScrollingTask(IPositioned positioned, Action<IPositioned> callbackAction)
+        void StartScrollingTask(IPositioned positioned, Action<IPositioned> callbackAction)
         {
-            const int waitDurationMsec = 8;
-
-            if (activeTask != null && !activeTask.IsCompleted)
-            {
-                cancelFlag = true;
-                while (!activeTask.IsCompleted) await Task.Delay(waitDurationMsec);
-            }
-
             const int durationMsec = 256;
             const int stepCount = 256;
             const int stepDuration = durationMsec / stepCount;
 
-            cancelFlag = false;
-            activeTask = Task.Run(async () =>
+            TaskFacade.StartMonoTask(async (token) =>
             {
                 double targetOffsetX;
                 double targetOffsetY;
@@ -139,9 +128,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
                 for (int i = 1; i < stepCount; i++)
                 {
-                    if (Application.Current == null) return;
-
-                    if (cancelFlag) return;
+                    if (token.IsCancellationRequested) return;
 
                     targetOffsetX = positioned.PositionX - StorylineVM.ViewWidth / 2 / Scale;
                     targetOffsetY = positioned.PositionY - StorylineVM.ViewHeight / 2 / Scale;
@@ -169,31 +156,20 @@ namespace StorylineEditor.ViewModel.Graphs
             });
         }
 
-        async void StartScalingTask()
+        void StartScalingTask()
         {
-            const int waitDurationMsec = 8;
-
-            if (activeTask != null && !activeTask.IsCompleted)
-            {
-                cancelFlag = true;
-                while (!activeTask.IsCompleted) await Task.Delay(waitDurationMsec);
-            }
-
             const int durationMsec = 256;
             const int stepCount = 256;
             const int stepDuration = durationMsec / stepCount;
 
-            cancelFlag = false;
-            activeTask = Task.Run(async () =>
+            TaskFacade.StartMonoTask(async (token) =>
             {
                 double deltaAlpha = 1.0 / stepCount;
                 double currentAlpha = deltaAlpha;
 
                 for (int i = 1; i < stepCount; i++)
                 {
-                    if (Application.Current == null) return;
-
-                    if (cancelFlag) return;
+                    if (token.IsCancellationRequested) return;
 
                     double newScale = Scale * (1 - currentAlpha) + currentAlpha;
 

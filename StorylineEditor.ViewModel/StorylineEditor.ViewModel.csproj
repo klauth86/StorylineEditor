@@ -88,6 +88,7 @@
     <Compile Include="Common\SimpleVM.cs" />
     <Compile Include="CollectionVM.cs" />
     <Compile Include="StorylineVM.cs" />
+    <Compile Include="TaskFacade.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />

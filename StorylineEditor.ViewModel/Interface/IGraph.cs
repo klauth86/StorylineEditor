@@ -25,7 +25,6 @@ namespace StorylineEditor.ViewModel.Interface
         double Left { get; set; }
         double Top { get; set; }
 
-        string Id { get; }
         string Name { get; set; }
         byte Gender { get; }
         bool IsSelected { get; }
