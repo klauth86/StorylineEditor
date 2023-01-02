@@ -2359,7 +2359,7 @@ StorylineEditor распространяется в надежде, что он�
                                             ButtonIncStyle="{StaticResource S_Button_Square_Auto}" ButtonIncContent="{StaticResource String_Icon_Plus}"
                                             ButtonDecStyle="{StaticResource S_Button_Square_Auto}" ButtonDecContent="{StaticResource String_Icon_Minus}"
                                             MinValue="1" MaxValue="60" Step="1" MinWidth="{StaticResource Double_Node_MinWidth}"></controls:NumericUpDown_Float>
-                            <TextBlock Style="{StaticResource S_TextBlock_Graph_Bold}" Text="{Binding StateTimeLeft, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                            <TextBlock Padding="{StaticResource Thickness_Padding_LeftRight}" VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Graph_Bold}" Text="{Binding TimeLeft, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
                         </StackPanel>
                     </Grid>
 

@@ -483,6 +483,8 @@ namespace StorylineEditor.ViewModel
 
                     ActiveGraph?.TickPlayer(alpha);
 
+                    TimeLeft = (1 - alpha) * Duration;
+
                     return TaskStatus.Running;
                 },
                 TimeSpan.FromMilliseconds(stepDuration),
@@ -492,6 +494,8 @@ namespace StorylineEditor.ViewModel
                     if (taskStatus == TaskStatus.RanToCompletion)
                     {
                         ActiveGraph?.TickPlayer(1);
+
+                        TimeLeft = 0;
 
                         GoNext();
                     }
