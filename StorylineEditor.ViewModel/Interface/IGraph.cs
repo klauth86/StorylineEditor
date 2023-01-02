@@ -34,6 +34,7 @@ namespace StorylineEditor.ViewModel.Interface
 
     public interface IGraph
     {
+        string Id { get; }
         INode SelectionNode { get; }
         INode FindNode(string nodeId);
         INode GenerateNode(string nodeId);

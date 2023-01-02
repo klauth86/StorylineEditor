@@ -898,7 +898,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
 
 
-        public override string Id => null;
+        public override string Id => Model?.id;
         public override IList GetContext(BaseM model) { if (model is LinkM) return Model.links; return Model.nodes; }
 
 
