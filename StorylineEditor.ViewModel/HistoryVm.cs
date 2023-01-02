@@ -414,7 +414,7 @@ namespace StorylineEditor.ViewModel
             {
                 if (value != playerContext)
                 {
-                    ActiveGraph?.SetPlayerContext(playerContext, value);
+                    ActiveContextService.ActiveGraph.SetPlayerContext(playerContext, value);
 
                     playerContext = value;
                     Notify(nameof(PlayerContext));
@@ -430,12 +430,11 @@ namespace StorylineEditor.ViewModel
             StartGraph = ActiveContextService.ActiveGraph;
             StartNode = StartGraph.SelectionNode;
 
-            ActiveGraph = StartGraph;
             ActiveNode = null;
 
             PlayerContext = new PlayerContext_TransitionVM();
 
-            ActiveGraph.MoveTo(StartNode, (taskStatus) => { if (taskStatus == TaskStatus.RanToCompletion) { OnFinishMovement(StartNode); } });
+            ActiveContextService.ActiveGraph.MoveTo(StartNode, (taskStatus) => { if (taskStatus == TaskStatus.RanToCompletion) { OnFinishMovement(StartNode); } });
         }, () => PlayerContext == null));
 
         private void OnFinishMovement(IPositioned positioned)
@@ -458,7 +457,7 @@ namespace StorylineEditor.ViewModel
                     }
                     else
                     {
-                        INode targetNode = ActiveGraph.FindNode(TargetId);
+                        INode targetNode = ActiveContextService.ActiveGraph.FindNode(TargetId);
                         if (targetNode != null)
                         {
                             OnFinishMovement(targetNode);
@@ -470,7 +469,7 @@ namespace StorylineEditor.ViewModel
 
         private void PlayNode()
         {
-            if (ActiveNode is Node_DialogVM dialogNodeViewModel || ActiveNode is Node_ReplicaVM replciaNodeViewModel)
+            if (ActiveNode is Node_DialogVM dialogNodeViewModel || ActiveNode is Node_ReplicaVM replicaNodeViewModel)
             {
                 const int stepCount = 256;
                 int stepDuration = Convert.ToInt32(Math.Round(Duration * 1000) / stepCount);
@@ -481,7 +480,7 @@ namespace StorylineEditor.ViewModel
 
                     if (Math.Abs(alpha - 1) < 0.01) return TaskStatus.RanToCompletion;
 
-                    ActiveGraph?.TickPlayer(alpha);
+                    ActiveContextService.ActiveGraph.TickPlayer(alpha);
 
                     TimeLeft = (1 - alpha) * Duration;
 
@@ -493,7 +492,7 @@ namespace StorylineEditor.ViewModel
                 {
                     if (taskStatus == TaskStatus.RanToCompletion)
                     {
-                        ActiveGraph?.TickPlayer(1);
+                        ActiveContextService.ActiveGraph.TickPlayer(1);
 
                         TimeLeft = 0;
 
@@ -509,67 +508,103 @@ namespace StorylineEditor.ViewModel
 
         private void GoNext()
         {
-            NextPaths = ActiveGraph.GetNext(ActiveNode.Id);
-
-            FilterByContext(NextPaths);
-
-            // TODO Filter nodes and paths that are not available in current context for full mode
-
-            if (NextPaths.Count == 1)
+            if (ActiveNode is Node_GateVM gateNode)
             {
-                TargetId = NextPaths.First().Key;
-            }
-            else if (NextPaths.Count > 0)
-            {
-                if (ActiveNode is Node_RandomVM randomNode)
+                if (gateNode.TargetDialog != null && gateNode.TargetExitNode != null)
                 {
-                    var targetIds = NextPaths.Keys.ToList();
-                    TargetId = targetIds[Random.Next(targetIds.Count)];
-                }
-                else if (ActiveNode is Node_GateVM gateNode)
-                {
-                    if (gateNode.TargetDialog != null && gateNode.TargetExitNode != null)
+                    if (ActiveContextService.ActiveStoryline.Selection is ICollection_Base collectionBase)
                     {
-                        // TODO Gates
-                    }
-                }
-                else if (NextPaths.All((pair) => pair.Value.Last().CharacterId == CharacterM.PLAYER_ID))
-                {
-                    HashSet<INode> choices = new HashSet<INode>();
-
-                    foreach (var key in NextPaths.Keys)
-                    {
-                        INode node = ActiveGraph.GenerateNode(key);
-                        if (node != null)
+                        if (collectionBase.AddToSelectionById(gateNode.TargetDialog.id, true))
                         {
-                            choices.Add(node);
+                            PlayerContext = null;
+
+                            ActiveNode = null;
+
+                            PlayerContext = new PlayerContext_TransitionVM();
+
+                            INode startNode = ActiveContextService.ActiveGraph.FindNode(gateNode.TargetExitNode.id) ?? ActiveContextService.ActiveGraph.GenerateNode(gateNode.TargetExitNode.id);
+
+                            if (startNode != null)
+                            {
+                                ActiveContextService.ActiveGraph.MoveTo(startNode, (taskStatus) => { if (taskStatus == TaskStatus.RanToCompletion) { OnFinishMovement(startNode); } });
+                            }
+                            else
+                            {
+                                Stop();
+                            }
+                        }
+                        else
+                        {
+                            Stop();
                         }
                     }
-
-                    PlayerContext = new PlayerContext_ChoiceVM(this, choices);
+                    else
+                    {
+                        Stop();
+                    }
                 }
                 else
                 {
-                    ////// TODO
-
-                    string description = "Дочерние вершины не подходят ни под одну из ситуаций:" + Environment.NewLine;
-                    description += Environment.NewLine;
-
-                    description += "- " + "После Случайной вершины (⇝) возможен любой состав дочерних вершин..." + Environment.NewLine;
-                    description += Environment.NewLine;
-
-                    description += "- " + "Если НЕ Случайная вершина (💬, ⇴) имеет одну актуальную (удовлетворяющую полу и своим предикатам) дочернюю вершину, то этой вершиной может быть любая вершина кроме вершины Транзит (⇴) с несколькими актуальными (удовлетворяющие полу и своим предикатам) дочерними вершинами..." + Environment.NewLine;
-                    description += Environment.NewLine;
-
-                    description += "- " + "Если НЕ Случайная вершина (💬, ⇴) имеет более одной актуальной (удовлетворяющей полу и своим предикатам) дочерней вершины, то эти вершины должны быть либо вершинами Основного персонажа (💬), либо Транзитом (⇴) на вершины Основного персонажа (💬) (ситуация ВЫБОР ИГРОКА)..." + Environment.NewLine;
-                    description += Environment.NewLine;
-
-                    PlayerContext = new PlayerContext_ErrorVM(this, description);
+                    Stop();
                 }
             }
             else
             {
-                Stop();
+                NextPaths = ActiveContextService.ActiveGraph.GetNext(ActiveNode.Id);
+
+                FilterByContext(NextPaths);
+
+                // TODO Filter nodes and paths that are not available in current context for full mode
+
+                if (NextPaths.Count == 1)
+                {
+                    TargetId = NextPaths.First().Key;
+                }
+                else if (NextPaths.Count > 0)
+                {
+                    if (ActiveNode is Node_RandomVM randomNode)
+                    {
+                        var targetIds = NextPaths.Keys.ToList();
+                        TargetId = targetIds[Random.Next(targetIds.Count)];
+                    }
+                    else if (NextPaths.All((pair) => pair.Value.Last().CharacterId == CharacterM.PLAYER_ID))
+                    {
+                        HashSet<INode> choices = new HashSet<INode>();
+
+                        foreach (var key in NextPaths.Keys)
+                        {
+                            INode node = ActiveContextService.ActiveGraph.GenerateNode(key);
+                            if (node != null)
+                            {
+                                choices.Add(node);
+                            }
+                        }
+
+                        PlayerContext = new PlayerContext_ChoiceVM(this, choices);
+                    }
+                    else
+                    {
+                        ////// TODO
+
+                        string description = "Дочерние вершины не подходят ни под одну из ситуаций:" + Environment.NewLine;
+                        description += Environment.NewLine;
+
+                        description += "- " + "После Случайной вершины (⇝) возможен любой состав дочерних вершин..." + Environment.NewLine;
+                        description += Environment.NewLine;
+
+                        description += "- " + "Если НЕ Случайная вершина (💬, ⇴) имеет одну актуальную (удовлетворяющую полу и своим предикатам) дочернюю вершину, то этой вершиной может быть любая вершина кроме вершины Транзит (⇴) с несколькими актуальными (удовлетворяющие полу и своим предикатам) дочерними вершинами..." + Environment.NewLine;
+                        description += Environment.NewLine;
+
+                        description += "- " + "Если НЕ Случайная вершина (💬, ⇴) имеет более одной актуальной (удовлетворяющей полу и своим предикатам) дочерней вершины, то эти вершины должны быть либо вершинами Основного персонажа (💬), либо Транзитом (⇴) на вершины Основного персонажа (💬) (ситуация ВЫБОР ИГРОКА)..." + Environment.NewLine;
+                        description += Environment.NewLine;
+
+                        PlayerContext = new PlayerContext_ErrorVM(this, description);
+                    }
+                }
+                else
+                {
+                    Stop();
+                }
             }
         }
 
@@ -581,7 +616,7 @@ namespace StorylineEditor.ViewModel
             {
                 foreach (var positioned in nextPaths[key])
                 {
-                    INode node = ActiveGraph?.FindNode(positioned.Id);
+                    INode node = ActiveContextService.ActiveGraph.FindNode(positioned.Id);
                     
                     if (node != null)
                     {
@@ -606,7 +641,7 @@ namespace StorylineEditor.ViewModel
             if (NextPaths[TargetId].Count > 0)
             {
                 IPositioned next = NextPaths[TargetId].First();
-                ActiveGraph.MoveTo(next, (taskStatus) => { if (taskStatus == TaskStatus.RanToCompletion) OnFinishMovement(next); });
+                ActiveContextService.ActiveGraph.MoveTo(next, (taskStatus) => { if (taskStatus == TaskStatus.RanToCompletion) OnFinishMovement(next); });
             }
         }
 
@@ -626,14 +661,12 @@ namespace StorylineEditor.ViewModel
             PlayerContext = null;
 
             ActiveNode = null;
-            ActiveGraph = null;
         }
 
         public void Dispose() { Stop(); }
 
         public IGraph StartGraph { get; set; }
         public INode StartNode { get; set; }
-        public IGraph ActiveGraph { get; set; }
         public INode ActiveNode { get; set; }
 
         Dictionary<string, List<IPositioned>> NextPaths { get; set; }

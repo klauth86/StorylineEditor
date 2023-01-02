@@ -12,6 +12,7 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model;
 using StorylineEditor.ViewModel.Common;
+using StorylineEditor.ViewModel.Interface;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ namespace StorylineEditor.ViewModel
         public IList Context { get; set; }
     }
 
-    public abstract class Collection_BaseVM<T, U> : SimpleVM<T> where T : class
+    public abstract class Collection_BaseVM<T, U> : SimpleVM<T>, ICollection_Base where T : class
     {
         public Collection_BaseVM(T model, ICallbackContext callbackContext, Func<Type, U, BaseM> modelCreator, Func<BaseM, ICallbackContext, Notifier> viewModelCreator,
             Func<Notifier, ICallbackContext, Notifier> editorCreator) : base(model, callbackContext)
@@ -148,7 +149,18 @@ namespace StorylineEditor.ViewModel
         }
         public abstract IList GetContext(BaseM model);
 
+        public bool AddToSelectionById(string id, bool resetSelection)
+        {
+            Notifier viewModelToSelect = ItemsVMs.FirstOrDefault(viewModel => viewModel.Id == id);
 
+            if (viewModelToSelect != null)
+            {
+                AddToSelection(viewModelToSelect, true);
+                return true;
+            }
+
+            return false;
+        }
 
         public abstract void AddToSelection(Notifier viewModel, bool resetSelection);
         public abstract void GetSelection(IList outSelection);

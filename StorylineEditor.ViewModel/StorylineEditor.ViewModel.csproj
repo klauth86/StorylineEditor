@@ -37,6 +37,7 @@
     <Compile Include="HistoryVm.cs" />
     <Compile Include="Interface\ICopyPaste.cs" />
     <Compile Include="Interface\IGraph.cs" />
+    <Compile Include="Interface\ICollection_Base.cs" />
     <Compile Include="Interface\IPositioned.cs" />
     <Compile Include="LocationVM.cs" />
     <Compile Include="GameEvents\GE_Relation_ChangeVM.cs" />
