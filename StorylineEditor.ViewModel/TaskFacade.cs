@@ -6,9 +6,9 @@ namespace StorylineEditor.ViewModel
 {
     public static class TaskFacade
     {
-        private static bool _isPaused = false;
-
         private static readonly object _locker = new object();
+
+        private static bool _isPaused = false;
 
         private static CancellationTokenSource _cancellationTokenSource;
 
@@ -17,7 +17,6 @@ namespace StorylineEditor.ViewModel
             _isPaused = false; // cancellation should be consiedered inside tickAction
 
             _cancellationTokenSource?.Cancel();
-            _cancellationTokenSource = null;
         }
 
         public static void PauseUnpauseMonoTask(bool isPaused) { _isPaused = isPaused; }
@@ -27,7 +26,6 @@ namespace StorylineEditor.ViewModel
             StopMonoTask();
 
             Monitor.Enter(_locker);
-            System.Diagnostics.Trace.WriteLine("Monitor.Enter(locker)", "@@@");
 
             TaskStatus taskStatus = TaskStatus.WaitingForActivation;
             double alpha = 0;
@@ -54,7 +52,6 @@ namespace StorylineEditor.ViewModel
             catch (Exception exception) { } // TODO
             finally
             {
-                System.Diagnostics.Trace.WriteLine("Monitor.Exit(locker)", "@@@");
                 Monitor.Exit(_locker);
 
                 callbackAction?.Invoke(taskStatus);
