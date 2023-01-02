@@ -2259,8 +2259,8 @@ StorylineEditor распространяется в надежде, что он�
     <DataTemplate DataType="{x:Type vmn:PlayerIndicatorVM}">
         <Ellipse Width="{Binding Width, UpdateSourceTrigger=PropertyChanged}"
                  Height="{Binding Height, UpdateSourceTrigger=PropertyChanged}"
-                 Fill="{StaticResource Color_PlayerIndicator}"
-                 StrokeThickness="{StaticResource Double_Margin_1x}" Stroke="{StaticResource Color_Separator}"></Ellipse>
+                 Fill="{StaticResource Color_PlayerIndicator}">
+        </Ellipse>
     </DataTemplate>
     
     <DataTemplate DataType="{x:Type config:UserActionVM}">

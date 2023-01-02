@@ -41,5 +41,6 @@ namespace StorylineEditor.ViewModel.Interface
         void MoveTo(string positionedId, Action<TaskStatus> callbackAction);
         Dictionary<string, List<IPositioned>> GetNext(string nodeId);
         void SetPlayerContext(object oldPlayerContext, object newPlayerContext);
+        void TickPlayer(double alpha);
     }
 }

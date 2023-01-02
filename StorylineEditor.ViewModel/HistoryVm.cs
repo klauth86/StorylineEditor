@@ -481,6 +481,8 @@ namespace StorylineEditor.ViewModel
 
                     if (Math.Abs(alpha - 1) < 0.01) return TaskStatus.RanToCompletion;
 
+                    ActiveGraph?.TickPlayer(alpha);
+
                     return TaskStatus.Running;
                 },
                 TimeSpan.FromMilliseconds(stepDuration),
@@ -489,6 +491,8 @@ namespace StorylineEditor.ViewModel
                 {
                     if (taskStatus == TaskStatus.RanToCompletion)
                     {
+                        ActiveGraph?.TickPlayer(1);
+
                         GoNext();
                     }
                 }, null);

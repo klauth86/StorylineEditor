@@ -113,5 +113,40 @@ namespace StorylineEditor.ViewModel.Nodes
 
         protected double _sizeAlpha;
         public double CurrentSizeAlpha { get; set; }
+
+        public double Scale { get; set; }
+
+        public void Tick(double alpha)
+        {
+            if (PlayerContext != null)
+            {
+                if (alpha < CurrentSizeAlpha)
+                {
+                    double betta = alpha / CurrentSizeAlpha;
+
+                    Width = (1 - betta) * Width + betta * TargetWidth;
+                    Height = (1 - betta) * Height + betta * TargetHeight;
+
+                    Left = (StorylineVM.ViewWidth - Width * Scale) / 2;
+                    Top = (StorylineVM.ViewHeight - Height * Scale) / 2;
+                }
+                else
+                {
+                    CurrentSizeAlpha = 0;
+
+                    double tmp = (alpha - _sizeAlpha);
+                    while (tmp > _sizeAlpha) tmp -= _sizeAlpha;
+                    tmp /= _sizeAlpha;
+
+                    double betta = tmp > 0.5 ? (2 - 2 * tmp) : (2 * tmp);
+
+                    Width = ((1 - betta) + 1.25 * betta) * TargetWidth;
+                    Height = ((1 - betta) + 1.25 * betta) * TargetHeight;
+
+                    Left = (StorylineVM.ViewWidth - Width * Scale) / 2;
+                    Top = (StorylineVM.ViewHeight - Height * Scale) / 2;
+                }
+            }
+        }
     }
 }

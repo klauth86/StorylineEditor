@@ -59,7 +59,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
             selectionBox = new SelectionBoxVM();
 
-            playerIndicator = new PlayerIndicatorVM(1.25, 0.2);
+            playerIndicator = new PlayerIndicatorVM(1.5, 0.2);
 
             UserAction = null;
 
@@ -128,31 +128,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
                 if (Math.Abs(stepX) < 0.01) return TaskStatus.RanToCompletion;
 
-                if (playerIndicator.PlayerContext != null)
-                {
-                    if (playerIndicator.CurrentSizeAlpha > 0)
-                    {
-                        if (alpha < playerIndicator.CurrentSizeAlpha)
-                        {
-                            double betta = alpha / playerIndicator.CurrentSizeAlpha;
-                            playerIndicator.Width = (1 - betta) * playerIndicator.Width + betta * playerIndicator.TargetWidth;
-                            playerIndicator.Height = (1 - betta) * playerIndicator.Height + betta * playerIndicator.TargetHeight;
-
-                            playerIndicator.Left = StorylineVM.ViewWidth / 2 - playerIndicator.Width * Scale;
-                            playerIndicator.Top = StorylineVM.ViewWidth / 2 - playerIndicator.Height * Scale;
-                        }
-                        else
-                        {
-                            playerIndicator.CurrentSizeAlpha = 0;
-
-                            playerIndicator.Width = playerIndicator.TargetWidth;
-                            playerIndicator.Height = playerIndicator.TargetHeight;
-
-                            playerIndicator.Left = StorylineVM.ViewWidth / 2 - playerIndicator.Width * Scale;
-                            playerIndicator.Top = StorylineVM.ViewWidth / 2 - playerIndicator.Height * Scale;
-                        }
-                    }
-                }
+                playerIndicator.Tick(alpha);
 
                 TranslateView(stepX * alpha, stepY * alpha);
 
@@ -167,14 +143,7 @@ namespace StorylineEditor.ViewModel.Graphs
                     double stepX = OffsetX - (positioned.PositionX - StorylineVM.ViewWidth / 2 / Scale);
                     double stepY = OffsetY - (positioned.PositionY - StorylineVM.ViewHeight / 2 / Scale);
 
-                    if (playerIndicator.PlayerContext != null)
-                    {
-                        playerIndicator.Width = playerIndicator.TargetWidth;
-                        playerIndicator.Height = playerIndicator.TargetHeight;
-
-                        playerIndicator.Left = StorylineVM.ViewWidth / 2 - playerIndicator.Width * Scale;
-                        playerIndicator.Top = StorylineVM.ViewWidth / 2 - playerIndicator.Height * Scale;
-                    }
+                    playerIndicator.Tick(1);
 
                     TranslateView(stepX, stepY);
                 }
@@ -1271,6 +1240,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
             if (playerContextNode == null && newNode != null)
             {
+                playerIndicator.Scale = scale;
                 ShowPlayerIndicator(newPlayerContext as INode);
             }
 
@@ -1281,6 +1251,8 @@ namespace StorylineEditor.ViewModel.Graphs
                 HidePlayerIndicator();
             }
         }
+
+        public void TickPlayer(double alpha) { playerIndicator.Tick(alpha); }
 
         protected virtual string CanLinkNodes(INode from, INode to) { return nameof(NotImplementedException); }
         protected virtual void PreLinkNodes(INode from, INode to) { }
