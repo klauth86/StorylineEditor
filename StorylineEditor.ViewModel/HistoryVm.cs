@@ -198,7 +198,7 @@ namespace StorylineEditor.ViewModel
         public override string Stats => null;
     }
 
-    public class HistoryVM : Notifier
+    public class HistoryVM : Notifier, IDisposable
     {
         public static readonly Random Random = new Random();
 
@@ -596,6 +596,8 @@ namespace StorylineEditor.ViewModel
             ActiveNode = null;
             ActiveGraph = null;
         }
+
+        public void Dispose() { Stop(); }
 
         public IGraph StartGraph { get; set; }
         public INode StartNode { get; set; }

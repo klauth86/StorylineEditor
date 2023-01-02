@@ -10,6 +10,8 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.ViewModel.Interface;
+using System;
 using System.Windows;
 
 namespace StorylineEditor.App
@@ -22,6 +24,16 @@ namespace StorylineEditor.App
         public DlgWindow()
         {
             InitializeComponent();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            if (DataContext is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
+
+            base.OnClosed(e);
         }
     }
 }
