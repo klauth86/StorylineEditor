@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace StorylineEditor.ViewModel
 {
-    public static class TaskFacade
+    public static class MonoTaskFacade
     {
         private static readonly object _locker = new object();
 
@@ -12,18 +12,18 @@ namespace StorylineEditor.ViewModel
 
         private static CancellationTokenSource _cancellationTokenSource;
 
-        public static void StopMonoTask()
+        public static void Stop()
         {
             _isPaused = false; // cancellation should be consiedered inside tickAction
 
             _cancellationTokenSource?.Cancel();
         }
 
-        public static void PauseUnpauseMonoTask(bool isPaused) { _isPaused = isPaused; }
+        public static void SetIsPaused(bool isPaused) { _isPaused = isPaused; }
 
-        public static async void StartMonoTask(Func<CancellationToken, double, TaskStatus> tickAction, TimeSpan tickTimeSpan, double alphaStep, Action<TaskStatus> finAction, Action<TaskStatus> callbackAction)
+        public static async void Start(Func<CancellationToken, double, TaskStatus> tickAction, TimeSpan tickTimeSpan, double alphaStep, Action<TaskStatus> finAction, Action<TaskStatus> callbackAction)
         {
-            StopMonoTask();
+            Stop();
 
             Monitor.Enter(_locker);
 

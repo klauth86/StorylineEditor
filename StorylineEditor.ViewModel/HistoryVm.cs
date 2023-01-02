@@ -475,7 +475,7 @@ namespace StorylineEditor.ViewModel
                 const int stepCount = 256;
                 int stepDuration = Convert.ToInt32(Math.Round(Duration * 1000) / stepCount);
 
-                TaskFacade.StartMonoTask((token, alpha) =>
+                MonoTaskFacade.Start((token, alpha) =>
                 {
                     if (token.IsCancellationRequested) return TaskStatus.Canceled;
 
@@ -586,7 +586,7 @@ namespace StorylineEditor.ViewModel
 
         private void Stop()
         {
-            TaskFacade.StopMonoTask();
+            MonoTaskFacade.Stop();
 
             TargetId = null;
             NextPaths?.Clear();
