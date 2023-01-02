@@ -1224,7 +1224,7 @@ namespace StorylineEditor.ViewModel.Graphs
                     else
                     {
                         List<IPositioned> nodesPath = childResultEntry.Value ?? new List<IPositioned>();
-                        nodesPath.Insert(0, new PositionVM(transitNode.positionX, transitNode.positionY, null, null));
+                        nodesPath.Insert(0, new PositionVM(transitNode.positionX, transitNode.positionY, transitNode.id, null));
                         result.Add(childResultEntry.Key, nodesPath);
                     }
                 }

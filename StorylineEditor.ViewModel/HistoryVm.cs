@@ -507,6 +507,8 @@ namespace StorylineEditor.ViewModel
         {
             NextPaths = ActiveGraph.GetNext(ActiveNode.Id);
 
+            FilterByContext(NextPaths);
+
             // TODO Filter nodes and paths that are not available in current context for full mode
 
             if (NextPaths.Count == 1)
@@ -564,6 +566,32 @@ namespace StorylineEditor.ViewModel
             else
             {
                 Stop();
+            }
+        }
+
+        private void FilterByContext(Dictionary<string, List<IPositioned>> nextPaths)
+        {
+            List<string> keysToRemove = new List<string>();
+
+            foreach (var key in nextPaths.Keys)
+            {
+                foreach (var positioned in nextPaths[key])
+                {
+                    INode node = ActiveGraph?.FindNode(positioned.Id);
+                    
+                    if (node != null)
+                    {
+                        if (node.Gender != Gender && node.Gender > 0) // Filtered by Gender
+                        {
+                            keysToRemove.Add(key);
+                        }
+                    }
+                }
+            }
+
+            foreach (var keyToRemove in keysToRemove)
+            {
+                nextPaths.Remove(keyToRemove);
             }
         }
 
