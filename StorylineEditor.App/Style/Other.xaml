@@ -2340,7 +2340,7 @@ StorylineEditor распространяется в надежде, что он�
 
             <TabItem Header="{StaticResource String_Tag_Player_Tab_Props}">
                 <DockPanel>
-                    <Grid DockPanel.Dock="Top" Grid.Row="2">
+                    <Grid DockPanel.Dock="Top" Grid.Row="2" Margin="{StaticResource Thickness_Margin_Underline_2x}">
                         <Grid.RowDefinitions>
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
@@ -2362,8 +2362,12 @@ StorylineEditor распространяется в надежде, что он�
                             <TextBlock Style="{StaticResource S_TextBlock_Graph_Bold}" Text="{Binding StateTimeLeft, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
                         </StackPanel>
                     </Grid>
-                    
-                    <ContentControl Grid.Row="1" Margin="{StaticResource Thickness_Margin_1x}" Content="{Binding PlayerContext, UpdateSourceTrigger=PropertyChanged}">
+
+                    <ContentControl Grid.Row="1"
+                                    MaxWidth="{StaticResource Double_Player_MaxWidth}"
+                                    MaxHeight="{StaticResource Double_Player_MaxHeight}"
+                                    Margin="{StaticResource Thickness_Margin_2x}"
+                                    Content="{Binding PlayerContext, UpdateSourceTrigger=PropertyChanged}">
                         <!--<ContentControl.Resources>
                             --><!--<DataTemplate DataType="{x:Type viewModelsNodes:DNode_TransitVm}">
                                 <Label HorizontalAlignment="Center" Style="{StaticResource S_Label_NodeType}"></Label>

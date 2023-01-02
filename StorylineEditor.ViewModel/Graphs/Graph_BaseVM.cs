@@ -1239,7 +1239,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
             if (playerContextNode == null && newPlayerContext is INode newNode && !playerIndicator.IsVisible)
             {
-                playerIndicator.Show(scale);
+                playerIndicator.IsVisible = true;
                 ShowPlayerIndicator(newNode);
             }
 
@@ -1248,7 +1248,7 @@ namespace StorylineEditor.ViewModel.Graphs
             if (playerIndicator.PlayerContext == null && playerIndicator.IsVisible)
             {
                 HidePlayerIndicator();
-                playerIndicator.Hide();
+                playerIndicator.IsVisible = false;
             }
         }
 

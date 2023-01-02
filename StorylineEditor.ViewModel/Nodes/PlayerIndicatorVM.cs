@@ -18,7 +18,7 @@ namespace StorylineEditor.ViewModel.Nodes
 
             _pulseAlpha = pulseAlpha;
 
-            Hide();
+            IsVisible = false;
         }
 
         public override string Id => null;
@@ -110,24 +110,18 @@ namespace StorylineEditor.ViewModel.Nodes
             }
         }
 
-
         protected double _targetWidth;
         public double TargetWidth => _targetWidth;
 
         protected double _targetHeight;
         public double TargetHeight => _targetHeight;
 
-
         protected double _sizeAlpha;
-        public double CurrentSizeAlpha { get; set; }
 
         protected double _pulseAlpha;
 
-        protected double _scale { get; set; }
-
-        public bool IsVisible => _scale > 0;
-        public void Show(double scale) => _scale = scale;
-        public void Hide() => _scale = -1;
+        public double CurrentSizeAlpha { get; set; }
+        public bool IsVisible { get; set; }
 
         public void Tick(double alpha)
         {
@@ -155,8 +149,8 @@ namespace StorylineEditor.ViewModel.Nodes
                 Width = (1 - betta) * Width + betta * targetWidth;
                 Height = (1 - betta) * Height + betta * targetHeight;
 
-                Left = (StorylineVM.ViewWidth - Width * _scale) / 2;
-                Top = (StorylineVM.ViewHeight - Height * _scale) / 2;
+                Left = (StorylineVM.ViewWidth - Width) / 2;
+                Top = (StorylineVM.ViewHeight - Height) / 2;
             }
         }
     }
