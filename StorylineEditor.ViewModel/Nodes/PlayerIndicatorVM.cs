@@ -6,76 +6,81 @@ namespace StorylineEditor.ViewModel.Nodes
 {
     public class PlayerIndicatorVM : Notifier
     {
-        public PlayerIndicatorVM(double paddingMultiplier, double sizeAlpha) : base()
+        public PlayerIndicatorVM(double paddingMultiplier, double sizeAlpha, double pulseAlpha) : base()
         {
             IsFilterPassed = true;
 
-            zIndex = -20000;
+            _zIndex = -20000;
 
             _paddingMultiplier = paddingMultiplier;
+            
             _sizeAlpha = sizeAlpha;
+
+            _pulseAlpha = pulseAlpha;
+
+            Hide();
         }
 
         public override string Id => null;
 
-        protected double width;
+        protected double _width;
         public double Width
         {
-            get => width;
+            get => _width;
             set
             {
-                if (width != value)
+                if (_width != value)
                 {
-                    width = value;
+                    _width = value;
                     Notify(nameof(Width));
                 }
             }
         }
 
-        protected double height;
+        protected double _height;
         public double Height
         {
-            get => height;
+            get => _height;
             set
             {
-                if (height != value)
+                if (_height != value)
                 {
-                    height = value;
+                    _height = value;
                     Notify(nameof(Height));
                 }
             }
         }
 
-        protected double left;
+        protected double _left;
         public double Left
         {
-            get => left;
+            get => _left;
             set
             {
-                if (left != value)
+                if (_left != value)
                 {
-                    left = value;
+                    _left = value;
                     Notify(nameof(Left));
                 }
             }
         }
 
-        protected double top;
+        protected double _top;
         public double Top
         {
-            get => top;
+            get => _top;
             set
             {
-                if (top != value)
+                if (_top != value)
                 {
-                    top = value;
+                    _top = value;
                     Notify(nameof(Top));
                 }
             }
         }
 
-        protected int zIndex;
-        public int ZIndex => zIndex;
+        protected int _zIndex;
+        public int ZIndex => _zIndex;
 
         protected readonly double _paddingMultiplier;
 
@@ -105,47 +110,53 @@ namespace StorylineEditor.ViewModel.Nodes
             }
         }
 
+
         protected double _targetWidth;
         public double TargetWidth => _targetWidth;
 
         protected double _targetHeight;
         public double TargetHeight => _targetHeight;
 
+
         protected double _sizeAlpha;
         public double CurrentSizeAlpha { get; set; }
 
-        public double Scale { get; set; }
+        protected double _pulseAlpha;
+
+        protected double _scale { get; set; }
+
+        public bool IsVisible => _scale > 0;
+        public void Show(double scale) => _scale = scale;
+        public void Hide() => _scale = -1;
 
         public void Tick(double alpha)
         {
             if (PlayerContext != null)
             {
+                double tmp = (alpha - _sizeAlpha);
+                while (tmp > _sizeAlpha) tmp -= _sizeAlpha;
+                tmp /= _sizeAlpha;
+
+                double betta = tmp > 0.5 ? (2 - 2 * tmp) : (2 * tmp);
+
+                double targetWidth = ((1 - betta) + 1.25 * betta) * TargetWidth;
+                double targetHeight = ((1 - betta) + 1.25 * betta) * TargetHeight;
+
                 if (alpha < CurrentSizeAlpha)
                 {
-                    double betta = alpha / CurrentSizeAlpha;
-
-                    Width = (1 - betta) * Width + betta * TargetWidth;
-                    Height = (1 - betta) * Height + betta * TargetHeight;
-
-                    Left = (StorylineVM.ViewWidth - Width * Scale) / 2;
-                    Top = (StorylineVM.ViewHeight - Height * Scale) / 2;
+                    betta = alpha / CurrentSizeAlpha;
                 }
                 else
                 {
                     CurrentSizeAlpha = 0;
-
-                    double tmp = (alpha - _sizeAlpha);
-                    while (tmp > _sizeAlpha) tmp -= _sizeAlpha;
-                    tmp /= _sizeAlpha;
-
-                    double betta = tmp > 0.5 ? (2 - 2 * tmp) : (2 * tmp);
-
-                    Width = ((1 - betta) + 1.25 * betta) * TargetWidth;
-                    Height = ((1 - betta) + 1.25 * betta) * TargetHeight;
-
-                    Left = (StorylineVM.ViewWidth - Width * Scale) / 2;
-                    Top = (StorylineVM.ViewHeight - Height * Scale) / 2;
+                    betta = 1;
                 }
+
+                Width = (1 - betta) * Width + betta * targetWidth;
+                Height = (1 - betta) * Height + betta * targetHeight;
+
+                Left = (StorylineVM.ViewWidth - Width * _scale) / 2;
+                Top = (StorylineVM.ViewHeight - Height * _scale) / 2;
             }
         }
     }

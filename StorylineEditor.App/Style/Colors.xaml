@@ -63,8 +63,8 @@ StorylineEditor распространяется в надежде, что он�
 
     <RadialGradientBrush x:Key="Color_PlayerIndicator" GradientOrigin="0.5, 0.5" Center="0.5, 0.5" RadiusX="0.5" RadiusY="0.5">
         <GradientStop Color="Goldenrod" Offset="0"></GradientStop>
-        <GradientStop Color="#FFDAA520" Offset="0.75"></GradientStop>
-        <GradientStop Color="#00DAA520" Offset="1"></GradientStop>
+        <GradientStop Color="#FFDAA520" Offset="0.6"></GradientStop>
+        <GradientStop Color="#00DAA520" Offset="0.9"></GradientStop>
     </RadialGradientBrush>
 
 </ResourceDictionary>

@@ -59,7 +59,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
             selectionBox = new SelectionBoxVM();
 
-            playerIndicator = new PlayerIndicatorVM(1.5, 0.2);
+            playerIndicator = new PlayerIndicatorVM(2, 0.1, 0.2);
 
             UserAction = null;
 
@@ -1236,19 +1236,19 @@ namespace StorylineEditor.ViewModel.Graphs
         public void SetPlayerContext(object oldPlayerContext, object newPlayerContext)
         {
             INode playerContextNode = playerIndicator.PlayerContext as INode;
-            INode newNode = newPlayerContext as INode;
 
-            if (playerContextNode == null && newNode != null)
+            if (playerContextNode == null && newPlayerContext is INode newNode && !playerIndicator.IsVisible)
             {
-                playerIndicator.Scale = scale;
-                ShowPlayerIndicator(newPlayerContext as INode);
+                playerIndicator.Show(scale);
+                ShowPlayerIndicator(newNode);
             }
 
             playerIndicator.PlayerContext = newPlayerContext;
 
-            if (playerIndicator.PlayerContext == null)
+            if (playerIndicator.PlayerContext == null && playerIndicator.IsVisible)
             {
                 HidePlayerIndicator();
+                playerIndicator.Hide();
             }
         }
 
