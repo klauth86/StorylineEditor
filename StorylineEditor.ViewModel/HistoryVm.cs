@@ -788,7 +788,7 @@ namespace StorylineEditor.ViewModel
 
             if (ActiveContextService.ActiveGraph.Id != StartGraph.Id)
             {
-                ICollection_Base collectionBase = (ICollection_Base)ActiveContextService.ActiveStoryline.Selection;
+                ICollection_Base collectionBase = (ICollection_Base)ActiveContextService.ActiveTab;
 
                 bool hasSwitched = SwitchToGraph(StartGraph.Id);
                 INode startNode = ActiveContextService.ActiveGraph.FindNode(StartNode.Id) ?? ActiveContextService.ActiveGraph.GenerateNode(StartNode.Id);
@@ -847,7 +847,7 @@ namespace StorylineEditor.ViewModel
 
         protected bool SwitchToGraph(string graphId)
         {
-            ICollection_Base collectionBase = (ICollection_Base)ActiveContextService.ActiveStoryline.Selection;
+            ICollection_Base collectionBase = (ICollection_Base)ActiveContextService.ActiveTab;
             return collectionBase.AddToSelectionById(graphId, true);
         }
 

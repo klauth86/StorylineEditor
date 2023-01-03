@@ -11,17 +11,40 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Model;
+using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Interface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel
 {
     public static class ActiveContextService
     {
         public static StorylineVM ActiveStoryline { get; set; }
+
+        public static event EventHandler ActiveTabChanged = delegate { };
+
+        private static IWithModel _activeTab;
+        public static IWithModel ActiveTab
+        {
+            get => _activeTab;
+            set
+            {
+                if (value != _activeTab)
+                {
+                    _activeTab = value;
+                    ActiveTabChanged(null, EventArgs.Empty);
+                    
+                    CommandManager.InvalidateRequerySuggested();
+                }
+            }
+        }
+        
         public static ICopyPaste ActiveCopyPaste { get; set; }
         public static IGraph ActiveGraph { get; set; }
+        
         public static IEnumerable<BaseM> GetEnumerator(params List<BaseM>[] collectionSet)
         {
             for (int i = 0; i < collectionSet.Length; i++)

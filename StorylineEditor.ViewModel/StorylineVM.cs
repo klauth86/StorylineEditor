@@ -42,52 +42,47 @@ namespace StorylineEditor.ViewModel
         private ICommand locationsTabCommand;
         public ICommand LocationsTabCommand => locationsTabCommand ?? (locationsTabCommand = new RelayCommand(() =>
         {
-            Selection = new CollectionVM(Model.locations, this,
+            ActiveContextService.ActiveTab = new CollectionVM(Model.locations, this,
                 (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new LocationM() { name = "Новая локация" }; },
                 (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM, callbackContext); else return new LocationVM((LocationM)model, callbackContext); },
                 (Notifier viewModel, ICallbackContext callbackContext) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM, callbackContext); else return new LocationEditorVM((LocationVM)viewModel, callbackContext); });
-            SelectionModel = Model.locations;
-        }, () => SelectionModel != Model.locations));
+        }, () => ActiveContextService.ActiveTab?.GetModel<object>() != Model.locations));
 
         private ICommand charactersTabCommand;
         public ICommand CharactersTabCommand => charactersTabCommand ?? (charactersTabCommand = new RelayCommand(() =>
         {
-            Selection = new CollectionVM(Model.characters, this,
+            ActiveContextService.ActiveTab = new CollectionVM(Model.characters, this,
                 (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new CharacterM() { name = "Новый персонаж" }; },
                 (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM, callbackContext); else return new CharacterVM((CharacterM)model, callbackContext); },
                 (Notifier viewModel, ICallbackContext callbackContext) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM, callbackContext); else return new CharacterEditorVM((CharacterVM)viewModel, callbackContext); });
-            SelectionModel = Model.characters;
-        }, () => SelectionModel != Model.characters));
+        }, () => ActiveContextService.ActiveTab?.GetModel<object>() != Model.characters));
 
         private ICommand itemsTabCommand;
         public ICommand ItemsTabCommand => itemsTabCommand ?? (itemsTabCommand = new RelayCommand(() =>
         {
-            Selection = new CollectionVM(Model.items, this,
+            ActiveContextService.ActiveTab = new CollectionVM(Model.items, this,
             (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new ItemM() { name = "Новый предмет" }; },
             (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM, callbackContext); else return new ItemVM((ItemM)model, callbackContext); },
             (Notifier viewModel, ICallbackContext callbackContext) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM, callbackContext); else return new ItemEditorVM((ItemVM)viewModel, callbackContext); });
-            SelectionModel = Model.items;
-        }, () => SelectionModel != Model.items));
+        }, () => ActiveContextService.ActiveTab?.GetModel<object>() != Model.items));
 
         private ICommand actorsTabCommand;
         public ICommand ActorsTabCommand => actorsTabCommand ?? (actorsTabCommand = new RelayCommand(() =>
         {
-            Selection = new CollectionVM(Model.actors, this,
+            ActiveContextService.ActiveTab = new CollectionVM(Model.actors, this,
             (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new ActorM() { name = "Новый актор" }; },
             (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM, callbackContext); else return new ActorVM((ActorM)model, callbackContext); },
             (Notifier viewModel, ICallbackContext callbackContext) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM, callbackContext); else return new ActorEditorVM((ActorVM)viewModel, callbackContext); });
-            SelectionModel = Model.actors;
-        }, () => SelectionModel != Model.actors));
+        }, () => ActiveContextService.ActiveTab?.GetModel<object>() != Model.actors));
 
         private ICommand journalTabCommand;
         public ICommand JournalTabCommand => journalTabCommand ?? (journalTabCommand = new RelayCommand(() =>
         {
-            Selection = new CollectionVM(Model.journal, this,
+            ActiveContextService.ActiveTab = new CollectionVM(Model.journal, this,
             (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new QuestM() { name = "Новый квест" }; },
             (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM, callbackContext); else return new QuestVM((QuestM)model, callbackContext); },
             (Notifier viewModel, ICallbackContext callbackContext) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM, callbackContext); else return CreateQuestEditorVM((QuestVM)viewModel, callbackContext); });
-            SelectionModel = Model.journal;
-        }, () => SelectionModel != Model.journal));
+        }, () => ActiveContextService.ActiveTab?.GetModel<object>() != Model.journal));
 
         private Notifier CreateQuestEditorVM(QuestVM inViewModel, ICallbackContext outerCallbackContext)
         {
@@ -122,12 +117,11 @@ namespace StorylineEditor.ViewModel
         private ICommand dialogsTabCommand;
         public ICommand DialogsTabCommand => dialogsTabCommand ?? (dialogsTabCommand = new RelayCommand(() =>
         {
-            Selection = new CollectionVM(Model.dialogs, this,
+            ActiveContextService.ActiveTab = new CollectionVM(Model.dialogs, this,
                 (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new DialogM() { name = "Новый диалог" }; },
                 (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM, callbackContext); else return new DialogVM((DialogM)model, callbackContext); },
                 (Notifier viewModel, ICallbackContext callbackContext) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM, callbackContext); else return CreateDialogEditorVM((DialogVM)viewModel, callbackContext); });
-            SelectionModel = Model.dialogs;
-        }, () => SelectionModel != Model.dialogs));
+        }, () => ActiveContextService.ActiveTab?.GetModel<object>() != Model.dialogs));
 
         private Notifier CreateDialogEditorVM(DialogVM inViewModel, ICallbackContext outerCallbackContext)
         {
@@ -174,12 +168,11 @@ namespace StorylineEditor.ViewModel
         private ICommand replicasTabCommand;
         public ICommand ReplicasTabCommand => replicasTabCommand ?? (replicasTabCommand = new RelayCommand(() =>
         {
-            Selection = new CollectionVM(Model.replicas, this,
+            ActiveContextService.ActiveTab = new CollectionVM(Model.replicas, this,
                 (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new ReplicaM() { name = "Новая реплика" }; },
                 (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM, callbackContext); else return new ReplicaVM((ReplicaM)model, callbackContext); },
                 (Notifier viewModel, ICallbackContext callbackContext) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM, callbackContext); else return CreateReplicaEditorVM((ReplicaVM)viewModel, callbackContext); });
-            SelectionModel = Model.replicas;
-        }, () => SelectionModel != Model.replicas));
+        }, () => ActiveContextService.ActiveTab?.GetModel<object>() != Model.replicas));
 
         private Notifier CreateReplicaEditorVM(ReplicaVM inViewModel, ICallbackContext outerCallbackContext)
         {
@@ -214,36 +207,6 @@ namespace StorylineEditor.ViewModel
             );
         }
 
-        public override string Id => Model.id;
-
-        private object selectionModel;
-        public object SelectionModel
-        {
-            get => selectionModel;
-            set
-            {
-                if (value != selectionModel)
-                {
-                    selectionModel = value;
-                    CommandManager.InvalidateRequerySuggested();
-                }
-            }
-        }
-
-        private object selection;
-        public object Selection
-        {
-            get => selection;
-            set
-            {
-                if (value != selection)
-                {
-                    selection = value;
-                    Notify(nameof(Selection));
-                }
-            }
-        }
-
         private ICommand abstractCutCommand;
         public ICommand AbstractCutCommand => abstractCutCommand ?? (abstractCutCommand = new RelayCommand(() =>
         {
@@ -267,10 +230,10 @@ namespace StorylineEditor.ViewModel
 
         public string GlobalFilter
         {
-            get => Notifier.Filter;
+            get => Filter;
             set
             {
-                Notifier.Filter = value;
+                Filter = value;
                 Notify(nameof(GlobalFilter));
             }
         }
@@ -287,8 +250,8 @@ namespace StorylineEditor.ViewModel
             }
         }
 
+        public override string Id => Model.id;
         public override string Title => null;
-
         public override string Stats => null;
     }
 }
