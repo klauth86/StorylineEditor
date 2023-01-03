@@ -222,16 +222,6 @@ namespace StorylineEditor.ViewModel
         private ICommand abstractDeleteCommand;
         public ICommand AbstractDeleteCommand => abstractDeleteCommand ?? (abstractDeleteCommand = new RelayCommand(() => { ActiveContextService.ActiveCopyPaste?.Delete(); }));
 
-        public string GlobalFilter
-        {
-            get => Filter;
-            set
-            {
-                Filter = value;
-                Notify(nameof(GlobalFilter));
-            }
-        }
-
         public void Callback(object viewModelObj, string propName)
         {
             if (propName == nameof(ICallbackContext))

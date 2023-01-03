@@ -406,13 +406,13 @@ namespace StorylineEditor.ViewModel.Graphs
 
             OnPostFilterChangedHandler(Filter);
 
-            PostFilterChangedEvent += OnPostFilterChangedHandler;
+            OnSecondFilterChangedPass += OnPostFilterChangedHandler;
         }, (args) => args != null));
 
         protected ICommand unInitCommand;
         public ICommand UnInitCommand => unInitCommand ?? (unInitCommand = new RelayCommand<RoutedEventArgs>((args) =>
         {
-            PostFilterChangedEvent -= OnPostFilterChangedHandler;
+            OnSecondFilterChangedPass -= OnPostFilterChangedHandler;
         }));
 
         protected ICommand scaleCommand;

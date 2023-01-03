@@ -20,9 +20,11 @@ namespace StorylineEditor.ViewModel.Common
         public event PropertyChangedEventHandler PropertyChanged;
         protected void Notify(string propName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
 
-        public static event Action<string> FilterChangedEvent = delegate { };
+        public static event EventHandler FilterChanged = delegate { };
 
-        public static event Action<string> PostFilterChangedEvent = delegate { };
+        public static event Action<string> OnFirstFilterChangedPass = delegate { };
+
+        public static event Action<string> OnSecondFilterChangedPass = delegate { };
 
         protected static string filter;
         public static string Filter
@@ -33,8 +35,10 @@ namespace StorylineEditor.ViewModel.Common
                 if (value != filter)
                 {
                     filter = value;
-                    FilterChangedEvent?.Invoke(filter);
-                    PostFilterChangedEvent?.Invoke(filter);
+                    FilterChanged(null, EventArgs.Empty);
+
+                    OnFirstFilterChangedPass.Invoke(filter);
+                    OnSecondFilterChangedPass.Invoke(filter);
                 }
             }
         }

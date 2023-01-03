@@ -61,7 +61,7 @@ namespace StorylineEditor.ViewModel.Common
         {
             OnFilterChangedHandler(Filter);
 
-            FilterChangedEvent += OnFilterChangedHandler;
+            OnFirstFilterChangedPass += OnFilterChangedHandler;
             ModelChangedEvent += OnModelChangedHandler;
         }
 
@@ -72,7 +72,7 @@ namespace StorylineEditor.ViewModel.Common
         protected virtual void UnregisterCommandInternal()
         {
             ModelChangedEvent -= OnModelChangedHandler;
-            FilterChangedEvent -= OnFilterChangedHandler;
+            OnFirstFilterChangedPass -= OnFilterChangedHandler;
         }
 
 

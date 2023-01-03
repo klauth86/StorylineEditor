@@ -15,6 +15,7 @@ StorylineEditor распространяется в надежде, что он�
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vmc="clr-namespace:StorylineEditor.ViewModel.Common;assembly=StorylineEditor.ViewModel"
         mc:Ignorable="d" Title="MainWindow" WindowState="Maximized" Content="{Binding}">
     <Window.ContentTemplate>
         <DataTemplate>
@@ -36,17 +37,17 @@ StorylineEditor распространяется в надежде, что он�
                         <Rectangle Grid.Column="3" Style="{StaticResource S_Rectangle_MainMenu}"></Rectangle>
                         <ContentControl VerticalAlignment="Bottom" Grid.Column="4" Content="{Binding UpdateSourceTrigger=PropertyChanged}" ContentTemplate="{StaticResource DT_StorylineVM_Tabs}"></ContentControl>
                         <Rectangle Grid.Column="5" Style="{StaticResource S_Rectangle_MainMenu}"></Rectangle>
-                        <TextBox VerticalAlignment="Bottom" Grid.Column="6" Style="{StaticResource S_TextBox_Filter}" Text="{Binding GlobalFilter, UpdateSourceTrigger=PropertyChanged}" MaxLength="128"></TextBox>
+                        <TextBox VerticalAlignment="Bottom" Grid.Column="6" Style="{StaticResource S_TextBox_Filter}" Text="{Binding Path=(vmc:Notifier.Filter), UpdateSourceTrigger=PropertyChanged}" MaxLength="128"></TextBox>
                         <TextBox VerticalAlignment="Bottom" Grid.Column="6" x:Name="tb_FilterPlaceholder" Style="{StaticResource S_TextBox_Filter_ToolTip}" Text="{StaticResource String_Tag_GlobalFilter_Tooltip}" Visibility="Collapsed"></TextBox>
                     </Grid>
                 </Border>
                 <ContentControl Content="{Binding UpdateSourceTrigger=PropertyChanged}" ContentTemplate="{StaticResource DT_StorylineVM_Selection}"></ContentControl>
             </DockPanel>
             <DataTemplate.Triggers>
-                <DataTrigger Binding="{Binding GlobalFilter, UpdateSourceTrigger=PropertyChanged}" Value="">
+                <DataTrigger Binding="{Binding Path=(vmc:Notifier.Filter), UpdateSourceTrigger=PropertyChanged}" Value="">
                     <Setter TargetName="tb_FilterPlaceholder" Property="Visibility" Value="Visible"></Setter>
                 </DataTrigger>
-                <DataTrigger Binding="{Binding GlobalFilter, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                <DataTrigger Binding="{Binding Path=(vmc:Notifier.Filter), UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
                     <Setter TargetName="tb_FilterPlaceholder" Property="Visibility" Value="Visible"></Setter>
                 </DataTrigger>
             </DataTemplate.Triggers>
