@@ -67,6 +67,10 @@ StorylineEditor распространяется в надежде, что он�
     <sys:Double x:Key="Double_Player_MaxWidth">256</sys:Double>
 
     <sys:Double x:Key="Double_Player_MaxHeight">512</sys:Double>
+
+    <sys:Double x:Key="Double_Player_FullMode_MaxWidth">512</sys:Double>
+
+    <sys:Double x:Key="Double_Player_FullMode_MaxHeight">768</sys:Double>
     
     <CornerRadius x:Key="CornerRadius_Common" TopLeft="2" TopRight="2" BottomRight="2" BottomLeft="2"></CornerRadius>
 

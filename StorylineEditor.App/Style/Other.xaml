@@ -2431,6 +2431,70 @@ StorylineEditor распространяется в надежде, что он�
             </TabItem>
 
             <TabItem
+                x:Name="ti_Relation"
+                IsEnabled="{Binding FullMode, UpdateSourceTrigger=PropertyChanged}">
+                <TabItem.Header>
+                    <controls:ComboBoxExt
+                        IsEnabled="{Binding ElementName=ti_Relation, Path=IsSelected, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedValue="{Binding Character, UpdateSourceTrigger=PropertyChanged}"
+                        ItemsSource="{Binding CharactersCVS.View}"
+                        Filter="{Binding CharactersFilter, UpdateSourceTrigger=PropertyChanged}"
+                        Style="{StaticResource S_ComboBoxExt_Prop_Popup}">
+                        <controls:ComboBoxExt.Tag>
+                            <TextBlock
+                                Padding="{StaticResource Thickness_Padding_LeftRight}"
+                                VerticalAlignment="Center"
+                                Text="{StaticResource String_Tag_MainMenu_Characters}"
+                                ></TextBlock>
+                        </controls:ComboBoxExt.Tag>
+                    </controls:ComboBoxExt>
+                </TabItem.Header>
+                <ScrollViewer>
+                    <ItemsControl
+                        ItemsSource="{Binding CharacterEntries}"
+                        >
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid
+                                    Margin="{StaticResource Thickness_Margin_Underline_4x}"
+                                    >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <ContentControl
+                                        Content="{Binding Character}"
+                                        ></ContentControl>
+                                    <controls:NumericUpDown_Float
+                                        Grid.Column="1"
+                                        Margin="{StaticResource Thickness_Margin_1x}"
+                                        VerticalAlignment="Center"
+                                        Value="{Binding DeltaRelation,UpdateSourceTrigger=PropertyChanged}"
+                                        ButtonIncStyle="{StaticResource S_Button_Square_Auto}"
+                                        ButtonIncContent="{StaticResource String_Icon_Plus}"
+                                        ButtonDecStyle="{StaticResource S_Button_Square_Auto}"
+                                        ButtonDecContent="{StaticResource String_Icon_Minus}"
+                                        MinValue="-20"
+                                        MaxValue="20"
+                                        Step="0.25"
+                                        MinWidth="{StaticResource Double_Node_MinWidth}"
+                                        ></controls:NumericUpDown_Float>
+                                    <Button
+                                        Grid.Column="2"
+                                        Style="{StaticResource S_Button_Remove}"
+                                        Margin="{StaticResource Thickness_Margin_1x}"
+                                        Command="{Binding ElementName=ti_Inventory, Path=DataContext.RemoveCharacterCommand}"
+                                        CommandParameter="{Binding Character}"
+                                        ></Button>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </TabItem>
+            
+            <TabItem
                 x:Name="ti_Inventory"
                 IsEnabled="{Binding FullMode, UpdateSourceTrigger=PropertyChanged}">
                 <TabItem.Header>
@@ -2674,50 +2738,14 @@ StorylineEditor распространяется в надежде, что он�
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </ScrollViewer>
-            </TabItem>
-
-            <TabItem x:Name="ti_Relation" IsEnabled="{Binding TreeCanvas.FullMode, UpdateSourceTrigger=PropertyChanged}">
-                <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Отношения: изменения" Style="{StaticResource S_TextBlock_Base}" FontSize="10"></TextBlock>
-                        <controls:FilteredComboBox Template="{StaticResource CT_FilteredComboBox_OnlyPopup}"
-                                                   IsEnabled="{Binding ElementName=ti_Relation, Path=IsSelected, UpdateSourceTrigger=PropertyChanged}"
-                                                   SelectedValue="{Binding TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.RelationEntryToAdd, UpdateSourceTrigger=PropertyChanged}"
-                                                   FilteredItemsSource="{Binding TreeCanvas.Tree.Parent.Parent.Characters, UpdateSourceTrigger=PropertyChanged}"
-                                                   ExcludeItemsSource="{Binding TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.Characters, UpdateSourceTrigger=PropertyChanged}"></controls:FilteredComboBox>
-                    </StackPanel>
-                </TabItem.Header>
-                <ScrollViewer>
-                    <ItemsControl ItemsSource="{Binding TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.RelationEntries}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"></ColumnDefinition>
-                                        <ColumnDefinition Width="auto"></ColumnDefinition>
-                                        <ColumnDefinition Width="auto"></ColumnDefinition>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding Character.Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
-
-                                    <xctk:SingleUpDown FontSize="8" Grid.Column="1" MinWidth="64" VerticalAlignment="Center" Increment="0.25" Minimum="-20" Maximum="20" Value="{Binding DeltaRelation, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" AllowTextInput="False"></xctk:SingleUpDown>
-
-                                    <Button Grid.Column="2" Style="{StaticResource S_Button_UI_Remove_TabItem}"
-                                                    FontSize="8"
-                                                    Width="{StaticResource PlayerToggleButtonSize}"
-                                                    Height="{StaticResource PlayerToggleButtonSize}"
-                                                    Command="{Binding ElementName=ti_Relation, Path=DataContext.TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.RemoveRelationEntryCommand, UpdateSourceTrigger=PropertyChanged}"
-                                                    CommandParameter="{Binding}"></Button>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
             </TabItem>-->
         </TabControl>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding FullMode, UpdateSourceTrigger=PropertyChanged}" Value="true">
-                <Setter TargetName="tc_Main" Property="Width" Value="{StaticResource Double_Player_MaxWidth}"></Setter>
-                <Setter TargetName="tc_Main" Property="Height" Value="{StaticResource Double_Player_MaxHeight}"></Setter>
+                <Setter TargetName="tc_Main" Property="MinWidth" Value="{StaticResource Double_Player_MaxWidth}"></Setter>
+                <Setter TargetName="tc_Main" Property="MinHeight" Value="{StaticResource Double_Player_MaxHeight}"></Setter>
+                <Setter TargetName="tc_Main" Property="MaxWidth" Value="{StaticResource Double_Player_FullMode_MaxWidth}"></Setter>
+                <Setter TargetName="tc_Main" Property="MaxHeight" Value="{StaticResource Double_Player_FullMode_MaxHeight}"></Setter>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>

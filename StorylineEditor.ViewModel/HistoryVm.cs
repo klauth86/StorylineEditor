@@ -171,15 +171,15 @@ namespace StorylineEditor.ViewModel
         public override string Stats => null;
     }
 
-    public class RelationEntryVM : SimpleVM<HistoryVM>
+    public class CharacterEntryVM : SimpleVM<HistoryVM>
     {
-        public RelationEntryVM(HistoryVM parent, ICallbackContext callbackContext) : base(parent, callbackContext)
+        public CharacterEntryVM(HistoryVM parent, ICallbackContext callbackContext) : base(parent, callbackContext)
         {
             Character = null;
             DeltaRelation = 0;
         }
 
-        public Notifier Character { get; set; }
+        public BaseM Character { get; set; }
 
         protected float deltaRelation;
         public float DeltaRelation
@@ -190,6 +190,7 @@ namespace StorylineEditor.ViewModel
                 if (value != deltaRelation)
                 {
                     deltaRelation = value;
+                    
                     //Parent?.ShowAvailabilityAdorners();
                 }
             }
@@ -206,8 +207,11 @@ namespace StorylineEditor.ViewModel
 
         public HistoryVM()
         {
-            Inventory = new ObservableCollection<BaseM>();
+            CharacterEntries = new ObservableCollection<CharacterEntryVM>();
+            _charactersCVSInit = false;
+            _charactersCVS = new CollectionViewSource();
 
+            Inventory = new ObservableCollection<BaseM>();
             _itemsCVSInit = false;
             _itemsCVS = new CollectionViewSource();
 
@@ -216,14 +220,126 @@ namespace StorylineEditor.ViewModel
             JournalEntries = new ObservableCollection<JournalEntryVM>();
             JournalRecords = new ObservableCollection<Notifier>();
 
-            RelationEntries = new ObservableCollection<RelationEntryVM>();
-            Characters = new ObservableCollection<Notifier>();
-
             FullMode = false;
             Gender = GENDER.MALE;
             Duration = 4;
             TimeLeft = 0;
         }
+
+        #region CHARACTERS
+
+        protected bool _charactersCVSInit;
+
+        protected CollectionViewSource _charactersCVS;
+        public CollectionViewSource CharactersCVS
+        {
+            get
+            {
+                if (_charactersCVS.View == null)
+                {
+                    _charactersCVS.Source = ActiveContextService.Characters;
+
+                    _charactersCVS.View.Filter = OnCharactersFilter;
+                    _charactersCVS.View.SortDescriptions.Add(new SortDescription(nameof(BaseM.id), ListSortDirection.Ascending));
+                    _charactersCVS.View.MoveCurrentTo(null);
+
+                    _charactersCVSInit = true;
+                }
+
+                return _charactersCVS;
+            }
+        }
+
+        public ObservableCollection<CharacterEntryVM> CharacterEntries { get; }
+
+        protected string charactersFilter;
+        public string CharactersFilter
+        {
+            set
+            {
+                if (value != charactersFilter)
+                {
+                    charactersFilter = value;
+                    CharactersCVS.View?.Refresh();
+                }
+            }
+        }
+
+        public BaseM Character { get => null; set => AddCharacter(value); }
+
+        private bool OnCharactersFilter(object sender)
+        {
+            if (sender is BaseM model)
+            {
+                return (string.IsNullOrEmpty(charactersFilter) || model.PassFilter(charactersFilter)) && CharacterEntries.All((characterEntry) => characterEntry.Character.id != model.id) && model.id != CharacterM.PLAYER_ID;
+            }
+            return false;
+        }
+        public void AddCharacter(BaseM character)
+        {
+            if (_charactersCVSInit)
+            {
+                foreach (var characterEntry in CharacterEntries)
+                {
+                    if (characterEntry.Character == character)
+                    {
+                        return;
+                    }
+                }
+
+                CharacterEntries.Add(new CharacterEntryVM(this, null) { Character = character });
+
+                _charactersCVS.View.Refresh();
+
+                //ShowAvailabilityAdorners();
+            }
+        }
+        public void RemoveCharacter(BaseM character)
+        {
+            List<CharacterEntryVM> characterEntriesToRemove = new List<CharacterEntryVM>();
+
+            foreach (var characterEntry in CharacterEntries)
+            {
+                if (characterEntry.Character == character)
+                {
+                    characterEntriesToRemove.Add(characterEntry);
+                }
+            }
+
+            if (characterEntriesToRemove.Count > 0)
+            {
+                foreach (var characterEntryToRemove in characterEntriesToRemove)
+                {
+                    CharacterEntries.Remove(characterEntryToRemove);
+                }
+
+                _charactersCVS.View.Refresh();
+
+                //ShowAvailabilityAdorners();
+            }
+        }
+
+        protected ICommand removeCharacterCommand;
+        public ICommand RemoveCharacterCommand => removeCharacterCommand ?? (removeCharacterCommand = new RelayCommand<BaseM>((character) => RemoveCharacter(character), (character) => character != null));
+
+        public float GetRelation(BaseM character)
+        {
+            //////if (viewModel is CharacterVM characterViewModel)
+            //////{
+            //////    float result = gender == GENDER.MALE ? characterViewModel.Model.initialRelation : characterViewModel.Model.initialRelationFemale;
+
+            //////    if (Characters.Contains(viewModel))
+            //////    {
+            //////        result += CharacterEntries[Characters.IndexOf(viewModel)].DeltaRelation;
+            //////    }
+
+            //////    return result;
+            //////}
+
+            return 0;
+        }
+
+        #endregion
 
         #region INVENTORY
 
@@ -298,9 +414,7 @@ namespace StorylineEditor.ViewModel
         protected ICommand removeItemCommand;
         public ICommand RemoveItemCommand => removeItemCommand ?? (removeItemCommand = new RelayCommand<BaseM>((item) => DropItem(item), (item) => item != null));
 
-#endregion
-
-
+        #endregion
 
 
         public ObservableCollection<TreePathVM> PassedDialogsAndReplicas { get; }
@@ -356,59 +470,6 @@ namespace StorylineEditor.ViewModel
 
         protected ICommand removeJournalEntryCommand;
         public ICommand RemoveJournalEntryCommand => removeJournalEntryCommand ?? (removeJournalEntryCommand = new RelayCommand<JournalEntryVM>((journalEntry) => RemoveJournalEntry(journalEntry), (journalEntry) => journalEntry != null));
-
-        public ObservableCollection<RelationEntryVM> RelationEntries { get; }
-
-        public ObservableCollection<Notifier> Characters { get; }
-
-        public float GetRelation(Notifier viewModel)
-        {
-            if (viewModel is CharacterVM characterViewModel)
-            {
-                float result = gender == GENDER.MALE ? characterViewModel.Model.initialRelation : characterViewModel.Model.initialRelationFemale;
-
-                if (Characters.Contains(viewModel))
-                {
-                    result += RelationEntries[Characters.IndexOf(viewModel)].DeltaRelation;
-                }
-
-                return result;
-            }
-
-            return 0;
-        }
-
-        public RelationEntryVM AddCharacter(Notifier viewModel)
-        {
-            if (!Characters.Contains(viewModel))
-            {
-                Characters.Add(viewModel);
-
-                RelationEntryVM relationEntry = new RelationEntryVM(this, null) { Character = viewModel };
-                RelationEntries.Add(relationEntry);
-
-                //ShowAvailabilityAdorners();
-
-                return relationEntry;
-            }
-
-            return RelationEntries[Characters.IndexOf(viewModel)];
-        }
-
-        public void RemoveRelationEntry(RelationEntryVM relationEntry)
-        {
-            if (RelationEntries.Remove(relationEntry))
-            {
-                Characters.Remove(relationEntry.Character);
-
-                //ShowAvailabilityAdorners();
-            }
-        }
-
-        public Notifier RelationEntryToAdd { get => null; set => AddCharacter(value); }
-
-        protected ICommand removeRelationEntryCommand;
-        public ICommand RemoveRelationEntryCommand => removeRelationEntryCommand ?? (removeRelationEntryCommand = new RelayCommand<RelationEntryVM>((relationEntry) => RemoveRelationEntry(relationEntry), (relationEntry) => relationEntry != null));
 
         protected bool fullMode;
         public bool FullMode
@@ -748,6 +809,13 @@ namespace StorylineEditor.ViewModel
 
             _itemsCVS.Source = null;
             _itemsCVSInit = false;
+
+            _charactersCVS.View.MoveCurrentTo(null);
+            _charactersCVS.View.SortDescriptions.Clear();
+            _charactersCVS.View.Filter = null;
+
+            _charactersCVS.Source = null;
+            _charactersCVSInit = false;
         }
 
         public IGraph StartGraph { get; set; }
