@@ -161,8 +161,8 @@ namespace StorylineEditor.ViewModel.Nodes
                 Width = (1 - betta) * Width + betta * targetWidth;
                 Height = (1 - betta) * Height + betta * targetHeight;
 
-                Left = (StorylineVM.ViewWidth - Width) / 2;
-                Top = (StorylineVM.ViewHeight - Height) / 2;
+                Left = (ActiveContextService.ViewWidth - Width) / 2;
+                Top = (ActiveContextService.ViewHeight - Height) / 2;
             }
         }
     }

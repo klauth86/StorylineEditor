@@ -22,6 +22,12 @@ namespace StorylineEditor.ViewModel
 {
     public static class ActiveContextService
     {
+        private static double _viewWidth;
+        public static double ViewWidth { get => _viewWidth; set => _viewWidth = value > 0 ? value : _viewWidth; }
+
+        private static double _viewHeight;
+        public static double ViewHeight { get => _viewHeight; set => _viewHeight = value > 0 ? value : _viewHeight; }
+
         public static StorylineVM ActiveStoryline { get; set; }
 
         public static event EventHandler ActiveTabChanged = delegate { };

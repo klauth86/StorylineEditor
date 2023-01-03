@@ -123,8 +123,8 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 if (token.IsCancellationRequested) return TaskStatus.Canceled;
 
-                double stepX = OffsetX - (positioned.PositionX - StorylineVM.ViewWidth / 2 / Scale);
-                double stepY = OffsetY - (positioned.PositionY - StorylineVM.ViewHeight / 2 / Scale);
+                double stepX = OffsetX - (positioned.PositionX - ActiveContextService.ViewWidth / 2 / Scale);
+                double stepY = OffsetY - (positioned.PositionY - ActiveContextService.ViewHeight / 2 / Scale);
 
                 if (Math.Abs(stepX) < 0.01) return TaskStatus.RanToCompletion;
 
@@ -140,8 +140,8 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 if (taskStatus == TaskStatus.RanToCompletion)
                 {
-                    double stepX = OffsetX - (positioned.PositionX - StorylineVM.ViewWidth / 2 / Scale);
-                    double stepY = OffsetY - (positioned.PositionY - StorylineVM.ViewHeight / 2 / Scale);
+                    double stepX = OffsetX - (positioned.PositionX - ActiveContextService.ViewWidth / 2 / Scale);
+                    double stepY = OffsetY - (positioned.PositionY - ActiveContextService.ViewHeight / 2 / Scale);
 
                     playerIndicator.Tick(1);
 
@@ -164,7 +164,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
                 if (Math.Abs(newScale - 1) < 0.01) return TaskStatus.RanToCompletion;
 
-                SetScale(StorylineVM.ViewWidth / 2, StorylineVM.ViewHeight / 2, newScale);
+                SetScale(ActiveContextService.ViewWidth / 2, ActiveContextService.ViewHeight / 2, newScale);
 
                 return TaskStatus.Running;
             },
@@ -174,7 +174,7 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 if (taskStatus == TaskStatus.RanToCompletion)
                 {
-                    SetScale(StorylineVM.ViewWidth / 2, StorylineVM.ViewHeight / 2, 1);
+                    SetScale(ActiveContextService.ViewWidth / 2, ActiveContextService.ViewHeight / 2, 1);
                 }
             }, null);
         }
@@ -1005,9 +1005,9 @@ namespace StorylineEditor.ViewModel.Graphs
             double maxWidth = (double)Application.Current.FindResource("Double_Node_MaxWidth");
 
             double viewportLeft = OffsetX;
-            double viewportRight = viewportLeft + StorylineVM.ViewWidth / Scale;
+            double viewportRight = viewportLeft + ActiveContextService.ViewWidth / Scale;
             double viewportBottom = OffsetY;
-            double viewportTop = viewportBottom + StorylineVM.ViewHeight / Scale;
+            double viewportTop = viewportBottom + ActiveContextService.ViewHeight / Scale;
 
             HashSet<BaseM> keepMs = new HashSet<BaseM>();
             HashSet<BaseM> addMs = new HashSet<BaseM>();
