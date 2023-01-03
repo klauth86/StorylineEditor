@@ -157,7 +157,18 @@ namespace StorylineEditor.App
                         if (!idsDictionary.ContainsKey(linkModel.id)) idsDictionary.Add(linkModel.id, 0);
                         idsDictionary[linkModel.id]++;
 
-                        if (linkModel.fromNodeId == linkModel.toNodeId) invalidLinks.Add(linkModel.id);
+                        if (string.IsNullOrEmpty(linkModel.fromNodeId) ||
+                            string.IsNullOrEmpty(linkModel.toNodeId) ||
+                            linkModel.fromNodeId == linkModel.toNodeId)
+                        {
+                            invalidLinks.Add(linkModel.id);
+                        }
+                        else
+                        {
+                            string linkModelSignature = linkModel.fromNodeId + " --->>> " + linkModel.toNodeId;
+                            if (!idsDictionary.ContainsKey(linkModelSignature)) idsDictionary.Add(linkModelSignature, 0);
+                            idsDictionary[linkModelSignature]++;
+                        }
                     }
 
                     foreach (var nodeModel in graphModel.nodes)
