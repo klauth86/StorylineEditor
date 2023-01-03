@@ -2430,7 +2430,9 @@ StorylineEditor распространяется в надежде, что он�
                 </DockPanel>
             </TabItem>
 
-            <TabItem x:Name="ti_Inventory" IsEnabled="{Binding FullMode, UpdateSourceTrigger=PropertyChanged}">
+            <TabItem
+                x:Name="ti_Inventory"
+                IsEnabled="{Binding FullMode, UpdateSourceTrigger=PropertyChanged}">
                 <TabItem.Header>
                     <controls:ComboBoxExt
                         IsEnabled="{Binding ElementName=ti_Inventory, Path=IsSelected, UpdateSourceTrigger=PropertyChanged}"
@@ -2439,7 +2441,11 @@ StorylineEditor распространяется в надежде, что он�
                         Filter="{Binding ItemsFilter, UpdateSourceTrigger=PropertyChanged}"
                         Style="{StaticResource S_ComboBoxExt_Prop_Popup}">
                         <controls:ComboBoxExt.Tag>
-                            <TextBlock Padding="{StaticResource Thickness_Padding_LeftRight}" VerticalAlignment="Center" Text="{StaticResource String_Tag_MainMenu_Items}"></TextBlock>
+                            <TextBlock
+                                Padding="{StaticResource Thickness_Padding_LeftRight}"
+                                VerticalAlignment="Center"
+                                Text="{StaticResource String_Tag_MainMenu_Items}"
+                                ></TextBlock>
                         </controls:ComboBoxExt.Tag>
                     </controls:ComboBoxExt>
                 </TabItem.Header>
@@ -2449,12 +2455,16 @@ StorylineEditor распространяется в надежде, что он�
                         >
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Grid Margin="{StaticResource Thickness_Margin_Underline_4x}">
+                                <Grid
+                                    Margin="{StaticResource Thickness_Margin_Underline_4x}"
+                                    >
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"></ColumnDefinition>
                                         <ColumnDefinition Width="auto"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
-                                    <ContentControl Content="{Binding}"></ContentControl>
+                                    <ContentControl
+                                        Content="{Binding}"
+                                        ></ContentControl>
                                     <Button
                                         Grid.Column="1"
                                         Style="{StaticResource S_Button_Remove}"
