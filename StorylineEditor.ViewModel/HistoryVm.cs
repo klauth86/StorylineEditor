@@ -61,50 +61,85 @@ namespace StorylineEditor.ViewModel
 
     public class PlayerContext_TransitionVM { }
 
-    public class TreePathVM : SimpleVM<HistoryVM>
+    public class DialogEntryVM : SimpleVM<HistoryVM>
     {
-        public TreePathVM(HistoryVM parent, ICallbackContext callbackContext) : base(parent, callbackContext)
+        public DialogEntryVM(HistoryVM parent, ICallbackContext callbackContext) : base(parent, callbackContext)
         {
-            IsActive = true;
-            Graph = null;
-            PassedNodes = new ObservableCollection<Notifier>();
+            Dialog = null;
+
+            Nodes = new ObservableCollection<BaseM>();
+            _nodesCVSInit = false;
+            _nodesCVS = new CollectionViewSource();
         }
 
-        protected bool isActive;
-        public bool IsActive
+        public BaseM Dialog { get; set; }
+
+        protected bool _nodesCVSInit;
+
+        protected CollectionViewSource _nodesCVS;
+        public CollectionViewSource NodesCVS
         {
-            get => isActive;
+            get
+            {
+                if (_nodesCVS.View == null)
+                {
+                    _nodesCVS.Source = ((GraphM)Dialog).nodes;
+
+                    _nodesCVS.View.Filter = OnNodesFilter;
+                    _nodesCVS.View.SortDescriptions.Add(new SortDescription(nameof(BaseM.id), ListSortDirection.Ascending));
+                    _nodesCVS.View.MoveCurrentTo(null);
+
+                    _nodesCVSInit = true;
+                }
+
+                return _nodesCVS;
+            }
+        }
+
+        public ObservableCollection<BaseM> Nodes { get; }
+
+        protected string nodesFilter;
+        public string NodesFilter
+        {
             set
             {
-                if (value != isActive)
+                if (value != nodesFilter)
                 {
-                    isActive = value;
-                    //Parent?.ShowAvailabilityAdorners();
+                    nodesFilter = value;
+                    NodesCVS.View?.Refresh();
                 }
             }
         }
 
-        public Notifier Graph { get; set; }
+        public BaseM Node { get => null; set => AddNode(value); }
 
-        public ObservableCollection<Notifier> PassedNodes { get; }
-
-        public void AddNode(Notifier node)
+        private bool OnNodesFilter(object sender)
         {
-            PassedNodes.Add(node); //Parent?.ShowAvailabilityAdorners();
-        }
-
-        public void RemoveNode(Notifier node)
-        {
-            if (PassedNodes.Remove(node))
+            if (sender is BaseM model)
             {
-                //Parent?.ShowAvailabilityAdorners();
+                return string.IsNullOrEmpty(nodesFilter) || model.PassFilter(nodesFilter);
+            }
+            return false;
+        }
+        public void AddNode(BaseM node)
+        {
+            if (_nodesCVSInit)
+            {
+                Nodes.Add(node);
+
+                //ShowAvailabilityAdorners();
+            }
+        }
+        public void RemoveNode(BaseM node)
+        {
+            if (Nodes.Remove(node))
+            {
+                //ShowAvailabilityAdorners();
             }
         }
 
-        public Notifier NodeToAdd { get => null; set => AddNode(value); }
-
-        protected ICommand removePassedNodeCommand;
-        public ICommand RemovePassedNodeCommand => removePassedNodeCommand ?? (removePassedNodeCommand = new RelayCommand<Notifier>((node) => RemoveNode(node), (node) => node != null));
+        protected ICommand removeNodeCommand;
+        public ICommand RemoveNodeCommand => removeNodeCommand ?? (removeNodeCommand = new RelayCommand<BaseM>((node) => RemoveNode(node), (node) => node != null));
 
         public override string Id => null;
         public override string Title => null;
@@ -137,7 +172,7 @@ namespace StorylineEditor.ViewModel
             {
                 if (_knownNodesCVS.View == null)
                 {
-                    _knownNodesCVS.Source = ((QuestM)Quest).nodes;
+                    _knownNodesCVS.Source = ((GraphM)Quest).nodes;
 
                     _knownNodesCVS.View.Filter = OnKnownNodesFilter;
                     _knownNodesCVS.View.SortDescriptions.Add(new SortDescription(nameof(BaseM.id), ListSortDirection.Ascending));
@@ -283,7 +318,9 @@ namespace StorylineEditor.ViewModel
             _questsCVSInit = false;
             _questsCVS = new CollectionViewSource();
 
-            PassedDialogsAndReplicas = new ObservableCollection<TreePathVM>();
+            DialogEntries = new ObservableCollection<DialogEntryVM>();
+            _dialogsCVSInit = false;
+            _dialogsCVS = new CollectionViewSource();
 
             FullMode = false;
             Gender = GENDER.MALE;
@@ -579,25 +616,89 @@ namespace StorylineEditor.ViewModel
 
         #endregion
 
-        public ObservableCollection<TreePathVM> PassedDialogsAndReplicas { get; }
+        #region DIALOGS
 
-        public void AddDialogTree(TreePathVM treePath)
+        protected bool _dialogsCVSLocked;
+
+        protected bool _dialogsCVSInit;
+
+        protected CollectionViewSource _dialogsCVS;
+        public CollectionViewSource DialogsCVS
         {
-            PassedDialogsAndReplicas.Add(treePath);
-            //ShowAvailabilityAdorners();
-        }
-        public void RemoveDialogTreePath(TreePathVM treePath)
-        {
-            if (PassedDialogsAndReplicas.Remove(treePath))
+            get
             {
+                if (_dialogsCVS.View == null)
+                {
+                    _dialogsCVS.Source = ActiveContextService.DialogsAndReplicas;
+
+                    _dialogsCVS.View.Filter = OnDialogsFilter;
+                    _dialogsCVS.View.SortDescriptions.Add(new SortDescription(nameof(BaseM.id), ListSortDirection.Ascending));
+                    _dialogsCVS.View.MoveCurrentTo(null);
+
+                    _dialogsCVSInit = true;
+                }
+
+                return _dialogsCVS;
+            }
+        }
+
+        public ObservableCollection<DialogEntryVM> DialogEntries { get; }
+
+        protected string dialogsFilter;
+        public string DialogsFilter
+        {
+            set
+            {
+                if (value != dialogsFilter)
+                {
+                    dialogsFilter = value;
+                    DialogsCVS.View?.Refresh();
+                }
+            }
+        }
+
+        public BaseM Dialog { get => null; set => AddDialog(value); }
+
+        private bool OnDialogsFilter(object sender)
+        {
+            if (sender is BaseM model)
+            {
+                return (string.IsNullOrEmpty(dialogsFilter) || model.PassFilter(dialogsFilter));
+            }
+            return false;
+        }
+        public void AddDialog(BaseM dialog)
+        {
+            if (_dialogsCVSInit)
+            {
+                if (!_dialogsCVSLocked)
+                {
+                    _dialogsCVSLocked = true;
+
+                    DialogEntries.Add(new DialogEntryVM(this, null) { Dialog = dialog });
+
+                    _dialogsCVS.View.Refresh();
+
+                    //ShowAvailabilityAdorners();
+
+                    _dialogsCVSLocked = false;
+                }
+            }
+        }
+        public void RemoveDialog(DialogEntryVM dialogEntry)
+        {
+            if (DialogEntries.Remove(dialogEntry))
+            {
+                _dialogsCVS.View.Refresh();
+
                 //ShowAvailabilityAdorners();
             }
         }
 
-        public Notifier DialogOrReplicaToAdd { get => null; set { if (value != null) AddDialogTree(new TreePathVM(this, null) { Graph = value }); } }
+        protected ICommand removeDialogCommand;
+        public ICommand RemoveDialogCommand => removeDialogCommand ?? (removeDialogCommand = new RelayCommand<DialogEntryVM>((dialogEntry) => RemoveDialog(dialogEntry), (dialogEntry) => dialogEntry != null));
 
-        protected ICommand removeDialogsAndReplicasCommand;
-        public ICommand RemoveDialogsAndReplicasCommand => removeDialogsAndReplicasCommand ?? (removeDialogsAndReplicasCommand = new RelayCommand<TreePathVM>((treePath) => RemoveDialogTreePath(treePath), (treePath) => treePath != null));
+        #endregion
 
         protected bool fullMode;
         public bool FullMode
@@ -930,6 +1031,20 @@ namespace StorylineEditor.ViewModel
 
             StartNode = null;
             StartGraph = null;
+
+            _dialogsCVS.View.MoveCurrentTo(null);
+            _dialogsCVS.View.SortDescriptions.Clear();
+            _dialogsCVS.View.Filter = null;
+
+            _dialogsCVS.Source = null;
+            _dialogsCVSInit = false;
+
+            _questsCVS.View.MoveCurrentTo(null);
+            _questsCVS.View.SortDescriptions.Clear();
+            _questsCVS.View.Filter = null;
+
+            _questsCVS.Source = null;
+            _questsCVSInit = false;
 
             _itemsCVS.View.MoveCurrentTo(null);
             _itemsCVS.View.SortDescriptions.Clear();

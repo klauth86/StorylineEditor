@@ -68,6 +68,8 @@ StorylineEditor распространяется в надежде, что он�
 
     <sys:String x:Key="String_Tag_MainMenu_Replicas">Реплики</sys:String>
 
+    <sys:String x:Key="String_Tag_MainMenu_DialogsAndReplicas">Диалоги и Реплики</sys:String>
+    
     <sys:Boolean x:Key="True">True</sys:Boolean>
 
     <sys:Boolean x:Key="False">False</sys:Boolean>

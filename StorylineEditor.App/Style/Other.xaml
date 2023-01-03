@@ -2484,7 +2484,7 @@ StorylineEditor распространяется в надежде, что он�
                                         Grid.Column="2"
                                         Style="{StaticResource S_Button_Remove}"
                                         Margin="{StaticResource Thickness_Margin_1x}"
-                                        Command="{Binding ElementName=ti_Inventory, Path=DataContext.RemoveCharacterCommand}"
+                                        Command="{Binding ElementName=ti_Relation, Path=DataContext.RemoveCharacterCommand}"
                                         CommandParameter="{Binding Character}"
                                         ></Button>
                                 </Grid>
@@ -2593,7 +2593,7 @@ StorylineEditor распространяется в надежде, что он�
                                                 Grid.Column="2"
                                                 Style="{StaticResource S_Button_Remove}"
                                                 Margin="{StaticResource Thickness_Margin_1x}"
-                                                Command="{Binding ElementName=ti_Inventory, Path=DataContext.RemoveQuestCommand}"
+                                                Command="{Binding ElementName=ti_Journal, Path=DataContext.RemoveQuestCommand}"
                                                 CommandParameter="{Binding Quest}"
                                                 ></Button>
                                         </Grid>
@@ -2611,12 +2611,11 @@ StorylineEditor распространяется в надежде, что он�
                                                         <ColumnDefinition Width="auto"></ColumnDefinition>
                                                         <ColumnDefinition Width="auto"></ColumnDefinition>
                                                     </Grid.ColumnDefinitions>
+                                                    
                                                     <ContentControl
                                                         Content="{Binding}"
                                                         ></ContentControl>
                                                     
-                                                    
-
                                                     <Button
                                                         Grid.Column="2"
                                                         Style="{StaticResource S_Button_Remove}"
@@ -2634,94 +2633,95 @@ StorylineEditor распространяется в надежде, что он�
                     </ItemsControl>
                 </ScrollViewer>
             </TabItem>
-            
-            <!--<TabItem x:Name="ti_DialogsAndReplicas" IsEnabled="{Binding TreeCanvas.FullMode, UpdateSourceTrigger=PropertyChanged}">
+
+            <TabItem
+                x:Name="ti_Dialogs"
+                IsEnabled="{Binding FullMode, UpdateSourceTrigger=PropertyChanged}">
                 <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Диалоги и реплики" Style="{StaticResource S_TextBlock_Base}" FontSize="10"></TextBlock>
-                        <controls:FilteredComboBox Template="{StaticResource CT_FilteredComboBox_OnlyPopup}"
-                                                   IsEnabled="{Binding ElementName=ti_DialogsAndReplicas, Path=IsSelected, UpdateSourceTrigger=PropertyChanged}"
-                                                   SelectedValue="{Binding TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.DialogOrReplicaToAdd, UpdateSourceTrigger=PropertyChanged}"
-                                                   ItemsSource="{Binding TreeCanvas.Tree.Parent.Parent.DialogsAndReplicas, UpdateSourceTrigger=PropertyChanged}"></controls:FilteredComboBox>
-                    </StackPanel>
+                    <controls:ComboBoxExt
+                        IsEnabled="{Binding ElementName=ti_Dialogs, Path=IsSelected, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedValue="{Binding Dialog, UpdateSourceTrigger=PropertyChanged}"
+                        ItemsSource="{Binding DialogsCVS.View}"
+                        Filter="{Binding DialogsFilter, UpdateSourceTrigger=PropertyChanged}"
+                        Style="{StaticResource S_ComboBoxExt_Prop_Popup}">
+                        <controls:ComboBoxExt.Tag>
+                            <TextBlock
+                                Padding="{StaticResource Thickness_Padding_LeftRight}"
+                                VerticalAlignment="Center"
+                                Text="{StaticResource String_Tag_MainMenu_DialogsAndReplicas}"
+                                ></TextBlock>
+                        </controls:ComboBoxExt.Tag>
+                    </controls:ComboBoxExt>
                 </TabItem.Header>
                 <ScrollViewer>
-                    <ItemsControl ItemsSource="{Binding TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.PassedDialogsAndReplicas}">
+                    <ItemsControl
+                        ItemsSource="{Binding DialogEntries}"
+                        >
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Expander x:Name="exp_Main">
+                                <Expander>
                                     <Expander.Header>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding Tree.Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
-                                            <controls:FilteredComboBox Template="{StaticResource CT_FilteredComboBox_OnlyPopup}"                                                   
-                                                   SelectedValue="{Binding NodeToAdd, UpdateSourceTrigger=PropertyChanged}"
-                                                   ItemsSource="{Binding Tree.Nodes, UpdateSourceTrigger=PropertyChanged}">
-                                                <controls:FilteredComboBox.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Grid ToolTip="{Binding Id}">
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="auto"></ColumnDefinition>
-                                                                <ColumnDefinition></ColumnDefinition>
-                                                            </Grid.ColumnDefinitions>
-                                                            <Grid.RowDefinitions>
-                                                                <RowDefinition Height="auto"></RowDefinition>
-                                                                <RowDefinition Height="auto"></RowDefinition>
-                                                            </Grid.RowDefinitions>
+                                        <Grid
+                                            Margin="{StaticResource Thickness_Margin_Underline_4x}"
+                                            >
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <ContentControl
+                                                Content="{Binding Dialog}"
+                                                ></ContentControl>
 
-                                                            <Label FontSize="12" FontWeight="Normal" Style="{StaticResource S_Label_NodeType}"></Label>
+                                            <controls:ComboBoxExt
+                                                Grid.Column="1"
+                                                SelectedValue="{Binding Node, UpdateSourceTrigger=PropertyChanged}"
+                                                ItemsSource="{Binding NodesCVS.View}"
+                                                Filter="{Binding NodesFilter, UpdateSourceTrigger=PropertyChanged}"
+                                                Style="{StaticResource S_ComboBoxExt_Prop_Popup}">
+                                            </controls:ComboBoxExt>
 
-                                                            <TextBlock Grid.Column="1" Grid.Row="0" FontWeight="Bold" Text="{Binding OwnerName, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
-
-                                                            <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" nodes:RTBHelper.Document="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
-                                                        </Grid>
-                                                    </DataTemplate>
-                                                </controls:FilteredComboBox.ItemTemplate>
-                                            </controls:FilteredComboBox>
-                                            <Button Grid.Column="1" Style="{StaticResource S_Button_UI_Remove_TabItem}"
-                                                    FontSize="8"
-                                                    Width="{StaticResource PlayerToggleButtonSize}"
-                                                    Height="{StaticResource PlayerToggleButtonSize}"
-                                                    Command="{Binding ElementName=ti_DialogsAndReplicas, Path=DataContext.TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.RemoveDialogsAndReplicasCommand, UpdateSourceTrigger=PropertyChanged}"
-                                                    CommandParameter="{Binding}"></Button>
-                                        </StackPanel>
+                                            <Button
+                                                Grid.Column="2"
+                                                Style="{StaticResource S_Button_Remove}"
+                                                Margin="{StaticResource Thickness_Margin_1x}"
+                                                Command="{Binding ElementName=ti_Dialogs, Path=DataContext.RemoveDialogCommand}"
+                                                ></Button>
+                                        </Grid>
                                     </Expander.Header>
-                                    <ItemsControl ItemsSource="{Binding PassedNodes}">
+
+                                    <ItemsControl x:Name="ic_Nodes"
+                                        ItemsSource="{Binding Nodes}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <Grid ToolTip="{Binding Id}" MaxWidth="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
+                                                <Grid
+                                                    Margin="{StaticResource Thickness_Margin_Underline_4x}"
+                                                    >
                                                     <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"></ColumnDefinition>
                                                         <ColumnDefinition Width="auto"></ColumnDefinition>
-                                                        <ColumnDefinition></ColumnDefinition>
                                                         <ColumnDefinition Width="auto"></ColumnDefinition>
                                                     </Grid.ColumnDefinitions>
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="auto"></RowDefinition>
-                                                        <RowDefinition Height="auto"></RowDefinition>
-                                                    </Grid.RowDefinitions>
-
-                                                    <Label FontSize="12" FontWeight="Normal" Style="{StaticResource S_Label_NodeType}"></Label>
-
-                                                    <TextBlock Grid.Column="1" Grid.Row="0" FontWeight="Bold" Text="{Binding OwnerName, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
-
-                                                    <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" nodes:RTBHelper.Document="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
-
-                                                    <Button Grid.Column="2" Grid.RowSpan="2" Style="{StaticResource S_Button_UI_Remove_TabItem}"
-                                                            FontSize="8"
-                                                            Width="{StaticResource PlayerToggleButtonSize}"
-                                                            Height="{StaticResource PlayerToggleButtonSize}"
-                                                            Command="{Binding ElementName=exp_Main, Path=DataContext.RemovePassedNodeCommand, UpdateSourceTrigger=PropertyChanged}"
-                                                            CommandParameter="{Binding}"></Button>
+                                                    <ContentControl
+                                                        Content="{Binding}"
+                                                        ></ContentControl>
+                                                    <Button
+                                                        Grid.Column="2"
+                                                        Style="{StaticResource S_Button_Remove}"
+                                                        Margin="{StaticResource Thickness_Margin_1x}"
+                                                        Command="{Binding ElementName=ic_Nodes, Path=DataContext.RemoveNodeCommand}"
+                                                        CommandParameter="{Binding}"
+                                                        ></Button>
                                                 </Grid>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
                                 </Expander>
-
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </ScrollViewer>
-            </TabItem>-->
+            </TabItem>
         </TabControl>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding FullMode, UpdateSourceTrigger=PropertyChanged}" Value="true">
