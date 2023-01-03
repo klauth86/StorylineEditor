@@ -17,8 +17,10 @@ using StorylineEditor.ViewModel.Nodes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel
@@ -204,7 +206,10 @@ namespace StorylineEditor.ViewModel
 
         public HistoryVM()
         {
-            Inventory = new ObservableCollection<Notifier>();
+            Inventory = new ObservableCollection<BaseM>();
+
+            _itemsCVSInit = false;
+            _itemsCVS = new CollectionViewSource();
 
             PassedDialogsAndReplicas = new ObservableCollection<TreePathVM>();
 
@@ -220,25 +225,83 @@ namespace StorylineEditor.ViewModel
             TimeLeft = 0;
         }
 
-        public ObservableCollection<Notifier> Inventory { get; }
+        #region INVENTORY
 
-        public void PickUpItem(Notifier item)
+        protected bool _itemsCVSInit;
+
+        protected CollectionViewSource _itemsCVS;
+        public CollectionViewSource ItemsCVS
         {
-            Inventory.Add(item);
-            //ShowAvailabilityAdorners();
+            get
+            {
+                if (_itemsCVS.View == null)
+                {
+                    _itemsCVS.Source = ActiveContextService.Items;
+
+                    _itemsCVS.View.Filter = OnItemsFilter;
+                    _itemsCVS.View.SortDescriptions.Add(new SortDescription(nameof(BaseM.id), ListSortDirection.Ascending));
+                    _itemsCVS.View.MoveCurrentTo(null);
+
+                    _itemsCVSInit = true;
+                }
+
+                return _itemsCVS;
+            }
         }
-        public void DropItem(Notifier item)
+        
+        public ObservableCollection<BaseM> Inventory { get; }
+
+        protected string itemsFilter;
+        public string ItemsFilter
+        {
+            set
+            {
+                if (value != itemsFilter)
+                {
+                    itemsFilter = value;
+                    ItemsCVS.View?.Refresh();
+                }
+            }
+        }
+
+        public BaseM Item { get => null; set => PickUpItem(value); }
+
+        private bool OnItemsFilter(object sender)
+        {
+            if (sender is BaseM model)
+            {
+                return (string.IsNullOrEmpty(itemsFilter) || model.PassFilter(itemsFilter)) && !Inventory.Contains(model);
+            }
+            return false;
+        }
+        public void PickUpItem(BaseM item)
+        {
+            if (_itemsCVSInit)
+            {
+                Inventory.Add(item);
+
+                ItemsCVS.View.Refresh();
+
+                //ShowAvailabilityAdorners();
+            }
+        }
+        public void DropItem(BaseM item)
         {
             if (Inventory.Remove(item))
             {
+                ItemsCVS.View.Refresh();
+
                 //ShowAvailabilityAdorners();
             }
         }
 
-        public Notifier ItemToAdd { get => null; set => PickUpItem(value); }
-
         protected ICommand removeItemCommand;
-        public ICommand RemoveItemCommand => removeItemCommand ?? (removeItemCommand = new RelayCommand<Notifier>((item) => DropItem(item), (item) => item != null));
+        public ICommand RemoveItemCommand => removeItemCommand ?? (removeItemCommand = new RelayCommand<BaseM>((item) => DropItem(item), (item) => item != null));
+
+#endregion
+
+
+
 
         public ObservableCollection<TreePathVM> PassedDialogsAndReplicas { get; }
 
@@ -678,6 +741,13 @@ namespace StorylineEditor.ViewModel
 
             StartNode = null;
             StartGraph = null;
+
+            _itemsCVS.View.MoveCurrentTo(null);
+            _itemsCVS.View.SortDescriptions.Clear();
+            _itemsCVS.View.Filter = null;
+
+            _itemsCVS.Source = null;
+            _itemsCVSInit = false;
         }
 
         public IGraph StartGraph { get; set; }

@@ -2336,7 +2336,11 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:HistoryVM}">
-        <TabControl>
+        <TabControl
+            x:Name="tc_Main"
+            MaxWidth="{StaticResource Double_Player_MaxWidth}"
+            MaxHeight="{StaticResource Double_Player_MaxHeight}"
+            >
 
             <TabItem Header="{StaticResource String_Tag_Player_Tab_Props}">
                 <DockPanel>
@@ -2364,8 +2368,6 @@ StorylineEditor распространяется в надежде, что он�
                     </Grid>
 
                     <ContentControl Grid.Row="1"
-                                    MaxWidth="{StaticResource Double_Player_MaxWidth}"
-                                    MaxHeight="{StaticResource Double_Player_MaxHeight}"
                                     Margin="{StaticResource Thickness_Margin_2x}"
                                     Content="{Binding PlayerContext, UpdateSourceTrigger=PropertyChanged}">
                         <!--<ContentControl.Resources>
@@ -2428,32 +2430,37 @@ StorylineEditor распространяется в надежде, что он�
                 </DockPanel>
             </TabItem>
 
-            <!--<TabItem x:Name="ti_Inventory" IsEnabled="{Binding TreeCanvas.FullMode, UpdateSourceTrigger=PropertyChanged}">
+            <TabItem x:Name="ti_Inventory" IsEnabled="{Binding FullMode, UpdateSourceTrigger=PropertyChanged}">
                 <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Инвентарь" Style="{StaticResource S_TextBlock_Base}" FontSize="10"></TextBlock>
-                        <controls:FilteredComboBox Template="{StaticResource CT_FilteredComboBox_OnlyPopup}"
-                                                   IsEnabled="{Binding ElementName=ti_Inventory, Path=IsSelected, UpdateSourceTrigger=PropertyChanged}"
-                                                   SelectedValue="{Binding TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.ItemToAdd, UpdateSourceTrigger=PropertyChanged}"
-                                                   ItemsSource="{Binding TreeCanvas.Tree.Parent.Parent.Items, UpdateSourceTrigger=PropertyChanged}"></controls:FilteredComboBox>
-                    </StackPanel>
+                    <controls:ComboBoxExt
+                        IsEnabled="{Binding ElementName=ti_Inventory, Path=IsSelected, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedValue="{Binding Item, UpdateSourceTrigger=PropertyChanged}"
+                        ItemsSource="{Binding ItemsCVS.View}"
+                        Filter="{Binding ItemsFilter, UpdateSourceTrigger=PropertyChanged}"
+                        Style="{StaticResource S_ComboBoxExt_Prop_Popup}">
+                        <controls:ComboBoxExt.Tag>
+                            <TextBlock Padding="{StaticResource Thickness_Padding_LeftRight}" VerticalAlignment="Center" Text="{StaticResource String_Tag_MainMenu_Items}"></TextBlock>
+                        </controls:ComboBoxExt.Tag>
+                    </controls:ComboBoxExt>
                 </TabItem.Header>
                 <ScrollViewer>
-                    <ItemsControl ItemsSource="{Binding TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.Inventory}">
+                    <ItemsControl
+                        ItemsSource="{Binding Inventory}"
+                        >
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Grid>
+                                <Grid Margin="{StaticResource Thickness_Margin_Underline_4x}">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"></ColumnDefinition>
                                         <ColumnDefinition Width="auto"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Style="{StaticResource S_TextBlock_Base}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-                                    <Button Grid.Column="1" Style="{StaticResource S_Button_UI_Remove_TabItem}"
-                                            FontSize="8"
-                                            Width="{StaticResource PlayerToggleButtonSize}"
-                                            Height="{StaticResource PlayerToggleButtonSize}"
-                                            Command="{Binding ElementName=ti_Inventory, Path=DataContext.TreeCanvas.Tree.Parent.Parent.TreePlayerHistory.RemoveItemCommand, UpdateSourceTrigger=PropertyChanged}"
-                                            CommandParameter="{Binding}"></Button>
+                                    <ContentControl Content="{Binding}"></ContentControl>
+                                    <Button
+                                        Grid.Column="1"
+                                        Style="{StaticResource S_Button_Remove}"
+                                        Margin="{StaticResource Thickness_Margin_1x}"
+                                        Command="{Binding ElementName=ti_Inventory, Path=DataContext.RemoveItemCommand}"
+                                        ></Button>
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -2461,7 +2468,7 @@ StorylineEditor распространяется в надежде, что он�
                 </ScrollViewer>
             </TabItem>
 
-            <TabItem x:Name="ti_DialogsAndReplicas" IsEnabled="{Binding TreeCanvas.FullMode, UpdateSourceTrigger=PropertyChanged}">
+            <!--<TabItem x:Name="ti_DialogsAndReplicas" IsEnabled="{Binding TreeCanvas.FullMode, UpdateSourceTrigger=PropertyChanged}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Диалоги и реплики" Style="{StaticResource S_TextBlock_Base}" FontSize="10"></TextBlock>
@@ -2696,8 +2703,13 @@ StorylineEditor распространяется в надежде, что он�
                     </ItemsControl>
                 </ScrollViewer>
             </TabItem>-->
-            
         </TabControl>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding FullMode, UpdateSourceTrigger=PropertyChanged}" Value="true">
+                <Setter TargetName="tc_Main" Property="Width" Value="{StaticResource Double_Player_MaxWidth}"></Setter>
+                <Setter TargetName="tc_Main" Property="Height" Value="{StaticResource Double_Player_MaxHeight}"></Setter>
+            </DataTrigger>
+        </DataTemplate.Triggers>
     </DataTemplate>
     
 </ResourceDictionary>
