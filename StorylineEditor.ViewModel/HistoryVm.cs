@@ -502,7 +502,7 @@ namespace StorylineEditor.ViewModel
         {
             if (ActiveNode is Node_DialogVM dialogNodeViewModel || ActiveNode is Node_ReplicaVM replicaNodeViewModel)
             {
-                const int stepCount = 256;
+                const int stepCount = 64;
                 int stepDuration = Convert.ToInt32(Math.Round(Duration * 1000) / stepCount);
 
                 MonoTaskFacade.Start((token, alpha) =>

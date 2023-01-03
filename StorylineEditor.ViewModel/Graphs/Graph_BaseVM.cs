@@ -116,7 +116,7 @@ namespace StorylineEditor.ViewModel.Graphs
         void StartScrollingTask(IPositioned positioned, Action<TaskStatus> callbackAction)
         {
             const int durationMsec = 256;
-            const int stepCount = 256;
+            const int stepCount = 64;
             const int stepDuration = durationMsec / stepCount;
 
             MonoTaskFacade.Start((token, alpha) =>
@@ -153,7 +153,7 @@ namespace StorylineEditor.ViewModel.Graphs
         void StartScalingTask()
         {
             const int durationMsec = 256;
-            const int stepCount = 256;
+            const int stepCount = 64;
             const int stepDuration = durationMsec / stepCount;
 
             MonoTaskFacade.Start((token, alpha) =>

@@ -46,6 +46,14 @@ namespace StorylineEditor.ViewModel.Graphs
         {
             if (from == to) return nameof(ArgumentException);
 
+            if (FromNodesLinks.ContainsKey(from.Id) && ToNodesLinks.ContainsKey(to.Id))
+            {
+                foreach (var linkId in FromNodesLinks[from.Id])
+                {
+                    if (ToNodesLinks[to.Id].Contains(linkId)) return nameof(ArgumentException);
+                }
+            }
+
             if (from is Node_Journal_AlternativeVM && to is Node_Journal_AlternativeVM) return nameof(NotImplementedException);
 
             foreach (var linkId in FromNodesLinks[from.Id])

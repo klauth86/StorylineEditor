@@ -26,7 +26,7 @@ StorylineEditor распространяется в надежде, что он�
 
     <sys:String x:Key="String_Stats_Node_TransitM_TmpDescription">⇴ Переход</sys:String>
 
-    <sys:String x:Key="String_Stats_Node_GateM_TmpDescription">⎆ Врата</sys:String>
+    <sys:String x:Key="String_Stats_Node_GateM_TmpDescription">⎆ Вход</sys:String>
 
     <sys:String x:Key="String_Stats_Node_ExitM_TmpDescription">🚪 Выход</sys:String>
 
@@ -132,7 +132,7 @@ StorylineEditor распространяется в надежде, что он�
 
     <sys:String x:Key="String_Tag_Node_Transit_Type">Переход</sys:String>
 
-    <sys:String x:Key="String_Tag_Node_Gate_Type">Врата</sys:String>
+    <sys:String x:Key="String_Tag_Node_Gate_Type">Вход</sys:String>
 
     <sys:String x:Key="String_Tag_Node_Exit_Type">Выход</sys:String>
 
