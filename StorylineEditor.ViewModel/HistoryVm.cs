@@ -11,6 +11,7 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Model;
+using StorylineEditor.Model.Graphs;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Interface;
 using StorylineEditor.ViewModel.Nodes;
@@ -110,61 +111,124 @@ namespace StorylineEditor.ViewModel
         public override string Stats => null;
     }
 
-    public class JournalEntryVM : SimpleVM<HistoryVM>
+    public class QuestEntryVM : SimpleVM<HistoryVM>
     {
-        public JournalEntryVM(HistoryVM parent, ICallbackContext callbackContext) : base(parent, callbackContext)
+        public QuestEntryVM(HistoryVM parent, ICallbackContext callbackContext) : base(parent, callbackContext)
         {
             Quest = null;
-            KnownNodes = new ObservableCollection<Notifier>();
-            PassedNodes = new ObservableCollection<Notifier>();
+
+            KnownNodes = new ObservableCollection<BaseM>();
+            _knownNodesCVSInit = false;
+            _knownNodesCVS = new CollectionViewSource();
+
+            PassedNodes = new ObservableCollection<BaseM>();
         }
 
-        public Notifier Quest { get; set; }
+        public BaseM Quest { get; set; }
 
-        public ObservableCollection<Notifier> KnownNodes { get; }
+        #region KNOWN
 
-        public void AddKnownNode(Notifier node)
+        protected bool _knownNodesCVSInit;
+
+        protected CollectionViewSource _knownNodesCVS;
+        public CollectionViewSource KnownNodesCVS
         {
-            if (!KnownNodes.Contains(node))
+            get
             {
-                KnownNodes.Add(node); //Parent?.ShowAvailabilityAdorners();
+                if (_knownNodesCVS.View == null)
+                {
+                    _knownNodesCVS.Source = ((QuestM)Quest).nodes;
+
+                    _knownNodesCVS.View.Filter = OnKnownNodesFilter;
+                    _knownNodesCVS.View.SortDescriptions.Add(new SortDescription(nameof(BaseM.id), ListSortDirection.Ascending));
+                    _knownNodesCVS.View.MoveCurrentTo(null);
+
+                    _knownNodesCVSInit = true;
+                }
+
+                return _knownNodesCVS;
             }
         }
 
-        public void RemoveKnownNode(Notifier node)
+        public ObservableCollection<BaseM> KnownNodes { get; }
+
+        protected string knownNodesFilter;
+        public string KnownNodesFilter
         {
-            if (KnownNodes.Remove(node))
-            { //Parent?.ShowAvailabilityAdorners();
+            set
+            {
+                if (value != knownNodesFilter)
+                {
+                    knownNodesFilter = value;
+                    KnownNodesCVS.View?.Refresh();
+                }
             }
         }
 
-        public Notifier KnownNodeToAdd { get => null; set => AddKnownNode(value); }
+        public BaseM KnownNode { get => null; set => AddKnownNode(value); }
+
+        private bool OnKnownNodesFilter(object sender)
+        {
+            if (sender is BaseM model)
+            {
+                return (string.IsNullOrEmpty(knownNodesFilter) || model.PassFilter(knownNodesFilter)) && KnownNodes.All((knownNode) => knownNode.id != model.id);
+            }
+            return false;
+        }
+        public void AddKnownNode(BaseM knownNode)
+        {
+            if (_knownNodesCVSInit)
+            {
+                if (!KnownNodes.Contains(knownNode))
+                {
+                    KnownNodes.Add(knownNode);
+
+                    _knownNodesCVS.View.Refresh();
+
+                    //ShowAvailabilityAdorners();
+                }
+            }
+        }
+        public void RemoveKnownNode(BaseM knownNode)
+        {
+            if (KnownNodes.Remove(knownNode))
+            {
+                _knownNodesCVS.View.Refresh();
+
+                //ShowAvailabilityAdorners();
+            }
+        }
 
         protected ICommand removeKnownNodeCommand;
-        public ICommand RemoveKnownNodeCommand => removeKnownNodeCommand ?? (removeKnownNodeCommand = new RelayCommand<Notifier>((node) => RemoveKnownNode(node), (node) => node != null));
+        public ICommand RemoveKnownNodeCommand => removeKnownNodeCommand ?? (removeKnownNodeCommand = new RelayCommand<BaseM>((knownNode) => RemoveKnownNode(knownNode), (knownNode) => knownNode != null));
 
-        public ObservableCollection<Notifier> PassedNodes { get; }
+        #endregion
 
-        public void AddPassedNode(Notifier node)
+        public ObservableCollection<BaseM> PassedNodes { get; }
+
+        public void AddPassedNode(BaseM node)
         {
             if (!PassedNodes.Contains(node))
             {
-                PassedNodes.Add(node); //Parent?.ShowAvailabilityAdorners();
+                PassedNodes.Add(node);
+
+                //Parent?.ShowAvailabilityAdorners();
             }
         }
 
-        public void RemovePassedNode(Notifier node)
+        public void RemovePassedNode(BaseM node)
         {
             if (PassedNodes.Remove(node))
-            { //Parent?.ShowAvailabilityAdorners();
+            {
+                //Parent?.ShowAvailabilityAdorners();
             }
         }
 
         protected ICommand addPassedNodeCommand;
-        public ICommand AddPassedNodeCommand => addPassedNodeCommand ?? (addPassedNodeCommand = new RelayCommand<Notifier>((node) => AddPassedNode(node), (node) => node != null && !PassedNodes.Contains(node)));
+        public ICommand AddPassedNodeCommand => addPassedNodeCommand ?? (addPassedNodeCommand = new RelayCommand<BaseM>((node) => AddPassedNode(node), (node) => node != null && !PassedNodes.Contains(node)));
 
         protected ICommand removePassedNodeCommand;
-        public ICommand RemovePassedNodeCommand => removePassedNodeCommand ?? (removePassedNodeCommand = new RelayCommand<Notifier>((node) => RemovePassedNode(node), (node) => node != null && PassedNodes.Contains(node)));
+        public ICommand RemovePassedNodeCommand => removePassedNodeCommand ?? (removePassedNodeCommand = new RelayCommand<BaseM>((node) => RemovePassedNode(node), (node) => node != null && PassedNodes.Contains(node)));
 
         public override string Id => null;
         public override string Title => null;
@@ -215,10 +279,11 @@ namespace StorylineEditor.ViewModel
             _itemsCVSInit = false;
             _itemsCVS = new CollectionViewSource();
 
-            PassedDialogsAndReplicas = new ObservableCollection<TreePathVM>();
+            QuestEntries = new ObservableCollection<QuestEntryVM>();
+            _questsCVSInit = false;
+            _questsCVS = new CollectionViewSource();
 
-            JournalEntries = new ObservableCollection<JournalEntryVM>();
-            JournalRecords = new ObservableCollection<Notifier>();
+            PassedDialogsAndReplicas = new ObservableCollection<TreePathVM>();
 
             FullMode = false;
             Gender = GENDER.MALE;
@@ -416,6 +481,103 @@ namespace StorylineEditor.ViewModel
 
         #endregion
 
+        #region JOURNAL
+
+        protected bool _questsCVSInit;
+
+        protected CollectionViewSource _questsCVS;
+        public CollectionViewSource QuestsCVS
+        {
+            get
+            {
+                if (_questsCVS.View == null)
+                {
+                    _questsCVS.Source = ActiveContextService.Quests;
+
+                    _questsCVS.View.Filter = OnQuestsFilter;
+                    _questsCVS.View.SortDescriptions.Add(new SortDescription(nameof(BaseM.id), ListSortDirection.Ascending));
+                    _questsCVS.View.MoveCurrentTo(null);
+
+                    _questsCVSInit = true;
+                }
+
+                return _questsCVS;
+            }
+        }
+
+        public ObservableCollection<QuestEntryVM> QuestEntries { get; }
+
+        protected string questsFilter;
+        public string QuestsFilter
+        {
+            set
+            {
+                if (value != questsFilter)
+                {
+                    questsFilter = value;
+                    QuestsCVS.View?.Refresh();
+                }
+            }
+        }
+
+        public BaseM Quest { get => null; set => AddQuest(value); }
+
+        private bool OnQuestsFilter(object sender)
+        {
+            if (sender is BaseM model)
+            {
+                return (string.IsNullOrEmpty(questsFilter) || model.PassFilter(questsFilter)) && QuestEntries.All((questEntry) => questEntry.Quest.id != model.id);
+            }
+            return false;
+        }
+        public void AddQuest(BaseM quest)
+        {
+            if (_questsCVSInit)
+            {
+                foreach (var questEntry in QuestEntries)
+                {
+                    if (questEntry.Quest == quest)
+                    {
+                        return;
+                    }
+                }
+
+                QuestEntries.Add(new QuestEntryVM(this, null) { Quest = quest });
+
+                _questsCVS.View.Refresh();
+
+                //ShowAvailabilityAdorners();
+            }
+        }
+        public void RemoveQuest(BaseM quest)
+        {
+            List<QuestEntryVM> questEntriesToRemove = new List<QuestEntryVM>();
+
+            foreach (var questEntry in QuestEntries)
+            {
+                if (questEntry.Quest == quest)
+                {
+                    questEntriesToRemove.Add(questEntry);
+                }
+            }
+
+            if (questEntriesToRemove.Count > 0)
+            {
+                foreach (var questEntryToRemove in questEntriesToRemove)
+                {
+                    QuestEntries.Remove(questEntryToRemove);
+                }
+
+                _questsCVS.View.Refresh();
+
+                //ShowAvailabilityAdorners();
+            }
+        }
+
+        protected ICommand removeQuestCommand;
+        public ICommand RemoveQuestCommand => removeQuestCommand ?? (removeQuestCommand = new RelayCommand<BaseM>((quest) => RemoveQuest(quest), (quest) => quest != null));
+
+        #endregion
 
         public ObservableCollection<TreePathVM> PassedDialogsAndReplicas { get; }
 
@@ -436,40 +598,6 @@ namespace StorylineEditor.ViewModel
 
         protected ICommand removeDialogsAndReplicasCommand;
         public ICommand RemoveDialogsAndReplicasCommand => removeDialogsAndReplicasCommand ?? (removeDialogsAndReplicasCommand = new RelayCommand<TreePathVM>((treePath) => RemoveDialogTreePath(treePath), (treePath) => treePath != null));
-
-        public ObservableCollection<JournalEntryVM> JournalEntries { get; }
-        public ObservableCollection<Notifier> JournalRecords { get; }
-
-        public JournalEntryVM AddJournalTree(Notifier tree)
-        {
-            if (!JournalRecords.Contains(tree))
-            {
-                JournalRecords.Add(tree);
-
-                JournalEntryVM journalEntry = new JournalEntryVM(this, null) { Quest = tree };
-                JournalEntries.Add(journalEntry);
-
-                //ShowAvailabilityAdorners();
-
-                return journalEntry;
-            }
-
-            return JournalEntries[JournalRecords.IndexOf(tree)];
-        }
-        public void RemoveJournalEntry(JournalEntryVM journalEntry)
-        {
-            if (JournalEntries.Remove(journalEntry))
-            {
-                JournalRecords.Remove(journalEntry.Quest);
-
-                //ShowAvailabilityAdorners();
-            }
-        }
-
-        public Notifier JournalEntryToAdd { get => null; set => AddJournalTree(value); }
-
-        protected ICommand removeJournalEntryCommand;
-        public ICommand RemoveJournalEntryCommand => removeJournalEntryCommand ?? (removeJournalEntryCommand = new RelayCommand<JournalEntryVM>((journalEntry) => RemoveJournalEntry(journalEntry), (journalEntry) => journalEntry != null));
 
         protected bool fullMode;
         public bool FullMode
