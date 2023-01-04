@@ -28,7 +28,20 @@ namespace StorylineEditor.ViewModel
         private static double _viewHeight;
         public static double ViewHeight { get => _viewHeight; set => _viewHeight = value > 0 ? value : _viewHeight; }
 
+        public static IDlgService DlgService { get; set; }
+
+        public static HistoryVM History { get; }
+
+        static ActiveContextService()
+        {
+            History = new HistoryVM();
+        }
+
+
+
         public static StorylineVM ActiveStoryline { get; set; }
+
+
 
         public static event EventHandler ActiveTabChanged = delegate { };
 
@@ -48,9 +61,13 @@ namespace StorylineEditor.ViewModel
             }
         }
         
+
+
         public static ICopyPaste ActiveCopyPaste { get; set; }
-        public static IGraph ActiveGraph { get; set; }
-        
+        public static IGraph ActiveGraph { get; set; }        
+
+
+
         public static IEnumerable<BaseM> GetEnumerator(params List<BaseM>[] collectionSet)
         {
             for (int i = 0; i < collectionSet.Length; i++)

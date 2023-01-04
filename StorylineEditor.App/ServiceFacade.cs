@@ -16,6 +16,10 @@ namespace StorylineEditor.App
 {
     public static class ServiceFacade
     {
+        public const string XmlFilter = "XML files (*.xml)|*.xml";
+
+        public const string ConfigXmlPath = "ConfigM.xml";
+
         public static readonly IFileService FileService;
 
         static ServiceFacade()

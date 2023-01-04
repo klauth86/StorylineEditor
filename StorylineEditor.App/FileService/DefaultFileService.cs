@@ -11,13 +11,13 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using Microsoft.Win32;
+using System.IO;
 
 namespace StorylineEditor.App.FileService
 {
     public class DefaultFileService : IFileService
     {
         public string Path { get; protected set; }
-
         public string OpenFile(string filter, bool refreshPath)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -30,7 +30,6 @@ namespace StorylineEditor.App.FileService
 
             return null;
         }
-
         public string SaveFile(string filter, bool refreshPath)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -43,5 +42,7 @@ namespace StorylineEditor.App.FileService
 
             return null;
         }
+
+        public FileStream OpenFile(string path, FileMode mode) { return File.Open(path, mode); }
     }
 }

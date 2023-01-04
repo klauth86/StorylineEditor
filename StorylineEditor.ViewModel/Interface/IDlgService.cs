@@ -10,28 +10,10 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using StorylineEditor.ViewModel.Common;
-using StorylineEditor.ViewModel.Config;
-using System.Collections.Generic;
-
-namespace StorylineEditor.App.Config
+namespace StorylineEditor.ViewModel.Interface
 {
-    public class ConfigVM : SimpleVM<ConfigM>
+    public interface IDlgService
     {
-        public ConfigVM(ConfigM model) : base(model, null)
-        {
-            UserActions = new List<UserActionVM>();
-            
-            foreach (var userAction in Model.UserActions)
-            {
-                UserActions.Add(new UserActionVM(userAction));
-            }
-        }
-
-        public List<UserActionVM> UserActions { get; }
-
-        public override string Id => throw new System.NotImplementedException();
-        public override string Title => null;
-        public override string Stats => null;
+        void ShowDialog(object dataContext, string title, string stats);
     }
 }

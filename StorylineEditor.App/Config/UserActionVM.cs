@@ -10,17 +10,17 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.ViewModel;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Config;
+using System.IO;
 using System.Windows.Input;
 
 namespace StorylineEditor.App.Config
 {
     public class UserActionVM : SimpleVM<UserActionM>
     {
-        public UserActionVM(UserActionM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
-
-        public override string Id => throw new System.NotImplementedException();
+        public UserActionVM(UserActionM model) : base(model, null) { }
 
         public MouseButton MouseButton
         {
@@ -30,8 +30,9 @@ namespace StorylineEditor.App.Config
                 if (value != Model.MouseButton)
                 {
                     Model.MouseButton = value;
-                    CallbackContext?.Callback(this, nameof(MouseButton));
                     Notify(nameof(MouseButton));
+
+                    SaveConfig();
                 }
             }
         }
@@ -50,8 +51,9 @@ namespace StorylineEditor.App.Config
                     Model.ModifierKeys &= ~ModifierKeys.Alt;
                 }
 
-                CallbackContext?.Callback(this, nameof(IsAlt));
                 Notify(nameof(IsAlt));
+
+                SaveConfig();
             }
         }
 
@@ -69,8 +71,9 @@ namespace StorylineEditor.App.Config
                     Model.ModifierKeys &= ~ModifierKeys.Control;
                 }
 
-                CallbackContext?.Callback(this, nameof(IsControl));
                 Notify(nameof(IsControl));
+
+                SaveConfig();
             }
         }
 
@@ -88,11 +91,21 @@ namespace StorylineEditor.App.Config
                     Model.ModifierKeys &= ~ModifierKeys.Shift;
                 }
 
-                CallbackContext?.Callback(this, nameof(IsShift));
                 Notify(nameof(IsShift));
+
+                SaveConfig();
             }
         }
 
+        private void SaveConfig()
+        {
+            using (var fileStream = ServiceFacade.FileService.OpenFile(ServiceFacade.ConfigXmlPath, FileMode.Create))
+            {
+                SerializeService.Serialize(fileStream, ConfigM.Config);
+            }
+        }
+
+        public override string Id => throw new System.NotImplementedException();
         public override string Title => null;
         public override string Stats => null;
     }

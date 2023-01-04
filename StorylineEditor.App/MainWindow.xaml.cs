@@ -17,6 +17,7 @@ using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModel;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Config;
+using StorylineEditor.ViewModel.Interface;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,16 +29,13 @@ namespace StorylineEditor.App
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, ICallbackContext
+    public partial class MainWindow : Window, IDlgService
     {
-        const string xmlFilter = "XML files (*.xml)|*.xml";
-        const string configXmlPath = nameof(ConfigM) + ".xml";
-
         static MainWindow()
         {
-            if (File.Exists(configXmlPath))
+            if (File.Exists(ServiceFacade.ConfigXmlPath))
             {
-                using (var fileStream = File.Open(configXmlPath, FileMode.Open))
+                using (var fileStream = ServiceFacade.FileService.OpenFile(ServiceFacade.ConfigXmlPath, FileMode.Open))
                 {
                     ConfigM.Config = SerializeService.Deserialize<ConfigM>(fileStream);
                 }
@@ -46,15 +44,10 @@ namespace StorylineEditor.App
             {
                 ConfigM.InitDefaultConfig();
 
-                SaveConfig();
-            }
-        }
-
-        private static void SaveConfig()
-        {
-            using (var fileStream = File.Open(configXmlPath, FileMode.Create))
-            {
-                SerializeService.Serialize(fileStream, ConfigM.Config);
+                using (var fileStream = ServiceFacade.FileService.OpenFile(ServiceFacade.ConfigXmlPath, FileMode.Create))
+                {
+                    SerializeService.Serialize(fileStream, ConfigM.Config);
+                }
             }
         }
 
@@ -62,10 +55,12 @@ namespace StorylineEditor.App
         {
             InitializeComponent();
 
+            ActiveContextService.DlgService = this;
+
             StorylineM storylineModel = new StorylineM();
             storylineModel.characters.Add(new CharacterM() { id = CharacterM.PLAYER_ID, name = "Основной персонаж" });
 
-            SetDataContext(new StorylineVM(storylineModel, this));
+            SetDataContext(new StorylineVM(storylineModel));
 
             var assemblyName = Assembly.GetExecutingAssembly().GetName();
             Title = string.Format("{0} [{1}]", assemblyName.Name, "new document");
@@ -73,14 +68,14 @@ namespace StorylineEditor.App
 
         private void btn_Open_Click(object sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrEmpty(ServiceFacade.FileService.OpenFile(xmlFilter, true))) OpenFile(ServiceFacade.FileService.Path);
+            if (!string.IsNullOrEmpty(ServiceFacade.FileService.OpenFile(ServiceFacade.XmlFilter, true))) OpenFile(ServiceFacade.FileService.Path);
         }
 
         private void btn_Save_Click(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(ServiceFacade.FileService.Path)) SaveFile(ServiceFacade.FileService.Path);
 
-            else if (!string.IsNullOrEmpty(ServiceFacade.FileService.SaveFile(xmlFilter, true))) SaveFile(ServiceFacade.FileService.Path);
+            else if (!string.IsNullOrEmpty(ServiceFacade.FileService.SaveFile(ServiceFacade.XmlFilter, true))) SaveFile(ServiceFacade.FileService.Path);
         }
 
         private void OpenFile(string path)
@@ -97,7 +92,7 @@ namespace StorylineEditor.App
 
             if (model != null)
             {
-                SetDataContext(new StorylineVM(model, this));
+                SetDataContext(new StorylineVM(model));
 
                 var assemblyName = Assembly.GetExecutingAssembly().GetName();
                 Title = string.Format("{0} [{1}]", assemblyName.Name, path);
@@ -130,7 +125,7 @@ namespace StorylineEditor.App
             new DlgWindow()
             {
                 Owner = this,
-                DataContext = new ConfigVM(ConfigM.Config, this),
+                DataContext = new ConfigVM(ConfigM.Config),
                 SizeToContent = SizeToContent.WidthAndHeight,
                 WindowStyle = WindowStyle.ToolWindow,
                 MinWidth = 256,
@@ -227,6 +222,11 @@ namespace StorylineEditor.App
             }
         }
 
+        public void ShowDialog(object dataContext, string title, string stats)
+        {
+            
+        }
+
         public void Callback(object viewModelObj, string propName)
         {
             if (propName == nameof(ICallbackContext))
@@ -254,10 +254,6 @@ namespace StorylineEditor.App
                     ResizeMode = ResizeMode.NoResize,
                     Title = App.Current.Resources["String_Tag_Player_Title"]?.ToString()
                 }.ShowDialog();
-            }
-            else
-            {
-                SaveConfig();
             }
         }
     }

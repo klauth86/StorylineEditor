@@ -10,6 +10,8 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using System.IO;
+
 namespace StorylineEditor.App.FileService
 {
     public interface IFileService
@@ -17,5 +19,7 @@ namespace StorylineEditor.App.FileService
         string Path { get; }
         string OpenFile(string filter, bool refreshPath); // открытие файла
         string SaveFile(string filter, bool refreshPath);  // сохранение файла
+
+        FileStream OpenFile(string path, FileMode mode);
     }
 }
