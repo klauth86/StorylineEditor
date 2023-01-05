@@ -139,16 +139,9 @@ namespace StorylineEditor.ViewModel
 
         public void Callback(object viewModelObj, string propName)
         {
-            if (propName == nameof(ICallbackContext) || propName == nameof(HistoryVM))
+            if (viewModelObj != null && propName == nameof(BaseVM<BaseM>.Name))
             {
-                CallbackContext?.Callback(viewModelObj, propName);
-            }
-            else
-            {
-                if (viewModelObj != null && propName == nameof(BaseVM<BaseM>.Name))
-                {
-                    CollectionViewSource.GetDefaultView(ItemsVMs)?.Refresh();
-                }
+                CollectionViewSource.GetDefaultView(ItemsVMs)?.Refresh();
             }
         }
 

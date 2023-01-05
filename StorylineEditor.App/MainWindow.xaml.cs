@@ -224,36 +224,31 @@ namespace StorylineEditor.App
 
         public void ShowDialog(object dataContext, string title, string stats)
         {
-            
-        }
-
-        public void Callback(object viewModelObj, string propName)
-        {
-            if (propName == nameof(ICallbackContext))
+            if (dataContext is HistoryVM)
             {
                 new DlgWindow()
                 {
                     Owner = this,
-                    DataContext = viewModelObj,
-                    SizeToContent = SizeToContent.WidthAndHeight,
-                    WindowStyle = WindowStyle.ToolWindow,
-                    MinWidth = 256,
-                    ResizeMode = ResizeMode.NoResize,
-                    ContentTemplate = App.Current.Resources["DT_Graph_Stats"] as DataTemplate
-                }.Show();
-            }
-            else if (propName == nameof(HistoryVM))
-            {
-                new DlgWindow()
-                {
-                    Owner = this,
-                    DataContext = viewModelObj,
+                    DataContext = dataContext,
                     SizeToContent = SizeToContent.WidthAndHeight,
                     WindowStyle = WindowStyle.ToolWindow,
                     MinWidth = 256,
                     ResizeMode = ResizeMode.NoResize,
                     Title = App.Current.Resources["String_Tag_Player_Title"]?.ToString()
                 }.ShowDialog();
+            }
+            else
+            {
+                new DlgWindow()
+                {
+                    Owner = this,
+                    DataContext = dataContext,
+                    SizeToContent = SizeToContent.WidthAndHeight,
+                    WindowStyle = WindowStyle.ToolWindow,
+                    MinWidth = 256,
+                    ResizeMode = ResizeMode.NoResize,
+                    ContentTemplate = App.Current.Resources["DT_Graph_Stats"] as DataTemplate
+                }.Show();
             }
         }
     }

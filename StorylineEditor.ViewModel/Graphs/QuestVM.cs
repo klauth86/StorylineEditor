@@ -29,7 +29,7 @@ namespace StorylineEditor.ViewModel.Graphs
         protected ICommand infoCommand;
         public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<Notifier>((viewModel) =>
         {
-            CallbackContext?.Callback(this, nameof(ICallbackContext));
+            ActiveContextService.DlgService?.ShowDialog(this, null, null);
         }));
 
         public override string Stats => Graph_BaseVM<QuestM>.GetStats(Model);

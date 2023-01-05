@@ -221,7 +221,7 @@ namespace StorylineEditor.ViewModel.Graphs
         public ICommand GoToOriginCommand => goToOriginCommand ?? (goToOriginCommand = new RelayCommand(() => StartScrollingTask(OriginVM.GetOrigin(), null)));
 
         protected ICommand playCommand;
-        public ICommand PlayCommand => playCommand ?? (playCommand = new RelayCommand(() => { CallbackContext?.Callback(this, nameof(HistoryVM)); }, () => HasSelection()));
+        public ICommand PlayCommand => playCommand ?? (playCommand = new RelayCommand(() => ActiveContextService.DlgService?.ShowDialog(ActiveContextService.History, null, null), () => HasSelection()));
 
         protected ICommand selectCommand;
         public override ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<Notifier>((viewModel) => { }));
@@ -940,18 +940,11 @@ namespace StorylineEditor.ViewModel.Graphs
 
         public void Callback(object viewModelObj, string propName)
         {
-            if (propName == nameof(ICallbackContext) || propName == nameof(HistoryVM))
+            if (viewModelObj is INode nodeViewModel)
             {
-                CallbackContext?.Callback(viewModelObj, propName);
-            }
-            else
-            {
-                if (viewModelObj is INode nodeViewModel)
-                {
-                    if (propName == nameof(INode.PositionX)) UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.X);
-                    else if (propName == nameof(INode.PositionY)) UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.Y);
-                    else if (propName == nameof(INode.Gender)) OnModelChanged(Model, nameof(Stats));
-                }
+                if (propName == nameof(INode.PositionX)) UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.X);
+                else if (propName == nameof(INode.PositionY)) UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.Y);
+                else if (propName == nameof(INode.Gender)) OnModelChanged(Model, nameof(Stats));
             }
         }
 
