@@ -41,6 +41,7 @@
     <Compile Include="Interface\IGraph.cs" />
     <Compile Include="Interface\ICollection_Base.cs" />
     <Compile Include="Interface\IPositioned.cs" />
+    <Compile Include="Interface\IWithModel.cs" />
     <Compile Include="LocationVM.cs" />
     <Compile Include="GameEvents\GE_Relation_ChangeVM.cs" />
     <Compile Include="GameEvents\GE_Quest_Node_PassVM.cs" />

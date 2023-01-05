@@ -17,6 +17,7 @@ using StorylineEditor.Model.Nodes;
 using StorylineEditor.Model.Predicates;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.GameEvents;
+using StorylineEditor.ViewModel.Interface;
 using StorylineEditor.ViewModel.Predicates;
 using System;
 using System.Collections.ObjectModel;

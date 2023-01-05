@@ -22,11 +22,6 @@ namespace StorylineEditor.ViewModel.Common
         void Callback(object viewModelObj, string propName);
     }
 
-    public interface IWithModel
-    {
-        ModelType GetModel<ModelType>() where ModelType : class;
-    }
-
     public abstract class SimpleVM<T> : Notifier, IWithModel where T : class
     {
         public static event Action<T, string> ModelChangedEvent = delegate { };

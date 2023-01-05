@@ -14,6 +14,7 @@ using StorylineEditor.Model;
 using StorylineEditor.Model.Graphs;
 using StorylineEditor.Model.Predicates;
 using StorylineEditor.ViewModel.Common;
+using StorylineEditor.ViewModel.Interface;
 using System.Linq;
 using System.Windows.Data;
 
