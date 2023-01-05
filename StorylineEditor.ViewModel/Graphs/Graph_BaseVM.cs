@@ -221,7 +221,7 @@ namespace StorylineEditor.ViewModel.Graphs
         public ICommand GoToOriginCommand => goToOriginCommand ?? (goToOriginCommand = new RelayCommand(() => StartScrollingTask(OriginVM.GetOrigin(), null)));
 
         protected ICommand playCommand;
-        public ICommand PlayCommand => playCommand ?? (playCommand = new RelayCommand(() => ActiveContextService.DlgService?.ShowDialog(ActiveContextService.History), () => HasSelection()));
+        public ICommand PlayCommand => playCommand ?? (playCommand = new RelayCommand(() => ActiveContextService.DialogService?.ShowDialog(ActiveContextService.History), () => HasSelection()));
 
         protected ICommand selectCommand;
         public override ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<Notifier>((viewModel) => { }));

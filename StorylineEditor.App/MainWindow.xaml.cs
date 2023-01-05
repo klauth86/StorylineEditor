@@ -29,7 +29,7 @@ namespace StorylineEditor.App
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, IDlgService
+    public partial class MainWindow : Window, IDialogService
     {
         static MainWindow()
         {
@@ -55,7 +55,7 @@ namespace StorylineEditor.App
         {
             InitializeComponent();
 
-            ActiveContextService.DlgService = this;
+            ActiveContextService.DialogService = this;
 
             StorylineM storylineModel = new StorylineM();
             storylineModel.characters.Add(new CharacterM() { id = CharacterM.PLAYER_ID, name = "Основной персонаж" });

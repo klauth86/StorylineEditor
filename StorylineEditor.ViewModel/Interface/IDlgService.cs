@@ -12,7 +12,7 @@ StorylineEditor распространяется в надежде, что он�
 
 namespace StorylineEditor.ViewModel.Interface
 {
-    public interface IDlgService
+    public interface IDialogService
     {
         void ShowDialog(object dataContext);
     }

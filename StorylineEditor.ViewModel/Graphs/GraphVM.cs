@@ -27,7 +27,7 @@ namespace StorylineEditor.ViewModel.Graphs
         public GraphVM(T model, ICallbackContext callbackContext) : base(model, callbackContext) { }
 
         protected ICommand infoCommand;
-        public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<Notifier>((viewModel) => ActiveContextService.DlgService?.ShowDialog(this)));
+        public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<Notifier>((viewModel) => ActiveContextService.DialogService?.ShowDialog(this)));
 
         public string Stats => GetStats(Model);
 

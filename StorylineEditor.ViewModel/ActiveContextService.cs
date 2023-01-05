@@ -28,7 +28,7 @@ namespace StorylineEditor.ViewModel
         private static double _viewHeight;
         public static double ViewHeight { get => _viewHeight; set => _viewHeight = value > 0 ? value : _viewHeight; }
 
-        public static IDlgService DlgService { get; set; }
+        public static IDialogService DialogService { get; set; }
 
         public static HistoryVM History { get; }
 
