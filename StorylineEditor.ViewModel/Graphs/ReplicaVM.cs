@@ -31,7 +31,7 @@ namespace StorylineEditor.ViewModel.Graphs
         protected ICommand infoCommand;
         public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<Notifier>((viewModel) =>
         {
-            ActiveContextService.DlgService?.ShowDialog(this, null, null);
+            ActiveContextService.DlgService?.ShowDialog(this);
         }));
 
         public override string Stats => Graph_BaseVM<ReplicaM>.GetStats(Model);
@@ -106,7 +106,6 @@ namespace StorylineEditor.ViewModel.Graphs
             }
         }
 
-        public override string Title => null;
         public override string Stats => null;
     }
 }

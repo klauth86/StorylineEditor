@@ -16,7 +16,7 @@ StorylineEditor распространяется в надежде, что он�
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vmc="clr-namespace:StorylineEditor.ViewModel.Common;assembly=StorylineEditor.ViewModel"
-        mc:Ignorable="d" Title="MainWindow" WindowState="Maximized" Content="{Binding}">
+        mc:Ignorable="d" WindowState="Maximized" Content="{Binding}">
     <Window.ContentTemplate>
         <DataTemplate>
             <DockPanel>

@@ -14,6 +14,6 @@ namespace StorylineEditor.ViewModel.Interface
 {
     public interface IDlgService
     {
-        void ShowDialog(object dataContext, string title, string stats);
+        void ShowDialog(object dataContext);
     }
 }

@@ -222,7 +222,7 @@ namespace StorylineEditor.App
             }
         }
 
-        public void ShowDialog(object dataContext, string title, string stats)
+        public void ShowDialog(object dataContext)
         {
             if (dataContext is HistoryVM)
             {

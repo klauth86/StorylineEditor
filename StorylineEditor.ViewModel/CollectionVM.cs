@@ -145,7 +145,6 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        public override string Title => null;
         public override string Stats => null;
     }
 }

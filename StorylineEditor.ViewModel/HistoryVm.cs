@@ -142,7 +142,6 @@ namespace StorylineEditor.ViewModel
         public ICommand RemoveNodeCommand => removeNodeCommand ?? (removeNodeCommand = new RelayCommand<BaseM>((node) => RemoveNode(node), (node) => node != null));
 
         public override string Id => null;
-        public override string Title => null;
         public override string Stats => null;
     }
 
@@ -266,7 +265,6 @@ namespace StorylineEditor.ViewModel
         public ICommand RemovePassedNodeCommand => removePassedNodeCommand ?? (removePassedNodeCommand = new RelayCommand<BaseM>((node) => RemovePassedNode(node), (node) => node != null && PassedNodes.Contains(node)));
 
         public override string Id => null;
-        public override string Title => null;
         public override string Stats => null;
     }
 
@@ -296,7 +294,6 @@ namespace StorylineEditor.ViewModel
         }
 
         public override string Id => null;
-        public override string Title => null;
         public override string Stats => null;
     }
 
