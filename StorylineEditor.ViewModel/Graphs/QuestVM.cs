@@ -18,21 +18,12 @@ using StorylineEditor.ViewModel.Nodes;
 using System;
 using System.Linq;
 using System.Windows;
-using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Graphs
 {
-    public class QuestVM : BaseVM<QuestM>
+    public class QuestVM : GraphVM<QuestM>
     {
         public QuestVM(QuestM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
-
-        protected ICommand infoCommand;
-        public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<Notifier>((viewModel) =>
-        {
-            ActiveContextService.DlgService?.ShowDialog(this);
-        }));
-
-        public override string Stats => Graph_BaseVM<QuestM>.GetStats(Model);
     }
 
     public class QuestEditorVM : Graph_BaseVM<QuestM>
@@ -119,7 +110,5 @@ namespace StorylineEditor.ViewModel.Graphs
                 }
             }
         }
-
-        public override string Stats => null;
     }
 }

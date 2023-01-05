@@ -18,23 +18,14 @@ using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Graphs
 {
-    public class ReplicaVM : BaseVM<ReplicaM>
+    public class ReplicaVM : GraphVM<ReplicaM>
     {
         public BaseM ReplicaLocation => ActiveContextService.GetLocation(Model.locationId);
 
         public ReplicaVM(ReplicaM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
-
-        protected ICommand infoCommand;
-        public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<Notifier>((viewModel) =>
-        {
-            ActiveContextService.DlgService?.ShowDialog(this);
-        }));
-
-        public override string Stats => Graph_BaseVM<ReplicaM>.GetStats(Model);
     }
 
     public class ReplicaEditorVM : Graph_BaseVM<ReplicaM>
@@ -105,7 +96,5 @@ namespace StorylineEditor.ViewModel.Graphs
                 }
             }
         }
-
-        public override string Stats => null;
     }
 }

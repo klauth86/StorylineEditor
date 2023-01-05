@@ -19,24 +19,15 @@ using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Graphs
 {
-    public class DialogVM : BaseVM<DialogM>
+    public class DialogVM : GraphVM<DialogM>
     {
         public DialogVM(DialogM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
 
         public BaseM DialogCharacter => ActiveContextService.GetCharacter(Model.npcId);
         public BaseM DialogLocation => ActiveContextService.GetLocation(Model.locationId);
-
-        protected ICommand infoCommand;
-        public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<Notifier>((viewModel) =>
-        {
-            ActiveContextService.DlgService?.ShowDialog(this);
-        }));
-
-        public override string Stats => Graph_BaseVM<DialogM>.GetStats(Model); 
     }
 
     public class DialogEditorVM : Graph_BaseVM<DialogM>
@@ -156,7 +147,5 @@ namespace StorylineEditor.ViewModel.Graphs
                 }
             }
         }
-
-        public override string Stats => null;
     }
 }

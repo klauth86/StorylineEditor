@@ -84,7 +84,5 @@ namespace StorylineEditor.ViewModel.Common
 
         protected ICommand unregisterContextCommand;
         public ICommand UnregisterContextCommand => unregisterContextCommand ?? (unregisterContextCommand = new RelayCommand(() => ActiveContextService.ActiveCopyPaste = null));
-
-        public abstract string Stats { get; }
     }
 }

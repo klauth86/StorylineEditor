@@ -218,6 +218,5 @@ namespace StorylineEditor.ViewModel
         public ICommand AbstractDeleteCommand => abstractDeleteCommand ?? (abstractDeleteCommand = new RelayCommand(() => { ActiveContextService.ActiveCopyPaste?.Delete(); }));
 
         public override string Id => Model.id;
-        public override string Stats => null;
     }
 }

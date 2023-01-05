@@ -34,6 +34,7 @@
     <Compile Include="Config\ConfigM.cs" />
     <Compile Include="Config\UserActionM.cs" />
     <Compile Include="GameEvents\GameEventsHelper.cs" />
+    <Compile Include="Graphs\GraphVM.cs" />
     <Compile Include="HistoryVm.cs" />
     <Compile Include="Interface\ICopyPaste.cs" />
     <Compile Include="Interface\IDlgService.cs" />

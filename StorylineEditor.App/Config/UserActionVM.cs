@@ -106,6 +106,5 @@ namespace StorylineEditor.App.Config
         }
 
         public override string Id => throw new System.NotImplementedException();
-        public override string Stats => null;
     }
 }

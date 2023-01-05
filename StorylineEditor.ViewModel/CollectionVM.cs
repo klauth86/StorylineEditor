@@ -144,7 +144,5 @@ namespace StorylineEditor.ViewModel
                 CollectionViewSource.GetDefaultView(ItemsVMs)?.Refresh();
             }
         }
-
-        public override string Stats => null;
     }
 }

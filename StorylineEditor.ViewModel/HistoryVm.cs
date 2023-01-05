@@ -142,7 +142,6 @@ namespace StorylineEditor.ViewModel
         public ICommand RemoveNodeCommand => removeNodeCommand ?? (removeNodeCommand = new RelayCommand<BaseM>((node) => RemoveNode(node), (node) => node != null));
 
         public override string Id => null;
-        public override string Stats => null;
     }
 
     public class QuestEntryVM : SimpleVM<HistoryVM>
@@ -265,7 +264,6 @@ namespace StorylineEditor.ViewModel
         public ICommand RemovePassedNodeCommand => removePassedNodeCommand ?? (removePassedNodeCommand = new RelayCommand<BaseM>((node) => RemovePassedNode(node), (node) => node != null && PassedNodes.Contains(node)));
 
         public override string Id => null;
-        public override string Stats => null;
     }
 
     public class CharacterEntryVM : SimpleVM<HistoryVM>
@@ -294,7 +292,6 @@ namespace StorylineEditor.ViewModel
         }
 
         public override string Id => null;
-        public override string Stats => null;
     }
 
     public class HistoryVM : Notifier, IDisposable

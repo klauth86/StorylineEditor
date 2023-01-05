@@ -728,7 +728,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
             AddToSelection(viewModel, resetSelection);
 
-            OnModelChanged(Model, nameof(Stats));
+            OnModelChanged(Model, nameof(GraphVM<GraphM>.Stats));
         }
 
         public void Delete()
@@ -805,7 +805,7 @@ namespace StorylineEditor.ViewModel.Graphs
                     NodesVMs.Remove(nodeId);
                     Remove(null, nodeModel, GetContext(nodeModel));
 
-                    OnModelChanged(Model, nameof(Stats));
+                    OnModelChanged(Model, nameof(GraphVM<GraphM>.Stats));
 
                     if (nodeModel is Node_ExitM) UpdateExitNames(null);
                 }
@@ -944,7 +944,7 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 if (propName == nameof(INode.PositionX)) UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.X);
                 else if (propName == nameof(INode.PositionY)) UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.Y);
-                else if (propName == nameof(INode.Gender)) OnModelChanged(Model, nameof(Stats));
+                else if (propName == nameof(INode.Gender)) OnModelChanged(Model, nameof(GraphVM<GraphM>.Stats));
             }
         }
 
@@ -1324,8 +1324,6 @@ namespace StorylineEditor.ViewModel.Graphs
                     Model.name = value;
                     OnModelChanged(Model, nameof(Name));
                     CallbackContext?.Callback(this, nameof(Name));
-
-                    OnModelChanged(Model, nameof(Stats));
                 }
             }
         }
@@ -1339,8 +1337,6 @@ namespace StorylineEditor.ViewModel.Graphs
                 {
                     Model.description = value;
                     OnModelChanged(Model, nameof(Description));
-
-                    OnModelChanged(Model, nameof(Stats));
                 }
             }
         }
@@ -1354,91 +1350,6 @@ namespace StorylineEditor.ViewModel.Graphs
                     linkEntry.Value.IsFilterPassed = NodesVMs[linkEntry.Value.FromNodeId].IsFilterPassed && NodesVMs[linkEntry.Value.ToNodeId].IsFilterPassed;
                 }
             }
-        }
-
-        public static string GetStats(GraphM graphModel)
-        {
-            string result = "";
-
-            Dictionary<string, Dictionary<string, int>> countByCharacter = new Dictionary<string, Dictionary<string, int>>();
-            Dictionary<string, int> countByType = new Dictionary<string, int>();
-
-            int characterKeyMaxLength = 0;
-            int typeKeyMaxLength = 0;
-
-            foreach (var node in graphModel.nodes)
-            {
-                // Characters
-
-                string characterKey = node is Node_RegularM regularNode ? ActiveContextService.GetCharacter(regularNode.characterId)?.name : "N/A";
-
-                string gender = " ";
-                if (node.gender == GENDER.MALE) gender = Application.Current.FindResource("String_Icon_Gender_Male")?.ToString();
-                if (node.gender == GENDER.FEMALE) gender = Application.Current.FindResource("String_Icon_Gender_Female")?.ToString();
-
-                if (!countByCharacter.ContainsKey(characterKey))
-                {
-                    countByCharacter.Add(characterKey, new Dictionary<string, int>()
-                        {
-                            { " ", 0 },
-                            { Application.Current.FindResource("String_Icon_Gender_Male")?.ToString(), 0 },
-                            { Application.Current.FindResource("String_Icon_Gender_Female")?.ToString(), 0 },
-                        }
-                    );
-                    characterKeyMaxLength = Math.Max(characterKey?.Length ?? 0, characterKeyMaxLength);
-                }
-
-                countByCharacter[characterKey][gender]++;
-
-                // Types
-
-                var typeName = node.GetType().Name;
-                var typeKey = Application.Current.FindResource(string.Format("String_Stats_{0}_TmpDescription", typeName))?.ToString();
-
-                if (!countByType.ContainsKey(typeKey))
-                {
-                    countByType.Add(typeKey, 0);
-                    typeKeyMaxLength = Math.Max(typeKey?.Length ?? 0, typeKeyMaxLength);
-                }
-
-                countByType[typeKey]++;
-            }
-
-            if (countByCharacter.Count > 0)
-            {
-                // Delimiter
-                result += Environment.NewLine;
-
-                result += Application.Current.FindResource("String_Stats_Characters")?.ToString() + Environment.NewLine;
-                result += Environment.NewLine;
-
-                foreach (var entry in countByCharacter.OrderBy(pair => pair.Key))
-                {
-                    result += string.Format("{0, -" + (characterKeyMaxLength + 6) + "}{1}",
-                        "- " + entry.Key + ":",
-                        string.Join("\t", entry.Value.Select(pair => string.Format("{0}{1, -6}", pair.Key, pair.Value)))
-                        ) + Environment.NewLine;
-                }
-            }
-
-            if (countByType.Count > 0)
-            {
-                // Delimiter
-                result += Environment.NewLine;
-
-                result += Application.Current.FindResource("String_Stats_Types")?.ToString() + Environment.NewLine;
-                result += Environment.NewLine;
-
-                foreach (var entry in countByType.OrderBy(pair => pair.Key))
-                {
-                    result += string.Format("{0, -" + (typeKeyMaxLength + 6) + "}{1}",
-                        "- " + entry.Key + ": ",
-                        entry.Value
-                        ) + Environment.NewLine;
-                }
-            }
-
-            return result;
         }
 
         protected void UpdateExitNames(BaseM model)

@@ -31,6 +31,5 @@ namespace StorylineEditor.App.Config
         public List<UserActionVM> UserActions { get; }
 
         public override string Id => throw new System.NotImplementedException();
-        public override string Stats => null;
     }
 }
