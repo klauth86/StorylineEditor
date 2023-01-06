@@ -19,9 +19,20 @@ using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Nodes
 {
-    public abstract class Node_BaseVM<T> : BaseVM<T>, INode where T : Node_BaseM
+    public abstract class Node_BaseVM<T, U>
+        : BaseVM<T, U>
+        , INode
+        where T : Node_BaseM
+        where U : class
     {
-        public Node_BaseVM(T model, ICallbackContext callbackContext) : base(model, callbackContext)
+        public Node_BaseVM(
+            T model
+            , U parent
+            )
+            : base(
+                  model
+                  , parent
+                  )
         {
             zIndex = 100;
             isRoot = false;
@@ -36,7 +47,8 @@ namespace StorylineEditor.ViewModel.Nodes
                 {
                     Model.gender = value;
                     OnModelChanged(Model, nameof(Gender));
-                    CallbackContext?.Callback(this, nameof(Gender));
+
+                    ActiveContextService.ActiveGraph.OnNodeGenderChanged(this);
                 }
             }
         }
@@ -50,7 +62,8 @@ namespace StorylineEditor.ViewModel.Nodes
                 {
                     Model.positionX = value;
                     OnModelChanged(Model, nameof(PositionX));
-                    CallbackContext?.Callback(this, nameof(PositionX));
+
+                    ActiveContextService.ActiveGraph.OnNodePositionChanged(this, ENodeUpdateFlags.X);
                 }
             }
         }
@@ -64,7 +77,8 @@ namespace StorylineEditor.ViewModel.Nodes
                 {
                     Model.positionY = value;
                     OnModelChanged(Model, nameof(PositionY));
-                    CallbackContext?.Callback(this, nameof(PositionY));
+
+                    ActiveContextService.ActiveGraph.OnNodePositionChanged(this, ENodeUpdateFlags.Y);
                 }
             }
         }
@@ -80,7 +94,8 @@ namespace StorylineEditor.ViewModel.Nodes
                 if (width != value)
                 {
                     width = value;
-                    CallbackContext?.Callback(this, nameof(PositionX));
+
+                    ActiveContextService.ActiveGraph.OnNodeSizeChanged(this, ENodeUpdateFlags.X);
                 }
             }
         }
@@ -94,7 +109,8 @@ namespace StorylineEditor.ViewModel.Nodes
                 if (height != value)
                 {
                     height = value;
-                    CallbackContext?.Callback(this, nameof(PositionY));
+
+                    ActiveContextService.ActiveGraph.OnNodeSizeChanged(this, ENodeUpdateFlags.Y);
                 }
             }
         }

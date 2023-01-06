@@ -12,17 +12,16 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model;
 using StorylineEditor.Model.GameEvents;
-using StorylineEditor.ViewModel.Common;
 using System.ComponentModel;
 using System.Windows.Data;
 
 namespace StorylineEditor.ViewModel.GameEvents
 {
-    public class GE_Relation_ChangeVM : GE_BaseVM<GE_Relation_ChangeM>
+    public class GE_Relation_ChangeVM : GE_BaseVM<GE_Relation_ChangeM, object>
     {
         public CollectionViewSource CharactersCVS { get; }
 
-        public GE_Relation_ChangeVM(GE_Relation_ChangeM model, ICallbackContext callbackContext) : base(model, callbackContext)
+        public GE_Relation_ChangeVM(GE_Relation_ChangeM model, object parent) : base(model, parent)
         {
             CharactersCVS = new CollectionViewSource() { Source = ActiveContextService.Characters };
 

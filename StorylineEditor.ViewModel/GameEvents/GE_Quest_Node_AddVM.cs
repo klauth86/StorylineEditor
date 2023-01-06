@@ -13,19 +13,18 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Model;
 using StorylineEditor.Model.GameEvents;
 using StorylineEditor.Model.Graphs;
-using StorylineEditor.ViewModel.Common;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 
 namespace StorylineEditor.ViewModel.GameEvents
 {
-    public class GE_Quest_Node_AddVM : GE_BaseVM<GE_Quest_Node_AddM>
+    public class GE_Quest_Node_AddVM : GE_BaseVM<GE_Quest_Node_AddM, object>
     {
         public CollectionViewSource QuestsCVS { get; }
         public CollectionViewSource NodesCVS { get; }
 
-        public GE_Quest_Node_AddVM(GE_Quest_Node_AddM model, ICallbackContext callbackContext) : base(model, callbackContext)
+        public GE_Quest_Node_AddVM(GE_Quest_Node_AddM model, object parent) : base(model, parent)
         {
             QuestsCVS = new CollectionViewSource() { Source = ActiveContextService.Quests };
 

@@ -21,20 +21,42 @@ using System.Windows.Data;
 
 namespace StorylineEditor.ViewModel.Graphs
 {
-    public class ReplicaVM : GraphVM<ReplicaM>
+    public class ReplicaVM
+        : GraphVM<ReplicaM>
     {
-        public BaseM ReplicaLocation => ActiveContextService.GetLocation(Model.locationId);
+        public ReplicaVM(
+            ReplicaM model
+            , object parent
+            )
+            : base(
+                  model
+                  , parent
+                  ) { }
 
-        public ReplicaVM(ReplicaM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+        public BaseM ReplicaLocation => ActiveContextService.GetLocation(Model.locationId);
     }
 
-    public class ReplicaEditorVM : Graph_BaseVM<ReplicaM>
+    public class ReplicaEditorVM
+        : Graph_BaseVM<ReplicaM, object>
     {
         public CollectionViewSource FilteredReplicaLocationCVS { get; }
 
-        public ReplicaEditorVM(ReplicaVM viewModel, ICallbackContext callbackContext, Func<Type, Point, BaseM> modelCreator, Func<BaseM, ICallbackContext, Notifier> viewModelCreator,
-           Func<Notifier, ICallbackContext, Notifier> editorCreator, Type defaultNodeType) : base(viewModel.Model, callbackContext,
-                modelCreator, viewModelCreator, editorCreator, defaultNodeType)
+        public ReplicaEditorVM(
+            ReplicaVM viewModel
+            , object parent
+            , Func<Type, Point, BaseM> modelCreator
+            , Func<BaseM, Notifier> viewModelCreator
+            , Func<Notifier, Notifier> editorCreator
+            , Type defaultNodeType
+            )
+            : base(
+                  viewModel.Model
+                  , parent
+                  , modelCreator
+                  , viewModelCreator
+                  , editorCreator
+                  , defaultNodeType
+                  )
         {
             FilteredReplicaLocationCVS = new CollectionViewSource() { Source = ActiveContextService.Locations };
 

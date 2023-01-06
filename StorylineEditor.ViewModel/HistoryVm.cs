@@ -61,18 +61,21 @@ namespace StorylineEditor.ViewModel
 
     public class PlayerContext_TransitionVM { }
 
-    public class DialogEntryVM : SimpleVM<HistoryVM>
+    public class HistoryItemVM : SimpleVM<BaseM, HistoryVM>
     {
-        public DialogEntryVM(HistoryVM parent, ICallbackContext callbackContext) : base(parent, callbackContext)
-        {
-            Dialog = null;
+        public HistoryItemVM(BaseM model, HistoryVM parent) : base(model, parent) { }
 
+        public override string Id => throw new NotImplementedException();
+    }
+
+    public class DialogEntryVM : HistoryItemVM
+    {
+        public DialogEntryVM(BaseM model, HistoryVM parent) : base(model, parent)
+        {
             Nodes = new ObservableCollection<BaseM>();
             _nodesCVSInit = false;
             _nodesCVS = new CollectionViewSource();
         }
-
-        public BaseM Dialog { get; set; }
 
         protected bool _nodesCVSInit;
 
@@ -83,7 +86,7 @@ namespace StorylineEditor.ViewModel
             {
                 if (_nodesCVS.View == null)
                 {
-                    _nodesCVS.Source = ((GraphM)Dialog).nodes;
+                    _nodesCVS.Source = GetModel<GraphM>().nodes;
 
                     _nodesCVS.View.Filter = OnNodesFilter;
                     _nodesCVS.View.SortDescriptions.Add(new SortDescription(nameof(BaseM.id), ListSortDirection.Ascending));
@@ -140,24 +143,18 @@ namespace StorylineEditor.ViewModel
 
         protected ICommand removeNodeCommand;
         public ICommand RemoveNodeCommand => removeNodeCommand ?? (removeNodeCommand = new RelayCommand<BaseM>((node) => RemoveNode(node), (node) => node != null));
-
-        public override string Id => null;
     }
 
-    public class QuestEntryVM : SimpleVM<HistoryVM>
+    public class QuestEntryVM : HistoryItemVM
     {
-        public QuestEntryVM(HistoryVM parent, ICallbackContext callbackContext) : base(parent, callbackContext)
+        public QuestEntryVM(BaseM model, HistoryVM parent) : base(model, parent)
         {
-            Quest = null;
-
             KnownNodes = new ObservableCollection<BaseM>();
             _knownNodesCVSInit = false;
             _knownNodesCVS = new CollectionViewSource();
 
             PassedNodes = new ObservableCollection<BaseM>();
         }
-
-        public BaseM Quest { get; set; }
 
         #region KNOWN
 
@@ -170,7 +167,7 @@ namespace StorylineEditor.ViewModel
             {
                 if (_knownNodesCVS.View == null)
                 {
-                    _knownNodesCVS.Source = ((GraphM)Quest).nodes;
+                    _knownNodesCVS.Source = GetModel<GraphM>().nodes;
 
                     _knownNodesCVS.View.Filter = OnKnownNodesFilter;
                     _knownNodesCVS.View.SortDescriptions.Add(new SortDescription(nameof(BaseM.id), ListSortDirection.Ascending));
@@ -262,19 +259,14 @@ namespace StorylineEditor.ViewModel
 
         protected ICommand removePassedNodeCommand;
         public ICommand RemovePassedNodeCommand => removePassedNodeCommand ?? (removePassedNodeCommand = new RelayCommand<BaseM>((node) => RemovePassedNode(node), (node) => node != null && PassedNodes.Contains(node)));
-
-        public override string Id => null;
     }
 
-    public class CharacterEntryVM : SimpleVM<HistoryVM>
+    public class CharacterEntryVM : HistoryItemVM
     {
-        public CharacterEntryVM(HistoryVM parent, ICallbackContext callbackContext) : base(parent, callbackContext)
+        public CharacterEntryVM(BaseM model, HistoryVM parent) : base(model, parent)
         {
-            Character = null;
             DeltaRelation = 0;
         }
-
-        public BaseM Character { get; set; }
 
         protected float deltaRelation;
         public float DeltaRelation
@@ -290,8 +282,6 @@ namespace StorylineEditor.ViewModel
                 }
             }
         }
-
-        public override string Id => null;
     }
 
     public class HistoryVM : Notifier, IDisposable
@@ -367,7 +357,7 @@ namespace StorylineEditor.ViewModel
         {
             if (sender is BaseM model)
             {
-                return (string.IsNullOrEmpty(charactersFilter) || model.PassFilter(charactersFilter)) && CharacterEntries.All((characterEntry) => characterEntry.Character.id != model.id) && model.id != CharacterM.PLAYER_ID;
+                return (string.IsNullOrEmpty(charactersFilter) || model.PassFilter(charactersFilter)) && CharacterEntries.All((characterEntry) => characterEntry.Model.id != model.id) && model.id != CharacterM.PLAYER_ID;
             }
             return false;
         }
@@ -377,13 +367,13 @@ namespace StorylineEditor.ViewModel
             {
                 foreach (var characterEntry in CharacterEntries)
                 {
-                    if (characterEntry.Character == character)
+                    if (characterEntry.Model == character)
                     {
                         return;
                     }
                 }
 
-                CharacterEntries.Add(new CharacterEntryVM(this, null) { Character = character });
+                CharacterEntries.Add(new CharacterEntryVM(character, this));
 
                 _charactersCVS.View.Refresh();
 
@@ -396,7 +386,7 @@ namespace StorylineEditor.ViewModel
 
             foreach (var characterEntry in CharacterEntries)
             {
-                if (characterEntry.Character == character)
+                if (characterEntry.Model == character)
                 {
                     characterEntriesToRemove.Add(characterEntry);
                 }
@@ -557,7 +547,7 @@ namespace StorylineEditor.ViewModel
         {
             if (sender is BaseM model)
             {
-                return (string.IsNullOrEmpty(questsFilter) || model.PassFilter(questsFilter)) && QuestEntries.All((questEntry) => questEntry.Quest.id != model.id);
+                return (string.IsNullOrEmpty(questsFilter) || model.PassFilter(questsFilter)) && QuestEntries.All((questEntry) => questEntry.Model.id != model.id);
             }
             return false;
         }
@@ -567,13 +557,13 @@ namespace StorylineEditor.ViewModel
             {
                 foreach (var questEntry in QuestEntries)
                 {
-                    if (questEntry.Quest == quest)
+                    if (questEntry.Model == quest)
                     {
                         return;
                     }
                 }
 
-                QuestEntries.Add(new QuestEntryVM(this, null) { Quest = quest });
+                QuestEntries.Add(new QuestEntryVM(quest, this));
 
                 _questsCVS.View.Refresh();
 
@@ -586,7 +576,7 @@ namespace StorylineEditor.ViewModel
 
             foreach (var questEntry in QuestEntries)
             {
-                if (questEntry.Quest == quest)
+                if (questEntry.Model == quest)
                 {
                     questEntriesToRemove.Add(questEntry);
                 }
@@ -669,7 +659,7 @@ namespace StorylineEditor.ViewModel
                 {
                     _dialogsCVSLocked = true;
 
-                    DialogEntries.Add(new DialogEntryVM(this, null) { Dialog = dialog });
+                    DialogEntries.Add(new DialogEntryVM(dialog, this));
 
                     _dialogsCVS.View.Refresh();
 
@@ -909,7 +899,7 @@ namespace StorylineEditor.ViewModel
 
                 FilterByContext(NextPaths);
 
-                // TODO Filter nodes and paths that are not available in current context for full mode
+                ////// TODO Filter nodes and paths that are not available in current context for full mode
 
                 if (NextPaths.Count == 1)
                 {

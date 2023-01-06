@@ -20,12 +20,12 @@ using System.Windows.Data;
 
 namespace StorylineEditor.ViewModel.Predicates
 {
-    public class P_Dialog_Node_Has_PrevSessionsVM : P_BaseVM<P_Dialog_Node_Has_PrevSessionsM>
+    public class P_Dialog_Node_Has_PrevSessionsVM : P_BaseVM<P_Dialog_Node_Has_PrevSessionsM, object>
     {
         public CollectionViewSource DialogsAndReplicasCVS { get; }
         public CollectionViewSource NodesCVS { get; }
 
-        public P_Dialog_Node_Has_PrevSessionsVM(P_Dialog_Node_Has_PrevSessionsM model, ICallbackContext callbackContext) : base(model, callbackContext)
+        public P_Dialog_Node_Has_PrevSessionsVM(P_Dialog_Node_Has_PrevSessionsM model, object parent) : base(model, parent)
         {
             DialogsAndReplicasCVS = new CollectionViewSource() { Source = ActiveContextService.DialogsAndReplicas };
 

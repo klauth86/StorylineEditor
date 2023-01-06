@@ -18,9 +18,9 @@ using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Predicates
 {
-    public class P_CompositeVM : P_BaseVM<P_CompositeM>
+    public class P_CompositeVM : P_BaseVM<P_CompositeM, object>
     {
-        public P_CompositeVM(P_CompositeM model, ICallbackContext callbackContext) : base(model, callbackContext)
+        public P_CompositeVM(P_CompositeM model, object parent) : base(model, parent)
         {
             IsFirstSelected = true;
         }
@@ -39,13 +39,13 @@ namespace StorylineEditor.ViewModel.Predicates
                     {
                         if (IsFirstSelected)
                         {
-                            PredicateA = PredicatesHelper.CreatePredicateByType(subType, CallbackContext);
+                            PredicateA = PredicatesHelper.CreatePredicateByType(subType, Parent);
                             Model.predicateA = ((IWithModel)PredicateA).GetModel<P_BaseM>();
                             Notify(nameof(PredicateA));
                         }
                         else
                         {
-                            PredicateB = PredicatesHelper.CreatePredicateByType(subType, CallbackContext);
+                            PredicateB = PredicatesHelper.CreatePredicateByType(subType, Parent);
                             Model.predicateB = ((IWithModel)PredicateB).GetModel<P_BaseM>();
                             Notify(nameof(PredicateB));
                         }

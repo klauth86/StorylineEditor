@@ -61,7 +61,7 @@ namespace StorylineEditor.ViewModel
                 finAction(taskStatus);
             }
             catch (TaskCanceledException taskCanceledException) { }
-            catch (Exception exception) { } // TODO
+            catch (Exception exception) { } ////// TODO
             finally
             {
                 Monitor.Exit(_locker);

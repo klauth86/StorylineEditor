@@ -15,13 +15,13 @@ using StorylineEditor.ViewModel.Common;
 
 namespace StorylineEditor.ViewModel
 {
-    public class LocationVM : BaseVM<LocationM>
+    public class LocationVM : BaseVM<LocationM, object>
     {
-        public LocationVM(LocationM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+        public LocationVM(LocationM model, object parent) : base(model, parent) { }
     }
 
     public class LocationEditorVM : LocationVM
     {
-        public LocationEditorVM(LocationVM viewModel, ICallbackContext callbackContext) : base(viewModel.Model, callbackContext) { }
+        public LocationEditorVM(LocationVM viewModel) : base(viewModel.Model, viewModel.Parent) { }
     }
 }

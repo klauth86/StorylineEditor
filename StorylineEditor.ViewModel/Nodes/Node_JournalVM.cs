@@ -11,13 +11,22 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Model.Nodes;
-using StorylineEditor.ViewModel.Common;
 
 namespace StorylineEditor.ViewModel.Nodes
 {
-    public abstract class Node_JournalVM<T> : Node_BaseVM<T> where T : Node_JournalM
+    public abstract class Node_JournalVM<T, U>
+        : Node_BaseVM<T, U>
+        where T : Node_JournalM
+        where U : class
     {
-        public Node_JournalVM(T model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+        public Node_JournalVM(
+            T model
+            , U parent
+            )
+            : base(
+                  model
+                  , parent
+                  ) { }
 
         public string Result
         {
@@ -33,23 +42,23 @@ namespace StorylineEditor.ViewModel.Nodes
         }
     }
 
-    public class Node_Journal_StepVM : Node_JournalVM<Node_StepM>
+    public class Node_Journal_StepVM : Node_JournalVM<Node_StepM, object>
     {
-        public Node_Journal_StepVM(Node_StepM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+        public Node_Journal_StepVM(Node_StepM model, object parent) : base(model, parent) { }
     }
 
     public class Node_Journal_StepEditorVM : Node_Journal_StepVM
     {
-        public Node_Journal_StepEditorVM(Node_Journal_StepVM viewModel) : base(viewModel.Model, viewModel.CallbackContext) { }
+        public Node_Journal_StepEditorVM(Node_Journal_StepVM viewModel) : base(viewModel.Model, viewModel.Parent) { }
     }
 
-    public class Node_Journal_AlternativeVM : Node_JournalVM<Node_AlternativeM>
+    public class Node_Journal_AlternativeVM : Node_JournalVM<Node_AlternativeM, object>
     {
-        public Node_Journal_AlternativeVM(Node_AlternativeM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+        public Node_Journal_AlternativeVM(Node_AlternativeM model, object parent) : base(model, parent) { }
     }
 
     public class Node_Journal_AlternativeEditorVM : Node_Journal_AlternativeVM
     {
-        public Node_Journal_AlternativeEditorVM(Node_Journal_AlternativeVM viewModel) : base(viewModel.Model, viewModel.CallbackContext) { }
+        public Node_Journal_AlternativeEditorVM(Node_Journal_AlternativeVM viewModel) : base(viewModel.Model, viewModel.Parent) { }
     }
 }

@@ -18,11 +18,11 @@ using System.Windows.Data;
 
 namespace StorylineEditor.ViewModel.GameEvents
 {
-    public class GE_Item_PickUpVM : GE_BaseVM<GE_Item_PickUpM>
+    public class GE_Item_PickUpVM : GE_BaseVM<GE_Item_PickUpM, object>
     {
         public CollectionViewSource ItemsCVS { get; }
 
-        public GE_Item_PickUpVM(GE_Item_PickUpM model, ICallbackContext callbackContext) : base(model, callbackContext)
+        public GE_Item_PickUpVM(GE_Item_PickUpM model, object parent) : base(model, parent)
         {
             ItemsCVS = new CollectionViewSource() { Source = ActiveContextService.Items };
 

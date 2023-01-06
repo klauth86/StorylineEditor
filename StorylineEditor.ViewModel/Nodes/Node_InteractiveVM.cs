@@ -28,15 +28,18 @@ using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Nodes
 {
-    public abstract class Node_InteractiveVM<T> : Node_BaseVM<T> where T : Node_InteractiveM
+    public abstract class Node_InteractiveVM<T, U>
+        : Node_BaseVM<T, U>
+        where T : Node_InteractiveM
+        where U : class
     {
-        public Node_InteractiveVM(T model, ICallbackContext callbackContext) : base(model, callbackContext)
+        public Node_InteractiveVM(T model, U parent) : base(model, parent)
         {
             Predicates = new ObservableCollection<IWithModel>();
-            foreach (var predicateModel in Model.predicates) Predicates.Add(PredicatesHelper.CreatePredicateByModel(predicateModel, CallbackContext));
+            foreach (var predicateModel in Model.predicates) Predicates.Add(PredicatesHelper.CreatePredicateByModel(predicateModel, this));
 
             GameEvents = new ObservableCollection<IWithModel>();
-            foreach (var gameEventModel in Model.gameEvents) GameEvents.Add(GameEventsHelper.CreateGameEventByModel(gameEventModel, CallbackContext));
+            foreach (var gameEventModel in Model.gameEvents) GameEvents.Add(GameEventsHelper.CreateGameEventByModel(gameEventModel, this));
         }
 
         public Type SelectedPredicateType
@@ -46,7 +49,7 @@ namespace StorylineEditor.ViewModel.Nodes
             {
                 if (value != null)
                 {
-                    IWithModel viewModel = PredicatesHelper.CreatePredicateByType(value, CallbackContext);
+                    IWithModel viewModel = PredicatesHelper.CreatePredicateByType(value, this);
                     Model.predicates.Add(viewModel.GetModel<P_BaseM>());
                     Predicates.Add(viewModel);
 
@@ -65,7 +68,7 @@ namespace StorylineEditor.ViewModel.Nodes
             {
                 if (value != null)
                 {
-                    IWithModel viewModel = GameEventsHelper.CreateGameEventByType(value, CallbackContext);
+                    IWithModel viewModel = GameEventsHelper.CreateGameEventByType(value, this);
                     Model.gameEvents.Add(viewModel.GetModel<GE_BaseM>());
                     GameEvents.Add(viewModel);
 
@@ -96,41 +99,41 @@ namespace StorylineEditor.ViewModel.Nodes
         }));
     }
 
-    public class Node_RandomVM : Node_InteractiveVM<Node_RandomM>
+    public class Node_RandomVM : Node_InteractiveVM<Node_RandomM, object>
     {
-        public Node_RandomVM(Node_RandomM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+        public Node_RandomVM(Node_RandomM model, object parent) : base(model, parent) { }
     }
 
     public class Node_RandomEditorVM : Node_RandomVM
     {
-        public Node_RandomEditorVM(Node_RandomVM viewModel) : base(viewModel.Model, viewModel.CallbackContext) { }
+        public Node_RandomEditorVM(Node_RandomVM viewModel) : base(viewModel.Model, viewModel.Parent) { }
     }
 
-    public class Node_TransitVM : Node_InteractiveVM<Node_TransitM>
+    public class Node_TransitVM : Node_InteractiveVM<Node_TransitM, object>
     {
-        public Node_TransitVM(Node_TransitM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+        public Node_TransitVM(Node_TransitM model, object parent) : base(model, parent) { }
     }
 
     public class Node_TransitEditorVM : Node_TransitVM
     {
-        public Node_TransitEditorVM(Node_TransitVM viewModel) : base(viewModel.Model, viewModel.CallbackContext) { }
+        public Node_TransitEditorVM(Node_TransitVM viewModel) : base(viewModel.Model, viewModel.Parent) { }
     }
 
-    public class Node_GateVM : Node_InteractiveVM<Node_GateM>
+    public class Node_GateVM : Node_InteractiveVM<Node_GateM, object>
     {
-        public Node_GateVM(Node_GateM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+        public Node_GateVM(Node_GateM model, object parent) : base(model, parent) { }
 
         public BaseM TargetDialog => ActiveContextService.GetDialog(Model.dialogId);
 
         public BaseM TargetExitNode => (TargetDialog as GraphM)?.nodes.FirstOrDefault((node) => node.id == Model.exitNodeId);
     }
 
-    public class Node_GateEditorVM : Node_InteractiveVM<Node_GateM>
+    public class Node_GateEditorVM : Node_InteractiveVM<Node_GateM, object>
     {
         public CollectionViewSource DialogsCVS { get; }
         public CollectionViewSource NodesCVS { get; }
 
-        public Node_GateEditorVM(Node_GateVM viewModel) : base(viewModel.Model, viewModel.CallbackContext)
+        public Node_GateEditorVM(Node_GateVM viewModel) : base(viewModel.Model, viewModel.Parent)
         {
             DialogsCVS = new CollectionViewSource() { Source = ActiveContextService.Dialogs };
 
@@ -239,13 +242,13 @@ namespace StorylineEditor.ViewModel.Nodes
         }
     }
 
-    public class Node_ExitVM : Node_BaseVM<Node_ExitM>
+    public class Node_ExitVM : Node_BaseVM<Node_ExitM, object>
     {
-        public Node_ExitVM(Node_ExitM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+        public Node_ExitVM(Node_ExitM model, object parent) : base(model, parent) { }
     }
 
     public class Node_ExitEditorVM : Node_ExitVM
     {
-        public Node_ExitEditorVM(Node_ExitVM viewModel) : base(viewModel.Model, viewModel.CallbackContext) { }
+        public Node_ExitEditorVM(Node_ExitVM viewModel) : base(viewModel.Model, viewModel.Parent) { }
     }
 }

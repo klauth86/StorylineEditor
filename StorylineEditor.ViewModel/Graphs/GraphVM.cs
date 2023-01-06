@@ -22,9 +22,9 @@ using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Graphs
 {
-    public class GraphVM<T> : BaseVM<T> where T : GraphM
+    public class GraphVM<T> : BaseVM<T, object> where T : GraphM
     {
-        public GraphVM(T model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+        public GraphVM(T model, object parent) : base(model, parent) { }
 
         protected ICommand infoCommand;
         public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<Notifier>((viewModel) => ActiveContextService.DialogService?.ShowDialog(this)));

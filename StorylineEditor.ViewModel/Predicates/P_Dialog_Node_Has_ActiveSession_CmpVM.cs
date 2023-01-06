@@ -13,26 +13,26 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Model;
 using StorylineEditor.Model.Graphs;
 using StorylineEditor.Model.Predicates;
-using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Interface;
 using System.Linq;
 using System.Windows.Data;
 
 namespace StorylineEditor.ViewModel.Predicates
 {
-    public class P_Dialog_Node_Has_ActiveSession_CmpVM : P_BaseVM<P_Dialog_Node_Has_ActiveSession_CmpM>
+    public class P_Dialog_Node_Has_ActiveSession_CmpVM : P_BaseVM<P_Dialog_Node_Has_ActiveSession_CmpM, object>
     {
         public CollectionViewSource NodesCVS { get; }
 
-        public P_Dialog_Node_Has_ActiveSession_CmpVM(P_Dialog_Node_Has_ActiveSession_CmpM model, ICallbackContext callbackContext) : base(model, callbackContext)
+        public P_Dialog_Node_Has_ActiveSession_CmpVM(P_Dialog_Node_Has_ActiveSession_CmpM model, object parent) : base(model, parent)
         {
             NodesCVS = new CollectionViewSource();
 
-            GraphM graph = (CallbackContext as IWithModel)?.GetModel<GraphM>();
+            ////// TODO
+            //GraphM graph = (CallbackContext as IWithModel)?.GetModel<GraphM>();
 
-            NodesCVS.Source = graph?.nodes;
-            if (NodesCVS.View != null) NodesCVS.View.Filter = OnNodesFilter;
-            NodesCVS.View?.MoveCurrentTo(Node != null && graph != null && graph.nodes.Contains(Node) ? Node : null);
+            //NodesCVS.Source = graph?.nodes;
+            //if (NodesCVS.View != null) NodesCVS.View.Filter = OnNodesFilter;
+            //NodesCVS.View?.MoveCurrentTo(Node != null && graph != null && graph.nodes.Contains(Node) ? Node : null);
         }
 
         private bool OnNodesFilter(object sender)
@@ -58,7 +58,8 @@ namespace StorylineEditor.ViewModel.Predicates
         }
         public BaseM Node
         {
-            get => (CallbackContext as IWithModel)?.GetModel<GraphM>()?.nodes.FirstOrDefault((node) => node.id == Model.nodeId);
+            get => null;
+                ////// TODO (CallbackContext as IWithModel)?.GetModel<GraphM>()?.nodes.FirstOrDefault((node) => node.id == Model.nodeId);
             set
             {
                 if (value?.id != Model.nodeId)

@@ -12,17 +12,16 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model;
 using StorylineEditor.Model.Predicates;
-using StorylineEditor.ViewModel.Common;
 using System.ComponentModel;
 using System.Windows.Data;
 
 namespace StorylineEditor.ViewModel.Predicates
 {
-    public class P_Item_HasVM : P_BaseVM<P_Item_HasM>
+    public class P_Item_HasVM : P_BaseVM<P_Item_HasM, object>
     {
         public CollectionViewSource ItemsCVS { get; }
 
-        public P_Item_HasVM(P_Item_HasM model, ICallbackContext callbackContext) : base(model, callbackContext)
+        public P_Item_HasVM(P_Item_HasM model, object parent) : base(model, parent)
         {
             ItemsCVS = new CollectionViewSource() { Source = ActiveContextService.Items };
 

@@ -20,12 +20,12 @@ using System.Windows.Data;
 
 namespace StorylineEditor.ViewModel.GameEvents
 {
-    public class GE_Quest_Node_PassVM : GE_BaseVM<GE_Quest_Node_PassM>
+    public class GE_Quest_Node_PassVM : GE_BaseVM<GE_Quest_Node_PassM, object>
     {
         public CollectionViewSource QuestsCVS { get; }
         public CollectionViewSource NodesCVS { get; }
 
-        public GE_Quest_Node_PassVM(GE_Quest_Node_PassM model, ICallbackContext callbackContext) : base(model, callbackContext)
+        public GE_Quest_Node_PassVM(GE_Quest_Node_PassM model, object parent) : base(model, parent)
         {
             QuestsCVS = new CollectionViewSource() { Source = ActiveContextService.Quests };
 

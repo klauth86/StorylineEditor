@@ -17,12 +17,9 @@ using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Common
 {
-    public interface ICallbackContext
-    {
-        void Callback(object viewModelObj, string propName);
-    }
-
-    public abstract class SimpleVM<T> : Notifier, IWithModel where T : class
+    public abstract class SimpleVM<T, U> : Notifier, IWithModel
+        where T : class
+        where U : class
     {
         public static event Action<T, string> ModelChangedEvent = delegate { };
         public static void OnModelChanged(T model, string propName) => ModelChangedEvent?.Invoke(model, propName);
@@ -30,15 +27,15 @@ namespace StorylineEditor.ViewModel.Common
         private readonly T _model;
         public T Model => _model;
 
-        private readonly ICallbackContext _callbackContext;
-        public ICallbackContext CallbackContext => _callbackContext;
+        private readonly U _parent;
+        public U Parent => _parent;
 
         public ModelType GetModel<ModelType>() where ModelType : class { return Model as ModelType; }
 
-        public SimpleVM(T model, ICallbackContext callbackContext)
+        public SimpleVM(T model, U parent)
         {
             _model = model ?? throw new ArgumentNullException(nameof(model));
-            _callbackContext = callbackContext;
+            _parent = parent;
 
             IsFilterPassed = true;
         }
@@ -49,6 +46,8 @@ namespace StorylineEditor.ViewModel.Common
         {
             if (Model is BaseM baseModel) IsFilterPassed = string.IsNullOrEmpty(filter) || baseModel.PassFilter(filter);
         }
+
+
 
         protected ICommand registerCommand;
         public ICommand RegisterCommand => registerCommand ?? (registerCommand = new RelayCommand(() => RegisterCommandInternal()));

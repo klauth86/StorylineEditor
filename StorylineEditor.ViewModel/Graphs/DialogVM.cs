@@ -24,19 +24,31 @@ namespace StorylineEditor.ViewModel.Graphs
 {
     public class DialogVM : GraphVM<DialogM>
     {
-        public DialogVM(DialogM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+        public DialogVM(DialogM model, object parent) : base(model, parent) { }
 
         public BaseM DialogCharacter => ActiveContextService.GetCharacter(Model.npcId);
         public BaseM DialogLocation => ActiveContextService.GetLocation(Model.locationId);
     }
 
-    public class DialogEditorVM : Graph_BaseVM<DialogM>
+    public class DialogEditorVM : Graph_BaseVM<DialogM, object>
     {
         public CollectionViewSource FilteredDialogCharacterCVS { get; }
         public CollectionViewSource FilteredDialogLocationCVS { get; }
-        public DialogEditorVM(DialogVM viewModel, ICallbackContext callbackContext, Func<Type, Point, BaseM> modelCreator, Func<BaseM, ICallbackContext, Notifier> viewModelCreator,
-           Func<Notifier, ICallbackContext, Notifier> editorCreator, Type defaultNodeType) : base(viewModel.Model, callbackContext,
-                modelCreator, viewModelCreator, editorCreator, defaultNodeType)
+        public DialogEditorVM(
+            DialogVM viewModel
+            , object parent, Func<Type, Point, BaseM> modelCreator
+            , Func<BaseM, Notifier> viewModelCreator
+            , Func<Notifier, Notifier> editorCreator
+            , Type defaultNodeType
+            )
+            : base(
+                  viewModel.Model
+                  , parent
+                  , modelCreator
+                  , viewModelCreator
+                  , editorCreator
+                  , defaultNodeType
+                  )
         {
             FilteredDialogCharacterCVS = new CollectionViewSource() { Source = ActiveContextService.Characters };
             

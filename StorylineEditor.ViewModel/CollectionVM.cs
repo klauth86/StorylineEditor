@@ -24,11 +24,22 @@ using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel
 {
-    public class CollectionVM : Collection_BaseVM<List<BaseM>, object>, ICallbackContext
+    public class CollectionVM : Collection_BaseVM<List<BaseM>, object ,object>
     {
-        public CollectionVM(List<BaseM> inModel, ICallbackContext callbackContext, Func<Type, object, BaseM> modelCreator, Func<BaseM, ICallbackContext, Notifier> viewModelCreator,
-            Func<Notifier, ICallbackContext, Notifier> editorCreator) : base(inModel, callbackContext, modelCreator, viewModelCreator,
-                editorCreator)
+        public CollectionVM(
+            List<BaseM> inModel
+            , object parent
+            , Func<Type, object, BaseM> modelCreator
+            , Func<BaseM, Notifier> viewModelCreator
+            , Func<Notifier, Notifier> editorCreator
+            )
+            : base(
+                  inModel
+                  , parent
+                  , modelCreator
+                  , viewModelCreator
+                  , editorCreator
+                  )
         {
             ICollectionView view = CollectionViewSource.GetDefaultView(ItemsVMs);
 
@@ -42,14 +53,14 @@ namespace StorylineEditor.ViewModel
             Context = new ObservableCollection<FolderM>();
             Context.Add(new FolderM() { name = "root", content = inModel });
 
-            foreach (var model in Model) { Add(null, _viewModelCreator(model, this)); }
+            foreach (var model in Model) { Add(null, _viewModelCreator(model)); }
         }
 
         private ICommand addCommand;
         public override ICommand AddCommand => addCommand ?? (addCommand = new RelayCommand<bool>((isFolder) =>
         {
             BaseM model = _modelCreator(isFolder ? typeof(FolderM) : null, null);
-            Notifier viewModel = _viewModelCreator(model, this);
+            Notifier viewModel = _viewModelCreator(model);
 
             Add(model, viewModel);
 
@@ -96,7 +107,7 @@ namespace StorylineEditor.ViewModel
 
             foreach (var model in Context.Last().content)
             {
-                Notifier viewModel = _viewModelCreator(model, this);
+                Notifier viewModel = _viewModelCreator(model);
                 viewModel.IsCut = cutViewModels.Contains(viewModel.Id);
                 Add(null, viewModel);
             }
@@ -127,7 +138,7 @@ namespace StorylineEditor.ViewModel
             if (selection != null)
             {
                 selection.IsSelected = true;
-                SelectionEditor = _editorCreator(selection, this);
+                SelectionEditor = _editorCreator(selection);
                 ActiveContextService.ActiveGraph = SelectionEditor as IGraph;
             }
 
@@ -136,13 +147,5 @@ namespace StorylineEditor.ViewModel
         public override void GetSelection(IList outSelection) { if (selection != null) outSelection.Add(selection); }
         public override bool HasSelection() => selection != null;
         public override bool SelectionCanBeDeleted() { return selection.Id != CharacterM.PLAYER_ID; }
-
-        public void Callback(object viewModelObj, string propName)
-        {
-            if (viewModelObj != null && propName == nameof(BaseVM<BaseM>.Name))
-            {
-                CollectionViewSource.GetDefaultView(ItemsVMs)?.Refresh();
-            }
-        }
     }
 }

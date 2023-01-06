@@ -16,9 +16,12 @@ using System;
 
 namespace StorylineEditor.ViewModel.GameEvents
 {
-    public abstract class GE_BaseVM<T> : BaseVM<T> where T : GE_BaseM
+    public abstract class GE_BaseVM<T, U>
+        : BaseVM<T, U>
+        where T : GE_BaseM
+        where U : class
     {
-        public GE_BaseVM(T model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+        public GE_BaseVM(T model, U parent) : base(model, parent) { }
 
         public Type GameEventType => Model?.GetType();
 

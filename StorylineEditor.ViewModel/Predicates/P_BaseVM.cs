@@ -16,9 +16,12 @@ using System;
 
 namespace StorylineEditor.ViewModel.Predicates
 {
-    public abstract class P_BaseVM<T> : BaseVM<T> where T : P_BaseM
+    public abstract class P_BaseVM<T, U>
+        : BaseVM<T, U>
+        where T : P_BaseM
+        where U : class
     {
-        public P_BaseVM(T model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+        public P_BaseVM(T model, U parent) : base(model, parent) { }
 
         public Type PredicateType => Model?.GetType();
 

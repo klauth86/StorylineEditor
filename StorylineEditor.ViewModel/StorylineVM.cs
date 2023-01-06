@@ -22,7 +22,7 @@ using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel
 {
-    public class StorylineVM : SimpleVM<StorylineM>
+    public class StorylineVM : SimpleVM<StorylineM, object>
     {
         public StorylineVM(StorylineM model) : base(model, null) { }
 
@@ -33,8 +33,8 @@ namespace StorylineEditor.ViewModel
         {
             ActiveContextService.ActiveTab = new CollectionVM(Model.locations, null,
                 (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new LocationM() { name = "Новая локация" }; },
-                (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM, callbackContext); else return new LocationVM((LocationM)model, callbackContext); },
-                (Notifier viewModel, ICallbackContext callbackContext) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM, callbackContext); else return new LocationEditorVM((LocationVM)viewModel, callbackContext); });
+                (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM, this); else return new LocationVM((LocationM)model, this); },
+                (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return new LocationEditorVM((LocationVM)viewModel); });
         }, () => ActiveContextService.ActiveTab?.GetModel<object>() != Model.locations));
 
         private ICommand charactersTabCommand;
@@ -42,8 +42,8 @@ namespace StorylineEditor.ViewModel
         {
             ActiveContextService.ActiveTab = new CollectionVM(Model.characters, null,
                 (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new CharacterM() { name = "Новый персонаж" }; },
-                (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM, callbackContext); else return new CharacterVM((CharacterM)model, callbackContext); },
-                (Notifier viewModel, ICallbackContext callbackContext) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM, callbackContext); else return new CharacterEditorVM((CharacterVM)viewModel, callbackContext); });
+                (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM, this); else return new CharacterVM((CharacterM)model, this); },
+                (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return new CharacterEditorVM((CharacterVM)viewModel); });
         }, () => ActiveContextService.ActiveTab?.GetModel<object>() != Model.characters));
 
         private ICommand itemsTabCommand;
@@ -51,8 +51,8 @@ namespace StorylineEditor.ViewModel
         {
             ActiveContextService.ActiveTab = new CollectionVM(Model.items, null,
             (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new ItemM() { name = "Новый предмет" }; },
-            (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM, callbackContext); else return new ItemVM((ItemM)model, callbackContext); },
-            (Notifier viewModel, ICallbackContext callbackContext) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM, callbackContext); else return new ItemEditorVM((ItemVM)viewModel, callbackContext); });
+            (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM, this); else return new ItemVM((ItemM)model, this); },
+            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return new ItemEditorVM((ItemVM)viewModel); });
         }, () => ActiveContextService.ActiveTab?.GetModel<object>() != Model.items));
 
         private ICommand actorsTabCommand;
@@ -60,8 +60,8 @@ namespace StorylineEditor.ViewModel
         {
             ActiveContextService.ActiveTab = new CollectionVM(Model.actors, null,
             (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new ActorM() { name = "Новый актор" }; },
-            (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM, callbackContext); else return new ActorVM((ActorM)model, callbackContext); },
-            (Notifier viewModel, ICallbackContext callbackContext) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM, callbackContext); else return new ActorEditorVM((ActorVM)viewModel, callbackContext); });
+            (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM, this); else return new ActorVM((ActorM)model, this); },
+            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return new ActorEditorVM((ActorVM)viewModel); });
         }, () => ActiveContextService.ActiveTab?.GetModel<object>() != Model.actors));
 
         private ICommand journalTabCommand;
@@ -69,13 +69,13 @@ namespace StorylineEditor.ViewModel
         {
             ActiveContextService.ActiveTab = new CollectionVM(Model.journal, null,
             (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new QuestM() { name = "Новый квест" }; },
-            (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM, callbackContext); else return new QuestVM((QuestM)model, callbackContext); },
-            (Notifier viewModel, ICallbackContext callbackContext) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM, callbackContext); else return CreateQuestEditorVM((QuestVM)viewModel, callbackContext); });
+            (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM, this); else return new QuestVM((QuestM)model, this); },
+            (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return CreateQuestEditorVM((QuestVM)viewModel); });
         }, () => ActiveContextService.ActiveTab?.GetModel<object>() != Model.journal));
 
-        private Notifier CreateQuestEditorVM(QuestVM inViewModel, ICallbackContext outerCallbackContext)
+        private Notifier CreateQuestEditorVM(QuestVM inViewModel)
         {
-            return new QuestEditorVM(inViewModel, outerCallbackContext,
+            return new QuestEditorVM(inViewModel, this,
             (Type type, Point position) =>
             {
                 if (type == typeof(LinkM)) return new LinkM();
@@ -84,15 +84,15 @@ namespace StorylineEditor.ViewModel
 
                 throw new ArgumentOutOfRangeException(nameof(type));
             },
-            (BaseM model, ICallbackContext callbackContext) =>
+            (BaseM model) =>
             {
-                if (model is LinkM modelLink) return new LinkVM(modelLink, callbackContext);
-                if (model is Node_StepM modelStep) return new Node_Journal_StepVM(modelStep, callbackContext);
-                if (model is Node_AlternativeM modelAlternative) return new Node_Journal_AlternativeVM(modelAlternative, callbackContext);
+                if (model is LinkM modelLink) return new LinkVM(modelLink, this);
+                if (model is Node_StepM modelStep) return new Node_Journal_StepVM(modelStep, this);
+                if (model is Node_AlternativeM modelAlternative) return new Node_Journal_AlternativeVM(modelAlternative, this);
 
                 throw new ArgumentOutOfRangeException(nameof(model));
             },
-            (Notifier viewModel, ICallbackContext callbackContext) =>
+            (Notifier viewModel) =>
             {
                 if (viewModel is Node_Journal_StepVM viewModelStep) return new Node_Journal_StepEditorVM(viewModelStep);
                 if (viewModel is Node_Journal_AlternativeVM viewModelAlternative) return new Node_Journal_AlternativeEditorVM(viewModelAlternative);
@@ -108,13 +108,13 @@ namespace StorylineEditor.ViewModel
         {
             ActiveContextService.ActiveTab = new CollectionVM(Model.dialogs, null,
                 (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new DialogM() { name = "Новый диалог" }; },
-                (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM, callbackContext); else return new DialogVM((DialogM)model, callbackContext); },
-                (Notifier viewModel, ICallbackContext callbackContext) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM, callbackContext); else return CreateDialogEditorVM((DialogVM)viewModel, callbackContext); });
+                (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM, this); else return new DialogVM((DialogM)model, this); },
+                (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return CreateDialogEditorVM((DialogVM)viewModel); });
         }, () => ActiveContextService.ActiveTab?.GetModel<object>() != Model.dialogs));
 
-        private Notifier CreateDialogEditorVM(DialogVM inViewModel, ICallbackContext outerCallbackContext)
+        private Notifier CreateDialogEditorVM(DialogVM inViewModel)
         {
-            return new DialogEditorVM(inViewModel, outerCallbackContext,
+            return new DialogEditorVM(inViewModel, this,
             (Type type, Point position) =>
             {
                 if (type == typeof(LinkM)) return new LinkM();
@@ -127,19 +127,19 @@ namespace StorylineEditor.ViewModel
 
                 throw new ArgumentOutOfRangeException(nameof(type));
             },
-            (BaseM model, ICallbackContext callbackContext) =>
+            (BaseM model) =>
             {
-                if (model is LinkM modelLink) return new LinkVM(modelLink, callbackContext);
-                if (model is Node_DialogM dialogModel) return new Node_DialogVM(dialogModel, callbackContext);
-                if (model is Node_ReplicaM replicaModel) return new Node_ReplicaVM(replicaModel, callbackContext);
-                if (model is Node_RandomM randomModel) return new Node_RandomVM(randomModel, callbackContext);
-                if (model is Node_TransitM transitModel) return new Node_TransitVM(transitModel, callbackContext);
-                if (model is Node_GateM gateModel) return new Node_GateVM(gateModel, callbackContext);
-                if (model is Node_ExitM exitModel) return new Node_ExitVM(exitModel, callbackContext);
+                if (model is LinkM modelLink) return new LinkVM(modelLink, this);
+                if (model is Node_DialogM dialogModel) return new Node_DialogVM(dialogModel, this);
+                if (model is Node_ReplicaM replicaModel) return new Node_ReplicaVM(replicaModel, this);
+                if (model is Node_RandomM randomModel) return new Node_RandomVM(randomModel, this);
+                if (model is Node_TransitM transitModel) return new Node_TransitVM(transitModel, this);
+                if (model is Node_GateM gateModel) return new Node_GateVM(gateModel, this);
+                if (model is Node_ExitM exitModel) return new Node_ExitVM(exitModel, this);
 
                 throw new ArgumentOutOfRangeException(nameof(model));
             },
-            (Notifier viewModel, ICallbackContext callbackContext) =>
+            (Notifier viewModel) =>
             {
                 if (viewModel is Node_DialogVM dialogViewModel) return new Node_DialogEditorVM(dialogViewModel);
                 if (viewModel is Node_ReplicaVM replicaViewModel) return new Node_ReplicaEditorVM(replicaViewModel);
@@ -159,13 +159,13 @@ namespace StorylineEditor.ViewModel
         {
             ActiveContextService.ActiveTab = new CollectionVM(Model.replicas, null,
                 (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new ReplicaM() { name = "Новая реплика" }; },
-                (BaseM model, ICallbackContext callbackContext) => { if (model is FolderM folderM) return new FolderVM(folderM, callbackContext); else return new ReplicaVM((ReplicaM)model, callbackContext); },
-                (Notifier viewModel, ICallbackContext callbackContext) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM, callbackContext); else return CreateReplicaEditorVM((ReplicaVM)viewModel, callbackContext); });
+                (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM, this); else return new ReplicaVM((ReplicaM)model, this); },
+                (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return CreateReplicaEditorVM((ReplicaVM)viewModel); });
         }, () => ActiveContextService.ActiveTab?.GetModel<object>() != Model.replicas));
 
-        private Notifier CreateReplicaEditorVM(ReplicaVM inViewModel, ICallbackContext outerCallbackContext)
+        private Notifier CreateReplicaEditorVM(ReplicaVM inViewModel)
         {
-            return new ReplicaEditorVM(inViewModel, outerCallbackContext,
+            return new ReplicaEditorVM(inViewModel, this,
             (Type type, Point position) =>
             {
                 if (type == typeof(LinkM)) return new LinkM();
@@ -175,16 +175,16 @@ namespace StorylineEditor.ViewModel
 
                 throw new ArgumentOutOfRangeException(nameof(type));
             },
-            (BaseM model, ICallbackContext callbackContext) =>
+            (BaseM model) =>
             {
-                if (model is LinkM modelLink) return new LinkVM(modelLink, callbackContext);
-                if (model is Node_ReplicaM replicaModel) return new Node_ReplicaVM(replicaModel, callbackContext);
-                if (model is Node_RandomM randomModel) return new Node_RandomVM(randomModel, callbackContext);
-                if (model is Node_TransitM transitModel) return new Node_TransitVM(transitModel, callbackContext);
+                if (model is LinkM modelLink) return new LinkVM(modelLink, this);
+                if (model is Node_ReplicaM replicaModel) return new Node_ReplicaVM(replicaModel, this);
+                if (model is Node_RandomM randomModel) return new Node_RandomVM(randomModel, this);
+                if (model is Node_TransitM transitModel) return new Node_TransitVM(transitModel, this);
 
                 throw new ArgumentOutOfRangeException(nameof(model));
             },
-            (Notifier viewModel, ICallbackContext callbackContext) =>
+            (Notifier viewModel) =>
             {
                 if (viewModel is Node_ReplicaVM replicaViewModel) return new Node_ReplicaEditorVM(replicaViewModel);
                 if (viewModel is Node_RandomVM randomViewModel) return new Node_RandomEditorVM(randomViewModel);

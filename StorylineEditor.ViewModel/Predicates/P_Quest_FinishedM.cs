@@ -18,11 +18,11 @@ using System.Windows.Data;
 
 namespace StorylineEditor.ViewModel.Predicates
 {
-    public class P_Quest_FinishedVM : P_BaseVM<P_Quest_FinishedM>
+    public class P_Quest_FinishedVM : P_BaseVM<P_Quest_FinishedM, object>
     {
         public CollectionViewSource QuestsCVS { get; }
 
-        public P_Quest_FinishedVM(P_Quest_FinishedM model, ICallbackContext callbackContext) : base(model, callbackContext)
+        public P_Quest_FinishedVM(P_Quest_FinishedM model, object parent) : base(model, parent)
         {
             QuestsCVS = new CollectionViewSource() { Source = ActiveContextService.Quests };
 

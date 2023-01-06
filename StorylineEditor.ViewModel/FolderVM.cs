@@ -15,15 +15,15 @@ using StorylineEditor.ViewModel.Common;
 
 namespace StorylineEditor.ViewModel
 {
-    public class FolderVM : BaseVM<FolderM>
+    public class FolderVM : BaseVM<FolderM, object>
     {
-        public FolderVM(FolderM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+        public FolderVM(FolderM model, object parent) : base(model, parent) { }
 
         public override bool IsFolder => true;
     }
 
     public class FolderEditorVM : FolderVM
     {
-        public FolderEditorVM(FolderVM viewModel, ICallbackContext callbackContext) : base(viewModel.Model, callbackContext) { }
+        public FolderEditorVM(FolderVM viewModel) : base(viewModel.Model, viewModel.Parent) { }
     }
 }

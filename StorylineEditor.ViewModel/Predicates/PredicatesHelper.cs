@@ -19,12 +19,12 @@ namespace StorylineEditor.ViewModel.Predicates
 {
     public static class PredicatesHelper
     {
-        public static IWithModel CreatePredicateByType(Type type, ICallbackContext callbackContext)
+        public static IWithModel CreatePredicateByType(Type type, object node)
         {
-            if (type == typeof(P_CompositeM)) return new P_CompositeVM(new P_CompositeM(0), callbackContext);
+            if (type == typeof(P_CompositeM)) return new P_CompositeVM(new P_CompositeM(0), node);
             else if (type == typeof(P_Dialog_HasM)) return new P_Dialog_HasVM(new P_Dialog_HasM(0), null);
-            else if (type == typeof(P_Dialog_Node_Has_ActiveSession_CmpM)) return new P_Dialog_Node_Has_ActiveSession_CmpVM(new P_Dialog_Node_Has_ActiveSession_CmpM(0), callbackContext);
-            else if (type == typeof(P_Dialog_Node_Has_ActiveSessionM)) return new P_Dialog_Node_Has_ActiveSessionVM(new P_Dialog_Node_Has_ActiveSessionM(0), callbackContext);
+            else if (type == typeof(P_Dialog_Node_Has_ActiveSession_CmpM)) return new P_Dialog_Node_Has_ActiveSession_CmpVM(new P_Dialog_Node_Has_ActiveSession_CmpM(0), node);
+            else if (type == typeof(P_Dialog_Node_Has_ActiveSessionM)) return new P_Dialog_Node_Has_ActiveSessionVM(new P_Dialog_Node_Has_ActiveSessionM(0), node);
             else if (type == typeof(P_Dialog_Node_Has_PrevSessions_CmpM)) return new P_Dialog_Node_Has_PrevSessions_CmpVM(new P_Dialog_Node_Has_PrevSessions_CmpM(0), null);
             else if (type == typeof(P_Dialog_Node_Has_PrevSessionsM)) return new P_Dialog_Node_Has_PrevSessionsVM(new P_Dialog_Node_Has_PrevSessionsM(0), null);
             else if (type == typeof(P_Item_HasM)) return new P_Item_HasVM(new P_Item_HasM(0), null);
@@ -37,12 +37,12 @@ namespace StorylineEditor.ViewModel.Predicates
             return null;
         }
 
-        public static IWithModel CreatePredicateByModel(P_BaseM model, ICallbackContext callbackContext)
+        public static IWithModel CreatePredicateByModel(P_BaseM model, object node)
         {
-            if (model.GetType() == typeof(P_CompositeM)) return new P_CompositeVM((P_CompositeM)model, callbackContext);
+            if (model.GetType() == typeof(P_CompositeM)) return new P_CompositeVM((P_CompositeM)model, node);
             else if (model.GetType() == typeof(P_Dialog_HasM)) return new P_Dialog_HasVM((P_Dialog_HasM)model, null);
-            else if (model.GetType() == typeof(P_Dialog_Node_Has_ActiveSession_CmpM)) return new P_Dialog_Node_Has_ActiveSession_CmpVM((P_Dialog_Node_Has_ActiveSession_CmpM)model, callbackContext);
-            else if (model.GetType() == typeof(P_Dialog_Node_Has_ActiveSessionM)) return new P_Dialog_Node_Has_ActiveSessionVM((P_Dialog_Node_Has_ActiveSessionM)model, callbackContext);
+            else if (model.GetType() == typeof(P_Dialog_Node_Has_ActiveSession_CmpM)) return new P_Dialog_Node_Has_ActiveSession_CmpVM((P_Dialog_Node_Has_ActiveSession_CmpM)model, node);
+            else if (model.GetType() == typeof(P_Dialog_Node_Has_ActiveSessionM)) return new P_Dialog_Node_Has_ActiveSessionVM((P_Dialog_Node_Has_ActiveSessionM)model, node);
             else if (model.GetType() == typeof(P_Dialog_Node_Has_PrevSessions_CmpM)) return new P_Dialog_Node_Has_PrevSessions_CmpVM((P_Dialog_Node_Has_PrevSessions_CmpM)model, null);
             else if (model.GetType() == typeof(P_Dialog_Node_Has_PrevSessionsM)) return new P_Dialog_Node_Has_PrevSessionsVM((P_Dialog_Node_Has_PrevSessionsM)model, null);
             else if (model.GetType() == typeof(P_Item_HasM)) return new P_Item_HasVM((P_Item_HasM)model, null);

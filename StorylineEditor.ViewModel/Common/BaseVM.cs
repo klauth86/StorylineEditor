@@ -11,12 +11,15 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Model;
+using StorylineEditor.ViewModel.Interface;
 
 namespace StorylineEditor.ViewModel.Common
 {
-    public abstract class BaseVM<T> : SimpleVM<T> where T : BaseM
+    public abstract class BaseVM<T, U> : SimpleVM<T, U>
+        where T : BaseM
+        where U : class
     {
-        public BaseVM(T model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+        public BaseVM(T model, U parent) : base(model, parent) { }
 
         public override string Id => Model?.id;
 
@@ -29,7 +32,11 @@ namespace StorylineEditor.ViewModel.Common
                 {
                     Model.name = value;
                     OnModelChanged(Model, nameof(Name));
-                    CallbackContext?.Callback(this, nameof(Name));
+
+                    if (ActiveContextService.ActiveTab is ICollection_Base collectionBase)
+                    {
+                        collectionBase.Refresh();
+                    }
                 }
             }
         }
@@ -42,6 +49,7 @@ namespace StorylineEditor.ViewModel.Common
                 if (Model.description != value)
                 {
                     Model.description = value;
+                    
                     OnModelChanged(Model, nameof(Description));
                 }
             }

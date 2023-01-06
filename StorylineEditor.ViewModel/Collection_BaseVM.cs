@@ -18,6 +18,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel
@@ -30,10 +31,19 @@ namespace StorylineEditor.ViewModel
         public IList Context { get; set; }
     }
 
-    public abstract class Collection_BaseVM<T, U> : SimpleVM<T>, ICollection_Base where T : class
+    public abstract class Collection_BaseVM<T, U, V>
+        : SimpleVM<T, U>
+        , ICollection_Base
+        where T : class
+        where U : class
     {
-        public Collection_BaseVM(T model, ICallbackContext callbackContext, Func<Type, U, BaseM> modelCreator, Func<BaseM, ICallbackContext, Notifier> viewModelCreator,
-            Func<Notifier, ICallbackContext, Notifier> editorCreator) : base(model, callbackContext)
+        public Collection_BaseVM(
+            T model
+            , U parent
+            , Func<Type, V, BaseM> modelCreator
+            , Func<BaseM, Notifier> viewModelCreator
+            , Func<Notifier, Notifier> editorCreator)
+            : base(model, parent)
         {
             _modelCreator = modelCreator ?? throw new ArgumentNullException(nameof(modelCreator));
             _viewModelCreator = viewModelCreator ?? throw new ArgumentNullException(nameof(viewModelCreator));
@@ -106,15 +116,23 @@ namespace StorylineEditor.ViewModel
         }, () => CutVMs.Count > 0));
         public abstract ICommand SelectCommand{ get; }
 
-
-
-        protected void Add(BaseM model, Notifier viewModel) // pass null to one of params if want to add only model/only viewModel
+        // pass null to one of params if want to add only model/only viewModel
+        protected void Add(
+            BaseM model
+            , Notifier viewModel
+            )
         {
             if (model != null) GetContext(model).Add(model);
 
             if (viewModel != null) ItemsVMs.Add(viewModel);
         }
-        protected void Remove(Notifier viewModel, BaseM model, IList context) // pass null to one of params if want to remove only model/only viewModel
+
+        // pass null to one of params if want to remove only model/only viewModel
+        protected void Remove(
+            Notifier viewModel
+            , BaseM model
+            , IList context
+            )
         {
             if (viewModel != null) ItemsVMs.Remove(viewModel);
 
@@ -123,9 +141,9 @@ namespace StorylineEditor.ViewModel
 
 
 
-        protected readonly Func<Type, U, BaseM> _modelCreator;
-        protected readonly Func<BaseM, ICallbackContext, Notifier> _viewModelCreator;
-        protected readonly Func<Notifier, ICallbackContext, Notifier> _editorCreator;
+        protected readonly Func<Type, V, BaseM> _modelCreator;
+        protected readonly Func<BaseM, Notifier> _viewModelCreator;
+        protected readonly Func<Notifier, Notifier> _editorCreator;
 
 
 
@@ -147,9 +165,15 @@ namespace StorylineEditor.ViewModel
                 }
             }
         }
-        public abstract IList GetContext(BaseM model);
 
-        public bool AddToSelectionById(string id, bool resetSelection)
+        public abstract IList GetContext(
+            BaseM model
+            );
+
+        public bool AddToSelectionById(
+            string id
+            , bool resetSelection
+            )
         {
             Notifier viewModelToSelect = ItemsVMs.FirstOrDefault(viewModel => viewModel.Id == id);
 
@@ -162,8 +186,15 @@ namespace StorylineEditor.ViewModel
             return false;
         }
 
-        public abstract void AddToSelection(Notifier viewModel, bool resetSelection);
-        public abstract void GetSelection(IList outSelection);
+        public void Refresh() { CollectionViewSource.GetDefaultView(ItemsVMs)?.Refresh(); }
+
+        public abstract void AddToSelection(
+            Notifier viewModel
+            , bool resetSelection
+            );
+        public abstract void GetSelection(
+            IList outSelection
+            );
         public abstract bool HasSelection();
         public abstract bool SelectionCanBeDeleted();
     }

@@ -16,7 +16,7 @@ using System.Collections.Generic;
 
 namespace StorylineEditor.App.Config
 {
-    public class ConfigVM : SimpleVM<ConfigM>
+    public class ConfigVM : SimpleVM<ConfigM, object>
     {
         public ConfigVM(ConfigM model) : base(model, null)
         {

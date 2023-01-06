@@ -18,7 +18,7 @@ using System.Windows.Input;
 
 namespace StorylineEditor.App.Config
 {
-    public class UserActionVM : SimpleVM<UserActionM>
+    public class UserActionVM : SimpleVM<UserActionM, object>
     {
         public UserActionVM(UserActionM model) : base(model, null) { }
 

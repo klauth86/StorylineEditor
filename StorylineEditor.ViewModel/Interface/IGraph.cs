@@ -16,6 +16,13 @@ using System.Threading.Tasks;
 
 namespace StorylineEditor.ViewModel.Interface
 {
+    public enum ENodeUpdateFlags
+    {
+        X = 1,
+        Y = 2,
+        XY = 3,
+    }
+
     public interface INode : IPositioned
     {
         // Absoulute
@@ -43,5 +50,8 @@ namespace StorylineEditor.ViewModel.Interface
         Dictionary<string, List<IPositioned>> GetNext(string nodeId);
         void SetPlayerContext(object oldPlayerContext, object newPlayerContext);
         void TickPlayer(double alpha);
+        void OnNodeGenderChanged(INode node);
+        void OnNodePositionChanged(INode node, ENodeUpdateFlags updateFlags);
+        void OnNodeSizeChanged(INode node, ENodeUpdateFlags updateFlags);
     }
 }

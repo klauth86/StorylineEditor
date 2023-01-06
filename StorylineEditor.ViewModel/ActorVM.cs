@@ -17,14 +17,14 @@ using System.Windows.Documents;
 
 namespace StorylineEditor.ViewModel
 {
-    public class ActorVM : BaseVM<ActorM>
+    public class ActorVM : BaseVM<ActorM, object>
     {
-        public ActorVM(ActorM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+        public ActorVM(ActorM model, object parent) : base(model, parent) { }
     }
 
     public class ActorEditorVM : ActorVM
     {
-        public ActorEditorVM(ActorVM viewModel, ICallbackContext callbackContext) : base(viewModel.Model, callbackContext) { }
+        public ActorEditorVM(ActorVM viewModel) : base(viewModel.Model, viewModel.Parent) { }
 
         public bool HasDescriptionFemale
         {

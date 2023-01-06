@@ -12,18 +12,20 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model;
 using StorylineEditor.Model.Nodes;
-using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Helpers;
 using System.ComponentModel;
 using System.Windows.Data;
 
 namespace StorylineEditor.ViewModel.Nodes
 {
-    public abstract class Node_RegularVM<T> : Node_InteractiveVM<T> where T : Node_RegularM
+    public abstract class Node_RegularVM<T, U>
+        : Node_InteractiveVM<T, U>
+        where T : Node_RegularM
+        where U : class
     {
         public CollectionViewSource FilteredCharacterCVS { get; }
 
-        public Node_RegularVM(T model, ICallbackContext callbackContext) : base(model, callbackContext)
+        public Node_RegularVM(T model, U parent) : base(model, parent)
         {
             Model.characterId = Model.characterId ?? CharacterM.PLAYER_ID;
 
@@ -115,27 +117,27 @@ namespace StorylineEditor.ViewModel.Nodes
         }
     }
 
-    public class Node_ReplicaVM : Node_RegularVM<Node_ReplicaM>
+    public class Node_ReplicaVM : Node_RegularVM<Node_ReplicaM, object>
     {
-        public Node_ReplicaVM(Node_ReplicaM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+        public Node_ReplicaVM(Node_ReplicaM model, object parent) : base(model, parent) { }
 
         protected override void RefreshModelName() { Name = string.Format("[{0}]: {1}", Character?.name ?? "???", FlowDocumentHelper.GetTextFromFlowDoc(DescriptionFlow)); }
     }
 
     public class Node_ReplicaEditorVM : Node_ReplicaVM
     {
-        public Node_ReplicaEditorVM(Node_ReplicaVM viewModel) : base(viewModel.Model, viewModel.CallbackContext) { }
+        public Node_ReplicaEditorVM(Node_ReplicaVM viewModel) : base(viewModel.Model, viewModel.Parent) { }
     }
 
-    public class Node_DialogVM : Node_RegularVM<Node_DialogM>
+    public class Node_DialogVM : Node_RegularVM<Node_DialogM, object>
     {
-        public Node_DialogVM(Node_DialogM model, ICallbackContext callbackContext) : base(model, callbackContext) { }
+        public Node_DialogVM(Node_DialogM model, object parent) : base(model, parent) { }
 
         protected override void RefreshModelName() { Name = string.Format("[{0}]: {1}", Character?.name ?? "???", FlowDocumentHelper.GetTextFromFlowDoc(DescriptionFlow)); }
     }
 
     public class Node_DialogEditorVM : Node_DialogVM
     {
-        public Node_DialogEditorVM(Node_DialogVM viewModel) : base(viewModel.Model, viewModel.CallbackContext) { }
+        public Node_DialogEditorVM(Node_DialogVM viewModel) : base(viewModel.Model, viewModel.Parent) { }
     }
 }

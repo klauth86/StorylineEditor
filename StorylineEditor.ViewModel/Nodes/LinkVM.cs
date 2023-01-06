@@ -42,9 +42,9 @@ namespace StorylineEditor.ViewModel.Nodes
         void RefreshStepPoints();
     }
 
-    public class LinkVM : BaseVM<LinkM>, ILinkVM
+    public class LinkVM : BaseVM<LinkM, object>, ILinkVM
     {
-        public LinkVM(LinkM model, ICallbackContext callbackContext, double step = 64, double cap = 6, double remove = 8) : base(model, callbackContext)
+        public LinkVM(LinkM model, object parent, double step = 64, double cap = 6, double remove = 8) : base(model, parent)
         {
             Step = step;
             Cap = cap;
@@ -253,7 +253,7 @@ namespace StorylineEditor.ViewModel.Nodes
     }
 
     public class PreviewLinkVM : LinkVM {
-        public PreviewLinkVM(LinkM model, ICallbackContext callbackContext) : base(model, callbackContext)
+        public PreviewLinkVM(LinkM model, object parent) : base(model, parent)
         {
             zIndex = 10000;
             strokeThicknessBase = 2;

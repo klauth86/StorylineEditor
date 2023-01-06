@@ -37,17 +37,28 @@ namespace StorylineEditor.ViewModel.Graphs
         Scale = 16
     }
 
-    enum ENodeVMUpdate
+    public abstract class Graph_BaseVM<T, U>
+        : Collection_BaseVM<T, U, Point>
+        , ICopyPaste
+        , IGraph
+        where T : GraphM
+        where U : class
     {
-        X = 1,
-        Y = 2,
-    }
-
-    public abstract class Graph_BaseVM<T> : Collection_BaseVM<T, Point>, ICallbackContext, ICopyPaste, IGraph where T : GraphM
-    {
-        public Graph_BaseVM(T model, ICallbackContext callbackContext, Func<Type, Point, BaseM> modelCreator, Func<BaseM, ICallbackContext, Notifier> viewModelCreator,
-            Func<Notifier, ICallbackContext, Notifier> editorCreator, Type defaultNodeType) : base(model, callbackContext,
-                modelCreator, viewModelCreator, editorCreator)
+        public Graph_BaseVM(
+            T model
+            , U parent
+            , Func<Type, Point, BaseM> modelCreator
+            , Func<BaseM, Notifier> viewModelCreator
+            , Func<Notifier, Notifier> editorCreator
+            , Type defaultNodeType
+            )
+            : base(
+                  model
+                  , parent
+                  , modelCreator
+                  , viewModelCreator
+                  , editorCreator
+                  )
         {
             offsetY = offsetX = 0;
             scale = 1;
@@ -227,7 +238,7 @@ namespace StorylineEditor.ViewModel.Graphs
         public override ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<Notifier>((viewModel) => { }));
         protected void AddLinkVM(LinkM model, string fromId, double fromX, double fromY, string toId, double toX, double toY)
         {
-            LinkVM viewModel = (LinkVM)_viewModelCreator(model, this);
+            LinkVM viewModel = (LinkVM)_viewModelCreator(model);
 
             viewModel.FromX = fromX;
             viewModel.FromY = fromY;
@@ -715,7 +726,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
             if (model is Node_ExitM) UpdateExitNames(model);
 
-            Notifier viewModel = _viewModelCreator(model, this);
+            Notifier viewModel = _viewModelCreator(model);
 
             NodesVMs.Add(model.id, viewModel);
             Add(null, viewModel);
@@ -936,24 +947,12 @@ namespace StorylineEditor.ViewModel.Graphs
             return result;
         }
 
-
-
-        public void Callback(object viewModelObj, string propName)
+        private void UpdateLocalPosition(INode nodeViewModel, ENodeUpdateFlags updateFlags)
         {
-            if (viewModelObj is INode nodeViewModel)
-            {
-                if (propName == nameof(INode.PositionX)) UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.X);
-                else if (propName == nameof(INode.PositionY)) UpdateLocalPosition(nodeViewModel, ENodeVMUpdate.Y);
-                else if (propName == nameof(INode.Gender)) OnModelChanged(Model, nameof(GraphVM<GraphM>.Stats));
-            }
-        }
+            if ((updateFlags & ENodeUpdateFlags.X) > 0) nodeViewModel.Left = FromAbsoluteToLocalX(nodeViewModel.PositionX) - nodeViewModel.Width / 2;
+            if ((updateFlags & ENodeUpdateFlags.Y) > 0) nodeViewModel.Top = FromAbsoluteToLocalY(nodeViewModel.PositionY) - nodeViewModel.Height / 2;
 
-        private void UpdateLocalPosition(INode nodeViewModel, ENodeVMUpdate updateTarget)
-        {
-            if ((updateTarget & ENodeVMUpdate.X) > 0) nodeViewModel.Left = FromAbsoluteToLocalX(nodeViewModel.PositionX) - nodeViewModel.Width / 2;
-            if ((updateTarget & ENodeVMUpdate.Y) > 0) nodeViewModel.Top = FromAbsoluteToLocalY(nodeViewModel.PositionY) - nodeViewModel.Height / 2;
-
-            if (updateTarget > 0)
+            if (updateFlags > 0)
             {
                 foreach (var linkId in FromNodesLinks[nodeViewModel.Id])
                 {
@@ -1054,7 +1053,7 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 if (!NodesVMs.ContainsKey(model.id))
                 {
-                    Notifier viewModel = _viewModelCreator(model, this);
+                    Notifier viewModel = _viewModelCreator(model);
                     viewModel.IsSelected = selection.Contains(model.id);
                     ((INode)viewModel).IsRoot = RootNodeIds.Contains(model.id);
 
@@ -1063,7 +1062,7 @@ namespace StorylineEditor.ViewModel.Graphs
                 }
             }
 
-            foreach (var nodeEntry in NodesVMs) UpdateLocalPosition((INode)nodeEntry.Value, ENodeVMUpdate.X | ENodeVMUpdate.Y);
+            foreach (var nodeEntry in NodesVMs) UpdateLocalPosition((INode)nodeEntry.Value, ENodeUpdateFlags.XY);
             foreach (var linkEntry in LinksVMs) UpdateLinkLocalPosition(linkEntry.Value, ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
         }
 
@@ -1102,7 +1101,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
             if (hasChanges)
             {
-                SelectionEditor = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? _editorCreator(NodesVMs[selection.First()], this) : null;
+                SelectionEditor = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? _editorCreator(NodesVMs[selection.First()]) : null;
 
                 SelectionNode = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? (INode)NodesVMs[selection.First()] : null;
 
@@ -1116,7 +1115,7 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 if (selection.Remove(nodeViewModel.Id))
                 {
-                    SelectionEditor = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? _editorCreator(NodesVMs[selection.First()], this) : null;
+                    SelectionEditor = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? _editorCreator(NodesVMs[selection.First()]) : null;
 
                     SelectionNode = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? (INode)NodesVMs[selection.First()] : null;
 
@@ -1157,7 +1156,7 @@ namespace StorylineEditor.ViewModel.Graphs
             Node_BaseM targetNodeModel = Model.nodes.FirstOrDefault((nodeModel) => nodeModel.id == nodeId);
             if (targetNodeModel != null)
             {
-                return _viewModelCreator(targetNodeModel, this) as INode;
+                return _viewModelCreator(targetNodeModel) as INode;
             }
 
             return null;
@@ -1247,6 +1246,13 @@ namespace StorylineEditor.ViewModel.Graphs
 
         public void TickPlayer(double alpha) { playerIndicator.Tick(alpha); }
 
+        public void OnNodeGenderChanged(INode node) { OnModelChanged(Model, nameof(GraphVM<GraphM>.Stats)); }
+
+        public void OnNodePositionChanged(INode node, ENodeUpdateFlags updateFlags) { UpdateLocalPosition(node, updateFlags); }
+
+        public void OnNodeSizeChanged(INode node, ENodeUpdateFlags updateFlags) { UpdateLocalPosition(node, updateFlags); }
+
+
         protected virtual string CanLinkNodes(INode from, INode to) { return nameof(NotImplementedException); }
         protected virtual void PreLinkNodes(INode from, INode to) { }
 
@@ -1323,7 +1329,11 @@ namespace StorylineEditor.ViewModel.Graphs
                 {
                     Model.name = value;
                     OnModelChanged(Model, nameof(Name));
-                    CallbackContext?.Callback(this, nameof(Name));
+
+                    if (ActiveContextService.ActiveTab is ICollection_Base collectionBase)
+                    {
+                        collectionBase.Refresh();
+                    }
                 }
             }
         }

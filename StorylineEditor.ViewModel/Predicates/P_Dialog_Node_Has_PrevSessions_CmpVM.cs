@@ -13,19 +13,18 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Model;
 using StorylineEditor.Model.Graphs;
 using StorylineEditor.Model.Predicates;
-using StorylineEditor.ViewModel.Common;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 
 namespace StorylineEditor.ViewModel.Predicates
 {
-    public class P_Dialog_Node_Has_PrevSessions_CmpVM : P_BaseVM<P_Dialog_Node_Has_PrevSessions_CmpM>
+    public class P_Dialog_Node_Has_PrevSessions_CmpVM : P_BaseVM<P_Dialog_Node_Has_PrevSessions_CmpM, object>
     {
         public CollectionViewSource DialogsAndReplicasCVS { get; }
         public CollectionViewSource NodesCVS { get; }
 
-        public P_Dialog_Node_Has_PrevSessions_CmpVM(P_Dialog_Node_Has_PrevSessions_CmpM model, ICallbackContext callbackContext) : base(model, callbackContext)
+        public P_Dialog_Node_Has_PrevSessions_CmpVM(P_Dialog_Node_Has_PrevSessions_CmpM model, object parent) : base(model, parent)
         {
             DialogsAndReplicasCVS = new CollectionViewSource() { Source = ActiveContextService.DialogsAndReplicas };
 
