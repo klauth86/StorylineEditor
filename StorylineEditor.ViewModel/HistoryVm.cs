@@ -976,6 +976,15 @@ namespace StorylineEditor.ViewModel
                         {
                             keysToRemove.Add(key);
                         }
+
+                        foreach (var predicate in node.Predicates)
+                        {
+                            if (!predicate.IsTrue())
+                            {
+                                keysToRemove.Add(key);
+                                break;
+                            }
+                        }
                     }
                 }
             }

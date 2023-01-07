@@ -14,6 +14,8 @@ using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Helpers;
 using StorylineEditor.ViewModel.Interface;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Documents;
 using System.Windows.Input;
 
@@ -196,5 +198,8 @@ namespace StorylineEditor.ViewModel.Nodes
         }
 
         protected virtual void RefreshModelName() { }
+
+        public virtual IEnumerable<IPredicate> Predicates { get => Enumerable.Empty<IPredicate>(); }
+        public virtual IEnumerable<IGameEvent> GameEvents { get => Enumerable.Empty<IGameEvent>(); }
     }
 }

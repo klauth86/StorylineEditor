@@ -10,6 +10,8 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using System.Collections.Generic;
+
 namespace StorylineEditor.ViewModel.Interface
 {
     public interface INode : IPositioned
@@ -26,5 +28,8 @@ namespace StorylineEditor.ViewModel.Interface
         byte Gender { get; }
         bool IsSelected { get; }
         bool IsRoot { get; set; }
+
+        IEnumerable<IPredicate> Predicates { get; }
+        IEnumerable<IGameEvent> GameEvents { get; }
     }
 }
