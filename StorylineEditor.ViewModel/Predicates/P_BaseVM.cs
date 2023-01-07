@@ -12,12 +12,14 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model.Predicates;
 using StorylineEditor.ViewModel.Common;
+using StorylineEditor.ViewModel.Interface;
 using System;
 
 namespace StorylineEditor.ViewModel.Predicates
 {
     public abstract class P_BaseVM<T, U>
         : BaseVM<T, U>
+        , IPredicate
         where T : P_BaseM
         where U : class
     {

@@ -12,12 +12,14 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model.GameEvents;
 using StorylineEditor.ViewModel.Common;
+using StorylineEditor.ViewModel.Interface;
 using System;
 
 namespace StorylineEditor.ViewModel.GameEvents
 {
     public abstract class GE_BaseVM<T, U>
         : BaseVM<T, U>
+        , IGameEvent
         where T : GE_BaseM
         where U : class
     {

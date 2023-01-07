@@ -11,7 +11,6 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Model.GameEvents;
-using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Interface;
 using System;
 
@@ -19,7 +18,7 @@ namespace StorylineEditor.ViewModel.GameEvents
 {
     public static class GameEventsHelper
     {
-        public static IWithModel CreateGameEventByType(Type type, INode node)
+        public static IGameEvent CreateGameEventByType(Type type, INode node)
         {
             if (type == typeof(GE_Item_DropM)) return new GE_Item_DropVM(new GE_Item_DropM(0), node);
             if (type == typeof(GE_Item_PickUpM)) return new GE_Item_PickUpVM(new GE_Item_PickUpM(0), node);
@@ -28,10 +27,10 @@ namespace StorylineEditor.ViewModel.GameEvents
             if (type == typeof(GE_Quest_Node_PassM)) return new GE_Quest_Node_PassVM(new GE_Quest_Node_PassM(0), node);
             if (type == typeof(GE_Relation_ChangeM)) return new GE_Relation_ChangeVM(new GE_Relation_ChangeM(0), node);
 
-            return null;
+            throw new ArgumentOutOfRangeException(nameof(type));
         }
 
-        public static IWithModel CreateGameEventByModel(GE_BaseM model, INode node)
+        public static IGameEvent CreateGameEventByModel(GE_BaseM model, INode node)
         {
             if (model.GetType() == typeof(GE_Item_DropM)) return new GE_Item_DropVM(new GE_Item_DropM(0), node);
             if (model.GetType() == typeof(GE_Item_PickUpM)) return new GE_Item_PickUpVM(new GE_Item_PickUpM(0), node);
@@ -40,7 +39,7 @@ namespace StorylineEditor.ViewModel.GameEvents
             if (model.GetType() == typeof(GE_Quest_Node_PassM)) return new GE_Quest_Node_PassVM(new GE_Quest_Node_PassM(0), node);
             if (model.GetType() == typeof(GE_Relation_ChangeM)) return new GE_Relation_ChangeVM(new GE_Relation_ChangeM(0), node);
 
-            return null;
+            throw new ArgumentOutOfRangeException(nameof(model));
         }
     }
 }

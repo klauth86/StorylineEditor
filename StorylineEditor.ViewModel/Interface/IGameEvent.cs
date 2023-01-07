@@ -10,32 +10,10 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
 namespace StorylineEditor.ViewModel.Interface
 {
-    public enum ENodeUpdateFlags
+    public interface IGameEvent : IWithModel
     {
-        X = 1,
-        Y = 2,
-        XY = 3,
-    }
 
-    public interface IGraph
-    {
-        string Id { get; }
-        INode SelectionNode { get; }
-        INode FindNode(string nodeId);
-        INode GenerateNode(string nodeId);
-        void MoveTo(IPositioned positioned, Action<TaskStatus> callbackAction);
-        void MoveTo(string positionedId, Action<TaskStatus> callbackAction);
-        Dictionary<string, List<IPositioned>> GetNext(string nodeId);
-        void SetPlayerContext(object oldPlayerContext, object newPlayerContext);
-        void TickPlayer(double alpha);
-        void OnNodeGenderChanged(INode node);
-        void OnNodePositionChanged(INode node, ENodeUpdateFlags updateFlags);
-        void OnNodeSizeChanged(INode node, ENodeUpdateFlags updateFlags);
     }
 }

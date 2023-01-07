@@ -40,13 +40,13 @@ namespace StorylineEditor.ViewModel.Predicates
                         if (IsFirstSelected)
                         {
                             PredicateA = PredicatesHelper.CreatePredicateByType(subType, Parent);
-                            Model.predicateA = ((IWithModel)PredicateA).GetModel<P_BaseM>();
+                            Model.predicateA = PredicateA.GetModel<P_BaseM>();
                             Notify(nameof(PredicateA));
                         }
                         else
                         {
                             PredicateB = PredicatesHelper.CreatePredicateByType(subType, Parent);
-                            Model.predicateB = ((IWithModel)PredicateB).GetModel<P_BaseM>();
+                            Model.predicateB = PredicateB.GetModel<P_BaseM>();
                             Notify(nameof(PredicateB));
                         }
                     }
@@ -56,9 +56,9 @@ namespace StorylineEditor.ViewModel.Predicates
 
         public bool IsFirstSelected { get; set; }
 
-        public IWithModel PredicateA { get; set; }
+        public IPredicate PredicateA { get; set; }
 
-        public IWithModel PredicateB { get; set; }
+        public IPredicate PredicateB { get; set; }
 
         public byte CompositionType
         {

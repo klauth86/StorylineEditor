@@ -37,10 +37,13 @@
     <Compile Include="Graphs\GraphVM.cs" />
     <Compile Include="HistoryVm.cs" />
     <Compile Include="Interface\ICopyPaste.cs" />
-    <Compile Include="Interface\IDlgService.cs" />
+    <Compile Include="Interface\IDialogService.cs" />
+    <Compile Include="Interface\IGameEvent.cs" />
     <Compile Include="Interface\IGraph.cs" />
     <Compile Include="Interface\ICollection_Base.cs" />
+    <Compile Include="Interface\INode.cs" />
     <Compile Include="Interface\IPositioned.cs" />
+    <Compile Include="Interface\IPredicate.cs" />
     <Compile Include="Interface\IWithModel.cs" />
     <Compile Include="LocationVM.cs" />
     <Compile Include="GameEvents\GE_Relation_ChangeVM.cs" />
