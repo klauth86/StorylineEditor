@@ -27,7 +27,7 @@ namespace StorylineEditor.ViewModel.Graphs
         public GraphVM(T model, object parent) : base(model, parent) { }
 
         protected ICommand infoCommand;
-        public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<Notifier>((viewModel) => ActiveContextService.DialogService?.ShowDialog(this)));
+        public ICommand InfoCommand => infoCommand ?? (infoCommand = new RelayCommand<Notifier>((viewModel) => ActiveContext.DialogService?.ShowDialog(this)));
 
         public string Stats => GetStats(Model);
 
@@ -45,7 +45,7 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 // Characters
 
-                string characterKey = node is Node_RegularM regularNode ? ActiveContextService.GetCharacter(regularNode.characterId)?.name : "N/A";
+                string characterKey = node is Node_RegularM regularNode ? ActiveContext.GetCharacter(regularNode.characterId)?.name : "N/A";
 
                 string gender = " ";
                 if (node.gender == GENDER.MALE) gender = Application.Current.FindResource("String_Icon_Gender_Male")?.ToString();

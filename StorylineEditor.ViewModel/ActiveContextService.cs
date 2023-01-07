@@ -19,7 +19,7 @@ using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel
 {
-    public static class ActiveContextService
+    public static class ActiveContext
     {
         private static double _viewWidth;
         public static double ViewWidth { get => _viewWidth; set => _viewWidth = value > 0 ? value : _viewWidth; }
@@ -31,7 +31,7 @@ namespace StorylineEditor.ViewModel
 
         public static HistoryVM History { get; }
 
-        static ActiveContextService()
+        static ActiveContext()
         {
             History = new HistoryVM();
         }

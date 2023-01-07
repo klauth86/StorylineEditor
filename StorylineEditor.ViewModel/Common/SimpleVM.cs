@@ -72,11 +72,11 @@ namespace StorylineEditor.ViewModel.Common
 
 
         protected ICommand registerContextCommand;
-        public ICommand RegisterContextCommand => registerContextCommand ?? (registerContextCommand = new RelayCommand(() => ActiveContextService.ActiveCopyPaste = this as ICopyPaste));
+        public ICommand RegisterContextCommand => registerContextCommand ?? (registerContextCommand = new RelayCommand(() => ActiveContext.ActiveCopyPaste = this as ICopyPaste));
 
 
 
         protected ICommand unregisterContextCommand;
-        public ICommand UnregisterContextCommand => unregisterContextCommand ?? (unregisterContextCommand = new RelayCommand(() => ActiveContextService.ActiveCopyPaste = null));
+        public ICommand UnregisterContextCommand => unregisterContextCommand ?? (unregisterContextCommand = new RelayCommand(() => ActiveContext.ActiveCopyPaste = null));
     }
 }

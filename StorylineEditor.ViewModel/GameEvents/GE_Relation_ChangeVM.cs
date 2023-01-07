@@ -24,7 +24,7 @@ namespace StorylineEditor.ViewModel.GameEvents
 
         public GE_Relation_ChangeVM(GE_Relation_ChangeM model, object parent) : base(model, parent)
         {
-            CharactersCVS = new CollectionViewSource() { Source = ActiveContextService.Characters };
+            CharactersCVS = new CollectionViewSource() { Source = ActiveContext.Characters };
 
             if (CharactersCVS.View != null)
             {
@@ -58,7 +58,7 @@ namespace StorylineEditor.ViewModel.GameEvents
 
         public BaseM Character
         {
-            get => ActiveContextService.GetCharacter(Model.npcId);
+            get => ActiveContext.GetCharacter(Model.npcId);
             set
             {
                 if (value?.id != Model.npcId)
@@ -86,14 +86,14 @@ namespace StorylineEditor.ViewModel.GameEvents
         {
             if (Character != null)
             {
-                CharacterEntryVM characterEntryVm = ActiveContextService.History.CharacterEntries.FirstOrDefault((ceVm) => ceVm.Model.id == Character.id);
+                CharacterEntryVM characterEntryVm = ActiveContext.History.CharacterEntries.FirstOrDefault((ceVm) => ceVm.Model.id == Character.id);
 
                 if (characterEntryVm == null)
                 {
-                    ActiveContextService.History.AddCharacter(Character);
+                    ActiveContext.History.AddCharacter(Character);
                 }
 
-                characterEntryVm = ActiveContextService.History.CharacterEntries.FirstOrDefault((ceVm) => ceVm.Model.id == Character.id);
+                characterEntryVm = ActiveContext.History.CharacterEntries.FirstOrDefault((ceVm) => ceVm.Model.id == Character.id);
 
                 characterEntryVm.DeltaRelation += Value;
             }

@@ -27,7 +27,7 @@ namespace StorylineEditor.ViewModel.Predicates
 
         public P_Dialog_Node_Has_PrevSessions_CmpVM(P_Dialog_Node_Has_PrevSessions_CmpM model, object parent) : base(model, parent)
         {
-            DialogsAndReplicasCVS = new CollectionViewSource() { Source = ActiveContextService.DialogsAndReplicas };
+            DialogsAndReplicasCVS = new CollectionViewSource() { Source = ActiveContext.DialogsAndReplicas };
 
             if (DialogsAndReplicasCVS.View != null)
             {
@@ -64,7 +64,7 @@ namespace StorylineEditor.ViewModel.Predicates
         }
         public BaseM DialogOrReplica
         {
-            get => ActiveContextService.GetDialogOrReplica(Model.dialogId);
+            get => ActiveContext.GetDialogOrReplica(Model.dialogId);
             set
             {
                 if (value?.id != Model.dialogId)
@@ -155,8 +155,8 @@ namespace StorylineEditor.ViewModel.Predicates
         {
             if (DialogOrReplica != null && Node != null)
             {
-                var dialogEntryVms = ActiveContextService.History.DialogEntries
-                    .Where((deVm) => deVm.Model.id == DialogOrReplica.id && deVm.Model.id != ActiveContextService.History.ActiveDialogEntryId);
+                var dialogEntryVms = ActiveContext.History.DialogEntries
+                    .Where((deVm) => deVm.Model.id == DialogOrReplica.id && deVm.Model.id != ActiveContext.History.ActiveDialogEntryId);
 
                 int count = 0;
 

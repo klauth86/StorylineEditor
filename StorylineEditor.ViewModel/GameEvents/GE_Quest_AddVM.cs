@@ -23,7 +23,7 @@ namespace StorylineEditor.ViewModel.GameEvents
 
         public GE_Quest_AddVM(GE_Quest_AddM model, object parent) : base(model, parent)
         {
-            QuestsCVS = new CollectionViewSource() { Source = ActiveContextService.Quests };
+            QuestsCVS = new CollectionViewSource() { Source = ActiveContext.Quests };
 
             if (QuestsCVS.View != null)
             {
@@ -57,7 +57,7 @@ namespace StorylineEditor.ViewModel.GameEvents
 
         public BaseM Quest
         {
-            get => ActiveContextService.GetQuest(Model.questId);
+            get => ActiveContext.GetQuest(Model.questId);
             set
             {
                 if (value?.id != Model.questId)
@@ -72,7 +72,7 @@ namespace StorylineEditor.ViewModel.GameEvents
         {
             if (Quest != null)
             {
-                ActiveContextService.History.AddQuest(Quest);
+                ActiveContext.History.AddQuest(Quest);
             }
         }
     }

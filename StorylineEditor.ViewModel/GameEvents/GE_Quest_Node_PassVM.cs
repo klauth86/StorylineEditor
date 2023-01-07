@@ -26,7 +26,7 @@ namespace StorylineEditor.ViewModel.GameEvents
 
         public GE_Quest_Node_PassVM(GE_Quest_Node_PassM model, object parent) : base(model, parent)
         {
-            QuestsCVS = new CollectionViewSource() { Source = ActiveContextService.Quests };
+            QuestsCVS = new CollectionViewSource() { Source = ActiveContext.Quests };
 
             if (QuestsCVS.View != null)
             {
@@ -63,7 +63,7 @@ namespace StorylineEditor.ViewModel.GameEvents
         }
         public BaseM Quest
         {
-            get => ActiveContextService.GetQuest(Model.questId);
+            get => ActiveContext.GetQuest(Model.questId);
             set
             {
                 if (value?.id != Model.questId)
@@ -128,14 +128,14 @@ namespace StorylineEditor.ViewModel.GameEvents
         {
             if (Quest != null && Node != null)
             {
-                QuestEntryVM questEntryVm = ActiveContextService.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == Quest.id);
+                QuestEntryVM questEntryVm = ActiveContext.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == Quest.id);
 
                 if (questEntryVm == null)
                 {
-                    ActiveContextService.History.AddQuest(Quest);
+                    ActiveContext.History.AddQuest(Quest);
                 }
 
-                questEntryVm = ActiveContextService.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == Quest.id);
+                questEntryVm = ActiveContext.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == Quest.id);
 
                 if (!questEntryVm.KnownNodes.Contains(Node))
                 {

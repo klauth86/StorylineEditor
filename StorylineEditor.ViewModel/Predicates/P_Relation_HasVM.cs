@@ -25,7 +25,7 @@ namespace StorylineEditor.ViewModel.Predicates
 
         public P_Relation_HasVM(P_Relation_HasM model, object parent) : base(model, parent)
         {
-            CharactersCVS = new CollectionViewSource() { Source = ActiveContextService.Characters };
+            CharactersCVS = new CollectionViewSource() { Source = ActiveContext.Characters };
 
             if (CharactersCVS.View != null)
             {
@@ -59,7 +59,7 @@ namespace StorylineEditor.ViewModel.Predicates
 
         public BaseM Character
         {
-            get => ActiveContextService.GetCharacter(Model.npcId);
+            get => ActiveContext.GetCharacter(Model.npcId);
             set
             {
                 if (value?.id != Model.npcId)
@@ -102,11 +102,11 @@ namespace StorylineEditor.ViewModel.Predicates
             {
                 CharacterM character = (CharacterM)Character;
 
-                float relation = ActiveContextService.History.Gender == GENDER.MALE
+                float relation = ActiveContext.History.Gender == GENDER.MALE
                     ? character.initialRelation
                     : character.initialRelationFemale;
                 
-                CharacterEntryVM characterEntryVm = ActiveContextService.History.CharacterEntries.FirstOrDefault((ceVm) => ceVm.Model.id == Character.id);
+                CharacterEntryVM characterEntryVm = ActiveContext.History.CharacterEntries.FirstOrDefault((ceVm) => ceVm.Model.id == Character.id);
                 if (characterEntryVm != null)
                 {
                     relation += characterEntryVm.DeltaRelation;

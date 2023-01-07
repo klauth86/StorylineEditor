@@ -23,7 +23,7 @@ namespace StorylineEditor.ViewModel.Predicates
 
         public P_Item_HasVM(P_Item_HasM model, object parent) : base(model, parent)
         {
-            ItemsCVS = new CollectionViewSource() { Source = ActiveContextService.Items };
+            ItemsCVS = new CollectionViewSource() { Source = ActiveContext.Items };
 
             if (ItemsCVS.View != null)
             {
@@ -57,7 +57,7 @@ namespace StorylineEditor.ViewModel.Predicates
 
         public BaseM Item
         {
-            get => ActiveContextService.GetItem(Model.itemId);
+            get => ActiveContext.GetItem(Model.itemId);
             set
             {
                 if (value?.id != Model.itemId)
@@ -72,7 +72,7 @@ namespace StorylineEditor.ViewModel.Predicates
         {
             if (Item != null)
             {
-                bool result = ActiveContextService.History.Inventory.Contains(Item);
+                bool result = ActiveContext.History.Inventory.Contains(Item);
 
                 if (IsInversed) result = !result;
                 return result;

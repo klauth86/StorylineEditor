@@ -26,8 +26,8 @@ namespace StorylineEditor.ViewModel.Graphs
     {
         public DialogVM(DialogM model, object parent) : base(model, parent) { }
 
-        public BaseM DialogCharacter => ActiveContextService.GetCharacter(Model.npcId);
-        public BaseM DialogLocation => ActiveContextService.GetLocation(Model.locationId);
+        public BaseM DialogCharacter => ActiveContext.GetCharacter(Model.npcId);
+        public BaseM DialogLocation => ActiveContext.GetLocation(Model.locationId);
     }
 
     public class DialogEditorVM : Graph_BaseVM<DialogM, object>
@@ -50,7 +50,7 @@ namespace StorylineEditor.ViewModel.Graphs
                   , defaultNodeType
                   )
         {
-            FilteredDialogCharacterCVS = new CollectionViewSource() { Source = ActiveContextService.Characters };
+            FilteredDialogCharacterCVS = new CollectionViewSource() { Source = ActiveContext.Characters };
             
             if (FilteredDialogCharacterCVS.View != null)
             {
@@ -59,7 +59,7 @@ namespace StorylineEditor.ViewModel.Graphs
                 FilteredDialogCharacterCVS.View.MoveCurrentTo(DialogCharacter);
             }
 
-            FilteredDialogLocationCVS = new CollectionViewSource() { Source = ActiveContextService.Locations };
+            FilteredDialogLocationCVS = new CollectionViewSource() { Source = ActiveContext.Locations };
 
             if (FilteredDialogLocationCVS.View != null)
             {
@@ -112,7 +112,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
         public BaseM DialogCharacter
         {
-            get => ActiveContextService.GetCharacter(Model.npcId);
+            get => ActiveContext.GetCharacter(Model.npcId);
             set
             {
                 if (value?.id != Model.npcId)
@@ -148,7 +148,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
         public BaseM DialogLocation
         {
-            get => ActiveContextService.GetLocation(Model.locationId);
+            get => ActiveContext.GetLocation(Model.locationId);
             set
             {
                 if (value?.id != Model.locationId)

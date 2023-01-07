@@ -128,7 +128,7 @@ namespace StorylineEditor.ViewModel
         {
             if (selection != null)
             {
-                ActiveContextService.ActiveGraph = null;
+                ActiveContext.ActiveGraph = null;
                 SelectionEditor = null;
                 selection.IsSelected = false;
             }
@@ -139,7 +139,7 @@ namespace StorylineEditor.ViewModel
             {
                 selection.IsSelected = true;
                 SelectionEditor = _editorCreator(selection);
-                ActiveContextService.ActiveGraph = SelectionEditor as IGraph;
+                ActiveContext.ActiveGraph = SelectionEditor as IGraph;
             }
 
             CommandManager.InvalidateRequerySuggested();

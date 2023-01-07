@@ -31,7 +31,7 @@ namespace StorylineEditor.ViewModel.Interface
         INode GenerateNode(string nodeId);
         void MoveTo(IPositioned positioned, Action<TaskStatus> callbackAction);
         void MoveTo(string positionedId, Action<TaskStatus> callbackAction);
-        List<List<IPositioned>> GetPaths(string nodeId);
+        List<List<IPositioned>> GetAllPaths(string nodeId);
         void SetPlayerContext(object oldPlayerContext, object newPlayerContext);
         void TickPlayer(double alpha);
         void OnNodeGenderChanged(INode node);

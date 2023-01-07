@@ -33,7 +33,7 @@ namespace StorylineEditor.ViewModel.Graphs
                   , parent
                   ) { }
 
-        public BaseM ReplicaLocation => ActiveContextService.GetLocation(Model.locationId);
+        public BaseM ReplicaLocation => ActiveContext.GetLocation(Model.locationId);
     }
 
     public class ReplicaEditorVM
@@ -58,7 +58,7 @@ namespace StorylineEditor.ViewModel.Graphs
                   , defaultNodeType
                   )
         {
-            FilteredReplicaLocationCVS = new CollectionViewSource() { Source = ActiveContextService.Locations };
+            FilteredReplicaLocationCVS = new CollectionViewSource() { Source = ActiveContext.Locations };
 
             if (FilteredReplicaLocationCVS.View != null)
             {
@@ -107,7 +107,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
         public BaseM ReplicaLocation
         {
-            get => ActiveContextService.GetLocation(Model.locationId);
+            get => ActiveContext.GetLocation(Model.locationId);
             set
             {
                 if (value?.id != Model.locationId)

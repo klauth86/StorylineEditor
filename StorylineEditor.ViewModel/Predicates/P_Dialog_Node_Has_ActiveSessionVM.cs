@@ -72,7 +72,7 @@ namespace StorylineEditor.ViewModel.Predicates
         {
             if (Node != null)
             {
-                DialogEntryVM dialogEntryVm = ActiveContextService.History.DialogEntries.FirstOrDefault((deVm) => deVm.Id == ActiveContextService.History.ActiveDialogEntryId);
+                DialogEntryVM dialogEntryVm = ActiveContext.History.DialogEntries.FirstOrDefault((deVm) => deVm.Id == ActiveContext.History.ActiveDialogEntryId);
 
                 if (dialogEntryVm != null)
                 {

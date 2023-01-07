@@ -349,7 +349,7 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:StorylineVM}" x:Key="DT_StorylineVM_Selection">
-        <ContentControl Content="{Binding Path=(vm:ActiveContextService.ActiveTab), UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+        <ContentControl Content="{Binding Path=(vm:ActiveContext.ActiveTab), UpdateSourceTrigger=PropertyChanged}"></ContentControl>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:CollectionVM}">
@@ -873,8 +873,8 @@ StorylineEditor распространяется в надежде, что он�
 
                     <ItemsControl Style="{StaticResource S_ItemsControl_Graph}"
                                   bhvrs:RenderSizeBehavior.IsEnabled="true"
-                                  bhvrs:RenderSizeBehavior.ActualWidth="{Binding Path=(vm:ActiveContextService.ViewWidth), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
-                                  bhvrs:RenderSizeBehavior.ActualHeight="{Binding Path=(vm:ActiveContextService.ViewHeight), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                                  bhvrs:RenderSizeBehavior.ActualWidth="{Binding Path=(vm:ActiveContext.ViewWidth), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                                  bhvrs:RenderSizeBehavior.ActualHeight="{Binding Path=(vm:ActiveContext.ViewHeight), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
                                   bhvrs:RenderSizeBehavior.SizeChangedFlag="{Binding SizeChangedFlag, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}">
                     </ItemsControl>
 
@@ -1619,8 +1619,8 @@ StorylineEditor распространяется в надежде, что он�
 
                     <ItemsControl Style="{StaticResource S_ItemsControl_Graph}"
                                   bhvrs:RenderSizeBehavior.IsEnabled="true"
-                                  bhvrs:RenderSizeBehavior.ActualWidth="{Binding Path=(vm:ActiveContextService.ViewWidth), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
-                                  bhvrs:RenderSizeBehavior.ActualHeight="{Binding Path=(vm:ActiveContextService.ViewHeight), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                                  bhvrs:RenderSizeBehavior.ActualWidth="{Binding Path=(vm:ActiveContext.ViewWidth), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                                  bhvrs:RenderSizeBehavior.ActualHeight="{Binding Path=(vm:ActiveContext.ViewHeight), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
                                   bhvrs:RenderSizeBehavior.SizeChangedFlag="{Binding SizeChangedFlag, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}">
                     </ItemsControl>
 
@@ -1750,8 +1750,8 @@ StorylineEditor распространяется в надежде, что он�
 
                     <ItemsControl Style="{StaticResource S_ItemsControl_Graph}"
                                   bhvrs:RenderSizeBehavior.IsEnabled="true"
-                                  bhvrs:RenderSizeBehavior.ActualWidth="{Binding Path=(vm:ActiveContextService.ViewWidth), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
-                                  bhvrs:RenderSizeBehavior.ActualHeight="{Binding Path=(vm:ActiveContextService.ViewHeight), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                                  bhvrs:RenderSizeBehavior.ActualWidth="{Binding Path=(vm:ActiveContext.ViewWidth), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
+                                  bhvrs:RenderSizeBehavior.ActualHeight="{Binding Path=(vm:ActiveContext.ViewHeight), UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"
                                   bhvrs:RenderSizeBehavior.SizeChangedFlag="{Binding SizeChangedFlag, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}">
                     </ItemsControl>
 

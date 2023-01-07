@@ -33,7 +33,7 @@ namespace StorylineEditor.ViewModel.Common
                     Model.name = value;
                     OnModelChanged(Model, nameof(Name));
 
-                    if (ActiveContextService.ActiveTab is ICollection_Base collectionBase)
+                    if (ActiveContext.ActiveTab is ICollection_Base collectionBase)
                     {
                         collectionBase.Refresh();
                     }

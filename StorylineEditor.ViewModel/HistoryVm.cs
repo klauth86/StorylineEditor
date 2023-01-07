@@ -41,7 +41,7 @@ namespace StorylineEditor.ViewModel
         public Dictionary<INode, int> Choices { get; set; }
 
         protected ICommand selectNodeCommand;
-        public ICommand SelectNodeCommand => selectNodeCommand ?? (selectNodeCommand = new RelayCommand<INode>((node) => { _parent.PathIndex = Choices[node]; }, (node) => node != null && Choices.ContainsKey(node)));
+        public ICommand SelectNodeCommand => selectNodeCommand ?? (selectNodeCommand = new RelayCommand<INode>((node) => { _parent.PathIndex = Choices[node]; }));
     }
 
     public class PlayerContext_ErrorVM : Notifier
@@ -142,7 +142,7 @@ namespace StorylineEditor.ViewModel
         }
 
         protected ICommand removeNodeCommand;
-        public ICommand RemoveNodeCommand => removeNodeCommand ?? (removeNodeCommand = new RelayCommand<BaseM>((node) => RemoveNode(node), (node) => node != null));
+        public ICommand RemoveNodeCommand => removeNodeCommand ?? (removeNodeCommand = new RelayCommand<BaseM>((node) => RemoveNode(node)));
     }
 
     public class QuestEntryVM : HistoryItemVM
@@ -230,7 +230,7 @@ namespace StorylineEditor.ViewModel
         }
 
         protected ICommand removeKnownNodeCommand;
-        public ICommand RemoveKnownNodeCommand => removeKnownNodeCommand ?? (removeKnownNodeCommand = new RelayCommand<BaseM>((knownNode) => RemoveKnownNode(knownNode), (knownNode) => knownNode != null));
+        public ICommand RemoveKnownNodeCommand => removeKnownNodeCommand ?? (removeKnownNodeCommand = new RelayCommand<BaseM>((knownNode) => RemoveKnownNode(knownNode)));
 
         #endregion
 
@@ -255,10 +255,10 @@ namespace StorylineEditor.ViewModel
         }
 
         protected ICommand addPassedNodeCommand;
-        public ICommand AddPassedNodeCommand => addPassedNodeCommand ?? (addPassedNodeCommand = new RelayCommand<BaseM>((node) => AddPassedNode(node), (node) => node != null && !PassedNodes.Contains(node)));
+        public ICommand AddPassedNodeCommand => addPassedNodeCommand ?? (addPassedNodeCommand = new RelayCommand<BaseM>((node) => AddPassedNode(node), (node) => !PassedNodes.Contains(node)));
 
         protected ICommand removePassedNodeCommand;
-        public ICommand RemovePassedNodeCommand => removePassedNodeCommand ?? (removePassedNodeCommand = new RelayCommand<BaseM>((node) => RemovePassedNode(node), (node) => node != null && PassedNodes.Contains(node)));
+        public ICommand RemovePassedNodeCommand => removePassedNodeCommand ?? (removePassedNodeCommand = new RelayCommand<BaseM>((node) => RemovePassedNode(node), (node) => PassedNodes.Contains(node)));
     }
 
     public class CharacterEntryVM : HistoryItemVM
@@ -325,7 +325,7 @@ namespace StorylineEditor.ViewModel
             {
                 if (_charactersCVS.View == null)
                 {
-                    _charactersCVS.Source = ActiveContextService.Characters;
+                    _charactersCVS.Source = ActiveContext.Characters;
 
                     _charactersCVS.View.Filter = OnCharactersFilter;
                     _charactersCVS.View.SortDescriptions.Add(new SortDescription(nameof(BaseM.id), ListSortDirection.Ascending));
@@ -429,7 +429,7 @@ namespace StorylineEditor.ViewModel
             {
                 if (_itemsCVS.View == null)
                 {
-                    _itemsCVS.Source = ActiveContextService.Items;
+                    _itemsCVS.Source = ActiveContext.Items;
 
                     _itemsCVS.View.Filter = OnItemsFilter;
                     _itemsCVS.View.SortDescriptions.Add(new SortDescription(nameof(BaseM.id), ListSortDirection.Ascending));
@@ -510,7 +510,7 @@ namespace StorylineEditor.ViewModel
             {
                 if (_questsCVS.View == null)
                 {
-                    _questsCVS.Source = ActiveContextService.Quests;
+                    _questsCVS.Source = ActiveContext.Quests;
 
                     _questsCVS.View.Filter = OnQuestsFilter;
                     _questsCVS.View.SortDescriptions.Add(new SortDescription(nameof(BaseM.id), ListSortDirection.Ascending));
@@ -616,7 +616,7 @@ namespace StorylineEditor.ViewModel
             {
                 if (_dialogsCVS.View == null)
                 {
-                    _dialogsCVS.Source = ActiveContextService.DialogsAndReplicas;
+                    _dialogsCVS.Source = ActiveContext.DialogsAndReplicas;
 
                     _dialogsCVS.View.Filter = OnDialogsFilter;
                     _dialogsCVS.View.SortDescriptions.Add(new SortDescription(nameof(BaseM.id), ListSortDirection.Ascending));
@@ -760,7 +760,7 @@ namespace StorylineEditor.ViewModel
             {
                 if (value != playerContext)
                 {
-                    ActiveContextService.ActiveGraph.SetPlayerContext(playerContext, value);
+                    ActiveContext.ActiveGraph.SetPlayerContext(playerContext, value);
 
                     playerContext = value;
                     Notify(nameof(PlayerContext));
@@ -775,37 +775,27 @@ namespace StorylineEditor.ViewModel
         {
             if (StartGraph == null)
             {
-                StartGraph = ActiveContextService.ActiveGraph;
+                StartGraph = ActiveContext.ActiveGraph;
                 StartNode = StartGraph.SelectionNode;
             }
 
-            if (ActiveContextService.ActiveGraph.Id != StartGraph.Id)
+            bool needToSwitch = ActiveContext.ActiveGraph.Id != StartGraph.Id;
+            bool hasSwitched = needToSwitch && SwitchToGraph(StartGraph.Id);
+
+            if (needToSwitch && hasSwitched || !needToSwitch)
             {
-                ICollection_Base collectionBase = (ICollection_Base)ActiveContextService.ActiveTab;
-
-                bool hasSwitched = SwitchToGraph(StartGraph.Id);
-                INode startNode = ActiveContextService.ActiveGraph.FindNode(StartNode.Id) ?? ActiveContextService.ActiveGraph.GenerateNode(StartNode.Id);
-
-                if (hasSwitched && startNode != null)
-                {
-                    OnStartMovement(StartNode);
-                }
-                else
-                {
-                    Stop();
-                }
+                OnStartMovement(StartNode);
             }
             else
             {
-                OnStartMovement(StartNode);
+                Stop();
             }
         }, () => PlayerContext == null));
 
         protected void OnStartMovement(IPositioned positioned)
         {
-            ActiveNode = null;
             PlayerContext = new PlayerContext_TransitionVM();
-            ActiveContextService.ActiveGraph.MoveTo(positioned, (taskStatus) => { if (taskStatus == TaskStatus.RanToCompletion) { OnFinishMovement(positioned); } });
+            ActiveContext.ActiveGraph.MoveTo(positioned, (taskStatus) => { if (taskStatus == TaskStatus.RanToCompletion) { OnFinishMovement(positioned); } });
         }
 
         protected void OnFinishMovement(IPositioned positioned)
@@ -816,27 +806,50 @@ namespace StorylineEditor.ViewModel
                 {
                     if (Paths[PathIndex].Count > 0)
                     {
+                        ExecuteGameEvents(positioned.Id, EXECUTION_MODE.ON_ENTER | EXECUTION_MODE.ON_LEAVE);
+
                         MoveThroughPath();
                         return;
                     }
                 }
-                else { } ////// TODO
+                else
+                {
+                    throw new IndexOutOfRangeException(nameof(PathIndex));
+                }
             }
 
-            ActiveNode = ActiveContextService.ActiveGraph.FindNode(positioned.Id);
-            PlayerContext = ActiveNode;
-            PlayNode();
+            INode node = ActiveContext.ActiveGraph.FindNode(positioned.Id);
+            PlayerContext = node;
+            StartPlayNode(node);
+        }
+
+        private void ExecuteGameEvents(string positionedId, int executionMode) { ExecuteGameEvents(ActiveContext.ActiveGraph.FindNode(positionedId), executionMode); }
+
+        private void ExecuteGameEvents(INode node, int executionMode)
+        {
+            if (fullMode)
+            {
+                foreach (var gameEvent in node.GameEvents)
+                {
+                    if ((gameEvent.ExecutionMode & executionMode) > 0)
+                    {
+                        gameEvent.Execute();
+                    }
+                }
+            }
         }
 
         protected bool SwitchToGraph(string graphId)
         {
-            ICollection_Base collectionBase = (ICollection_Base)ActiveContextService.ActiveTab;
+            ICollection_Base collectionBase = (ICollection_Base)ActiveContext.ActiveTab;
             return collectionBase.AddToSelectionById(graphId, true);
         }
 
-        private void PlayNode()
+        private void StartPlayNode(INode node)
         {
-            if (ActiveNode is Node_DialogVM dialogNodeViewModel || ActiveNode is Node_ReplicaVM replicaNodeViewModel)
+            ExecuteGameEvents(node, EXECUTION_MODE.ON_ENTER);
+
+            if (node is Node_DialogVM dialogNodeViewModel || node is Node_ReplicaVM replicaNodeViewModel)
             {
                 const int stepCount = 64;
                 int stepDuration = Convert.ToInt32(Math.Round(Duration * 1000) / stepCount);
@@ -847,7 +860,7 @@ namespace StorylineEditor.ViewModel
 
                     if (Math.Abs(alpha - 1) < 0.01) return TaskStatus.RanToCompletion;
 
-                    ActiveContextService.ActiveGraph.TickPlayer(alpha);
+                    ActiveContext.ActiveGraph.TickPlayer(alpha);
 
                     TimeLeft = (1 - alpha) * Duration;
 
@@ -859,32 +872,35 @@ namespace StorylineEditor.ViewModel
                 {
                     if (taskStatus == TaskStatus.RanToCompletion)
                     {
-                        ActiveContextService.ActiveGraph.TickPlayer(1);
+                        ActiveContext.ActiveGraph.TickPlayer(1);
 
                         TimeLeft = 0;
 
-                        GoToNext();
+                        FinishPlayNode(node);
                     }
                 }, null);
             }
             else
             {
-                GoToNext();
+                FinishPlayNode(node);
             }
         }
 
-        private void GoToNext()
+        private void FinishPlayNode(INode node)
         {
-            if (ActiveNode is Node_GateVM gateNode)
+            ExecuteGameEvents(node, EXECUTION_MODE.ON_LEAVE);
+
+            if (node is Node_GateVM gateNode)
             {
                 PlayerContext = null;
 
                 bool hasTargetAndExit = gateNode.TargetDialog != null && gateNode.TargetExitNode != null;
+                bool needToSwitch = hasTargetAndExit && ActiveContext.ActiveGraph.Id != StartGraph.Id;
                 bool hasSwitched = SwitchToGraph(gateNode.TargetDialog.id);
-                INode startNode = ActiveContextService.ActiveGraph.FindNode(gateNode.TargetExitNode.id) ?? ActiveContextService.ActiveGraph.GenerateNode(gateNode.TargetExitNode.id);
 
-                if (hasTargetAndExit && hasSwitched && startNode != null)
+                if (hasTargetAndExit && needToSwitch && hasSwitched || hasTargetAndExit && !needToSwitch)
                 {
+                    INode startNode = ActiveContext.ActiveGraph.FindNode(gateNode.TargetExitNode.id) ?? ActiveContext.ActiveGraph.GenerateNode(gateNode.TargetExitNode.id);
                     OnStartMovement(startNode);
                 }
                 else
@@ -894,9 +910,9 @@ namespace StorylineEditor.ViewModel
             }
             else
             {
-                var allPaths = ActiveContextService.ActiveGraph.GetPaths(ActiveNode.Id);
+                var allPaths = ActiveContext.ActiveGraph.GetAllPaths(node.Id);
 
-                Paths = FilterByContext(allPaths);
+                Paths = GetAvailablePaths(allPaths);
 
                 if (Paths.Count == 1)
                 {
@@ -904,7 +920,7 @@ namespace StorylineEditor.ViewModel
                 }
                 else if (Paths.Count > 0)
                 {
-                    if (ActiveNode is Node_RandomVM randomNode)
+                    if (node is Node_RandomVM randomNode)
                     {
                         PathIndex = Random.Next(Paths.Count);
                     }
@@ -914,9 +930,7 @@ namespace StorylineEditor.ViewModel
 
                         for (int i = 0; i < Paths.Count; i++)
                         {
-                            INode node = ActiveContextService.ActiveGraph.GenerateNode(Paths[i].Last().Id);
-
-                            choices.Add(node, i);
+                            choices.Add(ActiveContext.ActiveGraph.GenerateNode(Paths[i].Last().Id), i);
                         }
 
                         PlayerContext = new PlayerContext_ChoiceVM(this, choices);
@@ -947,7 +961,7 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        private List<List<IPositioned>> FilterByContext(List<List<IPositioned>> paths)
+        private List<List<IPositioned>> GetAvailablePaths(List<List<IPositioned>> paths)
         {
             List<List<IPositioned>> pathsToRemove = new List<List<IPositioned>>();
 
@@ -957,25 +971,30 @@ namespace StorylineEditor.ViewModel
                 {
                     foreach (var positioned in path)
                     {
-                        INode node = ActiveContextService.ActiveGraph.FindNode(positioned.Id);
+                        INode node = ActiveContext.ActiveGraph.GenerateNode(positioned.Id);
 
-                        if (node != null)
+                        bool shouldBeRemoved = false;
+
+                        if (node.Gender != Gender && node.Gender > 0) // Filtered by Gender
                         {
-                            if (node.Gender != Gender && node.Gender > 0) // Filtered by Gender
-                            {
-                                pathsToRemove.Add(path);
-                                break;
-                            }
+                            pathsToRemove.Add(path);
+                            shouldBeRemoved = true;
+                        }
 
+                        if (fullMode)
+                        {
                             foreach (var predicate in node.Predicates) // Filtered by predicates
                             {
                                 if (!predicate.IsTrue())
                                 {
                                     pathsToRemove.Add(path);
+                                    shouldBeRemoved = true;
                                     break;
                                 }
                             }
                         }
+
+                        if (shouldBeRemoved) break;
                     }
                 }
                 else
@@ -1016,7 +1035,7 @@ namespace StorylineEditor.ViewModel
             if (Paths[PathIndex].Count > 0)
             {
                 IPositioned next = Paths[PathIndex].First();
-                ActiveContextService.ActiveGraph.MoveTo(next, (taskStatus) => { if (taskStatus == TaskStatus.RanToCompletion) OnFinishMovement(next); });
+                ActiveContext.ActiveGraph.MoveTo(next, (taskStatus) => { if (taskStatus == TaskStatus.RanToCompletion) OnFinishMovement(next); });
             }
         }
 
@@ -1034,7 +1053,6 @@ namespace StorylineEditor.ViewModel
             Paths?.Clear();
 
             PlayerContext = null;
-            ActiveNode = null;
         }
 
         public void Dispose() { Reset(); }
@@ -1078,7 +1096,6 @@ namespace StorylineEditor.ViewModel
         public IGraph StartGraph { get; set; }
         public INode StartNode { get; set; }
         public string ActiveDialogEntryId { get; set; }
-        public INode ActiveNode { get; set; }
 
         List<List<IPositioned>> Paths { get; set; }
 

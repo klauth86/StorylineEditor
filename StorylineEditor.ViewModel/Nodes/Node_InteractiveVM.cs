@@ -126,7 +126,7 @@ namespace StorylineEditor.ViewModel.Nodes
     {
         public Node_GateVM(Node_GateM model, object parent) : base(model, parent) { }
 
-        public BaseM TargetDialog => ActiveContextService.GetDialog(Model.dialogId);
+        public BaseM TargetDialog => ActiveContext.GetDialog(Model.dialogId);
 
         public BaseM TargetExitNode => (TargetDialog as GraphM)?.nodes.FirstOrDefault((node) => node.id == Model.exitNodeId);
     }
@@ -138,7 +138,7 @@ namespace StorylineEditor.ViewModel.Nodes
 
         public Node_GateEditorVM(Node_GateVM viewModel) : base(viewModel.Model, viewModel.Parent)
         {
-            DialogsCVS = new CollectionViewSource() { Source = ActiveContextService.Dialogs };
+            DialogsCVS = new CollectionViewSource() { Source = ActiveContext.Dialogs };
 
             if (DialogsCVS.View != null)
             {
@@ -176,7 +176,7 @@ namespace StorylineEditor.ViewModel.Nodes
 
         public BaseM TargetDialog
         {
-            get => ActiveContextService.GetDialog(Model.dialogId);
+            get => ActiveContext.GetDialog(Model.dialogId);
             set
             {
                 if (value?.id != Model.dialogId)

@@ -31,47 +31,47 @@ namespace StorylineEditor.ViewModel
         private ICommand locationsTabCommand;
         public ICommand LocationsTabCommand => locationsTabCommand ?? (locationsTabCommand = new RelayCommand(() =>
         {
-            ActiveContextService.ActiveTab = new CollectionVM(Model.locations, null,
+            ActiveContext.ActiveTab = new CollectionVM(Model.locations, null,
                 (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new LocationM() { name = "Новая локация" }; },
                 (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM, this); else return new LocationVM((LocationM)model, this); },
                 (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return new LocationEditorVM((LocationVM)viewModel); });
-        }, () => ActiveContextService.ActiveTab?.GetModel<object>() != Model.locations));
+        }, () => ActiveContext.ActiveTab?.GetModel<object>() != Model.locations));
 
         private ICommand charactersTabCommand;
         public ICommand CharactersTabCommand => charactersTabCommand ?? (charactersTabCommand = new RelayCommand(() =>
         {
-            ActiveContextService.ActiveTab = new CollectionVM(Model.characters, null,
+            ActiveContext.ActiveTab = new CollectionVM(Model.characters, null,
                 (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new CharacterM() { name = "Новый персонаж" }; },
                 (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM, this); else return new CharacterVM((CharacterM)model, this); },
                 (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return new CharacterEditorVM((CharacterVM)viewModel); });
-        }, () => ActiveContextService.ActiveTab?.GetModel<object>() != Model.characters));
+        }, () => ActiveContext.ActiveTab?.GetModel<object>() != Model.characters));
 
         private ICommand itemsTabCommand;
         public ICommand ItemsTabCommand => itemsTabCommand ?? (itemsTabCommand = new RelayCommand(() =>
         {
-            ActiveContextService.ActiveTab = new CollectionVM(Model.items, null,
+            ActiveContext.ActiveTab = new CollectionVM(Model.items, null,
             (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new ItemM() { name = "Новый предмет" }; },
             (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM, this); else return new ItemVM((ItemM)model, this); },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return new ItemEditorVM((ItemVM)viewModel); });
-        }, () => ActiveContextService.ActiveTab?.GetModel<object>() != Model.items));
+        }, () => ActiveContext.ActiveTab?.GetModel<object>() != Model.items));
 
         private ICommand actorsTabCommand;
         public ICommand ActorsTabCommand => actorsTabCommand ?? (actorsTabCommand = new RelayCommand(() =>
         {
-            ActiveContextService.ActiveTab = new CollectionVM(Model.actors, null,
+            ActiveContext.ActiveTab = new CollectionVM(Model.actors, null,
             (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new ActorM() { name = "Новый актор" }; },
             (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM, this); else return new ActorVM((ActorM)model, this); },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return new ActorEditorVM((ActorVM)viewModel); });
-        }, () => ActiveContextService.ActiveTab?.GetModel<object>() != Model.actors));
+        }, () => ActiveContext.ActiveTab?.GetModel<object>() != Model.actors));
 
         private ICommand journalTabCommand;
         public ICommand JournalTabCommand => journalTabCommand ?? (journalTabCommand = new RelayCommand(() =>
         {
-            ActiveContextService.ActiveTab = new CollectionVM(Model.journal, null,
+            ActiveContext.ActiveTab = new CollectionVM(Model.journal, null,
             (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new QuestM() { name = "Новый квест" }; },
             (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM, this); else return new QuestVM((QuestM)model, this); },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return CreateQuestEditorVM((QuestVM)viewModel); });
-        }, () => ActiveContextService.ActiveTab?.GetModel<object>() != Model.journal));
+        }, () => ActiveContext.ActiveTab?.GetModel<object>() != Model.journal));
 
         private Notifier CreateQuestEditorVM(QuestVM inViewModel)
         {
@@ -106,11 +106,11 @@ namespace StorylineEditor.ViewModel
         private ICommand dialogsTabCommand;
         public ICommand DialogsTabCommand => dialogsTabCommand ?? (dialogsTabCommand = new RelayCommand(() =>
         {
-            ActiveContextService.ActiveTab = new CollectionVM(Model.dialogs, null,
+            ActiveContext.ActiveTab = new CollectionVM(Model.dialogs, null,
                 (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new DialogM() { name = "Новый диалог" }; },
                 (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM, this); else return new DialogVM((DialogM)model, this); },
                 (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return CreateDialogEditorVM((DialogVM)viewModel); });
-        }, () => ActiveContextService.ActiveTab?.GetModel<object>() != Model.dialogs));
+        }, () => ActiveContext.ActiveTab?.GetModel<object>() != Model.dialogs));
 
         private Notifier CreateDialogEditorVM(DialogVM inViewModel)
         {
@@ -157,11 +157,11 @@ namespace StorylineEditor.ViewModel
         private ICommand replicasTabCommand;
         public ICommand ReplicasTabCommand => replicasTabCommand ?? (replicasTabCommand = new RelayCommand(() =>
         {
-            ActiveContextService.ActiveTab = new CollectionVM(Model.replicas, null,
+            ActiveContext.ActiveTab = new CollectionVM(Model.replicas, null,
                 (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new ReplicaM() { name = "Новая реплика" }; },
                 (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM, this); else return new ReplicaVM((ReplicaM)model, this); },
                 (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return CreateReplicaEditorVM((ReplicaVM)viewModel); });
-        }, () => ActiveContextService.ActiveTab?.GetModel<object>() != Model.replicas));
+        }, () => ActiveContext.ActiveTab?.GetModel<object>() != Model.replicas));
 
         private Notifier CreateReplicaEditorVM(ReplicaVM inViewModel)
         {
@@ -205,17 +205,17 @@ namespace StorylineEditor.ViewModel
         private ICommand abstractCopyCommand;
         public ICommand AbstractCopyCommand => abstractCopyCommand ?? (abstractCopyCommand = new RelayCommand(() =>
         {
-            Clipboard.SetText(ActiveContextService.ActiveCopyPaste?.Copy());
+            Clipboard.SetText(ActiveContext.ActiveCopyPaste?.Copy());
         }));
 
         private ICommand abstractPasteCommand;
         public ICommand AbstractPasteCommand => abstractPasteCommand ?? (abstractPasteCommand = new RelayCommand(() =>
         {
-            ActiveContextService.ActiveCopyPaste?.Paste(Clipboard.GetText());
+            ActiveContext.ActiveCopyPaste?.Paste(Clipboard.GetText());
         }));
 
         private ICommand abstractDeleteCommand;
-        public ICommand AbstractDeleteCommand => abstractDeleteCommand ?? (abstractDeleteCommand = new RelayCommand(() => { ActiveContextService.ActiveCopyPaste?.Delete(); }));
+        public ICommand AbstractDeleteCommand => abstractDeleteCommand ?? (abstractDeleteCommand = new RelayCommand(() => { ActiveContext.ActiveCopyPaste?.Delete(); }));
 
         public override string Id => Model.id;
     }

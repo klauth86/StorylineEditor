@@ -25,7 +25,7 @@ namespace StorylineEditor.ViewModel.Predicates
 
         public P_Quest_FinishedVM(P_Quest_FinishedM model, object parent) : base(model, parent)
         {
-            QuestsCVS = new CollectionViewSource() { Source = ActiveContextService.Quests };
+            QuestsCVS = new CollectionViewSource() { Source = ActiveContext.Quests };
 
             if (QuestsCVS.View != null)
             {
@@ -59,7 +59,7 @@ namespace StorylineEditor.ViewModel.Predicates
 
         public BaseM Quest
         {
-            get => ActiveContextService.GetQuest(Model.questId);
+            get => ActiveContext.GetQuest(Model.questId);
             set
             {
                 if (value?.id != Model.questId)
@@ -78,7 +78,7 @@ namespace StorylineEditor.ViewModel.Predicates
 
                 bool result = false;
 
-                QuestEntryVM questEntryVm = ActiveContextService.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == Quest.id);
+                QuestEntryVM questEntryVm = ActiveContext.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == Quest.id);
                 
                 if (questEntryVm != null)
                 {

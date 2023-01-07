@@ -29,7 +29,7 @@ namespace StorylineEditor.ViewModel.Nodes
         {
             Model.characterId = Model.characterId ?? CharacterM.PLAYER_ID;
 
-            FilteredCharacterCVS = new CollectionViewSource() { Source = ActiveContextService.Characters };
+            FilteredCharacterCVS = new CollectionViewSource() { Source = ActiveContext.Characters };
 
             if (FilteredCharacterCVS.View != null)
             {
@@ -63,7 +63,7 @@ namespace StorylineEditor.ViewModel.Nodes
 
         public BaseM Character
         {
-            get => ActiveContextService.GetCharacter(Model.characterId);
+            get => ActiveContext.GetCharacter(Model.characterId);
             set
             {
                 if (value?.id != Model.characterId)

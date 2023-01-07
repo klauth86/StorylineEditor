@@ -24,7 +24,7 @@ namespace StorylineEditor.ViewModel.GameEvents
 
         public GE_Item_DropVM(GE_Item_DropM model, object parent) : base(model, parent)
         {
-            ItemsCVS = new CollectionViewSource() { Source = ActiveContextService.Items };
+            ItemsCVS = new CollectionViewSource() { Source = ActiveContext.Items };
 
             if (ItemsCVS.View != null)
             {
@@ -58,7 +58,7 @@ namespace StorylineEditor.ViewModel.GameEvents
 
         public BaseM Item
         {
-            get => ActiveContextService.GetItem(Model.itemId);
+            get => ActiveContext.GetItem(Model.itemId);
             set
             {
                 if (value?.id != Model.itemId)
@@ -73,7 +73,7 @@ namespace StorylineEditor.ViewModel.GameEvents
         {
             if (Item != null)
             {
-                ActiveContextService.History.DropItem(Item);
+                ActiveContext.History.DropItem(Item);
             }
         }
     }

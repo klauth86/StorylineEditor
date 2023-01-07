@@ -55,7 +55,7 @@ namespace StorylineEditor.App
         {
             InitializeComponent();
 
-            ActiveContextService.DialogService = this;
+            ActiveContext.DialogService = this;
 
             StorylineM storylineModel = new StorylineM();
             storylineModel.characters.Add(new CharacterM() { id = CharacterM.PLAYER_ID, name = "Основной персонаж" });
@@ -116,7 +116,7 @@ namespace StorylineEditor.App
 
         private void SetDataContext(StorylineVM storylineViewModel)
         {
-            ActiveContextService.ActiveStoryline = storylineViewModel;
+            ActiveContext.ActiveStoryline = storylineViewModel;
             DataContext = storylineViewModel;
         }
 

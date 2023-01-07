@@ -94,13 +94,13 @@ namespace StorylineEditor.ViewModel.Graphs
                 {
                     var flow = FlowDocumentHelper.ConvertBack(replicaNodeModel.description);
                     var flowDocText = FlowDocumentHelper.GetTextFromFlowDoc(flow);
-                    replicaNodeModel.name = string.Format("[{0}]: {1}", ActiveContextService.GetCharacter(replicaNodeModel.characterId)?.name ?? "???", flowDocText);
+                    replicaNodeModel.name = string.Format("[{0}]: {1}", ActiveContext.GetCharacter(replicaNodeModel.characterId)?.name ?? "???", flowDocText);
                 }
                 else if (nodeModel is Node_DialogM dialogNodeModel)
                 {
                     var flow = FlowDocumentHelper.ConvertBack(dialogNodeModel.description);
                     var flowDocText = FlowDocumentHelper.GetTextFromFlowDoc(flow);
-                    dialogNodeModel.name = string.Format("[{0}]: {1}", ActiveContextService.GetCharacter(dialogNodeModel.characterId)?.name ?? "???", flowDocText);
+                    dialogNodeModel.name = string.Format("[{0}]: {1}", ActiveContext.GetCharacter(dialogNodeModel.characterId)?.name ?? "???", flowDocText);
                 }
             }
 
@@ -134,8 +134,8 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 if (token.IsCancellationRequested) return TaskStatus.Canceled;
 
-                double stepX = OffsetX - (positioned.PositionX - ActiveContextService.ViewWidth / 2 / Scale);
-                double stepY = OffsetY - (positioned.PositionY - ActiveContextService.ViewHeight / 2 / Scale);
+                double stepX = OffsetX - (positioned.PositionX - ActiveContext.ViewWidth / 2 / Scale);
+                double stepY = OffsetY - (positioned.PositionY - ActiveContext.ViewHeight / 2 / Scale);
 
                 if (Math.Abs(stepX) < 0.01) return TaskStatus.RanToCompletion;
 
@@ -151,8 +151,8 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 if (taskStatus == TaskStatus.RanToCompletion)
                 {
-                    double stepX = OffsetX - (positioned.PositionX - ActiveContextService.ViewWidth / 2 / Scale);
-                    double stepY = OffsetY - (positioned.PositionY - ActiveContextService.ViewHeight / 2 / Scale);
+                    double stepX = OffsetX - (positioned.PositionX - ActiveContext.ViewWidth / 2 / Scale);
+                    double stepY = OffsetY - (positioned.PositionY - ActiveContext.ViewHeight / 2 / Scale);
 
                     playerIndicator.Tick(1);
 
@@ -175,7 +175,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
                 if (Math.Abs(newScale - 1) < 0.01) return TaskStatus.RanToCompletion;
 
-                SetScale(ActiveContextService.ViewWidth / 2, ActiveContextService.ViewHeight / 2, newScale);
+                SetScale(ActiveContext.ViewWidth / 2, ActiveContext.ViewHeight / 2, newScale);
 
                 return TaskStatus.Running;
             },
@@ -185,7 +185,7 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 if (taskStatus == TaskStatus.RanToCompletion)
                 {
-                    SetScale(ActiveContextService.ViewWidth / 2, ActiveContextService.ViewHeight / 2, 1);
+                    SetScale(ActiveContext.ViewWidth / 2, ActiveContext.ViewHeight / 2, 1);
                 }
             }, null);
         }
@@ -232,7 +232,7 @@ namespace StorylineEditor.ViewModel.Graphs
         public ICommand GoToOriginCommand => goToOriginCommand ?? (goToOriginCommand = new RelayCommand(() => StartScrollingTask(OriginVM.GetOrigin(), null)));
 
         protected ICommand playCommand;
-        public ICommand PlayCommand => playCommand ?? (playCommand = new RelayCommand(() => ActiveContextService.DialogService?.ShowDialog(ActiveContextService.History), () => HasSelection()));
+        public ICommand PlayCommand => playCommand ?? (playCommand = new RelayCommand(() => ActiveContext.DialogService?.ShowDialog(ActiveContext.History), () => HasSelection()));
 
         protected ICommand selectCommand;
         public override ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<Notifier>((viewModel) => { }));
@@ -997,9 +997,9 @@ namespace StorylineEditor.ViewModel.Graphs
             double maxWidth = (double)Application.Current.FindResource("Double_Node_MaxWidth");
 
             double viewportLeft = OffsetX;
-            double viewportRight = viewportLeft + ActiveContextService.ViewWidth / Scale;
+            double viewportRight = viewportLeft + ActiveContext.ViewWidth / Scale;
             double viewportBottom = OffsetY;
-            double viewportTop = viewportBottom + ActiveContextService.ViewHeight / Scale;
+            double viewportTop = viewportBottom + ActiveContext.ViewHeight / Scale;
 
             HashSet<BaseM> keepMs = new HashSet<BaseM>();
             HashSet<BaseM> addMs = new HashSet<BaseM>();
@@ -1188,7 +1188,7 @@ namespace StorylineEditor.ViewModel.Graphs
             }
         }
 
-        public List<List<IPositioned>> GetPaths(string nodeId)
+        public List<List<IPositioned>> GetAllPaths(string nodeId)
         {
             List<List<IPositioned>> paths = new List<List<IPositioned>>();
 
@@ -1204,7 +1204,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
             foreach (var tNodeModel in Model.nodes.Where((otherNode) => nodeIds.Contains(otherNode.id) && !ntNodeModels.Contains(otherNode)))
             {
-                List<List<IPositioned>> childPaths = GetPaths(tNodeModel.id);
+                List<List<IPositioned>> childPaths = GetAllPaths(tNodeModel.id);
 
                 foreach (var path in childPaths)
                 {
@@ -1321,7 +1321,7 @@ namespace StorylineEditor.ViewModel.Graphs
                     Model.name = value;
                     OnModelChanged(Model, nameof(Name));
 
-                    if (ActiveContextService.ActiveTab is ICollection_Base collectionBase)
+                    if (ActiveContext.ActiveTab is ICollection_Base collectionBase)
                     {
                         collectionBase.Refresh();
                     }
@@ -1371,12 +1371,12 @@ namespace StorylineEditor.ViewModel.Graphs
                         {
                             if (NodesVMs[node.id] is INode nodeViewModel)
                             {
-                                nodeViewModel.Name = (i).ToString();
+                                nodeViewModel.Name = i.ToString();
                             }
                         }
                         else
                         {
-                            node.name = (i).ToString();
+                            node.name = i.ToString();
                         }
 
                         i++;

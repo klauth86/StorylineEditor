@@ -50,7 +50,7 @@ namespace StorylineEditor.ViewModel.Nodes
                     Model.gender = value;
                     OnModelChanged(Model, nameof(Gender));
 
-                    ActiveContextService.ActiveGraph.OnNodeGenderChanged(this);
+                    ActiveContext.ActiveGraph.OnNodeGenderChanged(this);
                 }
             }
         }
@@ -65,7 +65,7 @@ namespace StorylineEditor.ViewModel.Nodes
                     Model.positionX = value;
                     OnModelChanged(Model, nameof(PositionX));
 
-                    ActiveContextService.ActiveGraph.OnNodePositionChanged(this, ENodeUpdateFlags.X);
+                    ActiveContext.ActiveGraph.OnNodePositionChanged(this, ENodeUpdateFlags.X);
                 }
             }
         }
@@ -80,7 +80,7 @@ namespace StorylineEditor.ViewModel.Nodes
                     Model.positionY = value;
                     OnModelChanged(Model, nameof(PositionY));
 
-                    ActiveContextService.ActiveGraph.OnNodePositionChanged(this, ENodeUpdateFlags.Y);
+                    ActiveContext.ActiveGraph.OnNodePositionChanged(this, ENodeUpdateFlags.Y);
                 }
             }
         }
@@ -97,7 +97,7 @@ namespace StorylineEditor.ViewModel.Nodes
                 {
                     width = value;
 
-                    ActiveContextService.ActiveGraph.OnNodeSizeChanged(this, ENodeUpdateFlags.X);
+                    ActiveContext.ActiveGraph.OnNodeSizeChanged(this, ENodeUpdateFlags.X);
                 }
             }
         }
@@ -112,7 +112,7 @@ namespace StorylineEditor.ViewModel.Nodes
                 {
                     height = value;
 
-                    ActiveContextService.ActiveGraph.OnNodeSizeChanged(this, ENodeUpdateFlags.Y);
+                    ActiveContext.ActiveGraph.OnNodeSizeChanged(this, ENodeUpdateFlags.Y);
                 }
             }
         }
