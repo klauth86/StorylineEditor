@@ -68,5 +68,13 @@ namespace StorylineEditor.ViewModel.GameEvents
                 }
             }
         }
+
+        public override void Execute()
+        {
+            if (Item != null)
+            {
+                ActiveContextService.History.PickUpItem(Item);
+            }
+        }
     }
 }

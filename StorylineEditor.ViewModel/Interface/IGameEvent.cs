@@ -14,6 +14,6 @@ namespace StorylineEditor.ViewModel.Interface
 {
     public interface IGameEvent : IWithModel
     {
-
+        void Execute();
     }
 }

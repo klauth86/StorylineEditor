@@ -40,5 +40,7 @@ namespace StorylineEditor.ViewModel.GameEvents
 
             }
         }
+
+        public abstract void Execute();
     }
 }

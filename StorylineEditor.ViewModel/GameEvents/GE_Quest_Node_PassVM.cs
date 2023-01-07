@@ -13,7 +13,6 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Model;
 using StorylineEditor.Model.GameEvents;
 using StorylineEditor.Model.Graphs;
-using StorylineEditor.ViewModel.Common;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
@@ -122,6 +121,28 @@ namespace StorylineEditor.ViewModel.GameEvents
             else
             {
                 NodesCVS.View?.MoveCurrentTo(null);
+            }
+        }
+
+        public override void Execute()
+        {
+            if (Quest != null && Node != null)
+            {
+                QuestEntryVM questEntryVm = ActiveContextService.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == Quest.id);
+
+                if (questEntryVm == null)
+                {
+                    ActiveContextService.History.AddQuest(Quest);
+                }
+
+                questEntryVm = ActiveContextService.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == Quest.id);
+
+                if (!questEntryVm.KnownNodes.Contains(Node))
+                {
+                    questEntryVm.AddKnownNode(Node);
+                }
+
+                questEntryVm.AddPassedNode(Node);
             }
         }
     }

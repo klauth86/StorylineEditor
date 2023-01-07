@@ -13,6 +13,7 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Model;
 using StorylineEditor.Model.GameEvents;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Data;
 
 namespace StorylineEditor.ViewModel.GameEvents
@@ -78,6 +79,23 @@ namespace StorylineEditor.ViewModel.GameEvents
                     Model.value = value;
                     Notify(nameof(Value));
                 }
+            }
+        }
+
+        public override void Execute()
+        {
+            if (Character != null)
+            {
+                CharacterEntryVM characterEntryVm = ActiveContextService.History.CharacterEntries.FirstOrDefault((ceVm) => ceVm.Model.id == Character.id);
+
+                if (characterEntryVm == null)
+                {
+                    ActiveContextService.History.AddCharacter(Character);
+                }
+
+                characterEntryVm = ActiveContextService.History.CharacterEntries.FirstOrDefault((ceVm) => ceVm.Model.id == Character.id);
+
+                characterEntryVm.DeltaRelation += Value;
             }
         }
     }

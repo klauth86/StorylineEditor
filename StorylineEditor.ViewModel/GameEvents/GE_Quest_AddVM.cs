@@ -67,5 +67,13 @@ namespace StorylineEditor.ViewModel.GameEvents
                 }
             }
         }
+
+        public override void Execute()
+        {
+            if (Quest != null)
+            {
+                ActiveContextService.History.AddQuest(Quest);
+            }
+        }
     }
 }

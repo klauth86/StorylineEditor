@@ -351,7 +351,7 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        public BaseM Character { get => null; set => AddCharacter(value); }
+        public BaseM Character { get => null; set => AddCharacter_Internal(value); }
 
         private bool OnCharactersFilter(object sender)
         {
@@ -361,25 +361,31 @@ namespace StorylineEditor.ViewModel
             }
             return false;
         }
+
         public void AddCharacter(BaseM character)
+        {
+            foreach (var characterEntry in CharacterEntries)
+            {
+                if (characterEntry.Model == character)
+                {
+                    return;
+                }
+            }
+
+            CharacterEntries.Add(new CharacterEntryVM(character, this));
+
+            _charactersCVS.View.Refresh();
+
+            //ShowAvailabilityAdorners();
+        }
+        protected void AddCharacter_Internal(BaseM character)
         {
             if (_charactersCVSInit)
             {
-                foreach (var characterEntry in CharacterEntries)
-                {
-                    if (characterEntry.Model == character)
-                    {
-                        return;
-                    }
-                }
-
-                CharacterEntries.Add(new CharacterEntryVM(character, this));
-
-                _charactersCVS.View.Refresh();
-
-                //ShowAvailabilityAdorners();
+                AddCharacter(character);
             }
         }
+
         public void RemoveCharacter(BaseM character)
         {
             List<CharacterEntryVM> characterEntriesToRemove = new List<CharacterEntryVM>();
@@ -407,23 +413,6 @@ namespace StorylineEditor.ViewModel
 
         protected ICommand removeCharacterCommand;
         public ICommand RemoveCharacterCommand => removeCharacterCommand ?? (removeCharacterCommand = new RelayCommand<BaseM>((character) => RemoveCharacter(character), (character) => character != null));
-
-        public float GetRelation(BaseM character)
-        {
-            //////if (viewModel is CharacterVM characterViewModel)
-            //////{
-            //////    float result = gender == GENDER.MALE ? characterViewModel.Model.initialRelation : characterViewModel.Model.initialRelationFemale;
-
-            //////    if (Characters.Contains(viewModel))
-            //////    {
-            //////        result += CharacterEntries[Characters.IndexOf(viewModel)].DeltaRelation;
-            //////    }
-
-            //////    return result;
-            //////}
-
-            return 0;
-        }
 
         #endregion
 
@@ -466,7 +455,7 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        public BaseM Item { get => null; set => PickUpItem(value); }
+        public BaseM Item { get => null; set => PickUpItem_Internal(value); }
 
         private bool OnItemsFilter(object sender)
         {
@@ -476,17 +465,23 @@ namespace StorylineEditor.ViewModel
             }
             return false;
         }
+
         public void PickUpItem(BaseM item)
+        {
+            Inventory.Add(item);
+
+            ItemsCVS.View.Refresh();
+
+            //ShowAvailabilityAdorners();
+        }
+        protected void PickUpItem_Internal(BaseM item)
         {
             if (_itemsCVSInit)
             {
-                Inventory.Add(item);
-
-                ItemsCVS.View.Refresh();
-
-                //ShowAvailabilityAdorners();
+                PickUpItem(item);
             }
         }
+
         public void DropItem(BaseM item)
         {
             if (Inventory.Remove(item))
@@ -541,7 +536,7 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        public BaseM Quest { get => null; set => AddQuest(value); }
+        public BaseM Quest { get => null; set => AddQuest_Internal(value); }
 
         private bool OnQuestsFilter(object sender)
         {
@@ -551,25 +546,31 @@ namespace StorylineEditor.ViewModel
             }
             return false;
         }
+
         public void AddQuest(BaseM quest)
+        {
+            foreach (var questEntry in QuestEntries)
+            {
+                if (questEntry.Model == quest)
+                {
+                    return;
+                }
+            }
+
+            QuestEntries.Add(new QuestEntryVM(quest, this));
+
+            _questsCVS.View.Refresh();
+
+            //ShowAvailabilityAdorners();
+        }
+        public void AddQuest_Internal(BaseM quest)
         {
             if (_questsCVSInit)
             {
-                foreach (var questEntry in QuestEntries)
-                {
-                    if (questEntry.Model == quest)
-                    {
-                        return;
-                    }
-                }
-
-                QuestEntries.Add(new QuestEntryVM(quest, this));
-
-                _questsCVS.View.Refresh();
-
-                //ShowAvailabilityAdorners();
+                AddQuest(quest);
             }
         }
+
         public void RemoveQuest(BaseM quest)
         {
             List<QuestEntryVM> questEntriesToRemove = new List<QuestEntryVM>();
@@ -641,7 +642,7 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        public BaseM Dialog { get => null; set => AddDialog(value); }
+        public BaseM Dialog { get => null; set => AddDialog_Internal(value); }
 
         private bool OnDialogsFilter(object sender)
         {
@@ -651,7 +652,16 @@ namespace StorylineEditor.ViewModel
             }
             return false;
         }
+
         public void AddDialog(BaseM dialog)
+        {
+            DialogEntries.Add(new DialogEntryVM(dialog, this));
+
+            _dialogsCVS.View.Refresh();
+
+            //ShowAvailabilityAdorners();
+        }
+        public void AddDialog_Internal(BaseM dialog)
         {
             if (_dialogsCVSInit)
             {
@@ -659,16 +669,13 @@ namespace StorylineEditor.ViewModel
                 {
                     _dialogsCVSLocked = true;
 
-                    DialogEntries.Add(new DialogEntryVM(dialog, this));
-
-                    _dialogsCVS.View.Refresh();
-
-                    //ShowAvailabilityAdorners();
+                    AddDialog(dialog);
 
                     _dialogsCVSLocked = false;
                 }
             }
         }
+
         public void RemoveDialog(DialogEntryVM dialogEntry)
         {
             if (DialogEntries.Remove(dialogEntry))
