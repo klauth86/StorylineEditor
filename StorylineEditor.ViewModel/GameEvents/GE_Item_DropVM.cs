@@ -12,7 +12,6 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model;
 using StorylineEditor.Model.GameEvents;
-using StorylineEditor.ViewModel.Common;
 using System.ComponentModel;
 using System.Windows.Data;
 

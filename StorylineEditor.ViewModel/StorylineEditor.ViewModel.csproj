@@ -75,7 +75,7 @@
     <Compile Include="Predicates\P_CompositeVM.cs" />
     <Compile Include="SerializeService.cs" />
     <Compile Include="Collection_BaseVM.cs" />
-    <Compile Include="ActiveContextService.cs" />
+    <Compile Include="ActiveContext.cs" />
     <Compile Include="Graphs\Graph_BaseVM.cs" />
     <Compile Include="Helpers\FlowDocumentHelpers.cs" />
     <Compile Include="Nodes\LinkVM.cs" />
