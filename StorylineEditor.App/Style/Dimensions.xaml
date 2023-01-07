@@ -68,7 +68,7 @@ StorylineEditor распространяется в надежде, что он�
 
     <sys:Double x:Key="Double_Player_MaxHeight">512</sys:Double>
 
-    <sys:Double x:Key="Double_Player_FullMode_MaxWidth">512</sys:Double>
+    <sys:Double x:Key="Double_Player_FullMode_MaxWidth">768</sys:Double>
 
     <sys:Double x:Key="Double_Player_FullMode_MaxHeight">768</sys:Double>
     

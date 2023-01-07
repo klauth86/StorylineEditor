@@ -2370,81 +2370,27 @@ StorylineEditor распространяется в надежде, что он�
                     <ContentControl Grid.Row="1"
                                     Margin="{StaticResource Thickness_Margin_2x}"
                                     Content="{Binding PlayerContext, UpdateSourceTrigger=PropertyChanged}">
-                        <!--<ContentControl.Resources>
-                            --><!--<DataTemplate DataType="{x:Type viewModelsNodes:DNode_TransitVm}">
-                                <Label HorizontalAlignment="Center" Style="{StaticResource S_Label_NodeType}"></Label>
-                            </DataTemplate>
-                            <DataTemplate DataType="{x:Type viewModelsNodes:DNode_RandomVm}">
-                                <Label HorizontalAlignment="Center" Style="{StaticResource S_Label_NodeType}"></Label>
-                            </DataTemplate>
-                            <DataTemplate DataType="{x:Type viewModelsNodes:DNode_CharacterVm}">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"></RowDefinition>
-                                        <RowDefinition Height="*"></RowDefinition>
-                                        <RowDefinition Height="auto"></RowDefinition>
-                                        <RowDefinition Height="auto"></RowDefinition>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Style="{StaticResource S_TextBlock_GNodeHeader}" Text="{Binding OwnerName, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-
-                                    <TextBlock Grid.Row="1" nodes:RTBHelper.Document="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
-
-                                    <Separator x:Name="sep_ShortDescription" Grid.Row="2" Visibility="Collapsed"></Separator>
-
-                                    <TextBlock x:Name="tb_ShortDescription" Grid.Row="3" Style="{StaticResource S_TextBlock_GNodeDescriptionShort}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"></TextBlock>
-                                </Grid>
-                                <DataTemplate.Triggers>
-                                    <DataTrigger Binding="{Binding OwnerId}" Value="{x:Static viewModels:CharacterVm.PlayerId}">
-                                        <Setter TargetName="sep_ShortDescription" Property="Visibility" Value="Visible"></Setter>
-                                        <Setter TargetName="tb_ShortDescription" Property="Visibility" Value="Visible"></Setter>
-                                    </DataTrigger>
-                                </DataTemplate.Triggers>
-                            </DataTemplate>
-                            <DataTemplate DataType="{x:Type viewModelsNodes:DNode_DialogVm}">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"></RowDefinition>
-                                        <RowDefinition Height="*"></RowDefinition>
-                                        <RowDefinition Height="auto"></RowDefinition>
-                                        <RowDefinition Height="auto"></RowDefinition>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Style="{StaticResource S_TextBlock_GNodeHeader}" Text="{Binding OwnerName, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-
-                                    <TextBlock Grid.Row="1" nodes:RTBHelper.Document="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Base}"></TextBlock>
-
-                                    <Separator x:Name="sep_ShortDescription" Grid.Row="2" Visibility="Collapsed"></Separator>
-
-                                    <TextBlock x:Name="tb_ShortDescription" Grid.Row="3" Style="{StaticResource S_TextBlock_GNodeDescriptionShort}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"></TextBlock>
-                                </Grid>
-                                <DataTemplate.Triggers>
-                                    <DataTrigger Binding="{Binding OwnerId}" Value="{x:Static viewModels:CharacterVm.PlayerId}">
-                                        <Setter TargetName="sep_ShortDescription" Property="Visibility" Value="Visible"></Setter>
-                                        <Setter TargetName="tb_ShortDescription" Property="Visibility" Value="Visible"></Setter>
-                                    </DataTrigger>
-                                </DataTemplate.Triggers>
-                            </DataTemplate>--><!--
-                        </ContentControl.Resources>-->
                     </ContentControl>
                 </DockPanel>
             </TabItem>
 
             <TabItem
                 x:Name="ti_Relation"
-                IsEnabled="{Binding FullMode, UpdateSourceTrigger=PropertyChanged}">
+                Visibility="Collapsed">
                 <TabItem.Header>
                     <controls:ComboBoxExt
                         IsEnabled="{Binding ElementName=ti_Relation, Path=IsSelected, UpdateSourceTrigger=PropertyChanged}"
                         SelectedValue="{Binding Character, UpdateSourceTrigger=PropertyChanged}"
                         ItemsSource="{Binding CharactersCVS.View}"
                         Filter="{Binding CharactersFilter, UpdateSourceTrigger=PropertyChanged}"
-                        Style="{StaticResource S_ComboBoxExt_Prop_Popup}">
+                        Style="{StaticResource S_ComboBoxExt_Prop_Popup}"
+                        FontSize="{StaticResource FontSize_Small}">
                         <controls:ComboBoxExt.Tag>
                             <TextBlock
                                 Padding="{StaticResource Thickness_Padding_LeftRight}"
                                 VerticalAlignment="Center"
                                 Text="{StaticResource String_Tag_MainMenu_Characters}"
+                                FontSize="{StaticResource FontSize_Small}"
                                 ></TextBlock>
                         </controls:ComboBoxExt.Tag>
                     </controls:ComboBoxExt>
@@ -2496,19 +2442,21 @@ StorylineEditor распространяется в надежде, что он�
             
             <TabItem
                 x:Name="ti_Inventory"
-                IsEnabled="{Binding FullMode, UpdateSourceTrigger=PropertyChanged}">
+                Visibility="Collapsed">
                 <TabItem.Header>
                     <controls:ComboBoxExt
                         IsEnabled="{Binding ElementName=ti_Inventory, Path=IsSelected, UpdateSourceTrigger=PropertyChanged}"
                         SelectedValue="{Binding Item, UpdateSourceTrigger=PropertyChanged}"
                         ItemsSource="{Binding ItemsCVS.View}"
                         Filter="{Binding ItemsFilter, UpdateSourceTrigger=PropertyChanged}"
-                        Style="{StaticResource S_ComboBoxExt_Prop_Popup}">
+                        Style="{StaticResource S_ComboBoxExt_Prop_Popup}"
+                        FontSize="{StaticResource FontSize_Small}">
                         <controls:ComboBoxExt.Tag>
                             <TextBlock
                                 Padding="{StaticResource Thickness_Padding_LeftRight}"
                                 VerticalAlignment="Center"
                                 Text="{StaticResource String_Tag_MainMenu_Items}"
+                                FontSize="{StaticResource FontSize_Small}"
                                 ></TextBlock>
                         </controls:ComboBoxExt.Tag>
                     </controls:ComboBoxExt>
@@ -2544,19 +2492,21 @@ StorylineEditor распространяется в надежде, что он�
 
             <TabItem
                 x:Name="ti_Journal"
-                IsEnabled="{Binding FullMode, UpdateSourceTrigger=PropertyChanged}">
+                Visibility="Collapsed">
                 <TabItem.Header>
                     <controls:ComboBoxExt
                         IsEnabled="{Binding ElementName=ti_Journal, Path=IsSelected, UpdateSourceTrigger=PropertyChanged}"
                         SelectedValue="{Binding Quest, UpdateSourceTrigger=PropertyChanged}"
                         ItemsSource="{Binding QuestsCVS.View}"
                         Filter="{Binding QuestsFilter, UpdateSourceTrigger=PropertyChanged}"
-                        Style="{StaticResource S_ComboBoxExt_Prop_Popup}">
+                        Style="{StaticResource S_ComboBoxExt_Prop_Popup}"
+                        FontSize="{StaticResource FontSize_Small}">
                         <controls:ComboBoxExt.Tag>
                             <TextBlock
                                 Padding="{StaticResource Thickness_Padding_LeftRight}"
                                 VerticalAlignment="Center"
                                 Text="{StaticResource String_Tag_MainMenu_Journal}"
+                                FontSize="{StaticResource FontSize_Small}"
                                 ></TextBlock>
                         </controls:ComboBoxExt.Tag>
                     </controls:ComboBoxExt>
@@ -2636,19 +2586,21 @@ StorylineEditor распространяется в надежде, что он�
 
             <TabItem
                 x:Name="ti_Dialogs"
-                IsEnabled="{Binding FullMode, UpdateSourceTrigger=PropertyChanged}">
+                Visibility="Collapsed">
                 <TabItem.Header>
                     <controls:ComboBoxExt
                         IsEnabled="{Binding ElementName=ti_Dialogs, Path=IsSelected, UpdateSourceTrigger=PropertyChanged}"
                         SelectedValue="{Binding Dialog, UpdateSourceTrigger=PropertyChanged}"
                         ItemsSource="{Binding DialogsCVS.View}"
                         Filter="{Binding DialogsFilter, UpdateSourceTrigger=PropertyChanged}"
-                        Style="{StaticResource S_ComboBoxExt_Prop_Popup}">
+                        Style="{StaticResource S_ComboBoxExt_Prop_Popup}"
+                        FontSize="{StaticResource FontSize_Small}">
                         <controls:ComboBoxExt.Tag>
                             <TextBlock
                                 Padding="{StaticResource Thickness_Padding_LeftRight}"
                                 VerticalAlignment="Center"
                                 Text="{StaticResource String_Tag_MainMenu_DialogsAndReplicas}"
+                                FontSize="{StaticResource FontSize_Small}"
                                 ></TextBlock>
                         </controls:ComboBoxExt.Tag>
                     </controls:ComboBoxExt>
@@ -2729,6 +2681,10 @@ StorylineEditor распространяется в надежде, что он�
                 <Setter TargetName="tc_Main" Property="MinHeight" Value="{StaticResource Double_Player_MaxHeight}"></Setter>
                 <Setter TargetName="tc_Main" Property="MaxWidth" Value="{StaticResource Double_Player_FullMode_MaxWidth}"></Setter>
                 <Setter TargetName="tc_Main" Property="MaxHeight" Value="{StaticResource Double_Player_FullMode_MaxHeight}"></Setter>
+                <Setter TargetName="ti_Relation" Property="Visibility" Value="Visible"></Setter>
+                <Setter TargetName="ti_Inventory" Property="Visibility" Value="Visible"></Setter>
+                <Setter TargetName="ti_Journal" Property="Visibility" Value="Visible"></Setter>
+                <Setter TargetName="ti_Dialogs" Property="Visibility" Value="Visible"></Setter>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
