@@ -40,5 +40,7 @@ namespace StorylineEditor.ViewModel.Predicates
             
             }
         }
+
+        public abstract bool IsTrue();
     }
 }

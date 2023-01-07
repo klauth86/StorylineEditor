@@ -14,6 +14,7 @@ using StorylineEditor.Model;
 using StorylineEditor.Model.Graphs;
 using StorylineEditor.Model.Predicates;
 using StorylineEditor.ViewModel.Interface;
+using System;
 using System.Linq;
 using System.Windows.Data;
 
@@ -94,6 +95,47 @@ namespace StorylineEditor.ViewModel.Predicates
                     Notify(nameof(Value));
                 }
             }
+        }
+
+        public override bool IsTrue()
+        {
+            if (Node != null)
+            {
+                DialogEntryVM dialogEntryVm = ActiveContextService.History.DialogEntries.FirstOrDefault((deVm) => deVm.Id == ActiveContextService.History.ActiveDialogEntryId);
+
+                if (dialogEntryVm != null)
+                {
+                    int count = dialogEntryVm.Nodes.Count((node) => node.id == Node.id);
+
+                    bool result = false;
+
+                    switch (CompareType)
+                    {
+                        case COMPARE_TYPE.LESS:
+                            result = count < Value;
+                            break;
+                        case COMPARE_TYPE.LESS_OR_EQUAL:
+                            result = count <= Value;
+                            break;
+                        case COMPARE_TYPE.EQUAL:
+                            result = count == Value;
+                            break;
+                        case COMPARE_TYPE.EQUAL_OR_GREATER:
+                            result = count >= Value;
+                            break;
+                        case COMPARE_TYPE.GREATER:
+                            result = count > Value;
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(CompareType));
+                    }
+
+                    if (IsInversed) result = !result;
+                    return result;
+                }
+            }
+
+            return true;
         }
     }
 }

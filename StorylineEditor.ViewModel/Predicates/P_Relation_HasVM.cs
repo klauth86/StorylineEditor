@@ -12,7 +12,9 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model;
 using StorylineEditor.Model.Predicates;
+using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Data;
 
 namespace StorylineEditor.ViewModel.Predicates
@@ -92,6 +94,52 @@ namespace StorylineEditor.ViewModel.Predicates
                     Notify(nameof(Value));
                 }
             }
+        }
+
+        public override bool IsTrue()
+        {
+            if (Character != null)
+            {
+                CharacterM character = (CharacterM)Character;
+
+                float relation = ActiveContextService.History.Gender == GENDER.MALE
+                    ? character.initialRelation
+                    : character.initialRelationFemale;
+                
+                CharacterEntryVM characterEntryVm = ActiveContextService.History.CharacterEntries.FirstOrDefault((ceVm) => ceVm.Model.id == Character.id);
+                if (characterEntryVm != null)
+                {
+                    relation += characterEntryVm.DeltaRelation;
+                }
+
+                bool result = false;
+
+                switch (CompareType)
+                {
+                    case COMPARE_TYPE.LESS:
+                        result = relation < Value;
+                        break;
+                    case COMPARE_TYPE.LESS_OR_EQUAL:
+                        result = relation <= Value;
+                        break;
+                    case COMPARE_TYPE.EQUAL:
+                        result = relation == Value;
+                        break;
+                    case COMPARE_TYPE.EQUAL_OR_GREATER:
+                        result = relation >= Value;
+                        break;
+                    case COMPARE_TYPE.GREATER:
+                        result = relation > Value;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(CompareType));
+                }
+
+                if (IsInversed) result = !result;
+                return result;
+            }
+
+            return true;
         }
     }
 }

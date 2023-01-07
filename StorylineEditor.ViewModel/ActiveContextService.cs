@@ -11,7 +11,6 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Model;
-using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Interface;
 using System;
 using System.Collections.Generic;

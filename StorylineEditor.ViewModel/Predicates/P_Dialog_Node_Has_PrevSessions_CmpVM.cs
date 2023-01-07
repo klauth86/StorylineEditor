@@ -13,6 +13,7 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Model;
 using StorylineEditor.Model.Graphs;
 using StorylineEditor.Model.Predicates;
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
@@ -148,6 +149,50 @@ namespace StorylineEditor.ViewModel.Predicates
                     Notify(nameof(Value));
                 }
             }
+        }
+
+        public override bool IsTrue()
+        {
+            if (DialogOrReplica != null && Node != null)
+            {
+                var dialogEntryVms = ActiveContextService.History.DialogEntries
+                    .Where((deVm) => deVm.Model.id == DialogOrReplica.id && deVm.Model.id != ActiveContextService.History.ActiveDialogEntryId);
+
+                int count = 0;
+
+                foreach (var dialogEntryVm in dialogEntryVms)
+                {
+                    count += dialogEntryVm.Nodes.Count((node) => node.id == Node.id);
+                }
+
+                bool result = false;
+
+                switch (CompareType)
+                {
+                    case COMPARE_TYPE.LESS:
+                        result = count < Value;
+                        break;
+                    case COMPARE_TYPE.LESS_OR_EQUAL:
+                        result = count <= Value;
+                        break;
+                    case COMPARE_TYPE.EQUAL:
+                        result = count == Value;
+                        break;
+                    case COMPARE_TYPE.EQUAL_OR_GREATER:
+                        result = count >= Value;
+                        break;
+                    case COMPARE_TYPE.GREATER:
+                        result = count > Value;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(CompareType));
+                }
+
+                if (IsInversed) result = !result;
+                return result;
+            }
+
+            return true;
         }
     }
 }

@@ -11,9 +11,10 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Model;
+using StorylineEditor.Model.Graphs;
 using StorylineEditor.Model.Predicates;
-using StorylineEditor.ViewModel.Common;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Data;
 
 namespace StorylineEditor.ViewModel.Predicates
@@ -67,6 +68,36 @@ namespace StorylineEditor.ViewModel.Predicates
                     Notify(nameof(Quest));
                 }
             }
+        }
+
+        public override bool IsTrue()
+        {
+            if (Quest != null) ////// TODO SIMPLIFY
+            {
+                GraphM graph = (GraphM)Quest;
+
+                bool result = false;
+
+                QuestEntryVM questEntryVm = ActiveContextService.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == Quest.id);
+                
+                if (questEntryVm != null)
+                {
+                    foreach (var passedNode in questEntryVm.PassedNodes)
+                    {
+                        bool isLeaf = graph.links.All((linkM) => linkM.fromNodeId != passedNode.id);
+                        if (isLeaf)
+                        {
+                            result = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (IsInversed) result = !result;
+                return result;
+            }
+
+            return true;
         }
     }
 }

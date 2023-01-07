@@ -10,6 +10,7 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Model;
 using StorylineEditor.Model.Predicates;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Interface;
@@ -83,5 +84,37 @@ namespace StorylineEditor.ViewModel.Predicates
             subType = IsFirstSelected ? Model.predicateA?.GetType() : Model.predicateB?.GetType();
             Notify(nameof(SubType));
         }));
+
+        public override bool IsTrue()
+        {
+            if (PredicateA != null && PredicateB != null)
+            {
+                bool result = false;
+
+                switch (CompositionType)
+                {
+                    case COMPOSITION_TYPE.AND:
+                        result = PredicateA.IsTrue() && PredicateB.IsTrue();
+                        break;
+                    case COMPOSITION_TYPE.OR:
+                        result = PredicateA.IsTrue() || PredicateB.IsTrue();
+                        break;
+                    case COMPOSITION_TYPE.XOR:
+                        result = PredicateA.IsTrue() ^ PredicateB.IsTrue();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(CompositionType));
+                }
+
+                if (IsInversed) result = !result;
+                return result;
+            }
+
+            if (PredicateA != null) return IsInversed ? !PredicateA.IsTrue() : PredicateA.IsTrue();
+
+            if (PredicateB != null) return IsInversed ? !PredicateB.IsTrue() : PredicateB.IsTrue();
+
+            return true;
+        }
     }
 }

@@ -12,8 +12,8 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model;
 using StorylineEditor.Model.Predicates;
-using StorylineEditor.ViewModel.Common;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Data;
 
 namespace StorylineEditor.ViewModel.Predicates
@@ -66,6 +66,20 @@ namespace StorylineEditor.ViewModel.Predicates
                     Notify(nameof(DialogOrReplica));
                 }
             }
+        }
+
+        public override bool IsTrue()
+        {
+            if (DialogOrReplica != null)
+            {
+                bool result = ActiveContextService.History.DialogEntries
+                    .Any((deVm) => deVm.Model.id == DialogOrReplica.id && deVm.Model.id != ActiveContextService.History.ActiveDialogEntryId);
+
+                if (IsInversed) result = !result;
+                return result;
+            }
+
+            return true;
         }
     }
 }

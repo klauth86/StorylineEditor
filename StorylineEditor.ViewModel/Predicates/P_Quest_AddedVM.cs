@@ -12,8 +12,8 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model;
 using StorylineEditor.Model.Predicates;
-using StorylineEditor.ViewModel.Common;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Data;
 
 namespace StorylineEditor.ViewModel.Predicates
@@ -67,6 +67,19 @@ namespace StorylineEditor.ViewModel.Predicates
                     Notify(nameof(Quest));
                 }
             }
+        }
+
+        public override bool IsTrue()
+        {
+            if (Quest != null)
+            {
+                bool result = ActiveContextService.History.QuestEntries.Any((qeVm) => qeVm.Model.id == Quest.id);
+
+                if (IsInversed) result = !result;
+                return result;
+            }
+
+            return true;
         }
     }
 }
