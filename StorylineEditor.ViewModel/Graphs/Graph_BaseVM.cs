@@ -1188,41 +1188,32 @@ namespace StorylineEditor.ViewModel.Graphs
             }
         }
 
-        public Dictionary<string, List<IPositioned>> GetNext(string nodeId)
+        public List<List<IPositioned>> GetPaths(string nodeId)
         {
-            Dictionary<string, List<IPositioned>> result = new Dictionary<string, List<IPositioned>>();
+            List<List<IPositioned>> paths = new List<List<IPositioned>>();
 
             List<string> nodeIds = Model.links.Where(link => link.fromNodeId == nodeId).Select(link => link.toNodeId).ToList();
 
-            List<Node_BaseM> nonTransitNodes = Model.nodes.Where((otherNode) => nodeIds.Contains(otherNode.id) && !(otherNode is Node_TransitM)).ToList();
+            List<Node_BaseM> ntNodeModels = Model.nodes.Where((otherNode) => nodeIds.Contains(otherNode.id) && !(otherNode is Node_TransitM)).ToList();
 
-            foreach (var nonTransitNodeModel in nonTransitNodes)
+            foreach (var ntNodeModel in ntNodeModels)
             {
-                if (!result.ContainsKey(nonTransitNodeModel.id)) result.Add(nonTransitNodeModel.id, new List<IPositioned>());
-                string characterId = nonTransitNodeModel is Node_RegularM regularNodeModel ? regularNodeModel.characterId : null;
-                result[nonTransitNodeModel.id].Add(new PositionVM(nonTransitNodeModel.positionX, nonTransitNodeModel.positionY, nonTransitNodeModel.id, characterId));
+                string characterId = ntNodeModel is Node_RegularM regularNodeModel ? regularNodeModel.characterId : null;
+                paths.Add(new List<IPositioned>() { new PositionVM(ntNodeModel.positionX, ntNodeModel.positionY, ntNodeModel.id, characterId) });
             }
 
-            foreach (var transitNode in Model.nodes.Where((otherNode) => nodeIds.Contains(otherNode.id) && !nonTransitNodes.Contains(otherNode)))
+            foreach (var tNodeModel in Model.nodes.Where((otherNode) => nodeIds.Contains(otherNode.id) && !ntNodeModels.Contains(otherNode)))
             {
-                Dictionary<string, List<IPositioned>> childResult = GetNext(transitNode.id);
+                List<List<IPositioned>> childPaths = GetPaths(tNodeModel.id);
 
-                foreach (var childResultEntry in childResult)
+                foreach (var path in childPaths)
                 {
-                    if (result.ContainsKey(childResultEntry.Key))
-                    {
-                        continue; // One path to nonTransit node is enough
-                    }
-                    else
-                    {
-                        List<IPositioned> nodesPath = childResultEntry.Value ?? new List<IPositioned>();
-                        nodesPath.Insert(0, new PositionVM(transitNode.positionX, transitNode.positionY, transitNode.id, null));
-                        result.Add(childResultEntry.Key, nodesPath);
-                    }
+                    path.Insert(0, new PositionVM(tNodeModel.positionX, tNodeModel.positionY, tNodeModel.id, null));
+                    paths.Add(path);
                 }
             }
 
-            return result;
+            return paths;
         }
 
         public void SetPlayerContext(object oldPlayerContext, object newPlayerContext)

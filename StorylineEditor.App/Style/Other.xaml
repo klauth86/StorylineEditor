@@ -2322,8 +2322,8 @@ StorylineEditor распространяется в надежде, что он�
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Button Margin="{StaticResource Thickness_Margin_1x}" FontSize="{StaticResource FontSize_Medium}"
-                                Command="{Binding ElementName=sv_Main, Path=DataContext.SelectNodeCommand}" CommandParameter="{Binding}"
-                                HorizontalContentAlignment="Stretch" Content="{Binding}">
+                                Command="{Binding ElementName=sv_Main, Path=DataContext.SelectNodeCommand}" CommandParameter="{Binding Key}"
+                                HorizontalContentAlignment="Stretch" Content="{Binding Key}">
                         </Button>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

@@ -30,7 +30,7 @@ namespace StorylineEditor.ViewModel
     {
         protected readonly HistoryVM _parent;
 
-        public PlayerContext_ChoiceVM(HistoryVM parent, HashSet<INode> choices)
+        public PlayerContext_ChoiceVM(HistoryVM parent, Dictionary<INode, int> choices)
         {
             _parent = parent;
             Choices = choices;
@@ -38,10 +38,10 @@ namespace StorylineEditor.ViewModel
 
         public override string Id => null;
 
-        public HashSet<INode> Choices { get; set; }
+        public Dictionary<INode, int> Choices { get; set; }
 
         protected ICommand selectNodeCommand;
-        public ICommand SelectNodeCommand => selectNodeCommand ?? (selectNodeCommand = new RelayCommand<INode>((node) => { _parent.TargetId = node.Id; }, (node) => node != null && Choices.Contains(node)));
+        public ICommand SelectNodeCommand => selectNodeCommand ?? (selectNodeCommand = new RelayCommand<INode>((node) => { _parent.PathIndex = Choices[node]; }, (node) => node != null && Choices.ContainsKey(node)));
     }
 
     public class PlayerContext_ErrorVM : Notifier
@@ -310,6 +310,8 @@ namespace StorylineEditor.ViewModel
             Gender = GENDER.MALE;
             Duration = 4;
             TimeLeft = 0;
+
+            Stop();
         }
 
         #region CHARACTERS
@@ -808,32 +810,22 @@ namespace StorylineEditor.ViewModel
 
         protected void OnFinishMovement(IPositioned positioned)
         {
-            if (positioned is INode node)
+            if (PathIndex >= 0)
             {
-                ActiveNode = node;
-                
-                PlayerContext = node;
-
-                PlayNode();
-            }
-            else
-            {
-                if (NextPaths[TargetId].Remove(positioned))
+                if (Paths[PathIndex].Remove(positioned))
                 {
-                    if (NextPaths[TargetId].Count > 0)
+                    if (Paths[PathIndex].Count > 0)
                     {
                         MoveThroughPath();
-                    }
-                    else
-                    {
-                        INode targetNode = ActiveContextService.ActiveGraph.FindNode(TargetId);
-                        if (targetNode != null)
-                        {
-                            OnFinishMovement(targetNode);
-                        }
+                        return;
                     }
                 }
+                else { } ////// TODO
             }
+
+            ActiveNode = ActiveContextService.ActiveGraph.FindNode(positioned.Id);
+            PlayerContext = ActiveNode;
+            PlayNode();
         }
 
         protected bool SwitchToGraph(string graphId)
@@ -902,34 +894,29 @@ namespace StorylineEditor.ViewModel
             }
             else
             {
-                NextPaths = ActiveContextService.ActiveGraph.GetNext(ActiveNode.Id);
+                var allPaths = ActiveContextService.ActiveGraph.GetPaths(ActiveNode.Id);
 
-                FilterByContext(NextPaths);
+                Paths = FilterByContext(allPaths);
 
-                ////// TODO Filter nodes and paths that are not available in current context for full mode
-
-                if (NextPaths.Count == 1)
+                if (Paths.Count == 1)
                 {
-                    TargetId = NextPaths.First().Key;
+                    PathIndex = 0;
                 }
-                else if (NextPaths.Count > 0)
+                else if (Paths.Count > 0)
                 {
                     if (ActiveNode is Node_RandomVM randomNode)
                     {
-                        var targetIds = NextPaths.Keys.ToList();
-                        TargetId = targetIds[Random.Next(targetIds.Count)];
+                        PathIndex = Random.Next(Paths.Count);
                     }
-                    else if (NextPaths.All((pair) => pair.Value.Last().CharacterId == CharacterM.PLAYER_ID))
+                    else if (Paths.All((path) => path.Last().CharacterId == CharacterM.PLAYER_ID))
                     {
-                        HashSet<INode> choices = new HashSet<INode>();
+                        Dictionary<INode, int> choices = new Dictionary<INode, int>();
 
-                        foreach (var key in NextPaths.Keys)
+                        for (int i = 0; i < Paths.Count; i++)
                         {
-                            INode node = ActiveContextService.ActiveGraph.GenerateNode(key);
-                            if (node != null)
-                            {
-                                choices.Add(node);
-                            }
+                            INode node = ActiveContextService.ActiveGraph.GenerateNode(Paths[i].Last().Id);
+
+                            choices.Add(node, i);
                         }
 
                         PlayerContext = new PlayerContext_ChoiceVM(this, choices);
@@ -960,48 +947,75 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        private void FilterByContext(Dictionary<string, List<IPositioned>> nextPaths)
+        private List<List<IPositioned>> FilterByContext(List<List<IPositioned>> paths)
         {
-            List<string> keysToRemove = new List<string>();
+            List<List<IPositioned>> pathsToRemove = new List<List<IPositioned>>();
 
-            foreach (var key in nextPaths.Keys)
+            foreach (var path in paths)
             {
-                foreach (var positioned in nextPaths[key])
+                if (path.Count > 0)
                 {
-                    INode node = ActiveContextService.ActiveGraph.FindNode(positioned.Id);
-                    
-                    if (node != null)
+                    foreach (var positioned in path)
                     {
-                        if (node.Gender != Gender && node.Gender > 0) // Filtered by Gender
-                        {
-                            keysToRemove.Add(key);
-                        }
+                        INode node = ActiveContextService.ActiveGraph.FindNode(positioned.Id);
 
-                        foreach (var predicate in node.Predicates)
+                        if (node != null)
                         {
-                            if (!predicate.IsTrue())
+                            if (node.Gender != Gender && node.Gender > 0) // Filtered by Gender
                             {
-                                keysToRemove.Add(key);
+                                pathsToRemove.Add(path);
                                 break;
+                            }
+
+                            foreach (var predicate in node.Predicates) // Filtered by predicates
+                            {
+                                if (!predicate.IsTrue())
+                                {
+                                    pathsToRemove.Add(path);
+                                    break;
+                                }
                             }
                         }
                     }
                 }
+                else
+                {
+                    pathsToRemove.Add(path);
+                }
             }
 
-            foreach (var keyToRemove in keysToRemove)
+            foreach (var pathToRemove in pathsToRemove)
             {
-                nextPaths.Remove(keyToRemove);
+                paths.Remove(pathToRemove);
             }
+
+            Dictionary<string, List<IPositioned>> shortestPaths = new Dictionary<string, List<IPositioned>>();
+
+            foreach (var path in paths)
+            {
+                string targetId = path.Last().Id;
+
+                if (!shortestPaths.ContainsKey(targetId))
+                {
+                    shortestPaths.Add(targetId, null);
+                }
+
+                if (shortestPaths[targetId] == null || shortestPaths[targetId].Count > path.Count)
+                {
+                    shortestPaths[targetId] = path;
+                }
+            }
+
+            return shortestPaths.Values.ToList();
         }
 
         private void MoveThroughPath()
         {
             PlayerContext = new PlayerContext_TransitionVM();
 
-            if (NextPaths[TargetId].Count > 0)
+            if (Paths[PathIndex].Count > 0)
             {
-                IPositioned next = NextPaths[TargetId].First();
+                IPositioned next = Paths[PathIndex].First();
                 ActiveContextService.ActiveGraph.MoveTo(next, (taskStatus) => { if (taskStatus == TaskStatus.RanToCompletion) OnFinishMovement(next); });
             }
         }
@@ -1016,8 +1030,8 @@ namespace StorylineEditor.ViewModel
         {
             MonoTaskFacade.Stop();
 
-            TargetId = null;
-            NextPaths?.Clear();
+            PathIndex = int.MinValue;
+            Paths?.Clear();
 
             PlayerContext = null;
             ActiveNode = null;
@@ -1066,18 +1080,18 @@ namespace StorylineEditor.ViewModel
         public string ActiveDialogEntryId { get; set; }
         public INode ActiveNode { get; set; }
 
-        Dictionary<string, List<IPositioned>> NextPaths { get; set; }
+        List<List<IPositioned>> Paths { get; set; }
 
-        private string targetId;
-        public string TargetId
+        private int _pathIndex;
+        public int PathIndex
         {
-            get => targetId;
+            get => _pathIndex;
             set
             {
-                if (targetId != value)
+                _pathIndex = value;
+                if (_pathIndex >= 0)
                 {
-                    targetId = value;
-                    if (targetId != null) MoveThroughPath();
+                    MoveThroughPath();
                 }
             }
         }
