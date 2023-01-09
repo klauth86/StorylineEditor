@@ -12,34 +12,10 @@ StorylineEditor распространяется в надежде, что он�
 
 namespace StorylineEditor.Model.Predicates
 {
-    public class P_Dialog_Node_Has_ActiveSession_CmpM : P_Dialog_Node_Has_ActiveSessionM
+    public class P_Dialog_Node_Has_ActiveSession_CmpM : P_Dialog_Node_Has_PrevSessions_CmpM
     {
-        public P_Dialog_Node_Has_ActiveSession_CmpM(long additionalTicks) : base(additionalTicks)
-        {
-            compareType = COMPARE_TYPE.LESS;
-            value = 1;
-        }
+        public P_Dialog_Node_Has_ActiveSession_CmpM(long additionalTicks) : base(additionalTicks) { }
 
         public P_Dialog_Node_Has_ActiveSession_CmpM() : this(0) { }
-
-        public override BaseM Clone(long additionalTicks)
-        {
-            P_Dialog_Node_Has_ActiveSession_CmpM clone = new P_Dialog_Node_Has_ActiveSession_CmpM(additionalTicks);
-            CloneInternal(clone);
-            return clone;
-        }
-        protected override void CloneInternal(BaseM targetObject)
-        {
-            base.CloneInternal(targetObject);
-
-            if (targetObject is P_Dialog_Node_Has_ActiveSession_CmpM casted)
-            {
-                casted.compareType = compareType;
-                casted.value = value;
-            }
-        }
-
-        public byte compareType { get; set; }
-        public int value { get; set; }
     }
 }

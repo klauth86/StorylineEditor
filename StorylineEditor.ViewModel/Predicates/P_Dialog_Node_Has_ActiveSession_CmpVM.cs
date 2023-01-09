@@ -13,8 +13,8 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Model;
 using StorylineEditor.Model.Graphs;
 using StorylineEditor.Model.Predicates;
-using StorylineEditor.ViewModel.Interface;
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 
@@ -22,18 +22,61 @@ namespace StorylineEditor.ViewModel.Predicates
 {
     public class P_Dialog_Node_Has_ActiveSession_CmpVM : P_BaseVM<P_Dialog_Node_Has_ActiveSession_CmpM, object>
     {
+        public CollectionViewSource DialogsAndReplicasCVS { get; }
         public CollectionViewSource NodesCVS { get; }
 
         public P_Dialog_Node_Has_ActiveSession_CmpVM(P_Dialog_Node_Has_ActiveSession_CmpM model, object parent) : base(model, parent)
         {
+            Model.dialogId = Model.dialogId ?? ActiveContext.ActiveGraph.Id;
+
+            DialogsAndReplicasCVS = new CollectionViewSource() { Source = ActiveContext.DialogsAndReplicas };
+
+            if (DialogsAndReplicasCVS.View != null)
+            {
+                DialogsAndReplicasCVS.View.Filter = OnFilter;
+                DialogsAndReplicasCVS.View.SortDescriptions.Add(new SortDescription(nameof(BaseM.id), ListSortDirection.Ascending));
+                DialogsAndReplicasCVS.View.MoveCurrentTo(DialogOrReplica);
+            }
+
             NodesCVS = new CollectionViewSource();
 
-            ////// TODO
-            //GraphM graph = (CallbackContext as IWithModel)?.GetModel<GraphM>();
+            RefreshNodesCVS();
+        }
 
-            //NodesCVS.Source = graph?.nodes;
-            //if (NodesCVS.View != null) NodesCVS.View.Filter = OnNodesFilter;
-            //NodesCVS.View?.MoveCurrentTo(Node != null && graph != null && graph.nodes.Contains(Node) ? Node : null);
+        private bool OnFilter(object sender)
+        {
+            if (sender is BaseM model)
+            {
+                return string.IsNullOrEmpty(dialogsAndReplicasFilter) || model.PassFilter(dialogsAndReplicasFilter);
+            }
+            return false;
+        }
+
+        protected string dialogsAndReplicasFilter;
+        public string DialogsAndReplicasFilter
+        {
+            set
+            {
+                if (value != dialogsAndReplicasFilter)
+                {
+                    dialogsAndReplicasFilter = value;
+                    DialogsAndReplicasCVS.View?.Refresh();
+                }
+            }
+        }
+        public BaseM DialogOrReplica
+        {
+            get => ActiveContext.GetDialogOrReplica(Model.dialogId);
+            set
+            {
+                if (value?.id != Model.dialogId)
+                {
+                    Model.dialogId = value?.id;
+                    Notify(nameof(DialogOrReplica));
+
+                    RefreshNodesCVS();
+                }
+            }
         }
 
         private bool OnNodesFilter(object sender)
@@ -59,8 +102,7 @@ namespace StorylineEditor.ViewModel.Predicates
         }
         public BaseM Node
         {
-            get => null;
-                ////// TODO (CallbackContext as IWithModel)?.GetModel<GraphM>()?.nodes.FirstOrDefault((node) => node.id == Model.nodeId);
+            get => (DialogOrReplica as GraphM)?.nodes.FirstOrDefault((node) => node.id == Model.nodeId);
             set
             {
                 if (value?.id != Model.nodeId)
@@ -68,6 +110,20 @@ namespace StorylineEditor.ViewModel.Predicates
                     Model.nodeId = value?.id;
                     Notify(nameof(Node));
                 }
+            }
+        }
+
+        private void RefreshNodesCVS()
+        {
+            if (DialogOrReplica is GraphM graph)
+            {
+                NodesCVS.Source = graph.nodes;
+                if (NodesCVS.View != null) NodesCVS.View.Filter = OnNodesFilter;
+                NodesCVS.View?.MoveCurrentTo(Node != null && graph.nodes.Contains(Node) ? Node : null);
+            }
+            else
+            {
+                NodesCVS.View?.MoveCurrentTo(null);
             }
         }
 
@@ -99,40 +155,43 @@ namespace StorylineEditor.ViewModel.Predicates
 
         public override bool IsTrue()
         {
-            if (Node != null)
+            if (DialogOrReplica != null && Node != null)
             {
-                DialogEntryVM dialogEntryVm = ActiveContext.History.DialogEntries.FirstOrDefault((deVm) => deVm.Id == ActiveContext.History.ActiveDialogEntryId);
+                var dialogEntryVms = ActiveContext.History.DialogEntries
+                    .Where((deVm) => deVm.Model.id == DialogOrReplica.id && deVm.Model.id != ActiveContext.History.ActiveDialogEntryId);
 
-                if (dialogEntryVm != null)
+                int count = 0;
+
+                foreach (var dialogEntryVm in dialogEntryVms)
                 {
-                    int count = dialogEntryVm.Nodes.Count((node) => node.id == Node.id);
-
-                    bool result = false;
-
-                    switch (CompareType)
-                    {
-                        case COMPARE_TYPE.LESS:
-                            result = count < Value;
-                            break;
-                        case COMPARE_TYPE.LESS_OR_EQUAL:
-                            result = count <= Value;
-                            break;
-                        case COMPARE_TYPE.EQUAL:
-                            result = count == Value;
-                            break;
-                        case COMPARE_TYPE.EQUAL_OR_GREATER:
-                            result = count >= Value;
-                            break;
-                        case COMPARE_TYPE.GREATER:
-                            result = count > Value;
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException(nameof(CompareType));
-                    }
-
-                    if (IsInversed) result = !result;
-                    return result;
+                    count += dialogEntryVm.Nodes.Count((node) => node.id == Node.id);
                 }
+
+                bool result = false;
+
+                switch (CompareType)
+                {
+                    case COMPARE_TYPE.LESS:
+                        result = count < Value;
+                        break;
+                    case COMPARE_TYPE.LESS_OR_EQUAL:
+                        result = count <= Value;
+                        break;
+                    case COMPARE_TYPE.EQUAL:
+                        result = count == Value;
+                        break;
+                    case COMPARE_TYPE.EQUAL_OR_GREATER:
+                        result = count >= Value;
+                        break;
+                    case COMPARE_TYPE.GREATER:
+                        result = count > Value;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(CompareType));
+                }
+
+                if (IsInversed) result = !result;
+                return result;
             }
 
             return true;
