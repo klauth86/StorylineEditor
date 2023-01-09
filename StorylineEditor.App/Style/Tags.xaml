@@ -164,6 +164,8 @@ StorylineEditor распространяется в надежде, что он�
 
     <sys:String x:Key="String_Tag_GlobalFilter_Tooltip">Фильтровать по ...</sys:String>
 
+    <sys:String x:Key="String_Tag_Predicate_IsInversed">Инвертировать</sys:String>
+    
     <sys:String x:Key="String_Tag_Predicate_P_CompositeM_DisplayName">Составной</sys:String>
 
     <sys:String x:Key="String_Tag_Predicate_P_Dialog_HasM_DisplayName">Реплики и диалоги: имеет</sys:String>

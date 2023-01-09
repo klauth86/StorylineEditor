@@ -1236,11 +1236,13 @@ StorylineEditor распространяется в надежде, что он�
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto"></RowDefinition>
+                                    <RowDefinition Height="auto"></RowDefinition>
                                     <RowDefinition Height="*"></RowDefinition>
                                 </Grid.RowDefinitions>
                                 <TextBlock HorizontalAlignment="Center" Tag="{Binding PredicateType}" Style="{StaticResource S_TextBlock_Predicate_Title}"></TextBlock>
-                                <ContentControl Grid.Row="1" Content="{Binding}"></ContentControl>
-                                <Button Grid.RowSpan="2" Style="{StaticResource S_Button_Remove}" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
+                                <CheckBox Grid.Row="1" IsChecked="{Binding IsInversed, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_CheckBox_Prop}" Tag="{StaticResource String_Tag_Predicate_IsInversed}"></CheckBox>
+                                <ContentControl Grid.Row="2" Content="{Binding}"></ContentControl>
+                                <Button Grid.RowSpan="3" Style="{StaticResource S_Button_Remove}" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
                             </Grid>
                         </Border>
                     </DataTemplate>
