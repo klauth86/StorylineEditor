@@ -10,10 +10,10 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Model;
 using StorylineEditor.Model.GameEvents;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Interface;
-using System;
 
 namespace StorylineEditor.ViewModel.GameEvents
 {
@@ -25,22 +25,20 @@ namespace StorylineEditor.ViewModel.GameEvents
     {
         public GE_BaseVM(T model, U parent) : base(model, parent) { }
 
-        public Type GameEventType => Model?.GetType();
-
-        public byte ExecutionMode
+        public bool IsExecutedOnLeave
         {
-            get => Model.executionMode;
+            get => Model.executionMode == EXECUTION_MODE.ON_LEAVE;
             set
             {
-                if (Model.executionMode != value)
+                if (value != IsExecutedOnLeave)
                 {
-                    Model.executionMode = value;
-                    Notify(nameof(ExecutionMode));
+                    Model.executionMode = value ? EXECUTION_MODE.ON_LEAVE : EXECUTION_MODE.ON_ENTER;
+                    Notify(nameof(IsExecutedOnLeave));
                 }
-
             }
         }
 
+        public byte ExecutionMode => Model.executionMode;
         public abstract void Execute();
     }
 }
