@@ -9,10 +9,36 @@ StorylineEditor распространяется в надежде, что он�
 
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 -->
-    
+
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!--COMMON-->
+
+    <sys:Boolean x:Key="True">True</sys:Boolean>
+
+    <sys:Boolean x:Key="False">False</sys:Boolean>
+
+    <sys:String x:Key="String_Tag_CompositionType_AND">И</sys:String>
+
+    <sys:String x:Key="String_Tag_CompositionType_OR">ИЛИ</sys:String>
+
+    <sys:String x:Key="String_Tag_CompositionType_XOR">Исключающее ИЛИ</sys:String>
+
+    <sys:String x:Key="String_Tag_CompareType_Less">Меньше</sys:String>
+
+    <sys:String x:Key="String_Tag_CompareType_LessOrEqual">Меньше или равно</sys:String>
+
+    <sys:String x:Key="String_Tag_CompareType_Equal">Равно</sys:String>
+
+    <sys:String x:Key="String_Tag_CompareType_EqualOrGreater">Больше или равно</sys:String>
+
+    <sys:String x:Key="String_Tag_CompareType_Greater">Больше</sys:String>
+
+    <sys:String x:Key="String_Tag_ComboBoxExt_Filter_Tooltip">Искать по ...</sys:String>
+
+    <!--STATS-->
 
     <sys:String x:Key="String_Stats_Characters">ПО ПЕРСОНАЖАМ:</sys:String>
 
@@ -33,11 +59,11 @@ StorylineEditor распространяется в надежде, что он�
     <sys:String x:Key="String_Stats_Node_DialogM_TmpDescription">💬 Диалог</sys:String>
 
     <sys:String x:Key="String_Stats_Node_ReplicaM_TmpDescription">🗣 Реплика</sys:String>
-    
+
+    <!--CONFIG-->
+
     <sys:String x:Key="String_Tag_Config_Title">⚙ Настройки</sys:String>
 
-    <sys:String x:Key="String_Tag_Player_Title">▶ Проигрыватель</sys:String>
-    
     <sys:String x:Key="String_Tag_Config_UserActions">Горячие клавиши и мышь</sys:String>
 
     <sys:String x:Key="String_Tag_Config_UserActions_CreateNode">Создать вершины</sys:String>
@@ -54,8 +80,12 @@ StorylineEditor распространяется в надежде, что он�
 
     <sys:String x:Key="String_Tag_Config_UserActions_SelectionBox">Выделение рамкой</sys:String>
 
+    <!--MAIN MENU-->
+
+    <sys:String x:Key="String_Tag_GlobalFilter_Tooltip">Фильтровать по ...</sys:String>
+
     <sys:String x:Key="String_Tag_MainMenu_Locations">Локации</sys:String>
-    
+
     <sys:String x:Key="String_Tag_MainMenu_Characters">Персонажи</sys:String>
 
     <sys:String x:Key="String_Tag_MainMenu_Items">Предметы</sys:String>
@@ -69,11 +99,9 @@ StorylineEditor распространяется в надежде, что он�
     <sys:String x:Key="String_Tag_MainMenu_Replicas">Реплики</sys:String>
 
     <sys:String x:Key="String_Tag_MainMenu_DialogsAndReplicas">Диалоги и Реплики</sys:String>
-    
-    <sys:Boolean x:Key="True">True</sys:Boolean>
 
-    <sys:Boolean x:Key="False">False</sys:Boolean>
-    
+    <!--PROPS-->
+
     <sys:String x:Key="String_Tag_Name">Имя</sys:String>
 
     <sys:String x:Key="String_Tag_Description">Описание</sys:String>
@@ -95,12 +123,20 @@ StorylineEditor распространяется в надежде, что он�
     <sys:String x:Key="String_Tag_HasInternalDescription">Имеет внутреннее описание</sys:String>
 
     <sys:String x:Key="String_Tag_HasInternalDescriptionFemale">Внутреннее описание зависит от пола</sys:String>
-    
+
     <sys:String x:Key="String_Tag_InternalDescription">Внутреннее описание</sys:String>
 
     <sys:String x:Key="String_Tag_InternalDescriptionMale">👨 Внутреннее описание</sys:String>
 
     <sys:String x:Key="String_Tag_InternalDescriptionFemale">👩 Внутреннее описание</sys:String>
+
+    <!--GRAPH-->
+
+    <sys:String x:Key="String_Tag_Graph_Tab_Props">Свойства</sys:String>
+
+    <sys:String x:Key="String_Tag_Graph_Tab_View">Вершины</sys:String>
+
+    <!--JOURNAL NODES-->
 
     <sys:String x:Key="String_Tag_Node_Step_Name">Имя шага</sys:String>
 
@@ -109,7 +145,7 @@ StorylineEditor распространяется в надежде, что он�
     <sys:String x:Key="String_Tag_Node_Step_Result">Результат шага</sys:String>
 
     <sys:String x:Key="String_Tag_Node_Step_Type">Шаг</sys:String>
-    
+
     <sys:String x:Key="String_Tag_Node_Alternative_Name">Имя альтернативы</sys:String>
 
     <sys:String x:Key="String_Tag_Node_Alternative_Description">Описание альтернативы</sys:String>
@@ -118,18 +154,14 @@ StorylineEditor распространяется в надежде, что он�
 
     <sys:String x:Key="String_Tag_Node_Alternative_Type">Альтернатива</sys:String>
 
-    <sys:String x:Key="String_Tag_Graph_Tab_Props">Свойства</sys:String>
-
-    <sys:String x:Key="String_Tag_Graph_Tab_Stats">Статистика</sys:String>
-    
-    <sys:String x:Key="String_Tag_Graph_Tab_View">Вершины</sys:String>
+    <!--NODES-->
 
     <sys:String x:Key="String_Tag_Node_Tab_Props">Свойства</sys:String>
 
     <sys:String x:Key="String_Tag_Node_Tab_Predicates">Предикаты</sys:String>
 
     <sys:String x:Key="String_Tag_Node_Tab_GameEvents">События</sys:String>
-    
+
     <sys:String x:Key="String_Tag_Node_Random_Type">Случайная</sys:String>
 
     <sys:String x:Key="String_Tag_Node_Transit_Type">Переход</sys:String>
@@ -153,19 +185,17 @@ StorylineEditor распространяется в надежде, что он�
     <sys:String x:Key="String_Tag_Node_Gate_TargetDialog">Диалог</sys:String>
 
     <sys:String x:Key="String_Tag_Node_Gate_TargetExitNode">Выход</sys:String>
-    
+
     <sys:String x:Key="String_Tag_Node_Regular_OverrideName">Иное отображаемое имя</sys:String>
 
     <sys:String x:Key="String_Tag_Node_Regular_FileHttpRef">Ссылка на аудио</sys:String>
 
     <sys:String x:Key="String_Tag_Node_Regular_ShortDescription">Краткое описание</sys:String>
-    
-    <sys:String x:Key="String_Tag_ComboBoxExt_Filter_Tooltip">Искать по ...</sys:String>
 
-    <sys:String x:Key="String_Tag_GlobalFilter_Tooltip">Фильтровать по ...</sys:String>
+    <!--PREDICATES-->
 
     <sys:String x:Key="String_Tag_Predicate_IsInversed">Инвертировать</sys:String>
-    
+
     <sys:String x:Key="String_Tag_Predicate_P_CompositeM_DisplayName">Составной</sys:String>
 
     <sys:String x:Key="String_Tag_Predicate_P_Dialog_HasM_DisplayName">Реплики и диалоги: имеет</sys:String>
@@ -189,20 +219,6 @@ StorylineEditor распространяется в надежде, что он�
     <sys:String x:Key="String_Tag_Predicate_P_Quest_Node_PassedM_DisplayName">Квест: выполнен/а шаг/альтернатива</sys:String>
 
     <sys:String x:Key="String_Tag_Predicate_P_Relation_HasM_DisplayName">Отношение: имеет</sys:String>
-
-    <sys:String x:Key="String_Tag_GameEvent_IsExecutedOnLeave">Выполнить ПОСЛЕ вершины</sys:String>
-    
-    <sys:String x:Key="String_Tag_GameEvent_GE_Item_DropM_DisplayName">Предмет: потерять</sys:String>
-
-    <sys:String x:Key="String_Tag_GameEvent_GE_Item_PickUpM_DisplayName">Предмет: получить</sys:String>
-
-    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_AddM_DisplayName">Квест: добавить</sys:String>
-
-    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_AddM_DisplayName">Квест: добавить шаг/альтернативу</sys:String>
-
-    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_PassM_DisplayName">Квест: выполнить шаг/альтернативу</sys:String>
-
-    <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_DisplayName">Отношение: изменить</sys:String>
 
     <sys:String x:Key="String_Tag_Predicate_P_CompositeM_Title">Составной</sys:String>
 
@@ -228,36 +244,8 @@ StorylineEditor распространяется в надежде, что он�
 
     <sys:String x:Key="String_Tag_Predicate_P_Relation_HasM_Title">Отношение: имеет</sys:String>
 
-    <sys:String x:Key="String_Tag_GameEvent_GE_Item_DropM_Title">Предмет: потерять</sys:String>
-
-    <sys:String x:Key="String_Tag_GameEvent_GE_Item_PickUpM_Title">Предмет: получить</sys:String>
-
-    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_AddM_Title">Квест: добавить</sys:String>
-
-    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_AddM_Title">Квест: добавить шаг/альтернативу</sys:String>
-
-    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_PassM_Title">Квест: выполнить шаг/альтернативу</sys:String>
-
-    <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_Title">Отношение: изменить</sys:String>
-
-    <sys:String x:Key="String_Tag_CompositionType_AND">И</sys:String>
-
-    <sys:String x:Key="String_Tag_CompositionType_OR">ИЛИ</sys:String>
-
-    <sys:String x:Key="String_Tag_CompositionType_XOR">Исключающее ИЛИ</sys:String>
-    
     <sys:String x:Key="String_Tag_Predicate_Compare">Условия</sys:String>
 
-    <sys:String x:Key="String_Tag_CompareType_Less">Меньше</sys:String>
-
-    <sys:String x:Key="String_Tag_CompareType_LessOrEqual">Меньше или равно</sys:String>
-
-    <sys:String x:Key="String_Tag_CompareType_Equal">Равно</sys:String>
-
-    <sys:String x:Key="String_Tag_CompareType_EqualOrGreater">Больше или равно</sys:String>
-
-    <sys:String x:Key="String_Tag_CompareType_Greater">Больше</sys:String>
-    
     <sys:String x:Key="String_Tag_Predicate_DialogOrReplica">Диалог или реплика</sys:String>
 
     <sys:String x:Key="String_Tag_Predicate_Node">Вершина</sys:String>
@@ -271,6 +259,38 @@ StorylineEditor распространяется в надежде, что он�
     <sys:String x:Key="String_Tag_Predicate_PredicateA">Предикат A</sys:String>
 
     <sys:String x:Key="String_Tag_Predicate_PredicateB">Предикат B</sys:String>
+
+    <!--GAME EVENTS-->
+
+    <sys:String x:Key="String_Tag_GameEvent_IsExecutedOnLeave">Выполнить ПОСЛЕ вершины</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Item_DropM_DisplayName">Предмет: потерять</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Item_PickUpM_DisplayName">Предмет: получить</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_AddM_DisplayName">Квест: добавить</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_AddM_DisplayName">Квест: добавить шаг/альтернативу</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_PassM_DisplayName">Квест: выполнить шаг/альтернативу</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_DisplayName">Отношение: изменить</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Item_DropM_Title">Предмет: потерять</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Item_PickUpM_Title">Предмет: получить</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_AddM_Title">Квест: добавить</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_AddM_Title">Квест: добавить шаг/альтернативу</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_PassM_Title">Квест: выполнить шаг/альтернативу</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_Title">Отношение: изменить</sys:String>
+
+    <!--PLAYER-->
+
+    <sys:String x:Key="String_Tag_Player_Title">▶ Проигрыватель</sys:String>
 
     <sys:String x:Key="String_Tag_Player_Tab_Props">Основная</sys:String>
 
