@@ -38,7 +38,6 @@ namespace StorylineEditor.ViewModel.GameEvents
             }
         }
 
-        public byte ExecutionMode => Model.executionMode;
         public abstract void Execute();
     }
 }

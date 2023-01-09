@@ -806,7 +806,8 @@ namespace StorylineEditor.ViewModel
                 {
                     if (Paths[PathIndex].Count > 0)
                     {
-                        ExecuteGameEvents(positioned.Id, EXECUTION_MODE.ON_ENTER | EXECUTION_MODE.ON_LEAVE);
+                        ExecuteGameEvents(positioned.Id, false); // Enter
+                        ExecuteGameEvents(positioned.Id, true); // Leave
 
                         MoveThroughPath();
                         return;
@@ -823,15 +824,15 @@ namespace StorylineEditor.ViewModel
             StartPlayNode(node);
         }
 
-        private void ExecuteGameEvents(string positionedId, int executionMode) { ExecuteGameEvents(ActiveContext.ActiveGraph.FindNode(positionedId), executionMode); }
+        private void ExecuteGameEvents(string positionedId, bool isLeave) { ExecuteGameEvents(ActiveContext.ActiveGraph.FindNode(positionedId), isLeave); }
 
-        private void ExecuteGameEvents(INode node, int executionMode)
+        private void ExecuteGameEvents(INode node, bool isLeave)
         {
             if (fullMode)
             {
                 foreach (var gameEvent in node.GameEvents)
                 {
-                    if ((gameEvent.ExecutionMode & executionMode) > 0)
+                    if (gameEvent.IsExecutedOnLeave == isLeave)
                     {
                         gameEvent.Execute();
                     }
@@ -847,7 +848,7 @@ namespace StorylineEditor.ViewModel
 
         private void StartPlayNode(INode node)
         {
-            ExecuteGameEvents(node, EXECUTION_MODE.ON_ENTER);
+            ExecuteGameEvents(node, false); // Enter
 
             if (node is Node_DialogVM dialogNodeViewModel || node is Node_ReplicaVM replicaNodeViewModel)
             {
@@ -888,7 +889,7 @@ namespace StorylineEditor.ViewModel
 
         private void FinishPlayNode(INode node)
         {
-            ExecuteGameEvents(node, EXECUTION_MODE.ON_LEAVE);
+            ExecuteGameEvents(node, true); // Leave
 
             if (node is Node_GateVM gateNode)
             {
