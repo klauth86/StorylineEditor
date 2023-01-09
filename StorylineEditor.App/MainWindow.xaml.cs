@@ -82,22 +82,31 @@ namespace StorylineEditor.App
         {
             SetDataContext(null);
 
-            StorylineM model = null;
+            FileStream fileStream = null;
 
-            using (var fileStream = File.Open(path, FileMode.Open))
+            try
             {
-                model = SerializeService.Deserialize<StorylineM>(fileStream);
+                fileStream = File.Open(path, FileMode.Open);
+                var model = SerializeService.Deserialize<StorylineM>(fileStream);
                 ValidateModel(model);
-            }
 
-            if (model != null)
-            {
                 SetDataContext(new StorylineVM(model));
 
                 var assemblyName = Assembly.GetExecutingAssembly().GetName();
                 Title = string.Format("{0} [{1}]", assemblyName.Name, path);
             }
-            else { } ////// TODO
+            catch (InvalidDataException idExc)
+            {
+                MessageBox.Show(idExc.Message, "Error", MessageBoxButton.OK);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Can not open file!", "Error", MessageBoxButton.OK);
+            }
+            finally
+            {
+                fileStream?.Dispose();
+            }
         }
 
         private void SaveFile(string path)
@@ -217,8 +226,7 @@ namespace StorylineEditor.App
 
             if (duplicateIds.Count + invalidLinks.Count > 0)
             {
-                MessageBox.Show("Invalid data!", "Error", MessageBoxButton.OK);
-                Application.Current.Shutdown();
+                throw new InvalidDataException("Data validation fault! Model contains duplicates or invalid elements!");
             }
         }
 
