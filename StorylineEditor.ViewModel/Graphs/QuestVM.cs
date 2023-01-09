@@ -16,6 +16,7 @@ using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Interface;
 using StorylineEditor.ViewModel.Nodes;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 
@@ -31,18 +32,18 @@ namespace StorylineEditor.ViewModel.Graphs
         public QuestEditorVM(
             QuestVM viewModel
             , object parent
+            , IEnumerable<Type> nodeTypes
             , Func<Type, Point, BaseM> modelCreator
             , Func<BaseM, Notifier> viewModelCreator
             , Func<Notifier, Notifier> editorCreator
-            , Type defaultNodeType
             )
             : base(
                   viewModel.Model
                   , parent
+                  , nodeTypes
                   , modelCreator
                   , viewModelCreator
                   , editorCreator
-                  , defaultNodeType
                   )
         { }
 

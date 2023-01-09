@@ -47,10 +47,10 @@ namespace StorylineEditor.ViewModel.Graphs
         public Graph_BaseVM(
             T model
             , U parent
+            , IEnumerable<Type> nodeTypes
             , Func<Type, Point, BaseM> modelCreator
             , Func<BaseM, Notifier> viewModelCreator
             , Func<Notifier, Notifier> editorCreator
-            , Type defaultNodeType
             )
             : base(
                   model
@@ -60,9 +60,11 @@ namespace StorylineEditor.ViewModel.Graphs
                   , editorCreator
                   )
         {
+            _nodeTypes = new HashSet<Type>(nodeTypes);
+
             offsetY = offsetX = 0;
             scale = 1;
-            selectedNodeType = defaultNodeType;
+            selectedNodeType = _nodeTypes.FirstOrDefault();
 
             targetNodeViewModel = null;
 
@@ -123,6 +125,8 @@ namespace StorylineEditor.ViewModel.Graphs
 
             selection = new HashSet<string>();
         }
+
+        protected readonly HashSet<Type> _nodeTypes;
 
         void StartScrollingTask(IPositioned positioned, Action<TaskStatus> callbackAction)
         {
@@ -703,6 +707,8 @@ namespace StorylineEditor.ViewModel.Graphs
 
             if (graphModel != null)
             {
+                PrePaste(graphModel);
+
                 GraphM graphModelCopy = graphModel.CloneAs<GraphM>(0);
 
                 bool resetSelection = true;
@@ -729,6 +735,45 @@ namespace StorylineEditor.ViewModel.Graphs
                     toNodeViewModel.IsRoot = false;
                     RootNodeIds.Remove(toNodeViewModel.Id);
                 }
+            }
+        }
+
+        protected void PrePaste(GraphM graphModel)
+        {
+            // Clear up nodes
+
+            HashSet<Node_BaseM> nodesToRemove = new HashSet<Node_BaseM>();
+            HashSet<string> nodeIdsToRemove = new HashSet<string>();
+
+            foreach (var nodeModel in graphModel.nodes)
+            {
+                if (!_nodeTypes.Contains(nodeModel.GetType()))
+                {
+                    nodesToRemove.Add(nodeModel);
+                    nodeIdsToRemove.Add(nodeModel.id);
+                }
+            }
+
+            foreach (var nodeModel in nodesToRemove)
+            {
+                graphModel.nodes.Remove(nodeModel);
+            }
+
+            // Clear up links
+
+            HashSet<LinkM> linksToRemove = new HashSet<LinkM>();
+
+            foreach (var linkModel in graphModel.links)
+            {
+                if (nodeIdsToRemove.Contains(linkModel.fromNodeId) || nodeIdsToRemove.Contains(linkModel.toNodeId))
+                {
+                    linksToRemove.Add(linkModel);
+                }
+            }
+
+            foreach (var linkModel in linksToRemove)
+            {
+                graphModel.links.Remove(linkModel);
             }
         }
 

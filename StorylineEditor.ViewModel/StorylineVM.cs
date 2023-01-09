@@ -75,31 +75,37 @@ namespace StorylineEditor.ViewModel
 
         private Notifier CreateQuestEditorVM(QuestVM inViewModel)
         {
-            return new QuestEditorVM(inViewModel, this,
-            (Type type, Point position) =>
-            {
-                if (type == typeof(LinkM)) return new LinkM();
-                if (type == typeof(Node_StepM)) return new Node_StepM() { positionX = position.X, positionY = position.Y };
-                if (type == typeof(Node_AlternativeM)) return new Node_AlternativeM() { positionX = position.X, positionY = position.Y };
+            return new QuestEditorVM(
+                inViewModel
+                , this
+                , new[]
+                {
+                    typeof(Node_StepM)
+                    , typeof(Node_AlternativeM)
+                }
+                , (Type type, Point position) =>
+                {
+                    if (type == typeof(LinkM)) return new LinkM();
+                    if (type == typeof(Node_StepM)) return new Node_StepM() { positionX = position.X, positionY = position.Y };
+                    if (type == typeof(Node_AlternativeM)) return new Node_AlternativeM() { positionX = position.X, positionY = position.Y };
 
-                throw new ArgumentOutOfRangeException(nameof(type));
-            },
-            (BaseM model) =>
-            {
-                if (model is LinkM modelLink) return new LinkVM(modelLink, this);
-                if (model is Node_StepM modelStep) return new Node_Journal_StepVM(modelStep, this);
-                if (model is Node_AlternativeM modelAlternative) return new Node_Journal_AlternativeVM(modelAlternative, this);
-
-                throw new ArgumentOutOfRangeException(nameof(model));
-            },
-            (Notifier viewModel) =>
-            {
-                if (viewModel is Node_Journal_StepVM viewModelStep) return new Node_Journal_StepEditorVM(viewModelStep);
-                if (viewModel is Node_Journal_AlternativeVM viewModelAlternative) return new Node_Journal_AlternativeEditorVM(viewModelAlternative);
-
-                throw new ArgumentOutOfRangeException(nameof(viewModel));
-            },
-            typeof(Node_StepM)
+                    throw new ArgumentOutOfRangeException(nameof(type));
+                }
+                , (BaseM model) =>
+                {
+                    if (model is LinkM modelLink) return new LinkVM(modelLink, this);
+                    if (model is Node_StepM modelStep) return new Node_Journal_StepVM(modelStep, this);
+                    if (model is Node_AlternativeM modelAlternative) return new Node_Journal_AlternativeVM(modelAlternative, this);
+                    
+                    throw new ArgumentOutOfRangeException(nameof(model));
+                }
+                , (Notifier viewModel) =>
+                {
+                    if (viewModel is Node_Journal_StepVM viewModelStep) return new Node_Journal_StepEditorVM(viewModelStep);
+                    if (viewModel is Node_Journal_AlternativeVM viewModelAlternative) return new Node_Journal_AlternativeEditorVM(viewModelAlternative);
+                    
+                    throw new ArgumentOutOfRangeException(nameof(viewModel));
+                }
             );
         }
 
@@ -114,43 +120,53 @@ namespace StorylineEditor.ViewModel
 
         private Notifier CreateDialogEditorVM(DialogVM inViewModel)
         {
-            return new DialogEditorVM(inViewModel, this,
-            (Type type, Point position) =>
-            {
-                if (type == typeof(LinkM)) return new LinkM();
-                if (type == typeof(Node_DialogM)) return new Node_DialogM() { positionX = position.X, positionY = position.Y };
-                if (type == typeof(Node_ReplicaM)) return new Node_ReplicaM() { positionX = position.X, positionY = position.Y };
-                if (type == typeof(Node_RandomM)) return new Node_RandomM() { positionX = position.X, positionY = position.Y };
-                if (type == typeof(Node_TransitM)) return new Node_TransitM() { positionX = position.X, positionY = position.Y };
-                if (type == typeof(Node_GateM)) return new Node_GateM() { positionX = position.X, positionY = position.Y };
-                if (type == typeof(Node_ExitM)) return new Node_ExitM() { positionX = position.X, positionY = position.Y };
-
-                throw new ArgumentOutOfRangeException(nameof(type));
-            },
-            (BaseM model) =>
-            {
-                if (model is LinkM modelLink) return new LinkVM(modelLink, this);
-                if (model is Node_DialogM dialogModel) return new Node_DialogVM(dialogModel, this);
-                if (model is Node_ReplicaM replicaModel) return new Node_ReplicaVM(replicaModel, this);
-                if (model is Node_RandomM randomModel) return new Node_RandomVM(randomModel, this);
-                if (model is Node_TransitM transitModel) return new Node_TransitVM(transitModel, this);
-                if (model is Node_GateM gateModel) return new Node_GateVM(gateModel, this);
-                if (model is Node_ExitM exitModel) return new Node_ExitVM(exitModel, this);
-
-                throw new ArgumentOutOfRangeException(nameof(model));
-            },
-            (Notifier viewModel) =>
-            {
-                if (viewModel is Node_DialogVM dialogViewModel) return new Node_DialogEditorVM(dialogViewModel);
-                if (viewModel is Node_ReplicaVM replicaViewModel) return new Node_ReplicaEditorVM(replicaViewModel);
-                if (viewModel is Node_RandomVM randomViewModel) return new Node_RandomEditorVM(randomViewModel);
-                if (viewModel is Node_TransitVM transitViewModel) return new Node_TransitEditorVM(transitViewModel);
-                if (viewModel is Node_GateVM gateViewModel) return new Node_GateEditorVM(gateViewModel);
-                if (viewModel is Node_ExitVM exitViewModel) return new Node_ExitEditorVM(exitViewModel);
-
-                throw new ArgumentOutOfRangeException(nameof(viewModel));
-            },
-            typeof(Node_DialogM)
+            return new DialogEditorVM(
+                inViewModel
+                , this
+                , new[]
+                {
+                    typeof(Node_DialogM)
+                    , typeof(Node_ReplicaM)
+                    , typeof(Node_RandomM)
+                    , typeof(Node_TransitM)
+                    , typeof(Node_GateM)
+                    , typeof(Node_ExitM)
+                }
+                , (Type type, Point position) =>
+                {
+                    if (type == typeof(LinkM)) return new LinkM();
+                    if (type == typeof(Node_DialogM)) return new Node_DialogM() { positionX = position.X, positionY = position.Y };
+                    if (type == typeof(Node_ReplicaM)) return new Node_ReplicaM() { positionX = position.X, positionY = position.Y };
+                    if (type == typeof(Node_RandomM)) return new Node_RandomM() { positionX = position.X, positionY = position.Y };
+                    if (type == typeof(Node_TransitM)) return new Node_TransitM() { positionX = position.X, positionY = position.Y };
+                    if (type == typeof(Node_GateM)) return new Node_GateM() { positionX = position.X, positionY = position.Y };
+                    if (type == typeof(Node_ExitM)) return new Node_ExitM() { positionX = position.X, positionY = position.Y };
+                    
+                    throw new ArgumentOutOfRangeException(nameof(type));
+                }
+                , (BaseM model) =>
+                {
+                    if (model is LinkM modelLink) return new LinkVM(modelLink, this);
+                    if (model is Node_DialogM dialogModel) return new Node_DialogVM(dialogModel, this);
+                    if (model is Node_ReplicaM replicaModel) return new Node_ReplicaVM(replicaModel, this);
+                    if (model is Node_RandomM randomModel) return new Node_RandomVM(randomModel, this);
+                    if (model is Node_TransitM transitModel) return new Node_TransitVM(transitModel, this);
+                    if (model is Node_GateM gateModel) return new Node_GateVM(gateModel, this);
+                    if (model is Node_ExitM exitModel) return new Node_ExitVM(exitModel, this);
+                    
+                    throw new ArgumentOutOfRangeException(nameof(model));
+                }
+                , (Notifier viewModel) =>
+                {
+                    if (viewModel is Node_DialogVM dialogViewModel) return new Node_DialogEditorVM(dialogViewModel);
+                    if (viewModel is Node_ReplicaVM replicaViewModel) return new Node_ReplicaEditorVM(replicaViewModel);
+                    if (viewModel is Node_RandomVM randomViewModel) return new Node_RandomEditorVM(randomViewModel);
+                    if (viewModel is Node_TransitVM transitViewModel) return new Node_TransitEditorVM(transitViewModel);
+                    if (viewModel is Node_GateVM gateViewModel) return new Node_GateEditorVM(gateViewModel);
+                    if (viewModel is Node_ExitVM exitViewModel) return new Node_ExitEditorVM(exitViewModel);
+                    
+                    throw new ArgumentOutOfRangeException(nameof(viewModel));
+                }
             );
         }
 
@@ -165,34 +181,41 @@ namespace StorylineEditor.ViewModel
 
         private Notifier CreateReplicaEditorVM(ReplicaVM inViewModel)
         {
-            return new ReplicaEditorVM(inViewModel, this,
-            (Type type, Point position) =>
-            {
-                if (type == typeof(LinkM)) return new LinkM();
-                if (type == typeof(Node_ReplicaM)) return new Node_ReplicaM() { positionX = position.X, positionY = position.Y };
-                if (type == typeof(Node_RandomM)) return new Node_RandomM() { positionX = position.X, positionY = position.Y };
-                if (type == typeof(Node_TransitM)) return new Node_TransitM() { positionX = position.X, positionY = position.Y };
-
-                throw new ArgumentOutOfRangeException(nameof(type));
-            },
-            (BaseM model) =>
-            {
-                if (model is LinkM modelLink) return new LinkVM(modelLink, this);
-                if (model is Node_ReplicaM replicaModel) return new Node_ReplicaVM(replicaModel, this);
-                if (model is Node_RandomM randomModel) return new Node_RandomVM(randomModel, this);
-                if (model is Node_TransitM transitModel) return new Node_TransitVM(transitModel, this);
-
-                throw new ArgumentOutOfRangeException(nameof(model));
-            },
-            (Notifier viewModel) =>
-            {
-                if (viewModel is Node_ReplicaVM replicaViewModel) return new Node_ReplicaEditorVM(replicaViewModel);
-                if (viewModel is Node_RandomVM randomViewModel) return new Node_RandomEditorVM(randomViewModel);
-                if (viewModel is Node_TransitVM transitViewModel) return new Node_TransitEditorVM(transitViewModel);
-
-                throw new ArgumentOutOfRangeException(nameof(viewModel));
-            },
-            typeof(Node_ReplicaM)
+            return new ReplicaEditorVM(
+                inViewModel
+                , this
+                , new[]
+                {
+                    typeof(Node_ReplicaM)
+                    , typeof(Node_RandomM)
+                    , typeof(Node_TransitM)
+                }
+                , (Type type, Point position) =>
+                {
+                    if (type == typeof(LinkM)) return new LinkM();
+                    if (type == typeof(Node_ReplicaM)) return new Node_ReplicaM() { positionX = position.X, positionY = position.Y };
+                    if (type == typeof(Node_RandomM)) return new Node_RandomM() { positionX = position.X, positionY = position.Y };
+                    if (type == typeof(Node_TransitM)) return new Node_TransitM() { positionX = position.X, positionY = position.Y };
+                    
+                    throw new ArgumentOutOfRangeException(nameof(type));
+                }
+                , (BaseM model) =>
+                {
+                    if (model is LinkM modelLink) return new LinkVM(modelLink, this);
+                    if (model is Node_ReplicaM replicaModel) return new Node_ReplicaVM(replicaModel, this);
+                    if (model is Node_RandomM randomModel) return new Node_RandomVM(randomModel, this);
+                    if (model is Node_TransitM transitModel) return new Node_TransitVM(transitModel, this);
+                    
+                    throw new ArgumentOutOfRangeException(nameof(model));
+                }
+                , (Notifier viewModel) =>
+                {
+                    if (viewModel is Node_ReplicaVM replicaViewModel) return new Node_ReplicaEditorVM(replicaViewModel);
+                    if (viewModel is Node_RandomVM randomViewModel) return new Node_RandomEditorVM(randomViewModel);
+                    if (viewModel is Node_TransitVM transitViewModel) return new Node_TransitEditorVM(transitViewModel);
+                    
+                    throw new ArgumentOutOfRangeException(nameof(viewModel));
+                }
             );
         }
 

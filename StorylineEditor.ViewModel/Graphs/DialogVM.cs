@@ -16,6 +16,7 @@ using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Interface;
 using StorylineEditor.ViewModel.Nodes;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
@@ -36,18 +37,19 @@ namespace StorylineEditor.ViewModel.Graphs
         public CollectionViewSource FilteredDialogLocationCVS { get; }
         public DialogEditorVM(
             DialogVM viewModel
-            , object parent, Func<Type, Point, BaseM> modelCreator
+            , object parent
+            , IEnumerable<Type> nodeTypes
+            , Func<Type, Point, BaseM> modelCreator
             , Func<BaseM, Notifier> viewModelCreator
             , Func<Notifier, Notifier> editorCreator
-            , Type defaultNodeType
             )
             : base(
                   viewModel.Model
                   , parent
+                  , nodeTypes
                   , modelCreator
                   , viewModelCreator
                   , editorCreator
-                  , defaultNodeType
                   )
         {
             FilteredDialogCharacterCVS = new CollectionViewSource() { Source = ActiveContext.Characters };
