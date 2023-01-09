@@ -325,6 +325,8 @@ namespace StorylineEditor.ViewModel.Graphs
                         targetNodeViewModel.PositionY += deltaY;
                     }
 
+                    HashSet<string> withoutVms = new HashSet<string>();
+
                     foreach (string selectedId in selection)
                     {
                         if (NodesVMs.ContainsKey(selectedId))
@@ -337,12 +339,16 @@ namespace StorylineEditor.ViewModel.Graphs
                         }
                         else
                         {
-                            Node_BaseM nodeModel = Model.nodes.FirstOrDefault((node) => node.id == selectedId); ////// TODO Cache if will be slow
-                            if (nodeModel != null)
-                            {
-                                nodeModel.positionX += deltaX;
-                                nodeModel.positionY += deltaY;
-                            }
+                            withoutVms.Add(selectedId);
+                        }
+                    }
+
+                    foreach (var nodeModel in Model.nodes)
+                    {
+                        if (withoutVms.Contains(nodeModel.id))
+                        {
+                            nodeModel.positionX += deltaX;
+                            nodeModel.positionY += deltaY;
                         }
                     }
                 }
@@ -365,6 +371,8 @@ namespace StorylineEditor.ViewModel.Graphs
                         targetNodeViewModel.PositionY += deltaY;
                     }
 
+                    HashSet<string> withoutVms = new HashSet<string>();
+
                     foreach (string selectedId in selection)
                     {
                         if (NodesVMs.ContainsKey(selectedId))
@@ -377,12 +385,16 @@ namespace StorylineEditor.ViewModel.Graphs
                         }
                         else
                         {
-                            Node_BaseM nodeModel = Model.nodes.FirstOrDefault((node) => node.id == selectedId); ////// TODO Cache if will be slow
-                            if (nodeModel != null)
-                            {
-                                nodeModel.positionX += deltaX;
-                                nodeModel.positionY += deltaY;
-                            }
+                            withoutVms.Add(selectedId);
+                        }
+                    }
+
+                    foreach (var nodeModel in Model.nodes)
+                    {
+                        if (withoutVms.Contains(nodeModel.id))
+                        {
+                            nodeModel.positionX += deltaX;
+                            nodeModel.positionY += deltaY;
                         }
                     }
                 }
