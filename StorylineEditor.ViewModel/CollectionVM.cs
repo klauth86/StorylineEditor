@@ -24,24 +24,36 @@ using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel
 {
+    public class CutEntryVM : Notifier
+    {
+        public override string Id => null;
+        public BaseM Model { get; set; }
+        public Notifier ViewModel { get; set; }
+        public IList Context { get; set; }
+    }
+
     public class CollectionVM : Collection_BaseVM<List<BaseM>, object ,object>
     {
+        public ObservableCollection<CutEntryVM> CutVMs { get; }
+
         public CollectionVM(
             List<BaseM> inModel
             , object parent
-            , Func<Type, object, BaseM> modelCreator
-            , Func<BaseM, Notifier> viewModelCreator
-            , Func<Notifier, Notifier> editorCreator
+            , Func<Type, object, BaseM> mCreator
+            , Func<BaseM, Notifier> vmCreator
+            , Func<Notifier, Notifier> evmCreator
             )
             : base(
                   inModel
                   , parent
-                  , modelCreator
-                  , viewModelCreator
-                  , editorCreator
+                  , mCreator
+                  , vmCreator
+                  , evmCreator
                   )
         {
-            ICollectionView view = CollectionViewSource.GetDefaultView(ItemsVMs);
+            CutVMs = new ObservableCollection<CutEntryVM>();
+
+            ICollectionView view = CollectionViewSource.GetDefaultView(ItemVms);
 
             if (view != null)
             {
@@ -53,14 +65,14 @@ namespace StorylineEditor.ViewModel
             Context = new ObservableCollection<FolderM>();
             Context.Add(new FolderM() { name = "root", content = inModel });
 
-            foreach (var model in Model) { Add(null, _viewModelCreator(model)); }
+            foreach (var model in Model) { Add(null, _vmCreator(model)); }
         }
 
         private ICommand addCommand;
-        public override ICommand AddCommand => addCommand ?? (addCommand = new RelayCommand<bool>((isFolder) =>
+        public ICommand AddCommand => addCommand ?? (addCommand = new RelayCommand<bool>((isFolder) =>
         {
-            BaseM model = _modelCreator(isFolder ? typeof(FolderM) : null, null);
-            Notifier viewModel = _viewModelCreator(model);
+            BaseM model = _mCreator(isFolder ? typeof(FolderM) : null, null);
+            Notifier viewModel = _vmCreator(model);
 
             Add(model, viewModel);
 
@@ -68,7 +80,7 @@ namespace StorylineEditor.ViewModel
         }));
 
         private ICommand selectCommand;
-        public override ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<Notifier>((viewModel) => AddToSelection(viewModel, true), (viewModel) => viewModel != null));
+        public ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<Notifier>((viewModel) => AddToSelection(viewModel, true), (viewModel) => viewModel != null));
 
         private ICommand setContextCommand;
         public ICommand SetContextCommand => setContextCommand ?? (setContextCommand = new RelayCommand<FolderM>((folderM) =>
@@ -92,30 +104,82 @@ namespace StorylineEditor.ViewModel
                 Context.Add(folderM);
             }
 
-            RefreshItemsVMs();
-
-        }, (folderM) => folderM != null));
-
-        protected void RefreshItemsVMs()
-        {
             AddToSelection(null, true);
 
-            ItemsVMs.Clear();
+            ItemVms.Clear();
 
             HashSet<string> cutViewModels = new HashSet<string>();
             foreach (var cutEntryVM in CutVMs) cutViewModels.Add(cutEntryVM.ViewModel.Id);
 
             foreach (var model in Context.Last().content)
             {
-                Notifier viewModel = _viewModelCreator(model);
+                Notifier viewModel = _vmCreator(model);
                 viewModel.IsCut = cutViewModels.Contains(viewModel.Id);
                 Add(null, viewModel);
             }
 
             CommandManager.InvalidateRequerySuggested();
-        }
 
+        }, (folderM) => folderM != null));
 
+        private ICommand removeCommand;
+        public ICommand RemoveCommand => removeCommand ?? (removeCommand = new RelayCommand(() =>
+        {
+            List<Notifier> prevSelection = new List<Notifier>();
+            GetSelection(prevSelection);
+
+            AddToSelection(null, true);
+
+            foreach (var viewModel in prevSelection)
+            {
+                if (viewModel.Id == CharacterM.PLAYER_ID) continue;
+
+                BaseM model = (viewModel as IWithModel)?.GetModel<BaseM>();
+                Remove(viewModel, model, GetContext(model));
+            }
+
+            CommandManager.InvalidateRequerySuggested();
+
+        }, () => HasSelection() && SelectionCanBeDeleted()));
+
+        private ICommand cutCommand;
+        public ICommand CutCommand => cutCommand ?? (cutCommand = new RelayCommand(() =>
+        {
+            foreach (var cutEntryVM in CutVMs) cutEntryVM.ViewModel.IsCut = false;
+            CutVMs.Clear();
+
+            List<Notifier> selection = new List<Notifier>();
+            GetSelection(selection);
+
+            foreach (var viewModel in selection)
+            {
+                BaseM model = (viewModel as IWithModel)?.GetModel<BaseM>();
+                CutVMs.Add(new CutEntryVM() { Model = model, ViewModel = viewModel, Context = GetContext(model) });
+                viewModel.IsCut = true;
+            }
+
+            CommandManager.InvalidateRequerySuggested();
+
+        }, () => HasSelection()));
+
+        private ICommand pasteCommand;
+        public ICommand PasteCommand => pasteCommand ?? (pasteCommand = new RelayCommand(() =>
+        {
+            foreach (var cutEntryVM in CutVMs)
+            {
+                Remove(cutEntryVM.ViewModel, cutEntryVM.Model, cutEntryVM.Context);
+                Add(cutEntryVM.Model, cutEntryVM.ViewModel);
+
+                cutEntryVM.ViewModel.IsCut = false;
+            }
+
+            AddToSelection(CutVMs.Last().ViewModel, true);
+
+            CutVMs.Clear();
+
+            CommandManager.InvalidateRequerySuggested();
+
+        }, () => CutVMs.Count > 0));
 
         public override string Id => null;
         public ObservableCollection<FolderM> Context { get; }
@@ -138,7 +202,7 @@ namespace StorylineEditor.ViewModel
             if (selection != null)
             {
                 selection.IsSelected = true;
-                SelectionEditor = _editorCreator(selection);
+                SelectionEditor = _evmCreator(selection);
                 ActiveContext.ActiveGraph = SelectionEditor as IGraph;
             }
 

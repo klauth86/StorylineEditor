@@ -46,17 +46,17 @@ namespace StorylineEditor.ViewModel.Graphs
             ReplicaVM viewModel
             , object parent
             , IEnumerable<Type> nodeTypes
-            , Func<Type, Point, BaseM> modelCreator
-            , Func<BaseM, Notifier> viewModelCreator
-            , Func<Notifier, Notifier> editorCreator
+            , Func<Type, Point, BaseM> mCreator
+            , Func<BaseM, Notifier> vmCreator
+            , Func<Notifier, Notifier> evmCreator
             )
             : base(
                   viewModel.Model
                   , parent
                   , nodeTypes
-                  , modelCreator
-                  , viewModelCreator
-                  , editorCreator
+                  , mCreator
+                  , vmCreator
+                  , evmCreator
                   )
         {
             FilteredReplicaLocationCVS = new CollectionViewSource() { Source = ActiveContext.Locations };

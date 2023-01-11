@@ -48,16 +48,16 @@ namespace StorylineEditor.ViewModel.Graphs
             T model
             , U parent
             , IEnumerable<Type> nodeTypes
-            , Func<Type, Point, BaseM> modelCreator
-            , Func<BaseM, Notifier> viewModelCreator
-            , Func<Notifier, Notifier> editorCreator
+            , Func<Type, Point, BaseM> mCreator
+            , Func<BaseM, Notifier> vmCreator
+            , Func<Notifier, Notifier> evmCreator
             )
             : base(
                   model
                   , parent
-                  , modelCreator
-                  , viewModelCreator
-                  , editorCreator
+                  , mCreator
+                  , vmCreator
+                  , evmCreator
                   )
         {
             _nodeTypes = new HashSet<Type>(nodeTypes);
@@ -238,11 +238,9 @@ namespace StorylineEditor.ViewModel.Graphs
         protected ICommand playCommand;
         public ICommand PlayCommand => playCommand ?? (playCommand = new RelayCommand(() => ActiveContext.DialogService?.ShowDialog(ActiveContext.History), () => HasSelection()));
 
-        protected ICommand selectCommand;
-        public override ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<Notifier>((viewModel) => { }));
         protected void AddLinkVM(LinkM model, string fromId, double fromX, double fromY, string toId, double toX, double toY)
         {
-            LinkVM viewModel = (LinkVM)_viewModelCreator(model);
+            LinkVM viewModel = (LinkVM)_vmCreator(model);
 
             viewModel.FromX = fromX;
             viewModel.FromY = fromY;
@@ -497,7 +495,7 @@ namespace StorylineEditor.ViewModel.Graphs
             position.X = FromLocalToAbsoluteX(position.X);
             position.Y = FromLocalToAbsoluteY(position.Y);
 
-            BaseM model = _modelCreator(SelectedNodeType, position);
+            BaseM model = _mCreator(SelectedNodeType, position);
 
             AddNode(model, true);
         }
@@ -585,7 +583,7 @@ namespace StorylineEditor.ViewModel.Graphs
                                 {
                                     PreLinkNodes(targetNodeViewModel, toNodeViewModel);
 
-                                    LinkM model = (LinkM)_modelCreator(typeof(LinkM), new Point());
+                                    LinkM model = (LinkM)_mCreator(typeof(LinkM), new Point());
                                     model.fromNodeId = targetNodeViewModel.Id;
                                     model.toNodeId = toNodeViewModel.Id;
 
@@ -783,7 +781,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
             if (model is Node_ExitM) UpdateExitNames(model);
 
-            Notifier viewModel = _viewModelCreator(model);
+            Notifier viewModel = _vmCreator(model);
 
             NodesVMs.Add(model.id, viewModel);
             Add(null, viewModel);
@@ -1110,7 +1108,7 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 if (!NodesVMs.ContainsKey(model.id))
                 {
-                    Notifier viewModel = _viewModelCreator(model);
+                    Notifier viewModel = _vmCreator(model);
                     viewModel.IsSelected = selection.Contains(model.id);
                     ((INode)viewModel).IsRoot = RootNodeIds.Contains(model.id);
 
@@ -1130,7 +1128,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
 
         protected readonly HashSet<string> selection;
-        public override void AddToSelection(Notifier viewModel, bool resetSelection)
+        public override void AddToSelection(Notifier vmToSelect, bool resetSelection)
         {
             bool hasChanges = false;
 
@@ -1146,11 +1144,11 @@ namespace StorylineEditor.ViewModel.Graphs
                 selection.Clear();
             }
 
-            if (viewModel != null && !selection.Contains(viewModel.Id))
+            if (vmToSelect != null && !selection.Contains(vmToSelect.Id))
             {
-                if (selection.Add(viewModel.Id))
+                if (selection.Add(vmToSelect.Id))
                 {
-                    viewModel.IsSelected = true;
+                    vmToSelect.IsSelected = true;
 
                     hasChanges = true;
                 }
@@ -1158,7 +1156,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
             if (hasChanges)
             {
-                SelectionEditor = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? _editorCreator(NodesVMs[selection.First()]) : null;
+                SelectionEditor = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? _evmCreator(NodesVMs[selection.First()]) : null;
 
                 SelectionNode = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? (INode)NodesVMs[selection.First()] : null;
 
@@ -1172,7 +1170,7 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 if (selection.Remove(nodeViewModel.Id))
                 {
-                    SelectionEditor = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? _editorCreator(NodesVMs[selection.First()]) : null;
+                    SelectionEditor = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? _evmCreator(NodesVMs[selection.First()]) : null;
 
                     SelectionNode = selection.Count == 1 && NodesVMs.ContainsKey(selection.First()) ? (INode)NodesVMs[selection.First()] : null;
 
@@ -1213,7 +1211,7 @@ namespace StorylineEditor.ViewModel.Graphs
             Node_BaseM targetNodeModel = Model.nodes.FirstOrDefault((nodeModel) => nodeModel.id == nodeId);
             if (targetNodeModel != null)
             {
-                return _viewModelCreator(targetNodeModel) as INode;
+                return _vmCreator(targetNodeModel) as INode;
             }
 
             return null;
@@ -1312,9 +1310,9 @@ namespace StorylineEditor.ViewModel.Graphs
             previewLink.ToY = nodeViewModel.PositionY;
             UpdateLinkLocalPosition(previewLink, ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
 
-            ItemsVMs.Add(previewLink);
+            ItemVms.Add(previewLink);
         }
-        protected void HidePreviewLink() { ItemsVMs.Remove(previewLink); }
+        protected void HidePreviewLink() { ItemVms.Remove(previewLink); }
 
         protected void ShowSelectionBox(double positionX, double positionY)
         {
@@ -1324,12 +1322,12 @@ namespace StorylineEditor.ViewModel.Graphs
             selectionBox.ToY = positionY;
             UpdateSelectionBoxLocalPosition(selectionBox, ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
 
-            ItemsVMs.Add(selectionBox);
+            ItemVms.Add(selectionBox);
         }
-        protected void HideSelectionBox() { ItemsVMs.Remove(selectionBox); }
+        protected void HideSelectionBox() { ItemVms.Remove(selectionBox); }
 
-        protected void ShowPlayerIndicator(INode node) { ItemsVMs.Add(playerIndicator); }
-        protected void HidePlayerIndicator() { ItemsVMs.Remove(playerIndicator); }
+        protected void ShowPlayerIndicator(INode node) { ItemVms.Add(playerIndicator); }
+        protected void HidePlayerIndicator() { ItemVms.Remove(playerIndicator); }
 
         protected void ProcessSelectionBox()
         {

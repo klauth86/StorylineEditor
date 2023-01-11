@@ -243,7 +243,7 @@ StorylineEditor распространяется в надежде, что он�
     <Style TargetType="ItemsControl" x:Key="S_ItemsControl_Graph">
         <Setter Property="Background" Value="{StaticResource Color_Graph_Background}"></Setter>
         <Setter Property="ItemsPanel" Value="{StaticResource IPT_Canvas}"></Setter>
-        <Setter Property="ItemsSource" Value="{Binding ItemsVMs}"></Setter>
+        <Setter Property="ItemsSource" Value="{Binding ItemVms}"></Setter>
         <Setter Property="bhvrs:MouseExtBehavior.MouseEnterCommand" Value="{Binding RegisterContextCommand}"></Setter>
         <Setter Property="bhvrs:MouseExtBehavior.MouseLeaveCommand" Value="{Binding UnregisterContextCommand}"></Setter>
         <Setter Property="bhvrs:MouseExtBehavior.MouseRightButtonDownCommand" Value="{Binding FacadeCommand}"></Setter>
@@ -379,7 +379,7 @@ StorylineEditor распространяется в надежде, что он�
                 <ItemsControl BorderBrush="{StaticResource Color_Path}" BorderThickness="{StaticResource Thickness_Margin_1x}" Margin="{StaticResource Thickness_Margin_1x}" Grid.Row="1" ItemsPanel="{StaticResource IPT_WrapPanel}" ItemsSource="{Binding Context}"></ItemsControl>
 
                 <ScrollViewer Margin="{StaticResource Thickness_Margin_1x}" Grid.Row="2" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                    <ItemsControl ItemsSource="{Binding ItemsVMs}">
+                    <ItemsControl ItemsSource="{Binding ItemVms}">
                         <ItemsControl.ItemContainerStyle>
                             <Style>
                                 <Style.Triggers>

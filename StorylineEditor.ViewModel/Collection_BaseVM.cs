@@ -15,142 +15,23 @@ using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Interface;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Data;
-using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel
 {
-    public class CutEntryVM : Notifier
-    {
-        public override string Id => null;
-        public BaseM Model { get; set; }
-        public Notifier ViewModel { get; set; }
-        public IList Context { get; set; }
-    }
-
     public abstract class Collection_BaseVM<T, U, V>
         : SimpleVM<T, U>
         , ICollection_Base
         where T : class
         where U : class
     {
-        public Collection_BaseVM(
-            T model
-            , U parent
-            , Func<Type, V, BaseM> modelCreator
-            , Func<BaseM, Notifier> viewModelCreator
-            , Func<Notifier, Notifier> editorCreator)
-            : base(model, parent)
-        {
-            _modelCreator = modelCreator ?? throw new ArgumentNullException(nameof(modelCreator));
-            _viewModelCreator = viewModelCreator ?? throw new ArgumentNullException(nameof(viewModelCreator));
-            _editorCreator = editorCreator ?? throw new ArgumentNullException(nameof(editorCreator));
+        protected readonly Func<Type, V, BaseM> _mCreator;
+        protected readonly Func<BaseM, Notifier> _vmCreator;
+        protected readonly Func<Notifier, Notifier> _evmCreator;
 
-            CutVMs = new ObservableCollection<CutEntryVM>();
-
-            ItemsVMs = new ObservableCollection<Notifier>();
-        }
-
-        public virtual ICommand AddCommand => null;
-
-        private ICommand removeCommand;
-        public ICommand RemoveCommand => removeCommand ?? (removeCommand = new RelayCommand(() =>
-        {
-            List<Notifier> prevSelection = new List<Notifier>();            
-            GetSelection(prevSelection);
-            
-            AddToSelection(null, true);
-
-            foreach (var viewModel in prevSelection)
-            {
-                if (viewModel.Id == CharacterM.PLAYER_ID) continue;
-
-                BaseM model = (viewModel as IWithModel)?.GetModel<BaseM>();
-                Remove(viewModel, model, GetContext(model));
-            }
-
-            CommandManager.InvalidateRequerySuggested();
-
-        }, () => HasSelection() && SelectionCanBeDeleted()));
-
-        private ICommand cutCommand;
-        public ICommand CutCommand => cutCommand ?? (cutCommand = new RelayCommand(() =>
-        {
-            foreach (var cutEntryVM in CutVMs) cutEntryVM.ViewModel.IsCut = false;
-            CutVMs.Clear();
-
-            List<Notifier> selection = new List<Notifier>();
-            GetSelection(selection);
-
-            foreach (var viewModel in selection)
-            {
-                BaseM model = (viewModel as IWithModel)?.GetModel<BaseM>();
-                CutVMs.Add(new CutEntryVM() { Model = model, ViewModel = viewModel, Context = GetContext(model) });
-                viewModel.IsCut = true;
-            }
-
-            CommandManager.InvalidateRequerySuggested();
-
-        }, () => HasSelection()));
-
-        private ICommand pasteCommand;
-        public ICommand PasteCommand => pasteCommand ?? (pasteCommand = new RelayCommand(() =>
-        {
-            foreach (var cutEntryVM in CutVMs)
-            {
-                Remove(cutEntryVM.ViewModel, cutEntryVM.Model, cutEntryVM.Context);
-                Add(cutEntryVM.Model, cutEntryVM.ViewModel);
-
-                cutEntryVM.ViewModel.IsCut = false;
-            }
-
-            AddToSelection(CutVMs.Last().ViewModel, true);
-
-            CutVMs.Clear();
-
-            CommandManager.InvalidateRequerySuggested();
-
-        }, () => CutVMs.Count > 0));
-        public abstract ICommand SelectCommand{ get; }
-
-        // pass null to one of params if want to add only model/only viewModel
-        protected void Add(
-            BaseM model
-            , Notifier viewModel
-            )
-        {
-            if (model != null) GetContext(model).Add(model);
-
-            if (viewModel != null) ItemsVMs.Add(viewModel);
-        }
-
-        // pass null to one of params if want to remove only model/only viewModel
-        protected void Remove(
-            Notifier viewModel
-            , BaseM model
-            , IList context
-            )
-        {
-            if (viewModel != null) ItemsVMs.Remove(viewModel);
-
-            if (model != null && context != null) context.Remove(model);
-        }
-
-
-
-        protected readonly Func<Type, V, BaseM> _modelCreator;
-        protected readonly Func<BaseM, Notifier> _viewModelCreator;
-        protected readonly Func<Notifier, Notifier> _editorCreator;
-
-
-
-        public ObservableCollection<CutEntryVM> CutVMs { get; }
-        public ObservableCollection<Notifier> ItemsVMs { get; }
-
-
+        public ObservableCollection<Notifier> ItemVms { get; }
 
         protected Notifier selectionEditor;
         public Notifier SelectionEditor
@@ -166,36 +47,80 @@ namespace StorylineEditor.ViewModel
             }
         }
 
+        public Collection_BaseVM(
+            T model
+            , U parent
+            , Func<Type, V, BaseM> mCreator
+            , Func<BaseM, Notifier> vmCreator
+            , Func<Notifier, Notifier> evmCreator)
+            : base(model, parent)
+        {
+            _mCreator = mCreator ?? throw new ArgumentNullException(nameof(mCreator));
+            _vmCreator = vmCreator ?? throw new ArgumentNullException(nameof(vmCreator));
+            _evmCreator = evmCreator ?? throw new ArgumentNullException(nameof(evmCreator));
+
+            ItemVms = new ObservableCollection<Notifier>();
+        }
+
+        // pass null to one of params if want to add only model/only viewModel
+        protected void Add(
+            BaseM model
+            , Notifier viewModel
+            )
+        {
+            if (model != null) GetContext(model).Add(model);
+
+            if (viewModel != null) ItemVms.Add(viewModel);
+        }
+
+        // pass null to one of params if want to remove only model/only viewModel
+        protected void Remove(
+            Notifier viewModel
+            , BaseM model
+            , IList context
+            )
+        {
+            if (viewModel != null) ItemVms.Remove(viewModel);
+
+            if (model != null && context != null) context.Remove(model);
+        }
+
         public abstract IList GetContext(
             BaseM model
             );
+
+        public abstract void AddToSelection(
+            Notifier viewModel
+            , bool resetSelection
+            );
+
+        public abstract void GetSelection(
+            IList outSelection
+            );
+
+        public abstract bool HasSelection();
+
+        public abstract bool SelectionCanBeDeleted();
 
         public bool AddToSelectionById(
             string id
             , bool resetSelection
             )
         {
-            Notifier viewModelToSelect = ItemsVMs.FirstOrDefault(viewModel => viewModel.Id == id);
+            Notifier viewModel = ItemVms.FirstOrDefault(itemVm => itemVm.Id == id);
 
-            if (viewModelToSelect != null)
+            if (viewModel != null)
             {
-                AddToSelection(viewModelToSelect, true);
+                AddToSelection(
+                    viewModel
+                    , resetSelection
+                    );
                 return true;
             }
 
             return false;
         }
 
-        public void Refresh() { CollectionViewSource.GetDefaultView(ItemsVMs)?.Refresh(); }
-
-        public abstract void AddToSelection(
-            Notifier viewModel
-            , bool resetSelection
-            );
-        public abstract void GetSelection(
-            IList outSelection
-            );
-        public abstract bool HasSelection();
-        public abstract bool SelectionCanBeDeleted();
+        public void Refresh() { CollectionViewSource.GetDefaultView(ItemVms)?.Refresh(); }
     }
 }
