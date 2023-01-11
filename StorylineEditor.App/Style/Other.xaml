@@ -1069,7 +1069,7 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmn:Node_Journal_StepVM}">
-        <Grid>
+        <Grid IsHitTestVisible="False">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -1085,7 +1085,7 @@ StorylineEditor распространяется в надежде, что он�
 
             <TextBlock VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
-            <controls:TextBlockExt IsHitTestVisible="False" Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+            <controls:TextBlockExt Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
                                        Style="{StaticResource S_TextBlock_Node_Description}"></controls:TextBlockExt>
 
             <Separator Grid.ColumnSpan="2" Grid.Row="2"></Separator>
@@ -1112,7 +1112,7 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmn:Node_Journal_AlternativeVM}">
-        <Grid>
+        <Grid IsHitTestVisible="False">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -1128,7 +1128,7 @@ StorylineEditor распространяется в надежде, что он�
 
             <TextBlock VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
-            <controls:TextBlockExt IsHitTestVisible="False" Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+            <controls:TextBlockExt Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
                                        Style="{StaticResource S_TextBlock_Node_Description}"></controls:TextBlockExt>
 
             <Separator Grid.ColumnSpan="2" Grid.Row="2"></Separator>
@@ -1463,7 +1463,7 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmn:Node_ReplicaVM}">
-        <Grid>
+        <Grid IsHitTestVisible="False">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -1482,7 +1482,7 @@ StorylineEditor распространяется в надежде, что он�
                 <Run Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged, StringFormat=[{0}], TargetNullValue=''}"></Run>
             </TextBlock>
 
-            <controls:TextBlockExt IsHitTestVisible="False" Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+            <controls:TextBlockExt Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
                                        Style="{StaticResource S_TextBlock_Node_Description}"></controls:TextBlockExt>
 
             <Separator Grid.ColumnSpan="2" Grid.Row="2"></Separator>
@@ -1519,7 +1519,7 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmn:Node_DialogVM}">
-        <Grid>
+        <Grid IsHitTestVisible="False">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -1538,7 +1538,7 @@ StorylineEditor распространяется в надежде, что он�
                 <Run Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged, StringFormat=[{0}], TargetNullValue=''}"></Run>
             </TextBlock>
 
-            <controls:TextBlockExt IsHitTestVisible="False" Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+            <controls:TextBlockExt Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
                                        Style="{StaticResource S_TextBlock_Node_Description}"></controls:TextBlockExt>
 
             <Separator Grid.ColumnSpan="2" Grid.Row="2"></Separator>
@@ -1818,16 +1818,16 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmn:PreviewLinkVM}">
-        <Grid 
-                  bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
-                  bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
-            <Polygon x:Name="pg_Main" IsHitTestVisible="False" Points="{Binding StepPoints}" Stroke="{StaticResource Color_PreviewLink_Disallow}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" Fill="{StaticResource Color_PreviewLink_Disallow}"></Polygon>
-            <Polygon x:Name="pg_Indicator" IsHitTestVisible="False" Points="{Binding RemovePoints}" Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" Fill="{StaticResource Color_PreviewLink_Disallow}"></Polygon>
+        <Grid IsHitTestVisible="False"
+              bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+              bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+            <Polygon x:Name="pg_Main" Points="{Binding StepPoints}" Stroke="{StaticResource Color_PreviewLink_Disallow}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" Fill="{StaticResource Color_PreviewLink_Disallow}"></Polygon>
+            <Polygon x:Name="pg_Indicator" Points="{Binding RemovePoints}" Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" Fill="{StaticResource Color_PreviewLink_Disallow}"></Polygon>
             <!--Here two Polyline are used just for one Cross because of WPF render bug check -->
-            <Line x:Name="ln_1" IsHitTestVisible="False" X1="{Binding Cross1_X1, UpdateSourceTrigger=PropertyChanged}" Y1="{Binding Cross1_Y1, UpdateSourceTrigger=PropertyChanged}"
+            <Line x:Name="ln_1" X1="{Binding Cross1_X1, UpdateSourceTrigger=PropertyChanged}" Y1="{Binding Cross1_Y1, UpdateSourceTrigger=PropertyChanged}"
                       X2="{Binding Cross1_X2, UpdateSourceTrigger=PropertyChanged}" Y2="{Binding Cross1_Y2, UpdateSourceTrigger=PropertyChanged}"
                       Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{Binding CrossStrokeThickness, UpdateSourceTrigger=PropertyChanged}"></Line>
-            <Line x:Name="ln_2" IsHitTestVisible="False" X1="{Binding Cross2_X1, UpdateSourceTrigger=PropertyChanged}" Y1="{Binding Cross2_Y1, UpdateSourceTrigger=PropertyChanged}"
+            <Line x:Name="ln_2" X1="{Binding Cross2_X1, UpdateSourceTrigger=PropertyChanged}" Y1="{Binding Cross2_Y1, UpdateSourceTrigger=PropertyChanged}"
                       X2="{Binding Cross2_X2, UpdateSourceTrigger=PropertyChanged}" Y2="{Binding Cross2_Y2, UpdateSourceTrigger=PropertyChanged}"
                       Stroke="{StaticResource Color_Link_Foreground}" StrokeThickness="{Binding CrossStrokeThickness, UpdateSourceTrigger=PropertyChanged}"></Line>
         </Grid>
@@ -1872,17 +1872,17 @@ StorylineEditor распространяется в надежде, что он�
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmn:SelectionBoxVM}">
-        <Grid>
-            <Line IsHitTestVisible="False" X1="0" Y1="0"
+        <Grid IsHitTestVisible="False">
+            <Line X1="0" Y1="0"
                       X2="0" Y2="{Binding HandleY, UpdateSourceTrigger=PropertyChanged}"
                       Stroke="{StaticResource Color_Link}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" StrokeDashArray="4, 8"></Line>
-            <Line IsHitTestVisible="False" X1="0" Y1="{Binding HandleY, UpdateSourceTrigger=PropertyChanged}"
+            <Line X1="0" Y1="{Binding HandleY, UpdateSourceTrigger=PropertyChanged}"
                       X2="{Binding HandleX, UpdateSourceTrigger=PropertyChanged}" Y2="{Binding HandleY, UpdateSourceTrigger=PropertyChanged}"
                       Stroke="{StaticResource Color_Link}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" StrokeDashArray="4, 8"></Line>
-            <Line IsHitTestVisible="False" X1="{Binding HandleX, UpdateSourceTrigger=PropertyChanged}" Y1="{Binding HandleY, UpdateSourceTrigger=PropertyChanged}"
+            <Line X1="{Binding HandleX, UpdateSourceTrigger=PropertyChanged}" Y1="{Binding HandleY, UpdateSourceTrigger=PropertyChanged}"
                       X2="{Binding HandleX, UpdateSourceTrigger=PropertyChanged}" Y2="0"
                       Stroke="{StaticResource Color_Link}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" StrokeDashArray="4, 8"></Line>
-            <Line IsHitTestVisible="False" X1="{Binding HandleX, UpdateSourceTrigger=PropertyChanged}" Y1="0"
+            <Line X1="{Binding HandleX, UpdateSourceTrigger=PropertyChanged}" Y1="0"
                       X2="0" Y2="0"
                       Stroke="{StaticResource Color_Link}" StrokeThickness="{Binding StrokeThickness, UpdateSourceTrigger=PropertyChanged}" StrokeDashArray="4, 8"></Line>
         </Grid>
