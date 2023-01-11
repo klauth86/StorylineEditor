@@ -125,7 +125,7 @@ namespace StorylineEditor.App
 
         private void SetDataContext(StorylineVM storylineViewModel)
         {
-            ActiveContext.ActiveStoryline = storylineViewModel;
+            ActiveContext.Storyline = storylineViewModel;
             DataContext = storylineViewModel;
         }
 

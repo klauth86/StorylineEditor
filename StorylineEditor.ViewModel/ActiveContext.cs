@@ -31,15 +31,35 @@ namespace StorylineEditor.ViewModel
 
         public static HistoryVM History { get; }
 
+
         static ActiveContext()
         {
             History = new HistoryVM();
         }
 
 
+        private static StorylineVM _storyline;
+        public static StorylineVM Storyline
+        {
+            get => _storyline;
+            set
+            {
+                if (_storyline != value)
+                {
+                    Reset();
+                    _storyline = value;
+                }
+            }
+        }
 
-        public static StorylineVM ActiveStoryline { get; set; }
 
+        public static IWithModel LocationsTab { get; set; }
+        public static IWithModel CharactersTab { get; set; }
+        public static IWithModel ItemsTab { get; set; }
+        public static IWithModel ActorsTab { get; set; }
+        public static IWithModel JournalTab { get; set; }
+        public static IWithModel DialogsTab { get; set; }
+        public static IWithModel ReplicasTab { get; set; }
 
 
         public static event EventHandler ActiveTabChanged = delegate { };
@@ -54,17 +74,15 @@ namespace StorylineEditor.ViewModel
                 {
                     _activeTab = value;
                     ActiveTabChanged(null, EventArgs.Empty);
-                    
+
                     CommandManager.InvalidateRequerySuggested();
                 }
             }
         }
-        
 
 
         public static ICopyPaste ActiveCopyPaste { get; set; }
-        public static IGraph ActiveGraph { get; set; }        
-
+        public static IGraph ActiveGraph { get; set; }
 
 
         public static IEnumerable<BaseM> GetEnumerator(params List<BaseM>[] collectionSet)
@@ -88,25 +106,43 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        public static IEnumerable<BaseM> Locations => GetEnumerator(ActiveStoryline?.Model.locations);
+        public static IEnumerable<BaseM> Locations => GetEnumerator(Storyline?.Model.locations);
         public static BaseM GetLocation(string id) => Locations?.FirstOrDefault((model) => model.id == id);
 
-        public static IEnumerable<BaseM> Characters => GetEnumerator(ActiveStoryline?.Model.characters);
+        public static IEnumerable<BaseM> Characters => GetEnumerator(Storyline?.Model.characters);
         public static BaseM GetCharacter(string id) => Characters?.FirstOrDefault((model) => model.id == id);
 
-        public static IEnumerable<BaseM> Items => GetEnumerator(ActiveStoryline?.Model.items);
+        public static IEnumerable<BaseM> Items => GetEnumerator(Storyline?.Model.items);
         public static BaseM GetItem(string id) => Items?.FirstOrDefault((model) => model.id == id);
 
-        public static IEnumerable<BaseM> Actors => GetEnumerator(ActiveStoryline?.Model.actors);
+        public static IEnumerable<BaseM> Actors => GetEnumerator(Storyline?.Model.actors);
         public static BaseM GetActor(string id) => Actors?.FirstOrDefault((model) => model.id == id);
 
-        public static IEnumerable<BaseM> Quests => GetEnumerator(ActiveStoryline?.Model.journal);
+        public static IEnumerable<BaseM> Quests => GetEnumerator(Storyline?.Model.journal);
         public static BaseM GetQuest(string id) => Quests?.FirstOrDefault((model) => model.id == id);
 
-        public static IEnumerable<BaseM> DialogsAndReplicas => GetEnumerator(ActiveStoryline?.Model.dialogs, ActiveStoryline?.Model.replicas);
+        public static IEnumerable<BaseM> DialogsAndReplicas => GetEnumerator(Storyline?.Model.dialogs, Storyline?.Model.replicas);
         public static BaseM GetDialogOrReplica(string id) => DialogsAndReplicas?.FirstOrDefault((model) => model.id == id);
 
-        public static IEnumerable<BaseM> Dialogs => GetEnumerator(ActiveStoryline?.Model.dialogs);
+        public static IEnumerable<BaseM> Dialogs => GetEnumerator(Storyline?.Model.dialogs);
         public static BaseM GetDialog(string id) => Dialogs?.FirstOrDefault((model) => model.id == id);
+
+
+        public static void Reset()
+        {
+            ActiveGraph = null;
+
+            ActiveTab = null;
+
+            LocationsTab = null;
+            CharactersTab = null;
+            ItemsTab = null;
+            ActorsTab = null;
+            JournalTab = null;
+            DialogsTab = null;
+            ReplicasTab = null;
+
+            History.Clear();
+        }
     }
 }

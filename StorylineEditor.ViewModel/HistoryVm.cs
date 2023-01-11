@@ -1080,6 +1080,11 @@ namespace StorylineEditor.ViewModel
             _charactersCVSInit = false;
         }
 
+        public void Clear()
+        { 
+        
+        }
+
         public IGraph StartGraph { get; set; }
         public INode StartNode { get; set; }
         public string ActiveDialogEntryId { get; set; }
