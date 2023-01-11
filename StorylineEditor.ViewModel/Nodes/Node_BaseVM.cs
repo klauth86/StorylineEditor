@@ -14,6 +14,7 @@ using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Helpers;
 using StorylineEditor.ViewModel.Interface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Documents;
@@ -24,6 +25,7 @@ namespace StorylineEditor.ViewModel.Nodes
     public abstract class Node_BaseVM<T, U>
         : BaseVM<T, U>
         , INode
+        , IDisposable
         where T : Node_BaseM
         where U : class
     {
@@ -201,5 +203,10 @@ namespace StorylineEditor.ViewModel.Nodes
 
         public virtual IEnumerable<IPredicate> Predicates { get => Enumerable.Empty<IPredicate>(); }
         public virtual IEnumerable<IGameEvent> GameEvents { get => Enumerable.Empty<IGameEvent>(); }
+
+        public void Dispose()
+        {
+            descriptionFlow = null;
+        }
     }
 }
