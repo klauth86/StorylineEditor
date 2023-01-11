@@ -1477,8 +1477,10 @@ StorylineEditor распространяется в надежде, что он�
 
             <TextBlock Text="{StaticResource String_Icon_Node_Replica}" Style="{StaticResource S_TextBlock_Node_Icon}"></TextBlock>
 
-            <TextBlock x:Name="tb_CharacterName" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Character.name, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"></TextBlock>
-            <TextBlock x:Name="tb_OverrideName" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+            <TextBlock VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}">
+                <Run Text="{Binding Character.name, UpdateSourceTrigger=PropertyChanged}"></Run>
+                <Run Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged, StringFormat=[{0}], TargetNullValue=''}"></Run>
+            </TextBlock>
 
             <controls:TextBlockExt IsHitTestVisible="False" Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
                                        Style="{StaticResource S_TextBlock_Node_Description}"></controls:TextBlockExt>
@@ -1487,12 +1489,6 @@ StorylineEditor распространяется в надежде, что он�
 
             <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_ShortDescription}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
         </Grid>
-        <DataTemplate.Triggers>
-            <Trigger SourceName="tb_OverrideName" Property="Text" Value="">
-                <Setter TargetName="tb_OverrideName" Property="Visibility" Value="Collapsed"></Setter>
-                <Setter TargetName="tb_CharacterName" Property="Visibility" Value="Visible"></Setter>
-            </Trigger>
-        </DataTemplate.Triggers>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmn:Node_ReplicaEditorVM}">
@@ -1537,8 +1533,10 @@ StorylineEditor распространяется в надежде, что он�
 
             <TextBlock Text="{StaticResource String_Icon_Node_Dialog}" Style="{StaticResource S_TextBlock_Node_Icon}"></TextBlock>
 
-            <TextBlock x:Name="tb_CharacterName" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Character.name, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"></TextBlock>
-            <TextBlock x:Name="tb_OverrideName" VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+            <TextBlock VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}">
+                <Run Text="{Binding Character.name, UpdateSourceTrigger=PropertyChanged}"></Run>
+                <Run Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged, StringFormat=[{0}], TargetNullValue=''}"></Run>
+            </TextBlock>
 
             <controls:TextBlockExt IsHitTestVisible="False" Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
                                        Style="{StaticResource S_TextBlock_Node_Description}"></controls:TextBlockExt>
@@ -1547,12 +1545,6 @@ StorylineEditor распространяется в надежде, что он�
 
             <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_ShortDescription}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
         </Grid>
-        <DataTemplate.Triggers>
-            <Trigger SourceName="tb_OverrideName" Property="Text" Value="">
-                <Setter TargetName="tb_OverrideName" Property="Visibility" Value="Collapsed"></Setter>
-                <Setter TargetName="tb_CharacterName" Property="Visibility" Value="Visible"></Setter>
-            </Trigger>
-        </DataTemplate.Triggers>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmn:Node_DialogEditorVM}">

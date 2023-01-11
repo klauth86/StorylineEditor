@@ -79,7 +79,7 @@ namespace StorylineEditor.ViewModel.Nodes
 
         public string OverrideName
         {
-            get => Model.overrideName;
+            get => string.IsNullOrWhiteSpace(Model.overrideName) ? null : Model.overrideName;
             set
             {
                 if (Model.overrideName != value)
