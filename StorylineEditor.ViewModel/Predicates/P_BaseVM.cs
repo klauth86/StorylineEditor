@@ -13,6 +13,7 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Model.Predicates;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Interface;
+using System;
 
 namespace StorylineEditor.ViewModel.Predicates
 {
@@ -23,6 +24,8 @@ namespace StorylineEditor.ViewModel.Predicates
         where U : class
     {
         public P_BaseVM(T model, U parent) : base(model, parent) { }
+
+        public Type PredicateType => Model?.GetType();
 
         public bool IsInversed
         {

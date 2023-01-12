@@ -14,6 +14,7 @@ using StorylineEditor.Model;
 using StorylineEditor.Model.GameEvents;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Interface;
+using System;
 
 namespace StorylineEditor.ViewModel.GameEvents
 {
@@ -24,6 +25,8 @@ namespace StorylineEditor.ViewModel.GameEvents
         where U : class
     {
         public GE_BaseVM(T model, U parent) : base(model, parent) { }
+
+        public Type GameEventType => Model?.GetType();
 
         public bool IsExecutedOnLeave
         {

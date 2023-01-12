@@ -1158,7 +1158,14 @@ StorylineEditor распространяется в надежде, что он�
         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{StaticResource String_Icon_Node_Random}" Style="{StaticResource S_TextBlock_Node_Icon_Large}"></TextBlock>
     </DataTemplate>
 
-    <Style TargetType="TextBlock" x:Key="S_TextBlock_Predicate_Title" BasedOn="{StaticResource S_TextBlock}">
+    <Style TargetType="TextBlock" x:Key="S_TextBlock_InteractiveTitle" BasedOn="{StaticResource S_TextBlock}">
+        <Setter Property="FontWeight" Value="Bold"></Setter>
+        <Setter Property="FontSize" Value="{StaticResource FontSize_Medium}"></Setter>
+        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_Underline_2x}"></Setter>
+        <Setter Property="TextAlignment" Value="Center"></Setter>
+    </Style>
+
+    <Style TargetType="TextBlock" x:Key="S_TextBlock_Predicate_Title" BasedOn="{StaticResource S_TextBlock_InteractiveTitle}">
         <Style.Triggers>
             <Trigger Property="Tag" Value="{x:Type mp:P_CompositeM}">
                 <Setter Property="Text" Value="{StaticResource String_Tag_Predicate_P_CompositeM_Title}"></Setter>
@@ -1199,7 +1206,7 @@ StorylineEditor распространяется в надежде, что он�
         </Style.Triggers>
     </Style>
 
-    <Style TargetType="TextBlock" x:Key="S_TextBlock_GameEvent_Title" BasedOn="{StaticResource S_TextBlock}">
+    <Style TargetType="TextBlock" x:Key="S_TextBlock_GameEvent_Title" BasedOn="{StaticResource S_TextBlock_InteractiveTitle}">
         <Style.Triggers>
             <Trigger Property="Tag" Value="{x:Type mge:GE_Item_DropM}">
                 <Setter Property="Text" Value="{StaticResource String_Tag_GameEvent_GE_Item_DropM_Title}"></Setter>
