@@ -37,7 +37,7 @@ namespace StorylineEditor.ViewModel.Graphs
     }
 
     public abstract class GraphEditorVM<T, U>
-        : Collection_BaseVM<T, U, Point>
+        : CollectionVM<T, U, Point>
         , ICopyPaste
         , IGraph
         where T : GraphM

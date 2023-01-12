@@ -21,7 +21,7 @@ using System.Windows.Data;
 
 namespace StorylineEditor.ViewModel
 {
-    public abstract class Collection_BaseVM<T, U, V>
+    public abstract class CollectionVM<T, U, V>
         : SimpleVM<T, U>
         , ICollection_Base
         , IPartiallyStored
@@ -48,7 +48,7 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        public Collection_BaseVM(
+        public CollectionVM(
             T model
             , U parent
             , Func<Type, V, BaseM> mCreator

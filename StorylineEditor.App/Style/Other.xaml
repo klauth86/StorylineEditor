@@ -352,7 +352,7 @@ StorylineEditor распространяется в надежде, что он�
         <ContentControl Content="{Binding Path=(vm:ActiveContext.ActiveTab), UpdateSourceTrigger=PropertyChanged}"></ContentControl>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type vm:CollectionVM}">
+    <DataTemplate DataType="{x:Type vm:ListVM}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>

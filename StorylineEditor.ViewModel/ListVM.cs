@@ -32,11 +32,11 @@ namespace StorylineEditor.ViewModel
         public IList Context { get; set; }
     }
 
-    public class CollectionVM : Collection_BaseVM<List<BaseM>, object ,object>
+    public class ListVM : CollectionVM<List<BaseM>, object ,object>
     {
         public ObservableCollection<CutEntryVM> CutVMs { get; }
 
-        public CollectionVM(
+        public ListVM(
             List<BaseM> inModel
             , object parent
             , Func<Type, object, BaseM> mCreator
