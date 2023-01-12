@@ -72,7 +72,24 @@ namespace StorylineEditor.ViewModel
             {
                 if (value != _activeTab)
                 {
+                    if (_activeTab != null)
+                    {
+                        if (_activeTab is IPartiallyStored partiallyStoredTab)
+                        {
+                            partiallyStoredTab.OnLeave();
+                        }
+                    }
+
                     _activeTab = value;
+
+                    if (_activeTab != null)
+                    {
+                        if (_activeTab is IPartiallyStored partiallyStoredTab)
+                        {
+                            partiallyStoredTab.OnEnter();
+                        }
+                    }
+
                     ActiveTabChanged(null, EventArgs.Empty);
 
                     CommandManager.InvalidateRequerySuggested();

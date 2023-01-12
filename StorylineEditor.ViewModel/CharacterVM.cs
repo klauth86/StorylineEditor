@@ -13,6 +13,7 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Model;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Helpers;
+using StorylineEditor.ViewModel.Interface;
 using System.Windows.Documents;
 
 namespace StorylineEditor.ViewModel
@@ -22,7 +23,7 @@ namespace StorylineEditor.ViewModel
         public CharacterVM(CharacterM model, object parent) : base(model, parent) { }
     }
 
-    public class CharacterEditorVM : CharacterVM
+    public class CharacterEditorVM : CharacterVM, IPartiallyStored
     {
         public CharacterEditorVM(CharacterVM viewModel) : base(viewModel.Model, viewModel.Parent) { }
 
@@ -162,6 +163,14 @@ namespace StorylineEditor.ViewModel
                     DescriptionFemale = DescriptionFlowFemale != null ? FlowDocumentHelper.ConvertTo(DescriptionFlowFemale) : null;
                 }
             }
+        }
+
+        public void OnEnter() { }
+
+        public void OnLeave()
+        {
+            descriptionFlow = null;
+            descriptionFlowFemale = null;
         }
     }
 }

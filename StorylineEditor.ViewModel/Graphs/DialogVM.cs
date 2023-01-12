@@ -31,7 +31,7 @@ namespace StorylineEditor.ViewModel.Graphs
         public BaseM DialogLocation => ActiveContext.GetLocation(Model.locationId);
     }
 
-    public class DialogEditorVM : Graph_BaseVM<DialogM, object>
+    public class DialogEditorVM : GraphEditorVM<DialogM, object>
     {
         public CollectionViewSource FilteredDialogCharacterCVS { get; }
         public CollectionViewSource FilteredDialogLocationCVS { get; }

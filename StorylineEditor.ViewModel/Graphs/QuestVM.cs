@@ -27,7 +27,7 @@ namespace StorylineEditor.ViewModel.Graphs
         public QuestVM(QuestM model, object parent) : base(model, parent) { }
     }
 
-    public class QuestEditorVM : Graph_BaseVM<QuestM, object>
+    public class QuestEditorVM : GraphEditorVM<QuestM, object>
     {
         public QuestEditorVM(
             QuestVM viewModel

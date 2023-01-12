@@ -37,14 +37,14 @@ namespace StorylineEditor.ViewModel.Graphs
         Scale = 16
     }
 
-    public abstract class Graph_BaseVM<T, U>
+    public abstract class GraphEditorVM<T, U>
         : Collection_BaseVM<T, U, Point>
         , ICopyPaste
         , IGraph
         where T : GraphM
         where U : class
     {
-        public Graph_BaseVM(
+        public GraphEditorVM(
             T model
             , U parent
             , IEnumerable<Type> nodeTypes

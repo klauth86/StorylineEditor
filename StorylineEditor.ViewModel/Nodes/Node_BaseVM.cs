@@ -24,6 +24,7 @@ namespace StorylineEditor.ViewModel.Nodes
     public abstract class Node_BaseVM<T, U>
         : BaseVM<T, U>
         , INode
+        , IPartiallyStored
         where T : Node_BaseM
         where U : class
     {
@@ -201,5 +202,12 @@ namespace StorylineEditor.ViewModel.Nodes
 
         public virtual IEnumerable<IPredicate> Predicates { get => Enumerable.Empty<IPredicate>(); }
         public virtual IEnumerable<IGameEvent> GameEvents { get => Enumerable.Empty<IGameEvent>(); }
+
+        public void OnEnter() { }
+
+        public void OnLeave()
+        {
+            descriptionFlow = null;
+        }
     }
 }

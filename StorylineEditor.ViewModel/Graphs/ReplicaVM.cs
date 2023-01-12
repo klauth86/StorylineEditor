@@ -38,7 +38,7 @@ namespace StorylineEditor.ViewModel.Graphs
     }
 
     public class ReplicaEditorVM
-        : Graph_BaseVM<ReplicaM, object>
+        : GraphEditorVM<ReplicaM, object>
     {
         public CollectionViewSource FilteredReplicaLocationCVS { get; }
 

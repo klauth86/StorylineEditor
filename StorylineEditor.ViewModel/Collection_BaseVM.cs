@@ -24,6 +24,7 @@ namespace StorylineEditor.ViewModel
     public abstract class Collection_BaseVM<T, U, V>
         : SimpleVM<T, U>
         , ICollection_Base
+        , IPartiallyStored
         where T : class
         where U : class
     {
@@ -122,5 +123,27 @@ namespace StorylineEditor.ViewModel
         }
 
         public void Refresh() { CollectionViewSource.GetDefaultView(ItemVms)?.Refresh(); }
+
+        public void OnEnter()
+        {
+            if (SelectionEditor != null)
+            {
+                if (SelectionEditor is IPartiallyStored partiallyStoredEd)
+                {
+                    partiallyStoredEd.OnEnter();
+                }
+            }
+        }
+
+        public void OnLeave()
+        {
+            if (SelectionEditor != null)
+            {
+                if (SelectionEditor is IPartiallyStored partiallyStoredEd)
+                {
+                    partiallyStoredEd.OnLeave();
+                }
+            }
+        }
     }
 }
