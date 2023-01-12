@@ -53,42 +53,30 @@ namespace StorylineEditor.ViewModel
         }
 
 
-        public static IWithModel LocationsTab { get; set; }
-        public static IWithModel CharactersTab { get; set; }
-        public static IWithModel ItemsTab { get; set; }
-        public static IWithModel ActorsTab { get; set; }
-        public static IWithModel JournalTab { get; set; }
-        public static IWithModel DialogsTab { get; set; }
-        public static IWithModel ReplicasTab { get; set; }
+        public static IPartiallyStored LocationsTab { get; set; }
+        public static IPartiallyStored CharactersTab { get; set; }
+        public static IPartiallyStored ItemsTab { get; set; }
+        public static IPartiallyStored ActorsTab { get; set; }
+        public static IPartiallyStored JournalTab { get; set; }
+        public static IPartiallyStored DialogsTab { get; set; }
+        public static IPartiallyStored ReplicasTab { get; set; }
 
 
         public static event EventHandler ActiveTabChanged = delegate { };
 
-        private static IWithModel _activeTab;
-        public static IWithModel ActiveTab
+        private static IPartiallyStored _activeTab;
+        public static IPartiallyStored ActiveTab
         {
             get => _activeTab;
             set
             {
                 if (value != _activeTab)
                 {
-                    if (_activeTab != null)
-                    {
-                        if (_activeTab is IPartiallyStored partiallyStoredTab)
-                        {
-                            partiallyStoredTab.OnLeave();
-                        }
-                    }
+                    _activeTab?.OnLeave();
 
                     _activeTab = value;
 
-                    if (_activeTab != null)
-                    {
-                        if (_activeTab is IPartiallyStored partiallyStoredTab)
-                        {
-                            partiallyStoredTab.OnEnter();
-                        }
-                    }
+                    _activeTab?.OnEnter();
 
                     ActiveTabChanged(null, EventArgs.Empty);
 

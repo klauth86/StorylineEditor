@@ -35,7 +35,7 @@ namespace StorylineEditor.ViewModel
                 (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new LocationM() { name = "Новая локация" }; },
                 (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM, this); else return new LocationVM((LocationM)model, this); },
                 (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return new LocationEditorVM((LocationVM)viewModel); }));
-        }, () => ActiveContext.ActiveTab?.GetModel<object>() != Model.locations));
+        }, () => ActiveContext.ActiveTab == null || ActiveContext.ActiveTab != ActiveContext.LocationsTab));
 
         private ICommand charactersTabCommand;
         public ICommand CharactersTabCommand => charactersTabCommand ?? (charactersTabCommand = new RelayCommand(() =>
@@ -44,7 +44,7 @@ namespace StorylineEditor.ViewModel
                 (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new CharacterM() { name = "Новый персонаж" }; },
                 (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM, this); else return new CharacterVM((CharacterM)model, this); },
                 (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return new CharacterEditorVM((CharacterVM)viewModel); }));
-        }, () => ActiveContext.ActiveTab?.GetModel<object>() != Model.characters));
+        }, () => ActiveContext.ActiveTab == null || ActiveContext.ActiveTab != ActiveContext.CharactersTab));
 
         private ICommand itemsTabCommand;
         public ICommand ItemsTabCommand => itemsTabCommand ?? (itemsTabCommand = new RelayCommand(() =>
@@ -53,7 +53,7 @@ namespace StorylineEditor.ViewModel
             (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new ItemM() { name = "Новый предмет" }; },
             (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM, this); else return new ItemVM((ItemM)model, this); },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return new ItemEditorVM((ItemVM)viewModel); }));
-        }, () => ActiveContext.ActiveTab?.GetModel<object>() != Model.items));
+        }, () => ActiveContext.ActiveTab == null || ActiveContext.ActiveTab != ActiveContext.ItemsTab));
 
         private ICommand actorsTabCommand;
         public ICommand ActorsTabCommand => actorsTabCommand ?? (actorsTabCommand = new RelayCommand(() =>
@@ -62,7 +62,7 @@ namespace StorylineEditor.ViewModel
             (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new ActorM() { name = "Новый актор" }; },
             (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM, this); else return new ActorVM((ActorM)model, this); },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return new ActorEditorVM((ActorVM)viewModel); }));
-        }, () => ActiveContext.ActiveTab?.GetModel<object>() != Model.actors));
+        }, () => ActiveContext.ActiveTab == null || ActiveContext.ActiveTab != ActiveContext.ActorsTab));
 
         private ICommand journalTabCommand;
         public ICommand JournalTabCommand => journalTabCommand ?? (journalTabCommand = new RelayCommand(() =>
@@ -71,7 +71,7 @@ namespace StorylineEditor.ViewModel
             (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new QuestM() { name = "Новый квест" }; },
             (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM, this); else return new QuestVM((QuestM)model, this); },
             (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return CreateQuestEditorVM((QuestVM)viewModel); }));
-        }, () => ActiveContext.ActiveTab?.GetModel<object>() != Model.journal));
+        }, () => ActiveContext.ActiveTab == null || ActiveContext.ActiveTab != ActiveContext.JournalTab));
 
         private Notifier CreateQuestEditorVM(QuestVM inViewModel)
         {
@@ -116,7 +116,7 @@ namespace StorylineEditor.ViewModel
                 (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new DialogM() { name = "Новый диалог" }; },
                 (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM, this); else return new DialogVM((DialogM)model, this); },
                 (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return CreateDialogEditorVM((DialogVM)viewModel); }));
-        }, () => ActiveContext.ActiveTab?.GetModel<object>() != Model.dialogs));
+        }, () => ActiveContext.ActiveTab == null || ActiveContext.ActiveTab != ActiveContext.DialogsTab));
 
         private Notifier CreateDialogEditorVM(DialogVM inViewModel)
         {
@@ -177,7 +177,7 @@ namespace StorylineEditor.ViewModel
                 (Type type, object param) => { if (type == typeof(FolderM)) return new FolderM() { name = "Новая папка" }; else return new ReplicaM() { name = "Новая реплика" }; },
                 (BaseM model) => { if (model is FolderM folderM) return new FolderVM(folderM, this); else return new ReplicaVM((ReplicaM)model, this); },
                 (Notifier viewModel) => { if (viewModel is FolderVM folderVM) return new FolderEditorVM(folderVM); else return CreateReplicaEditorVM((ReplicaVM)viewModel); }));
-        }, () => ActiveContext.ActiveTab?.GetModel<object>() != Model.replicas));
+        }, () => ActiveContext.ActiveTab == null || ActiveContext.ActiveTab != ActiveContext.ReplicasTab));
 
         private Notifier CreateReplicaEditorVM(ReplicaVM inViewModel)
         {
