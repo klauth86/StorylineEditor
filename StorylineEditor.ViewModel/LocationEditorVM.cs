@@ -10,12 +10,10 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using StorylineEditor.Model.Graphs;
-
-namespace StorylineEditor.ViewModel.Graphs
+namespace StorylineEditor.ViewModel
 {
-    public class QuestVM : GraphVM<QuestM>
+    public class LocationEditorVM : LocationVM
     {
-        public QuestVM(QuestM model, object parent) : base(model, parent) { }
+        public LocationEditorVM(LocationVM viewModel) : base(viewModel.Model, viewModel.Parent) { }
     }
 }

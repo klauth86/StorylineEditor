@@ -19,9 +19,4 @@ namespace StorylineEditor.ViewModel
     {
         public LocationVM(LocationM model, object parent) : base(model, parent) { }
     }
-
-    public class LocationEditorVM : LocationVM
-    {
-        public LocationEditorVM(LocationVM viewModel) : base(viewModel.Model, viewModel.Parent) { }
-    }
 }
