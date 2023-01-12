@@ -74,6 +74,8 @@
     <Compile Include="DlgWindow.xaml.cs">
       <DependentUpon>DlgWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Service\FlowDocumentService.cs" />
+    <Compile Include="Service\SerializationService.cs" />
     <Compile Include="ServiceFacade.cs" />
     <Page Include="Controls\NumericUpDown.xaml">
       <SubType>Designer</SubType>

@@ -10,38 +10,16 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using System;
-using System.IO;
 using System.Windows.Documents;
-using System.Windows.Markup;
-using System.Xml;
 
-namespace StorylineEditor.ViewModel.Helpers
+namespace StorylineEditor.ViewModel.Interface
 {
-    public static class FlowDocumentHelper
+    public interface IFlowDocumentService
     {
-        public static string GetTextFromFlowDoc(FlowDocument document) { return document != null ? new TextRange(document.ContentStart, document.ContentEnd).Text : null; }
+        string GetTextFromFlowDoc(FlowDocument document);
 
-        public static string ConvertTo(FlowDocument document) { return XamlWriter.Save(document); }
+        string ConvertTo(FlowDocument document);
 
-        public static FlowDocument ConvertBack(string value)
-        {
-            if (!string.IsNullOrEmpty(value))
-            {
-                using (var stringReader = new StringReader(value))
-                {
-                    try
-                    {
-                        using (var xmlTextReader = new XmlTextReader(stringReader))
-                        {
-                            return (FlowDocument)XamlReader.Load(xmlTextReader);
-                        }
-                    }
-                    catch (Exception) { } ////// TODO
-                }
-            }
-
-            return new FlowDocument();
-        }
+        FlowDocument ConvertBack(string value);
     }
 }

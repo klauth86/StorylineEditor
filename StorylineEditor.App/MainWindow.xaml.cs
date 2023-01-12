@@ -11,11 +11,11 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.App.Config;
+using StorylineEditor.App.Service;
 using StorylineEditor.Model;
 using StorylineEditor.Model.Graphs;
 using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModel;
-using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Config;
 using StorylineEditor.ViewModel.Interface;
 using System;
@@ -33,11 +33,14 @@ namespace StorylineEditor.App
     {
         static MainWindow()
         {
+            ActiveContext.SerializationService = new SerializationService();
+            ActiveContext.FlowDocumentService = new FlowDocumentService();
+
             if (File.Exists(ServiceFacade.ConfigXmlPath))
             {
                 using (var fileStream = ServiceFacade.FileService.OpenFile(ServiceFacade.ConfigXmlPath, FileMode.Open))
                 {
-                    ConfigM.Config = SerializeService.Deserialize<ConfigM>(fileStream);
+                    ConfigM.Config = ActiveContext.SerializationService.Deserialize<ConfigM>(fileStream);
                 }
             }
             else
@@ -46,7 +49,7 @@ namespace StorylineEditor.App
 
                 using (var fileStream = ServiceFacade.FileService.OpenFile(ServiceFacade.ConfigXmlPath, FileMode.Create))
                 {
-                    SerializeService.Serialize(fileStream, ConfigM.Config);
+                    ActiveContext.SerializationService.Serialize(fileStream, ConfigM.Config);
                 }
             }
         }
@@ -87,7 +90,7 @@ namespace StorylineEditor.App
             try
             {
                 fileStream = File.Open(path, FileMode.Open);
-                var model = SerializeService.Deserialize<StorylineM>(fileStream);
+                var model = ActiveContext.SerializationService.Deserialize<StorylineM>(fileStream);
                 ValidateModel(model);
 
                 SetDataContext(new StorylineVM(model));
@@ -115,7 +118,7 @@ namespace StorylineEditor.App
             {
                 using (var fileStream = File.Open(path, FileMode.Create))
                 {
-                    SerializeService.Serialize(fileStream, storylineVM.Model);
+                    ActiveContext.SerializationService.Serialize(fileStream, storylineVM.Model);
 
                     var assemblyName = Assembly.GetExecutingAssembly().GetName();
                     Title = string.Format("{0} [{1}]", assemblyName.Name, path);

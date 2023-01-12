@@ -15,7 +15,6 @@ using StorylineEditor.Model.Graphs;
 using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Config;
-using StorylineEditor.ViewModel.Helpers;
 using StorylineEditor.ViewModel.Interface;
 using StorylineEditor.ViewModel.Nodes;
 using System;
@@ -94,14 +93,14 @@ namespace StorylineEditor.ViewModel.Graphs
 
                 if (nodeModel is Node_ReplicaM replicaNodeModel)
                 {
-                    var flow = FlowDocumentHelper.ConvertBack(replicaNodeModel.description);
-                    var flowDocText = FlowDocumentHelper.GetTextFromFlowDoc(flow);
+                    var flow = ActiveContext.FlowDocumentService.ConvertBack(replicaNodeModel.description);
+                    var flowDocText = ActiveContext.FlowDocumentService.GetTextFromFlowDoc(flow);
                     replicaNodeModel.name = string.Format("[{0}]: {1}", ActiveContext.GetCharacter(replicaNodeModel.characterId)?.name ?? "???", flowDocText);
                 }
                 else if (nodeModel is Node_DialogM dialogNodeModel)
                 {
-                    var flow = FlowDocumentHelper.ConvertBack(dialogNodeModel.description);
-                    var flowDocText = FlowDocumentHelper.GetTextFromFlowDoc(flow);
+                    var flow = ActiveContext.FlowDocumentService.ConvertBack(dialogNodeModel.description);
+                    var flowDocText = ActiveContext.FlowDocumentService.GetTextFromFlowDoc(flow);
                     dialogNodeModel.name = string.Format("[{0}]: {1}", ActiveContext.GetCharacter(dialogNodeModel.characterId)?.name ?? "???", flowDocText);
                 }
             }
@@ -696,12 +695,12 @@ namespace StorylineEditor.ViewModel.Graphs
                 nodeModel.positionY -= OffsetY;
             }
 
-            return SerializeService.Serialize(graphModelCopy);
+            return ActiveContext.SerializationService.Serialize(graphModelCopy);
         }
 
         public void Paste(string clipboard)
         {
-            GraphM graphModel = SerializeService.Deserialize<GraphM>(clipboard);
+            GraphM graphModel = ActiveContext.SerializationService.Deserialize<GraphM>(clipboard);
 
             if (graphModel != null)
             {

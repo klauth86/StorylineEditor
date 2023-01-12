@@ -101,7 +101,7 @@ namespace StorylineEditor.App.Config
         {
             using (var fileStream = ServiceFacade.FileService.OpenFile(ServiceFacade.ConfigXmlPath, FileMode.Create))
             {
-                SerializeService.Serialize(fileStream, ConfigM.Config);
+                ActiveContext.SerializationService.Serialize(fileStream, ConfigM.Config);
             }
         }
 

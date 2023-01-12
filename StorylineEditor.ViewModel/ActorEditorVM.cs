@@ -10,9 +10,6 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using StorylineEditor.Model;
-using StorylineEditor.ViewModel.Common;
-using StorylineEditor.ViewModel.Helpers;
 using StorylineEditor.ViewModel.Interface;
 using System.Windows.Documents;
 
@@ -81,7 +78,7 @@ namespace StorylineEditor.ViewModel
             {
                 if (descriptionFlow == null)
                 {
-                    descriptionFlow = FlowDocumentHelper.ConvertBack(Description);
+                    descriptionFlow = ActiveContext.FlowDocumentService.ConvertBack(Description);
                     descriptionFlow.Name = Id;
                 }
 
@@ -99,7 +96,7 @@ namespace StorylineEditor.ViewModel
                 {
                     documentChangedFlag = value;
 
-                    Description = DescriptionFlow != null ? FlowDocumentHelper.ConvertTo(DescriptionFlow) : null;
+                    Description = DescriptionFlow != null ? ActiveContext.FlowDocumentService.ConvertTo(DescriptionFlow) : null;
                 }
             }
         }
@@ -111,7 +108,7 @@ namespace StorylineEditor.ViewModel
             {
                 if (descriptionFlowFemale == null)
                 {
-                    descriptionFlowFemale = FlowDocumentHelper.ConvertBack(DescriptionFemale);
+                    descriptionFlowFemale = ActiveContext.FlowDocumentService.ConvertBack(DescriptionFemale);
                     descriptionFlowFemale.Name = Id;
                 }
 
@@ -129,7 +126,7 @@ namespace StorylineEditor.ViewModel
                 {
                     documentChangedFlagFemale = value;
 
-                    DescriptionFemale = DescriptionFlowFemale != null ? FlowDocumentHelper.ConvertTo(DescriptionFlowFemale) : null;
+                    DescriptionFemale = DescriptionFlowFemale != null ? ActiveContext.FlowDocumentService.ConvertTo(DescriptionFlowFemale) : null;
                 }
             }
         }

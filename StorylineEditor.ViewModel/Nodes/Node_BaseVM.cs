@@ -12,7 +12,6 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model.Nodes;
 using StorylineEditor.ViewModel.Common;
-using StorylineEditor.ViewModel.Helpers;
 using StorylineEditor.ViewModel.Interface;
 using System.Collections.Generic;
 using System.Linq;
@@ -173,7 +172,7 @@ namespace StorylineEditor.ViewModel.Nodes
             {
                 if (descriptionFlow == null)
                 {
-                    descriptionFlow = FlowDocumentHelper.ConvertBack(Description);
+                    descriptionFlow = ActiveContext.FlowDocumentService.ConvertBack(Description);
                     descriptionFlow.Name = Id;
                 }
 
@@ -191,7 +190,7 @@ namespace StorylineEditor.ViewModel.Nodes
                 {
                     documentChangedFlag = value;
                     
-                    Description = DescriptionFlow != null ? FlowDocumentHelper.ConvertTo(DescriptionFlow) : null;
+                    Description = DescriptionFlow != null ? ActiveContext.FlowDocumentService.ConvertTo(DescriptionFlow) : null;
 
                     RefreshModelName();
                 }

@@ -10,7 +10,6 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using StorylineEditor.ViewModel.Helpers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -33,7 +32,7 @@ namespace StorylineEditor.App.Controls
             {
                 textBlock.Inlines.Clear();
 
-                FlowDocument document = FlowDocumentHelper.ConvertBack(e.NewValue?.ToString());
+                FlowDocument document = ViewModel.ActiveContext.FlowDocumentService.ConvertBack(e.NewValue?.ToString()); // TODO
 
                 int i = 0;
 
