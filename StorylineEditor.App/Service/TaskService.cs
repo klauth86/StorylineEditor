@@ -10,13 +10,14 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.ViewModel.Interface;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace StorylineEditor.ViewModel
+namespace StorylineEditor.App.Service
 {
-    public static class MonoTaskFacade
+    public class TaskService : ITaskService
     {
         private static readonly object _locker = new object();
 
@@ -24,16 +25,16 @@ namespace StorylineEditor.ViewModel
 
         private static CancellationTokenSource _cancellationTokenSource;
 
-        public static void Stop()
+        public void Stop()
         {
             _isPaused = false; // cancellation should be consiedered inside tickAction
 
             _cancellationTokenSource?.Cancel();
         }
 
-        public static void SetIsPaused(bool isPaused) { _isPaused = isPaused; }
+        public void SetIsPaused(bool isPaused) { _isPaused = isPaused; }
 
-        public static async void Start(Func<CancellationToken, double, TaskStatus> tickAction, TimeSpan tickTimeSpan, double alphaStep, Action<TaskStatus> finAction, Action<TaskStatus> callbackAction)
+        public async void Start(Func<CancellationToken, double, TaskStatus> tickAction, TimeSpan tickTimeSpan, double alphaStep, Action<TaskStatus> finAction, Action<TaskStatus> callbackAction)
         {
             Stop();
 

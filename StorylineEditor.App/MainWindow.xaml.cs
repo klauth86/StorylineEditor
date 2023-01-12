@@ -35,6 +35,7 @@ namespace StorylineEditor.App
         {
             ActiveContext.SerializationService = new SerializationService();
             ActiveContext.FlowDocumentService = new FlowDocumentService();
+            ActiveContext.TaskService = new TaskService();
 
             if (File.Exists(ServiceFacade.ConfigXmlPath))
             {

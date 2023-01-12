@@ -133,7 +133,7 @@ namespace StorylineEditor.ViewModel.Graphs
             const int stepCount = 64;
             const int stepDuration = durationMsec / stepCount;
 
-            MonoTaskFacade.Start((token, alpha) =>
+            ActiveContext.TaskService.Start((token, alpha) =>
             {
                 if (token.IsCancellationRequested) return TaskStatus.Canceled;
 
@@ -170,7 +170,7 @@ namespace StorylineEditor.ViewModel.Graphs
             const int stepCount = 64;
             const int stepDuration = durationMsec / stepCount;
 
-            MonoTaskFacade.Start((token, alpha) =>
+            ActiveContext.TaskService.Start((token, alpha) =>
             {
                 if (token.IsCancellationRequested) return TaskStatus.Canceled;
 

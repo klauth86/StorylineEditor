@@ -53,6 +53,7 @@
     <Compile Include="Interface\IPositioned.cs" />
     <Compile Include="Interface\IPredicate.cs" />
     <Compile Include="Interface\ISerializationService.cs" />
+    <Compile Include="Interface\ITaskService.cs" />
     <Compile Include="Interface\IWithModel.cs" />
     <Compile Include="ItemEditorVM.cs" />
     <Compile Include="LocationEditorVM.cs" />
@@ -105,7 +106,6 @@
     <Compile Include="Common\SimpleVM.cs" />
     <Compile Include="CollectionVM.cs" />
     <Compile Include="StorylineVM.cs" />
-    <Compile Include="TaskFacade.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
