@@ -2364,17 +2364,25 @@ StorylineEditor распространяется в надежде, что он�
                         <CheckBox IsChecked="{Binding FullMode}" Content="{StaticResource String_Tag_Player_FullMode}"></CheckBox>
 
                         <StackPanel Grid.Row="1" Orientation="Horizontal">
-                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Stop}" ToolTip="{StaticResource String_Player_Stop_Tooltip}" Command="{Binding StopCommand}"></Button>
-                            <Grid>
+                            <Button VerticalAlignment="Center" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Stop}" ToolTip="{StaticResource String_Player_Stop_Tooltip}" Command="{Binding StopCommand}"></Button>
+                            <Grid VerticalAlignment="Center">
                                 <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Pause}" ToolTip="{StaticResource String_Player_Pause_Tooltip}" Command="{Binding PauseCommand}"></Button>
                                 <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Play}" ToolTip="{StaticResource String_Player_Play_Tooltip}" Command="{Binding PlayCommand}"></Button>
                             </Grid>
-                            <Button Style="{StaticResource S_Button_Gender}"></Button>
-                            <controls:NumericUpDown_Float Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Value="{Binding Duration,UpdateSourceTrigger=PropertyChanged}"
+                            <Button VerticalAlignment="Center" Style="{StaticResource S_Button_Gender}"></Button>
+                            <GroupBox Margin="{StaticResource Thickness_Margin_Underline_6x}" Header="{StaticResource String_Tag_Player_PlayRate}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Player}">
+                                <controls:NumericUpDown_Float Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Value="{Binding PlayRate,UpdateSourceTrigger=PropertyChanged, StringFormat=N3}"
+                                            ButtonIncStyle="{StaticResource S_Button_Square_Auto}" ButtonIncContent="{StaticResource String_Icon_Plus}"
+                                            ButtonDecStyle="{StaticResource S_Button_Square_Auto}" ButtonDecContent="{StaticResource String_Icon_Minus}"
+                                            MinValue="0.01" MaxValue="10" Step="0.01" MinWidth="{StaticResource Double_Node_MinWidth}"></controls:NumericUpDown_Float>
+                            </GroupBox>
+                            <GroupBox Margin="{StaticResource Thickness_Margin_Underline_6x}" Header="{StaticResource String_Tag_Player_Duration}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Player}">
+                                <controls:NumericUpDown_Float Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Value="{Binding Duration,UpdateSourceTrigger=PropertyChanged}"
                                             ButtonIncStyle="{StaticResource S_Button_Square_Auto}" ButtonIncContent="{StaticResource String_Icon_Plus}"
                                             ButtonDecStyle="{StaticResource S_Button_Square_Auto}" ButtonDecContent="{StaticResource String_Icon_Minus}"
                                             MinValue="1" MaxValue="60" Step="1" MinWidth="{StaticResource Double_Node_MinWidth}"></controls:NumericUpDown_Float>
-                            <TextBlock Padding="{StaticResource Thickness_Padding_LeftRight}" VerticalAlignment="Center" Style="{StaticResource S_TextBlock_Graph_Bold}" Text="{Binding TimeLeft, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                            </GroupBox>
+                            <TextBlock VerticalAlignment="Center" Padding="{StaticResource Thickness_Padding_LeftRight}" Style="{StaticResource S_TextBlock_Graph_Bold}" Text="{Binding TimeLeft, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
                         </StackPanel>
                     </Grid>
 

@@ -308,6 +308,7 @@ namespace StorylineEditor.ViewModel
 
             FullMode = false;
             Gender = GENDER.MALE;
+            PlayRate = 1;
             Duration = 4;
             TimeLeft = 0;
 
@@ -723,6 +724,20 @@ namespace StorylineEditor.ViewModel
 
         protected ICommand toggleGenderCommand;
         public ICommand ToggleGenderCommand => toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand(() => Gender = (byte)(3 - Gender), () => PlayerContext == null));
+
+        protected double playRate;
+        public double PlayRate
+        {
+            get => playRate;
+            set
+            {
+                if (value != playRate)
+                {
+                    playRate = value;
+                    Notify(nameof(PlayRate));
+                }
+            }
+        }
 
         protected double duration;
         public double Duration

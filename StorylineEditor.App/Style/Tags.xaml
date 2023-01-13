@@ -298,4 +298,8 @@ StorylineEditor распространяется в надежде, что он�
 
     <sys:String x:Key="String_Tag_Player_Error">ОШИБКА</sys:String>
 
+    <sys:String x:Key="String_Tag_Player_PlayRate">Скорость</sys:String>
+
+    <sys:String x:Key="String_Tag_Player_Duration">Время вершины</sys:String>
+    
 </ResourceDictionary>
