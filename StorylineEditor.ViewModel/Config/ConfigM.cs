@@ -50,8 +50,18 @@ namespace StorylineEditor.ViewModel.Config
             Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.SELECTION_SIMPLE, MouseButton = MouseButton.Left });
             Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.SELECTION_ADDITIVE, MouseButton = MouseButton.Left, ModifierKeys = ModifierKeys.Control });
             Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.SELECTION_BOX, MouseButton = MouseButton.Left, ModifierKeys = ModifierKeys.Shift });
+
+            Config.PlayRate = 100;
+            Config.Duration = 4;
         }
 
+
+        // CANVAS COMMANDS
         public List<UserActionM> UserActions { get; set; }
+
+
+        // DIALOG PLAYER
+        public float PlayRate { get; set; }
+        public float Duration { get; set; }
     }
 }

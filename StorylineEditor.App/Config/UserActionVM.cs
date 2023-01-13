@@ -13,7 +13,6 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.ViewModel;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Config;
-using System.IO;
 using System.Windows.Input;
 
 namespace StorylineEditor.App.Config
@@ -32,7 +31,7 @@ namespace StorylineEditor.App.Config
                     Model.MouseButton = value;
                     Notify(nameof(MouseButton));
 
-                    SaveConfig();
+                    ActiveContext.FileService.SaveConfig();
                 }
             }
         }
@@ -53,7 +52,7 @@ namespace StorylineEditor.App.Config
 
                 Notify(nameof(IsAlt));
 
-                SaveConfig();
+                ActiveContext.FileService.SaveConfig();
             }
         }
 
@@ -73,7 +72,7 @@ namespace StorylineEditor.App.Config
 
                 Notify(nameof(IsControl));
 
-                SaveConfig();
+                ActiveContext.FileService.SaveConfig();
             }
         }
 
@@ -93,15 +92,7 @@ namespace StorylineEditor.App.Config
 
                 Notify(nameof(IsShift));
 
-                SaveConfig();
-            }
-        }
-
-        private void SaveConfig()
-        {
-            using (var fileStream = ServiceFacade.FileService.OpenFile(ServiceFacade.ConfigXmlPath, FileMode.Create))
-            {
-                ActiveContext.SerializationService.Serialize(fileStream, ConfigM.Config);
+                ActiveContext.FileService.SaveConfig();
             }
         }
 

@@ -44,6 +44,7 @@
     <Compile Include="HistoryVm.cs" />
     <Compile Include="Interface\ICopyPaste.cs" />
     <Compile Include="Interface\IDialogService.cs" />
+    <Compile Include="Interface\IFileService.cs" />
     <Compile Include="Interface\IFlowDocumentService.cs" />
     <Compile Include="Interface\IGameEvent.cs" />
     <Compile Include="Interface\IGraph.cs" />

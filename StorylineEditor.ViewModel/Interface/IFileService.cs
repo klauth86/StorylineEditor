@@ -10,21 +10,19 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using StorylineEditor.App.FileService;
+using System.IO;
 
-namespace StorylineEditor.App
+namespace StorylineEditor.ViewModel.Interface
 {
-    public static class ServiceFacade
+    public interface IFileService
     {
-        public const string XmlFilter = "XML files (*.xml)|*.xml";
+        string Path { get; }
+        string OpenFile(string filter, bool refreshPath); // открытие файла
+        string SaveFile(string filter, bool refreshPath);  // сохранение файла
 
-        public const string ConfigXmlPath = "ConfigM.xml";
+        FileStream OpenFile(string path, FileMode mode);
 
-        public static readonly IFileService FileService;
-
-        static ServiceFacade()
-        {
-            FileService = new DefaultFileService();
-        }
+        void LoadConfig();
+        void SaveConfig();
     }
 }

@@ -31,28 +31,16 @@ namespace StorylineEditor.App
     /// </summary>
     public partial class MainWindow : Window, IDialogService
     {
+        public const string XmlFilter = "XML files (*.xml)|*.xml";
+
         static MainWindow()
         {
             ActiveContext.SerializationService = new SerializationService();
             ActiveContext.FlowDocumentService = new FlowDocumentService();
             ActiveContext.TaskService = new TaskService();
+            ActiveContext.FileService = new FileService();
 
-            if (File.Exists(ServiceFacade.ConfigXmlPath))
-            {
-                using (var fileStream = ServiceFacade.FileService.OpenFile(ServiceFacade.ConfigXmlPath, FileMode.Open))
-                {
-                    ConfigM.Config = ActiveContext.SerializationService.Deserialize<ConfigM>(fileStream);
-                }
-            }
-            else
-            {
-                ConfigM.InitDefaultConfig();
-
-                using (var fileStream = ServiceFacade.FileService.OpenFile(ServiceFacade.ConfigXmlPath, FileMode.Create))
-                {
-                    ActiveContext.SerializationService.Serialize(fileStream, ConfigM.Config);
-                }
-            }
+            ActiveContext.FileService.LoadConfig();
         }
 
         public MainWindow()
@@ -72,14 +60,14 @@ namespace StorylineEditor.App
 
         private void btn_Open_Click(object sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrEmpty(ServiceFacade.FileService.OpenFile(ServiceFacade.XmlFilter, true))) OpenFile(ServiceFacade.FileService.Path);
+            if (!string.IsNullOrEmpty(ActiveContext.FileService.OpenFile(XmlFilter, true))) OpenFile(ActiveContext.FileService.Path);
         }
 
         private void btn_Save_Click(object sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrEmpty(ServiceFacade.FileService.Path)) SaveFile(ServiceFacade.FileService.Path);
+            if (!string.IsNullOrEmpty(ActiveContext.FileService.Path)) SaveFile(ActiveContext.FileService.Path);
 
-            else if (!string.IsNullOrEmpty(ServiceFacade.FileService.SaveFile(ServiceFacade.XmlFilter, true))) SaveFile(ServiceFacade.FileService.Path);
+            else if (!string.IsNullOrEmpty(ActiveContext.FileService.SaveFile(XmlFilter, true))) SaveFile(ActiveContext.FileService.Path);
         }
 
         private void OpenFile(string path)

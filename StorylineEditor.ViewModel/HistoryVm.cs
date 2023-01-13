@@ -13,6 +13,7 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Model;
 using StorylineEditor.Model.Graphs;
 using StorylineEditor.ViewModel.Common;
+using StorylineEditor.ViewModel.Config;
 using StorylineEditor.ViewModel.Interface;
 using StorylineEditor.ViewModel.Nodes;
 using System;
@@ -308,8 +309,6 @@ namespace StorylineEditor.ViewModel
 
             FullMode = false;
             Gender = GENDER.MALE;
-            PlayRate = 1;
-            Duration = 4;
             TimeLeft = 0;
 
             Stop();
@@ -725,30 +724,32 @@ namespace StorylineEditor.ViewModel
         protected ICommand toggleGenderCommand;
         public ICommand ToggleGenderCommand => toggleGenderCommand ?? (toggleGenderCommand = new RelayCommand(() => Gender = (byte)(3 - Gender), () => PlayerContext == null));
 
-        protected double playRate;
-        public double PlayRate
+        public float PlayRate
         {
-            get => playRate;
+            get => ConfigM.Config.PlayRate;
             set
             {
-                if (value != playRate)
+                if (value != ConfigM.Config.PlayRate)
                 {
-                    playRate = value;
+                    ConfigM.Config.PlayRate = value;
                     Notify(nameof(PlayRate));
+
+                    ActiveContext.FileService.SaveConfig();
                 }
             }
         }
 
-        protected double duration;
-        public double Duration
+        public float Duration
         {
-            get => duration;
+            get => ConfigM.Config.Duration;
             set
             {
-                if (value != duration)
+                if (value != ConfigM.Config.Duration)
                 {
-                    duration = value;
+                    ConfigM.Config.Duration = value;
                     Notify(nameof(Duration));
+
+                    ActiveContext.FileService.SaveConfig();
                 }
             }
         }

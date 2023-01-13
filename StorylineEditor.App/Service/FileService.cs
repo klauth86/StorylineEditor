@@ -11,12 +11,17 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using Microsoft.Win32;
+using StorylineEditor.ViewModel;
+using StorylineEditor.ViewModel.Config;
+using StorylineEditor.ViewModel.Interface;
 using System.IO;
 
-namespace StorylineEditor.App.FileService
+namespace StorylineEditor.App.Service
 {
-    public class DefaultFileService : IFileService
+    public class FileService : IFileService
     {
+        private const string _configXmlPath = "ConfigM.xml";
+
         public string Path { get; protected set; }
         public string OpenFile(string filter, bool refreshPath)
         {
@@ -44,5 +49,29 @@ namespace StorylineEditor.App.FileService
         }
 
         public FileStream OpenFile(string path, FileMode mode) { return File.Open(path, mode); }
+
+        public void LoadConfig()
+        {
+            if (File.Exists(_configXmlPath))
+            {
+                using (var fileStream = OpenFile(_configXmlPath, FileMode.Open))
+                {
+                    ConfigM.Config = ActiveContext.SerializationService.Deserialize<ConfigM>(fileStream);
+                }
+            }
+            else
+            {
+                ConfigM.InitDefaultConfig();
+
+                SaveConfig();
+            }
+        }
+        public void SaveConfig()
+        {
+            using (var fileStream = OpenFile(_configXmlPath, FileMode.Create))
+            {
+                ActiveContext.SerializationService.Serialize(fileStream, ConfigM.Config);
+            }
+        }
     }
 }
