@@ -14,7 +14,7 @@ using StorylineEditor.ViewModel.Interface;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace StorylineEditor.ViewModel.Nodes
+namespace StorylineEditor.App.Nodes
 {
     public class CanvasDataTemplateSelector: DataTemplateSelector
     {
