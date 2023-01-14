@@ -19,7 +19,7 @@ namespace StorylineEditor.App.Service
 {
     public class TaskService : ITaskService
     {
-        private static readonly object _locker = new object();
+        private static long _lockIndex = 0;
 
         private static bool _isPaused = false;
 
@@ -32,13 +32,18 @@ namespace StorylineEditor.App.Service
 
         public void SetIsPaused(bool isPaused) { _isPaused = isPaused; }
 
-        public async void Start(double durationMsec, Func<CancellationToken, double, double, double, double, TaskStatus> tickAction, Action<TaskStatus, double, double, double, double> finAction, Action<TaskStatus> callbackAction)
+        public async void Start(double durationMsec, Func<CancellationToken, double, double, double, double, CustomTaskStatus> tickAction, Action<CustomTaskStatus, double, double, double, double> finAction, Action<CustomTaskStatus> callbackAction)
         {
             Stop();
 
-            Monitor.Enter(_locker);
+            Interlocked.Add(ref _lockIndex, 1);
 
-            TaskStatus taskStatus = TaskStatus.WaitingToRun;
+            while (Interlocked.Read(ref _lockIndex) > 1)
+            {
+                await Task.Delay(2);
+            }
+
+            CustomTaskStatus CustomTaskStatus = CustomTaskStatus.WaitingToRun;
 
             try
             {
@@ -54,12 +59,12 @@ namespace StorylineEditor.App.Service
                 {
                     if (_cancellationTokenSource.Token.IsCancellationRequested)
                     {
-                        taskStatus = TaskStatus.Canceled;
+                        CustomTaskStatus = CustomTaskStatus.Canceled;
                         break;
                     }
                     else if (!_isPaused)
                     {
-                        taskStatus = tickAction(_cancellationTokenSource.Token, startTimeMsec, durationMsec, timeMsec, timeMsec - prevTimeMsec);
+                        CustomTaskStatus = tickAction(_cancellationTokenSource.Token, startTimeMsec, durationMsec, timeMsec, timeMsec - prevTimeMsec);
                     }
 
                     await Task.Delay(2);
@@ -69,17 +74,17 @@ namespace StorylineEditor.App.Service
                 }
 
                 // Final tick
-                taskStatus = tickAction(_cancellationTokenSource.Token, startTimeMsec, durationMsec, timeMsec, timeMsec - prevTimeMsec);
+                CustomTaskStatus = tickAction(_cancellationTokenSource.Token, startTimeMsec, durationMsec, timeMsec, timeMsec - prevTimeMsec);
 
-                finAction(taskStatus, startTimeMsec, durationMsec, timeMsec, timeMsec - prevTimeMsec);
+                finAction(CustomTaskStatus, startTimeMsec, durationMsec, timeMsec, timeMsec - prevTimeMsec);
             }
             catch (TaskCanceledException taskCanceledExc) { }
             catch (Exception exc) { } ////// TODO
             finally
             {
-                Monitor.Exit(_locker);
+                Interlocked.Decrement(ref _lockIndex);
 
-                callbackAction?.Invoke(taskStatus);
+                callbackAction?.Invoke(CustomTaskStatus);
             }
         }
     }

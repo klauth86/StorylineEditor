@@ -12,7 +12,6 @@ StorylineEditor распространяется в надежде, что он�
 
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace StorylineEditor.ViewModel.Interface
 {
@@ -29,8 +28,8 @@ namespace StorylineEditor.ViewModel.Interface
         INode SelectionNode { get; }
         INode FindNode(string nodeId);
         INode GenerateNode(string nodeId);
-        void MoveTo(IPositioned positioned, Action<TaskStatus> callbackAction, float playRate);
-        void MoveTo(string positionedId, Action<TaskStatus> callbackAction, float playRate);
+        void MoveTo(IPositioned positioned, Action<CustomTaskStatus> callbackAction, float playRate);
+        void MoveTo(string positionedId, Action<CustomTaskStatus> callbackAction, float playRate);
         List<List<IPositioned>> GetAllPaths(string nodeId);
         void SetPlayerContext(object oldPlayerContext, object newPlayerContext);
         void TickPlayer(double deltaTime);
