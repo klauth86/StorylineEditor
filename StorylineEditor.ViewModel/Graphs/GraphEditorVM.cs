@@ -384,31 +384,33 @@ namespace StorylineEditor.ViewModel.Graphs
                         targetNodeViewModel.PositionX += deltaX;
                         targetNodeViewModel.PositionY += deltaY;
                     }
-
-                    HashSet<string> withoutVms = new HashSet<string>();
-
-                    foreach (string selectedId in selection)
+                    else
                     {
-                        if (NodesVMs.ContainsKey(selectedId))
+                        HashSet<string> withoutVms = new HashSet<string>();
+
+                        foreach (string selectedId in selection)
                         {
-                            if (NodesVMs[selectedId] is INode nodeViewModel)
+                            if (NodesVMs.ContainsKey(selectedId))
                             {
-                                nodeViewModel.PositionX += deltaX;
-                                nodeViewModel.PositionY += deltaY;
+                                if (NodesVMs[selectedId] is INode nodeViewModel)
+                                {
+                                    nodeViewModel.PositionX += deltaX;
+                                    nodeViewModel.PositionY += deltaY;
+                                }
+                            }
+                            else
+                            {
+                                withoutVms.Add(selectedId);
                             }
                         }
-                        else
-                        {
-                            withoutVms.Add(selectedId);
-                        }
-                    }
 
-                    foreach (var nodeModel in Model.nodes)
-                    {
-                        if (withoutVms.Contains(nodeModel.id))
+                        foreach (var nodeModel in Model.nodes)
                         {
-                            nodeModel.positionX += deltaX;
-                            nodeModel.positionY += deltaY;
+                            if (withoutVms.Contains(nodeModel.id))
+                            {
+                                nodeModel.positionX += deltaX;
+                                nodeModel.positionY += deltaY;
+                            }
                         }
                     }
                 }
