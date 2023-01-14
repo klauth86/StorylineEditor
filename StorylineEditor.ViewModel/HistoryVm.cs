@@ -270,6 +270,14 @@ namespace StorylineEditor.ViewModel
                 _knownNodesCVS.View.Refresh();
                 //ShowAvailabilityAdorners();
 
+                foreach (var otherKnownNode in _knownNodesDictionary.Keys.ToList())
+                {
+                    if (_knownNodesDictionary[otherKnownNode] > _knownNodesDictionary[knownNode])
+                    {
+                        _knownNodesDictionary[otherKnownNode] = _knownNodesDictionary[otherKnownNode] - 1;
+                    }
+                }
+
                 _knownNodesDictionary.Remove(knownNode);
             }
         }

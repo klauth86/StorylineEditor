@@ -2429,7 +2429,7 @@ StorylineEditor распространяется в надежде, что он�
                                         <ColumnDefinition Width="auto"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
                                     <ContentControl
-                                        Content="{Binding Character}"
+                                        Content="{Binding Model}"
                                         ></ContentControl>
                                     <controls:NumericUpDown_Float
                                         Grid.Column="1"
@@ -2450,7 +2450,7 @@ StorylineEditor распространяется в надежде, что он�
                                         Style="{StaticResource S_Button_Remove}"
                                         Margin="{StaticResource Thickness_Margin_1x}"
                                         Command="{Binding ElementName=ti_Relation, Path=DataContext.RemoveCharacterCommand}"
-                                        CommandParameter="{Binding Character}"
+                                        CommandParameter="{Binding Model}"
                                         ></Button>
                                 </Grid>
                             </DataTemplate>
@@ -2547,7 +2547,7 @@ StorylineEditor распространяется в надежде, что он�
                                                 <ColumnDefinition Width="auto"></ColumnDefinition>
                                             </Grid.ColumnDefinitions>
                                             <ContentControl
-                                                Content="{Binding Quest}"
+                                                Content="{Binding Model}"
                                                 ></ContentControl>
 
                                             <controls:ComboBoxExt
@@ -2563,7 +2563,7 @@ StorylineEditor распространяется в надежде, что он�
                                                 Style="{StaticResource S_Button_Remove}"
                                                 Margin="{StaticResource Thickness_Margin_1x}"
                                                 Command="{Binding ElementName=ti_Journal, Path=DataContext.RemoveQuestCommand}"
-                                                CommandParameter="{Binding Quest}"
+                                                CommandParameter="{Binding Model}"
                                                 ></Button>
                                         </Grid>
                                     </Expander.Header>
@@ -2650,7 +2650,7 @@ StorylineEditor распространяется в надежде, что он�
                                                 <ColumnDefinition Width="auto"></ColumnDefinition>
                                             </Grid.ColumnDefinitions>
                                             <ContentControl
-                                                Content="{Binding Dialog}"
+                                                Content="{Binding Model}"
                                                 ></ContentControl>
 
                                             <controls:ComboBoxExt
