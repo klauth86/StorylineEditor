@@ -11,25 +11,17 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace StorylineEditor.ViewModel.Interface
 {
-    public enum TaskStatusCustom
-    {
-        WaitingToRun,
-        Running,
-        RanToCompletion,
-        Canceled,
-        Faulted,
-        Timeout,
-    }
-
     public interface ITaskService
     {
         void Stop();
 
         void SetIsPaused(bool isPaused);
 
-        void Start(double indurationMsec, Func<double, double, double, double, TaskStatusCustom> tickAction, Action<TaskStatusCustom, double, double, double, double> finAction, Action<TaskStatusCustom> callbackAction);
+        void Start(double indurationMsec, Func<CancellationToken, double, double, double, double, TaskStatus> tickAction, Action<TaskStatus, double, double, double, double> finAction, Action<TaskStatus> callbackAction);
     }
 }

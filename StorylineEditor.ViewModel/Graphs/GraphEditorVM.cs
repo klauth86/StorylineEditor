@@ -21,6 +21,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -126,7 +127,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
         protected readonly HashSet<Type> _nodeTypes;
 
-        void StartScrollingTask(IPositioned positioned, Action<TaskStatusCustom> callbackAction, float playRate)
+        void StartScrollingTask(IPositioned positioned, Action<TaskStatus> callbackAction, float playRate)
         {
             double localX = FromAbsoluteToLocalX(positioned.PositionX);
             double localY = FromAbsoluteToLocalY(positioned.PositionY);
@@ -137,7 +138,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
             if (distance < 16) // Ignore offset of 2x2 pixels
             {
-                callbackAction?.Invoke(TaskStatusCustom.RanToCompletion);
+                callbackAction?.Invoke(TaskStatus.RanToCompletion);
             }
             else
             {
@@ -149,9 +150,9 @@ namespace StorylineEditor.ViewModel.Graphs
 
                 ActiveContext.TaskService.Start(
                     durationMsec,
-                    (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
+                    (token, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
                     {
-                        if (inTimeMsec > inStartTimeMsec + inDurationMsec) return TaskStatusCustom.RanToCompletion;
+                        if (inTimeMsec > inStartTimeMsec + inDurationMsec) return TaskStatus.RanToCompletion;
 
                         playerIndicator.Tick(inDeltaTimeMsec);
 
@@ -162,11 +163,11 @@ namespace StorylineEditor.ViewModel.Graphs
 
                         TranslateView(stepX * alpha, stepY * alpha);
 
-                        return TaskStatusCustom.Running;
+                        return TaskStatus.Running;
                     },
                     (taskStatus, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
                     {
-                        if (taskStatus == TaskStatusCustom.RanToCompletion)
+                        if (taskStatus == TaskStatus.RanToCompletion)
                         {
                             playerIndicator.Tick(inDeltaTimeMsec);
 
@@ -185,9 +186,9 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 ActiveContext.TaskService.Start(
                 256,
-                (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
+                (token, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
                 {
-                    if (inTimeMsec > inStartTimeMsec + inDurationMsec) return TaskStatusCustom.RanToCompletion;
+                    if (inTimeMsec > inStartTimeMsec + inDurationMsec) return TaskStatus.RanToCompletion;
                     
                     double alpha = (inTimeMsec - inStartTimeMsec) / inDurationMsec;
                     
@@ -195,11 +196,11 @@ namespace StorylineEditor.ViewModel.Graphs
                     
                     SetScale(ActiveContext.ViewWidth / 2, ActiveContext.ViewHeight / 2, newScale);
                     
-                    return TaskStatusCustom.Running;
+                    return TaskStatus.Running;
                 },
                 (taskStatus, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
                 {
-                    if (taskStatus == TaskStatusCustom.RanToCompletion)
+                    if (taskStatus == TaskStatus.RanToCompletion)
                     {
                         SetScale(ActiveContext.ViewWidth / 2, ActiveContext.ViewHeight / 2, 1);
                     }
@@ -1108,34 +1109,30 @@ namespace StorylineEditor.ViewModel.Graphs
                 }
             }
 
-            ////// TODO
-            Application.Current.Dispatcher.Invoke(() =>
+            foreach (var model in removeMs)
             {
-                foreach (var model in removeMs)
+                if (NodesVMs.ContainsKey(model.id))
                 {
-                    if (NodesVMs.ContainsKey(model.id))
-                    {
-                        Remove(NodesVMs[model.id], null, null);
-                        NodesVMs.Remove(model.id);
-                    }
+                    Remove(NodesVMs[model.id], null, null);
+                    NodesVMs.Remove(model.id);
                 }
+            }
 
-                foreach (var model in addMs)
+            foreach (var model in addMs)
+            {
+                if (!NodesVMs.ContainsKey(model.id))
                 {
-                    if (!NodesVMs.ContainsKey(model.id))
-                    {
-                        Notifier viewModel = _vmCreator(model);
-                        viewModel.IsSelected = selection.Contains(model.id);
-                        ((INode)viewModel).IsRoot = RootNodeIds.Contains(model.id);
+                    Notifier viewModel = _vmCreator(model);
+                    viewModel.IsSelected = selection.Contains(model.id);
+                    ((INode)viewModel).IsRoot = RootNodeIds.Contains(model.id);
 
-                        NodesVMs.Add(model.id, viewModel);
-                        Add(null, viewModel);
-                    }
+                    NodesVMs.Add(model.id, viewModel);
+                    Add(null, viewModel);
                 }
+            }
 
-                foreach (var nodeEntry in NodesVMs) UpdateLocalPosition((INode)nodeEntry.Value, ENodeUpdateFlags.XY);
-                foreach (var linkEntry in LinksVMs) UpdateLinkLocalPosition(linkEntry.Value, ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
-            });
+            foreach (var nodeEntry in NodesVMs) UpdateLocalPosition((INode)nodeEntry.Value, ENodeUpdateFlags.XY);
+            foreach (var linkEntry in LinksVMs) UpdateLinkLocalPosition(linkEntry.Value, ELinkVMUpdate.FromX | ELinkVMUpdate.FromY | ELinkVMUpdate.ToX | ELinkVMUpdate.ToY | ELinkVMUpdate.Scale);
         }
 
 
@@ -1234,7 +1231,7 @@ namespace StorylineEditor.ViewModel.Graphs
             return null;
         }
 
-        public void MoveTo(IPositioned positioned, Action<TaskStatusCustom> callbackAction, float playRate)
+        public void MoveTo(IPositioned positioned, Action<TaskStatus> callbackAction, float playRate)
         {
             if (positioned != null)
             {
@@ -1242,11 +1239,11 @@ namespace StorylineEditor.ViewModel.Graphs
             }
             else
             {
-                callbackAction(TaskStatusCustom.WaitingToRun);
+                callbackAction(TaskStatus.WaitingForActivation);
             }
         }
 
-        public void MoveTo(string targetId, Action<TaskStatusCustom> callbackAction, float playRate)
+        public void MoveTo(string targetId, Action<TaskStatus> callbackAction, float playRate)
         {
             Node_BaseM targetNodeModel = Model.nodes.FirstOrDefault(node => node.id == targetId);
             if (targetNodeModel != null)
@@ -1256,7 +1253,7 @@ namespace StorylineEditor.ViewModel.Graphs
             }
             else
             {
-                callbackAction(TaskStatusCustom.WaitingToRun);
+                callbackAction(TaskStatus.WaitingForActivation);
             }
         }
 

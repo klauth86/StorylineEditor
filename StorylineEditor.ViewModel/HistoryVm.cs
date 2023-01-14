@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -810,7 +811,7 @@ namespace StorylineEditor.ViewModel
         protected void OnStartMovement(IPositioned positioned)
         {
             PlayerContext = new PlayerContext_TransitionVM();
-            ActiveContext.ActiveGraph.MoveTo(positioned, (taskStatus) => { if (taskStatus == TaskStatusCustom.RanToCompletion) { OnFinishMovement(positioned); } }, PlayRate);
+            ActiveContext.ActiveGraph.MoveTo(positioned, (taskStatus) => { if (taskStatus == TaskStatus.RanToCompletion) { OnFinishMovement(positioned); } }, PlayRate);
         }
 
         protected void OnFinishMovement(IPositioned positioned)
@@ -874,19 +875,19 @@ namespace StorylineEditor.ViewModel
 
                 ActiveContext.TaskService.Start(
                     Duration * 1000,
-                    (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
+                    (token, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
                     {
-                        if (inTimeMsec > inStartTimeMsec + inDurationMsec) return TaskStatusCustom.RanToCompletion;
+                        if (inTimeMsec > inStartTimeMsec + inDurationMsec) return TaskStatus.RanToCompletion;
 
                         ActiveContext.ActiveGraph.TickPlayer(inDeltaTimeMsec);
 
                         TimeLeft -= inDeltaTimeMsec / 1000;
 
-                        return TaskStatusCustom.Running;
+                        return TaskStatus.Running;
                     },
                     (taskStatus, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
                     {
-                        if (taskStatus == TaskStatusCustom.RanToCompletion)
+                        if (taskStatus == TaskStatus.RanToCompletion)
                         {
                             ActiveContext.ActiveGraph.TickPlayer(inDeltaTimeMsec);
                             
@@ -1037,7 +1038,7 @@ namespace StorylineEditor.ViewModel
             if (Paths[PathIndex].Count > 0)
             {
                 IPositioned next = Paths[PathIndex].First();
-                ActiveContext.ActiveGraph.MoveTo(next, (taskStatus) => { if (taskStatus == TaskStatusCustom.RanToCompletion) OnFinishMovement(next); }, PlayRate);
+                ActiveContext.ActiveGraph.MoveTo(next, (taskStatus) => { if (taskStatus == TaskStatus.RanToCompletion) OnFinishMovement(next); }, PlayRate);
             }
         }
 
