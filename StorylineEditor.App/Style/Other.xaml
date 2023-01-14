@@ -2696,8 +2696,8 @@ StorylineEditor распространяется в надежде, что он�
         </TabControl>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding FullMode, UpdateSourceTrigger=PropertyChanged}" Value="true">
-                <Setter TargetName="tc_Main" Property="MinWidth" Value="{StaticResource Double_Player_MaxWidth}"></Setter>
-                <Setter TargetName="tc_Main" Property="MinHeight" Value="{StaticResource Double_Player_MaxHeight}"></Setter>
+                <Setter TargetName="tc_Main" Property="MaxWidth" Value="{StaticResource Double_Player_MaxWidth}"></Setter>
+                <Setter TargetName="tc_Main" Property="MaxHeight" Value="{StaticResource Double_Player_MaxHeight}"></Setter>
                 <Setter TargetName="tc_Main" Property="MaxWidth" Value="{StaticResource Double_Player_FullMode_MaxWidth}"></Setter>
                 <Setter TargetName="tc_Main" Property="MaxHeight" Value="{StaticResource Double_Player_FullMode_MaxHeight}"></Setter>
                 <Setter TargetName="ti_Relation" Property="Visibility" Value="Visible"></Setter>

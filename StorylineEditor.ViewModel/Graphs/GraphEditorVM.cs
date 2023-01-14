@@ -70,7 +70,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
             selectionBox = new SelectionBoxVM();
 
-            playerIndicator = new PlayerIndicatorVM(2, 600, 600);
+            playerIndicator = new PlayerIndicatorVM(2, 300, 600);
 
             UserAction = null;
 
@@ -142,7 +142,7 @@ namespace StorylineEditor.ViewModel.Graphs
             else
             {
                 double velocityMsec = playRate * ActiveContext.ViewWidth / 2
-                    / 1000 // Msec
+                    / 400 // Msec
                     / 100; // playRate is %
 
                 double durationMsec = distance / velocityMsec;

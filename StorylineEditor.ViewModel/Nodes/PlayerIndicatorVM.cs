@@ -150,7 +150,7 @@ namespace StorylineEditor.ViewModel.Nodes
 
                     if (_sizeChangedDurationMsecLeft > 0)
                     {
-                        sizeAlpha = _sizeChangedDurationMsecLeft / _sizeChangeDurationMsec;
+                        sizeAlpha = 1 - _sizeChangedDurationMsecLeft / _sizeChangeDurationMsec;
                     }
                 }
 
