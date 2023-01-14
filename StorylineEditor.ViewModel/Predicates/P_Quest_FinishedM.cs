@@ -82,13 +82,15 @@ namespace StorylineEditor.ViewModel.Predicates
                 
                 if (questEntryVm != null)
                 {
-                    foreach (var passedNode in questEntryVm.PassedNodes)
+                    foreach (var knownNodeEntry in questEntryVm.KnownNodes)
                     {
-                        bool isLeaf = graph.links.All((linkM) => linkM.fromNodeId != passedNode.id);
-                        if (isLeaf)
+                        if (knownNodeEntry.IsPassed)
                         {
-                            result = true;
-                            break;
+                            if (graph.links.All((linkM) => linkM.fromNodeId != knownNodeEntry.Node.id))
+                            {
+                                result = true;
+                                break;
+                            }
                         }
                     }
                 }

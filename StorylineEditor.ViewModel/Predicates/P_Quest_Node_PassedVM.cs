@@ -134,7 +134,7 @@ namespace StorylineEditor.ViewModel.Predicates
 
                 if (questEntryVm != null)
                 {
-                    result = questEntryVm.PassedNodes.Contains(Node);
+                    result = questEntryVm.GetKnownNodeIsPassed(Node);
                 }
 
                 if (IsInversed) result = !result;

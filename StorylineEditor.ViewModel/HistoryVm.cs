@@ -145,15 +145,35 @@ namespace StorylineEditor.ViewModel
         public ICommand RemoveNodeCommand => removeNodeCommand ?? (removeNodeCommand = new RelayCommand<BaseM>((node) => RemoveNode(node)));
     }
 
+    public class QuestNodeEntry : Notifier
+    {
+        public BaseM Node { get; set; }
+
+        protected bool _isPassed;
+        public bool IsPassed
+        {
+            get => _isPassed;
+            set
+            {
+                if (value != _isPassed)
+                {
+                    _isPassed = value;
+                    Notify(nameof(IsPassed));
+                }
+            }
+        }
+
+        public override string Id => throw new NotImplementedException();
+    }
+
     public class QuestEntryVM : HistoryItemVM
     {
         public QuestEntryVM(BaseM model, HistoryVM parent) : base(model, parent)
         {
-            KnownNodes = new ObservableCollection<BaseM>();
+            _knownNodesDictionary = new Dictionary<BaseM, int>();
+            KnownNodes = new  ObservableCollection<QuestNodeEntry>();
             _knownNodesCVSInit = false;
             _knownNodesCVS = new CollectionViewSource();
-
-            PassedNodes = new ObservableCollection<BaseM>();
         }
 
         #region KNOWN
@@ -180,7 +200,9 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        public ObservableCollection<BaseM> KnownNodes { get; }
+        protected Dictionary<BaseM, int> _knownNodesDictionary;
+
+        public ObservableCollection<QuestNodeEntry> KnownNodes { get; }
 
         protected string knownNodesFilter;
         public string KnownNodesFilter
@@ -201,31 +223,54 @@ namespace StorylineEditor.ViewModel
         {
             if (sender is BaseM model)
             {
-                return (string.IsNullOrEmpty(knownNodesFilter) || model.PassFilter(knownNodesFilter)) && KnownNodes.All((knownNode) => knownNode.id != model.id);
+                return (string.IsNullOrEmpty(knownNodesFilter) || model.PassFilter(knownNodesFilter)) && KnownNodes.All((knownNode) => knownNode.Node.id != model.id);
             }
             return false;
         }
+
+        public bool GetKnownNodeIsPassed(BaseM knownNode)
+        {
+            if (_knownNodesDictionary.ContainsKey(knownNode))
+            {
+                return KnownNodes[_knownNodesDictionary[knownNode]].IsPassed;
+            }
+
+            return false;
+        }
+
+        public void SetKnownNodeIsPassed(BaseM knownNode, bool isPassed)
+        {
+            if (_knownNodesDictionary.ContainsKey(knownNode))
+            {
+                KnownNodes[_knownNodesDictionary[knownNode]].IsPassed = isPassed;
+            }
+        }
+
+        public bool HasKnownNode(BaseM knownNode) { return _knownNodesDictionary.ContainsKey(knownNode); }
+
         public void AddKnownNode(BaseM knownNode)
         {
             if (_knownNodesCVSInit)
             {
-                if (!KnownNodes.Contains(knownNode))
+                if (!_knownNodesDictionary.ContainsKey(knownNode))
                 {
-                    KnownNodes.Add(knownNode);
+                    _knownNodesDictionary.Add(knownNode, KnownNodes.Count);
 
+                    KnownNodes.Add(new QuestNodeEntry() { Node = knownNode, IsPassed = false });
                     _knownNodesCVS.View.Refresh();
-
                     //ShowAvailabilityAdorners();
                 }
             }
         }
         public void RemoveKnownNode(BaseM knownNode)
         {
-            if (KnownNodes.Remove(knownNode))
+            if (_knownNodesDictionary.ContainsKey(knownNode))
             {
+                KnownNodes.RemoveAt(_knownNodesDictionary[knownNode]);
                 _knownNodesCVS.View.Refresh();
-
                 //ShowAvailabilityAdorners();
+
+                _knownNodesDictionary.Remove(knownNode);
             }
         }
 
@@ -233,32 +278,6 @@ namespace StorylineEditor.ViewModel
         public ICommand RemoveKnownNodeCommand => removeKnownNodeCommand ?? (removeKnownNodeCommand = new RelayCommand<BaseM>((knownNode) => RemoveKnownNode(knownNode)));
 
         #endregion
-
-        public ObservableCollection<BaseM> PassedNodes { get; }
-
-        public void AddPassedNode(BaseM node)
-        {
-            if (!PassedNodes.Contains(node))
-            {
-                PassedNodes.Add(node);
-
-                //Parent?.ShowAvailabilityAdorners();
-            }
-        }
-
-        public void RemovePassedNode(BaseM node)
-        {
-            if (PassedNodes.Remove(node))
-            {
-                //Parent?.ShowAvailabilityAdorners();
-            }
-        }
-
-        protected ICommand addPassedNodeCommand;
-        public ICommand AddPassedNodeCommand => addPassedNodeCommand ?? (addPassedNodeCommand = new RelayCommand<BaseM>((node) => AddPassedNode(node), (node) => !PassedNodes.Contains(node)));
-
-        protected ICommand removePassedNodeCommand;
-        public ICommand RemovePassedNodeCommand => removePassedNodeCommand ?? (removePassedNodeCommand = new RelayCommand<BaseM>((node) => RemovePassedNode(node), (node) => PassedNodes.Contains(node)));
     }
 
     public class CharacterEntryVM : HistoryItemVM

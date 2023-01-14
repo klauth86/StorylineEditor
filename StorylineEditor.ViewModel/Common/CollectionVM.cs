@@ -18,6 +18,7 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel
 {
@@ -90,18 +91,31 @@ namespace StorylineEditor.ViewModel
             BaseM model
             );
 
-        public abstract void AddToSelection(
-            Notifier viewModel
-            , bool resetSelection
-            );
+        private Notifier selection;
+        public virtual void AddToSelection(Notifier viewModel, bool resetSelection)
+        {
+            if (selection != null)
+            {
+                ActiveContext.ActiveGraph = null;
+                SelectionEditor = null;
+                selection.IsSelected = false;
+            }
 
-        public abstract void GetSelection(
-            IList outSelection
-            );
+            selection = viewModel;
 
-        public abstract bool HasSelection();
+            if (selection != null)
+            {
+                selection.IsSelected = true;
+                SelectionEditor = _evmCreator(selection);
+                ActiveContext.ActiveGraph = SelectionEditor as IGraph;
+            }
 
-        public abstract bool SelectionCanBeDeleted();
+            CommandManager.InvalidateRequerySuggested();
+        }
+
+        public virtual void GetSelection(IList outSelection) { if (selection != null) outSelection.Add(selection); }
+        public virtual bool HasSelection() => selection != null;
+        public virtual bool SelectionCanBeDeleted() { return selection.Id != CharacterM.PLAYER_ID; }
 
         public bool AddToSelectionById(
             string id
@@ -133,10 +147,14 @@ namespace StorylineEditor.ViewModel
                     partiallyStoredEd.OnEnter();
                 }
             }
+
+            ActiveContext.ActiveGraph = SelectionEditor as IGraph;
         }
 
         public void OnLeave()
         {
+            ActiveContext.ActiveGraph = null;
+
             if (SelectionEditor != null)
             {
                 if (SelectionEditor is IPartiallyStored partiallyStoredEd)

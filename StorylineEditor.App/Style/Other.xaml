@@ -2582,15 +2582,24 @@ StorylineEditor распространяется в надежде, что он�
                                                     </Grid.ColumnDefinitions>
                                                     
                                                     <ContentControl
-                                                        Content="{Binding}"
+                                                        Content="{Binding Node}"
                                                         ></ContentControl>
+
+                                                    <CheckBox
+                                                        Margin="{StaticResource Thickness_Padding_LeftRight}"
+                                                        VerticalContentAlignment="Center"
+                                                        Grid.Column="1"
+                                                        IsChecked="{Binding IsPassed, UpdateSourceTrigger=PropertyChanged}"
+                                                        Content="{StaticResource String_Tag_Player_QuestNodeIsPassed}"
+                                                        FontSize="{StaticResource FontSize_VerySmall}"
+                                                        ></CheckBox>
                                                     
                                                     <Button
                                                         Grid.Column="2"
                                                         Style="{StaticResource S_Button_Remove}"
                                                         Margin="{StaticResource Thickness_Margin_1x}"
                                                         Command="{Binding ElementName=ic_Nodes, Path=DataContext.RemoveKnownNodeCommand}"
-                                                        CommandParameter="{Binding}"
+                                                        CommandParameter="{Binding Node}"
                                                         ></Button>
                                                 </Grid>
                                             </DataTemplate>

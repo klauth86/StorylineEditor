@@ -184,32 +184,5 @@ namespace StorylineEditor.ViewModel
         public override string Id => null;
         public ObservableCollection<FolderM> Context { get; }
         public override IList GetContext(BaseM model) { return Context.Last().content; }
-
-
-
-        private Notifier selection;
-        public override void AddToSelection(Notifier viewModel, bool resetSelection)
-        {
-            if (selection != null)
-            {
-                ActiveContext.ActiveGraph = null;
-                SelectionEditor = null;
-                selection.IsSelected = false;
-            }
-
-            selection = viewModel;
-
-            if (selection != null)
-            {
-                selection.IsSelected = true;
-                SelectionEditor = _evmCreator(selection);
-                ActiveContext.ActiveGraph = SelectionEditor as IGraph;
-            }
-
-            CommandManager.InvalidateRequerySuggested();
-        }
-        public override void GetSelection(IList outSelection) { if (selection != null) outSelection.Add(selection); }
-        public override bool HasSelection() => selection != null;
-        public override bool SelectionCanBeDeleted() { return selection.Id != CharacterM.PLAYER_ID; }
     }
 }

@@ -137,12 +137,12 @@ namespace StorylineEditor.ViewModel.GameEvents
 
                 questEntryVm = ActiveContext.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == Quest.id);
 
-                if (!questEntryVm.KnownNodes.Contains(Node))
+                if (!questEntryVm.HasKnownNode(Node))
                 {
                     questEntryVm.AddKnownNode(Node);
                 }
 
-                questEntryVm.AddPassedNode(Node);
+                questEntryVm.SetKnownNodeIsPassed(Node, true);
             }
         }
     }
