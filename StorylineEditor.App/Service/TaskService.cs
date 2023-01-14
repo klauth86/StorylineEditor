@@ -13,73 +13,141 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.ViewModel.Interface;
 using System;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace StorylineEditor.App.Service
 {
+    public struct TaskFrame
+    {
+        public double StartTimeMsecMsec;
+
+        public double DurationMsec;
+
+        public Func<double, double, double, double, TaskStatusCustom> TickAction;
+
+        public Action<TaskStatusCustom, double, double, double, double> FinAction;
+
+        public Action<TaskStatusCustom> CallbackAction;
+
+        public TaskStatusCustom TaskStatus;
+
+        public bool IsDone;
+    }
+
     public class TaskService : ITaskService
     {
-        private static readonly object _locker = new object();
+        private static TaskFrame[] _taskFrames = { new TaskFrame(), new TaskFrame() };
+
+        private static int _taskFrameIndex = 1;
+
+        private static Thread _workerThread = null;
+
+        private static double _timeMsec;
+
+        private static double _prevTimeMsec;
 
         private static bool _isPaused = false;
 
-        private static CancellationTokenSource _cancellationTokenSource;
-
         public void Stop()
         {
-            _cancellationTokenSource?.Cancel();
+            var taskFrame = _taskFrames[_taskFrameIndex];
+            taskFrame.IsDone = true;
         }
 
         public void SetIsPaused(bool isPaused) { _isPaused = isPaused; }
 
-        public async void Start(double durationMsec, Func<CancellationToken, double, double, double, double, TaskStatus> tickAction, Action<TaskStatus, double, double, double, double> finAction, Action<TaskStatus> callbackAction)
+        public void Start(
+            double durationMsec
+            , Func<double, double, double, double, TaskStatusCustom> tickAction
+            , Action<TaskStatusCustom, double, double, double, double> finAction
+            , Action<TaskStatusCustom> callbackAction
+            )
         {
-            Stop();
+            int nextTaskFrameIndex = 1 - _taskFrameIndex;
 
-            Monitor.Enter(_locker);
+            _taskFrames[nextTaskFrameIndex].StartTimeMsecMsec = DateTime.Now.TimeOfDay.TotalMilliseconds;
+            _taskFrames[nextTaskFrameIndex].DurationMsec = durationMsec;
+            _taskFrames[nextTaskFrameIndex].TickAction = tickAction;
+            _taskFrames[nextTaskFrameIndex].FinAction = finAction;
+            _taskFrames[nextTaskFrameIndex].CallbackAction = callbackAction;
+            _taskFrames[nextTaskFrameIndex].TaskStatus = TaskStatusCustom.WaitingToRun;
+            _taskFrames[nextTaskFrameIndex].IsDone = false;
 
-            TaskStatus taskStatus = TaskStatus.WaitingToRun;
+            Interlocked.Exchange(ref _taskFrameIndex, nextTaskFrameIndex);
 
-            try
+            if (_workerThread == null)
             {
-                _cancellationTokenSource = new CancellationTokenSource();
-
-                double startTimeMsec = DateTime.Now.TimeOfDay.TotalMilliseconds;
-                double timeMsec = startTimeMsec;
-                double prevTimeMsec = timeMsec;
-
-                double finishTimeMsec = startTimeMsec + durationMsec;
-
-                while (timeMsec < finishTimeMsec)
-                {
-                    if (_cancellationTokenSource.Token.IsCancellationRequested)
-                    {
-                        taskStatus = TaskStatus.Canceled;
-                        break;
-                    }
-                    else if (!_isPaused)
-                    {
-                        taskStatus = tickAction(_cancellationTokenSource.Token, startTimeMsec, durationMsec, timeMsec, timeMsec - prevTimeMsec);
-                    }
-
-                    await Task.Delay(2);
-
-                    prevTimeMsec = timeMsec;
-                    timeMsec = DateTime.Now.TimeOfDay.TotalMilliseconds;
-                }
-
-                // Final tick
-                taskStatus = tickAction(_cancellationTokenSource.Token, startTimeMsec, durationMsec, timeMsec, timeMsec - prevTimeMsec);
-
-                finAction(taskStatus, startTimeMsec, durationMsec, timeMsec, timeMsec - prevTimeMsec);
+                CreateWorkerThread();
             }
-            catch (TaskCanceledException taskCanceledExc) { }
-            catch (Exception exc) { } ////// TODO
-            finally
-            {
-                Monitor.Exit(_locker);
+        }
 
-                callbackAction?.Invoke(taskStatus);
+        private void CreateWorkerThread()
+        {
+            _workerThread = new Thread(() =>
+            {
+                while (true)
+                {
+                    _timeMsec = DateTime.Now.TimeOfDay.TotalMilliseconds;
+
+                    var taskFrame = _taskFrames[_taskFrameIndex];
+
+                    TickTaskFrame(taskFrame);
+
+                    _prevTimeMsec = _timeMsec;
+
+                    Thread.Sleep(2);
+                }
+            });
+
+            _workerThread.IsBackground = true;
+            _workerThread.Start();
+        }
+
+        private void TickTaskFrame(TaskFrame taskFrame)
+        {
+            if (taskFrame.IsDone) return;
+
+            double startTimeMsec = taskFrame.StartTimeMsecMsec;
+            double durationMsec = taskFrame.DurationMsec;
+            var tickAction = taskFrame.TickAction;
+            var finAction = taskFrame.FinAction;
+            var callbackAction = taskFrame.CallbackAction;
+
+            // Init
+
+            if (taskFrame.TaskStatus == TaskStatusCustom.WaitingToRun)
+            {
+                if (_timeMsec < startTimeMsec + durationMsec)
+                {
+                    taskFrame.TaskStatus = TaskStatusCustom.Running;
+                }
+                else
+                {
+                    taskFrame.TaskStatus = TaskStatusCustom.Timeout;
+                }
+            }
+
+            if (taskFrame.TaskStatus != TaskStatusCustom.Running)
+            {
+                finAction(taskFrame.TaskStatus, startTimeMsec, durationMsec, _timeMsec, _timeMsec - _prevTimeMsec);
+
+                callbackAction?.Invoke(taskFrame.TaskStatus);
+
+                taskFrame.IsDone = true;
+            }
+            else
+            {
+                if (_timeMsec < startTimeMsec + durationMsec)
+                {
+                    taskFrame.TaskStatus = tickAction(startTimeMsec, durationMsec, _timeMsec, _timeMsec - _prevTimeMsec);
+                }
+                else
+                {
+                    finAction(taskFrame.TaskStatus, startTimeMsec, durationMsec, _timeMsec, _timeMsec - _prevTimeMsec);
+
+                    callbackAction?.Invoke(taskFrame.TaskStatus);
+
+                    taskFrame.IsDone = true;
+                }
             }
         }
     }
