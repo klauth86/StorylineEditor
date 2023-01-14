@@ -127,70 +127,69 @@ namespace StorylineEditor.ViewModel.Graphs
 
         protected readonly HashSet<Type> _nodeTypes;
 
-        void StartScrollingTask(IPositioned positioned, Action<TaskStatus> callbackAction)
+        void StartScrollingTask(IPositioned positioned, Action<TaskStatus> callbackAction, float playRate)
         {
-            const int durationMsec = 256;
-            const int stepCount = 64;
-            const int stepDuration = durationMsec / stepCount;
+            double distance = Math.Sqrt((positioned.PositionX - offsetX) * (positioned.PositionX - offsetX) + (positioned.PositionY - offsetY) * (positioned.PositionY - offsetY));
+            double velocityMsec = playRate * ActiveContext.ViewWidth / 2
+                / 1000 // Msec
+                / 100; // playRate is %
 
-            ActiveContext.TaskService.Start((token, alpha) =>
-            {
-                if (token.IsCancellationRequested) return TaskStatus.Canceled;
+            double durationMsec = distance / velocityMsec;
 
-                double stepX = OffsetX - (positioned.PositionX - ActiveContext.ViewWidth / 2 / Scale);
-                double stepY = OffsetY - (positioned.PositionY - ActiveContext.ViewHeight / 2 / Scale);
-
-                if (Math.Abs(stepX) < 0.01) return TaskStatus.RanToCompletion;
-
-                playerIndicator.Tick(alpha);
-
-                TranslateView(stepX * alpha, stepY * alpha);
-
-                return TaskStatus.Running;
-            },
-            TimeSpan.FromMilliseconds(stepDuration),
-            1.0 / stepCount,
-            (taskStatus) =>
-            {
-                if (taskStatus == TaskStatus.RanToCompletion)
+            ActiveContext.TaskService.Start(
+                durationMsec,
+                (token, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
                 {
+                    if (inTimeMsec > inStartTimeMsec + inDurationMsec) return TaskStatus.RanToCompletion;
+
+                    playerIndicator.Tick(inDeltaTimeMsec);
+
                     double stepX = OffsetX - (positioned.PositionX - ActiveContext.ViewWidth / 2 / Scale);
                     double stepY = OffsetY - (positioned.PositionY - ActiveContext.ViewHeight / 2 / Scale);
 
-                    playerIndicator.Tick(1);
+                    double alpha = (inTimeMsec - inStartTimeMsec) / inDurationMsec;
 
-                    TranslateView(stepX, stepY);
-                }
-            }, callbackAction);
+                    TranslateView(stepX * alpha, stepY * alpha);
+
+                    return TaskStatus.Running;
+                },
+                (taskStatus, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
+                {
+                    if (taskStatus == TaskStatus.RanToCompletion)
+                    {
+                        playerIndicator.Tick(inDeltaTimeMsec);
+
+                        double stepX = OffsetX - (positioned.PositionX - ActiveContext.ViewWidth / 2 / Scale);
+                        double stepY = OffsetY - (positioned.PositionY - ActiveContext.ViewHeight / 2 / Scale);
+
+                        TranslateView(stepX, stepY);
+                    }
+                }, callbackAction);
         }
 
         void StartScalingTask()
         {
-            const int durationMsec = 256;
-            const int stepCount = 64;
-            const int stepDuration = durationMsec / stepCount;
-
-            ActiveContext.TaskService.Start((token, alpha) =>
-            {
-                if (token.IsCancellationRequested) return TaskStatus.Canceled;
-
-                double newScale = Scale * (1 - alpha) + alpha;
-
-                if (Math.Abs(newScale - 1) < 0.01) return TaskStatus.RanToCompletion;
-
-                SetScale(ActiveContext.ViewWidth / 2, ActiveContext.ViewHeight / 2, newScale);
-
-                return TaskStatus.Running;
-            },
-            TimeSpan.FromMilliseconds(stepDuration),
-            1.0 / stepCount,
-            (taskStatus) =>
-            {
-                if (taskStatus == TaskStatus.RanToCompletion)
+            ActiveContext.TaskService.Start(
+                256,
+                (token, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
                 {
-                    SetScale(ActiveContext.ViewWidth / 2, ActiveContext.ViewHeight / 2, 1);
-                }
-            }, null);
+                    if (inTimeMsec > inStartTimeMsec + inDurationMsec) return TaskStatus.RanToCompletion;
+                    
+                    double alpha = (inTimeMsec - inStartTimeMsec) / inDurationMsec;
+                    
+                    double newScale = Scale * (1 - alpha) + alpha;
+                    
+                    SetScale(ActiveContext.ViewWidth / 2, ActiveContext.ViewHeight / 2, newScale);
+                    
+                    return TaskStatus.Running;
+                },
+                (taskStatus, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
+                {
+                    if (taskStatus == TaskStatus.RanToCompletion)
+                    {
+                        SetScale(ActiveContext.ViewWidth / 2, ActiveContext.ViewHeight / 2, 1);
+                    }
+                }, null);
         }
 
         protected ICommand selectNodeTypeCommand;
@@ -207,7 +206,7 @@ namespace StorylineEditor.ViewModel.Graphs
                 if (rootNodeModel != null)
                 {
                     string characterId = rootNodeModel is Node_RegularM regularNodeModel ? regularNodeModel.characterId : null;
-                    StartScrollingTask(new PositionVM(rootNodeModel.positionX, rootNodeModel.positionY, rootNodeModel.id, characterId), null);
+                    StartScrollingTask(new PositionVM(rootNodeModel.positionX, rootNodeModel.positionY, rootNodeModel.id, characterId), null, 1);
                 }
             }
         }, () => RootNodeIds.Count > 0));
@@ -223,7 +222,7 @@ namespace StorylineEditor.ViewModel.Graphs
                 if (rootNodeModel != null)
                 {
                     string characterId = rootNodeModel is Node_RegularM regularNodeModel ? regularNodeModel.characterId : null;
-                    StartScrollingTask(new PositionVM(rootNodeModel.positionX, rootNodeModel.positionY, rootNodeModel.id, characterId), null);
+                    StartScrollingTask(new PositionVM(rootNodeModel.positionX, rootNodeModel.positionY, rootNodeModel.id, characterId), null, 1);
                 }
             }
         }, () => RootNodeIds.Count > 0));
@@ -232,7 +231,7 @@ namespace StorylineEditor.ViewModel.Graphs
         public ICommand ResetScaleCommand => resetScaleCommand ?? (resetScaleCommand = new RelayCommand(() => StartScalingTask()));
 
         protected ICommand goToOriginCommand;
-        public ICommand GoToOriginCommand => goToOriginCommand ?? (goToOriginCommand = new RelayCommand(() => StartScrollingTask(OriginVM.GetOrigin(), null)));
+        public ICommand GoToOriginCommand => goToOriginCommand ?? (goToOriginCommand = new RelayCommand(() => StartScrollingTask(OriginVM.GetOrigin(), null, 1)));
 
         protected ICommand playCommand;
         public ICommand PlayCommand => playCommand ?? (playCommand = new RelayCommand(() => ActiveContext.DialogService?.ShowDialog(ActiveContext.History), () => HasSelection()));
@@ -1216,11 +1215,11 @@ namespace StorylineEditor.ViewModel.Graphs
             return null;
         }
 
-        public void MoveTo(IPositioned positioned, Action<TaskStatus> callbackAction)
+        public void MoveTo(IPositioned positioned, Action<TaskStatus> callbackAction, float playRate)
         {
             if (positioned != null)
             {
-                StartScrollingTask(positioned, callbackAction);
+                StartScrollingTask(positioned, callbackAction, playRate);
             }
             else
             {
@@ -1228,13 +1227,13 @@ namespace StorylineEditor.ViewModel.Graphs
             }
         }
 
-        public void MoveTo(string targetId, Action<TaskStatus> callbackAction)
+        public void MoveTo(string targetId, Action<TaskStatus> callbackAction, float playRate)
         {
             Node_BaseM targetNodeModel = Model.nodes.FirstOrDefault(node => node.id == targetId);
             if (targetNodeModel != null)
             {
                 string characterId = targetNodeModel is Node_RegularM regularNodeModel ? regularNodeModel.characterId : null;
-                MoveTo(new PositionVM(targetNodeModel.positionX, targetNodeModel.positionY, targetId, characterId), callbackAction);
+                MoveTo(new PositionVM(targetNodeModel.positionX, targetNodeModel.positionY, targetId, characterId), callbackAction, playRate);
             }
             else
             {
@@ -1289,7 +1288,7 @@ namespace StorylineEditor.ViewModel.Graphs
             }
         }
 
-        public void TickPlayer(double alpha) { playerIndicator.Tick(alpha); }
+        public void TickPlayer(double deltaTimeMsec) { playerIndicator.Tick(deltaTimeMsec); }
 
         public void OnNodeGenderChanged(INode node) { OnModelChanged(Model, nameof(GraphVM<GraphM>.Stats)); }
 

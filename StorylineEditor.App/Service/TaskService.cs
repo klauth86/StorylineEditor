@@ -34,35 +34,45 @@ namespace StorylineEditor.App.Service
 
         public void SetIsPaused(bool isPaused) { _isPaused = isPaused; }
 
-        public async void Start(Func<CancellationToken, double, TaskStatus> tickAction, TimeSpan tickTimeSpan, double alphaStep, Action<TaskStatus> finAction, Action<TaskStatus> callbackAction)
+        public async void Start(double durationMsec, Func<CancellationToken, double, double, double, double, TaskStatus> tickAction, Action<TaskStatus, double, double, double, double> finAction, Action<TaskStatus> callbackAction)
         {
             Stop();
 
             Monitor.Enter(_locker);
 
             TaskStatus taskStatus = TaskStatus.WaitingForActivation;
-            double alpha = 0;
 
             try
             {
                 _cancellationTokenSource = new CancellationTokenSource();
 
-                do
+                double startTimeMsec = DateTime.Now.TimeOfDay.TotalMilliseconds;
+                double finishTimeMsec = startTimeMsec + durationMsec;
+                double timeMsec = startTimeMsec;
+                double prevTimeMsec = timeMsec;
+
+                while (timeMsec < finishTimeMsec)
                 {
-                    if (!_isPaused)
+                    if (_cancellationTokenSource.Token.IsCancellationRequested)
                     {
-                        taskStatus = tickAction(_cancellationTokenSource.Token, alpha);
-                        alpha += alphaStep;
+                        taskStatus = TaskStatus.Canceled;
+                        break;
+                    }
+                    else if (!_isPaused)
+                    {
+                        taskStatus = tickAction(_cancellationTokenSource.Token, startTimeMsec, durationMsec, timeMsec, timeMsec - prevTimeMsec);
                     }
 
-                    await Task.Delay(tickTimeSpan, _cancellationTokenSource.Token);
-                }
-                while (taskStatus == TaskStatus.Running);
+                    await Task.Delay(2);
 
-                finAction(taskStatus);
+                    prevTimeMsec = timeMsec;
+                    timeMsec = DateTime.Now.TimeOfDay.TotalMilliseconds;
+                }
+
+                finAction(taskStatus, startTimeMsec, durationMsec, timeMsec, timeMsec - prevTimeMsec);
             }
-            catch (TaskCanceledException taskCanceledException) { }
-            catch (Exception exception) { } ////// TODO
+            catch (TaskCanceledException taskCanceledExc) { }
+            catch (Exception exc) { } ////// TODO
             finally
             {
                 Monitor.Exit(_locker);

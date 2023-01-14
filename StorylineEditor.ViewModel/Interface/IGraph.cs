@@ -29,11 +29,11 @@ namespace StorylineEditor.ViewModel.Interface
         INode SelectionNode { get; }
         INode FindNode(string nodeId);
         INode GenerateNode(string nodeId);
-        void MoveTo(IPositioned positioned, Action<TaskStatus> callbackAction);
-        void MoveTo(string positionedId, Action<TaskStatus> callbackAction);
+        void MoveTo(IPositioned positioned, Action<TaskStatus> callbackAction, float playRate);
+        void MoveTo(string positionedId, Action<TaskStatus> callbackAction, float playRate);
         List<List<IPositioned>> GetAllPaths(string nodeId);
         void SetPlayerContext(object oldPlayerContext, object newPlayerContext);
-        void TickPlayer(double alpha);
+        void TickPlayer(double deltaTime);
         void OnNodeGenderChanged(INode node);
         void OnNodePositionChanged(INode node, ENodeUpdateFlags updateFlags);
         void OnNodeSizeChanged(INode node, ENodeUpdateFlags updateFlags);

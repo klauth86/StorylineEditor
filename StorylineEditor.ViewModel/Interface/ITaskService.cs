@@ -22,6 +22,6 @@ namespace StorylineEditor.ViewModel.Interface
 
         void SetIsPaused(bool isPaused);
 
-        void Start(Func<CancellationToken, double, TaskStatus> tickAction, TimeSpan tickTimeSpan, double alphaStep, Action<TaskStatus> finAction, Action<TaskStatus> callbackAction);
+        void Start(double indurationMsec, Func<CancellationToken, double, double, double, double, TaskStatus> tickAction, Action<TaskStatus, double, double, double, double> finAction, Action<TaskStatus> callbackAction);
     }
 }

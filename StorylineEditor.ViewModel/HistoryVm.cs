@@ -811,7 +811,7 @@ namespace StorylineEditor.ViewModel
         protected void OnStartMovement(IPositioned positioned)
         {
             PlayerContext = new PlayerContext_TransitionVM();
-            ActiveContext.ActiveGraph.MoveTo(positioned, (taskStatus) => { if (taskStatus == TaskStatus.RanToCompletion) { OnFinishMovement(positioned); } });
+            ActiveContext.ActiveGraph.MoveTo(positioned, (taskStatus) => { if (taskStatus == TaskStatus.RanToCompletion) { OnFinishMovement(positioned); } }, PlayRate);
         }
 
         protected void OnFinishMovement(IPositioned positioned)
@@ -868,34 +868,32 @@ namespace StorylineEditor.ViewModel
 
             if (node is Node_DialogVM dialogNodeViewModel || node is Node_ReplicaVM replicaNodeViewModel)
             {
-                const int stepCount = 64;
-                int stepDuration = Convert.ToInt32(Math.Round(Duration * 1000) / stepCount);
+                double startTimeMsec = DateTime.Now.TimeOfDay.TotalMilliseconds;
+                double finishTimeMsec = startTimeMsec + Duration * 1000;
 
-                ActiveContext.TaskService.Start((token, alpha) =>
-                {
-                    if (token.IsCancellationRequested) return TaskStatus.Canceled;
-
-                    if (Math.Abs(alpha - 1) < 0.01) return TaskStatus.RanToCompletion;
-
-                    ActiveContext.ActiveGraph.TickPlayer(alpha);
-
-                    TimeLeft = (1 - alpha) * Duration;
-
-                    return TaskStatus.Running;
-                },
-                TimeSpan.FromMilliseconds(stepDuration),
-                1.0 / stepCount,
-                (taskStatus) =>
-                {
-                    if (taskStatus == TaskStatus.RanToCompletion)
+                ActiveContext.TaskService.Start(
+                    Duration * 1000,
+                    (token, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
                     {
-                        ActiveContext.ActiveGraph.TickPlayer(1);
+                        if (inTimeMsec > inStartTimeMsec + inDurationMsec) return TaskStatus.RanToCompletion;
 
-                        TimeLeft = 0;
+                        ActiveContext.ActiveGraph.TickPlayer(inDeltaTimeMsec);
 
-                        FinishPlayNode(node);
-                    }
-                }, null);
+                        TimeLeft -= inDeltaTimeMsec;
+
+                        return TaskStatus.Running;
+                    },
+                    (taskStatus, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
+                    {
+                        if (taskStatus == TaskStatus.RanToCompletion)
+                        {
+                            ActiveContext.ActiveGraph.TickPlayer(inDeltaTimeMsec);
+                            
+                            TimeLeft = 0;
+                            
+                            FinishPlayNode(node);
+                        }
+                    }, null);
             }
             else
             {
@@ -1038,7 +1036,7 @@ namespace StorylineEditor.ViewModel
             if (Paths[PathIndex].Count > 0)
             {
                 IPositioned next = Paths[PathIndex].First();
-                ActiveContext.ActiveGraph.MoveTo(next, (taskStatus) => { if (taskStatus == TaskStatus.RanToCompletion) OnFinishMovement(next); });
+                ActiveContext.ActiveGraph.MoveTo(next, (taskStatus) => { if (taskStatus == TaskStatus.RanToCompletion) OnFinishMovement(next); }, PlayRate);
             }
         }
 

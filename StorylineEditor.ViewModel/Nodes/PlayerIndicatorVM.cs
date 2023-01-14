@@ -18,17 +18,17 @@ namespace StorylineEditor.ViewModel.Nodes
 {
     public class PlayerIndicatorVM : Notifier
     {
-        public PlayerIndicatorVM(double paddingMultiplier, double sizeAlpha, double pulseAlpha) : base()
+        public PlayerIndicatorVM(double paddingMultiplier, double sizeChangeDuration, double pulseDuration) : base()
         {
             IsFilterPassed = true;
 
             _zIndex = -20000;
 
             _paddingMultiplier = paddingMultiplier;
-            
-            _sizeAlpha = sizeAlpha;
 
-            _pulseAlpha = pulseAlpha;
+            _sizeChangeDurationMsec = sizeChangeDuration;
+
+            _pulseDurationMsec = pulseDuration;
 
             IsVisible = false;
         }
@@ -110,13 +110,13 @@ namespace StorylineEditor.ViewModel.Nodes
                     {
                         _targetWidth = node.Width * _paddingMultiplier;
                         _targetHeight = node.Height * _paddingMultiplier;
-                        CurrentSizeAlpha = _sizeAlpha;
+                        _sizeChangedDurationMsecLeft = _sizeChangeDurationMsec;
                     }
                     else
                     {
                         _targetWidth = (double)Application.Current.FindResource("Double_Size_16x");
                         _targetHeight = (double)Application.Current.FindResource("Double_Size_16x");
-                        CurrentSizeAlpha = _sizeAlpha;
+                        _sizeChangedDurationMsecLeft = _sizeChangeDurationMsec;
                     }
                 }
             }
@@ -128,38 +128,49 @@ namespace StorylineEditor.ViewModel.Nodes
         protected double _targetHeight;
         public double TargetHeight => _targetHeight;
 
-        protected double _sizeAlpha;
+        protected double _sizeChangeDurationMsec;
 
-        protected double _pulseAlpha;
+        protected double _sizeChangedDurationMsecLeft;
 
-        public double CurrentSizeAlpha { get; set; }
+        protected double _pulseDurationMsec;
+
+        protected double _pulseTimeMsec;
+
         public bool IsVisible { get; set; }
 
-        public void Tick(double alpha)
+        public void Tick(double deltaTimeMsec)
         {
             if (PlayerContext != null)
             {
-                double tmp = (alpha - _sizeAlpha);
-                while (tmp > _sizeAlpha) tmp -= _sizeAlpha;
-                tmp /= _sizeAlpha;
+                double sizeAlpha = 1;
 
-                double betta = tmp > 0.5 ? (2 - 2 * tmp) : (2 * tmp);
-
-                double targetWidth = ((1 - betta) + 1.25 * betta) * TargetWidth;
-                double targetHeight = ((1 - betta) + 1.25 * betta) * TargetHeight;
-
-                if (alpha < CurrentSizeAlpha)
+                if (_sizeChangedDurationMsecLeft > 0)
                 {
-                    betta = alpha / CurrentSizeAlpha;
-                }
-                else
-                {
-                    CurrentSizeAlpha = 0;
-                    betta = 1;
+                    _sizeChangedDurationMsecLeft -= deltaTimeMsec;
+
+                    if (_sizeChangedDurationMsecLeft > 0)
+                    {
+                        sizeAlpha = _sizeChangedDurationMsecLeft / _sizeChangeDurationMsec;
+                    }
                 }
 
-                Width = (1 - betta) * Width + betta * targetWidth;
-                Height = (1 - betta) * Height + betta * targetHeight;
+                _pulseTimeMsec += deltaTimeMsec;
+
+                if (_pulseTimeMsec > _pulseDurationMsec)
+                {
+                    _pulseTimeMsec -= _pulseDurationMsec;
+                }
+
+                double pulseX = _pulseTimeMsec / _pulseTimeMsec;
+                pulseX = pulseX - 0.5;
+                double pulseAlpha = 1 - 4 * pulseX * pulseX;
+                double targetMultiplier = pulseAlpha * 0.25 + 1;
+
+                double targetWidth = TargetWidth * targetMultiplier;
+                double targetHeight = TargetHeight * targetMultiplier;
+
+                Width = (1 - sizeAlpha) * Width + sizeAlpha * targetWidth;
+                Height = (1 - sizeAlpha) * Height + sizeAlpha * targetHeight;
 
                 Left = (ActiveContext.ViewWidth - Width) / 2;
                 Top = (ActiveContext.ViewHeight - Height) / 2;
