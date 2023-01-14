@@ -27,8 +27,6 @@ namespace StorylineEditor.App.Service
 
         public void Stop()
         {
-            _isPaused = false; // cancellation should be consiedered inside tickAction
-
             _cancellationTokenSource?.Cancel();
         }
 
@@ -40,16 +38,17 @@ namespace StorylineEditor.App.Service
 
             Monitor.Enter(_locker);
 
-            TaskStatus taskStatus = TaskStatus.WaitingForActivation;
+            TaskStatus taskStatus = TaskStatus.WaitingToRun;
 
             try
             {
                 _cancellationTokenSource = new CancellationTokenSource();
 
                 double startTimeMsec = DateTime.Now.TimeOfDay.TotalMilliseconds;
-                double finishTimeMsec = startTimeMsec + durationMsec;
                 double timeMsec = startTimeMsec;
                 double prevTimeMsec = timeMsec;
+
+                double finishTimeMsec = startTimeMsec + durationMsec;
 
                 while (timeMsec < finishTimeMsec)
                 {
@@ -68,6 +67,9 @@ namespace StorylineEditor.App.Service
                     prevTimeMsec = timeMsec;
                     timeMsec = DateTime.Now.TimeOfDay.TotalMilliseconds;
                 }
+
+                // Final tick
+                taskStatus = tickAction(_cancellationTokenSource.Token, startTimeMsec, durationMsec, timeMsec, timeMsec - prevTimeMsec);
 
                 finAction(taskStatus, startTimeMsec, durationMsec, timeMsec, timeMsec - prevTimeMsec);
             }

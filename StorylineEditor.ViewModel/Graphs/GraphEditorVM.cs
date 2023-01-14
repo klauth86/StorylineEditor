@@ -71,7 +71,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
             selectionBox = new SelectionBoxVM();
 
-            playerIndicator = new PlayerIndicatorVM(2, 0.1, 0.2);
+            playerIndicator = new PlayerIndicatorVM(2, 600, 600);
 
             UserAction = null;
 
@@ -129,47 +129,62 @@ namespace StorylineEditor.ViewModel.Graphs
 
         void StartScrollingTask(IPositioned positioned, Action<TaskStatus> callbackAction, float playRate)
         {
-            double distance = Math.Sqrt((positioned.PositionX - offsetX) * (positioned.PositionX - offsetX) + (positioned.PositionY - offsetY) * (positioned.PositionY - offsetY));
-            double velocityMsec = playRate * ActiveContext.ViewWidth / 2
-                / 1000 // Msec
-                / 100; // playRate is %
+            double localX = FromAbsoluteToLocalX(positioned.PositionX);
+            double localY = FromAbsoluteToLocalY(positioned.PositionY);
 
-            double durationMsec = distance / velocityMsec;
+            double distance = Math.Sqrt(
+                (localX - ActiveContext.ViewWidth / 2) * (localX - ActiveContext.ViewWidth / 2) +
+                (localY - ActiveContext.ViewHeight / 2) * (localY - ActiveContext.ViewHeight / 2));
 
-            ActiveContext.TaskService.Start(
-                durationMsec,
-                (token, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
-                {
-                    if (inTimeMsec > inStartTimeMsec + inDurationMsec) return TaskStatus.RanToCompletion;
+            if (distance < 16) // Ignore offset of 2x2 pixels
+            {
+                callbackAction?.Invoke(TaskStatus.RanToCompletion);
+            }
+            else
+            {
+                double velocityMsec = playRate * ActiveContext.ViewWidth / 2
+                    / 1000 // Msec
+                    / 100; // playRate is %
 
-                    playerIndicator.Tick(inDeltaTimeMsec);
+                double durationMsec = distance / velocityMsec;
 
-                    double stepX = OffsetX - (positioned.PositionX - ActiveContext.ViewWidth / 2 / Scale);
-                    double stepY = OffsetY - (positioned.PositionY - ActiveContext.ViewHeight / 2 / Scale);
-
-                    double alpha = (inTimeMsec - inStartTimeMsec) / inDurationMsec;
-
-                    TranslateView(stepX * alpha, stepY * alpha);
-
-                    return TaskStatus.Running;
-                },
-                (taskStatus, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
-                {
-                    if (taskStatus == TaskStatus.RanToCompletion)
+                ActiveContext.TaskService.Start(
+                    durationMsec,
+                    (token, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
                     {
+                        if (inTimeMsec > inStartTimeMsec + inDurationMsec) return TaskStatus.RanToCompletion;
+
                         playerIndicator.Tick(inDeltaTimeMsec);
 
                         double stepX = OffsetX - (positioned.PositionX - ActiveContext.ViewWidth / 2 / Scale);
                         double stepY = OffsetY - (positioned.PositionY - ActiveContext.ViewHeight / 2 / Scale);
 
-                        TranslateView(stepX, stepY);
-                    }
-                }, callbackAction);
+                        double alpha = (inTimeMsec - inStartTimeMsec) / inDurationMsec;
+
+                        TranslateView(stepX * alpha, stepY * alpha);
+
+                        return TaskStatus.Running;
+                    },
+                    (taskStatus, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
+                    {
+                        if (taskStatus == TaskStatus.RanToCompletion)
+                        {
+                            playerIndicator.Tick(inDeltaTimeMsec);
+
+                            double stepX = OffsetX - (positioned.PositionX - ActiveContext.ViewWidth / 2 / Scale);
+                            double stepY = OffsetY - (positioned.PositionY - ActiveContext.ViewHeight / 2 / Scale);
+
+                            TranslateView(stepX, stepY);
+                        }
+                    }, callbackAction);
+            }
         }
 
         void StartScalingTask()
         {
-            ActiveContext.TaskService.Start(
+            if (Math.Abs(Scale - 1) > 0.01)
+            {
+                ActiveContext.TaskService.Start(
                 256,
                 (token, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
                 {
@@ -190,6 +205,7 @@ namespace StorylineEditor.ViewModel.Graphs
                         SetScale(ActiveContext.ViewWidth / 2, ActiveContext.ViewHeight / 2, 1);
                     }
                 }, null);
+            }
         }
 
         protected ICommand selectNodeTypeCommand;
@@ -206,7 +222,7 @@ namespace StorylineEditor.ViewModel.Graphs
                 if (rootNodeModel != null)
                 {
                     string characterId = rootNodeModel is Node_RegularM regularNodeModel ? regularNodeModel.characterId : null;
-                    StartScrollingTask(new PositionVM(rootNodeModel.positionX, rootNodeModel.positionY, rootNodeModel.id, characterId), null, 1);
+                    StartScrollingTask(new PositionVM(rootNodeModel.positionX, rootNodeModel.positionY, rootNodeModel.id, characterId), null, 100);
                 }
             }
         }, () => RootNodeIds.Count > 0));
@@ -222,7 +238,7 @@ namespace StorylineEditor.ViewModel.Graphs
                 if (rootNodeModel != null)
                 {
                     string characterId = rootNodeModel is Node_RegularM regularNodeModel ? regularNodeModel.characterId : null;
-                    StartScrollingTask(new PositionVM(rootNodeModel.positionX, rootNodeModel.positionY, rootNodeModel.id, characterId), null, 1);
+                    StartScrollingTask(new PositionVM(rootNodeModel.positionX, rootNodeModel.positionY, rootNodeModel.id, characterId), null, 100);
                 }
             }
         }, () => RootNodeIds.Count > 0));
@@ -231,7 +247,7 @@ namespace StorylineEditor.ViewModel.Graphs
         public ICommand ResetScaleCommand => resetScaleCommand ?? (resetScaleCommand = new RelayCommand(() => StartScalingTask()));
 
         protected ICommand goToOriginCommand;
-        public ICommand GoToOriginCommand => goToOriginCommand ?? (goToOriginCommand = new RelayCommand(() => StartScrollingTask(OriginVM.GetOrigin(), null, 1)));
+        public ICommand GoToOriginCommand => goToOriginCommand ?? (goToOriginCommand = new RelayCommand(() => StartScrollingTask(OriginVM.GetOrigin(), null, 100)));
 
         protected ICommand playCommand;
         public ICommand PlayCommand => playCommand ?? (playCommand = new RelayCommand(() => ActiveContext.DialogService?.ShowDialog(ActiveContext.History), () => HasSelection()));

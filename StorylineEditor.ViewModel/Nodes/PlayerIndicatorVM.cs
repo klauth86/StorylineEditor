@@ -18,7 +18,7 @@ namespace StorylineEditor.ViewModel.Nodes
 {
     public class PlayerIndicatorVM : Notifier
     {
-        public PlayerIndicatorVM(double paddingMultiplier, double sizeChangeDuration, double pulseDuration) : base()
+        public PlayerIndicatorVM(double paddingMultiplier, double sizeChangeDurationMsec, double pulseDurationMsec) : base()
         {
             IsFilterPassed = true;
 
@@ -26,9 +26,9 @@ namespace StorylineEditor.ViewModel.Nodes
 
             _paddingMultiplier = paddingMultiplier;
 
-            _sizeChangeDurationMsec = sizeChangeDuration;
+            _sizeChangeDurationMsec = sizeChangeDurationMsec;
 
-            _pulseDurationMsec = pulseDuration;
+            _pulseDurationMsec = pulseDurationMsec;
 
             IsVisible = false;
         }
@@ -161,7 +161,7 @@ namespace StorylineEditor.ViewModel.Nodes
                     _pulseTimeMsec -= _pulseDurationMsec;
                 }
 
-                double pulseX = _pulseTimeMsec / _pulseTimeMsec;
+                double pulseX = _pulseTimeMsec / _pulseDurationMsec;
                 pulseX = pulseX - 0.5;
                 double pulseAlpha = 1 - 4 * pulseX * pulseX;
                 double targetMultiplier = pulseAlpha * 0.25 + 1;

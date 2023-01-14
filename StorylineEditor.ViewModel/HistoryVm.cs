@@ -871,6 +871,8 @@ namespace StorylineEditor.ViewModel
                 double startTimeMsec = DateTime.Now.TimeOfDay.TotalMilliseconds;
                 double finishTimeMsec = startTimeMsec + Duration * 1000;
 
+                TimeLeft = Duration;
+
                 ActiveContext.TaskService.Start(
                     Duration * 1000,
                     (token, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
@@ -879,7 +881,7 @@ namespace StorylineEditor.ViewModel
 
                         ActiveContext.ActiveGraph.TickPlayer(inDeltaTimeMsec);
 
-                        TimeLeft -= inDeltaTimeMsec;
+                        TimeLeft -= inDeltaTimeMsec / 1000;
 
                         return TaskStatus.Running;
                     },
