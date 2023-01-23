@@ -12,6 +12,7 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model;
 using StorylineEditor.Model.Nodes;
+using StorylineEditor.ViewModel.Interface;
 using System.ComponentModel;
 using System.Windows.Data;
 
@@ -19,6 +20,7 @@ namespace StorylineEditor.ViewModel.Nodes
 {
     public abstract class Node_RegularVM<T, U>
         : Node_InteractiveVM<T, U>
+        , IRegularNode
         where T : Node_RegularM
         where U : class
     {
@@ -85,6 +87,19 @@ namespace StorylineEditor.ViewModel.Nodes
                 {
                     Model.overrideName = value;
                     OnModelChanged(Model, nameof(OverrideName));
+                }
+            }
+        }
+
+        public byte FileStorageType
+        {
+            get => Model.fileStorageType;
+            set
+            {
+                if (Model.fileStorageType != value)
+                {
+                    Model.fileStorageType = value;
+                    OnModelChanged(Model, nameof(FileStorageType));
                 }
             }
         }

@@ -27,9 +27,14 @@ namespace StorylineEditor.ViewModel.Interface
         string Name { get; set; }
         byte Gender { get; }
         bool IsSelected { get; }
-        bool IsRoot { get; set; }
 
         IEnumerable<IPredicate> Predicates { get; }
         IEnumerable<IGameEvent> GameEvents { get; }
+    }
+
+    public interface IRegularNode : INode
+    {
+        byte FileStorageType { get; }
+        string FileHttpRef { get; }
     }
 }
