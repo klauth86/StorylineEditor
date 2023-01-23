@@ -1509,6 +1509,7 @@ StorylineEditor распространяется в надежде, что он�
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
                     <controls:ComboBoxExt SelectedValue="{Binding Character, UpdateSourceTrigger=PropertyChanged}"
                                           Tag="{StaticResource String_Tag_Node_Regular_Character}"
@@ -1516,9 +1517,10 @@ StorylineEditor распространяется в надежде, что он�
                                           Filter="{Binding CharacterFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
                     <TextBox Grid.Row="1" Style="{StaticResource S_TextBox_Prop}" Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_OverrideName}"></TextBox>
-                    <TextBox Grid.Row="2" Style="{StaticResource S_TextBox_Prop}" Text="{Binding FileHttpRef, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_FileHttpRef}"></TextBox>
-                    <TextBox Grid.Row="3" Style="{StaticResource S_TextBox_Prop_Rich}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Alternative_Description}"></TextBox>
-                    <TextBox Grid.Row="4" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_ShortDescription}"></TextBox>
+                    <ContentControl Grid.Row="2" Style="{StaticResource S_ContentControl_Prop_StorageType}" Content="{Binding}" Tag="{StaticResource String_Tag_Node_Regular_FileStorageType}"></ContentControl>
+                    <TextBox Grid.Row="3" Style="{StaticResource S_TextBox_Prop}" Text="{Binding FileHttpRef, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_FileHttpRef}"></TextBox>
+                    <TextBox Grid.Row="4" Style="{StaticResource S_TextBox_Prop_Rich}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Alternative_Description}"></TextBox>
+                    <TextBox Grid.Row="5" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_ShortDescription}"></TextBox>
                 </Grid>
             </TabItem>
             <TabItem ContentTemplate="{StaticResource DT_ContentControl_Predicates}" Content="{Binding}" HeaderTemplate="{StaticResource DT_ContentControl_PredicatesHeader}" Header="{Binding}"></TabItem>
@@ -1565,6 +1567,7 @@ StorylineEditor распространяется в надежде, что он�
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
                     <controls:ComboBoxExt SelectedValue="{Binding Character, UpdateSourceTrigger=PropertyChanged}"
                                           Tag="{StaticResource String_Tag_Node_Regular_Character}"
@@ -1572,9 +1575,10 @@ StorylineEditor распространяется в надежде, что он�
                                           Filter="{Binding CharacterFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
                     <TextBox Grid.Row="1" Style="{StaticResource S_TextBox_Prop}" Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_OverrideName}"></TextBox>
-                    <TextBox Grid.Row="2" Style="{StaticResource S_TextBox_Prop}" Text="{Binding FileHttpRef, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_FileHttpRef}"></TextBox>
-                    <TextBox Grid.Row="3" Style="{StaticResource S_TextBox_Prop_Rich}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Alternative_Description}"></TextBox>
-                    <TextBox Grid.Row="4" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_ShortDescription}"></TextBox>
+                    <ContentControl Grid.Row="2" Style="{StaticResource S_ContentControl_Prop_StorageType}" Content="{Binding}" Tag="{StaticResource String_Tag_Node_Regular_FileStorageType}"></ContentControl>
+                    <TextBox Grid.Row="3" Style="{StaticResource S_TextBox_Prop}" Text="{Binding FileHttpRef, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_FileHttpRef}"></TextBox>
+                    <TextBox Grid.Row="4" Style="{StaticResource S_TextBox_Prop_Rich}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Alternative_Description}"></TextBox>
+                    <TextBox Grid.Row="5" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_ShortDescription}"></TextBox>
                 </Grid>
             </TabItem>
             <TabItem ContentTemplate="{StaticResource DT_ContentControl_Predicates}" Content="{Binding}" HeaderTemplate="{StaticResource DT_ContentControl_PredicatesHeader}" Header="{Binding}"></TabItem>

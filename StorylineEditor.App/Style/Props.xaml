@@ -14,7 +14,8 @@ StorylineEditor распространяется в надежде, что он�
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:StorylineEditor.App.Controls"
                     xmlns:m="clr-namespace:StorylineEditor.Model;assembly=StorylineEditor.Model"
-                    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
+                    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <Style TargetType="GroupBox" x:Key="S_GroupBox_Prop">
         <Setter Property="Margin" Value="{StaticResource Thickness_Margin_2x}"></Setter>
@@ -114,6 +115,37 @@ StorylineEditor распространяется в надежде, что он�
         </DataTemplate.Triggers>
     </DataTemplate>
 
+    <DataTemplate x:Key="DT_ListBoxItem_StorageType">
+        <TextBlock x:Name="tb_Main"></TextBlock>
+        <DataTemplate.Triggers>
+            <Trigger SourceName="tb_Main" Property="DataContext" Value="{x:Static m:STORAGE_TYPE.GOOGLE_DRIVE}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_StorageType_GoogleDrive}"></Setter>
+            </Trigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <x:Array x:Key="ARRAY_StorageTypes"  Type="{x:Type sys:Byte}">
+        <x:Static Member="m:STORAGE_TYPE.GOOGLE_DRIVE"></x:Static>
+    </x:Array>
+
+    <Style TargetType="ComboBox" x:Key="S_ComboBox_StorageTypes">
+        <Setter Property="SelectedIndex" Value="0"></Setter>
+        <Setter Property="ItemTemplate" Value="{StaticResource DT_ListBoxItem_StorageType}"></Setter>
+        <Setter Property="ItemsSource" Value="{StaticResource ARRAY_StorageTypes}"></Setter>
+    </Style>
+
+    <Style TargetType="ContentControl" x:Key="S_ContentControl_Prop_StorageType">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ContentControl">
+                    <GroupBox Style="{StaticResource S_GroupBox_Prop}" Header="{TemplateBinding Tag}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
+                        <ComboBox SelectedValue="{Binding Path=DataContext.FileStorageType, RelativeSource={RelativeSource Mode=TemplatedParent}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_ComboBox_StorageTypes}"></ComboBox>
+                    </GroupBox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
     <ControlTemplate TargetType="ContentControl" x:Key="CT_ContentControl_Comparer_List">
         <ListBox SelectedValue="{Binding CompareType}" SelectedIndex="0" ItemTemplate="{StaticResource DT_ListBoxItem_CompareType}" FontSize="{StaticResource FontSize_Small}">
             <x:Static Member="m:COMPARE_TYPE.LESS"></x:Static>

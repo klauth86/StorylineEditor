@@ -188,9 +188,13 @@ StorylineEditor распространяется в надежде, что он�
 
     <sys:String x:Key="String_Tag_Node_Regular_OverrideName">Иное отображаемое имя</sys:String>
 
+    <sys:String x:Key="String_Tag_Node_Regular_FileStorageType">Тип хранилища</sys:String>
+    
     <sys:String x:Key="String_Tag_Node_Regular_FileHttpRef">Ссылка на аудио</sys:String>
 
     <sys:String x:Key="String_Tag_Node_Regular_ShortDescription">Краткое описание</sys:String>
+
+    <sys:String x:Key="String_Tag_StorageType_GoogleDrive">Google Drive</sys:String>
 
     <!--PREDICATES-->
 
