@@ -15,6 +15,12 @@ using System.Collections.Generic;
 
 namespace StorylineEditor.Model
 {
+    public static class STORAGE_TYPE
+    {
+        public const byte UNSET = 0;
+        public const byte GOOGLE_DRIVE = 1;
+    }
+
     public static class GENDER
     {
         public const byte UNSET = 0;

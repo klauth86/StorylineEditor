@@ -20,6 +20,7 @@ namespace StorylineEditor.Model.Nodes
         {
             characterId = null;
             overrideName = null;
+            fileStorageType = STORAGE_TYPE.GOOGLE_DRIVE;
             fileHttpRef = null;
             shortDescription = null;
         }
@@ -34,6 +35,7 @@ namespace StorylineEditor.Model.Nodes
             {
                 casted.characterId = characterId;
                 casted.overrideName = overrideName;
+                casted.fileStorageType = casted.fileStorageType;
                 casted.fileHttpRef = fileHttpRef;
                 casted.shortDescription = shortDescription;
             }
@@ -49,6 +51,7 @@ namespace StorylineEditor.Model.Nodes
 
         public string characterId { get; set; }
         public string overrideName { get; set; }
+        public byte fileStorageType { get; set; }
         public string fileHttpRef { get; set; }
         public string shortDescription { get; set; }
     }
