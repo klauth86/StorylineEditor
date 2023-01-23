@@ -607,7 +607,6 @@ namespace StorylineEditor.ViewModel.Graphs
                                         targetNodeViewModel.Id, targetNodeViewModel.PositionX, targetNodeViewModel.PositionY,
                                         toNodeViewModel.Id, toNodeViewModel.PositionX, toNodeViewModel.PositionY);
 
-                                    toNodeViewModel.IsRoot = false;
                                     RootNodeIds.Remove(toNodeViewModel.Id);
 
                                     CommandManager.InvalidateRequerySuggested();
@@ -744,7 +743,6 @@ namespace StorylineEditor.ViewModel.Graphs
                         fromNodeViewModel.Id, fromNodeViewModel.PositionX, fromNodeViewModel.PositionY,
                         toNodeViewModel.Id, toNodeViewModel.PositionX, toNodeViewModel.PositionY);
 
-                    toNodeViewModel.IsRoot = false;
                     RootNodeIds.Remove(toNodeViewModel.Id);
                 }
             }
@@ -804,7 +802,6 @@ namespace StorylineEditor.ViewModel.Graphs
             ToNodesLinks.Add(model.id, new HashSet<string>());
 
             RootNodeIds.Add(model.id);
-            ((INode)NodesVMs[model.id]).IsRoot = true;
 
             AddToSelection(viewModel, resetSelection);
 
@@ -910,7 +907,6 @@ namespace StorylineEditor.ViewModel.Graphs
                     if (ToNodesLinks[linkViewModel.ToNodeId].Count == 0)
                     {
                         RootNodeIds.Add(linkViewModel.ToNodeId);
-                        if (NodesVMs.ContainsKey(linkViewModel.ToNodeId)) ((INode)NodesVMs[linkViewModel.ToNodeId]).IsRoot = true;
                     }
                 }
             }
@@ -1126,7 +1122,6 @@ namespace StorylineEditor.ViewModel.Graphs
                 {
                     Notifier viewModel = _vmCreator(model);
                     viewModel.IsSelected = selection.Contains(model.id);
-                    ((INode)viewModel).IsRoot = RootNodeIds.Contains(model.id);
 
                     NodesVMs.Add(model.id, viewModel);
                     Add(null, viewModel);

@@ -37,7 +37,6 @@ namespace StorylineEditor.ViewModel.Nodes
                   )
         {
             zIndex = 100;
-            isRoot = false;
         }
 
         public byte Gender
@@ -150,20 +149,6 @@ namespace StorylineEditor.ViewModel.Nodes
 
         protected int zIndex;
         public int ZIndex => zIndex;
-
-        protected bool isRoot;
-        public bool IsRoot
-        {
-            get => isRoot;
-            set
-            {
-                if (isRoot != value)
-                {
-                    isRoot = value;
-                    Notify(nameof(IsRoot));
-                }
-            }
-        }
 
         protected FlowDocument descriptionFlow;
         public FlowDocument DescriptionFlow
