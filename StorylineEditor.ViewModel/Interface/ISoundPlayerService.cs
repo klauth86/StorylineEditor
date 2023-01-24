@@ -11,22 +11,15 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using System;
-using System.IO;
 
 namespace StorylineEditor.ViewModel.Interface
 {
-    public interface IFileService
+    public interface ISoundPlayerService
     {
-        // Open Save logic
-        string Path { get; }
-        string OpenFile(string filter, bool refreshPath); // открытие файла
-        string SaveFile(string filter, bool refreshPath);  // сохранение файла
+        void Stop();
 
-        // File Storage logic
-        void GetFileFromStorage(byte fileStorageType, string fileHttpRef, Action<string> successCallback, Action failureCallback);
+        void SetIsPaused(bool isPaused);
 
-        // Config logic
-        void LoadConfig();
-        void SaveConfig();
+        void Play(string sourceFilePath, Action successCallback, Action failureCallback);
     }
 }

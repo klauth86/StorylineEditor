@@ -10,18 +10,29 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Drive.v3;
+using Google.Apis.Services;
 using Microsoft.Win32;
+using StorylineEditor.Model;
 using StorylineEditor.ViewModel;
 using StorylineEditor.ViewModel.Config;
 using StorylineEditor.ViewModel.Interface;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
+using System.Net;
 
 namespace StorylineEditor.App.Service
 {
     public class FileService : IFileService
     {
         private const string _configXmlPath = "ConfigM.xml";
+        
+        private Dictionary<string, string> cachedFiles = new Dictionary<string, string>();
 
+        // Open Save logic
         public string Path { get; protected set; }
         public string OpenFile(string filter, bool refreshPath)
         {
@@ -48,8 +59,67 @@ namespace StorylineEditor.App.Service
             return null;
         }
 
-        public FileStream OpenFile(string path, FileMode mode) { return File.Open(path, mode); }
+        // File Storage logic
+        public void GetFileFromStorage(byte fileStorageType, string fileHttpRef, Action<string> successCallback, Action failureCallback)
+        {
+            if (fileStorageType == STORAGE_TYPE.GOOGLE_DRIVE)
+            {
+                GetFileFromGoogleDrive(fileHttpRef, successCallback, failureCallback);
+            }
+            else
+            {
+                failureCallback();
+            }
+        }
+        private void GetFileFromGoogleDrive(string fileHttpRef, Action<string> successCallback, Action failureCallback)
+        {
+            GoogleCredential credential = GoogleCredential.GetApplicationDefault().CreateScoped(DriveService.Scope.Drive);
 
+            var service = new DriveService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = "" ////// TODO
+            });
+
+            var fileResource = service.Files.Get(fileHttpRef);
+            var file = fileResource.Execute();
+
+            MemoryStream memoryStream = new MemoryStream();
+
+            fileResource.MediaDownloader.ProgressChanged += (progress) =>
+            {
+                switch (progress.Status)
+                {
+                    case Google.Apis.Download.DownloadStatus.Completed:
+                        {
+                            string cachedFilePath = Environment.CurrentDirectory + "\\" + file.Name;
+
+                            using (var fileStream = OpenFile(cachedFilePath, FileMode.CreateNew))
+                            {
+                                memoryStream.Position = 0;
+                                memoryStream.CopyTo(fileStream);
+                            }
+
+                            cachedFiles.Add(fileHttpRef, cachedFilePath);
+                            successCallback(cachedFilePath);
+                        }
+                        break;
+
+                    case Google.Apis.Download.DownloadStatus.Failed:
+                        {
+                            failureCallback();
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            };
+
+            fileResource.DownloadAsync(memoryStream);
+        }
+
+        // Config logic
         public void LoadConfig()
         {
             if (File.Exists(_configXmlPath))
@@ -73,5 +143,7 @@ namespace StorylineEditor.App.Service
                 ActiveContext.SerializationService.Serialize(fileStream, ConfigM.Config);
             }
         }
+
+        private FileStream OpenFile(string path, FileMode mode) { return File.Open(path, mode); }
     }
 }

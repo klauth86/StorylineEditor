@@ -39,6 +39,7 @@ namespace StorylineEditor.App
             ActiveContext.FlowDocumentService = new FlowDocumentService();
             ActiveContext.TaskService = new TaskService();
             ActiveContext.FileService = new FileService();
+            ActiveContext.SoundPlayerService = new SoundPlayerService();
 
             ActiveContext.FileService.LoadConfig();
         }

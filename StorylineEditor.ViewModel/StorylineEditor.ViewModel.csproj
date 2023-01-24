@@ -54,6 +54,7 @@
     <Compile Include="Interface\IPositioned.cs" />
     <Compile Include="Interface\IPredicate.cs" />
     <Compile Include="Interface\ISerializationService.cs" />
+    <Compile Include="Interface\ISoundPlayerService.cs" />
     <Compile Include="Interface\ITaskService.cs" />
     <Compile Include="Interface\IWithModel.cs" />
     <Compile Include="ItemEditorVM.cs" />

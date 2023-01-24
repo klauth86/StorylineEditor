@@ -863,7 +863,7 @@ namespace StorylineEditor.ViewModel
 
             INode node = ActiveContext.ActiveGraph.FindNode(positioned.Id);
             PlayerContext = node;
-            StartPlayNode(node);
+            StartPlayNode(node, false);
         }
 
         private void ExecuteGameEvents(string positionedId, bool isLeave) { ExecuteGameEvents(ActiveContext.ActiveGraph.FindNode(positionedId), isLeave); }
@@ -888,40 +888,61 @@ namespace StorylineEditor.ViewModel
             return collectionBase.AddToSelectionById(graphId, true);
         }
 
-        private void StartPlayNode(INode node)
+        private void StartPlayNode(INode node, bool noAudioMode)
         {
             ExecuteGameEvents(node, false); // Enter
 
-            if (node is Node_DialogVM dialogNodeViewModel || node is Node_ReplicaVM replicaNodeViewModel)
+            if (node is IRegularNode regularNode)
             {
-                double startTimeMsec = DateTime.Now.TimeOfDay.TotalMilliseconds;
-                double finishTimeMsec = startTimeMsec + Duration * 1000;
+                byte fileStorageType = (byte)regularNode.FileStorageType;
+                string fileHttpRef = regularNode.FileHttpRef;
 
-                TimeLeft = Duration;
+                if (noAudioMode || string.IsNullOrEmpty(fileHttpRef) || fileStorageType == STORAGE_TYPE.UNSET)
+                {
+                    double startTimeMsec = DateTime.Now.TimeOfDay.TotalMilliseconds;
+                    double finishTimeMsec = startTimeMsec + Duration * 1000;
 
-                ActiveContext.TaskService.Start(
-                    Duration * 1000,
-                    (token, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
-                    {
-                        if (inTimeMsec > inStartTimeMsec + inDurationMsec) return CustomTaskStatus.RanToCompletion;
+                    TimeLeft = Duration;
 
-                        ActiveContext.ActiveGraph.TickPlayer(inDeltaTimeMsec);
-
-                        TimeLeft -= inDeltaTimeMsec / 1000;
-
-                        return CustomTaskStatus.Running;
-                    },
-                    (CustomTaskStatus, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
-                    {
-                        if (CustomTaskStatus == CustomTaskStatus.RanToCompletion)
+                    ActiveContext.TaskService.Start(
+                        Duration * 1000,
+                        (token, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
                         {
+                            if (inTimeMsec > inStartTimeMsec + inDurationMsec) return CustomTaskStatus.RanToCompletion;
+
                             ActiveContext.ActiveGraph.TickPlayer(inDeltaTimeMsec);
-                            
-                            TimeLeft = 0;
-                            
-                            FinishPlayNode(node);
+
+                            TimeLeft -= inDeltaTimeMsec / 1000;
+
+                            return CustomTaskStatus.Running;
+                        },
+                        (CustomTaskStatus, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
+                        {
+                            if (CustomTaskStatus == CustomTaskStatus.RanToCompletion)
+                            {
+                                ActiveContext.ActiveGraph.TickPlayer(inDeltaTimeMsec);
+
+                                TimeLeft = 0;
+
+                                FinishPlayNode(node);
+                            }
+                        }, null);
+                }
+                else
+                {
+                    ActiveContext.FileService.GetFileFromStorage(
+                        fileStorageType
+                        , fileHttpRef
+                        , (sourceFilePath) =>
+                        {
+                            ActiveContext.SoundPlayerService.Play(
+                                sourceFilePath
+                                , () => { FinishPlayNode(node); }
+                                , () => { StartPlayNode(node, true); }
+                            );
                         }
-                    }, null);
+                        , () => { StartPlayNode(node, true); });
+                }
             }
             else
             {
