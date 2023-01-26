@@ -10,18 +10,17 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using Google.Apis.Auth.OAuth2;
-using Google.Apis.Drive.v3;
-using Google.Apis.Services;
 using Microsoft.Win32;
+using StorylineEditor.App.Service.StorageProvider;
 using StorylineEditor.Model;
 using StorylineEditor.ViewModel;
 using StorylineEditor.ViewModel.Config;
 using StorylineEditor.ViewModel.Interface;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
-using System.Text.RegularExpressions;
+using System.Net;
 
 namespace StorylineEditor.App.Service
 {
@@ -29,9 +28,51 @@ namespace StorylineEditor.App.Service
     {
         private const string _configXmlPath = "ConfigM.xml";
         
-        private Dictionary<string, string> cachedFiles = new Dictionary<string, string>();
+        private Dictionary<string, string> _cachedFiles = new Dictionary<string, string>();
 
-        private Regex regex = new Regex(@"\/d\/(.+)\/", RegexOptions.IgnoreCase);
+        private Dictionary<byte, IStorageProvider> _storageProviders = new Dictionary<byte, IStorageProvider> { { STORAGE_TYPE.GOOGLE_DRIVE, new GoogleDrveStorageProvider() } };
+
+        private WebClient _webClient = new WebClient();
+
+        private string _nodeId;
+
+        private string _fileUrl;
+
+        private Action<string> _successCallback = null;
+
+        private Action _failureCallback = null;
+
+        public FileService()
+        {
+            _webClient.DownloadFileCompleted += OnDownloadFileCompleted;
+        }
+
+        public void Dispose()
+        {
+            _webClient.Dispose();
+
+            foreach (var cachedFileEntry in _cachedFiles) ////// TODO Think
+            {
+                File.Delete(cachedFileEntry.Value);
+            }
+        }
+
+        private void OnDownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
+        {
+            if (e.Cancelled)
+            {
+            }
+            else if (e.Error != null)
+            {
+                _failureCallback();
+            }
+            else
+            {
+                _successCallback(GetDownloadPath(_nodeId));
+            }
+        }
+
+        private string GetDownloadPath(string nodeId) { return string.Format("{0}\\{1}", new FileInfo(Path).Directory.FullName, "test"); }
 
         // Open Save logic
         public string Path { get; protected set; }
@@ -61,69 +102,26 @@ namespace StorylineEditor.App.Service
         }
 
         // File Storage logic
-        public void GetFileFromStorage(byte storageType, string fileUrl, Action<string> successCallback, Action failureCallback)
+        public void GetFileFromStorage(string nodeId, byte storageType, string fileUrl, Action<string> successCallback, Action failureCallback)
         {
-            if (storageType == STORAGE_TYPE.GOOGLE_DRIVE)
+            if (_cachedFiles.ContainsKey(fileUrl) && File.Exists(_cachedFiles[fileUrl]))
             {
-                GetFileFromGoogleDrive(fileUrl, successCallback, failureCallback);
+                successCallback(_cachedFiles[fileUrl]);
+            }
+            else if (_storageProviders.ContainsKey(storageType))
+            {
+                _nodeId = nodeId;
+                _fileUrl = fileUrl;
+                _successCallback = successCallback;
+                _failureCallback = failureCallback;
+
+                string downloadUrl = _storageProviders[storageType].GetDownloadUrlFromBasicUrl(ref fileUrl);              
+                _webClient.DownloadFileAsync(new Uri(downloadUrl), GetDownloadPath(_nodeId));
             }
             else
             {
                 failureCallback();
             }
-        }
-        private void GetFileFromGoogleDrive(string fileUrl, Action<string> successCallback, Action failureCallback)
-        {
-            GoogleCredential credential = GoogleCredential.GetApplicationDefault().CreateScoped(DriveService.Scope.DriveReadonly);
-
-            var service = new DriveService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = "" ////// TODO
-            });
-
-            string fileId = GetIdFromUrlForGoogleDrive(ref fileUrl);
-            var fileResource = service.Files.Get(fileId);
-            var file = fileResource.Execute();
-
-            MemoryStream memoryStream = new MemoryStream();
-
-            fileResource.MediaDownloader.ProgressChanged += (progress) =>
-            {
-                switch (progress.Status)
-                {
-                    case Google.Apis.Download.DownloadStatus.Completed:
-                        {
-                            string cachedFilePath = Environment.CurrentDirectory + "\\" + file.Name;
-
-                            using (var fileStream = OpenFile(cachedFilePath, FileMode.CreateNew))
-                            {
-                                memoryStream.Position = 0;
-                                memoryStream.CopyTo(fileStream);
-                            }
-
-                            cachedFiles.Add(fileUrl, cachedFilePath);
-                            successCallback(cachedFilePath);
-                        }
-                        break;
-
-                    case Google.Apis.Download.DownloadStatus.Failed:
-                        {
-                            failureCallback();
-                        }
-                        break;
-
-                    default:
-                        break;
-                }
-            };
-
-            fileResource.DownloadAsync(memoryStream);
-        }
-        private string GetIdFromUrlForGoogleDrive(ref string fileUrl)
-        {
-            Match m = regex.Match(fileUrl);
-            return m.ToString().TrimStart('/', 'd').Trim('/');
         }
 
         // Config logic

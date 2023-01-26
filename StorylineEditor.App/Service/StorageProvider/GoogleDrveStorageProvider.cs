@@ -10,22 +10,24 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using System;
+using System.Text.RegularExpressions;
 
-namespace StorylineEditor.ViewModel.Interface
+namespace StorylineEditor.App.Service.StorageProvider
 {
-    public interface IFileService : IDisposable
+    public class GoogleDrveStorageProvider : IStorageProvider
     {
-        // Open Save logic
-        string Path { get; }
-        string OpenFile(string filter, bool refreshPath); // открытие файла
-        string SaveFile(string filter, bool refreshPath);  // сохранение файла
+        private Regex _regex = new Regex(@"[-\w]{25,}(?!.*[-\w]{25,})", RegexOptions.IgnoreCase);
 
-        // File Storage logic
-        void GetFileFromStorage(string nodeId, byte storageType, string fileUrl, Action<string> successCallback, Action failureCallback);
+        public string GetDownloadUrlFromBasicUrl(ref string fileUrl)
+        {
+            Match match = _regex.Match(fileUrl);
+            if (match.Success)
+            {
+                string fileId = match.ToString().TrimStart('/', 'd').Trim('/');
+                return string.Format("https://drive.google.com/uc?id={0}&export=download", fileId);
+            }
 
-        // Config logic
-        void LoadConfig();
-        void SaveConfig();
+            return null;
+        }
     }
 }

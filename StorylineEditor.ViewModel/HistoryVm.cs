@@ -931,7 +931,8 @@ namespace StorylineEditor.ViewModel
                 else
                 {
                     ActiveContext.FileService.GetFileFromStorage(
-                        storageType
+                        node.Id
+                        , storageType
                         , fileUrl
                         , (sourceFilePath) =>
                         {

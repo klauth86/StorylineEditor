@@ -20,6 +20,7 @@ using StorylineEditor.ViewModel.Config;
 using StorylineEditor.ViewModel.Interface;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 using System.Windows;
@@ -59,6 +60,13 @@ namespace StorylineEditor.App
             Title = string.Format("{0} [{1}]", assemblyName.Name, "new document");
         }
 
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            ActiveContext.FileService.Dispose();
+
+            base.OnClosing(e);
+        }
+
         private void btn_Open_Click(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(ActiveContext.FileService.OpenFile(XmlFilter, true))) OpenFile(ActiveContext.FileService.Path);
@@ -75,30 +83,29 @@ namespace StorylineEditor.App
         {
             SetDataContext(null);
 
-            FileStream fileStream = null;
+            if (File.Exists(path))
+            {
+                using (FileStream fileStream = File.Open(path, FileMode.Open))
+                {
+                    try
+                    {
+                        var model = ActiveContext.SerializationService.Deserialize<StorylineM>(fileStream);
+                        ValidateModel(model);
 
-            try
-            {
-                fileStream = File.Open(path, FileMode.Open);
-                var model = ActiveContext.SerializationService.Deserialize<StorylineM>(fileStream);
-                ValidateModel(model);
+                        SetDataContext(new StorylineVM(model));
 
-                SetDataContext(new StorylineVM(model));
-
-                var assemblyName = Assembly.GetExecutingAssembly().GetName();
-                Title = string.Format("{0} [{1}]", assemblyName.Name, path);
-            }
-            catch (InvalidDataException idExc)
-            {
-                MessageBox.Show(idExc.Message, "Error", MessageBoxButton.OK);
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Can not open file!", "Error", MessageBoxButton.OK);
-            }
-            finally
-            {
-                fileStream?.Dispose();
+                        var assemblyName = Assembly.GetExecutingAssembly().GetName();
+                        Title = string.Format("{0} [{1}]", assemblyName.Name, path);
+                    }
+                    catch (InvalidDataException idExc)
+                    {
+                        MessageBox.Show(idExc.Message, "Error", MessageBoxButton.OK);
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("Can not open file!", "Error", MessageBoxButton.OK);
+                    }
+                }
             }
         }
 
