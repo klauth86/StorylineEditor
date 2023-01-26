@@ -21,11 +21,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace StorylineEditor.App.Service
 {
     public class FileService : IFileService
     {
+        private Regex _fileNameRegex = new Regex("filename=\"([^\"]*)\";", RegexOptions.IgnoreCase);
+
         private const string _configXmlPath = "ConfigM.xml";
         
         private Dictionary<string, string> _cachedFiles = new Dictionary<string, string>();
@@ -37,6 +40,8 @@ namespace StorylineEditor.App.Service
         private string _nodeId;
 
         private string _fileUrl;
+
+        private string _downloadPath;
 
         private Action<string> _successCallback = null;
 
@@ -68,11 +73,12 @@ namespace StorylineEditor.App.Service
             }
             else
             {
-                _successCallback(GetDownloadPath(_nodeId));
+                _cachedFiles.Add(_fileUrl, _downloadPath);
+                _successCallback(_downloadPath);
             }
         }
 
-        private string GetDownloadPath(string nodeId) { return string.Format("{0}\\{1}", new FileInfo(Path).Directory.FullName, "test"); }
+        private string GetDownloadPath(string fileName) { return string.Format("{0}\\{1}", new FileInfo(Path).Directory.FullName, fileName); }
 
         // Open Save logic
         public string Path { get; protected set; }
@@ -115,8 +121,37 @@ namespace StorylineEditor.App.Service
                 _successCallback = successCallback;
                 _failureCallback = failureCallback;
 
-                string downloadUrl = _storageProviders[storageType].GetDownloadUrlFromBasicUrl(ref fileUrl);              
-                _webClient.DownloadFileAsync(new Uri(downloadUrl), GetDownloadPath(_nodeId));
+                string downloadUrl = _storageProviders[storageType].GetDownloadUrlFromBasicUrl(ref fileUrl);
+
+                _webClient.DownloadData(downloadUrl);
+
+                if (!string.IsNullOrEmpty(_webClient.ResponseHeaders["Content-Disposition"]))
+                {
+                    string contentDisposition = _webClient.ResponseHeaders["Content-Disposition"];
+
+                    Match match = _fileNameRegex.Match(contentDisposition);
+                    
+                    if (match.Success)
+                    {
+                        if (match.Groups.Count > 1)
+                        {
+                            _downloadPath = GetDownloadPath(match.Groups[1].ToString());
+                            _webClient.DownloadFileAsync(new Uri(downloadUrl), _downloadPath);
+                        }
+                        else
+                        {
+                            failureCallback();
+                        }
+                    }
+                    else
+                    {
+                        failureCallback();
+                    }
+                }
+                else
+                {
+                    failureCallback();
+                }
             }
             else
             {

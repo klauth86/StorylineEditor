@@ -34,6 +34,7 @@ namespace StorylineEditor.App.Service
         public SoundPlayerService()
         {
             _mediaElement = new MediaElement();
+            _mediaElement.Volume = 1;
             _mediaElement.LoadedBehavior = MediaState.Manual;
             _mediaElement.MediaFailed += OnMediaFailed;
             _mediaElement.MediaEnded += OnMediaEnded;
@@ -94,7 +95,7 @@ namespace StorylineEditor.App.Service
 
             try
             {
-                _mediaElement.Source = new Uri("sourceFilePath");
+                _mediaElement.Source = new Uri(sourceFilePath);
                 _mediaElement.Play();
                 _customStatus = CustomStatus.Running;
             }
