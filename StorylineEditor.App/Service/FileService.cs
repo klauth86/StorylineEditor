@@ -20,9 +20,8 @@ using StorylineEditor.ViewModel.Config;
 using StorylineEditor.ViewModel.Interface;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
-using System.Net;
+using System.Text.RegularExpressions;
 
 namespace StorylineEditor.App.Service
 {
@@ -31,6 +30,8 @@ namespace StorylineEditor.App.Service
         private const string _configXmlPath = "ConfigM.xml";
         
         private Dictionary<string, string> cachedFiles = new Dictionary<string, string>();
+
+        private Regex regex = new Regex(@"\/d\/(.+)\/", RegexOptions.IgnoreCase);
 
         // Open Save logic
         public string Path { get; protected set; }
@@ -60,20 +61,20 @@ namespace StorylineEditor.App.Service
         }
 
         // File Storage logic
-        public void GetFileFromStorage(byte fileStorageType, string fileHttpRef, Action<string> successCallback, Action failureCallback)
+        public void GetFileFromStorage(byte storageType, string fileUrl, Action<string> successCallback, Action failureCallback)
         {
-            if (fileStorageType == STORAGE_TYPE.GOOGLE_DRIVE)
+            if (storageType == STORAGE_TYPE.GOOGLE_DRIVE)
             {
-                GetFileFromGoogleDrive(fileHttpRef, successCallback, failureCallback);
+                GetFileFromGoogleDrive(fileUrl, successCallback, failureCallback);
             }
             else
             {
                 failureCallback();
             }
         }
-        private void GetFileFromGoogleDrive(string fileHttpRef, Action<string> successCallback, Action failureCallback)
+        private void GetFileFromGoogleDrive(string fileUrl, Action<string> successCallback, Action failureCallback)
         {
-            GoogleCredential credential = GoogleCredential.GetApplicationDefault().CreateScoped(DriveService.Scope.Drive);
+            GoogleCredential credential = GoogleCredential.GetApplicationDefault().CreateScoped(DriveService.Scope.DriveReadonly);
 
             var service = new DriveService(new BaseClientService.Initializer()
             {
@@ -81,7 +82,8 @@ namespace StorylineEditor.App.Service
                 ApplicationName = "" ////// TODO
             });
 
-            var fileResource = service.Files.Get(fileHttpRef);
+            string fileId = GetIdFromUrlForGoogleDrive(ref fileUrl);
+            var fileResource = service.Files.Get(fileId);
             var file = fileResource.Execute();
 
             MemoryStream memoryStream = new MemoryStream();
@@ -100,7 +102,7 @@ namespace StorylineEditor.App.Service
                                 memoryStream.CopyTo(fileStream);
                             }
 
-                            cachedFiles.Add(fileHttpRef, cachedFilePath);
+                            cachedFiles.Add(fileUrl, cachedFilePath);
                             successCallback(cachedFilePath);
                         }
                         break;
@@ -117,6 +119,11 @@ namespace StorylineEditor.App.Service
             };
 
             fileResource.DownloadAsync(memoryStream);
+        }
+        private string GetIdFromUrlForGoogleDrive(ref string fileUrl)
+        {
+            Match m = regex.Match(fileUrl);
+            return m.ToString().TrimStart('/', 'd').Trim('/');
         }
 
         // Config logic

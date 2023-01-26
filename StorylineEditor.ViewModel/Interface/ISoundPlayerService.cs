@@ -20,6 +20,6 @@ namespace StorylineEditor.ViewModel.Interface
 
         void SetIsPaused(bool isPaused);
 
-        void Play(string sourceFilePath, Action successCallback, Action failureCallback);
+        void Play(string sourceFilePath, Action<CustomStatus> callbackAction);
     }
 }

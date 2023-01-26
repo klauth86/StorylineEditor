@@ -15,7 +15,7 @@ using System.Threading;
 
 namespace StorylineEditor.ViewModel.Interface
 {
-    public enum CustomTaskStatus
+    public enum CustomStatus
     {
         Created,
         WaitingForActivation,
@@ -33,6 +33,6 @@ namespace StorylineEditor.ViewModel.Interface
 
         void SetIsPaused(bool isPaused);
 
-        void Start(double indurationMsec, Func<CancellationToken, double, double, double, double, CustomTaskStatus> tickAction, Action<CustomTaskStatus, double, double, double, double> finAction, Action<CustomTaskStatus> callbackAction);
+        void Start(double indurationMsec, Func<CancellationToken, double, double, double, double, CustomStatus> tickAction, Action<CustomStatus, double, double, double, double> finAction, Action<CustomStatus> callbackAction);
     }
 }

@@ -23,7 +23,7 @@ namespace StorylineEditor.ViewModel.Interface
         string SaveFile(string filter, bool refreshPath);  // сохранение файла
 
         // File Storage logic
-        void GetFileFromStorage(byte fileStorageType, string fileHttpRef, Action<string> successCallback, Action failureCallback);
+        void GetFileFromStorage(byte storageType, string fileUrl, Action<string> successCallback, Action failureCallback);
 
         // Config logic
         void LoadConfig();

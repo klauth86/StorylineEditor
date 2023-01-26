@@ -12,23 +12,53 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.ViewModel.Interface;
 using System;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace StorylineEditor.App.Service
 {
     public class SoundPlayerService : ISoundPlayerService
     {
-        private static MediaElement _mediaElement = new MediaElement();
+        private MediaElement _mediaElement;
 
-        private static long _lockIndex = 0;
+        private long _lockIndex = 0;
 
-        private static bool _isPaused = false;
+        private Action<CustomStatus> _callbackAction = null;
+
+        private CustomStatus _customStatus;
+
+        private bool _isPaused = false;
+
+        public SoundPlayerService()
+        {
+            _mediaElement = new MediaElement();
+            _mediaElement.MediaFailed += OnMediaFailed;
+            _mediaElement.MediaEnded += OnMediaEnded;
+        }
+
+        private void OnMediaFailed(object sender, ExceptionRoutedEventArgs e)
+        {
+            _customStatus = CustomStatus.Faulted;
+            Finish();
+        }
+
+        private void OnMediaEnded(object sender, RoutedEventArgs e)
+        {
+            _customStatus = CustomStatus.RanToCompletion;
+            Finish();
+        }
+
+        private void Finish()
+        {
+            Interlocked.Decrement(ref _lockIndex);
+            _callbackAction?.Invoke(_customStatus);
+        }
 
         public void Stop()
         {
+            _customStatus = CustomStatus.Canceled;
             _mediaElement.Stop();
         }
 
@@ -46,7 +76,7 @@ namespace StorylineEditor.App.Service
             }
         }
 
-        public async void Play(string sourceFilePath, Action successCallback, Action failureCallback)
+        public async void Play(string sourceFilePath, Action<CustomStatus> callbackAction)
         {
             Stop();
 
@@ -57,16 +87,20 @@ namespace StorylineEditor.App.Service
                 await Task.Delay(2);
             }
 
+            _callbackAction = callbackAction;
+
+            _customStatus = CustomStatus.WaitingToRun;
+
             try
             {
                 _mediaElement.Source = new Uri("sourceFilePath");
                 _mediaElement.Play();
+                _customStatus = CustomStatus.Running;
             }
-            finally
+            catch (Exception exc)
             {
-                Interlocked.Decrement(ref _lockIndex);
-
-
+                _customStatus = CustomStatus.Faulted;
+                Finish();
             }
         }
     }

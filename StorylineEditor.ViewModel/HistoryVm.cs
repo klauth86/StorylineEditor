@@ -837,7 +837,7 @@ namespace StorylineEditor.ViewModel
         protected void OnStartMovement(IPositioned positioned)
         {
             PlayerContext = new PlayerContext_TransitionVM();
-            ActiveContext.ActiveGraph.MoveTo(positioned, (CustomTaskStatus) => { if (CustomTaskStatus == CustomTaskStatus.RanToCompletion) { OnFinishMovement(positioned); } }, PlayRate);
+            ActiveContext.ActiveGraph.MoveTo(positioned, (customStatus) => { if (customStatus == CustomStatus.RanToCompletion) { OnFinishMovement(positioned); } }, PlayRate);
         }
 
         protected void OnFinishMovement(IPositioned positioned)
@@ -894,10 +894,10 @@ namespace StorylineEditor.ViewModel
 
             if (node is IRegularNode regularNode)
             {
-                byte fileStorageType = (byte)regularNode.FileStorageType;
-                string fileHttpRef = regularNode.FileHttpRef;
+                byte storageType = regularNode.FileStorageType;
+                string fileUrl = regularNode.FileHttpRef;
 
-                if (noAudioMode || string.IsNullOrEmpty(fileHttpRef) || fileStorageType == STORAGE_TYPE.UNSET)
+                if (noAudioMode || string.IsNullOrEmpty(fileUrl) || storageType == STORAGE_TYPE.UNSET)
                 {
                     double startTimeMsec = DateTime.Now.TimeOfDay.TotalMilliseconds;
                     double finishTimeMsec = startTimeMsec + Duration * 1000;
@@ -908,17 +908,17 @@ namespace StorylineEditor.ViewModel
                         Duration * 1000,
                         (token, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
                         {
-                            if (inTimeMsec > inStartTimeMsec + inDurationMsec) return CustomTaskStatus.RanToCompletion;
+                            if (inTimeMsec > inStartTimeMsec + inDurationMsec) return CustomStatus.RanToCompletion;
 
                             ActiveContext.ActiveGraph.TickPlayer(inDeltaTimeMsec);
 
                             TimeLeft -= inDeltaTimeMsec / 1000;
 
-                            return CustomTaskStatus.Running;
+                            return CustomStatus.Running;
                         },
-                        (CustomTaskStatus, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
+                        (customStatus, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
                         {
-                            if (CustomTaskStatus == CustomTaskStatus.RanToCompletion)
+                            if (customStatus == CustomStatus.RanToCompletion)
                             {
                                 ActiveContext.ActiveGraph.TickPlayer(inDeltaTimeMsec);
 
@@ -931,14 +931,22 @@ namespace StorylineEditor.ViewModel
                 else
                 {
                     ActiveContext.FileService.GetFileFromStorage(
-                        fileStorageType
-                        , fileHttpRef
+                        storageType
+                        , fileUrl
                         , (sourceFilePath) =>
                         {
                             ActiveContext.SoundPlayerService.Play(
                                 sourceFilePath
-                                , () => { FinishPlayNode(node); }
-                                , () => { StartPlayNode(node, true); }
+                                , (customStatus) => {
+                                    if (customStatus == CustomStatus.RanToCompletion)
+                                    {
+                                        FinishPlayNode(node);
+                                    }
+                                    else if (customStatus == CustomStatus.Faulted)
+                                    {
+                                        StartPlayNode(node, true);
+                                    }
+                                }
                             );
                         }
                         , () => { StartPlayNode(node, true); });
@@ -1085,7 +1093,7 @@ namespace StorylineEditor.ViewModel
             if (Paths[PathIndex].Count > 0)
             {
                 IPositioned next = Paths[PathIndex].First();
-                ActiveContext.ActiveGraph.MoveTo(next, (CustomTaskStatus) => { if (CustomTaskStatus == CustomTaskStatus.RanToCompletion) OnFinishMovement(next); }, PlayRate);
+                ActiveContext.ActiveGraph.MoveTo(next, (customStatus) => { if (customStatus == CustomStatus.RanToCompletion) OnFinishMovement(next); }, PlayRate);
             }
         }
 
