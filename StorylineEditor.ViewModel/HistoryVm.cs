@@ -906,7 +906,7 @@ namespace StorylineEditor.ViewModel
 
                     ActiveContext.TaskService.Start(
                         Duration * 1000,
-                        (token, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
+                        (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
                         {
                             if (inTimeMsec > inStartTimeMsec + inDurationMsec) return CustomStatus.RanToCompletion;
 
@@ -916,7 +916,7 @@ namespace StorylineEditor.ViewModel
 
                             return CustomStatus.Running;
                         },
-                        (customStatus, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
+                        (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec, customStatus) =>
                         {
                             if (customStatus == CustomStatus.RanToCompletion)
                             {
@@ -926,7 +926,10 @@ namespace StorylineEditor.ViewModel
 
                                 FinishPlayNode(node);
                             }
-                        }, null);
+
+                            return customStatus;
+                        }
+                        , null);
                 }
                 else
                 {

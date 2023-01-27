@@ -154,7 +154,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
                 ActiveContext.TaskService.Start(
                     durationMsec,
-                    (token, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
+                    (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
                     {
                         if (inTimeMsec > inStartTimeMsec + inDurationMsec) return CustomStatus.RanToCompletion;
 
@@ -166,7 +166,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
                         return CustomStatus.Running;
                     },
-                    (customStatus, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
+                    (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec, customStatus) =>
                     {
                         if (customStatus == CustomStatus.RanToCompletion)
                         {
@@ -174,7 +174,10 @@ namespace StorylineEditor.ViewModel.Graphs
 
                             SetView(targetOffsetX, targetOffsetY);
                         }
-                    }, callbackAction);
+
+                        return customStatus;
+                    }
+                    , callbackAction);
             }
         }
 
@@ -184,7 +187,7 @@ namespace StorylineEditor.ViewModel.Graphs
             {
                 ActiveContext.TaskService.Start(
                 256,
-                (token, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
+                (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
                 {
                     if (inTimeMsec > inStartTimeMsec + inDurationMsec) return CustomStatus.RanToCompletion;
                     
@@ -196,13 +199,16 @@ namespace StorylineEditor.ViewModel.Graphs
                     
                     return CustomStatus.Running;
                 },
-                (customStatus, inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
+                (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec, customStatus) =>
                 {
                     if (customStatus == CustomStatus.RanToCompletion)
                     {
                         SetScale(ActiveContext.ViewWidth / 2, ActiveContext.ViewHeight / 2, 1);
                     }
-                }, null);
+
+                    return customStatus;
+                }
+                , null);
             }
         }
 

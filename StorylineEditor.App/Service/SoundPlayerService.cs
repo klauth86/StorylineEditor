@@ -40,6 +40,7 @@ namespace StorylineEditor.App.Service
         private void OnMediaFailed(object sender, ExceptionEventArgs e)
         {
             _customStatus = CustomStatus.Faulted;
+
             Finish();
         }
 
@@ -49,6 +50,7 @@ namespace StorylineEditor.App.Service
             {
                 _customStatus = CustomStatus.RanToCompletion;
             }
+
             Finish();
         }
 

@@ -11,7 +11,6 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using System;
-using System.Threading;
 
 namespace StorylineEditor.ViewModel.Interface
 {
@@ -19,8 +18,8 @@ namespace StorylineEditor.ViewModel.Interface
     {
         bool IsPaused { get; set; }
 
-        void Start(double indurationMsec, Func<CancellationToken, double, double, double, double, CustomStatus> tickAction, Action<CustomStatus, double, double, double, double> finAction, Action<CustomStatus> callbackAction);
+        void Start(double indurationMsec, Func<double, double, double, double, CustomStatus> tickAction, Func<double, double, double, double, CustomStatus, CustomStatus> finAction, Action<CustomStatus> callbackAction);
 
-        void Stop();    
+        void Stop();
     }
 }
