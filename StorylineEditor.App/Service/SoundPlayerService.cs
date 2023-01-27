@@ -24,6 +24,8 @@ namespace StorylineEditor.App.Service
 
         private long _lockIndex = 0;
 
+        private Action _prePlayAction = null;
+        private Action postPlayAction = null;
         private Action<CustomStatus> _callbackAction = null;
 
         private CustomStatus _customStatus;
@@ -56,6 +58,8 @@ namespace StorylineEditor.App.Service
 
         private void Finish()
         {
+            postPlayAction?.Invoke();
+
             Interlocked.Decrement(ref _lockIndex);
             _callbackAction?.Invoke(_customStatus);
         }
@@ -83,7 +87,7 @@ namespace StorylineEditor.App.Service
             }
         }
 
-        public async void Play(string sourceFilePath, Action<CustomStatus> callbackAction)
+        public async void Play(string sourceFilePath, Action prePlayAction, Action beforeFinishPlayingAction, Action<CustomStatus> callbackAction)
         {
             Stop();
 
@@ -94,6 +98,8 @@ namespace StorylineEditor.App.Service
                 await Task.Delay(2);
             }
 
+            _prePlayAction = prePlayAction;
+            postPlayAction = beforeFinishPlayingAction;
             _callbackAction = callbackAction;
 
             _customStatus = CustomStatus.WaitingToRun;
@@ -103,6 +109,9 @@ namespace StorylineEditor.App.Service
                 _mediaPlayer.Open(new Uri(sourceFilePath));
                 _mediaPlayer.Play();
                 _customStatus = CustomStatus.Running;
+
+                _prePlayAction?.Invoke();
+
             }
             catch (Exception exc)
             {
@@ -115,6 +124,13 @@ namespace StorylineEditor.App.Service
         {
             _customStatus = CustomStatus.Canceled;
             _mediaPlayer.Stop();
+        }
+
+        public void Dispose()
+        {
+            Stop();
+
+            _mediaPlayer.Close();
         }
     }
 }

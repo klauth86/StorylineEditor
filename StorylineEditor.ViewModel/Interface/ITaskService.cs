@@ -14,7 +14,7 @@ using System;
 
 namespace StorylineEditor.ViewModel.Interface
 {
-    public interface ITaskService
+    public interface ITaskService : IDisposable
     {
         bool IsPaused { get; set; }
 

@@ -931,24 +931,34 @@ namespace StorylineEditor.ViewModel
                 }
                 else
                 {
+                    TimeLeft = 0;
+
                     ActiveContext.FileService.GetFileFromStorage(
                         node.Id
                         , storageType
                         , fileUrl
                         , (sourceFilePath) =>
                         {
-                            ActiveContext.TaskService.Start(
-                                (double)TaskMode.DrivenByStatus
-                                , (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
-                                {
-                                    return CustomStatus.Running;
-                                }
-                                , null
-                                , null
-                            );
-
                             ActiveContext.SoundPlayerService.Play(
                                 sourceFilePath
+                                , () =>
+                                {
+                                    ActiveContext.TaskService.Start(
+                                        (double)TaskMode.DrivenByStatus
+                                        , (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
+                                        {
+                                            ActiveContext.ActiveGraph.TickPlayer(inDeltaTimeMsec);
+
+                                            return CustomStatus.Running;
+                                        }
+                                        , (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec, customStatus) => customStatus
+                                        , null
+                                        );
+                                }
+                                , () =>
+                                {
+                                    ActiveContext.TaskService.Stop();
+                                }
                                 , (customStatus) =>
                                 {
                                     if (customStatus == CustomStatus.RanToCompletion)

@@ -62,7 +62,9 @@ namespace StorylineEditor.App
 
         protected override void OnClosing(CancelEventArgs e)
         {
+            ActiveContext.SoundPlayerService.Dispose();
             ActiveContext.FileService.Dispose();
+            ActiveContext.TaskService.Dispose();
 
             base.OnClosing(e);
         }

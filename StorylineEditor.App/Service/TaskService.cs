@@ -99,5 +99,10 @@ namespace StorylineEditor.App.Service
         {
             _isCancellationRequested = true;
         }
+
+        public void Dispose()
+        {
+            Stop();
+        }
     }
 }

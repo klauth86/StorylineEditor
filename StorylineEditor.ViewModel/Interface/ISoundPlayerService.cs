@@ -14,11 +14,11 @@ using System;
 
 namespace StorylineEditor.ViewModel.Interface
 {
-    public interface ISoundPlayerService
+    public interface ISoundPlayerService : IDisposable
     {
         bool IsPaused { get; set; }
 
-        void Play(string sourceFilePath, Action<CustomStatus> callbackAction);
+        void Play(string sourceFilePath, Action afterStartPlaying, Action beforeFinishPlaying, Action<CustomStatus> callbackAction);
 
         void Stop();
     }
