@@ -16,10 +16,10 @@ namespace StorylineEditor.ViewModel.Interface
 {
     public interface ISoundPlayerService
     {
-        void Stop();
-
-        void SetIsPaused(bool isPaused);
+        bool IsPaused { get; set; }
 
         void Play(string sourceFilePath, Action<CustomStatus> callbackAction);
+
+        void Stop();
     }
 }

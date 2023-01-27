@@ -28,8 +28,6 @@ namespace StorylineEditor.App.Service
 
         private CustomStatus _customStatus;
 
-        private bool _isPaused = false;
-
         public SoundPlayerService()
         {
             _mediaPlayer = new MediaPlayer();
@@ -47,7 +45,10 @@ namespace StorylineEditor.App.Service
 
         private void OnMediaEnded(object sender, EventArgs e)
         {
-            _customStatus = CustomStatus.RanToCompletion;
+            if (_customStatus == CustomStatus.Running)
+            {
+                _customStatus = CustomStatus.RanToCompletion;
+            }
             Finish();
         }
 
@@ -57,23 +58,26 @@ namespace StorylineEditor.App.Service
             _callbackAction?.Invoke(_customStatus);
         }
 
-        public void Stop()
+        private bool _isPaused = false;
+        public bool IsPaused
         {
-            _customStatus = CustomStatus.Canceled;
-            _mediaPlayer.Stop();
-        }
+            get => _isPaused;
+            set
+            {
+                if (_isPaused != value)
+                {
+                    _isPaused = value;
 
-        public void SetIsPaused(bool isPaused)
-        {
-            _isPaused = isPaused;
-            
-            if (isPaused)
-            {
-                _mediaPlayer.Pause();
-            }
-            else
-            {
-                _mediaPlayer.Play();
+                    if (_isPaused)
+                    {
+                        _mediaPlayer.Pause();
+                    }
+                    else
+                    {
+                        _mediaPlayer.Play();
+                    }
+                }
+
             }
         }
 
@@ -103,6 +107,12 @@ namespace StorylineEditor.App.Service
                 _customStatus = CustomStatus.Faulted;
                 Finish();
             }
+        }
+
+        public void Stop()
+        {
+            _customStatus = CustomStatus.Canceled;
+            _mediaPlayer.Stop();
         }
     }
 }

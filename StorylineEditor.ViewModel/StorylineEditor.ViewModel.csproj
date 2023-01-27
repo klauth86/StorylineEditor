@@ -42,6 +42,7 @@
     <Compile Include="Graphs\QuestEditorVM.cs" />
     <Compile Include="Graphs\ReplicaEditorVM.cs" />
     <Compile Include="HistoryVm.cs" />
+    <Compile Include="Interface\CustomStatus.cs" />
     <Compile Include="Interface\ICopyPaste.cs" />
     <Compile Include="Interface\IDialogService.cs" />
     <Compile Include="Interface\IFileService.cs" />

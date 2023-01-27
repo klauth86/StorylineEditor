@@ -1106,6 +1106,7 @@ namespace StorylineEditor.ViewModel
 
         private void Stop()
         {
+            ActiveContext.SoundPlayerService?.Stop();
             ActiveContext.TaskService?.Stop();
 
             PathIndex = int.MinValue;

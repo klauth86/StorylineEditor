@@ -21,16 +21,9 @@ namespace StorylineEditor.App.Service
     {
         private static long _lockIndex = 0;
 
-        private static bool _isPaused = false;
-
         private static CancellationTokenSource _cancellationTokenSource;
 
-        public void Stop()
-        {
-            _cancellationTokenSource?.Cancel();
-        }
-
-        public void SetIsPaused(bool isPaused) { _isPaused = isPaused; }
+        public bool IsPaused {get;set;}
 
         public async void Start(double durationMsec, Func<CancellationToken, double, double, double, double, CustomStatus> tickAction, Action<CustomStatus, double, double, double, double> finAction, Action<CustomStatus> callbackAction)
         {
@@ -62,7 +55,7 @@ namespace StorylineEditor.App.Service
                         customStatus = CustomStatus.Canceled;
                         break;
                     }
-                    else if (!_isPaused)
+                    else if (!IsPaused)
                     {
                         customStatus = tickAction(_cancellationTokenSource.Token, startTimeMsec, durationMsec, timeMsec, timeMsec - prevTimeMsec);
                     }
@@ -86,6 +79,11 @@ namespace StorylineEditor.App.Service
 
                 callbackAction?.Invoke(customStatus);
             }
+        }
+
+        public void Stop()
+        {
+            _cancellationTokenSource?.Cancel();
         }
     }
 }

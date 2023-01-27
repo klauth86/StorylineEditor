@@ -1234,7 +1234,7 @@ namespace StorylineEditor.ViewModel.Graphs
             }
             else
             {
-                callbackAction(CustomStatus.WaitingForActivation);
+                callbackAction(CustomStatus.WaitingToRun);
             }
         }
 
@@ -1248,7 +1248,7 @@ namespace StorylineEditor.ViewModel.Graphs
             }
             else
             {
-                callbackAction(CustomStatus.WaitingForActivation);
+                callbackAction(CustomStatus.WaitingToRun);
             }
         }
 
