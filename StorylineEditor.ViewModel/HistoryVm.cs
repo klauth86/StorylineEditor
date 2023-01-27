@@ -908,8 +908,6 @@ namespace StorylineEditor.ViewModel
                         Duration * 1000,
                         (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
                         {
-                            if (inTimeMsec > inStartTimeMsec + inDurationMsec) return CustomStatus.RanToCompletion;
-
                             ActiveContext.ActiveGraph.TickPlayer(inDeltaTimeMsec);
 
                             TimeLeft -= inDeltaTimeMsec / 1000;
@@ -939,9 +937,20 @@ namespace StorylineEditor.ViewModel
                         , fileUrl
                         , (sourceFilePath) =>
                         {
+                            ActiveContext.TaskService.Start(
+                                (double)TaskMode.DrivenByStatus
+                                , (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
+                                {
+                                    return CustomStatus.Running;
+                                }
+                                , null
+                                , null
+                            );
+
                             ActiveContext.SoundPlayerService.Play(
                                 sourceFilePath
-                                , (customStatus) => {
+                                , (customStatus) =>
+                                {
                                     if (customStatus == CustomStatus.RanToCompletion)
                                     {
                                         FinishPlayNode(node);

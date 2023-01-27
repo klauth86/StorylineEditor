@@ -43,11 +43,11 @@ namespace StorylineEditor.App.Service
             try
             {
                 double startTimeMsec = DateTime.Now.TimeOfDay.TotalMilliseconds;
-                double timeMsec = startTimeMsec;
-                double prevTimeMsec = timeMsec;
-                double deltaTimeMsec = 0;
+                double finishTimeMsec = durationMsec >= 0 ? (startTimeMsec + durationMsec) : double.MaxValue;
 
-                double finishTimeMsec = startTimeMsec + durationMsec;
+                double prevTimeMsec = startTimeMsec;
+                double timeMsec = startTimeMsec;
+                double deltaTimeMsec = 0;
 
                 while (timeMsec < finishTimeMsec)
                 {
@@ -60,7 +60,7 @@ namespace StorylineEditor.App.Service
                         customStatus = tickAction(startTimeMsec, durationMsec, timeMsec, deltaTimeMsec);
                     }
 
-                    if (customStatus == CustomStatus.Canceled || customStatus == CustomStatus.Faulted)
+                    if (customStatus == CustomStatus.RanToCompletion || customStatus == CustomStatus.Canceled || customStatus == CustomStatus.Faulted)
                     {
                         break;
                     }
@@ -72,20 +72,21 @@ namespace StorylineEditor.App.Service
                     deltaTimeMsec = timeMsec - prevTimeMsec;
                 }
 
-                timeMsec = DateTime.Now.TimeOfDay.TotalMilliseconds;
-                deltaTimeMsec = timeMsec - prevTimeMsec;
-
-                // Mark as completed due to task duration
+                // Mark as completed if cycle was broken by time limits
 
                 if (customStatus == CustomStatus.Running)
                 {
                     customStatus = CustomStatus.RanToCompletion;
                 }
 
+                prevTimeMsec = timeMsec;
+                timeMsec = DateTime.Now.TimeOfDay.TotalMilliseconds;
+                deltaTimeMsec = timeMsec - prevTimeMsec;
+
                 customStatus = finAction(startTimeMsec, durationMsec, timeMsec, deltaTimeMsec, customStatus);
             }
             catch (TaskCanceledException taskCanceledExc) { throw taskCanceledExc; }
-            catch (Exception exc) { throw exc; } ////// TODO
+            catch (Exception exc) { throw exc; }
             finally
             {
                 Interlocked.Decrement(ref _lockIndex);

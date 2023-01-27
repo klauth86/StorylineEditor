@@ -20,4 +20,9 @@ namespace StorylineEditor.ViewModel.Interface
         Canceled,
         Faulted
     }
+
+    public enum TaskMode
+    {
+        DrivenByStatus = -1
+    }
 }

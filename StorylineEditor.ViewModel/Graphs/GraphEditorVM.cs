@@ -156,8 +156,6 @@ namespace StorylineEditor.ViewModel.Graphs
                     durationMsec,
                     (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
                     {
-                        if (inTimeMsec > inStartTimeMsec + inDurationMsec) return CustomStatus.RanToCompletion;
-
                         playerIndicator.Tick(inDeltaTimeMsec);
 
                         double alpha = (inTimeMsec - inStartTimeMsec) / inDurationMsec;
@@ -188,9 +186,7 @@ namespace StorylineEditor.ViewModel.Graphs
                 ActiveContext.TaskService.Start(
                 256,
                 (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
-                {
-                    if (inTimeMsec > inStartTimeMsec + inDurationMsec) return CustomStatus.RanToCompletion;
-                    
+                {                    
                     double alpha = (inTimeMsec - inStartTimeMsec) / inDurationMsec;
                     
                     double newScale = Scale * (1 - alpha) + alpha;
