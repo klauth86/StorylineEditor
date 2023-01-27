@@ -14,14 +14,13 @@ using StorylineEditor.ViewModel.Interface;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace StorylineEditor.App.Service
 {
     public class SoundPlayerService : ISoundPlayerService
     {
-        private MediaElement _mediaElement;
+        private MediaPlayer _mediaPlayer;
 
         private long _lockIndex = 0;
 
@@ -33,20 +32,20 @@ namespace StorylineEditor.App.Service
 
         public SoundPlayerService()
         {
-            _mediaElement = new MediaElement();
-            _mediaElement.Volume = 1;
-            _mediaElement.LoadedBehavior = MediaState.Manual;
-            _mediaElement.MediaFailed += OnMediaFailed;
-            _mediaElement.MediaEnded += OnMediaEnded;
+            _mediaPlayer = new MediaPlayer();
+            _mediaPlayer.Volume = 1;
+
+            _mediaPlayer.MediaFailed += OnMediaFailed;
+            _mediaPlayer.MediaEnded += OnMediaEnded;
         }
 
-        private void OnMediaFailed(object sender, ExceptionRoutedEventArgs e)
+        private void OnMediaFailed(object sender, ExceptionEventArgs e)
         {
             _customStatus = CustomStatus.Faulted;
             Finish();
         }
 
-        private void OnMediaEnded(object sender, RoutedEventArgs e)
+        private void OnMediaEnded(object sender, EventArgs e)
         {
             _customStatus = CustomStatus.RanToCompletion;
             Finish();
@@ -61,7 +60,7 @@ namespace StorylineEditor.App.Service
         public void Stop()
         {
             _customStatus = CustomStatus.Canceled;
-            _mediaElement.Stop();
+            _mediaPlayer.Stop();
         }
 
         public void SetIsPaused(bool isPaused)
@@ -70,11 +69,11 @@ namespace StorylineEditor.App.Service
             
             if (isPaused)
             {
-                _mediaElement.Pause();
+                _mediaPlayer.Pause();
             }
             else
             {
-                _mediaElement.Play();
+                _mediaPlayer.Play();
             }
         }
 
@@ -95,8 +94,8 @@ namespace StorylineEditor.App.Service
 
             try
             {
-                _mediaElement.Source = new Uri(sourceFilePath);
-                _mediaElement.Play();
+                _mediaPlayer.Open(new Uri(sourceFilePath));
+                _mediaPlayer.Play();
                 _customStatus = CustomStatus.Running;
             }
             catch (Exception exc)
