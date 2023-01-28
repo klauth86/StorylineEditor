@@ -145,7 +145,38 @@ StorylineEditor распространяется в надежде, что он�
             </Setter.Value>
         </Setter>
     </Style>
-    
+
+    <Style TargetType="ContentControl" x:Key="S_ContentControl_Indicator_IsDownloading">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ContentControl">
+                    <Label
+                        Content="{StaticResource String_Tag_IsDownloading}"
+                        FontSize="{StaticResource FontSize_Large}"
+                        Foreground="{StaticResource Color_IsDownloading_Indicator}"
+                        >
+                        <Label.RenderTransform>
+                            <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1" ScaleY="1"></ScaleTransform>
+                        </Label.RenderTransform>
+                        <Label.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard Name="stbrd_Indicator">
+                                    <Storyboard>
+                                        <DoubleAnimation AutoReverse="True" Storyboard.TargetProperty="(Label.RenderTransform).(ScaleTransform.ScaleX)" From="1" To="1.4" Duration="0:0:0.25" RepeatBehavior="Forever"/>
+                                        <DoubleAnimation AutoReverse="True" Storyboard.TargetProperty="(Label.RenderTransform).(ScaleTransform.ScaleY)" From="1" To="1.4" Duration="0:0:0.25" RepeatBehavior="Forever"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="Unloaded">
+                                <StopStoryboard BeginStoryboardName="stbrd_Indicator"></StopStoryboard>
+                            </EventTrigger>
+                        </Label.Triggers>
+                    </Label>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <ControlTemplate TargetType="ContentControl" x:Key="CT_ContentControl_Comparer_List">
         <ListBox SelectedValue="{Binding CompareType}" SelectedIndex="0" ItemTemplate="{StaticResource DT_ListBoxItem_CompareType}" FontSize="{StaticResource FontSize_Small}">
             <x:Static Member="m:COMPARE_TYPE.LESS"></x:Static>

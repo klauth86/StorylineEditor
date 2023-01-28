@@ -2387,7 +2387,10 @@ StorylineEditor распространяется в надежде, что он�
                                             ButtonDecStyle="{StaticResource S_Button_Square_Auto}" ButtonDecContent="{StaticResource String_Icon_Minus}"
                                             MinValue="1" MaxValue="60" Step="1" MinWidth="{StaticResource Double_Node_MinWidth}"></controls:NumericUpDown_Float>
                             </GroupBox>
-                            <TextBlock VerticalAlignment="Center" Padding="{StaticResource Thickness_Padding_LeftRight}" Style="{StaticResource S_TextBlock_Graph_Bold}" Text="{Binding TimeLeft, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                            <Grid>
+                                <TextBlock x:Name="tb_TimeLeft" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="{StaticResource Thickness_Padding_LeftRight}" Style="{StaticResource S_TextBlock_Graph_Bold}" Text="{Binding TimeLeft, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                                <ContentControl x:Name="cc_IsDownloading" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource S_ContentControl_Indicator_IsDownloading}" Visibility="Hidden"></ContentControl>
+                            </Grid>
                         </StackPanel>
                     </Grid>
 
@@ -2718,6 +2721,10 @@ StorylineEditor распространяется в надежде, что он�
                 <Setter TargetName="ti_Inventory" Property="Visibility" Value="Visible"></Setter>
                 <Setter TargetName="ti_Journal" Property="Visibility" Value="Visible"></Setter>
                 <Setter TargetName="ti_Dialogs" Property="Visibility" Value="Visible"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsDownloading, UpdateSourceTrigger=PropertyChanged}" Value="true">
+                <Setter TargetName="tb_TimeLeft" Property="Visibility" Value="Hidden"></Setter>
+                <Setter TargetName="cc_IsDownloading" Property="Visibility" Value="Visible"></Setter>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>

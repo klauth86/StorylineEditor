@@ -780,6 +780,20 @@ namespace StorylineEditor.ViewModel
             }
         }
 
+        protected bool isDownloading;
+        public bool IsDownloading
+        {
+            get => isDownloading;
+            set
+            {
+                if (isDownloading != value)
+                {
+                    isDownloading = value;
+                    Notify(nameof(IsDownloading));
+                }
+            }
+        }
+
         protected double timeLeft;
         public double TimeLeft
         {
@@ -932,6 +946,7 @@ namespace StorylineEditor.ViewModel
                 else
                 {
                     TimeLeft = 0;
+                    IsDownloading = true;
 
                     ActiveContext.FileService.GetFileFromStorage(
                         node.Id
@@ -939,6 +954,8 @@ namespace StorylineEditor.ViewModel
                         , fileUrl
                         , (sourceFilePath) =>
                         {
+                            IsDownloading = false;
+
                             ActiveContext.SoundPlayerService.Play(
                                 sourceFilePath
                                 , () =>
@@ -972,7 +989,12 @@ namespace StorylineEditor.ViewModel
                                 }
                             );
                         }
-                        , () => { StartPlayNode(node, true); });
+                        , () =>
+                        {
+                            IsDownloading = false;
+
+                            StartPlayNode(node, true);
+                        });
                 }
             }
             else
