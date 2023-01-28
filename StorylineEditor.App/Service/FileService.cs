@@ -35,11 +35,13 @@ namespace StorylineEditor.App.Service
 
         private Dictionary<byte, IStorageProvider> _storageProviders = new Dictionary<byte, IStorageProvider> { { STORAGE_TYPE.GOOGLE_DRIVE, new GoogleDrveStorageProvider() } };
 
-        private WebClient _webClient = new WebClient();
+        private WebClient _webClient;
 
         private string _nodeId;
 
         private string _fileUrl;
+
+        private Uri _downloadUri;
 
         private string _downloadPath;
 
@@ -49,16 +51,53 @@ namespace StorylineEditor.App.Service
 
         public FileService()
         {
+            _webClient = new WebClient();
+
+            _webClient.DownloadDataCompleted += OnDownloadDataCompleted;
             _webClient.DownloadFileCompleted += OnDownloadFileCompleted;
         }
 
         public void Dispose()
         {
+            _webClient.DownloadFileCompleted -= OnDownloadFileCompleted;
+            _webClient.DownloadDataCompleted -= OnDownloadDataCompleted;
+
             _webClient.Dispose();
 
             foreach (var cachedFileEntry in _cachedFiles) ////// TODO Think
             {
                 File.Delete(cachedFileEntry.Value);
+            }
+        }
+
+        private void OnDownloadDataCompleted(object sender, AsyncCompletedEventArgs e)
+        {
+            if (e.Cancelled)
+            {
+            }
+            else if (e.Error != null)
+            {
+                _failureCallback();
+            }
+            else if (!string.IsNullOrEmpty(_webClient.ResponseHeaders["Content-Disposition"]))
+            {
+                string contentDisposition = _webClient.ResponseHeaders["Content-Disposition"];
+
+                Match match = _fileNameRegex.Match(contentDisposition);
+
+                if (match.Success && match.Groups.Count > 1)
+                {
+                    _downloadPath = GetDownloadPath(match.Groups[1].ToString());
+                    _webClient.DownloadFileAsync(_downloadUri, _downloadPath);
+                }
+                else
+                {
+                    _failureCallback();
+                }
+            }
+            else
+            {
+                _failureCallback();
             }
         }
 
@@ -121,37 +160,8 @@ namespace StorylineEditor.App.Service
                 _successCallback = successCallback;
                 _failureCallback = failureCallback;
 
-                string downloadUrl = _storageProviders[storageType].GetDownloadUrlFromBasicUrl(ref fileUrl);
-
-                _webClient.DownloadData(downloadUrl);
-
-                if (!string.IsNullOrEmpty(_webClient.ResponseHeaders["Content-Disposition"]))
-                {
-                    string contentDisposition = _webClient.ResponseHeaders["Content-Disposition"];
-
-                    Match match = _fileNameRegex.Match(contentDisposition);
-                    
-                    if (match.Success)
-                    {
-                        if (match.Groups.Count > 1)
-                        {
-                            _downloadPath = GetDownloadPath(match.Groups[1].ToString());
-                            _webClient.DownloadFileAsync(new Uri(downloadUrl), _downloadPath);
-                        }
-                        else
-                        {
-                            failureCallback();
-                        }
-                    }
-                    else
-                    {
-                        failureCallback();
-                    }
-                }
-                else
-                {
-                    failureCallback();
-                }
+                _downloadUri = new Uri(_storageProviders[storageType].GetDownloadUrlFromBasicUrl(ref fileUrl));
+                _webClient.DownloadDataAsync(_downloadUri);
             }
             else
             {
