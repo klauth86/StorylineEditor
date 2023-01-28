@@ -14,6 +14,7 @@ namespace StorylineEditor.ViewModel.Interface
 {
     public enum CustomStatus
     {
+        None,
         WaitingToRun,
         Running,
         RanToCompletion,

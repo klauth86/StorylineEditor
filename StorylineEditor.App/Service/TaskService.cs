@@ -31,10 +31,7 @@ namespace StorylineEditor.App.Service
 
             Interlocked.Add(ref _lockIndex, 1);
 
-            while (Interlocked.Read(ref _lockIndex) > 1)
-            {
-                await Task.Delay(2);
-            }
+            while (Interlocked.Read(ref _lockIndex) > 1) await Task.Delay(2);
 
             _isCancellationRequested = false;
 

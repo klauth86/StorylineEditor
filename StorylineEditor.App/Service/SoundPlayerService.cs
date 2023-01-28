@@ -25,7 +25,7 @@ namespace StorylineEditor.App.Service
         private long _lockIndex = 0;
 
         private Action _prePlayAction = null;
-        private Action postPlayAction = null;
+        private Action _postPlayAction = null;
         private Action<CustomStatus> _callbackAction = null;
 
         private CustomStatus _customStatus;
@@ -37,13 +37,16 @@ namespace StorylineEditor.App.Service
 
             _mediaPlayer.MediaFailed += OnMediaFailed;
             _mediaPlayer.MediaEnded += OnMediaEnded;
+
+            _customStatus = CustomStatus.None;
+            _isPaused = false;
         }
 
         private void OnMediaFailed(object sender, ExceptionEventArgs e)
         {
             _customStatus = CustomStatus.Faulted;
 
-            Finish();
+            OnPlayEnded();
         }
 
         private void OnMediaEnded(object sender, EventArgs e)
@@ -53,18 +56,20 @@ namespace StorylineEditor.App.Service
                 _customStatus = CustomStatus.RanToCompletion;
             }
 
-            Finish();
+            OnPlayEnded();
         }
 
-        private void Finish()
+        private void OnPlayEnded()
         {
-            postPlayAction?.Invoke();
+            _postPlayAction?.Invoke();
 
             Interlocked.Decrement(ref _lockIndex);
             _callbackAction?.Invoke(_customStatus);
+
+            _customStatus = CustomStatus.None;
         }
 
-        private bool _isPaused = false;
+        private bool _isPaused;
         public bool IsPaused
         {
             get => _isPaused;
@@ -93,13 +98,10 @@ namespace StorylineEditor.App.Service
 
             Interlocked.Add(ref _lockIndex, 1);
 
-            while (Interlocked.Read(ref _lockIndex) > 1)
-            {
-                await Task.Delay(2);
-            }
+            while (Interlocked.Read(ref _lockIndex) > 1) await Task.Delay(2);
 
             _prePlayAction = prePlayAction;
-            postPlayAction = beforeFinishPlayingAction;
+            _postPlayAction = beforeFinishPlayingAction;
             _callbackAction = callbackAction;
 
             _customStatus = CustomStatus.WaitingToRun;
@@ -107,23 +109,30 @@ namespace StorylineEditor.App.Service
             try
             {
                 _mediaPlayer.Open(new Uri(sourceFilePath));
+                
                 _mediaPlayer.Play();
                 _customStatus = CustomStatus.Running;
 
                 _prePlayAction?.Invoke();
-
             }
-            catch (Exception exc)
+            catch
             {
                 _customStatus = CustomStatus.Faulted;
-                Finish();
+
+                OnPlayEnded();
             }
         }
 
         public void Stop()
         {
-            _customStatus = CustomStatus.Canceled;
-            _mediaPlayer.Stop();
+            if (_customStatus == CustomStatus.Running)
+            {
+                _customStatus = CustomStatus.Canceled;
+                
+                _mediaPlayer.Stop();
+
+                OnPlayEnded();
+            }
         }
 
         public void Dispose()
