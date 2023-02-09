@@ -130,7 +130,7 @@ namespace StorylineEditor.ViewModel
             {
                 if (descriptionFlow == null)
                 {
-                    descriptionFlow = ActiveContext.FlowDocumentService.ConvertBack(Description);
+                    descriptionFlow = ActiveContext.FlowDocumentService.ConvertBack(Description, ActiveContext.SerializationService);
                     descriptionFlow.Name = Id;
                 }
 
@@ -148,7 +148,7 @@ namespace StorylineEditor.ViewModel
                 {
                     documentChangedFlag = value;
 
-                    Description = DescriptionFlow != null ? ActiveContext.FlowDocumentService.ConvertTo(DescriptionFlow) : null;
+                    Description = DescriptionFlow != null ? ActiveContext.FlowDocumentService.ConvertTo(DescriptionFlow, ActiveContext.SerializationService) : null;
                 }
             }
         }
@@ -160,7 +160,7 @@ namespace StorylineEditor.ViewModel
             {
                 if (descriptionFlowFemale == null)
                 {
-                    descriptionFlowFemale = ActiveContext.FlowDocumentService.ConvertBack(DescriptionFemale);
+                    descriptionFlowFemale = ActiveContext.FlowDocumentService.ConvertBack(DescriptionFemale, ActiveContext.SerializationService);
                     descriptionFlowFemale.Name = Id;
                 }
 
@@ -178,7 +178,7 @@ namespace StorylineEditor.ViewModel
                 {
                     documentChangedFlagFemale = value;
 
-                    DescriptionFemale = DescriptionFlowFemale != null ? ActiveContext.FlowDocumentService.ConvertTo(DescriptionFlowFemale) : null;
+                    DescriptionFemale = DescriptionFlowFemale != null ? ActiveContext.FlowDocumentService.ConvertTo(DescriptionFlowFemale, ActiveContext.SerializationService) : null;
                 }
             }
         }
@@ -190,7 +190,7 @@ namespace StorylineEditor.ViewModel
             {
                 if (internalDescriptionFlow == null)
                 {
-                    internalDescriptionFlow = ActiveContext.FlowDocumentService.ConvertBack(InternalDescription);
+                    internalDescriptionFlow = ActiveContext.FlowDocumentService.ConvertBack(InternalDescription, ActiveContext.SerializationService);
                     internalDescriptionFlow.Name = Id;
                 }
 
@@ -208,7 +208,7 @@ namespace StorylineEditor.ViewModel
                 {
                     internalDocumentChangedFlag = value;
 
-                    InternalDescription = InternalDescriptionFlow != null ? ActiveContext.FlowDocumentService.ConvertTo(InternalDescriptionFlow) : null;
+                    InternalDescription = InternalDescriptionFlow != null ? ActiveContext.FlowDocumentService.ConvertTo(InternalDescriptionFlow, ActiveContext.SerializationService) : null;
                 }
             }
         }
@@ -220,7 +220,7 @@ namespace StorylineEditor.ViewModel
             {
                 if (internalDescriptionFlowFemale == null)
                 {
-                    internalDescriptionFlowFemale = ActiveContext.FlowDocumentService.ConvertBack(InternalDescriptionFemale);
+                    internalDescriptionFlowFemale = ActiveContext.FlowDocumentService.ConvertBack(InternalDescriptionFemale, ActiveContext.SerializationService);
                     internalDescriptionFlowFemale.Name = Id;
                 }
 
@@ -238,7 +238,7 @@ namespace StorylineEditor.ViewModel
                 {
                     internalDocumentChangedFlagFemale = value;
 
-                    InternalDescriptionFemale = InternalDescriptionFlowFemale != null ? ActiveContext.FlowDocumentService.ConvertTo(InternalDescriptionFlowFemale) : null;
+                    InternalDescriptionFemale = InternalDescriptionFlowFemale != null ? ActiveContext.FlowDocumentService.ConvertTo(InternalDescriptionFlowFemale, ActiveContext.SerializationService) : null;
                 }
             }
         }

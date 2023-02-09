@@ -32,7 +32,7 @@ namespace StorylineEditor.App.Controls
             {
                 textBlock.Inlines.Clear();
 
-                FlowDocument document = ViewModel.ActiveContext.FlowDocumentService.ConvertBack(e.NewValue?.ToString()); ////// TODO
+                FlowDocument document = ViewModel.ActiveContext.FlowDocumentService.ConvertBack(e.NewValue?.ToString(), ViewModel.ActiveContext.SerializationService); ////// TODO
 
                 int i = 0;
 

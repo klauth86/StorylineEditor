@@ -157,7 +157,7 @@ namespace StorylineEditor.ViewModel.Nodes
             {
                 if (descriptionFlow == null)
                 {
-                    descriptionFlow = ActiveContext.FlowDocumentService.ConvertBack(Description);
+                    descriptionFlow = ActiveContext.FlowDocumentService.ConvertBack(Description, ActiveContext.SerializationService);
                     descriptionFlow.Name = Id;
                 }
 
@@ -175,7 +175,7 @@ namespace StorylineEditor.ViewModel.Nodes
                 {
                     documentChangedFlag = value;
                     
-                    Description = DescriptionFlow != null ? ActiveContext.FlowDocumentService.ConvertTo(DescriptionFlow) : null;
+                    Description = DescriptionFlow != null ? ActiveContext.FlowDocumentService.ConvertTo(DescriptionFlow, ActiveContext.SerializationService) : null;
 
                     RefreshModelName();
                 }

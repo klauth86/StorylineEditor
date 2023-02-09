@@ -67,6 +67,7 @@
     <Compile Include="Predicates\P_Quest_Node_PassedM.cs" />
     <Compile Include="Predicates\P_Relation_HasM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RichText\TextRangeM.cs" />
     <Compile Include="StorylineM.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

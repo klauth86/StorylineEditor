@@ -92,13 +92,13 @@ namespace StorylineEditor.ViewModel.Graphs
 
                 if (nodeModel is Node_ReplicaM replicaNodeModel)
                 {
-                    var flow = ActiveContext.FlowDocumentService.ConvertBack(replicaNodeModel.description);
+                    var flow = ActiveContext.FlowDocumentService.ConvertBack(replicaNodeModel.description, ActiveContext.SerializationService);
                     var flowDocText = ActiveContext.FlowDocumentService.GetTextFromFlowDoc(flow);
                     replicaNodeModel.name = string.Format("[{0}]: {1}", ActiveContext.GetCharacter(replicaNodeModel.characterId)?.name ?? "???", flowDocText);
                 }
                 else if (nodeModel is Node_DialogM dialogNodeModel)
                 {
-                    var flow = ActiveContext.FlowDocumentService.ConvertBack(dialogNodeModel.description);
+                    var flow = ActiveContext.FlowDocumentService.ConvertBack(dialogNodeModel.description, ActiveContext.SerializationService);
                     var flowDocText = ActiveContext.FlowDocumentService.GetTextFromFlowDoc(flow);
                     dialogNodeModel.name = string.Format("[{0}]: {1}", ActiveContext.GetCharacter(dialogNodeModel.characterId)?.name ?? "???", flowDocText);
                 }

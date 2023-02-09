@@ -18,8 +18,8 @@ namespace StorylineEditor.ViewModel.Interface
     {
         string GetTextFromFlowDoc(FlowDocument document);
 
-        string ConvertTo(FlowDocument document);
+        string ConvertTo(FlowDocument document, ISerializationService serializationService);
 
-        FlowDocument ConvertBack(string value);
+        FlowDocument ConvertBack(string value, ISerializationService serializationService);
     }
 }
