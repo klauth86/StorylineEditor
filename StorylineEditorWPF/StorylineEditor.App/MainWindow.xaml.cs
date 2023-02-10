@@ -117,10 +117,67 @@ namespace StorylineEditor.App
             {
                 using (var fileStream = File.Open(path, FileMode.Create))
                 {
+                    Dictionary<string, string> namesMapping = new Dictionary<string, string>();
+
+                    // In fact we dont store any useful info in dialogs and replicas nodes name field
+                    // It is generated during work and used in combobox search as string representation of item
+                    // So no need to save it - just clear them before save and fix up after save
+
+                    ClearUpNodesNames(storylineVM.Model.dialogs, namesMapping);
+                    ClearUpNodesNames(storylineVM.Model.replicas, namesMapping);
+
                     ActiveContext.SerializationService.Serialize(fileStream, storylineVM.Model);
+
+                    FixUpNodesNames(storylineVM.Model.replicas, namesMapping);
+                    FixUpNodesNames(storylineVM.Model.dialogs, namesMapping);
 
                     var assemblyName = Assembly.GetExecutingAssembly().GetName();
                     Title = string.Format("{0} [{1}]", assemblyName.Name, path);
+                }
+            }
+        }
+
+        private void ClearUpNodesNames(List<BaseM> items, Dictionary<string, string> namesMapping)
+        {
+            foreach (var item in items)
+            {
+                if (item is FolderM folder)
+                {
+                    ClearUpNodesNames(folder.content, namesMapping);
+                }
+                else if (item is GraphM graph)
+                {
+                    foreach (var node in graph.nodes)
+                    {
+                        namesMapping.Add(node.id, node.name);
+                        node.name = null;
+                    }
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException(nameof(item));
+                }
+            }
+        }
+
+        private void FixUpNodesNames(List<BaseM> items, Dictionary<string, string> namesMapping)
+        {
+            foreach (var item in items)
+            {
+                if (item is FolderM folder)
+                {
+                    FixUpNodesNames(folder.content, namesMapping);
+                }
+                else if (item is GraphM graph)
+                {
+                    foreach (var node in graph.nodes)
+                    {
+                        node.name = namesMapping[node.id];
+                    }
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException(nameof(item));
                 }
             }
         }

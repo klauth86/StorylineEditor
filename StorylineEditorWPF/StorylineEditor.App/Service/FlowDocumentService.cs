@@ -63,11 +63,15 @@ namespace StorylineEditor.App.Service
 
                             if (newStyle != oldStyle)
                             {
-                                rootTextRangeModel.subRanges.Add(new TextRangeM() {isBold = isBold, isItalic = isItalic, isUnderline = isUnderline });
+                                rootTextRangeModel.subRanges.Add(new TextRangeM() { isBold = isBold, isItalic = isItalic, isUnderline = isUnderline });
                                 oldStyle = newStyle;
                             }
 
                             rootTextRangeModel.subRanges[rootTextRangeModel.subRanges.Count - 1].content += run.Text;
+                        }
+                        else if (inline is LineBreak)
+                        {
+                            continue;
                         }
                         else
                         {
