@@ -16,12 +16,14 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Model.RichText;
+
 namespace StorylineEditor.ViewModel.Interface
 {
     public interface IRichTextSource
     {
-        string Id { get; }
         string Description { get; }
-        void OnRichTextChanged(string propName, string richTextModelString, string textString);
+        TextRangeM GetRichText(string propName);
+        void OnRichTextChanged(string propName, ref TextRangeM textRangeModel);
     }
 }

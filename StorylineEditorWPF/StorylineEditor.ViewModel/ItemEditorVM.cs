@@ -10,7 +10,9 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Model.RichText;
 using StorylineEditor.ViewModel.Interface;
+using System;
 
 namespace StorylineEditor.ViewModel
 {
@@ -122,23 +124,55 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        public void OnRichTextChanged(string propName, string richTextModelString, string textString)
+        public TextRangeM GetRichText(string propName)
         {
-            if (propName == nameof(Description))
+            if (propName == nameof(Model.rtDescription))
             {
-                Description = richTextModelString;
+                return Model.rtDescription;
             }
-            else if (propName == nameof(DescriptionFemale))
+            else if (propName == nameof(Model.rtDescriptionFemale))
             {
-                DescriptionFemale = richTextModelString;
+                return Model.rtDescriptionFemale;
             }
-            else if (propName == nameof(InternalDescription))
+            else if (propName == nameof(Model.rtInternalDescription))
             {
-                InternalDescription = richTextModelString;
+                return Model.rtInternalDescription;
             }
-            else if (propName == nameof(InternalDescriptionFemale))
+            else if (propName == nameof(Model.rtInternalDescriptionFemale))
             {
-                InternalDescriptionFemale = richTextModelString;
+                return Model.rtInternalDescriptionFemale;
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException(nameof(propName));
+            }
+        }
+
+        public void OnRichTextChanged(string propName, ref TextRangeM textRangeModel)
+        {
+            if (propName == nameof(Model.rtDescription))
+            {
+                Model.rtDescription = textRangeModel;
+                OnModelChanged(Model, nameof(Model.rtDescription));
+            }
+            else if (propName == nameof(Model.rtDescriptionFemale))
+            {
+                Model.rtDescriptionFemale = textRangeModel;
+                OnModelChanged(Model, nameof(Model.rtDescriptionFemale));
+            }
+            else if (propName == nameof(Model.rtInternalDescription))
+            {
+                Model.rtInternalDescription = textRangeModel;
+                OnModelChanged(Model, nameof(Model.rtInternalDescription));
+            }
+            else if (propName == nameof(Model.rtInternalDescriptionFemale))
+            {
+                Model.rtInternalDescriptionFemale = textRangeModel;
+                OnModelChanged(Model, nameof(Model.rtInternalDescriptionFemale));
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException(nameof(propName));
             }
         }
     }

@@ -11,6 +11,7 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Model.Nodes;
+using StorylineEditor.Model.RichText;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Interface;
 using System.Collections.Generic;
@@ -149,9 +150,15 @@ namespace StorylineEditor.ViewModel.Nodes
         protected int zIndex;
         public int ZIndex => zIndex;
 
-        public virtual void OnRichTextChanged(string propName, string richTextModelString, string textString)
+        public TextRangeM GetRichText(string propName)
         {
-            Description = richTextModelString;
+            return Model.rtDescription;
+        }
+
+        public virtual void OnRichTextChanged(string propName, ref TextRangeM textRangeModel)
+        {
+            Model.rtDescription = textRangeModel;
+            OnModelChanged(Model, nameof(Model.rtDescription));
         }
 
         public virtual IEnumerable<IPredicate> Predicates { get => Enumerable.Empty<IPredicate>(); }

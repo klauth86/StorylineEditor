@@ -104,7 +104,7 @@ namespace StorylineEditor.App.Controls
                 {
                     string richTextModelString = GetRichTextModelString(Document, ActiveContext.SerializationService);
                     string textString = GetTextString(Document);
-                    richTextSource.OnRichTextChanged(Tag?.ToString(), richTextModelString, textString);
+                    ////// TODOrichTextSource.OnRichTextChanged(Name, richTextModelString, textString);
                 }
             }
         }

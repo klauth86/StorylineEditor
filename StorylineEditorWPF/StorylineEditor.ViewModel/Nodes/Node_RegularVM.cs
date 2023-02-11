@@ -12,6 +12,7 @@ StorylineEditor распространяется в надежде, что он�
 
 using StorylineEditor.Model;
 using StorylineEditor.Model.Nodes;
+using StorylineEditor.Model.RichText;
 using StorylineEditor.ViewModel.Interface;
 using System.ComponentModel;
 using System.Windows.Data;
@@ -130,19 +131,16 @@ namespace StorylineEditor.ViewModel.Nodes
             }
         }
 
-        protected string descriptionTextString;
-        public override void OnRichTextChanged(string propName, string richTextModelString, string textString)
+        public override void OnRichTextChanged(string propName, ref TextRangeM textRangeModel)
         {
-            base.OnRichTextChanged(propName, richTextModelString, textString);
+            base.OnRichTextChanged(propName, ref textRangeModel);
 
-            if (descriptionTextString != textString)
-            {
-                descriptionTextString = textString;
-                RefreshModelName();
-            }
+            RefreshModelName();
         }
 
-        protected void RefreshModelName() { Name = string.Format("[{0}]: {1}", Character?.name ?? "???", descriptionTextString ?? "???"); } ////// TODO DUPLICATION
+        protected void RefreshModelName() { 
+            ////// TODOName = string.Format("[{0}]: {1}", Character?.name ?? "???", descriptionTextString ?? "???"); 
+        } ////// TODO DUPLICATION
     }
 
     public class Node_ReplicaVM : Node_RegularVM<Node_ReplicaM, object>
