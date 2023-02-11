@@ -11,6 +11,7 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.App.Config;
+using StorylineEditor.App.Helpers;
 using StorylineEditor.App.Service;
 using StorylineEditor.Model;
 using StorylineEditor.Model.Graphs;
@@ -181,10 +182,41 @@ namespace StorylineEditor.App
             }
         }
 
-        private void SetDataContext(StorylineVM storylineViewModel)
+        private void FillNodesNames(List<BaseM> items)
         {
-            ActiveContext.Storyline = storylineViewModel;
-            DataContext = storylineViewModel;
+            foreach (var item in items)
+            {
+                if (item is FolderM folder)
+                {
+                    FillNodesNames(folder.content);
+                }
+                else if (item is GraphM graph)
+                {
+                    foreach (var node in graph.nodes)
+                    {
+                        if (node is Node_RegularM regularNode)
+                        {
+                            node.name = string.Format("[{0}]: {1}", ActiveContext.GetCharacter(regularNode.characterId)?.name ?? "???", RichTextMHelper.GetTextString(node.description) ?? "???"); ////// TODO DUPLICATION
+                        }
+                    }
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException(nameof(item));
+                }
+            }
+        }
+
+        private void SetDataContext(StorylineVM storylineVM)
+        {
+            ActiveContext.Storyline = storylineVM;
+            DataContext = storylineVM;
+            
+            if (storylineVM != null)
+            {
+                FillNodesNames(storylineVM.Model.dialogs);
+                FillNodesNames(storylineVM.Model.replicas);
+            }
         }
 
         private void btn_Config_Click(object sender, RoutedEventArgs e)

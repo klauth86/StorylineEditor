@@ -149,12 +149,9 @@ namespace StorylineEditor.ViewModel.Nodes
         protected int zIndex;
         public int ZIndex => zIndex;
 
-        protected string descriptionCompendium;
-        public void OnRichTextChanged(string propName, string richTextModelString, string textString)
+        public virtual void OnRichTextChanged(string propName, string richTextModelString, string textString)
         {
             Description = richTextModelString;
-            descriptionCompendium = textString;
-            // TODO update name
         }
 
         public virtual IEnumerable<IPredicate> Predicates { get => Enumerable.Empty<IPredicate>(); }

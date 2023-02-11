@@ -129,6 +129,20 @@ namespace StorylineEditor.ViewModel.Nodes
                 }
             }
         }
+
+        protected string descriptionTextString;
+        public override void OnRichTextChanged(string propName, string richTextModelString, string textString)
+        {
+            base.OnRichTextChanged(propName, richTextModelString, textString);
+
+            if (descriptionTextString != textString)
+            {
+                descriptionTextString = textString;
+                RefreshModelName();
+            }
+        }
+
+        protected void RefreshModelName() { Name = string.Format("[{0}]: {1}", Character?.name ?? "???", descriptionTextString ?? "???"); } ////// TODO DUPLICATION
     }
 
     public class Node_ReplicaVM : Node_RegularVM<Node_ReplicaM, object>

@@ -11,7 +11,9 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.Model.RichText;
+using StorylineEditor.ViewModel;
 using System;
+using System.Text;
 
 namespace StorylineEditor.App.Helpers
 {
@@ -48,6 +50,29 @@ namespace StorylineEditor.App.Helpers
                     }
                 }
             }
+        }
+
+        public const string NewLineDecorString = "...";
+
+        public static string GetTextString(string maskedXml)
+        {
+            string xml = UnmaskXml(maskedXml);
+
+            if (!string.IsNullOrEmpty(xml))
+            {
+                TextRangeM rootTextRangeModel = ActiveContext.SerializationService.Deserialize<TextRangeM>(xml);
+                
+                foreach (var textRangeModel in rootTextRangeModel.subRanges)
+                {
+                    if (!string.IsNullOrEmpty(textRangeModel.content))
+                    {
+                        string[] textSegments = textRangeModel.content.Replace(Environment.NewLine, newLineString).Split(Separator, StringSplitOptions.RemoveEmptyEntries);
+                        return string.Join(NewLineDecorString, textSegments);
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }

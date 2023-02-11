@@ -781,10 +781,10 @@ StorylineEditor распространяется в надежде, что он�
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition x:Name="cd_InternalDescriptionFemale" Width="0"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <GroupBox x:Name="gb_InternalDescription" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_InternalDescription}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}" Tag="{Binding ElementName=rtb_InternalFlowDocument}">
+                <GroupBox x:Name="gb_InternalDescription" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_InternalDescription}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
                     <controls:RichTextBoxWithTarget MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="InternalDescription" Description="{Binding InternalDescription, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithTarget>
                 </GroupBox>
-                <GroupBox Grid.Column="1" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_InternalDescriptionFemale}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}" Tag="{Binding ElementName=rtb_InternalFlowDocumentFemale}">
+                <GroupBox Grid.Column="1" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_InternalDescriptionFemale}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
                     <controls:RichTextBoxWithTarget MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="InternalDescriptionFemale" Description="{Binding InternalDescriptionFemale, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithTarget>
                 </GroupBox>
             </Grid>

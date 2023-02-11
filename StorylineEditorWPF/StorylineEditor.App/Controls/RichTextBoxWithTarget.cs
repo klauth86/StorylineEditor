@@ -121,8 +121,6 @@ namespace StorylineEditor.App.Controls
             RefreshDocument(xml);
         }
 
-        private static char[] newLineDecorString = "...".ToCharArray();
-
         public string GetRichTextModelString(FlowDocument document, ISerializationService serializationService)
         {
             TextRangeM rootTextRangeModel = new TextRangeM();
@@ -198,10 +196,14 @@ namespace StorylineEditor.App.Controls
                         {
                             if (block != document.Blocks.FirstBlock)
                             {
-                                stringBuilder.Append(newLineDecorString);
+                                stringBuilder.Append(RichTextMHelper.NewLineDecorString);
                             }
                             stringBuilder.Append(paragraphText);
                         }
+                    }
+                    else
+                    {
+                        throw new ArgumentOutOfRangeException(nameof(block));
                     }
                 }
             }
