@@ -29,7 +29,6 @@ namespace StorylineEditor.ViewModel
 
         public static IDialogService DialogService { get; set; }
         public static ISerializationService SerializationService { get; set; }
-        public static IFlowDocumentService FlowDocumentService { get; set; }
         public static ITaskService TaskService { get; set; }
         public static IFileService FileService { get; set; }
         public static ISoundPlayerService SoundPlayerService { get; set; }

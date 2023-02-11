@@ -16,9 +16,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.App.Helpers;
 using StorylineEditor.Model.RichText;
 using StorylineEditor.ViewModel;
 using StorylineEditor.ViewModel.Interface;
+using System;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -39,7 +42,7 @@ namespace StorylineEditor.App.Controls
         {
             if (d is RichTextBoxWithTarget richTextBoxWithTarget)
             {
-                string xml = ActiveContext.FlowDocumentService.UnmaskXml(e.NewValue?.ToString());
+                string xml = RichTextMHelper.UnmaskXml(e.NewValue?.ToString());
 
                 richTextBoxWithTarget.RefreshDocument(xml);
             }
@@ -58,7 +61,7 @@ namespace StorylineEditor.App.Controls
                 {
                     TextRangeM rootTextRangeModel = ActiveContext.SerializationService.Deserialize<TextRangeM>(xml);
 
-                    ActiveContext.FlowDocumentService.IterateThroughTextRangeM(rootTextRangeModel
+                    RichTextMHelper.IterateThroughTextRangeM(rootTextRangeModel
                         , (textSegment, textRangeModel) => AddRunForTextRange(textSegment, textRangeModel, paragraph)
                         , (textSegment, textRangeModel) =>
                         {
@@ -99,8 +102,8 @@ namespace StorylineEditor.App.Controls
             {
                 if (DataContext is IRichTextSource richTextSource)
                 {
-                    string richTextModelString = ActiveContext.FlowDocumentService.ConvertTo(Document, ActiveContext.SerializationService);
-                    string textString = ActiveContext.FlowDocumentService.GetTextFromFlowDoc(Document);
+                    string richTextModelString = GetRichTextModelString(Document, ActiveContext.SerializationService);
+                    string textString = GetTextString(Document);
                     richTextSource.OnRichTextChanged(Tag?.ToString(), richTextModelString, textString);
                 }
             }
@@ -113,9 +116,97 @@ namespace StorylineEditor.App.Controls
 
         private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            string xml = ActiveContext.FlowDocumentService.UnmaskXml((e.NewValue as IRichTextSource)?.Description);
+            string xml = RichTextMHelper.UnmaskXml((e.NewValue as IRichTextSource)?.Description);
 
             RefreshDocument(xml);
+        }
+
+        private static char[] newLineDecorString = "...".ToCharArray();
+
+        public string GetRichTextModelString(FlowDocument document, ISerializationService serializationService)
+        {
+            TextRangeM rootTextRangeModel = new TextRangeM();
+
+            int paragraphIndex = 0;
+            int oldStyle = -1;
+
+            foreach (Block block in document.Blocks)
+            {
+                if (block is Paragraph paragraph)
+                {
+                    if (paragraphIndex > 0)
+                    {
+                        if (rootTextRangeModel.subRanges.Count == 0)
+                        {
+                            rootTextRangeModel.subRanges.Add(new TextRangeM());
+                            oldStyle = 0;
+                        }
+                        rootTextRangeModel.subRanges[rootTextRangeModel.subRanges.Count - 1].content += Environment.NewLine;
+                    }
+
+                    foreach (Inline inline in paragraph.Inlines)
+                    {
+                        if (inline is Run run)
+                        {
+                            bool isBold = run.FontWeight == FontWeights.Bold;
+                            bool isItalic = run.FontStyle == FontStyles.Italic;
+                            bool isUnderline = run.TextDecorations == TextDecorations.Underline;
+
+                            int newStyle = (isBold ? 1 : 0) + (isItalic ? 2 : 0) + (isUnderline ? 4 : 0);
+
+                            if (newStyle != oldStyle)
+                            {
+                                rootTextRangeModel.subRanges.Add(new TextRangeM() { isBold = isBold, isItalic = isItalic, isUnderline = isUnderline });
+                                oldStyle = newStyle;
+                            }
+
+                            rootTextRangeModel.subRanges[rootTextRangeModel.subRanges.Count - 1].content += run.Text;
+                        }
+                        else if (inline is LineBreak)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            throw new ArgumentOutOfRangeException(nameof(inline));
+                        }
+                    }
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException(nameof(block));
+                }
+
+                paragraphIndex++;
+            }
+
+            return RichTextMHelper.MaskXml(serializationService.Serialize(rootTextRangeModel));
+        }
+
+        public string GetTextString(FlowDocument document)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            if (document != null)
+            {
+                foreach (var block in document.Blocks)
+                {
+                    if (block is Paragraph paragraph)
+                    {
+                        string paragraphText = new TextRange(paragraph.ContentStart, paragraph.ContentEnd).Text;
+                        if (!string.IsNullOrEmpty(paragraphText))
+                        {
+                            if (block != document.Blocks.FirstBlock)
+                            {
+                                stringBuilder.Append(newLineDecorString);
+                            }
+                            stringBuilder.Append(paragraphText);
+                        }
+                    }
+                }
+            }
+
+            return stringBuilder.ToString();
         }
     }
 }

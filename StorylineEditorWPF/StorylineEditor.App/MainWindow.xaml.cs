@@ -37,7 +37,6 @@ namespace StorylineEditor.App
         static MainWindow()
         {
             ActiveContext.SerializationService = new SerializationService();
-            ActiveContext.FlowDocumentService = new FlowDocumentService();
             ActiveContext.TaskService = new TaskService();
             ActiveContext.FileService = new FileService();
             ActiveContext.SoundPlayerService = new SoundPlayerService();

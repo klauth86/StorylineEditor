@@ -10,6 +10,7 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.App.Helpers;
 using StorylineEditor.Model.RichText;
 using StorylineEditor.ViewModel;
 using System.Windows;
@@ -42,9 +43,9 @@ namespace StorylineEditor.App.Behaviors
 
                 if (!string.IsNullOrEmpty(maskedXml))
                 {
-                    TextRangeM rootTextRangeModel = ActiveContext.SerializationService.Deserialize<TextRangeM>(ActiveContext.FlowDocumentService.UnmaskXml(maskedXml));
+                    TextRangeM rootTextRangeModel = ActiveContext.SerializationService.Deserialize<TextRangeM>(RichTextMHelper.UnmaskXml(maskedXml));
 
-                    ActiveContext.FlowDocumentService.IterateThroughTextRangeM(rootTextRangeModel
+                    RichTextMHelper.IterateThroughTextRangeM(rootTextRangeModel
                         , (textSegment, textRangeModel) => AddRunForTextRange(textSegment, textRangeModel, textBlock)
                         , (textSegment, textRangeModel) =>
                         {

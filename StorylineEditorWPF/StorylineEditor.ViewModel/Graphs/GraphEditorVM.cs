@@ -89,19 +89,6 @@ namespace StorylineEditor.ViewModel.Graphs
                 if (!FromNodesLinks.ContainsKey(nodeModel.id)) FromNodesLinks.Add(nodeModel.id, new HashSet<string>());
                 if (!ToNodesLinks.ContainsKey(nodeModel.id)) ToNodesLinks.Add(nodeModel.id, new HashSet<string>());
                 if (!nodesPositions.ContainsKey(nodeModel.id)) nodesPositions.Add(nodeModel.id, new Tuple<double, double>(nodeModel.positionX, nodeModel.positionY));
-
-                if (nodeModel is Node_ReplicaM replicaNodeModel)
-                {
-                    var flow = ActiveContext.FlowDocumentService.ConvertBack(replicaNodeModel.description, ActiveContext.SerializationService);
-                    var flowDocText = ActiveContext.FlowDocumentService.GetTextFromFlowDoc(flow);
-                    replicaNodeModel.name = string.Format("[{0}]: {1}", ActiveContext.GetCharacter(replicaNodeModel.characterId)?.name ?? "???", flowDocText);
-                }
-                else if (nodeModel is Node_DialogM dialogNodeModel)
-                {
-                    var flow = ActiveContext.FlowDocumentService.ConvertBack(dialogNodeModel.description, ActiveContext.SerializationService);
-                    var flowDocText = ActiveContext.FlowDocumentService.GetTextFromFlowDoc(flow);
-                    dialogNodeModel.name = string.Format("[{0}]: {1}", ActiveContext.GetCharacter(dialogNodeModel.characterId)?.name ?? "???", flowDocText);
-                }
             }
 
             foreach (var linkModel in Model.links)
