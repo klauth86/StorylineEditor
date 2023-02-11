@@ -32,13 +32,13 @@ namespace StorylineEditor.App.Behaviors
 
         public static void SetDescription(this UIElement inUIElement, string value) { inUIElement.SetValue(DescriptionProperty, value); }
 
-        private static void DescriptionPropertyChanged(DependencyObject dp, DependencyPropertyChangedEventArgs args)
+        private static void DescriptionPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (dp is TextBlock textBlock)
+            if (d is TextBlock textBlock)
             {
                 textBlock.Inlines.Clear();
 
-                string maskedXml = args.NewValue?.ToString();
+                string maskedXml = e.NewValue?.ToString();
 
                 if (!string.IsNullOrEmpty(maskedXml))
                 {

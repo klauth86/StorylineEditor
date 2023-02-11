@@ -16,29 +16,106 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Model.RichText;
 using StorylineEditor.ViewModel;
 using StorylineEditor.ViewModel.Interface;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 
 namespace StorylineEditor.App.Controls
 {
     public class RichTextBoxWithTarget : RichTextBox
     {
-        public RichTextBoxWithTarget()
-        {
+        public static readonly DependencyProperty DescriptionProperty = DependencyProperty.Register
+            (
+            "Description",
+            typeof(string),
+            typeof(RichTextBoxWithTarget),
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, DescriptionPropertyChanged)
+            );
 
+        private static void DescriptionPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is RichTextBoxWithTarget richTextBoxWithTarget)
+            {
+                string xml = ActiveContext.FlowDocumentService.UnmaskXml(e.NewValue?.ToString());
+
+                richTextBoxWithTarget.RefreshDocument(xml);
+            }
+        }
+
+        private void RefreshDocument(string xml)
+        {
+            IsUnderDescriptionPropertyChangedScope = true;
+            {
+                Document.Blocks.Clear();
+
+                Paragraph paragraph = new Paragraph();
+                Document.Blocks.Add(paragraph);
+
+                if (!string.IsNullOrEmpty(xml))
+                {
+                    TextRangeM rootTextRangeModel = ActiveContext.SerializationService.Deserialize<TextRangeM>(xml);
+
+                    ActiveContext.FlowDocumentService.IterateThroughTextRangeM(rootTextRangeModel
+                        , (textSegment, textRangeModel) => AddRunForTextRange(textSegment, textRangeModel, paragraph)
+                        , (textSegment, textRangeModel) =>
+                        {
+                            paragraph = new Paragraph();
+                            Document.Blocks.Add(paragraph);
+
+                            AddRunForTextRange(textSegment, textRangeModel, paragraph);
+                        });
+                }
+            }
+            IsUnderDescriptionPropertyChangedScope = false;
+        }
+
+        private void AddRunForTextRange(string textSegment, TextRangeM textRangeModel, Paragraph paragraph)
+        {
+            Run run = new Run(textSegment);
+
+            if (textRangeModel.isBold) run.FontWeight = FontWeights.Bold;
+            if (textRangeModel.isItalic) run.FontStyle = FontStyles.Italic;
+            if (textRangeModel.isUnderline) run.TextDecorations = TextDecorations.Underline;
+
+            paragraph.Inlines.Add(run);
+        }
+
+        private bool IsUnderDescriptionPropertyChangedScope = false;
+
+        public string Description
+        {
+            get => GetValue(DescriptionProperty)?.ToString();
+            set => SetValue(DescriptionProperty, value);
         }
 
         protected override void OnTextChanged(TextChangedEventArgs e)
         {
             base.OnTextChanged(e);
 
-            if (DataContext is IRichTextSource richTextSource)
+            if (!IsUnderDescriptionPropertyChangedScope)
             {
-                string richTextModelString = ActiveContext.FlowDocumentService.ConvertTo(Document, ActiveContext.SerializationService);
-                string textString = ActiveContext.FlowDocumentService.GetTextFromFlowDoc(Document);
-                richTextSource.OnRichTextChanged(richTextModelString, textString);
+                if (DataContext is IRichTextSource richTextSource)
+                {
+                    string richTextModelString = ActiveContext.FlowDocumentService.ConvertTo(Document, ActiveContext.SerializationService);
+                    string textString = ActiveContext.FlowDocumentService.GetTextFromFlowDoc(Document);
+                    richTextSource.OnRichTextChanged(Tag?.ToString(), richTextModelString, textString);
+                }
             }
+        }
+
+        public RichTextBoxWithTarget()
+        {
+            DataContextChanged += OnDataContextChanged;
+        }
+
+        private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            string xml = ActiveContext.FlowDocumentService.UnmaskXml((e.NewValue as IRichTextSource)?.Description);
+
+            RefreshDocument(xml);
         }
     }
 }

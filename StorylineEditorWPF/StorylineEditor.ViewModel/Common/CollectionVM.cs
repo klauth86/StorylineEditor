@@ -140,28 +140,12 @@ namespace StorylineEditor.ViewModel
 
         public void OnEnter()
         {
-            if (SelectionEditor != null)
-            {
-                if (SelectionEditor is IPartiallyStored partiallyStoredEd)
-                {
-                    partiallyStoredEd.OnEnter();
-                }
-            }
-
             ActiveContext.ActiveGraph = SelectionEditor as IGraph;
         }
 
         public void OnLeave()
         {
             ActiveContext.ActiveGraph = null;
-
-            if (SelectionEditor != null)
-            {
-                if (SelectionEditor is IPartiallyStored partiallyStoredEd)
-                {
-                    partiallyStoredEd.OnLeave();
-                }
-            }
         }
     }
 }

@@ -11,11 +11,10 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.ViewModel.Interface;
-using System.Windows.Documents;
 
 namespace StorylineEditor.ViewModel
 {
-    public class ActorEditorVM : ActorVM, IPartiallyStored
+    public class ActorEditorVM : ActorVM, IRichTextSource
     {
         public ActorEditorVM(ActorVM viewModel) : base(viewModel.Model, viewModel.Parent) { }
 
@@ -71,72 +70,16 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        protected FlowDocument descriptionFlow;
-        public FlowDocument DescriptionFlow
+        public void OnRichTextChanged(string propName, string richTextModelString, string textString)
         {
-            get
+            if (propName == nameof(Description))
             {
-                if (descriptionFlow == null)
-                {
-                    descriptionFlow = ActiveContext.FlowDocumentService.ConvertBack(Description, ActiveContext.SerializationService);
-                    descriptionFlow.Name = Id;
-                }
-
-                return descriptionFlow;
+                Description = richTextModelString;
             }
-        }
-
-        protected bool documentChangedFlag;
-        public bool DocumentChangedFlag
-        {
-            get => documentChangedFlag;
-            set
+            else if (propName == nameof(DescriptionFemale))
             {
-                if (value != documentChangedFlag)
-                {
-                    documentChangedFlag = value;
-
-                    Description = DescriptionFlow != null ? ActiveContext.FlowDocumentService.ConvertTo(DescriptionFlow, ActiveContext.SerializationService) : null;
-                }
+                DescriptionFemale = richTextModelString;
             }
-        }
-
-        protected FlowDocument descriptionFlowFemale;
-        public FlowDocument DescriptionFlowFemale
-        {
-            get
-            {
-                if (descriptionFlowFemale == null)
-                {
-                    descriptionFlowFemale = ActiveContext.FlowDocumentService.ConvertBack(DescriptionFemale, ActiveContext.SerializationService);
-                    descriptionFlowFemale.Name = Id;
-                }
-
-                return descriptionFlowFemale;
-            }
-        }
-
-        protected bool documentChangedFlagFemale;
-        public bool DocumentChangedFlagFemale
-        {
-            get => documentChangedFlagFemale;
-            set
-            {
-                if (value != documentChangedFlagFemale)
-                {
-                    documentChangedFlagFemale = value;
-
-                    DescriptionFemale = DescriptionFlowFemale != null ? ActiveContext.FlowDocumentService.ConvertTo(DescriptionFlowFemale, ActiveContext.SerializationService) : null;
-                }
-            }
-        }
-
-        public void OnEnter() { }
-
-        public void OnLeave()
-        {
-            descriptionFlow = null;
-            descriptionFlowFemale = null;
         }
     }
 }

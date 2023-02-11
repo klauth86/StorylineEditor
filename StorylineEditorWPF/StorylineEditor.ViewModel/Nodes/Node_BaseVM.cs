@@ -150,7 +150,7 @@ namespace StorylineEditor.ViewModel.Nodes
         public int ZIndex => zIndex;
 
         protected string descriptionCompendium;
-        public void OnRichTextChanged(string richTextModelString, string textString)
+        public void OnRichTextChanged(string propName, string richTextModelString, string textString)
         {
             Description = richTextModelString;
             descriptionCompendium = textString;

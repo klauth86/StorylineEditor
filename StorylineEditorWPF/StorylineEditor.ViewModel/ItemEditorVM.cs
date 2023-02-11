@@ -11,11 +11,10 @@ StorylineEditor распространяется в надежде, что он�
 */
 
 using StorylineEditor.ViewModel.Interface;
-using System.Windows.Documents;
 
 namespace StorylineEditor.ViewModel
 {
-    public class ItemEditorVM : ItemVM, IPartiallyStored
+    public class ItemEditorVM : ItemVM, IRichTextSource
     {
         public ItemEditorVM(ItemVM viewModel) : base(viewModel.Model, viewModel.Parent) { }
 
@@ -123,134 +122,24 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        protected FlowDocument descriptionFlow;
-        public FlowDocument DescriptionFlow
+        public void OnRichTextChanged(string propName, string richTextModelString, string textString)
         {
-            get
+            if (propName == nameof(Description))
             {
-                if (descriptionFlow == null)
-                {
-                    descriptionFlow = ActiveContext.FlowDocumentService.ConvertBack(Description, ActiveContext.SerializationService);
-                    descriptionFlow.Name = Id;
-                }
-
-                return descriptionFlow;
+                Description = richTextModelString;
             }
-        }
-
-        protected bool documentChangedFlag;
-        public bool DocumentChangedFlag
-        {
-            get => documentChangedFlag;
-            set
+            else if (propName == nameof(DescriptionFemale))
             {
-                if (value != documentChangedFlag)
-                {
-                    documentChangedFlag = value;
-
-                    Description = DescriptionFlow != null ? ActiveContext.FlowDocumentService.ConvertTo(DescriptionFlow, ActiveContext.SerializationService) : null;
-                }
+                DescriptionFemale = richTextModelString;
             }
-        }
-
-        protected FlowDocument descriptionFlowFemale;
-        public FlowDocument DescriptionFlowFemale
-        {
-            get
+            else if (propName == nameof(InternalDescription))
             {
-                if (descriptionFlowFemale == null)
-                {
-                    descriptionFlowFemale = ActiveContext.FlowDocumentService.ConvertBack(DescriptionFemale, ActiveContext.SerializationService);
-                    descriptionFlowFemale.Name = Id;
-                }
-
-                return descriptionFlowFemale;
+                InternalDescription = richTextModelString;
             }
-        }
-
-        protected bool documentChangedFlagFemale;
-        public bool DocumentChangedFlagFemale
-        {
-            get => documentChangedFlagFemale;
-            set
+            else if (propName == nameof(InternalDescriptionFemale))
             {
-                if (value != documentChangedFlagFemale)
-                {
-                    documentChangedFlagFemale = value;
-
-                    DescriptionFemale = DescriptionFlowFemale != null ? ActiveContext.FlowDocumentService.ConvertTo(DescriptionFlowFemale, ActiveContext.SerializationService) : null;
-                }
+                InternalDescriptionFemale = richTextModelString;
             }
-        }
-
-        protected FlowDocument internalDescriptionFlow;
-        public FlowDocument InternalDescriptionFlow
-        {
-            get
-            {
-                if (internalDescriptionFlow == null)
-                {
-                    internalDescriptionFlow = ActiveContext.FlowDocumentService.ConvertBack(InternalDescription, ActiveContext.SerializationService);
-                    internalDescriptionFlow.Name = Id;
-                }
-
-                return internalDescriptionFlow;
-            }
-        }
-
-        protected bool internalDocumentChangedFlag;
-        public bool InternalDocumentChangedFlag
-        {
-            get => internalDocumentChangedFlag;
-            set
-            {
-                if (value != internalDocumentChangedFlag)
-                {
-                    internalDocumentChangedFlag = value;
-
-                    InternalDescription = InternalDescriptionFlow != null ? ActiveContext.FlowDocumentService.ConvertTo(InternalDescriptionFlow, ActiveContext.SerializationService) : null;
-                }
-            }
-        }
-
-        protected FlowDocument internalDescriptionFlowFemale;
-        public FlowDocument InternalDescriptionFlowFemale
-        {
-            get
-            {
-                if (internalDescriptionFlowFemale == null)
-                {
-                    internalDescriptionFlowFemale = ActiveContext.FlowDocumentService.ConvertBack(InternalDescriptionFemale, ActiveContext.SerializationService);
-                    internalDescriptionFlowFemale.Name = Id;
-                }
-
-                return internalDescriptionFlowFemale;
-            }
-        }
-
-        protected bool internalDocumentChangedFlagFemale;
-        public bool InternalDocumentChangedFlagFemale
-        {
-            get => internalDocumentChangedFlagFemale;
-            set
-            {
-                if (value != internalDocumentChangedFlagFemale)
-                {
-                    internalDocumentChangedFlagFemale = value;
-
-                    InternalDescriptionFemale = InternalDescriptionFlowFemale != null ? ActiveContext.FlowDocumentService.ConvertTo(InternalDescriptionFlowFemale, ActiveContext.SerializationService) : null;
-                }
-            }
-        }
-
-        public void OnEnter() { }
-
-        public void OnLeave()
-        {
-            descriptionFlow = null;
-            descriptionFlowFemale = null;
-            internalDescriptionFlow = null;
-            internalDescriptionFlowFemale = null;
         }
     }
 }

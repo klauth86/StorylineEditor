@@ -22,6 +22,6 @@ namespace StorylineEditor.ViewModel.Interface
     {
         string Id { get; }
         string Description { get; }
-        void OnRichTextChanged(string richTextModelString, string textString);
+        void OnRichTextChanged(string propName, string richTextModelString, string textString);
     }
 }
