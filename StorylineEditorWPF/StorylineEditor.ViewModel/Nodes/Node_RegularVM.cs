@@ -129,13 +129,13 @@ namespace StorylineEditor.ViewModel.Nodes
                 }
             }
         }
+
+        protected override void RefreshModelName() { Name = string.Format("[{0}]: {1}", Character?.name ?? "???", ActiveContext.FlowDocumentService.GetTextFromFlowDoc(DescriptionFlow)); }
     }
 
     public class Node_ReplicaVM : Node_RegularVM<Node_ReplicaM, object>
     {
         public Node_ReplicaVM(Node_ReplicaM model, object parent) : base(model, parent) { }
-
-        protected override void RefreshModelName() { Name = string.Format("[{0}]: {1}", Character?.name ?? "???", ActiveContext.FlowDocumentService.GetTextFromFlowDoc(DescriptionFlow)); }
     }
 
     public class Node_ReplicaEditorVM : Node_ReplicaVM
@@ -146,8 +146,6 @@ namespace StorylineEditor.ViewModel.Nodes
     public class Node_DialogVM : Node_RegularVM<Node_DialogM, object>
     {
         public Node_DialogVM(Node_DialogM model, object parent) : base(model, parent) { }
-
-        protected override void RefreshModelName() { Name = string.Format("[{0}]: {1}", Character?.name ?? "???", ActiveContext.FlowDocumentService.GetTextFromFlowDoc(DescriptionFlow)); }
     }
 
     public class Node_DialogEditorVM : Node_DialogVM

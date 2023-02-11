@@ -13,6 +13,7 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Model.RichText;
 using StorylineEditor.ViewModel.Interface;
 using System;
+using System.Text;
 using System.Windows;
 using System.Windows.Documents;
 
@@ -26,9 +27,34 @@ namespace StorylineEditor.App.Service
         const string EndTagBracketMasked = "&gt;";
 
         static string newLineString = new string('\n', 1);
+        static char[] newLineDecorString = "...".ToCharArray();
         static char[] Separator = { '\n' };
 
-        public string GetTextFromFlowDoc(FlowDocument document) { return document != null ? new TextRange(document.ContentStart, document.ContentEnd).Text : null; }
+        public string GetTextFromFlowDoc(FlowDocument document)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            if (document != null)
+            {
+                foreach (var block in document.Blocks)
+                {
+                    if (block is Paragraph paragraph)
+                    {
+                        string paragraphText = new TextRange(paragraph.ContentStart, paragraph.ContentEnd).Text;
+                        if (!string.IsNullOrEmpty(paragraphText))
+                        {
+                            if (block != document.Blocks.FirstBlock)
+                            {
+                                stringBuilder.Append(newLineDecorString);
+                            }
+                            stringBuilder.Append(paragraphText);
+                        }
+                    }
+                }
+            }
+
+            return stringBuilder.ToString();
+        }
 
         public string ConvertTo(FlowDocument document, ISerializationService serializationService)
         {
