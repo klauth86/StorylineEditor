@@ -58,6 +58,7 @@
     <Compile Include="Interface\ISoundPlayerService.cs" />
     <Compile Include="Interface\ITaskService.cs" />
     <Compile Include="Interface\IWithModel.cs" />
+    <Compile Include="Interface\IRichTextSource.cs" />
     <Compile Include="ItemEditorVM.cs" />
     <Compile Include="LocationEditorVM.cs" />
     <Compile Include="LocationVM.cs" />

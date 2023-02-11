@@ -73,7 +73,7 @@ namespace StorylineEditor.ViewModel.Nodes
                     OnModelChanged(Model, nameof(Character));
                     Notify(nameof(Character));
 
-                    RefreshModelName();
+                    // TODO update name
                 }
             }
         }
@@ -129,8 +129,6 @@ namespace StorylineEditor.ViewModel.Nodes
                 }
             }
         }
-
-        protected override void RefreshModelName() { Name = string.Format("[{0}]: {1}", Character?.name ?? "???", ActiveContext.FlowDocumentService.GetTextFromFlowDoc(DescriptionFlow)); }
     }
 
     public class Node_ReplicaVM : Node_RegularVM<Node_ReplicaM, object>

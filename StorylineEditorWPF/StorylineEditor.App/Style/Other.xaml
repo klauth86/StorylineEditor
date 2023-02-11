@@ -656,13 +656,13 @@ StorylineEditor распространяется в надежде, что он�
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition x:Name="cd_DescriptionFemale" Width="0"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <GroupBox x:Name="gb_Description" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}" Tag="{Binding ElementName=rtb_FlowDocument}">
-                    <controls:RichTextBoxExt x:Name="rtb_FlowDocument" MinHeight="{StaticResource Double_Node_MinHeight}"
+                <GroupBox x:Name="gb_Description" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                    <controls:RichTextBoxExt MinHeight="{StaticResource Double_Node_MinHeight}"
                                                  BindableDocument="{Binding DescriptionFlow, UpdateSourceTrigger=PropertyChanged}"
                                                  DocumentChangedFlag="{Binding DocumentChangedFlag, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></controls:RichTextBoxExt>
                 </GroupBox>
-                <GroupBox Grid.Column="1" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_DescriptionFemale}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}" Tag="{Binding ElementName=rtb_FlowDocumentFemale}">
-                    <controls:RichTextBoxExt x:Name="rtb_FlowDocumentFemale" MinHeight="{StaticResource Double_Node_MinHeight}"
+                <GroupBox Grid.Column="1" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_DescriptionFemale}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                    <controls:RichTextBoxExt MinHeight="{StaticResource Double_Node_MinHeight}"
                                                  BindableDocument="{Binding DescriptionFlowFemale, UpdateSourceTrigger=PropertyChanged}"
                                                  DocumentChangedFlag="{Binding DocumentChangedFlagFemale, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></controls:RichTextBoxExt>
                 </GroupBox>
@@ -723,13 +723,13 @@ StorylineEditor распространяется в надежде, что он�
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition x:Name="cd_DescriptionFemale" Width="0"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <GroupBox x:Name="gb_Description" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}" Tag="{Binding ElementName=rtb_FlowDocument}">
-                    <controls:RichTextBoxExt x:Name="rtb_FlowDocument" MinHeight="{StaticResource Double_Node_MinHeight}"
+                <GroupBox x:Name="gb_Description" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                    <controls:RichTextBoxExt MinHeight="{StaticResource Double_Node_MinHeight}"
                                                  BindableDocument="{Binding DescriptionFlow, UpdateSourceTrigger=PropertyChanged}"
                                                  DocumentChangedFlag="{Binding DocumentChangedFlag, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></controls:RichTextBoxExt>
                 </GroupBox>
-                <GroupBox Grid.Column="1" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_DescriptionFemale}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}" Tag="{Binding ElementName=rtb_FlowDocumentFemale}">
-                    <controls:RichTextBoxExt x:Name="rtb_FlowDocumentFemale" MinHeight="{StaticResource Double_Node_MinHeight}"
+                <GroupBox Grid.Column="1" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_DescriptionFemale}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                    <controls:RichTextBoxExt MinHeight="{StaticResource Double_Node_MinHeight}"
                                                  BindableDocument="{Binding DescriptionFlowFemale, UpdateSourceTrigger=PropertyChanged}"
                                                  DocumentChangedFlag="{Binding DocumentChangedFlagFemale, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></controls:RichTextBoxExt>
                 </GroupBox>
@@ -774,13 +774,13 @@ StorylineEditor распространяется в надежде, что он�
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition x:Name="cd_DescriptionFemale" Width="0"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <GroupBox x:Name="gb_Description" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}" Tag="{Binding ElementName=rtb_FlowDocument}">
-                    <controls:RichTextBoxExt x:Name="rtb_FlowDocument" MinHeight="{StaticResource Double_Node_MinHeight}"
+                <GroupBox x:Name="gb_Description" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                    <controls:RichTextBoxExt MinHeight="{StaticResource Double_Node_MinHeight}"
                                                  BindableDocument="{Binding DescriptionFlow, UpdateSourceTrigger=PropertyChanged}"
                                                  DocumentChangedFlag="{Binding DocumentChangedFlag, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></controls:RichTextBoxExt>
                 </GroupBox>
-                <GroupBox Grid.Column="1" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_DescriptionFemale}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}" Tag="{Binding ElementName=rtb_FlowDocumentFemale}">
-                    <controls:RichTextBoxExt x:Name="rtb_FlowDocumentFemale" MinHeight="{StaticResource Double_Node_MinHeight}"
+                <GroupBox Grid.Column="1" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_DescriptionFemale}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                    <controls:RichTextBoxExt MinHeight="{StaticResource Double_Node_MinHeight}"
                                                  BindableDocument="{Binding DescriptionFlowFemale, UpdateSourceTrigger=PropertyChanged}"
                                                  DocumentChangedFlag="{Binding DocumentChangedFlagFemale, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></controls:RichTextBoxExt>
                 </GroupBox>
@@ -1086,9 +1086,8 @@ StorylineEditor распространяется в надежде, что он�
 
             <TextBlock VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
-            <controls:TextBlockExt Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
-                                       Style="{StaticResource S_TextBlock_Node_Description}"></controls:TextBlockExt>
-
+            <TextBlock Grid.ColumnSpan="2" Grid.Row="1" bhvrs:RichTextMBehavior.Description="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Node_Description}"></TextBlock>
+            
             <Separator Grid.ColumnSpan="2" Grid.Row="2"></Separator>
 
             <TextBlock Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource S_TextBlock_Node_Result}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
@@ -1105,7 +1104,9 @@ StorylineEditor распространяется в надежде, что он�
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
                     <TextBox Style="{StaticResource S_TextBox_Prop}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Step_Name}"></TextBox>
-                    <TextBox Grid.Row="1" Style="{StaticResource S_TextBox_Prop_Rich}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Step_Description}"></TextBox>
+                    <GroupBox Grid.Row="1" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_Node_Step_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                        <controls:RichTextBoxWithTarget MinHeight="{StaticResource Double_Node_MinHeight}" DataContext="{Binding}"></controls:RichTextBoxWithTarget>
+                    </GroupBox>
                     <TextBox Grid.Row="2" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Step_Result}"></TextBox>
                 </Grid>
             </TabItem>
@@ -1129,8 +1130,7 @@ StorylineEditor распространяется в надежде, что он�
 
             <TextBlock VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
-            <controls:TextBlockExt Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
-                                       Style="{StaticResource S_TextBlock_Node_Description}"></controls:TextBlockExt>
+            <TextBlock Grid.ColumnSpan="2" Grid.Row="1" bhvrs:RichTextMBehavior.Description="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Node_Description}"></TextBlock>
 
             <Separator Grid.ColumnSpan="2" Grid.Row="2"></Separator>
 
@@ -1148,7 +1148,9 @@ StorylineEditor распространяется в надежде, что он�
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
                     <TextBox Style="{StaticResource S_TextBox_Prop}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Alternative_Name}"></TextBox>
-                    <TextBox Grid.Row="1" Style="{StaticResource S_TextBox_Prop_Rich}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Alternative_Description}"></TextBox>
+                    <GroupBox Grid.Row="1" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_Node_Alternative_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                        <controls:RichTextBoxWithTarget MinHeight="{StaticResource Double_Node_MinHeight}" DataContext="{Binding}"></controls:RichTextBoxWithTarget>
+                    </GroupBox>
                     <TextBox Grid.Row="2" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Alternative_Result}"></TextBox>
                 </Grid>
             </TabItem>
@@ -1490,8 +1492,7 @@ StorylineEditor распространяется в надежде, что он�
                 <Run Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged, StringFormat=[{0}], TargetNullValue=''}"></Run>
             </TextBlock>
 
-            <controls:TextBlockExt Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
-                                       Style="{StaticResource S_TextBlock_Node_Description}"></controls:TextBlockExt>
+            <TextBlock Grid.ColumnSpan="2" Grid.Row="1" bhvrs:RichTextMBehavior.Description="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Node_Description}"></TextBlock>
 
             <Separator Grid.ColumnSpan="2" Grid.Row="2"></Separator>
 
@@ -1519,7 +1520,9 @@ StorylineEditor распространяется в надежде, что он�
                     <TextBox Grid.Row="1" Style="{StaticResource S_TextBox_Prop}" Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_OverrideName}"></TextBox>
                     <ContentControl Grid.Row="2" Style="{StaticResource S_ContentControl_Prop_StorageType}" Content="{Binding}" Tag="{StaticResource String_Tag_Node_Regular_FileStorageType}"></ContentControl>
                     <TextBox Grid.Row="3" Style="{StaticResource S_TextBox_Prop}" Text="{Binding FileHttpRef, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_FileHttpRef}"></TextBox>
-                    <TextBox Grid.Row="4" Style="{StaticResource S_TextBox_Prop_Rich}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Description}"></TextBox>
+                    <GroupBox Grid.Row="4" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                        <controls:RichTextBoxWithTarget MinHeight="{StaticResource Double_Node_MinHeight}" DataContext="{Binding}"></controls:RichTextBoxWithTarget>
+                    </GroupBox>
                     <TextBox Grid.Row="5" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_ShortDescription}"></TextBox>
                 </Grid>
             </TabItem>
@@ -1548,8 +1551,7 @@ StorylineEditor распространяется в надежде, что он�
                 <Run Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged, StringFormat=[{0}], TargetNullValue=''}"></Run>
             </TextBlock>
 
-            <controls:TextBlockExt Grid.ColumnSpan="2" Grid.Row="1" Document="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
-                                       Style="{StaticResource S_TextBlock_Node_Description}"></controls:TextBlockExt>
+            <TextBlock Grid.ColumnSpan="2" Grid.Row="1" bhvrs:RichTextMBehavior.Description="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Node_Description}"></TextBlock>
 
             <Separator Grid.ColumnSpan="2" Grid.Row="2"></Separator>
 
@@ -1577,7 +1579,9 @@ StorylineEditor распространяется в надежде, что он�
                     <TextBox Grid.Row="1" Style="{StaticResource S_TextBox_Prop}" Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_OverrideName}"></TextBox>
                     <ContentControl Grid.Row="2" Style="{StaticResource S_ContentControl_Prop_StorageType}" Content="{Binding}" Tag="{StaticResource String_Tag_Node_Regular_FileStorageType}"></ContentControl>
                     <TextBox Grid.Row="3" Style="{StaticResource S_TextBox_Prop}" Text="{Binding FileHttpRef, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_FileHttpRef}"></TextBox>
-                    <TextBox Grid.Row="4" Style="{StaticResource S_TextBox_Prop_Rich}" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Description}"></TextBox>
+                    <GroupBox Grid.Row="4" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                        <controls:RichTextBoxWithTarget MinHeight="{StaticResource Double_Node_MinHeight}" DataContext="{Binding}"></controls:RichTextBoxWithTarget>
+                    </GroupBox>
                     <TextBox Grid.Row="5" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_ShortDescription}"></TextBox>
                 </Grid>
             </TabItem>

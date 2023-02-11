@@ -13,6 +13,7 @@ StorylineEditor распространяется в надежде, что он�
 using StorylineEditor.Model.RichText;
 using StorylineEditor.ViewModel.Interface;
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 using System.Windows.Documents;
@@ -21,14 +22,11 @@ namespace StorylineEditor.App.Service
 {
     public class FlowDocumentService : IFlowDocumentService
     {
-        const string StartTagBracket = "<";
-        const string StartTagBracketMasked = "&lt;";
-        const string EndTagBracket = ">";
-        const string EndTagBracketMasked = "&gt;";
+        private static Dictionary<IRichTextSource, object> richTextViews = new Dictionary<IRichTextSource, object>();
 
-        static string newLineString = new string('\n', 1);
-        static char[] newLineDecorString = "...".ToCharArray();
-        static char[] Separator = { '\n' };
+        private static string newLineString = new string('\n', 1);
+        private static char[] newLineDecorString = "...".ToCharArray();
+        private static char[] Separator = { '\n' };
 
         public string GetTextFromFlowDoc(FlowDocument document)
         {
@@ -113,10 +111,8 @@ namespace StorylineEditor.App.Service
                 paragraphIndex++;
             }
 
-            return serializationService.Serialize(rootTextRangeModel).Replace(StartTagBracket, StartTagBracketMasked).Replace(EndTagBracket, EndTagBracketMasked);
+            return MaskXml(serializationService.Serialize(rootTextRangeModel));
         }
-
-
 
         public FlowDocument ConvertBack(string value, ISerializationService serializationService)
         {
@@ -127,42 +123,61 @@ namespace StorylineEditor.App.Service
 
             if (!string.IsNullOrEmpty(value))
             {
-                TextRangeM rootTextRangeModel = serializationService.Deserialize<TextRangeM>(value.Replace(StartTagBracketMasked, StartTagBracket).Replace(EndTagBracketMasked, EndTagBracket));
+                TextRangeM rootTextRangeModel = serializationService.Deserialize<TextRangeM>(UnmaskXml(value));
 
-                foreach (var textRangeModel in rootTextRangeModel.subRanges)
-                {
-                    if (!string.IsNullOrEmpty(textRangeModel.content))
+                IterateThroughTextRangeM(rootTextRangeModel
+                    , (textSegment, textRangeModel) => AddRunForTextRange(textSegment, textRangeModel, paragraph)
+                    , (textSegment, textRangeModel) =>
                     {
-                        string[] textLines = textRangeModel.content.Replace(Environment.NewLine, newLineString).Split(Separator);
+                        paragraph = new Paragraph();
+                        flowDocument.Blocks.Add(paragraph);
 
-                        if (textLines.Length > 0)
-                        {
-                            AddRunForTextLine(textLines[0], textRangeModel.isBold, textRangeModel.isItalic, textRangeModel.isUnderline, paragraph);
-
-                            for (int i = 1; i < textLines.Length; i++)
-                            {
-                                paragraph = new Paragraph();
-                                flowDocument.Blocks.Add(paragraph);
-
-                                AddRunForTextLine(textLines[i], textRangeModel.isBold, textRangeModel.isItalic, textRangeModel.isUnderline, paragraph);
-                            }
-                        }
-                    }
-                }
+                        AddRunForTextRange(textSegment, textRangeModel, paragraph);
+                    });
             }
 
             return flowDocument;
         }
 
-        private void AddRunForTextLine(string textLine, bool isBold, bool isItalic, bool isUnderline, Paragraph paragraph)
+        private void AddRunForTextRange(string textSegment, TextRangeM textRangeModel, Paragraph paragraph)
         {
-            Run run = new Run(textLine);
+            Run run = new Run(textSegment);
 
-            if (isBold) run.FontWeight = FontWeights.Bold;
-            if (isItalic) run.FontStyle = FontStyles.Italic;
-            if (isUnderline) run.TextDecorations = TextDecorations.Underline;
+            if (textRangeModel.isBold) run.FontWeight = FontWeights.Bold;
+            if (textRangeModel.isItalic) run.FontStyle = FontStyles.Italic;
+            if (textRangeModel.isUnderline) run.TextDecorations = TextDecorations.Underline;
 
             paragraph.Inlines.Add(run);
+        }
+
+        private const string StartTagBracket = "<";
+        private const string StartTagBracketMasked = "&lt;";
+        private const string EndTagBracket = ">";
+        private const string EndTagBracketMasked = "&gt;";
+
+        public string MaskXml(string xml) { return xml?.Replace(StartTagBracket, StartTagBracketMasked)?.Replace(EndTagBracket, EndTagBracketMasked); }
+
+        public string UnmaskXml(string maskedXml) { return maskedXml?.Replace(StartTagBracketMasked, StartTagBracket)?.Replace(EndTagBracketMasked, EndTagBracket); }
+
+        public void IterateThroughTextRangeM(TextRangeM rootTextRangeModel, Action<string, TextRangeM> firstRangeCallback, Action<string, TextRangeM> nextRangeCallback)
+        {
+            foreach (var textRangeModel in rootTextRangeModel.subRanges)
+            {
+                if (!string.IsNullOrEmpty(textRangeModel.content))
+                {
+                    string[] textSegments = textRangeModel.content.Replace(Environment.NewLine, newLineString).Split(Separator);
+
+                    if (textSegments.Length > 0)
+                    {
+                        firstRangeCallback(textSegments[0], textRangeModel);
+
+                        for (int i = 1; i < textSegments.Length; i++)
+                        {
+                            nextRangeCallback(textSegments[i], textRangeModel);
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -10,6 +10,8 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Model.RichText;
+using System;
 using System.Windows.Documents;
 
 namespace StorylineEditor.ViewModel.Interface
@@ -21,5 +23,11 @@ namespace StorylineEditor.ViewModel.Interface
         string ConvertTo(FlowDocument document, ISerializationService serializationService);
 
         FlowDocument ConvertBack(string value, ISerializationService serializationService);
+
+        string MaskXml(string xml);
+
+        string UnmaskXml(string maskedXml);
+
+        void IterateThroughTextRangeM(TextRangeM rootTextRangeModel, Action<string, TextRangeM> firstRangeCallback, Action<string, TextRangeM> nextRangeCallback);
     }
 }

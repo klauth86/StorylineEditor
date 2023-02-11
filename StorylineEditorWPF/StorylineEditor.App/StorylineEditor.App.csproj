@@ -53,10 +53,12 @@
     </ApplicationDefinition>
     <Compile Include="Behaviors\LoadUnloadExtBehavior.cs" />
     <Compile Include="Behaviors\NumericUpDownBehavior.cs" />
+    <Compile Include="Behaviors\RichTextMBehavior.cs" />
     <Compile Include="Behaviors\RenderSizeBehavior.cs" />
     <Compile Include="Behaviors\MouseExtBehavior.cs" />
     <Compile Include="Config\ConfigVM.cs" />
     <Compile Include="Config\UserActionVM.cs" />
+    <Compile Include="Controls\RichTextBoxWithTarget.cs" />
     <Compile Include="Controls\ComboBoxExt.cs" />
     <Compile Include="Controls\NumericUpDown.xaml.cs">
       <DependentUpon>NumericUpDown.xaml</DependentUpon>
@@ -65,7 +67,6 @@
       <DependentUpon>NumericUpDown_Float.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\RichTextBoxExt.cs" />
-    <Compile Include="Controls\TextBlockExt.cs" />
     <Compile Include="DlgWindow.xaml.cs">
       <DependentUpon>DlgWindow.xaml</DependentUpon>
     </Compile>

@@ -15,7 +15,6 @@ using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Interface;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Nodes
@@ -23,7 +22,7 @@ namespace StorylineEditor.ViewModel.Nodes
     public abstract class Node_BaseVM<T, U>
         : BaseVM<T, U>
         , INode
-        , IPartiallyStored
+        , IRichTextSource
         where T : Node_BaseM
         where U : class
     {
@@ -150,48 +149,15 @@ namespace StorylineEditor.ViewModel.Nodes
         protected int zIndex;
         public int ZIndex => zIndex;
 
-        protected FlowDocument descriptionFlow;
-        public FlowDocument DescriptionFlow
+        protected string descriptionCompendium;
+        public void OnRichTextChanged(string richTextModelString, string textString)
         {
-            get
-            {
-                if (descriptionFlow == null)
-                {
-                    descriptionFlow = ActiveContext.FlowDocumentService.ConvertBack(Description, ActiveContext.SerializationService);
-                    descriptionFlow.Name = Id;
-                }
-
-                return descriptionFlow;
-            }
+            Description = richTextModelString;
+            descriptionCompendium = textString;
+            // TODO update name
         }
-
-        protected bool documentChangedFlag;
-        public bool DocumentChangedFlag
-        {
-            get => documentChangedFlag;
-            set
-            {
-                if (value != documentChangedFlag)
-                {
-                    documentChangedFlag = value;
-                    
-                    Description = DescriptionFlow != null ? ActiveContext.FlowDocumentService.ConvertTo(DescriptionFlow, ActiveContext.SerializationService) : null;
-
-                    RefreshModelName();
-                }
-            }
-        }
-
-        protected virtual void RefreshModelName() { }
 
         public virtual IEnumerable<IPredicate> Predicates { get => Enumerable.Empty<IPredicate>(); }
         public virtual IEnumerable<IGameEvent> GameEvents { get => Enumerable.Empty<IGameEvent>(); }
-
-        public void OnEnter() { }
-
-        public void OnLeave()
-        {
-            descriptionFlow = null;
-        }
     }
 }
