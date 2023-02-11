@@ -123,7 +123,7 @@ namespace StorylineEditor.App.Controls
 
         public string GetRichTextModelString(FlowDocument document, ISerializationService serializationService)
         {
-            TextRangeM rootTextRangeModel = new TextRangeM();
+            TextRangeM rootTextRangeModel = new TextRangeM(0);
 
             int paragraphIndex = 0;
             int oldStyle = -1;
@@ -139,7 +139,7 @@ namespace StorylineEditor.App.Controls
                             rootTextRangeModel.subRanges.Add(new TextRangeM());
                             oldStyle = 0;
                         }
-                        rootTextRangeModel.subRanges[rootTextRangeModel.subRanges.Count - 1].content += Environment.NewLine;
+                        ////// TODOrootTextRangeModel.subRanges[rootTextRangeModel.subRanges.Count - 1].content += Environment.NewLine;
                     }
 
                     foreach (Inline inline in paragraph.Inlines)
@@ -158,7 +158,7 @@ namespace StorylineEditor.App.Controls
                                 oldStyle = newStyle;
                             }
 
-                            rootTextRangeModel.subRanges[rootTextRangeModel.subRanges.Count - 1].content += run.Text;
+                            ////// TODOrootTextRangeModel.subRanges[rootTextRangeModel.subRanges.Count - 1].content += run.Text;
                         }
                         else if (inline is LineBreak)
                         {

@@ -16,26 +16,49 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System;
 using System.Collections.Generic;
 
 namespace StorylineEditor.Model.RichText
 {
-    public class TextRangeM
+    public struct TextRangeM
     {
-        public TextRangeM()
+        public TextRangeM(int dummy)
         {
+            isNewLine = false;
             isBold = false;
             isItalic = false;
             isUnderline = false;
             content = string.Empty;
-            subRanges = new List<TextRangeM>();
+            subRanges = new List<TextRangeM>() { new TextRangeM(string.Empty) };
         }
 
+        private TextRangeM(string inContent)
+        {
+            isNewLine = false;
+            isBold = false;
+            isItalic = false;
+            isUnderline = false;
+            content = inContent;
+            subRanges = null;
+        }
+
+        public bool isNewLine { get; set; }
         public bool isBold { get; set; }
         public bool isItalic { get; set; }
         public bool isUnderline { get; set; }
 
         public string content { get; set; }
         public List<TextRangeM> subRanges { get; set; }
+
+        public void AddSubRange(string inContent)
+        {
+            subRanges.Add(new TextRangeM(inContent));
+        }
+
+        public bool PassFilter(string filter)
+        {
+            return !subRanges.TrueForAll((textRangeModel) => (textRangeModel.content?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) ?? -1) < 0);
+        }
     }
 }

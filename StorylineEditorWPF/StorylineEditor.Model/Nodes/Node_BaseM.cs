@@ -16,6 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Model.RichText;
+
 namespace StorylineEditor.Model.Nodes
 {
     public abstract class Node_BaseM : BaseM
@@ -25,6 +27,7 @@ namespace StorylineEditor.Model.Nodes
             gender = GENDER.UNSET;
             positionX = 0;
             positionY = 0;
+            rtDescription = new TextRangeM(0);
         }
 
         public Node_BaseM() : this(0) { }
@@ -38,11 +41,20 @@ namespace StorylineEditor.Model.Nodes
                 casted.gender = gender;
                 casted.positionX = positionX;
                 casted.positionY = positionY;
+                casted.rtDescription = rtDescription;
             }
+        }
+
+        public override bool PassFilter(string filter)
+        {
+            return
+                rtDescription.PassFilter(filter) ||
+                base.PassFilter(filter);
         }
 
         public byte gender { get; set; }
         public double positionX { get; set; }
         public double positionY { get; set; }
+        public TextRangeM rtDescription { get; set; }
     }
 }

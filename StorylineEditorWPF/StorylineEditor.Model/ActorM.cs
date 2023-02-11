@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Model.RichText;
 using System;
 
 namespace StorylineEditor.Model
@@ -24,8 +25,10 @@ namespace StorylineEditor.Model
     {
         public ActorM(long additionalTicks) : base(additionalTicks)
         {
+            rtDescription = new TextRangeM(0);
             hasDescriptionFemale = false;
             descriptionFemale = null;
+            rtDescriptionFemale = new TextRangeM(0);
             actorName = null;
             classPathName = null;
         }
@@ -44,8 +47,10 @@ namespace StorylineEditor.Model
 
             if (targetObject is ActorM casted)
             {
+                casted.rtDescription = rtDescription;
                 casted.hasDescriptionFemale = hasDescriptionFemale;
                 casted.descriptionFemale = descriptionFemale;
+                casted.rtDescriptionFemale = rtDescriptionFemale;
                 casted.actorName = actorName;
                 casted.classPathName = classPathName;
             }
@@ -54,14 +59,18 @@ namespace StorylineEditor.Model
         public override bool PassFilter(string filter)
         {
             return
+                rtDescription.PassFilter(filter) ||
+                hasDescriptionFemale && rtDescriptionFemale.PassFilter(filter) ||
                 ((descriptionFemale?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) ?? -1) >= 0) ||
                 ((actorName?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) ?? -1) >= 0) ||
                 ((classPathName?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) ?? -1) >= 0) ||
                 base.PassFilter(filter);
         }
 
+        public TextRangeM rtDescription { get; set; }
         public bool hasDescriptionFemale { get; set; }
         public string descriptionFemale { get; set; }
+        public TextRangeM rtDescriptionFemale { get; set; }
         public string actorName { get; set; }
         public string classPathName { get; set; }
     }

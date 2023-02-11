@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Model.RichText;
 using System;
 
 namespace StorylineEditor.Model
@@ -26,8 +27,10 @@ namespace StorylineEditor.Model
         {
             hasInternalDescription = false;
             internalDescription = null;
+            rtInternalDescription = new TextRangeM(0);
             hasInternalDescriptionFemale = false;
             internalDescriptionFemale = null;
+            rtInternalDescriptionFemale = new TextRangeM(0);
         }
 
         public ItemM() : this(0) { }
@@ -46,14 +49,18 @@ namespace StorylineEditor.Model
             {
                 casted.hasInternalDescription = hasInternalDescription;
                 casted.internalDescription = internalDescription;
+                casted.rtInternalDescription = rtInternalDescription;
                 casted.hasInternalDescriptionFemale = hasInternalDescriptionFemale;
                 casted.internalDescriptionFemale = internalDescriptionFemale;
+                casted.rtInternalDescriptionFemale = rtInternalDescriptionFemale;
             }
         }
 
         public override bool PassFilter(string filter)
         {
             return
+                hasInternalDescription && rtInternalDescription.PassFilter(filter) ||
+                hasInternalDescription && hasInternalDescriptionFemale && rtInternalDescriptionFemale.PassFilter(filter) ||
                 ((internalDescription?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) ?? -1) >= 0) ||
                 ((internalDescriptionFemale?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) ?? -1) >= 0) ||
                 base.PassFilter(filter);
@@ -61,7 +68,9 @@ namespace StorylineEditor.Model
 
         public bool hasInternalDescription { get; set; }
         public string internalDescription { get; set; }
+        public TextRangeM rtInternalDescription { get; set; }
         public bool hasInternalDescriptionFemale { get; set; }
         public string internalDescriptionFemale { get; set; }
+        public TextRangeM rtInternalDescriptionFemale { get; set; }
     }
 }
