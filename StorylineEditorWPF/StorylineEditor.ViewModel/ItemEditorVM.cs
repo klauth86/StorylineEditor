@@ -124,6 +124,58 @@ namespace StorylineEditor.ViewModel
             }
         }
 
+        public int RtDescriptionVersion
+        {
+            get => Model.rtDescriptionVersion;
+            private set
+            {
+                if (value != Model.rtDescriptionVersion)
+                {
+                    Model.rtDescriptionVersion = value;
+                    OnModelChanged(Model, nameof(RtDescriptionVersion));
+                }
+            }
+        }
+
+        public int RtDescriptionFemaleVersion
+        {
+            get => Model.rtDescriptionFemaleVersion;
+            private set
+            {
+                if (value != Model.rtDescriptionFemaleVersion)
+                {
+                    Model.rtDescriptionFemaleVersion = value;
+                    OnModelChanged(Model, nameof(RtDescriptionFemaleVersion));
+                }
+            }
+        }
+
+        public int RtInternalDescriptionVersion
+        {
+            get => Model.rtInternalDescriptionVersion;
+            private set
+            {
+                if (value != Model.rtInternalDescriptionVersion)
+                {
+                    Model.rtInternalDescriptionVersion = value;
+                    OnModelChanged(Model, nameof(RtInternalDescriptionVersion));
+                }
+            }
+        }
+
+        public int RtInternalDescriptionFemaleVersion
+        {
+            get => Model.rtInternalDescriptionFemaleVersion;
+            private set
+            {
+                if (value != Model.rtInternalDescriptionFemaleVersion)
+                {
+                    Model.rtInternalDescriptionFemaleVersion = value;
+                    OnModelChanged(Model, nameof(RtInternalDescriptionFemaleVersion));
+                }
+            }
+        }
+
         public TextRangeM GetRichText(string propName)
         {
             if (propName == nameof(Model.rtDescription))
@@ -134,7 +186,7 @@ namespace StorylineEditor.ViewModel
             {
                 return Model.rtDescriptionFemale;
             }
-            else if (propName == nameof(Model.rtInternalDescription))
+            if (propName == nameof(Model.rtInternalDescription))
             {
                 return Model.rtInternalDescription;
             }
@@ -148,27 +200,27 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        public void OnRichTextChanged(string propName, ref TextRangeM textRangeModel)
+        public void SetRichText(string propName, ref TextRangeM textRangeModel)
         {
             if (propName == nameof(Model.rtDescription))
             {
                 Model.rtDescription = textRangeModel;
-                OnModelChanged(Model, nameof(Model.rtDescription));
+                RtDescriptionVersion = (RtDescriptionVersion + 1) % TextRangeM.CYCLE;
             }
             else if (propName == nameof(Model.rtDescriptionFemale))
             {
                 Model.rtDescriptionFemale = textRangeModel;
-                OnModelChanged(Model, nameof(Model.rtDescriptionFemale));
+                RtDescriptionFemaleVersion = (RtDescriptionFemaleVersion + 1) % TextRangeM.CYCLE;
             }
-            else if (propName == nameof(Model.rtInternalDescription))
+            if (propName == nameof(Model.rtInternalDescription))
             {
                 Model.rtInternalDescription = textRangeModel;
-                OnModelChanged(Model, nameof(Model.rtInternalDescription));
+                RtInternalDescriptionVersion = (RtInternalDescriptionVersion + 1) % TextRangeM.CYCLE;
             }
             else if (propName == nameof(Model.rtInternalDescriptionFemale))
             {
                 Model.rtInternalDescriptionFemale = textRangeModel;
-                OnModelChanged(Model, nameof(Model.rtInternalDescriptionFemale));
+                RtInternalDescriptionFemaleVersion = (RtInternalDescriptionFemaleVersion + 1) % TextRangeM.CYCLE;
             }
             else
             {

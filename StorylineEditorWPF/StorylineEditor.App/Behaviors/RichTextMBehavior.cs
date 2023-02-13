@@ -10,9 +10,8 @@ StorylineEditor распространяется в надежде, что он�
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.
 */
 
-using StorylineEditor.App.Helpers;
 using StorylineEditor.Model.RichText;
-using StorylineEditor.ViewModel;
+using StorylineEditor.ViewModel.Interface;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -21,51 +20,49 @@ namespace StorylineEditor.App.Behaviors
 {
     public static class RichTextMBehavior
     {
-        private static readonly DependencyProperty DescriptionProperty = DependencyProperty.RegisterAttached
+        public static readonly DependencyProperty RtVersionProperty = DependencyProperty.RegisterAttached
             (
-            "Description",
-            typeof(string),
+            "RtVersion",
+            typeof(int),
             typeof(RichTextMBehavior),
-            new PropertyMetadata(null, DescriptionPropertyChanged)
+            new PropertyMetadata(-1, RtVersionPropertyChanged)
             );
 
-        public static string GetDescription(this UIElement inUIElement) { return inUIElement.GetValue(DescriptionProperty)?.ToString(); }
+        public static int GetRtVersion(this UIElement inUIElement) { return (int)inUIElement.GetValue(RtVersionProperty); }
+        public static void SetRtVersion(this UIElement inUIElement, int value) { inUIElement.SetValue(RtVersionProperty, value); }
 
-        public static void SetDescription(this UIElement inUIElement, string value) { inUIElement.SetValue(DescriptionProperty, value); }
-
-        private static void DescriptionPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void RtVersionPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is TextBlock textBlock)
             {
-                textBlock.Inlines.Clear();
-
-                string maskedXml = e.NewValue?.ToString();
-
-                if (!string.IsNullOrEmpty(maskedXml))
-                {
-                    TextRangeM rootTextRangeModel = ActiveContext.SerializationService.Deserialize<TextRangeM>(RichTextMHelper.UnmaskXml(maskedXml));
-
-                    RichTextMHelper.IterateThroughTextRangeM(rootTextRangeModel
-                        , (textSegment, textRangeModel) => AddRunForTextRange(textSegment, textRangeModel, textBlock)
-                        , (textSegment, textRangeModel) =>
-                        {
-                            textBlock.Inlines.Add(new LineBreak());
-
-                            AddRunForTextRange(textSegment, textRangeModel, textBlock);
-                        });
-                }
+                RefreshDocument(textBlock);
             }
         }
 
-        private static void AddRunForTextRange(string textSegment, TextRangeM textRangeModel, TextBlock textBlock)
+        private static void RefreshDocument(TextBlock textBlock)
         {
-            Run run = new Run(textSegment);
+            TextRangeM textRangeModel = (textBlock.DataContext as IRichTextSource)?.GetRichText(textBlock.Name) ?? TextRangeM.EmptyTextRange;
 
-            if (textRangeModel.isBold) run.FontWeight = FontWeights.Bold;
-            if (textRangeModel.isItalic) run.FontStyle = FontStyles.Italic;
-            if (textRangeModel.isUnderline) run.TextDecorations = TextDecorations.Underline;
+            textBlock.Inlines.Clear();
 
-            textBlock.Inlines.Add(run);
+            foreach (var subTextRangeModel in textRangeModel.subRanges)
+            {
+                if (subTextRangeModel.isNewLine)
+                {
+                    textBlock.Inlines.Add(new LineBreak());
+                }
+
+                if (!string.IsNullOrEmpty(subTextRangeModel.content))
+                {
+                    Run run = new Run(subTextRangeModel.content);
+
+                    if (subTextRangeModel.isBold) run.FontWeight = FontWeights.Bold;
+                    if (subTextRangeModel.isItalic) run.FontStyle = FontStyles.Italic;
+                    if (subTextRangeModel.isUnderline) run.TextDecorations = TextDecorations.Underline;
+
+                    textBlock.Inlines.Add(run);
+                }
+            }
         }
     }
 }

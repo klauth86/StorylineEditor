@@ -22,8 +22,7 @@ namespace StorylineEditor.ViewModel.Interface
 {
     public interface IRichTextSource
     {
-        string Description { get; }
         TextRangeM GetRichText(string propName);
-        void OnRichTextChanged(string propName, ref TextRangeM textRangeModel);
+        void SetRichText(string propName, ref TextRangeM textRangeModel);
     }
 }

@@ -27,6 +27,7 @@ namespace StorylineEditor.Model.Nodes
             gender = GENDER.UNSET;
             positionX = 0;
             positionY = 0;
+            rtDescriptionVersion = 0;
             rtDescription = new TextRangeM(0);
         }
 
@@ -55,6 +56,7 @@ namespace StorylineEditor.Model.Nodes
         public byte gender { get; set; }
         public double positionX { get; set; }
         public double positionY { get; set; }
+        public int rtDescriptionVersion { get; set; }
         public TextRangeM rtDescription { get; set; }
     }
 }

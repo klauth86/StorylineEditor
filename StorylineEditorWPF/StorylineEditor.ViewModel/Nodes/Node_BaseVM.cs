@@ -150,15 +150,28 @@ namespace StorylineEditor.ViewModel.Nodes
         protected int zIndex;
         public int ZIndex => zIndex;
 
+        public int RtDescriptionVersion
+        {
+            get => Model.rtDescriptionVersion;
+            private set
+            {
+                if (value != Model.rtDescriptionVersion)
+                {
+                    Model.rtDescriptionVersion = value;
+                    OnModelChanged(Model, nameof(RtDescriptionVersion));
+                }
+            }
+        }
+
         public TextRangeM GetRichText(string propName)
         {
             return Model.rtDescription;
         }
 
-        public virtual void OnRichTextChanged(string propName, ref TextRangeM textRangeModel)
+        public virtual void SetRichText(string propName, ref TextRangeM textRangeModel)
         {
             Model.rtDescription = textRangeModel;
-            OnModelChanged(Model, nameof(Model.rtDescription));
+            RtDescriptionVersion = (RtDescriptionVersion + 1) % TextRangeM.CYCLE;
         }
 
         public virtual IEnumerable<IPredicate> Predicates { get => Enumerable.Empty<IPredicate>(); }

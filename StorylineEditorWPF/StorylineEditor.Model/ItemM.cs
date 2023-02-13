@@ -27,9 +27,11 @@ namespace StorylineEditor.Model
         {
             hasInternalDescription = false;
             internalDescription = null;
+            rtInternalDescriptionVersion = 0;
             rtInternalDescription = new TextRangeM(0);
             hasInternalDescriptionFemale = false;
             internalDescriptionFemale = null;
+            rtInternalDescriptionFemaleVersion = 0;
             rtInternalDescriptionFemale = new TextRangeM(0);
         }
 
@@ -68,9 +70,11 @@ namespace StorylineEditor.Model
 
         public bool hasInternalDescription { get; set; }
         public string internalDescription { get; set; }
+        public int rtInternalDescriptionVersion { get; set; }
         public TextRangeM rtInternalDescription { get; set; }
         public bool hasInternalDescriptionFemale { get; set; }
         public string internalDescriptionFemale { get; set; }
+        public int rtInternalDescriptionFemaleVersion { get; set; }
         public TextRangeM rtInternalDescriptionFemale { get; set; }
     }
 }

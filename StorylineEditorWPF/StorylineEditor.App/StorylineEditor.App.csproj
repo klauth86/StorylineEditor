@@ -58,7 +58,7 @@
     <Compile Include="Behaviors\MouseExtBehavior.cs" />
     <Compile Include="Config\ConfigVM.cs" />
     <Compile Include="Config\UserActionVM.cs" />
-    <Compile Include="Controls\RichTextBoxWithTarget.cs" />
+    <Compile Include="Controls\RichTextBoxWithSource.cs" />
     <Compile Include="Controls\ComboBoxExt.cs" />
     <Compile Include="Controls\NumericUpDown.xaml.cs">
       <DependentUpon>NumericUpDown.xaml</DependentUpon>

@@ -196,7 +196,7 @@ namespace StorylineEditor.App
                     {
                         if (node is Node_RegularM regularNode)
                         {
-                            node.name = string.Format("[{0}]: {1}", ActiveContext.GetCharacter(regularNode.characterId)?.name ?? "???", RichTextMHelper.GetTextString(node.description) ?? "???"); ////// TODO DUPLICATION
+                            node.name = string.Format("[{0}]: {1}", ActiveContext.GetCharacter(regularNode.characterId)?.name ?? "???", node.rtDescription.ToString()); ////// TODO DUPLICATION
                         }
                     }
                 }

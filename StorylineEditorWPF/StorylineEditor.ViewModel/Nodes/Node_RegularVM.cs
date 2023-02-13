@@ -74,7 +74,7 @@ namespace StorylineEditor.ViewModel.Nodes
                     OnModelChanged(Model, nameof(Character));
                     Notify(nameof(Character));
 
-                    // TODO update name
+                    RefreshModelName();
                 }
             }
         }
@@ -131,16 +131,14 @@ namespace StorylineEditor.ViewModel.Nodes
             }
         }
 
-        public override void OnRichTextChanged(string propName, ref TextRangeM textRangeModel)
+        public override void SetRichText(string propName, ref TextRangeM textRangeModel)
         {
-            base.OnRichTextChanged(propName, ref textRangeModel);
+            base.SetRichText(propName, ref textRangeModel);
 
             RefreshModelName();
         }
 
-        protected void RefreshModelName() { 
-            ////// TODOName = string.Format("[{0}]: {1}", Character?.name ?? "???", descriptionTextString ?? "???"); 
-        } ////// TODO DUPLICATION
+        protected void RefreshModelName() { Name = string.Format("[{0}]: {1}", Character?.name ?? "???", Model.rtDescription.ToString()); } ////// TODO DUPLICATION
     }
 
     public class Node_ReplicaVM : Node_RegularVM<Node_ReplicaM, object>
