@@ -663,9 +663,7 @@ StorylineEditor распространяется в надежде, что он�
                     <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescriptionFemale" RtVersion="{Binding RtDescriptionFemaleVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                 </GroupBox>
             </Grid>
-            <TextBox Text="{Binding ActorName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_ActorName}"></TextBox>
-            <TextBox Text="{Binding ClassPathName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_ClassPathName}"></TextBox>
-
+            
             <StackPanel Orientation="Horizontal" Margin="{StaticResource Thickness_Margin_1x}">
                 <ContentControl ContentTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}" Content="{TemplateBinding Tag}"></ContentControl>
                 <controls:NumericUpDown_Float Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Value="{Binding InitialRelation,UpdateSourceTrigger=PropertyChanged}"
@@ -726,8 +724,6 @@ StorylineEditor распространяется в надежде, что он�
                     <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescriptionFemale" RtVersion="{Binding RtDescriptionFemaleVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                 </GroupBox>
             </Grid>
-            <TextBox Text="{Binding ActorName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_ActorName}"></TextBox>
-            <TextBox Text="{Binding ClassPathName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_ClassPathName}"></TextBox>
         </StackPanel>
         <DataTemplate.Triggers>
             <Trigger SourceName="cb_HasDescriptionFemale" Property="IsChecked" Value="true">
@@ -788,9 +784,6 @@ StorylineEditor распространяется в надежде, что он�
                     <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtInternalDescriptionFemale" RtVersion="{Binding RtInternalDescriptionFemaleVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                 </GroupBox>
             </Grid>
-
-            <TextBox Text="{Binding ActorName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_ActorName}"></TextBox>
-            <TextBox Text="{Binding ClassPathName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_ClassPathName}"></TextBox>
         </StackPanel>
         <DataTemplate.Triggers>
             <Trigger SourceName="cb_HasDescriptionFemale" Property="IsChecked" Value="true">

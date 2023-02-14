@@ -46,32 +46,6 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        public string ActorName
-        {
-            get => Model.actorName;
-            set
-            {
-                if (Model.actorName != value)
-                {
-                    Model.actorName = value;
-                    OnModelChanged(Model, nameof(ActorName));
-                }
-            }
-        }
-
-        public string ClassPathName
-        {
-            get => Model.classPathName;
-            set
-            {
-                if (Model.classPathName != value)
-                {
-                    Model.classPathName = value;
-                    OnModelChanged(Model, nameof(ClassPathName));
-                }
-            }
-        }
-
         public bool HasInternalDescription
         {
             get => Model.hasInternalDescription;

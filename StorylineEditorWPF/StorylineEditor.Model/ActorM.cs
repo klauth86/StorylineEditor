@@ -31,8 +31,6 @@ namespace StorylineEditor.Model
             descriptionFemale = null;
             rtDescriptionFemaleVersion = 0;
             rtDescriptionFemale = new TextRangeM(0);
-            actorName = null;
-            classPathName = null;
         }
 
         public ActorM() : this(0) { }
@@ -53,8 +51,6 @@ namespace StorylineEditor.Model
                 casted.hasDescriptionFemale = hasDescriptionFemale;
                 casted.descriptionFemale = descriptionFemale;
                 casted.rtDescriptionFemale = rtDescriptionFemale;
-                casted.actorName = actorName;
-                casted.classPathName = classPathName;
             }
         }
 
@@ -64,8 +60,6 @@ namespace StorylineEditor.Model
                 rtDescription.PassFilter(filter) ||
                 hasDescriptionFemale && rtDescriptionFemale.PassFilter(filter) ||
                 ((descriptionFemale?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) ?? -1) >= 0) ||
-                ((actorName?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) ?? -1) >= 0) ||
-                ((classPathName?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) ?? -1) >= 0) ||
                 base.PassFilter(filter);
         }
 
@@ -75,7 +69,5 @@ namespace StorylineEditor.Model
         public string descriptionFemale { get; set; }
         public int rtDescriptionFemaleVersion { get; set; }
         public TextRangeM rtDescriptionFemale { get; set; }
-        public string actorName { get; set; }
-        public string classPathName { get; set; }
     }
 }
