@@ -32,7 +32,7 @@ namespace StorylineEditor.App.Controls
             "RtVersion",
             typeof(int),
             typeof(RichTextBoxWithSource),
-            new FrameworkPropertyMetadata(-1, FrameworkPropertyMetadataOptions.None, RtVersionPropertyChanged)
+            new FrameworkPropertyMetadata(int.MinValue, FrameworkPropertyMetadataOptions.None, RtVersionPropertyChanged)
             );
 
         public int RtVersion
@@ -137,9 +137,15 @@ namespace StorylineEditor.App.Controls
         public RichTextBoxWithSource()
         {
             DataContextChanged += OnDataContextChanged;
+            Loaded += OnLoaded;
         }
 
         private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            RefreshDocument();
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
         {
             RefreshDocument();
         }

@@ -1070,7 +1070,7 @@ StorylineEditor распространяется в надежде, что он�
 
             <TextBlock VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
-            <TextBlock Grid.ColumnSpan="2" Grid.Row="1" x:Name="rtDescription" bhvrs:RichTextMBehavior.RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Node_Description}" DataContext="{Binding}"></TextBlock>
+            <controls:TextBlockWithSource Grid.ColumnSpan="2" Grid.Row="1" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Node_Description}" DataContext="{Binding}"></controls:TextBlockWithSource>
             
             <Separator Grid.ColumnSpan="2" Grid.Row="2"></Separator>
 
@@ -1114,7 +1114,7 @@ StorylineEditor распространяется в надежде, что он�
 
             <TextBlock VerticalAlignment="Center" TextAlignment="Center" Grid.Column="1" Grid.Row="0" Style="{StaticResource S_TextBlock_Node_Header}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
 
-            <TextBlock Grid.ColumnSpan="2" Grid.Row="1" x:Name="rtDescription" bhvrs:RichTextMBehavior.RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Node_Description}" DataContext="{Binding}"></TextBlock>
+            <controls:TextBlockWithSource Grid.ColumnSpan="2" Grid.Row="1" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Node_Description}" DataContext="{Binding}"></controls:TextBlockWithSource>
 
             <Separator Grid.ColumnSpan="2" Grid.Row="2"></Separator>
 
@@ -1476,7 +1476,7 @@ StorylineEditor распространяется в надежде, что он�
                 <Run Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged, StringFormat=[{0}], TargetNullValue=''}"></Run>
             </TextBlock>
 
-            <TextBlock Grid.ColumnSpan="2" Grid.Row="1" x:Name="rtDescription" bhvrs:RichTextMBehavior.RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Node_Description}" DataContext="{Binding}"></TextBlock>
+            <controls:TextBlockWithSource Grid.ColumnSpan="2" Grid.Row="1" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Node_Description}" DataContext="{Binding}"></controls:TextBlockWithSource>
 
             <Separator Grid.ColumnSpan="2" Grid.Row="2"></Separator>
 
@@ -1535,7 +1535,7 @@ StorylineEditor распространяется в надежде, что он�
                 <Run Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged, StringFormat=[{0}], TargetNullValue=''}"></Run>
             </TextBlock>
 
-            <TextBlock Grid.ColumnSpan="2" Grid.Row="1" x:Name="rtDescription" bhvrs:RichTextMBehavior.RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Node_Description}" DataContext="{Binding}"></TextBlock>
+            <controls:TextBlockWithSource Grid.ColumnSpan="2" Grid.Row="1" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Node_Description}" DataContext="{Binding}"></controls:TextBlockWithSource>
 
             <Separator Grid.ColumnSpan="2" Grid.Row="2"></Separator>
 

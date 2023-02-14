@@ -53,11 +53,11 @@
     </ApplicationDefinition>
     <Compile Include="Behaviors\LoadUnloadExtBehavior.cs" />
     <Compile Include="Behaviors\NumericUpDownBehavior.cs" />
-    <Compile Include="Behaviors\RichTextMBehavior.cs" />
     <Compile Include="Behaviors\RenderSizeBehavior.cs" />
     <Compile Include="Behaviors\MouseExtBehavior.cs" />
     <Compile Include="Config\ConfigVM.cs" />
     <Compile Include="Config\UserActionVM.cs" />
+    <Compile Include="Controls\TextBlockWithSource.cs" />
     <Compile Include="Controls\RichTextBoxWithSource.cs" />
     <Compile Include="Controls\ComboBoxExt.cs" />
     <Compile Include="Controls\NumericUpDown.xaml.cs">
