@@ -69,7 +69,6 @@
     <Compile Include="DlgWindow.xaml.cs">
       <DependentUpon>DlgWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\RichTextMHelper.cs" />
     <Compile Include="Nodes\CanvasItemTemplateSelector.cs" />
     <Compile Include="Service\StorageProvider\GoogleDrveStorageProvider.cs" />
     <Compile Include="Service\SerializationService.cs" />
