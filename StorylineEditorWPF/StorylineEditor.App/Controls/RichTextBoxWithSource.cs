@@ -51,7 +51,7 @@ namespace StorylineEditor.App.Controls
 
         private void RefreshDocument()
         {
-            TextRangeM textRangeModel = (DataContext as IRichTextSource)?.GetRichText(Name) ?? TextRangeM.EmptyTextRange;
+            TextRangeM textRangeModel = IsLoaded && (DataContext is IRichTextSource richTextSource) ? richTextSource.GetRichText(Name) : TextRangeM.EmptyTextRange;
 
             IsUnderDescriptionPropertyChangedScope = true;
             {

@@ -41,7 +41,7 @@ namespace StorylineEditor.App.Behaviors
 
         private static void RefreshDocument(TextBlock textBlock)
         {
-            TextRangeM textRangeModel = (textBlock.DataContext as IRichTextSource)?.GetRichText(textBlock.Name) ?? TextRangeM.EmptyTextRange;
+            TextRangeM textRangeModel = textBlock.IsLoaded && (textBlock.DataContext is IRichTextSource richTextSource) ? richTextSource.GetRichText(textBlock.Name) : TextRangeM.EmptyTextRange;
 
             textBlock.Inlines.Clear();
 
