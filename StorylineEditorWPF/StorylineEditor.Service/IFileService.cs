@@ -18,14 +18,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
 
-namespace StorylineEditor.ViewModel.Interface
+namespace StorylineEditor.Service
 {
-    public interface ITaskService : IDisposable
+    public interface IFileService : IDisposable
     {
-        bool IsPaused { get; set; }
+        // Open Save logic
+        string Path { get; }
+        string OpenFile(string filter, bool refreshPath); // открытие файла
+        string SaveFile(string filter, bool refreshPath);  // сохранение файла
 
-        void Start(double indurationMsec, Func<double, double, double, double, CustomStatus> tickAction, Func<double, double, double, double, CustomStatus, CustomStatus> finAction, Action<CustomStatus> callbackAction);
+        // File Storage logic
+        void GetFileFromStorage(string nodeId, byte storageType, string fileUrl, Action<string> successCallback, Action failureCallback);
 
-        void Stop();
+        // Config logic
+        void LoadConfig();
+        void SaveConfig();
     }
 }

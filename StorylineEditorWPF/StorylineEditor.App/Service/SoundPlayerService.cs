@@ -16,13 +16,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using StorylineEditor.ViewModel.Interface;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace StorylineEditor.App.Service
+namespace StorylineEditor.Service
 {
     public class SoundPlayerService : ISoundPlayerService
     {

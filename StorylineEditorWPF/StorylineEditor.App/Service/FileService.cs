@@ -17,11 +17,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 using Microsoft.Win32;
-using StorylineEditor.App.Service.StorageProvider;
 using StorylineEditor.Model;
+using StorylineEditor.Service.StorageProvider;
 using StorylineEditor.ViewModel;
 using StorylineEditor.ViewModel.Config;
-using StorylineEditor.ViewModel.Interface;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -29,7 +28,7 @@ using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 
-namespace StorylineEditor.App.Service
+namespace StorylineEditor.Service
 {
     public class FileService : IFileService
     {

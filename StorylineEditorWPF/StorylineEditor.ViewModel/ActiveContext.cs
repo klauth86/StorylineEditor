@@ -17,6 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 using StorylineEditor.Model;
+using StorylineEditor.Service;
 using StorylineEditor.ViewModel.Interface;
 using System;
 using System.Collections.Generic;

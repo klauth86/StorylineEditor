@@ -16,16 +16,24 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
+using System.IO;
 
-namespace StorylineEditor.ViewModel.Interface
+namespace StorylineEditor.Service
 {
-    public interface ISoundPlayerService : IDisposable
+    public interface ISerializationService
     {
-        bool IsPaused { get; set; }
+        // Universal
 
-        void Play(string sourceFilePath, Action afterStartPlaying, Action beforeFinishPlaying, Action<CustomStatus> callbackAction);
+        void Serialize<T>(Stream stream, T obj);
 
-        void Stop();
+        T Deserialize<T>(Stream stream);
+
+
+
+        // Clipboard
+
+        string Serialize<T>(T obj);
+
+        T Deserialize<T>(string str);
     }
 }

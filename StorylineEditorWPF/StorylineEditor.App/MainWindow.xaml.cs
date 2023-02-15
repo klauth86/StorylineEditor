@@ -17,13 +17,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 using StorylineEditor.App.Config;
-using StorylineEditor.App.Service;
 using StorylineEditor.Model;
 using StorylineEditor.Model.Graphs;
 using StorylineEditor.Model.Nodes;
+using StorylineEditor.Service;
 using StorylineEditor.ViewModel;
 using StorylineEditor.ViewModel.Config;
-using StorylineEditor.ViewModel.Interface;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

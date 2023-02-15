@@ -16,14 +16,13 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using StorylineEditor.ViewModel.Interface;
 using System;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace StorylineEditor.App.Service
+namespace StorylineEditor.Service
 {
     public class SerializationService : ISerializationService
     {

@@ -42,10 +42,7 @@
     <Compile Include="Graphs\QuestEditorVM.cs" />
     <Compile Include="Graphs\ReplicaEditorVM.cs" />
     <Compile Include="HistoryVm.cs" />
-    <Compile Include="Interface\CustomStatus.cs" />
     <Compile Include="Interface\ICopyPaste.cs" />
-    <Compile Include="Interface\IDialogService.cs" />
-    <Compile Include="Interface\IFileService.cs" />
     <Compile Include="Interface\IGameEvent.cs" />
     <Compile Include="Interface\IGraph.cs" />
     <Compile Include="Interface\ICollection_Base.cs" />
@@ -53,9 +50,6 @@
     <Compile Include="Interface\IPartiallyStored.cs" />
     <Compile Include="Interface\IPositioned.cs" />
     <Compile Include="Interface\IPredicate.cs" />
-    <Compile Include="Interface\ISerializationService.cs" />
-    <Compile Include="Interface\ISoundPlayerService.cs" />
-    <Compile Include="Interface\ITaskService.cs" />
     <Compile Include="Interface\IWithModel.cs" />
     <Compile Include="Interface\IRichTextSource.cs" />
     <Compile Include="ItemEditorVM.cs" />
@@ -119,6 +113,10 @@
     <ProjectReference Include="..\StorylineEditor.Model\StorylineEditor.Model.csproj">
       <Project>{9c1b256a-f0c5-4173-830d-e55c44be79bf}</Project>
       <Name>StorylineEditor.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StorylineEditor.Service\StorylineEditor.Service.csproj">
+      <Project>{6cd1d3c8-c987-4e3e-b1cd-4d8d814559a4}</Project>
+      <Name>StorylineEditor.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

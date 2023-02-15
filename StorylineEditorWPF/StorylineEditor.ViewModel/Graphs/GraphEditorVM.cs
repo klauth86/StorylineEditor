@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using StorylineEditor.Model;
 using StorylineEditor.Model.Graphs;
 using StorylineEditor.Model.Nodes;
+using StorylineEditor.Service;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Config;
 using StorylineEditor.ViewModel.Interface;

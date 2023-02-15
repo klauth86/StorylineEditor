@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.Text.RegularExpressions;
 
-namespace StorylineEditor.App.Service.StorageProvider
+namespace StorylineEditor.Service.StorageProvider
 {
     public class GoogleDrveStorageProvider : IStorageProvider
     {

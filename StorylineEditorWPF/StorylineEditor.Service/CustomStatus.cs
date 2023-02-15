@@ -16,22 +16,20 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
-
-namespace StorylineEditor.ViewModel.Interface
+namespace StorylineEditor.Service
 {
-    public interface IFileService : IDisposable
+    public enum CustomStatus
     {
-        // Open Save logic
-        string Path { get; }
-        string OpenFile(string filter, bool refreshPath); // открытие файла
-        string SaveFile(string filter, bool refreshPath);  // сохранение файла
+        None,
+        WaitingToRun,
+        Running,
+        RanToCompletion,
+        Canceled,
+        Faulted
+    }
 
-        // File Storage logic
-        void GetFileFromStorage(string nodeId, byte storageType, string fileUrl, Action<string> successCallback, Action failureCallback);
-
-        // Config logic
-        void LoadConfig();
-        void SaveConfig();
+    public enum TaskMode
+    {
+        DrivenByStatus = -1
     }
 }

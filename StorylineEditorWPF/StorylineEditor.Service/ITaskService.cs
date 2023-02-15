@@ -16,20 +16,16 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace StorylineEditor.ViewModel.Interface
-{
-    public enum CustomStatus
-    {
-        None,
-        WaitingToRun,
-        Running,
-        RanToCompletion,
-        Canceled,
-        Faulted
-    }
+using System;
 
-    public enum TaskMode
+namespace StorylineEditor.Service
+{
+    public interface ITaskService : IDisposable
     {
-        DrivenByStatus = -1
+        bool IsPaused { get; set; }
+
+        void Start(double indurationMsec, Func<double, double, double, double, CustomStatus> tickAction, Func<double, double, double, double, CustomStatus, CustomStatus> finAction, Action<CustomStatus> callbackAction);
+
+        void Stop();
     }
 }

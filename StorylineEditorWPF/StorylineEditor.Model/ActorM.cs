@@ -17,7 +17,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 using StorylineEditor.Model.RichText;
-using System;
 
 namespace StorylineEditor.Model
 {
