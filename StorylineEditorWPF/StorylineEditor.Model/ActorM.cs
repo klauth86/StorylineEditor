@@ -28,7 +28,6 @@ namespace StorylineEditor.Model
             rtDescriptionVersion = 0;
             rtDescription = new TextRangeM(0);
             hasDescriptionFemale = false;
-            descriptionFemale = null;
             rtDescriptionFemaleVersion = 0;
             rtDescriptionFemale = new TextRangeM(0);
         }
@@ -49,7 +48,6 @@ namespace StorylineEditor.Model
             {
                 casted.rtDescription = rtDescription;
                 casted.hasDescriptionFemale = hasDescriptionFemale;
-                casted.descriptionFemale = descriptionFemale;
                 casted.rtDescriptionFemale = rtDescriptionFemale;
             }
         }
@@ -59,14 +57,12 @@ namespace StorylineEditor.Model
             return
                 rtDescription.PassFilter(filter) ||
                 hasDescriptionFemale && rtDescriptionFemale.PassFilter(filter) ||
-                ((descriptionFemale?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) ?? -1) >= 0) ||
                 base.PassFilter(filter);
         }
 
         public int rtDescriptionVersion { get; set; }
         public TextRangeM rtDescription { get; set; }
         public bool hasDescriptionFemale { get; set; }
-        public string descriptionFemale { get; set; }
         public int rtDescriptionFemaleVersion { get; set; }
         public TextRangeM rtDescriptionFemale { get; set; }
     }

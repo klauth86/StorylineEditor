@@ -39,19 +39,6 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        public string DescriptionFemale
-        {
-            get => Model.descriptionFemale;
-            set
-            {
-                if (Model.descriptionFemale != value)
-                {
-                    Model.descriptionFemale = value;
-                    OnModelChanged(Model, nameof(DescriptionFemale));
-                }
-            }
-        }
-
         public bool HasInternalDescription
         {
             get => Model.hasInternalDescription;
@@ -65,19 +52,6 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        public string InternalDescription
-        {
-            get => Model.internalDescription;
-            set
-            {
-                if (Model.internalDescription != value)
-                {
-                    Model.internalDescription = value;
-                    OnModelChanged(Model, nameof(InternalDescription));
-                }
-            }
-        }
-
         public bool HasInternalDescriptionFemale
         {
             get => Model.hasInternalDescriptionFemale;
@@ -87,19 +61,6 @@ namespace StorylineEditor.ViewModel
                 {
                     Model.hasInternalDescriptionFemale = value;
                     OnModelChanged(Model, nameof(HasInternalDescriptionFemale));
-                }
-            }
-        }
-
-        public string InternalDescriptionFemale
-        {
-            get => Model.internalDescriptionFemale;
-            set
-            {
-                if (Model.internalDescriptionFemale != value)
-                {
-                    Model.internalDescriptionFemale = value;
-                    OnModelChanged(Model, nameof(InternalDescriptionFemale));
                 }
             }
         }

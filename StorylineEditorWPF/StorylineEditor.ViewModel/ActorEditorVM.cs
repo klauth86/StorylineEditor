@@ -39,19 +39,6 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        public string DescriptionFemale
-        {
-            get => Model.descriptionFemale;
-            set
-            {
-                if (Model.descriptionFemale != value)
-                {
-                    Model.descriptionFemale = value;
-                    OnModelChanged(Model, nameof(DescriptionFemale));
-                }
-            }
-        }
-
         public int RtDescriptionVersion
         {
             get => Model.rtDescriptionVersion;

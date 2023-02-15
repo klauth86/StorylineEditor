@@ -17,7 +17,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 using StorylineEditor.Model.RichText;
-using System;
 
 namespace StorylineEditor.Model
 {
@@ -26,11 +25,9 @@ namespace StorylineEditor.Model
         public ItemM(long additionalTicks) : base(additionalTicks)
         {
             hasInternalDescription = false;
-            internalDescription = null;
             rtInternalDescriptionVersion = 0;
             rtInternalDescription = new TextRangeM(0);
             hasInternalDescriptionFemale = false;
-            internalDescriptionFemale = null;
             rtInternalDescriptionFemaleVersion = 0;
             rtInternalDescriptionFemale = new TextRangeM(0);
         }
@@ -50,10 +47,8 @@ namespace StorylineEditor.Model
             if (targetObject is ItemM casted)
             {
                 casted.hasInternalDescription = hasInternalDescription;
-                casted.internalDescription = internalDescription;
                 casted.rtInternalDescription = rtInternalDescription;
                 casted.hasInternalDescriptionFemale = hasInternalDescriptionFemale;
-                casted.internalDescriptionFemale = internalDescriptionFemale;
                 casted.rtInternalDescriptionFemale = rtInternalDescriptionFemale;
             }
         }
@@ -63,17 +58,13 @@ namespace StorylineEditor.Model
             return
                 hasInternalDescription && rtInternalDescription.PassFilter(filter) ||
                 hasInternalDescription && hasInternalDescriptionFemale && rtInternalDescriptionFemale.PassFilter(filter) ||
-                ((internalDescription?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) ?? -1) >= 0) ||
-                ((internalDescriptionFemale?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) ?? -1) >= 0) ||
                 base.PassFilter(filter);
         }
 
         public bool hasInternalDescription { get; set; }
-        public string internalDescription { get; set; }
         public int rtInternalDescriptionVersion { get; set; }
         public TextRangeM rtInternalDescription { get; set; }
         public bool hasInternalDescriptionFemale { get; set; }
-        public string internalDescriptionFemale { get; set; }
         public int rtInternalDescriptionFemaleVersion { get; set; }
         public TextRangeM rtInternalDescriptionFemale { get; set; }
     }
