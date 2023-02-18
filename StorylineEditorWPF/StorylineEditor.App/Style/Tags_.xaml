@@ -28,6 +28,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <sys:String x:Key="String_Tag_RUS">Русский</sys:String>
     
+    <sys:String x:Key="String_MainWindow_Title">locerr</sys:String>
+    
+    <sys:String x:Key="String_DlgWindow_Title">locerr</sys:String>
+    
     <!--COMMON-->
   
     <sys:String x:Key="String_Tag_IsDownloading">locerr</sys:String>
@@ -73,8 +77,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Stats_Node_ReplicaM_TmpDescription">locerr</sys:String>
 
     <!--CONFIG-->
-
-    <sys:String x:Key="String_Tag_Config_Title">locerr</sys:String>
 
     <sys:String x:Key="String_Tag_Config_Language">locerr</sys:String>
   

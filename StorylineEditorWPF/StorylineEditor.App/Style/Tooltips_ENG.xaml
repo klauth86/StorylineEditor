@@ -50,7 +50,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <!--TabMenu-->
 
-    <sys:String x:Key="String_TabMenu_Up_Tooltip_ENG">На уровень выше</sys:String>
+    <sys:String x:Key="String_TabMenu_Up_Tooltip_ENG">Up</sys:String>
 
     <sys:String x:Key="String_TabMenu_Add_Tooltip_ENG">Create</sys:String>
 
@@ -93,5 +93,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Italic_Tooltip_ENG">Italic</sys:String>
 
     <sys:String x:Key="String_Underline_Tooltip_ENG">Underline</sys:String>
+
+    <sys:String x:Key="String_Error_Line1_ENG">Child nodes dont met any of supported cases:</sys:String>
+
+    <sys:String x:Key="String_Error_Line2_ENG">- After Random node (⇝) any child nodes collection is valid...</sys:String>
+
+    <sys:String x:Key="String_Error_Line3_ENG">- If non-Random node (💬, ⇴) has only one actual child node (i.e. successfully passed by Predicates and Gender in current context), then this child node can be any except Transit node (⇴) with several actual child nodes...</sys:String>
+
+    <sys:String x:Key="String_Error_Line4_ENG">- If non-Random node (💬, ⇴) has several actual child nodes (i.e. successfully passed by Predicates and Gender in current context), then these child nodes can be Main Character nodes (i.e. owned by Main Character) or Transit nodes, through which only Main Character nodes are accessible (MAIN CHARACTER CHOICE)...</sys:String>
     
 </ResourceDictionary>

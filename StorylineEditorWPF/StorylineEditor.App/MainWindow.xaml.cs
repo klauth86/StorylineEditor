@@ -23,6 +23,7 @@ using StorylineEditor.Model.Nodes;
 using StorylineEditor.Service;
 using StorylineEditor.ViewModel;
 using StorylineEditor.ViewModel.Config;
+using StorylineEditor.ViewModel.Interface;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -64,8 +65,18 @@ namespace StorylineEditor.App
 
             SetDataContext(new StorylineVM(storylineModel));
 
+            SetTitleForNewProject();
+        }
+
+        protected void SetTitleForNewProject()
+        {
             var assemblyName = Assembly.GetExecutingAssembly().GetName();
-            Title = string.Format("{0} [{1}]", assemblyName.Name, GetLocalizedString("String_New_Storyline"));
+            App.Current.Resources["String_MainWindow_Title"] = string.Format("{0} [{1}]", assemblyName.Name, ActiveContext.FileService.Path ?? GetLocalizedString("String_New_Storyline"));
+        }
+
+        protected void SetTitleForDlg(string key)
+        {
+            App.Current.Resources["String_DlgWindow_Title"] = GetLocalizedString(key);
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -229,6 +240,8 @@ namespace StorylineEditor.App
 
         private void btn_Config_Click(object sender, RoutedEventArgs e)
         {
+            SetTitleForDlg("String_Tag_Config_Title");
+
             new DlgWindow()
             {
                 Owner = this,
@@ -237,7 +250,6 @@ namespace StorylineEditor.App
                 WindowStyle = WindowStyle.ToolWindow,
                 MinWidth = 256,
                 ResizeMode = ResizeMode.NoResize,
-                Title = App.Current.Resources["String_Tag_Config_Title"]?.ToString()
             }.ShowDialog();
         }
 
@@ -332,6 +344,8 @@ namespace StorylineEditor.App
         {
             if (dataContext is HistoryVM)
             {
+                SetTitleForDlg("String_Tag_Player_Title");
+
                 new DlgWindow()
                 {
                     Owner = this,
@@ -339,8 +353,7 @@ namespace StorylineEditor.App
                     SizeToContent = SizeToContent.WidthAndHeight,
                     WindowStyle = WindowStyle.ToolWindow,
                     MinWidth = 256,
-                    ResizeMode = ResizeMode.NoResize,
-                    Title = GetLocalizedString("String_Tag_Player_Title")
+                    ResizeMode = ResizeMode.NoResize
                 }.ShowDialog();
             }
             else
@@ -353,7 +366,8 @@ namespace StorylineEditor.App
                     WindowStyle = WindowStyle.ToolWindow,
                     MinWidth = 256,
                     ResizeMode = ResizeMode.NoResize,
-                    ContentTemplate = App.Current.Resources["DT_Graph_Stats"] as DataTemplate
+                    ContentTemplate = App.Current.Resources["DT_Graph_Stats"] as DataTemplate,
+                    Title = ((IWithModel)dataContext).GetModel<GraphM>().name
                 }.Show();
             }
         }
@@ -434,8 +448,6 @@ namespace StorylineEditor.App
             SetWithSuffix("String_Stats_Node_DialogM_TmpDescription", suffix);
 
             SetWithSuffix("String_Stats_Node_ReplicaM_TmpDescription", suffix);
-
-            SetWithSuffix("String_Tag_Config_Title", suffix);
 
             SetWithSuffix("String_Tag_Config_Language", suffix);
 
@@ -704,6 +716,20 @@ namespace StorylineEditor.App
             SetWithSuffix("String_Italic_Tooltip", suffix);
 
             SetWithSuffix("String_Underline_Tooltip", suffix);
+
+            SetWithSuffix("String_Error_Line1", suffix);
+
+            SetWithSuffix("String_Error_Line2", suffix);
+
+            SetWithSuffix("String_Error_Line3", suffix);
+
+            SetWithSuffix("String_Error_Line4", suffix);
+
+            // Update main window title if it is new project
+
+            SetTitleForNewProject();
+
+            SetTitleForDlg("String_Tag_Config_Title");
         }
 
         protected void SetWithSuffix(string key, string suffix)

@@ -2339,13 +2339,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <StackPanel Orientation="Vertical">
             <TextBlock VerticalAlignment="Center" Text="{DynamicResource String_Tag_Player_Error}" Style="{StaticResource S_TextBlock_Graph_Bold}" Foreground="{StaticResource Color_Player_Error}"></TextBlock>
             <TextBlock Style="{StaticResource S_TextBlock_Graph}" Foreground="{StaticResource Color_Player_Error}">
-                <Run Text="Дочерние вершины не подходят ни под одну из ситуаций:"></Run>
+                <Run Text="{DynamicResource String_Error_Line1}"></Run>
                 <LineBreak></LineBreak><LineBreak></LineBreak>
-                <Run Text="- После Случайной вершины (⇝) возможен любой состав дочерних вершин..."></Run>
+                <Run Text="{DynamicResource String_Error_Line2}"></Run>
                 <LineBreak></LineBreak><LineBreak></LineBreak>
-                <Run Text="- Если НЕ Случайная вершина (💬, ⇴) имеет одну актуальную (удовлетворяющую полу и своим предикатам) дочернюю вершину, то этой вершиной может быть любая вершина кроме вершины Транзит (⇴) с несколькими актуальными (удовлетворяющие полу и своим предикатам) дочерними вершинами..."></Run>
+                <Run Text="{DynamicResource String_Error_Line3}"></Run>
                 <LineBreak></LineBreak><LineBreak></LineBreak>
-                <Run Text="- Если НЕ Случайная вершина (💬, ⇴) имеет более одной актуальной (удовлетворяющей полу и своим предикатам) дочерней вершины, то эти вершины должны быть либо вершинами Основного персонажа (💬), либо Транзитом (⇴) на вершины Основного персонажа (💬) (ситуация ВЫБОР ИГРОКА)..."></Run>
+                <Run Text="{DynamicResource String_Error_Line4}"></Run>
             </TextBlock>
         </StackPanel>
     </DataTemplate>

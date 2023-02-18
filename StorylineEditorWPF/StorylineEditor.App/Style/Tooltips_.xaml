@@ -74,4 +74,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <sys:String x:Key="String_Underline_Tooltip">locerr</sys:String>
 
+    <sys:String x:Key="String_Error_Line1">locerr</sys:String>
+
+    <sys:String x:Key="String_Error_Line2">locerr</sys:String>
+
+    <sys:String x:Key="String_Error_Line3">locerr</sys:String>
+
+    <sys:String x:Key="String_Error_Line4">locerr</sys:String>
+    
 </ResourceDictionary>
