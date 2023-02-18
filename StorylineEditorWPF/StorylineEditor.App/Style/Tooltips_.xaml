@@ -66,4 +66,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <sys:String x:Key="String_Player_Play_Tooltip">locerr</sys:String>
 
+    <!--Other-->
+    
+    <sys:String x:Key="String_Bold_Tooltip">locerr</sys:String>
+
+    <sys:String x:Key="String_Italic_Tooltip">locerr</sys:String>
+
+    <sys:String x:Key="String_Underline_Tooltip">locerr</sys:String>
+
 </ResourceDictionary>

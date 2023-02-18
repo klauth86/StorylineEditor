@@ -86,4 +86,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <sys:String x:Key="String_Player_Play_Tooltip_RUS">Старт</sys:String>
 
+    <!--Other-->
+
+    <sys:String x:Key="String_Bold_Tooltip_RUS">Жирный</sys:String>
+
+    <sys:String x:Key="String_Italic_Tooltip_RUS">Курсив</sys:String>
+
+    <sys:String x:Key="String_Underline_Tooltip_RUS">Подчеркнутый</sys:String>
+    
 </ResourceDictionary>

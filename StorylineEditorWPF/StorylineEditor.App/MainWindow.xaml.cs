@@ -60,12 +60,12 @@ namespace StorylineEditor.App
             InitLocalization();
 
             StorylineM storylineModel = new StorylineM();
-            storylineModel.characters.Add(new CharacterM() { id = CharacterM.PLAYER_ID, name = ActiveContext.LocalizationService.GetLocalizedString("String_Player") });
+            storylineModel.characters.Add(new CharacterM() { id = CharacterM.PLAYER_ID, name = GetLocalizedString("String_Player") });
 
             SetDataContext(new StorylineVM(storylineModel));
 
             var assemblyName = Assembly.GetExecutingAssembly().GetName();
-            Title = string.Format("{0} [{1}]", assemblyName.Name, ActiveContext.LocalizationService.GetLocalizedString("String_New_Storyline"));
+            Title = string.Format("{0} [{1}]", assemblyName.Name, GetLocalizedString("String_New_Storyline"));
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -340,7 +340,7 @@ namespace StorylineEditor.App
                     WindowStyle = WindowStyle.ToolWindow,
                     MinWidth = 256,
                     ResizeMode = ResizeMode.NoResize,
-                    Title = App.Current.Resources["String_Tag_Player_Title"]?.ToString()
+                    Title = GetLocalizedString("String_Tag_Player_Title")
                 }.ShowDialog();
             }
             else
@@ -649,8 +649,6 @@ namespace StorylineEditor.App
 
             SetWithSuffix("String_Tag_GameEvent_GE_Relation_ChangeM_Title", suffix);
 
-            SetWithSuffix("String_Tag_Player_Title", suffix);
-
             SetWithSuffix("String_Tag_Player_Tab_Props", suffix);
 
             SetWithSuffix("String_Tag_Player_FullMode", suffix);
@@ -700,6 +698,12 @@ namespace StorylineEditor.App
             SetWithSuffix("String_Player_Pause_Tooltip", suffix);
 
             SetWithSuffix("String_Player_Play_Tooltip", suffix);
+
+            SetWithSuffix("String_Bold_Tooltip", suffix);
+
+            SetWithSuffix("String_Italic_Tooltip", suffix);
+
+            SetWithSuffix("String_Underline_Tooltip", suffix);
         }
 
         protected void SetWithSuffix(string key, string suffix)

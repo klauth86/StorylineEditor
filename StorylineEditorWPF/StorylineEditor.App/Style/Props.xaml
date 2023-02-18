@@ -38,15 +38,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <DataTemplate x:Key="DT_GroupBox_HeaderTemplate_Prop_Rich">
         <StackPanel Orientation="Horizontal">
             <TextBlock Margin="{StaticResource Thickness_Margin_1x}" Text="{Binding UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" TextWrapping="Wrap"></TextBlock>
-            <Button Style="{StaticResource S_Button_Square_Auto}" Command="EditingCommands.ToggleBold" ToolTip="Bold" FontFamily="{StaticResource FontFamily_Button_Prop_Rich_Command}"
+            <Button Style="{StaticResource S_Button_Square_Auto}" Command="EditingCommands.ToggleBold" ToolTip="{DynamicResource String_Bold_Tooltip}" FontFamily="{StaticResource FontFamily_Button_Prop_Rich_Command}"
                     CommandTarget="{Binding Content, RelativeSource={RelativeSource AncestorType=GroupBox}}">
                 <TextBlock FontWeight="Bold">B</TextBlock>
             </Button>
-            <Button Style="{StaticResource S_Button_Square_Auto}" Command="EditingCommands.ToggleItalic" ToolTip="Italic" FontFamily="{StaticResource FontFamily_Button_Prop_Rich_Command}"
+            <Button Style="{StaticResource S_Button_Square_Auto}" Command="EditingCommands.ToggleItalic" ToolTip="{DynamicResource String_Italic_Tooltip}" FontFamily="{StaticResource FontFamily_Button_Prop_Rich_Command}"
                     CommandTarget="{Binding Content, RelativeSource={RelativeSource AncestorType=GroupBox}}">
                 <TextBlock FontStyle="Italic" FontWeight="Bold">I</TextBlock>
             </Button>
-            <Button Style="{StaticResource S_Button_Square_Auto}" Command="EditingCommands.ToggleUnderline" ToolTip="Underline" FontFamily="{StaticResource FontFamily_Button_Prop_Rich_Command}"
+            <Button Style="{StaticResource S_Button_Square_Auto}" Command="EditingCommands.ToggleUnderline" ToolTip="{DynamicResource String_Underline_Tooltip}" FontFamily="{StaticResource FontFamily_Button_Prop_Rich_Command}"
                     CommandTarget="{Binding Content, RelativeSource={RelativeSource AncestorType=GroupBox}}">
                 <TextBlock TextDecorations="Underline" FontWeight="Bold">U</TextBlock>
             </Button>

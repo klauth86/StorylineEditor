@@ -85,5 +85,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Player_Pause_Tooltip_ENG">Pause</sys:String>
 
     <sys:String x:Key="String_Player_Play_Tooltip_ENG">Start</sys:String>
+    
+    <!--Other-->
 
+    <sys:String x:Key="String_Bold_Tooltip_ENG">Bold</sys:String>
+
+    <sys:String x:Key="String_Italic_Tooltip_ENG">Italic</sys:String>
+
+    <sys:String x:Key="String_Underline_Tooltip_ENG">Underline</sys:String>
+    
 </ResourceDictionary>

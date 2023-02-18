@@ -304,8 +304,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <!--PLAYER-->
 
-    <sys:String x:Key="String_Tag_Player_Title">locerr</sys:String>
-
     <sys:String x:Key="String_Tag_Player_Tab_Props">locerr</sys:String>
 
     <sys:String x:Key="String_Tag_Player_FullMode">locerr</sys:String>
