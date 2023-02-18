@@ -301,14 +301,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </DataTemplate>
     
     <DataTemplate x:Key="DT_HasPredicates_Mini">
-        <Grid Width="{StaticResource Double_Size_16x}" Height="{StaticResource Double_Size_16x}" ToolTip="{StaticResource String_HasPredicates_Tooltip}">
+        <Grid Width="{StaticResource Double_Size_16x}" Height="{StaticResource Double_Size_16x}" ToolTip="{DynamicResource String_HasPredicates_Tooltip}">
             <Ellipse Fill="{StaticResource Color_HasPredicates_Fill}" StrokeThickness="{StaticResource Double_Margin_1x}" Stroke="{StaticResource Color_Separator}"></Ellipse>
             <TextBlock FontWeight="Bold" Foreground="{StaticResource Color_HasPredicates_Foreground}" FontSize="{StaticResource FontSize_Medium}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{StaticResource String_Icon_HasPredicates}"></TextBlock>
         </Grid>
     </DataTemplate>
     
     <DataTemplate x:Key="DT_HasPredicates">
-        <Grid Width="{StaticResource Double_Size_24x}" Height="{StaticResource Double_Size_24x}" ToolTip="{StaticResource String_HasPredicates_Tooltip}">
+        <Grid Width="{StaticResource Double_Size_24x}" Height="{StaticResource Double_Size_24x}" ToolTip="{DynamicResource String_HasPredicates_Tooltip}">
             <Ellipse Fill="{StaticResource Color_HasPredicates_Fill}" StrokeThickness="{StaticResource Double_Margin_1x}" Stroke="{StaticResource Color_Separator}"></Ellipse>
             <TextBlock FontWeight="Bold" Foreground="{StaticResource Color_HasPredicates_Foreground}" FontSize="{StaticResource FontSize_VeryLarge}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{StaticResource String_Icon_HasPredicates}"></TextBlock>
         </Grid>
@@ -320,14 +320,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </DataTemplate>
 
     <DataTemplate x:Key="DT_HasGameEvents_Mini">
-        <Grid Width="{StaticResource Double_Size_16x}" Height="{StaticResource Double_Size_16x}" ToolTip="{StaticResource String_HasGameEvents_Tooltip}">
+        <Grid Width="{StaticResource Double_Size_16x}" Height="{StaticResource Double_Size_16x}" ToolTip="{DynamicResource String_HasGameEvents_Tooltip}">
             <Ellipse Fill="{StaticResource Color_HasGameEvents_Fill}" StrokeThickness="{StaticResource Double_Margin_1x}" Stroke="{StaticResource Color_Separator}"></Ellipse>
             <TextBlock FontWeight="Bold" Foreground="{StaticResource Color_HasPredicates_Foreground}" FontSize="{StaticResource FontSize_Medium}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{StaticResource String_Icon_HasGameEvents}"></TextBlock>
         </Grid>
     </DataTemplate>
     
     <DataTemplate x:Key="DT_HasGameEvents">
-        <Grid Width="{StaticResource Double_Size_24x}" Height="{StaticResource Double_Size_24x}" ToolTip="{StaticResource String_HasGameEvents_Tooltip}">
+        <Grid Width="{StaticResource Double_Size_24x}" Height="{StaticResource Double_Size_24x}" ToolTip="{DynamicResource String_HasGameEvents_Tooltip}">
             <Ellipse Fill="{StaticResource Color_HasGameEvents_Fill}" StrokeThickness="{StaticResource Double_Margin_1x}" Stroke="{StaticResource Color_Separator}"></Ellipse>
             <TextBlock FontWeight="Bold" Foreground="{StaticResource Color_HasPredicates_Foreground}" FontSize="{StaticResource FontSize_VeryLarge}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{StaticResource String_Icon_HasGameEvents}"></TextBlock>
         </Grid>
@@ -376,12 +376,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </Grid.RowDefinitions>
 
                 <StackPanel Margin="{StaticResource Thickness_Margin_1x}" Orientation="Horizontal">
-                    <Button Background="{StaticResource Color_Add}" Foreground="{StaticResource Color_Link_Foreground}" Content="{StaticResource String_Icon_Add}" ToolTip="{StaticResource String_TabMenu_Add_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding AddCommand}" CommandParameter="{StaticResource False}"></Button>
-                    <Button Background="{StaticResource Color_AddFolder}" Foreground="{StaticResource Color_Link_Foreground}" Content="{StaticResource String_Icon_Add}" ToolTip="{StaticResource String_TabMenu_AddFolder_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding AddCommand}" CommandParameter="{StaticResource True}"></Button>
-                    <Button Background="{StaticResource Color_Remove}" Foreground="{StaticResource Color_Link_Foreground}" Content="{StaticResource String_Icon_Remove}" ToolTip="{StaticResource String_TabMenu_Remove_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding RemoveCommand}"></Button>
+                    <Button Background="{StaticResource Color_Add}" Foreground="{StaticResource Color_Link_Foreground}" Content="{StaticResource String_Icon_Add}" ToolTip="{DynamicResource String_TabMenu_Add_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding AddCommand}" CommandParameter="{StaticResource False}"></Button>
+                    <Button Background="{StaticResource Color_AddFolder}" Foreground="{StaticResource Color_Link_Foreground}" Content="{StaticResource String_Icon_Add}" ToolTip="{DynamicResource String_TabMenu_AddFolder_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding AddCommand}" CommandParameter="{StaticResource True}"></Button>
+                    <Button Background="{StaticResource Color_Remove}" Foreground="{StaticResource Color_Link_Foreground}" Content="{StaticResource String_Icon_Remove}" ToolTip="{DynamicResource String_TabMenu_Remove_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding RemoveCommand}"></Button>
 
-                    <Button Content="{StaticResource String_Icon_Cut}" ToolTip="{StaticResource String_TabMenu_Cut_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding CutCommand}"></Button>
-                    <Button Content="{StaticResource String_Icon_Paste}" ToolTip="{StaticResource String_TabMenu_Paste_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding PasteCommand}"></Button>
+                    <Button Content="{StaticResource String_Icon_Cut}" ToolTip="{DynamicResource String_TabMenu_Cut_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding CutCommand}"></Button>
+                    <Button Content="{StaticResource String_Icon_Paste}" ToolTip="{DynamicResource String_TabMenu_Paste_Tooltip}" Style="{StaticResource S_Button_Square_24x}" Command="{Binding PasteCommand}"></Button>
                 </StackPanel>
 
                 <ItemsControl BorderBrush="{StaticResource Color_Path}" BorderThickness="{StaticResource Thickness_Margin_1x}" Margin="{StaticResource Thickness_Margin_1x}" Grid.Row="1" ItemsPanel="{StaticResource IPT_WrapPanel}" ItemsSource="{Binding Context}"></ItemsControl>
@@ -873,11 +873,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <Button x:Name="btn_selectable_Step" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Step}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_StepM}" ToolTip="{DynamicResource String_Tag_Node_Step_Type}"></Button>
                             <Button x:Name="btn_selectable_Alternative" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Alternative}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_AlternativeM}" ToolTip="{DynamicResource String_Tag_Node_Alternative_Type}"></Button>
                             <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
-                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Bwd}" Command="{Binding PrevRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_PrevRootNode_Tooltip}"></Button>
-                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Fwd}" Command="{Binding NextRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_NextRootNode_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Bwd}" Command="{Binding PrevRootNodeCommand}" ToolTip="{DynamicResource String_GraphMenu_PrevRootNode_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Fwd}" Command="{Binding NextRootNodeCommand}" ToolTip="{DynamicResource String_GraphMenu_NextRootNode_Tooltip}"></Button>
                             <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
-                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Graph_Origin}" Command="{Binding GoToOriginCommand}" ToolTip="{StaticResource String_GraphMenu_GoToOrigin_Tooltip}"></Button>
-                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Graph_Reset}" Command="{Binding ResetScaleCommand}" ToolTip="{StaticResource String_GraphMenu_ResetScale_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Graph_Origin}" Command="{Binding GoToOriginCommand}" ToolTip="{DynamicResource String_GraphMenu_GoToOrigin_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Graph_Reset}" Command="{Binding ResetScaleCommand}" ToolTip="{DynamicResource String_GraphMenu_ResetScale_Tooltip}"></Button>
                         </StackPanel>
 
                         <TextBlock Grid.Row="1" Style="{StaticResource S_TextBlock_Graph_Bold}" Margin="{StaticResource Thickness_Margin_2x}">
@@ -1634,13 +1634,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <Button x:Name="btn_selectable_Gate" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Gate}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_GateM}" ToolTip="{DynamicResource String_Tag_Node_Gate_Type}"></Button>
                             <Button x:Name="btn_selectable_Exit" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Exit}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_ExitM}" ToolTip="{DynamicResource String_Tag_Node_Exit_Type}"></Button>
                             <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
-                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Bwd}" Command="{Binding PrevRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_PrevRootNode_Tooltip}"></Button>
-                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Fwd}" Command="{Binding NextRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_NextRootNode_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Bwd}" Command="{Binding PrevRootNodeCommand}" ToolTip="{DynamicResource String_GraphMenu_PrevRootNode_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Fwd}" Command="{Binding NextRootNodeCommand}" ToolTip="{DynamicResource String_GraphMenu_NextRootNode_Tooltip}"></Button>
                             <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
-                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Graph_Origin}" Command="{Binding GoToOriginCommand}" ToolTip="{StaticResource String_GraphMenu_GoToOrigin_Tooltip}"></Button>
-                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Graph_Reset}" Command="{Binding ResetScaleCommand}" ToolTip="{StaticResource String_GraphMenu_ResetScale_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Graph_Origin}" Command="{Binding GoToOriginCommand}" ToolTip="{DynamicResource String_GraphMenu_GoToOrigin_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Graph_Reset}" Command="{Binding ResetScaleCommand}" ToolTip="{DynamicResource String_GraphMenu_ResetScale_Tooltip}"></Button>
                             <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
-                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Play}" Command="{Binding PlayCommand}" ToolTip="{StaticResource String_GraphMenu_Play_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Play}" Command="{Binding PlayCommand}" ToolTip="{DynamicResource String_GraphMenu_Play_Tooltip}"></Button>
                         </StackPanel>
 
                         <TextBlock Grid.Row="1" Style="{StaticResource S_TextBlock_Graph_Bold}" Margin="{StaticResource Thickness_Margin_2x}">
@@ -1762,13 +1762,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <Button x:Name="btn_selectable_Random" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Random}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_RandomM}" ToolTip="{DynamicResource String_Tag_Node_Random_Type}"></Button>
                             <Button x:Name="btn_selectable_Transit" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Transit}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_TransitM}" ToolTip="{DynamicResource String_Tag_Node_Transit_Type}"></Button>
                             <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
-                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Bwd}" Command="{Binding PrevRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_PrevRootNode_Tooltip}"></Button>
-                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Fwd}" Command="{Binding NextRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_NextRootNode_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Bwd}" Command="{Binding PrevRootNodeCommand}" ToolTip="{DynamicResource String_GraphMenu_PrevRootNode_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Fwd}" Command="{Binding NextRootNodeCommand}" ToolTip="{DynamicResource String_GraphMenu_NextRootNode_Tooltip}"></Button>
                             <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
-                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Graph_Origin}" Command="{Binding GoToOriginCommand}" ToolTip="{StaticResource String_GraphMenu_GoToOrigin_Tooltip}"></Button>
-                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Graph_Reset}" Command="{Binding ResetScaleCommand}" ToolTip="{StaticResource String_GraphMenu_ResetScale_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Graph_Origin}" Command="{Binding GoToOriginCommand}" ToolTip="{DynamicResource String_GraphMenu_GoToOrigin_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Graph_Reset}" Command="{Binding ResetScaleCommand}" ToolTip="{DynamicResource String_GraphMenu_ResetScale_Tooltip}"></Button>
                             <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
-                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Play}" Command="{Binding PlayCommand}" ToolTip="{StaticResource String_GraphMenu_Play_Tooltip}"></Button>
+                            <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Play}" Command="{Binding PlayCommand}" ToolTip="{DynamicResource String_GraphMenu_Play_Tooltip}"></Button>
                         </StackPanel>
 
                         <TextBlock Grid.Row="1" Style="{StaticResource S_TextBlock_Graph_Bold}" Margin="{StaticResource Thickness_Margin_2x}">
@@ -2374,10 +2374,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <CheckBox IsChecked="{Binding FullMode}" Content="{DynamicResource String_Tag_Player_FullMode}"></CheckBox>
 
                         <StackPanel Grid.Row="1" Orientation="Horizontal">
-                            <Button VerticalAlignment="Center" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Stop}" ToolTip="{StaticResource String_Player_Stop_Tooltip}" Command="{Binding StopCommand}"></Button>
+                            <Button VerticalAlignment="Center" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Stop}" ToolTip="{DynamicResource String_Player_Stop_Tooltip}" Command="{Binding StopCommand}"></Button>
                             <Grid VerticalAlignment="Center">
-                                <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Pause}" ToolTip="{StaticResource String_Player_Pause_Tooltip}" Command="{Binding PauseCommand}"></Button>
-                                <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Play}" ToolTip="{StaticResource String_Player_Play_Tooltip}" Command="{Binding PlayCommand}"></Button>
+                                <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Pause}" ToolTip="{DynamicResource String_Player_Pause_Tooltip}" Command="{Binding PauseCommand}"></Button>
+                                <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Play}" ToolTip="{DynamicResource String_Player_Play_Tooltip}" Command="{Binding PlayCommand}"></Button>
                             </Grid>
                             <Button VerticalAlignment="Center" Style="{StaticResource S_Button_Gender}"></Button>
                             <GroupBox Margin="{StaticResource Thickness_Margin_Underline_6x}" Header="{DynamicResource String_Tag_Player_PlayRate}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Player}">
