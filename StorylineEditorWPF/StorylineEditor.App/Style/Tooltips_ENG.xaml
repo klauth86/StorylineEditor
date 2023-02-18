@@ -20,6 +20,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
+    <sys:String x:Key="String_New_Folder_ENG">New Folder</sys:String>
+
+    <sys:String x:Key="String_New_Location_ENG">New Location</sys:String>
+
+    <sys:String x:Key="String_New_Character_ENG">New Character</sys:String>
+
+    <sys:String x:Key="String_New_Item_ENG">New Item</sys:String>
+
+    <sys:String x:Key="String_New_Actor_ENG">New Actor</sys:String>
+
+    <sys:String x:Key="String_New_Quest_ENG">New Quest</sys:String>
+
+    <sys:String x:Key="String_New_Dialog_ENG">New Dialog</sys:String>
+
+    <sys:String x:Key="String_New_Replica_ENG">New Replica</sys:String>
+    
     <!--MainMenu-->
 
     <sys:String x:Key="String_MainMenu_Open_Tooltip_ENG">Open</sys:String>

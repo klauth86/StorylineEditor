@@ -26,6 +26,7 @@ using StorylineEditor.ViewModel.Config;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Windows;
@@ -359,7 +360,35 @@ namespace StorylineEditor.App
 
         public void InitLocalization()
         {
-            
+            if (ConfigM.Config.Language == LANGUAGE.UNSET)
+            {
+                if (CultureInfo.InstalledUICulture.ThreeLetterISOLanguageName == "rus")
+                {
+                    ConfigM.Config.Language = LANGUAGE.RUS;
+                    ActiveContext.FileService.SaveConfig();
+                    SwitchLocalization(LANGUAGE.RUS);
+                }
+                else
+                {
+                    ConfigM.Config.Language = LANGUAGE.ENG;
+                    ActiveContext.FileService.SaveConfig();
+                    SwitchLocalization(LANGUAGE.ENG);
+                }
+            }
+            else if (ConfigM.Config.Language == LANGUAGE.RUS)
+            {
+                SwitchLocalization(LANGUAGE.RUS);
+            }
+            else if (ConfigM.Config.Language == LANGUAGE.ENG)
+            {
+                SwitchLocalization(LANGUAGE.ENG);
+            }
+            else // Fix if have invalid value (out of enum)
+            {
+                ConfigM.Config.Language = LANGUAGE.ENG;
+                ActiveContext.FileService.SaveConfig();
+                SwitchLocalization(LANGUAGE.ENG);
+            }
         }
 
         public void SwitchLocalization(byte language)
@@ -633,6 +662,44 @@ namespace StorylineEditor.App
             SetWithSuffix("String_Tag_Player_Duration", suffix);
 
             SetWithSuffix("String_Tag_Player_QuestNodeIsPassed", suffix);
+
+            SetWithSuffix("String_MainMenu_Open_Tooltip", suffix);
+
+            SetWithSuffix("String_MainMenu_Save_Tooltip", suffix);
+
+            SetWithSuffix("String_MainMenu_Condig_Tooltip", suffix);
+
+            SetWithSuffix("String_TabMenu_Up_Tooltip", suffix);
+
+            SetWithSuffix("String_TabMenu_Add_Tooltip", suffix);
+
+            SetWithSuffix("String_TabMenu_AddFolder_Tooltip", suffix);
+
+            SetWithSuffix("String_TabMenu_Remove_Tooltip", suffix);
+
+            SetWithSuffix("String_TabMenu_Cut_Tooltip", suffix);
+
+            SetWithSuffix("String_TabMenu_Paste_Tooltip", suffix);
+
+            SetWithSuffix("String_GraphMenu_PrevRootNode_Tooltip", suffix);
+
+            SetWithSuffix("String_GraphMenu_NextRootNode_Tooltip", suffix);
+
+            SetWithSuffix("String_GraphMenu_ResetScale_Tooltip", suffix);
+
+            SetWithSuffix("String_GraphMenu_GoToOrigin_Tooltip", suffix);
+
+            SetWithSuffix("String_GraphMenu_Play_Tooltip", suffix);
+
+            SetWithSuffix("String_HasPredicates_Tooltip", suffix);
+
+            SetWithSuffix("String_HasGameEvents_Tooltip", suffix);
+
+            SetWithSuffix("String_Player_Stop_Tooltip", suffix);
+
+            SetWithSuffix("String_Player_Pause_Tooltip", suffix);
+
+            SetWithSuffix("String_Player_Play_Tooltip", suffix);
         }
 
         protected void SetWithSuffix(string key, string suffix)
@@ -645,6 +712,12 @@ namespace StorylineEditor.App
             if (language == LANGUAGE.RUS) return "RUS";
 
             return "ENG"; // English is default
+        }
+
+        public string GetLocalizedString(string key)
+        {
+            string suffix = GetLocalizationSuffix(ConfigM.Config.Language);
+            return App.Current.Resources[string.Format("{0}_{1}", key, suffix)]?.ToString();
         }
     }
 }

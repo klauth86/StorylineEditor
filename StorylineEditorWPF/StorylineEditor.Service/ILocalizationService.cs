@@ -22,5 +22,6 @@ namespace StorylineEditor.Service
     {
         void InitLocalization();
         void SwitchLocalization(byte language);
+        string GetLocalizedString(string key);
     }
 }

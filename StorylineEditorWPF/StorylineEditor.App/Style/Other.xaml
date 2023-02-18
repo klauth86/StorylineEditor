@@ -2250,6 +2250,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <x:Static Member="vmconfig:LANGUAGE.ENG"></x:Static>
         <x:Static Member="vmconfig:LANGUAGE.RUS"></x:Static>
     </x:Array>
+
+    <DataTemplate x:Key="DT_ListBoxItem_Language">
+        <TextBlock x:Name="tb_Main"></TextBlock>
+        <DataTemplate.Triggers>
+            <Trigger SourceName="tb_Main" Property="DataContext" Value="{x:Static vmconfig:LANGUAGE.ENG}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_ENG}"></Setter>
+            </Trigger>
+            <Trigger SourceName="tb_Main" Property="DataContext" Value="{x:Static vmconfig:LANGUAGE.RUS}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_RUS}"></Setter>
+            </Trigger>            
+        </DataTemplate.Triggers>
+    </DataTemplate>
     
     <DataTemplate DataType="{x:Type config:ConfigVM}">
         <StackPanel Orientation="Vertical">
@@ -2260,7 +2272,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="{DynamicResource String_Tag_Config_Language}"></TextBlock>
-                    <ComboBox Grid.Column="1" ItemsSource="{StaticResource ARRAY_Languages}" SelectedValue="{Binding Language, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
+                    <ComboBox Grid.Column="1" ItemsSource="{StaticResource ARRAY_Languages}" SelectedValue="{Binding Language, UpdateSourceTrigger=PropertyChanged}"
+                              ItemTemplate="{StaticResource DT_ListBoxItem_Language}"></ComboBox>
                 </Grid>
             </GroupBox>
             <GroupBox Header="{DynamicResource String_Tag_Config_UserActions}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">

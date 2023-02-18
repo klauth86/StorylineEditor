@@ -23,6 +23,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:Boolean x:Key="True">True</sys:Boolean>
 
     <sys:Boolean x:Key="False">False</sys:Boolean>
+
+    <sys:String x:Key="String_Tag_ENG">English</sys:String>
+
+    <sys:String x:Key="String_Tag_RUS">Русский</sys:String>
     
     <!--COMMON-->
   
