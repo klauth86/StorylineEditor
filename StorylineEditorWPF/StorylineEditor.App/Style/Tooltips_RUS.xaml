@@ -20,6 +20,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
+    <sys:String x:Key="String_New_Storyline_RUS">новый проект</sys:String>
+    
+    <sys:String x:Key="String_Player_RUS">Основной персонаж</sys:String>
+    
     <sys:String x:Key="String_New_Folder_RUS">Новая папка</sys:String>
 
     <sys:String x:Key="String_New_Location_RUS">Новая локация</sys:String>

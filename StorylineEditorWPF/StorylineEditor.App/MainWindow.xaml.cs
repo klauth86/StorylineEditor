@@ -60,12 +60,12 @@ namespace StorylineEditor.App
             InitLocalization();
 
             StorylineM storylineModel = new StorylineM();
-            storylineModel.characters.Add(new CharacterM() { id = CharacterM.PLAYER_ID, name = "Основной персонаж" });
+            storylineModel.characters.Add(new CharacterM() { id = CharacterM.PLAYER_ID, name = ActiveContext.LocalizationService.GetLocalizedString("String_Player") });
 
             SetDataContext(new StorylineVM(storylineModel));
 
             var assemblyName = Assembly.GetExecutingAssembly().GetName();
-            Title = string.Format("{0} [{1}]", assemblyName.Name, "new document");
+            Title = string.Format("{0} [{1}]", assemblyName.Name, ActiveContext.LocalizationService.GetLocalizedString("String_New_Storyline"));
         }
 
         protected override void OnClosing(CancelEventArgs e)
