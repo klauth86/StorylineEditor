@@ -24,7 +24,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Style/Icons.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="Style/Tags.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Style/Tags_.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Style/Tags_ENG.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Style/Tags_RUS.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Style/Tooltips.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Style/Colors.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Style/Dimensions.xaml"></ResourceDictionary>

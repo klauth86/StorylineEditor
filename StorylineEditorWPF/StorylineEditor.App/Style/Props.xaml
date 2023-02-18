@@ -75,19 +75,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <TextBlock x:Name="tb_Main"></TextBlock>
         <DataTemplate.Triggers>
             <Trigger SourceName="tb_Main" Property="DataContext" Value="{x:Static m:COMPARE_TYPE.LESS}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_CompareType_Less}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_CompareType_Less}"></Setter>
             </Trigger>
             <Trigger SourceName="tb_Main" Property="DataContext" Value="{x:Static m:COMPARE_TYPE.LESS_OR_EQUAL}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_CompareType_LessOrEqual}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_CompareType_LessOrEqual}"></Setter>
             </Trigger>
             <Trigger SourceName="tb_Main" Property="DataContext" Value="{x:Static m:COMPARE_TYPE.EQUAL}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_CompareType_Equal}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_CompareType_Equal}"></Setter>
             </Trigger>
             <Trigger SourceName="tb_Main" Property="DataContext" Value="{x:Static m:COMPARE_TYPE.EQUAL_OR_GREATER}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_CompareType_EqualOrGreater}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_CompareType_EqualOrGreater}"></Setter>
             </Trigger>
             <Trigger SourceName="tb_Main" Property="DataContext" Value="{x:Static m:COMPARE_TYPE.GREATER}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_CompareType_Greater}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_CompareType_Greater}"></Setter>
             </Trigger>
         </DataTemplate.Triggers>
     </DataTemplate>
@@ -96,13 +96,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <TextBlock x:Name="tb_Main"></TextBlock>
         <DataTemplate.Triggers>
             <Trigger SourceName="tb_Main" Property="DataContext" Value="{x:Static m:COMPOSITION_TYPE.AND}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_CompositionType_AND}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_CompositionType_AND}"></Setter>
             </Trigger>
             <Trigger SourceName="tb_Main" Property="DataContext" Value="{x:Static m:COMPOSITION_TYPE.OR}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_CompositionType_OR}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_CompositionType_OR}"></Setter>
             </Trigger>
             <Trigger SourceName="tb_Main" Property="DataContext" Value="{x:Static m:COMPOSITION_TYPE.XOR}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_CompositionType_XOR}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_CompositionType_XOR}"></Setter>
             </Trigger>
         </DataTemplate.Triggers>
     </DataTemplate>
@@ -111,7 +111,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <TextBlock x:Name="tb_Main"></TextBlock>
         <DataTemplate.Triggers>
             <Trigger SourceName="tb_Main" Property="DataContext" Value="{x:Static m:STORAGE_TYPE.GOOGLE_DRIVE}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_StorageType_GoogleDrive}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_StorageType_GoogleDrive}"></Setter>
             </Trigger>
         </DataTemplate.Triggers>
     </DataTemplate>
@@ -143,7 +143,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <Setter.Value>
                 <ControlTemplate TargetType="ContentControl">
                     <Label
-                        Content="{StaticResource String_Tag_IsDownloading}"
+                        Content="{DynamicResource String_Tag_IsDownloading}"
                         FontSize="{StaticResource FontSize_Large}"
                         Foreground="{StaticResource Color_IsDownloading_Indicator}"
                         >
@@ -457,7 +457,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                                 <RowDefinition Height="*"></RowDefinition>
                                             </Grid.RowDefinitions>
                                             <TextBox Background="{StaticResource ComboBox.Static.Editable.Background}" Margin="0, 8, 0, 4" x:Name="tb_Filter" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}"></TextBox>
-                                            <TextBox Margin="0, 8, 0, 4" x:Name="tb_FilterPlaceholder" Style="{StaticResource S_TextBox_Filter_ToolTip}" Text="{StaticResource String_Tag_ComboBoxExt_Filter_Tooltip}" Visibility="Collapsed"></TextBox>
+                                            <TextBox Margin="0, 8, 0, 4" x:Name="tb_FilterPlaceholder" Style="{StaticResource S_TextBox_Filter_ToolTip}" Text="{DynamicResource String_Tag_ComboBoxExt_Filter_Tooltip}" Visibility="Collapsed"></TextBox>
                                             <ScrollViewer Grid.Row="1" x:Name="DropDownScrollViewer">
                                                 <Grid x:Name="grid" RenderOptions.ClearTypeHint="Enabled">
                                                     <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">

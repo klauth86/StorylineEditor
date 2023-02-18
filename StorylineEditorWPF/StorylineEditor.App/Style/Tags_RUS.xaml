@@ -1,0 +1,313 @@
+﻿<!--
+StorylineEditor
+Copyright (C) 2023 Pentangle Studio
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!--COMMON-->
+
+    <sys:String x:Key="String_Tag_IsDownloading_RUS">🡇</sys:String>
+
+    <sys:String x:Key="String_Tag_CompositionType_AND_RUS">И</sys:String>
+
+    <sys:String x:Key="String_Tag_CompositionType_OR_RUS">ИЛИ</sys:String>
+
+    <sys:String x:Key="String_Tag_CompositionType_XOR_RUS">Исключающее ИЛИ</sys:String>
+
+    <sys:String x:Key="String_Tag_CompareType_Less_RUS">Меньше</sys:String>
+
+    <sys:String x:Key="String_Tag_CompareType_LessOrEqual_RUS">Меньше или равно</sys:String>
+
+    <sys:String x:Key="String_Tag_CompareType_Equal_RUS">Равно</sys:String>
+
+    <sys:String x:Key="String_Tag_CompareType_EqualOrGreater_RUS">Больше или равно</sys:String>
+
+    <sys:String x:Key="String_Tag_CompareType_Greater_RUS">Больше</sys:String>
+
+    <sys:String x:Key="String_Tag_ComboBoxExt_Filter_Tooltip_RUS">Искать по ...</sys:String>
+
+    <!--STATS-->
+
+    <sys:String x:Key="String_Stats_Characters_RUS">ПО ПЕРСОНАЖАМ:</sys:String>
+
+    <sys:String x:Key="String_Stats_Types_RUS">ПО ТИПАМ:</sys:String>
+
+    <sys:String x:Key="String_Stats_Node_StepM_TmpDescription_RUS">✔ Шаг</sys:String>
+
+    <sys:String x:Key="String_Stats_Node_AlternativeM_TmpDescription_RUS">💡 Альтернатива</sys:String>
+
+    <sys:String x:Key="String_Stats_Node_RandomM_TmpDescription_RUS">⇝ Случайная</sys:String>
+
+    <sys:String x:Key="String_Stats_Node_TransitM_TmpDescription_RUS">⇴ Переход</sys:String>
+
+    <sys:String x:Key="String_Stats_Node_GateM_TmpDescription_RUS">⎆ Вход</sys:String>
+
+    <sys:String x:Key="String_Stats_Node_ExitM_TmpDescription_RUS">🚪 Выход</sys:String>
+
+    <sys:String x:Key="String_Stats_Node_DialogM_TmpDescription_RUS">💬 Диалог</sys:String>
+
+    <sys:String x:Key="String_Stats_Node_ReplicaM_TmpDescription_RUS">🗣 Реплика</sys:String>
+
+    <!--CONFIG-->
+
+    <sys:String x:Key="String_Tag_Config_Title_RUS">⚙ Настройки</sys:String>
+
+    <sys:String x:Key="String_Tag_Config_Language_RUS">Язык</sys:String>
+
+    <sys:String x:Key="String_Tag_Config_UserActions_RUS">Горячие клавиши и мышь</sys:String>
+
+    <sys:String x:Key="String_Tag_Config_UserActions_CreateNode_RUS">Создать вершины</sys:String>
+
+    <sys:String x:Key="String_Tag_Config_UserActions_DuplicateNode_RUS">Дублировать вершины</sys:String>
+
+    <sys:String x:Key="String_Tag_Config_UserActions_Link_RUS">Соединять вершины</sys:String>
+
+    <sys:String x:Key="String_Tag_Config_UserActions_DragAndScroll_RUS">Перетаскивание/скролл</sys:String>
+
+    <sys:String x:Key="String_Tag_Config_UserActions_SelectionSimple_RUS">Простое выделение</sys:String>
+
+    <sys:String x:Key="String_Tag_Config_UserActions_SelectionAdditive_RUS">Аддитивное выделение</sys:String>
+
+    <sys:String x:Key="String_Tag_Config_UserActions_SelectionBox_RUS">Выделение рамкой</sys:String>
+
+    <!--MAIN MENU-->
+
+    <sys:String x:Key="String_Tag_GlobalFilter_Tooltip_RUS">Фильтровать по ...</sys:String>
+
+    <sys:String x:Key="String_Tag_MainMenu_Locations_RUS">Локации</sys:String>
+
+    <sys:String x:Key="String_Tag_MainMenu_Characters_RUS">Персонажи</sys:String>
+
+    <sys:String x:Key="String_Tag_MainMenu_Items_RUS">Предметы</sys:String>
+
+    <sys:String x:Key="String_Tag_MainMenu_Actors_RUS">Акторы</sys:String>
+
+    <sys:String x:Key="String_Tag_MainMenu_Journal_RUS">Журнальные записи</sys:String>
+
+    <sys:String x:Key="String_Tag_MainMenu_Dialogs_RUS">Диалоги</sys:String>
+
+    <sys:String x:Key="String_Tag_MainMenu_Replicas_RUS">Реплики</sys:String>
+
+    <sys:String x:Key="String_Tag_MainMenu_DialogsAndReplicas_RUS">Диалоги и Реплики</sys:String>
+
+    <!--PROPS-->
+
+    <sys:String x:Key="String_Tag_Name_RUS">Имя</sys:String>
+
+    <sys:String x:Key="String_Tag_Description_RUS">Описание</sys:String>
+
+    <sys:String x:Key="String_Tag_HasDescriptionFemale_RUS">Описание зависит от пола</sys:String>
+
+    <sys:String x:Key="String_Tag_DescriptionMale_RUS">👨 Описание</sys:String>
+
+    <sys:String x:Key="String_Tag_DescriptionFemale_RUS">👩 Описание</sys:String>
+
+    <sys:String x:Key="String_Tag_Relation_RUS">👨 Отношение</sys:String>
+
+    <sys:String x:Key="String_Tag_RelationFemale_RUS">👩 Отношение</sys:String>
+
+    <sys:String x:Key="String_Tag_HasInternalDescription_RUS">Имеет внутреннее описание</sys:String>
+
+    <sys:String x:Key="String_Tag_HasInternalDescriptionFemale_RUS">Внутреннее описание зависит от пола</sys:String>
+
+    <sys:String x:Key="String_Tag_InternalDescription_RUS">Внутреннее описание</sys:String>
+
+    <sys:String x:Key="String_Tag_InternalDescriptionMale_RUS">👨 Внутреннее описание</sys:String>
+
+    <sys:String x:Key="String_Tag_InternalDescriptionFemale_RUS">👩 Внутреннее описание</sys:String>
+
+    <!--GRAPH-->
+
+    <sys:String x:Key="String_Tag_Graph_Tab_Props_RUS">Свойства</sys:String>
+
+    <sys:String x:Key="String_Tag_Graph_Tab_View_RUS">Вершины</sys:String>
+
+    <!--JOURNAL NODES-->
+
+    <sys:String x:Key="String_Tag_Node_Step_Name_RUS">Имя шага</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Step_Description_RUS">Описание шага</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Step_Result_RUS">Результат шага</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Step_Type_RUS">Шаг</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Alternative_Name_RUS">Имя альтернативы</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Alternative_Description_RUS">Описание альтернативы</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Alternative_Result_RUS">Результат альтернативы</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Alternative_Type_RUS">Альтернатива</sys:String>
+
+    <!--NODES-->
+
+    <sys:String x:Key="String_Tag_Node_Tab_Props_RUS">Свойства</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Tab_Predicates_RUS">Предикаты</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Tab_GameEvents_RUS">События</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Random_Type_RUS">Случайная</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Transit_Type_RUS">Переход</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Gate_Type_RUS">Вход</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Exit_Type_RUS">Выход</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Replica_Type_RUS">Реплика</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Dialog_Type_RUS">Диалог</sys:String>
+
+    <sys:String x:Key="String_Tag_Dialog_DialogCharacter_RUS">Персонаж</sys:String>
+
+    <sys:String x:Key="String_Tag_Dialog_DialogLocation_RUS">Локация</sys:String>
+
+    <sys:String x:Key="String_Tag_Dialog_ReplicaLocation_RUS">Локация</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Regular_Character_RUS">Владелец</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Gate_TargetDialog_RUS">Диалог</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Gate_TargetExitNode_RUS">Выход</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Regular_OverrideName_RUS">Иное отображаемое имя</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Regular_FileStorageType_RUS">Тип хранилища</sys:String>
+    
+    <sys:String x:Key="String_Tag_Node_Regular_FileHttpRef_RUS">Ссылка на аудио</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Regular_ShortDescription_RUS">Краткое описание</sys:String>
+
+    <sys:String x:Key="String_Tag_StorageType_GoogleDrive_RUS">Google Drive</sys:String>
+
+    <!--PREDICATES-->
+
+    <sys:String x:Key="String_Tag_Predicate_IsInversed_RUS">Инвертировать</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_CompositeM_DisplayName_RUS">Составной</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_HasM_DisplayName_RUS">Реплики и диалоги: имеет</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_ActiveSession_CmpM_DisplayName_RUS">Реплики и диалоги: имеет вершину в активной сессии &lt;&gt;</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_ActiveSessionM_DisplayName_RUS">Реплики и диалоги: имеет вершину в активной сессии</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_PrevSessions_CmpM_DisplayName_RUS">Реплики и диалоги: имеет вершину в прошлых сессиях &lt;&gt;</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_PrevSessionsM_DisplayName_RUS">Реплики и диалоги: имеет вершину в прошлых сессиях</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Item_HasM_DisplayName_RUS">Предмет: имеет</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_AddedM_DisplayName_RUS">Квест: добавлен</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_FinishedM_DisplayName_RUS">Квест: выполнен</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_Node_AddedM_DisplayName_RUS">Квест: добавлен/а шаг/альтернатива</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_Node_PassedM_DisplayName_RUS">Квест: выполнен/а шаг/альтернатива</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Relation_HasM_DisplayName_RUS">Отношение: имеет</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_CompositeM_Title_RUS">Составной</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_HasM_Title_RUS">Реплики и диалоги: имеет</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_ActiveSession_CmpM_Title_RUS">Реплики и диалоги: имеет вершину в активной сессии &lt;&gt;</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_ActiveSessionM_Title_RUS">Реплики и диалоги: имеет вершину в активной сессии</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_PrevSessions_CmpM_Title_RUS">Реплики и диалоги: имеет вершину в прошлых сессиях &lt;&gt;</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_PrevSessionsM_Title_RUS">Реплики и диалоги: имеет вершину в прошлых сессиях</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Item_HasM_Title_RUS">Предмет: имеет</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_AddedM_Title_RUS">Квест: добавлен</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_FinishedM_Title_RUS">Квест: выполнен</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_Node_AddedM_Title_RUS">Квест: добавлен/а шаг/альтернатива</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_Node_PassedM_Title_RUS">Квест: выполнен/а шаг/альтернатива</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Relation_HasM_Title_RUS">Отношение: имеет</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_Compare_RUS">Условия</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_DialogOrReplica_RUS">Диалог или реплика</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_Node_RUS">Вершина</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_Item_RUS">Предмет</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_Quest_RUS">Квест</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_Character_RUS">Персонаж</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_PredicateA_RUS">Предикат A</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_PredicateB_RUS">Предикат B</sys:String>
+
+    <!--GAME EVENTS-->
+
+    <sys:String x:Key="String_Tag_GameEvent_IsExecutedOnLeave_RUS">Выполнить ПОСЛЕ вершины</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Item_DropM_DisplayName_RUS">Предмет: потерять</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Item_PickUpM_DisplayName_RUS">Предмет: получить</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_AddM_DisplayName_RUS">Квест: добавить</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_AddM_DisplayName_RUS">Квест: добавить шаг/альтернативу</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_PassM_DisplayName_RUS">Квест: выполнить шаг/альтернативу</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_DisplayName_RUS">Отношение: изменить</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Item_DropM_Title_RUS">Предмет: потерять</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Item_PickUpM_Title_RUS">Предмет: получить</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_AddM_Title_RUS">Квест: добавить</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_AddM_Title_RUS">Квест: добавить шаг/альтернативу</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_PassM_Title_RUS">Квест: выполнить шаг/альтернативу</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_Title_RUS">Отношение: изменить</sys:String>
+
+    <!--PLAYER-->
+
+    <sys:String x:Key="String_Tag_Player_Title_RUS">▶ Проигрыватель</sys:String>
+
+    <sys:String x:Key="String_Tag_Player_Tab_Props_RUS">Основная</sys:String>
+
+    <sys:String x:Key="String_Tag_Player_FullMode_RUS">Полный режим</sys:String>
+
+    <sys:String x:Key="String_Tag_Player_Error_RUS">ОШИБКА</sys:String>
+
+    <sys:String x:Key="String_Tag_Player_PlayRate_RUS">Скорость, %</sys:String>
+
+    <sys:String x:Key="String_Tag_Player_Duration_RUS">Время вершины, сек</sys:String>
+
+    <sys:String x:Key="String_Tag_Player_QuestNodeIsPassed_RUS">Шаг/Альтернатива пройден/а</sys:String>
+
+</ResourceDictionary>

@@ -21,6 +21,14 @@ using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Config
 {
+    public static class LANGUAGE
+    {
+        public const byte UNSET = 0;
+
+        public const byte ENG = 1;
+        public const byte RUS = 2;
+    }
+
     public static class USER_ACTION_TYPE
     {
         public const byte UNSET = 0;
@@ -42,6 +50,7 @@ namespace StorylineEditor.ViewModel.Config
 
         public ConfigM()
         {
+            Language = LANGUAGE.UNSET;
             UserActions = new List<UserActionM>();
         }
 
@@ -61,6 +70,9 @@ namespace StorylineEditor.ViewModel.Config
             Config.Duration = 4;
         }
 
+
+        // LANGUAGE
+        public byte Language { get; set; }
 
         // CANVAS COMMANDS
         public List<UserActionM> UserActions { get; set; }

@@ -32,7 +32,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     xmlns:mge="clr-namespace:StorylineEditor.Model.GameEvents;assembly=StorylineEditor.Model"
                     xmlns:mg="clr-namespace:StorylineEditor.Model.Graphs;assembly=StorylineEditor.Model"
                     xmlns:bhvrs="clr-namespace:StorylineEditor.App.Behaviors"
-                    xmlns:controls="clr-namespace:StorylineEditor.App.Controls" xmlns:system="clr-namespace:System;assembly=mscorlib">
+                    xmlns:controls="clr-namespace:StorylineEditor.App.Controls"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!-- COLLECTION CONTEXT (FOLDERS AND PATH) -->
 
@@ -345,13 +346,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <DataTemplate DataType="{x:Type vm:StorylineVM}" x:Key="DT_StorylineVM_Tabs">
         <StackPanel Orientation="Horizontal">
-            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding LocationsTabCommand}" Content="{StaticResource String_Tag_MainMenu_Locations}"></Button>
-            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding CharactersTabCommand}" Content="{StaticResource String_Tag_MainMenu_Characters}"></Button>
-            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding ItemsTabCommand}" Content="{StaticResource String_Tag_MainMenu_Items}"></Button>
-            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding ActorsTabCommand}" Content="{StaticResource String_Tag_MainMenu_Actors}"></Button>
-            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding JournalTabCommand}" Content="{StaticResource String_Tag_MainMenu_Journal}"></Button>
-            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding DialogsTabCommand}" Content="{StaticResource String_Tag_MainMenu_Dialogs}"></Button>
-            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding ReplicasTabCommand}" Content="{StaticResource String_Tag_MainMenu_Replicas}"></Button>
+            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding LocationsTabCommand}" Content="{DynamicResource String_Tag_MainMenu_Locations}"></Button>
+            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding CharactersTabCommand}" Content="{DynamicResource String_Tag_MainMenu_Characters}"></Button>
+            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding ItemsTabCommand}" Content="{DynamicResource String_Tag_MainMenu_Items}"></Button>
+            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding ActorsTabCommand}" Content="{DynamicResource String_Tag_MainMenu_Actors}"></Button>
+            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding JournalTabCommand}" Content="{DynamicResource String_Tag_MainMenu_Journal}"></Button>
+            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding DialogsTabCommand}" Content="{DynamicResource String_Tag_MainMenu_Dialogs}"></Button>
+            <Button Template="{StaticResource CT_Button_TabMenu}" Command="{Binding ReplicasTabCommand}" Content="{DynamicResource String_Tag_MainMenu_Replicas}"></Button>
         </StackPanel>
     </DataTemplate>
 
@@ -430,8 +431,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <DataTemplate DataType="{x:Type vm:FolderEditorVM}">
         <StackPanel Orientation="Vertical">
-            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_Name}"></TextBox>
-            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{DynamicResource String_Tag_Name}"></TextBox>
+            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{DynamicResource String_Tag_Description}"></TextBox>
         </StackPanel>
     </DataTemplate>
 
@@ -457,8 +458,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <DataTemplate DataType="{x:Type vm:LocationEditorVM}">
         <StackPanel Orientation="Vertical">
-            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_Name}"></TextBox>
-            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{DynamicResource String_Tag_Name}"></TextBox>
+            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{DynamicResource String_Tag_Description}"></TextBox>
         </StackPanel>
     </DataTemplate>
 
@@ -655,17 +656,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     
     <DataTemplate DataType="{x:Type vm:CharacterEditorVM}">
         <StackPanel Orientation="Vertical">
-            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_Name}"></TextBox>
-            <CheckBox x:Name="cb_HasDescriptionFemale" IsChecked="{Binding HasDescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_CheckBox_Prop}" Tag="{StaticResource String_Tag_HasDescriptionFemale}"></CheckBox>
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{DynamicResource String_Tag_Name}"></TextBox>
+            <CheckBox x:Name="cb_HasDescriptionFemale" IsChecked="{Binding HasDescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_CheckBox_Prop}" Tag="{DynamicResource String_Tag_HasDescriptionFemale}"></CheckBox>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition x:Name="cd_DescriptionFemale" Width="0"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <GroupBox x:Name="gb_Description" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                <GroupBox x:Name="gb_Description" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
                     <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                 </GroupBox>
-                <GroupBox Grid.Column="1" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_DescriptionFemale}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                <GroupBox Grid.Column="1" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_DescriptionFemale}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
                     <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescriptionFemale" RtVersion="{Binding RtDescriptionFemaleVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                 </GroupBox>
             </Grid>
@@ -688,7 +689,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </StackPanel>
         <DataTemplate.Triggers>
             <Trigger SourceName="cb_HasDescriptionFemale" Property="IsChecked" Value="true">
-                <Setter TargetName="gb_Description" Property="Header" Value="{StaticResource String_Tag_DescriptionMale}"></Setter>
+                <Setter TargetName="gb_Description" Property="Header" Value="{DynamicResource String_Tag_DescriptionMale}"></Setter>
                 <Setter TargetName="cd_DescriptionFemale" Property="Width" Value="*"></Setter>
             </Trigger>
         </DataTemplate.Triggers>
@@ -716,24 +717,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <DataTemplate DataType="{x:Type vm:ActorEditorVM}">
         <StackPanel Orientation="Vertical">
-            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_Name}"></TextBox>
-            <CheckBox x:Name="cb_HasDescriptionFemale" IsChecked="{Binding HasDescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_CheckBox_Prop}" Tag="{StaticResource String_Tag_HasDescriptionFemale}"></CheckBox>
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{DynamicResource String_Tag_Name}"></TextBox>
+            <CheckBox x:Name="cb_HasDescriptionFemale" IsChecked="{Binding HasDescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_CheckBox_Prop}" Tag="{DynamicResource String_Tag_HasDescriptionFemale}"></CheckBox>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition x:Name="cd_DescriptionFemale" Width="0"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <GroupBox x:Name="gb_Description" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                <GroupBox x:Name="gb_Description" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
                     <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                 </GroupBox>
-                <GroupBox Grid.Column="1" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_DescriptionFemale}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                <GroupBox Grid.Column="1" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_DescriptionFemale}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
                     <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescriptionFemale" RtVersion="{Binding RtDescriptionFemaleVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                 </GroupBox>
             </Grid>
         </StackPanel>
         <DataTemplate.Triggers>
             <Trigger SourceName="cb_HasDescriptionFemale" Property="IsChecked" Value="true">
-                <Setter TargetName="gb_Description" Property="Header" Value="{StaticResource String_Tag_DescriptionMale}"></Setter>
+                <Setter TargetName="gb_Description" Property="Header" Value="{DynamicResource String_Tag_DescriptionMale}"></Setter>
                 <Setter TargetName="cd_DescriptionFemale" Property="Width" Value="*"></Setter>
             </Trigger>
         </DataTemplate.Triggers>
@@ -761,39 +762,39 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <DataTemplate DataType="{x:Type vm:ItemEditorVM}">
         <StackPanel Orientation="Vertical">
-            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_Name}"></TextBox>
-            <CheckBox x:Name="cb_HasDescriptionFemale" IsChecked="{Binding HasDescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_CheckBox_Prop}" Tag="{StaticResource String_Tag_HasDescriptionFemale}"></CheckBox>
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{DynamicResource String_Tag_Name}"></TextBox>
+            <CheckBox x:Name="cb_HasDescriptionFemale" IsChecked="{Binding HasDescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_CheckBox_Prop}" Tag="{DynamicResource String_Tag_HasDescriptionFemale}"></CheckBox>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition x:Name="cd_DescriptionFemale" Width="0"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <GroupBox x:Name="gb_Description" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                <GroupBox x:Name="gb_Description" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
                     <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                 </GroupBox>
-                <GroupBox Grid.Column="1" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_DescriptionFemale}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                <GroupBox Grid.Column="1" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_DescriptionFemale}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
                     <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescriptionFemale" RtVersion="{Binding RtDescriptionFemaleVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                 </GroupBox>
             </Grid>
 
-            <CheckBox x:Name="cb_HasInternalDescription" IsChecked="{Binding HasInternalDescription, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_CheckBox_Prop}" Tag="{StaticResource String_Tag_HasInternalDescription}"></CheckBox>
-            <CheckBox x:Name="cb_HasInternalDescriptionFemale" IsChecked="{Binding HasInternalDescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_CheckBox_Prop}" Tag="{StaticResource String_Tag_HasInternalDescriptionFemale}"></CheckBox>
+            <CheckBox x:Name="cb_HasInternalDescription" IsChecked="{Binding HasInternalDescription, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_CheckBox_Prop}" Tag="{DynamicResource String_Tag_HasInternalDescription}"></CheckBox>
+            <CheckBox x:Name="cb_HasInternalDescriptionFemale" IsChecked="{Binding HasInternalDescriptionFemale, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_CheckBox_Prop}" Tag="{DynamicResource String_Tag_HasInternalDescriptionFemale}"></CheckBox>
             <Grid x:Name="gr_InternalDescription">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition x:Name="cd_InternalDescriptionFemale" Width="0"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <GroupBox x:Name="gb_InternalDescription" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_InternalDescription}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                <GroupBox x:Name="gb_InternalDescription" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_InternalDescription}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
                     <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtInternalDescription" RtVersion="{Binding RtInternalDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                 </GroupBox>
-                <GroupBox Grid.Column="1" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_InternalDescriptionFemale}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                <GroupBox Grid.Column="1" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_InternalDescriptionFemale}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
                     <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtInternalDescriptionFemale" RtVersion="{Binding RtInternalDescriptionFemaleVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                 </GroupBox>
             </Grid>
         </StackPanel>
         <DataTemplate.Triggers>
             <Trigger SourceName="cb_HasDescriptionFemale" Property="IsChecked" Value="true">
-                <Setter TargetName="gb_Description" Property="Header" Value="{StaticResource String_Tag_DescriptionMale}"></Setter>
+                <Setter TargetName="gb_Description" Property="Header" Value="{DynamicResource String_Tag_DescriptionMale}"></Setter>
                 <Setter TargetName="cd_DescriptionFemale" Property="Width" Value="*"></Setter>
             </Trigger>
             <Trigger SourceName="cb_HasInternalDescription" Property="IsChecked" Value="false">
@@ -801,7 +802,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <Setter TargetName="gr_InternalDescription" Property="Visibility" Value="Collapsed"></Setter>
             </Trigger>
             <Trigger SourceName="cb_HasInternalDescriptionFemale" Property="IsChecked" Value="true">
-                <Setter TargetName="gb_InternalDescription" Property="Header" Value="{StaticResource String_Tag_InternalDescriptionMale}"></Setter>
+                <Setter TargetName="gb_InternalDescription" Property="Header" Value="{DynamicResource String_Tag_InternalDescriptionMale}"></Setter>
                 <Setter TargetName="cd_InternalDescriptionFemale" Property="Width" Value="*"></Setter>
             </Trigger>
         </DataTemplate.Triggers>
@@ -847,7 +848,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     
     <DataTemplate DataType="{x:Type vmg:QuestEditorVM}">
         <TabControl Padding="0" Margin="0">
-            <TabItem Header="{StaticResource String_Tag_Graph_Tab_View}">
+            <TabItem Header="{DynamicResource String_Tag_Graph_Tab_View}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="7*"></ColumnDefinition>
@@ -869,8 +870,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         </Grid.RowDefinitions>
 
                         <StackPanel Orientation="Horizontal">
-                            <Button x:Name="btn_selectable_Step" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Step}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_StepM}" ToolTip="{StaticResource String_Tag_Node_Step_Type}"></Button>
-                            <Button x:Name="btn_selectable_Alternative" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Alternative}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_AlternativeM}" ToolTip="{StaticResource String_Tag_Node_Alternative_Type}"></Button>
+                            <Button x:Name="btn_selectable_Step" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Step}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_StepM}" ToolTip="{DynamicResource String_Tag_Node_Step_Type}"></Button>
+                            <Button x:Name="btn_selectable_Alternative" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Alternative}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_AlternativeM}" ToolTip="{DynamicResource String_Tag_Node_Alternative_Type}"></Button>
                             <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
                             <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Bwd}" Command="{Binding PrevRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_PrevRootNode_Tooltip}"></Button>
                             <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Fwd}" Command="{Binding NextRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_NextRootNode_Tooltip}"></Button>
@@ -897,21 +898,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <ContentControl Grid.Column="2" Content="{Binding SelectionEditor, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
                 </Grid>
             </TabItem>
-            <TabItem Header="{StaticResource String_Tag_Graph_Tab_Props}">
+            <TabItem Header="{DynamicResource String_Tag_Graph_Tab_Props}">
                 <StackPanel Orientation="Vertical">
-                    <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_Name}"></TextBox>
-                    <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
+                    <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{DynamicResource String_Tag_Name}"></TextBox>
+                    <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{DynamicResource String_Tag_Description}"></TextBox>
                 </StackPanel>
             </TabItem>
         </TabControl>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_StepM}">
                 <Setter TargetName="btn_selectable_Step" Property="Style" Value="{StaticResource S_Button_24x_Selected}"></Setter>
-                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Step_Type}"></Setter>
+                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{DynamicResource String_Tag_Node_Step_Type}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_AlternativeM}">
                 <Setter TargetName="btn_selectable_Alternative" Property="Style" Value="{StaticResource S_Button_24x_Selected}"></Setter>
-                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Alternative_Type}"></Setter>
+                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{DynamicResource String_Tag_Node_Alternative_Type}"></Setter>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
@@ -1079,18 +1080,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <DataTemplate DataType="{x:Type vmn:Node_Journal_StepEditorVM}">
         <TabControl>
-            <TabItem Header="{StaticResource String_Tag_Node_Tab_Props}">
+            <TabItem Header="{DynamicResource String_Tag_Node_Tab_Props}">
                 <Grid VerticalAlignment="Top">
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <TextBox Style="{StaticResource S_TextBox_Prop}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Step_Name}"></TextBox>
-                    <GroupBox Grid.Row="1" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_Node_Step_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                    <TextBox Style="{StaticResource S_TextBox_Prop}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Step_Name}"></TextBox>
+                    <GroupBox Grid.Row="1" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_Node_Step_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
                         <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                     </GroupBox>
-                    <TextBox Grid.Row="2" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Step_Result}"></TextBox>
+                    <TextBox Grid.Row="2" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Step_Result}"></TextBox>
                 </Grid>
             </TabItem>
         </TabControl>
@@ -1123,18 +1124,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <DataTemplate DataType="{x:Type vmn:Node_Journal_AlternativeEditorVM}">
         <TabControl>
-            <TabItem Header="{StaticResource String_Tag_Node_Tab_Props}">
+            <TabItem Header="{DynamicResource String_Tag_Node_Tab_Props}">
                 <Grid VerticalAlignment="Top">
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <TextBox Style="{StaticResource S_TextBox_Prop}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Alternative_Name}"></TextBox>
-                    <GroupBox Grid.Row="1" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_Node_Alternative_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                    <TextBox Style="{StaticResource S_TextBox_Prop}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Alternative_Name}"></TextBox>
+                    <GroupBox Grid.Row="1" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_Node_Alternative_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
                         <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                     </GroupBox>
-                    <TextBox Grid.Row="2" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Alternative_Result}"></TextBox>
+                    <TextBox Grid.Row="2" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Alternative_Result}"></TextBox>
                 </Grid>
             </TabItem>
         </TabControl>
@@ -1154,40 +1155,40 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <Style TargetType="TextBlock" x:Key="S_TextBlock_Predicate_Title" BasedOn="{StaticResource S_TextBlock_InteractiveTitle}">
         <Style.Triggers>
             <Trigger Property="Tag" Value="{x:Type mp:P_CompositeM}">
-                <Setter Property="Text" Value="{StaticResource String_Tag_Predicate_P_CompositeM_Title}"></Setter>
+                <Setter Property="Text" Value="{DynamicResource String_Tag_Predicate_P_CompositeM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mp:P_Dialog_HasM}">
-                <Setter Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_HasM_Title}"></Setter>
+                <Setter Property="Text" Value="{DynamicResource String_Tag_Predicate_P_Dialog_HasM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mp:P_Dialog_Node_Has_ActiveSession_CmpM}">
-                <Setter Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_ActiveSession_CmpM_Title}"></Setter>
+                <Setter Property="Text" Value="{DynamicResource String_Tag_Predicate_P_Dialog_Node_Has_ActiveSession_CmpM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mp:P_Dialog_Node_Has_ActiveSessionM}">
-                <Setter Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_ActiveSessionM_Title}"></Setter>
+                <Setter Property="Text" Value="{DynamicResource String_Tag_Predicate_P_Dialog_Node_Has_ActiveSessionM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mp:P_Dialog_Node_Has_PrevSessions_CmpM}">
-                <Setter Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_PrevSessions_CmpM_Title}"></Setter>
+                <Setter Property="Text" Value="{DynamicResource String_Tag_Predicate_P_Dialog_Node_Has_PrevSessions_CmpM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mp:P_Dialog_Node_Has_PrevSessionsM}">
-                <Setter Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_PrevSessionsM_Title}"></Setter>
+                <Setter Property="Text" Value="{DynamicResource String_Tag_Predicate_P_Dialog_Node_Has_PrevSessionsM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mp:P_Item_HasM}">
-                <Setter Property="Text" Value="{StaticResource String_Tag_Predicate_P_Item_HasM_Title}"></Setter>
+                <Setter Property="Text" Value="{DynamicResource String_Tag_Predicate_P_Item_HasM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mp:P_Quest_AddedM}">
-                <Setter Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_AddedM_Title}"></Setter>
+                <Setter Property="Text" Value="{DynamicResource String_Tag_Predicate_P_Quest_AddedM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mp:P_Quest_FinishedM}">
-                <Setter Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_FinishedM_Title}"></Setter>
+                <Setter Property="Text" Value="{DynamicResource String_Tag_Predicate_P_Quest_FinishedM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mp:P_Quest_Node_AddedM}">
-                <Setter Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_Node_AddedM_Title}"></Setter>
+                <Setter Property="Text" Value="{DynamicResource String_Tag_Predicate_P_Quest_Node_AddedM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mp:P_Quest_Node_PassedM}">
-                <Setter Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_Node_PassedM_Title}"></Setter>
+                <Setter Property="Text" Value="{DynamicResource String_Tag_Predicate_P_Quest_Node_PassedM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mp:P_Relation_HasM}">
-                <Setter Property="Text" Value="{StaticResource String_Tag_Predicate_P_Relation_HasM_Title}"></Setter>
+                <Setter Property="Text" Value="{DynamicResource String_Tag_Predicate_P_Relation_HasM_Title}"></Setter>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -1195,22 +1196,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <Style TargetType="TextBlock" x:Key="S_TextBlock_GameEvent_Title" BasedOn="{StaticResource S_TextBlock_InteractiveTitle}">
         <Style.Triggers>
             <Trigger Property="Tag" Value="{x:Type mge:GE_Item_DropM}">
-                <Setter Property="Text" Value="{StaticResource String_Tag_GameEvent_GE_Item_DropM_Title}"></Setter>
+                <Setter Property="Text" Value="{DynamicResource String_Tag_GameEvent_GE_Item_DropM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mge:GE_Item_PickUpM}">
-                <Setter Property="Text" Value="{StaticResource String_Tag_GameEvent_GE_Item_PickUpM_Title}"></Setter>
+                <Setter Property="Text" Value="{DynamicResource String_Tag_GameEvent_GE_Item_PickUpM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mge:GE_Quest_AddM}">
-                <Setter Property="Text" Value="{StaticResource String_Tag_GameEvent_GE_Quest_AddM_Title}"></Setter>
+                <Setter Property="Text" Value="{DynamicResource String_Tag_GameEvent_GE_Quest_AddM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mge:GE_Quest_Node_AddM}">
-                <Setter Property="Text" Value="{StaticResource String_Tag_GameEvent_GE_Quest_Node_AddM_Title}"></Setter>
+                <Setter Property="Text" Value="{DynamicResource String_Tag_GameEvent_GE_Quest_Node_AddM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mge:GE_Quest_Node_PassM}">
-                <Setter Property="Text" Value="{StaticResource String_Tag_GameEvent_GE_Quest_Node_PassM_Title}"></Setter>
+                <Setter Property="Text" Value="{DynamicResource String_Tag_GameEvent_GE_Quest_Node_PassM_Title}"></Setter>
             </Trigger>
             <Trigger Property="Tag" Value="{x:Type mge:GE_Relation_ChangeM}">
-                <Setter Property="Text" Value="{StaticResource String_Tag_GameEvent_GE_Relation_ChangeM_Title}"></Setter>
+                <Setter Property="Text" Value="{DynamicResource String_Tag_GameEvent_GE_Relation_ChangeM_Title}"></Setter>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -1233,7 +1234,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                     <RowDefinition Height="*"></RowDefinition>
                                 </Grid.RowDefinitions>
                                 <TextBlock HorizontalAlignment="Center" Tag="{Binding PredicateType}" Style="{StaticResource S_TextBlock_Predicate_Title}"></TextBlock>
-                                <CheckBox Grid.Row="1" IsChecked="{Binding IsInversed, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_CheckBox_Prop}" Tag="{StaticResource String_Tag_Predicate_IsInversed}"></CheckBox>
+                                <CheckBox Grid.Row="1" IsChecked="{Binding IsInversed, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_CheckBox_Prop}" Tag="{DynamicResource String_Tag_Predicate_IsInversed}"></CheckBox>
                                 <ContentControl Grid.Row="2" Content="{Binding}"></ContentControl>
                                 <Button Grid.RowSpan="3" Style="{StaticResource S_Button_Remove}" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
                             </Grid>
@@ -1262,7 +1263,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                     <RowDefinition Height="*"></RowDefinition>
                                 </Grid.RowDefinitions>
                                 <TextBlock HorizontalAlignment="Center" Tag="{Binding GameEventType}" Style="{StaticResource S_TextBlock_GameEvent_Title}"></TextBlock>
-                                <CheckBox Grid.Row="1" IsChecked="{Binding IsExecutedOnLeave, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_CheckBox_Prop}" Tag="{StaticResource String_Tag_GameEvent_IsExecutedOnLeave}"></CheckBox>
+                                <CheckBox Grid.Row="1" IsChecked="{Binding IsExecutedOnLeave, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_CheckBox_Prop}" Tag="{DynamicResource String_Tag_GameEvent_IsExecutedOnLeave}"></CheckBox>
                                 <ContentControl Grid.Row="2" Content="{Binding}"></ContentControl>
                                 <Button Grid.RowSpan="3" Style="{StaticResource S_Button_Remove}" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
                             </Grid>
@@ -1277,40 +1278,40 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <TextBlock x:Name="tb_Main"></TextBlock>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding}" Value="{x:Type mp:P_CompositeM}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_CompositeM_DisplayName}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_Predicate_P_CompositeM_DisplayName}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding}" Value="{x:Type mp:P_Dialog_HasM}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_HasM_DisplayName}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_Predicate_P_Dialog_HasM_DisplayName}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding}" Value="{x:Type mp:P_Dialog_Node_Has_ActiveSession_CmpM}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_ActiveSession_CmpM_DisplayName}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_Predicate_P_Dialog_Node_Has_ActiveSession_CmpM_DisplayName}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding}" Value="{x:Type mp:P_Dialog_Node_Has_ActiveSessionM}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_ActiveSessionM_DisplayName}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_Predicate_P_Dialog_Node_Has_ActiveSessionM_DisplayName}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding}" Value="{x:Type mp:P_Dialog_Node_Has_PrevSessions_CmpM}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_PrevSessions_CmpM_DisplayName}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_Predicate_P_Dialog_Node_Has_PrevSessions_CmpM_DisplayName}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding}" Value="{x:Type mp:P_Dialog_Node_Has_PrevSessionsM}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Dialog_Node_Has_PrevSessionsM_DisplayName}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_Predicate_P_Dialog_Node_Has_PrevSessionsM_DisplayName}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding}" Value="{x:Type mp:P_Item_HasM}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Item_HasM_DisplayName}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_Predicate_P_Item_HasM_DisplayName}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding}" Value="{x:Type mp:P_Quest_AddedM}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_AddedM_DisplayName}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_Predicate_P_Quest_AddedM_DisplayName}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding}" Value="{x:Type mp:P_Quest_FinishedM}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_FinishedM_DisplayName}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_Predicate_P_Quest_FinishedM_DisplayName}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding}" Value="{x:Type mp:P_Quest_Node_AddedM}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_Node_AddedM_DisplayName}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_Predicate_P_Quest_Node_AddedM_DisplayName}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding}" Value="{x:Type mp:P_Quest_Node_PassedM}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Quest_Node_PassedM_DisplayName}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_Predicate_P_Quest_Node_PassedM_DisplayName}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding}" Value="{x:Type mp:P_Relation_HasM}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_Predicate_P_Relation_HasM_DisplayName}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_Predicate_P_Relation_HasM_DisplayName}"></Setter>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
@@ -1321,21 +1322,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <controls:ComboBoxExt.Tag>
                 <StackPanel Orientation="Horizontal">
                     <ContentControl ContentTemplate="{StaticResource DT_HasPredicates_Mini}"></ContentControl>
-                    <TextBlock Padding="{StaticResource Thickness_Padding_LeftRight}" VerticalAlignment="Center" Text="{StaticResource String_Tag_Node_Tab_Predicates}"></TextBlock>
+                    <TextBlock Padding="{StaticResource Thickness_Padding_LeftRight}" VerticalAlignment="Center" Text="{DynamicResource String_Tag_Node_Tab_Predicates}"></TextBlock>
                 </StackPanel>
             </controls:ComboBoxExt.Tag>
-            <system:Type>mp:P_CompositeM</system:Type>
-            <system:Type>mp:P_Dialog_HasM</system:Type>
-            <system:Type>mp:P_Dialog_Node_Has_ActiveSession_CmpM</system:Type>
-            <system:Type>mp:P_Dialog_Node_Has_ActiveSessionM</system:Type>
-            <system:Type>mp:P_Dialog_Node_Has_PrevSessions_CmpM</system:Type>
-            <system:Type>mp:P_Dialog_Node_Has_PrevSessionsM</system:Type>
-            <system:Type>mp:P_Item_HasM</system:Type>
-            <system:Type>mp:P_Quest_AddedM</system:Type>
-            <system:Type>mp:P_Quest_FinishedM</system:Type>
-            <system:Type>mp:P_Quest_Node_AddedM</system:Type>
-            <system:Type>mp:P_Quest_Node_PassedM</system:Type>
-            <system:Type>mp:P_Relation_HasM</system:Type>
+            <sys:Type>mp:P_CompositeM</sys:Type>
+            <sys:Type>mp:P_Dialog_HasM</sys:Type>
+            <sys:Type>mp:P_Dialog_Node_Has_ActiveSession_CmpM</sys:Type>
+            <sys:Type>mp:P_Dialog_Node_Has_ActiveSessionM</sys:Type>
+            <sys:Type>mp:P_Dialog_Node_Has_PrevSessions_CmpM</sys:Type>
+            <sys:Type>mp:P_Dialog_Node_Has_PrevSessionsM</sys:Type>
+            <sys:Type>mp:P_Item_HasM</sys:Type>
+            <sys:Type>mp:P_Quest_AddedM</sys:Type>
+            <sys:Type>mp:P_Quest_FinishedM</sys:Type>
+            <sys:Type>mp:P_Quest_Node_AddedM</sys:Type>
+            <sys:Type>mp:P_Quest_Node_PassedM</sys:Type>
+            <sys:Type>mp:P_Relation_HasM</sys:Type>
         </controls:ComboBoxExt>
     </DataTemplate>
 
@@ -1343,22 +1344,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <TextBlock x:Name="tb_Main"></TextBlock>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding}" Value="{x:Type mge:GE_Item_DropM}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_GameEvent_GE_Item_DropM_DisplayName}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_GameEvent_GE_Item_DropM_DisplayName}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding}" Value="{x:Type mge:GE_Item_PickUpM}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_GameEvent_GE_Item_PickUpM_DisplayName}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_GameEvent_GE_Item_PickUpM_DisplayName}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding}" Value="{x:Type mge:GE_Quest_AddM}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_GameEvent_GE_Quest_AddM_DisplayName}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_GameEvent_GE_Quest_AddM_DisplayName}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding}" Value="{x:Type mge:GE_Quest_Node_AddM}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_GameEvent_GE_Quest_Node_AddM_DisplayName}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_GameEvent_GE_Quest_Node_AddM_DisplayName}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding}" Value="{x:Type mge:GE_Quest_Node_PassM}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_GameEvent_GE_Quest_Node_PassM_DisplayName}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_GameEvent_GE_Quest_Node_PassM_DisplayName}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding}" Value="{x:Type mge:GE_Relation_ChangeM}">
-                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_GameEvent_GE_Relation_ChangeM_DisplayName}"></Setter>
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_GameEvent_GE_Relation_ChangeM_DisplayName}"></Setter>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
@@ -1369,15 +1370,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <controls:ComboBoxExt.Tag>
                 <StackPanel Orientation="Horizontal">
                     <ContentControl ContentTemplate="{StaticResource DT_HasGameEvents_Mini}"></ContentControl>
-                    <TextBlock Padding="{StaticResource Thickness_Padding_LeftRight}" VerticalAlignment="Center" Text="{StaticResource String_Tag_Node_Tab_GameEvents}"></TextBlock>
+                    <TextBlock Padding="{StaticResource Thickness_Padding_LeftRight}" VerticalAlignment="Center" Text="{DynamicResource String_Tag_Node_Tab_GameEvents}"></TextBlock>
                 </StackPanel>
             </controls:ComboBoxExt.Tag>
-            <system:Type>mge:GE_Item_DropM</system:Type>
-            <system:Type>mge:GE_Item_PickUpM</system:Type>
-            <system:Type>mge:GE_Quest_AddM</system:Type>
-            <system:Type>mge:GE_Quest_Node_AddM</system:Type>
-            <system:Type>mge:GE_Quest_Node_PassM</system:Type>
-            <system:Type>mge:GE_Relation_ChangeM</system:Type>
+            <sys:Type>mge:GE_Item_DropM</sys:Type>
+            <sys:Type>mge:GE_Item_PickUpM</sys:Type>
+            <sys:Type>mge:GE_Quest_AddM</sys:Type>
+            <sys:Type>mge:GE_Quest_Node_AddM</sys:Type>
+            <sys:Type>mge:GE_Quest_Node_PassM</sys:Type>
+            <sys:Type>mge:GE_Relation_ChangeM</sys:Type>
         </controls:ComboBoxExt>
     </DataTemplate>
     
@@ -1417,19 +1418,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <DataTemplate DataType="{x:Type vmn:Node_GateEditorVM}">
         <TabControl>
-            <TabItem Header="{StaticResource String_Tag_Node_Tab_Props}">
+            <TabItem Header="{DynamicResource String_Tag_Node_Tab_Props}">
                 <Grid VerticalAlignment="Top">
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
                     <controls:ComboBoxExt x:Name="cmb_TargetDialog" SelectedValue="{Binding TargetDialog, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Node_Gate_TargetDialog}"
+                                          Tag="{DynamicResource String_Tag_Node_Gate_TargetDialog}"
                                           ItemsSource="{Binding DialogsCVS.View}"
                                           Filter="{Binding TargetDialogFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
                     <controls:ComboBoxExt x:Name="cmb_TargetExitNode" Grid.Row="1" SelectedValue="{Binding TargetExitNode, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Node_Gate_TargetExitNode}"
+                                          Tag="{DynamicResource String_Tag_Node_Gate_TargetExitNode}"
                                           ItemsSource="{Binding NodesCVS.View}"
                                           Filter="{Binding NodesFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
@@ -1485,7 +1486,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <DataTemplate DataType="{x:Type vmn:Node_ReplicaEditorVM}">
         <TabControl>
-            <TabItem Header="{StaticResource String_Tag_Node_Tab_Props}">
+            <TabItem Header="{DynamicResource String_Tag_Node_Tab_Props}">
                 <Grid VerticalAlignment="Top">
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
@@ -1496,17 +1497,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
                     <controls:ComboBoxExt SelectedValue="{Binding Character, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Node_Regular_Character}"
+                                          Tag="{DynamicResource String_Tag_Node_Regular_Character}"
                                           ItemsSource="{Binding FilteredCharacterCVS.View}"
                                           Filter="{Binding CharacterFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
-                    <TextBox Grid.Row="1" Style="{StaticResource S_TextBox_Prop}" Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_OverrideName}"></TextBox>
-                    <ContentControl Grid.Row="2" Style="{StaticResource S_ContentControl_Prop_StorageType}" Content="{Binding}" Tag="{StaticResource String_Tag_Node_Regular_FileStorageType}"></ContentControl>
-                    <TextBox Grid.Row="3" Style="{StaticResource S_TextBox_Prop}" Text="{Binding FileHttpRef, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_FileHttpRef}"></TextBox>
-                    <GroupBox Grid.Row="4" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                    <TextBox Grid.Row="1" Style="{StaticResource S_TextBox_Prop}" Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Regular_OverrideName}"></TextBox>
+                    <ContentControl Grid.Row="2" Style="{StaticResource S_ContentControl_Prop_StorageType}" Content="{Binding}" Tag="{DynamicResource String_Tag_Node_Regular_FileStorageType}"></ContentControl>
+                    <TextBox Grid.Row="3" Style="{StaticResource S_TextBox_Prop}" Text="{Binding FileHttpRef, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Regular_FileHttpRef}"></TextBox>
+                    <GroupBox Grid.Row="4" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
                         <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                     </GroupBox>
-                    <TextBox Grid.Row="5" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_ShortDescription}"></TextBox>
+                    <TextBox Grid.Row="5" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Regular_ShortDescription}"></TextBox>
                 </Grid>
             </TabItem>
             <TabItem ContentTemplate="{StaticResource DT_ContentControl_Predicates}" Content="{Binding}" HeaderTemplate="{StaticResource DT_ContentControl_PredicatesHeader}" Header="{Binding}"></TabItem>
@@ -1544,7 +1545,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <DataTemplate DataType="{x:Type vmn:Node_DialogEditorVM}">
         <TabControl>
-            <TabItem Header="{StaticResource String_Tag_Node_Tab_Props}">
+            <TabItem Header="{DynamicResource String_Tag_Node_Tab_Props}">
                 <Grid VerticalAlignment="Top">
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
@@ -1555,17 +1556,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
                     <controls:ComboBoxExt SelectedValue="{Binding Character, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Node_Regular_Character}"
+                                          Tag="{DynamicResource String_Tag_Node_Regular_Character}"
                                           ItemsSource="{Binding FilteredCharacterCVS.View}"
                                           Filter="{Binding CharacterFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
-                    <TextBox Grid.Row="1" Style="{StaticResource S_TextBox_Prop}" Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_OverrideName}"></TextBox>
-                    <ContentControl Grid.Row="2" Style="{StaticResource S_ContentControl_Prop_StorageType}" Content="{Binding}" Tag="{StaticResource String_Tag_Node_Regular_FileStorageType}"></ContentControl>
-                    <TextBox Grid.Row="3" Style="{StaticResource S_TextBox_Prop}" Text="{Binding FileHttpRef, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_FileHttpRef}"></TextBox>
-                    <GroupBox Grid.Row="4" Style="{StaticResource S_GroupBox_Prop}" Header="{StaticResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                    <TextBox Grid.Row="1" Style="{StaticResource S_TextBox_Prop}" Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Regular_OverrideName}"></TextBox>
+                    <ContentControl Grid.Row="2" Style="{StaticResource S_ContentControl_Prop_StorageType}" Content="{Binding}" Tag="{DynamicResource String_Tag_Node_Regular_FileStorageType}"></ContentControl>
+                    <TextBox Grid.Row="3" Style="{StaticResource S_TextBox_Prop}" Text="{Binding FileHttpRef, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Regular_FileHttpRef}"></TextBox>
+                    <GroupBox Grid.Row="4" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
                         <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                     </GroupBox>
-                    <TextBox Grid.Row="5" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}" Tag="{StaticResource String_Tag_Node_Regular_ShortDescription}"></TextBox>
+                    <TextBox Grid.Row="5" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Regular_ShortDescription}"></TextBox>
                 </Grid>
             </TabItem>
             <TabItem ContentTemplate="{StaticResource DT_ContentControl_Predicates}" Content="{Binding}" HeaderTemplate="{StaticResource DT_ContentControl_PredicatesHeader}" Header="{Binding}"></TabItem>
@@ -1604,7 +1605,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <DataTemplate DataType="{x:Type vmg:DialogEditorVM}">
         <TabControl Padding="0" Margin="0">
-            <TabItem Header="{StaticResource String_Tag_Graph_Tab_View}">
+            <TabItem Header="{DynamicResource String_Tag_Graph_Tab_View}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="7*"></ColumnDefinition>
@@ -1626,12 +1627,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         </Grid.RowDefinitions>
 
                         <StackPanel Orientation="Horizontal">
-                            <Button x:Name="btn_selectable_Dialog" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Dialog}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_DialogM}" ToolTip="{StaticResource String_Tag_Node_Dialog_Type}"></Button>
-                            <Button x:Name="btn_selectable_Replica" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Replica}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_ReplicaM}" ToolTip="{StaticResource String_Tag_Node_Replica_Type}"></Button>
-                            <Button x:Name="btn_selectable_Random" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Random}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_RandomM}" ToolTip="{StaticResource String_Tag_Node_Random_Type}"></Button>
-                            <Button x:Name="btn_selectable_Transit" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Transit}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_TransitM}" ToolTip="{StaticResource String_Tag_Node_Transit_Type}"></Button>
-                            <Button x:Name="btn_selectable_Gate" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Gate}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_GateM}" ToolTip="{StaticResource String_Tag_Node_Gate_Type}"></Button>
-                            <Button x:Name="btn_selectable_Exit" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Exit}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_ExitM}" ToolTip="{StaticResource String_Tag_Node_Exit_Type}"></Button>
+                            <Button x:Name="btn_selectable_Dialog" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Dialog}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_DialogM}" ToolTip="{DynamicResource String_Tag_Node_Dialog_Type}"></Button>
+                            <Button x:Name="btn_selectable_Replica" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Replica}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_ReplicaM}" ToolTip="{DynamicResource String_Tag_Node_Replica_Type}"></Button>
+                            <Button x:Name="btn_selectable_Random" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Random}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_RandomM}" ToolTip="{DynamicResource String_Tag_Node_Random_Type}"></Button>
+                            <Button x:Name="btn_selectable_Transit" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Transit}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_TransitM}" ToolTip="{DynamicResource String_Tag_Node_Transit_Type}"></Button>
+                            <Button x:Name="btn_selectable_Gate" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Gate}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_GateM}" ToolTip="{DynamicResource String_Tag_Node_Gate_Type}"></Button>
+                            <Button x:Name="btn_selectable_Exit" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Exit}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_ExitM}" ToolTip="{DynamicResource String_Tag_Node_Exit_Type}"></Button>
                             <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
                             <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Bwd}" Command="{Binding PrevRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_PrevRootNode_Tooltip}"></Button>
                             <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Fwd}" Command="{Binding NextRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_NextRootNode_Tooltip}"></Button>
@@ -1660,17 +1661,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <ContentControl Grid.Column="2" Content="{Binding SelectionEditor, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
                 </Grid>
             </TabItem>
-            <TabItem Header="{StaticResource String_Tag_Graph_Tab_Props}">
+            <TabItem Header="{DynamicResource String_Tag_Graph_Tab_Props}">
                 <StackPanel Orientation="Vertical">
-                    <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_Name}"></TextBox>
-                    <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
+                    <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{DynamicResource String_Tag_Name}"></TextBox>
+                    <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{DynamicResource String_Tag_Description}"></TextBox>
                     <controls:ComboBoxExt SelectedValue="{Binding DialogCharacter, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Dialog_DialogCharacter}"
+                                          Tag="{DynamicResource String_Tag_Dialog_DialogCharacter}"
                                           ItemsSource="{Binding FilteredDialogCharacterCVS.View}"
                                           Filter="{Binding DialogCharacterFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
                     <controls:ComboBoxExt SelectedValue="{Binding DialogLocation, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Dialog_DialogLocation}"
+                                          Tag="{DynamicResource String_Tag_Dialog_DialogLocation}"
                                           ItemsSource="{Binding FilteredDialogLocationCVS.View}"
                                           Filter="{Binding DialogLocationFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
@@ -1680,27 +1681,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_DialogM}">
                 <Setter TargetName="btn_selectable_Dialog" Property="Style" Value="{StaticResource S_Button_24x_Selected}"></Setter>
-                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Dialog_Type}"></Setter>
+                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{DynamicResource String_Tag_Node_Dialog_Type}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_ReplicaM}">
                 <Setter TargetName="btn_selectable_Replica" Property="Style" Value="{StaticResource S_Button_24x_Selected}"></Setter>
-                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Replica_Type}"></Setter>
+                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{DynamicResource String_Tag_Node_Replica_Type}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_RandomM}">
                 <Setter TargetName="btn_selectable_Random" Property="Style" Value="{StaticResource S_Button_24x_Selected}"></Setter>
-                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Random_Type}"></Setter>
+                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{DynamicResource String_Tag_Node_Random_Type}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_TransitM}">
                 <Setter TargetName="btn_selectable_Transit" Property="Style" Value="{StaticResource S_Button_24x_Selected}"></Setter>
-                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Transit_Type}"></Setter>
+                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{DynamicResource String_Tag_Node_Transit_Type}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_GateM}">
                 <Setter TargetName="btn_selectable_Gate" Property="Style" Value="{StaticResource S_Button_24x_Selected}"></Setter>
-                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Gate_Type}"></Setter>
+                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{DynamicResource String_Tag_Node_Gate_Type}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_ExitM}">
                 <Setter TargetName="btn_selectable_Exit" Property="Style" Value="{StaticResource S_Button_24x_Selected}"></Setter>
-                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Exit_Type}"></Setter>
+                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{DynamicResource String_Tag_Node_Exit_Type}"></Setter>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
@@ -1735,7 +1736,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <DataTemplate DataType="{x:Type vmg:ReplicaEditorVM}">
         <TabControl Padding="0" Margin="0">
-            <TabItem Header="{StaticResource String_Tag_Graph_Tab_View}">
+            <TabItem Header="{DynamicResource String_Tag_Graph_Tab_View}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="7*"></ColumnDefinition>
@@ -1757,9 +1758,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         </Grid.RowDefinitions>
 
                         <StackPanel Orientation="Horizontal">
-                            <Button x:Name="btn_selectable_Replica" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Replica}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_ReplicaM}" ToolTip="{StaticResource String_Tag_Node_Replica_Type}"></Button>
-                            <Button x:Name="btn_selectable_Random" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Random}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_RandomM}" ToolTip="{StaticResource String_Tag_Node_Random_Type}"></Button>
-                            <Button x:Name="btn_selectable_Transit" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Transit}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_TransitM}" ToolTip="{StaticResource String_Tag_Node_Transit_Type}"></Button>
+                            <Button x:Name="btn_selectable_Replica" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Replica}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_ReplicaM}" ToolTip="{DynamicResource String_Tag_Node_Replica_Type}"></Button>
+                            <Button x:Name="btn_selectable_Random" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Random}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_RandomM}" ToolTip="{DynamicResource String_Tag_Node_Random_Type}"></Button>
+                            <Button x:Name="btn_selectable_Transit" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Transit}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_TransitM}" ToolTip="{DynamicResource String_Tag_Node_Transit_Type}"></Button>
                             <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
                             <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Bwd}" Command="{Binding PrevRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_PrevRootNode_Tooltip}"></Button>
                             <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Fwd}" Command="{Binding NextRootNodeCommand}" ToolTip="{StaticResource String_GraphMenu_NextRootNode_Tooltip}"></Button>
@@ -1788,12 +1789,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <ContentControl Grid.Column="2" Content="{Binding SelectionEditor, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
                 </Grid>
             </TabItem>
-            <TabItem Header="{StaticResource String_Tag_Graph_Tab_Props}">
+            <TabItem Header="{DynamicResource String_Tag_Graph_Tab_Props}">
                 <StackPanel Orientation="Vertical">
-                    <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{StaticResource String_Tag_Name}"></TextBox>
-                    <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{StaticResource String_Tag_Description}"></TextBox>
+                    <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{DynamicResource String_Tag_Name}"></TextBox>
+                    <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop_Multiline}" Tag="{DynamicResource String_Tag_Description}"></TextBox>
                     <controls:ComboBoxExt SelectedValue="{Binding ReplicaLocation, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Dialog_ReplicaLocation}"
+                                          Tag="{DynamicResource String_Tag_Dialog_ReplicaLocation}"
                                           ItemsSource="{Binding FilteredReplicaLocationCVS.View}"
                                           Filter="{Binding ReplicaLocationFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
@@ -1803,15 +1804,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_ReplicaM}">
                 <Setter TargetName="btn_selectable_Replica" Property="Style" Value="{StaticResource S_Button_24x_Selected}"></Setter>
-                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Replica_Type}"></Setter>
+                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{DynamicResource String_Tag_Node_Replica_Type}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_RandomM}">
                 <Setter TargetName="btn_selectable_Random" Property="Style" Value="{StaticResource S_Button_24x_Selected}"></Setter>
-                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Random_Type}"></Setter>
+                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{DynamicResource String_Tag_Node_Random_Type}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_TransitM}">
                 <Setter TargetName="btn_selectable_Transit" Property="Style" Value="{StaticResource S_Button_24x_Selected}"></Setter>
-                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{StaticResource String_Tag_Node_Transit_Type}"></Setter>
+                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{DynamicResource String_Tag_Node_Transit_Type}"></Setter>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
@@ -1899,7 +1900,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     
     <DataTemplate DataType="{x:Type vmp:P_Dialog_HasVM}">
         <controls:ComboBoxExt SelectedValue="{Binding DialogOrReplica, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Predicate_DialogOrReplica}"
+                                          Tag="{DynamicResource String_Tag_Predicate_DialogOrReplica}"
                                           ItemsSource="{Binding DialogsAndReplicasCVS.View}"
                                           Filter="{Binding DialogsAndReplicasFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
@@ -1908,12 +1909,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <DataTemplate DataType="{x:Type vmp:P_Dialog_Node_Has_PrevSessionsVM}">
         <StackPanel Orientation="Vertical">
             <controls:ComboBoxExt x:Name="cmb_DialogOrReplica" SelectedValue="{Binding DialogOrReplica, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Predicate_DialogOrReplica}"
+                                          Tag="{DynamicResource String_Tag_Predicate_DialogOrReplica}"
                                           ItemsSource="{Binding DialogsAndReplicasCVS.View}"
                                           Filter="{Binding DialogsAndReplicasFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
             <controls:ComboBoxExt x:Name="cmb_Node" SelectedValue="{Binding Node, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Predicate_Node}"
+                                          Tag="{DynamicResource String_Tag_Predicate_Node}"
                                           ItemsSource="{Binding NodesCVS.View}"
                                           Filter="{Binding NodesFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
@@ -1927,7 +1928,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <DataTemplate DataType="{x:Type vmp:P_Dialog_Node_Has_ActiveSessionVM}">
         <controls:ComboBoxExt SelectedValue="{Binding Node, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Predicate_Node}"
+                                          Tag="{DynamicResource String_Tag_Predicate_Node}"
                                           ItemsSource="{Binding NodesCVS.View}"
                                           Filter="{Binding NodesFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
@@ -1936,16 +1937,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <DataTemplate DataType="{x:Type vmp:P_Dialog_Node_Has_PrevSessions_CmpVM}">
         <StackPanel Orientation="Vertical">
             <controls:ComboBoxExt x:Name="cmb_DialogOrReplica" SelectedValue="{Binding DialogOrReplica, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Predicate_DialogOrReplica}"
+                                          Tag="{DynamicResource String_Tag_Predicate_DialogOrReplica}"
                                           ItemsSource="{Binding DialogsAndReplicasCVS.View}"
                                           Filter="{Binding DialogsAndReplicasFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
             <controls:ComboBoxExt x:Name="cmb_Node" SelectedValue="{Binding Node, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Predicate_Node}"
+                                          Tag="{DynamicResource String_Tag_Predicate_Node}"
                                           ItemsSource="{Binding NodesCVS.View}"
                                           Filter="{Binding NodesFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
-            <GroupBox x:Name="gb_Compare" Header="{StaticResource String_Tag_Predicate_Compare}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
+            <GroupBox x:Name="gb_Compare" Header="{DynamicResource String_Tag_Predicate_Compare}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition></ColumnDefinition>
@@ -1973,11 +1974,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <DataTemplate DataType="{x:Type vmp:P_Dialog_Node_Has_ActiveSession_CmpVM}">
         <StackPanel Orientation="Vertical">
             <controls:ComboBoxExt x:Name="cmb_Node" SelectedValue="{Binding Node, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Predicate_Node}"
+                                          Tag="{DynamicResource String_Tag_Predicate_Node}"
                                           ItemsSource="{Binding NodesCVS.View}"
                                           Filter="{Binding NodesFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
-            <GroupBox x:Name="gb_Compare" Header="{StaticResource String_Tag_Predicate_Compare}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
+            <GroupBox x:Name="gb_Compare" Header="{DynamicResource String_Tag_Predicate_Compare}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition></ColumnDefinition>
@@ -2000,7 +2001,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <DataTemplate DataType="{x:Type vmp:P_Item_HasVM}">
         <controls:ComboBoxExt SelectedValue="{Binding Item, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Predicate_Item}"
+                                          Tag="{DynamicResource String_Tag_Predicate_Item}"
                                           ItemsSource="{Binding ItemsCVS.View}"
                                           Filter="{Binding ItemsFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
@@ -2008,7 +2009,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <DataTemplate DataType="{x:Type vmp:P_Quest_AddedVM}">
         <controls:ComboBoxExt SelectedValue="{Binding Quest, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Predicate_Quest}"
+                                          Tag="{DynamicResource String_Tag_Predicate_Quest}"
                                           ItemsSource="{Binding QuestsCVS.View}"
                                           Filter="{Binding QuestsFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
@@ -2016,7 +2017,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <DataTemplate DataType="{x:Type vmp:P_Quest_FinishedVM}">
         <controls:ComboBoxExt SelectedValue="{Binding Quest, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Predicate_Quest}"
+                                          Tag="{DynamicResource String_Tag_Predicate_Quest}"
                                           ItemsSource="{Binding QuestsCVS.View}"
                                           Filter="{Binding QuestsFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
@@ -2025,11 +2026,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <DataTemplate DataType="{x:Type vmp:P_Relation_HasVM}">
         <StackPanel Orientation="Vertical">
             <controls:ComboBoxExt x:Name="cmb_Characters" SelectedValue="{Binding Character, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Predicate_Character}"
+                                          Tag="{DynamicResource String_Tag_Predicate_Character}"
                                           ItemsSource="{Binding CharactersCVS.View}"
                                           Filter="{Binding CharactersFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
-            <GroupBox x:Name="gb_Compare" Header="{StaticResource String_Tag_Predicate_Compare}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
+            <GroupBox x:Name="gb_Compare" Header="{DynamicResource String_Tag_Predicate_Compare}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition></ColumnDefinition>
@@ -2053,12 +2054,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <DataTemplate DataType="{x:Type vmp:P_Quest_Node_AddedVM}">
         <StackPanel Orientation="Vertical">
             <controls:ComboBoxExt x:Name="cmb_Quest" SelectedValue="{Binding Quest, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Predicate_Quest}"
+                                          Tag="{DynamicResource String_Tag_Predicate_Quest}"
                                           ItemsSource="{Binding QuestsCVS.View}"
                                           Filter="{Binding QuestsFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
             <controls:ComboBoxExt x:Name="cmb_Node" SelectedValue="{Binding Node, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Predicate_Node}"
+                                          Tag="{DynamicResource String_Tag_Predicate_Node}"
                                           ItemsSource="{Binding NodesCVS.View}"
                                           Filter="{Binding NodesFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
@@ -2073,12 +2074,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <DataTemplate DataType="{x:Type vmp:P_Quest_Node_PassedVM}">
         <StackPanel Orientation="Vertical">
             <controls:ComboBoxExt x:Name="cmb_Quest" SelectedValue="{Binding Quest, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Predicate_Quest}"
+                                          Tag="{DynamicResource String_Tag_Predicate_Quest}"
                                           ItemsSource="{Binding QuestsCVS.View}"
                                           Filter="{Binding QuestsFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
             <controls:ComboBoxExt x:Name="cmb_Node" SelectedValue="{Binding Node, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Predicate_Node}"
+                                          Tag="{DynamicResource String_Tag_Predicate_Node}"
                                           ItemsSource="{Binding NodesCVS.View}"
                                           Filter="{Binding NodesFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
@@ -2103,28 +2104,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Button Grid.Row="0" Grid.Column="0" Content="{StaticResource String_Tag_Predicate_PredicateA}" Command="{Binding SelectCommand}" CommandParameter="{StaticResource True}"></Button>
+            <Button Grid.Row="0" Grid.Column="0" Content="{DynamicResource String_Tag_Predicate_PredicateA}" Command="{Binding SelectCommand}" CommandParameter="{StaticResource True}"></Button>
             <ComboBox Grid.Row="0" Grid.Column="1" SelectedValue="{Binding CompositionType}" SelectedIndex="0" ItemTemplate="{StaticResource DT_ListBoxItem_CompositionType}">
                 <x:Static Member="m:COMPOSITION_TYPE.AND"></x:Static>
                 <x:Static Member="m:COMPOSITION_TYPE.OR"></x:Static>
                 <x:Static Member="m:COMPOSITION_TYPE.XOR"></x:Static>
             </ComboBox>
-            <Button Grid.Row="0" Grid.Column="2" Content="{StaticResource String_Tag_Predicate_PredicateB}" Command="{Binding SelectCommand}" CommandParameter="{StaticResource False}"></Button>
+            <Button Grid.Row="0" Grid.Column="2" Content="{DynamicResource String_Tag_Predicate_PredicateB}" Command="{Binding SelectCommand}" CommandParameter="{StaticResource False}"></Button>
 
             <ComboBox x:Name="cmb_PredicateA" Grid.Row="1" Grid.ColumnSpan="3" SelectedValue="{Binding SubType, UpdateSourceTrigger=PropertyChanged}"
                       ItemTemplate="{StaticResource DT_ComboBoxItem_Predicate}">
-                <system:Type>mp:P_CompositeM</system:Type>
-                <system:Type>mp:P_Dialog_HasM</system:Type>
-                <system:Type>mp:P_Dialog_Node_Has_ActiveSession_CmpM</system:Type>
-                <system:Type>mp:P_Dialog_Node_Has_ActiveSessionM</system:Type>
-                <system:Type>mp:P_Dialog_Node_Has_PrevSessions_CmpM</system:Type>
-                <system:Type>mp:P_Dialog_Node_Has_PrevSessionsM</system:Type>
-                <system:Type>mp:P_Item_HasM</system:Type>
-                <system:Type>mp:P_Quest_AddedM</system:Type>
-                <system:Type>mp:P_Quest_FinishedM</system:Type>
-                <system:Type>mp:P_Quest_Node_AddedM</system:Type>
-                <system:Type>mp:P_Quest_Node_PassedM</system:Type>
-                <system:Type>mp:P_Relation_HasM</system:Type>
+                <sys:Type>mp:P_CompositeM</sys:Type>
+                <sys:Type>mp:P_Dialog_HasM</sys:Type>
+                <sys:Type>mp:P_Dialog_Node_Has_ActiveSession_CmpM</sys:Type>
+                <sys:Type>mp:P_Dialog_Node_Has_ActiveSessionM</sys:Type>
+                <sys:Type>mp:P_Dialog_Node_Has_PrevSessions_CmpM</sys:Type>
+                <sys:Type>mp:P_Dialog_Node_Has_PrevSessionsM</sys:Type>
+                <sys:Type>mp:P_Item_HasM</sys:Type>
+                <sys:Type>mp:P_Quest_AddedM</sys:Type>
+                <sys:Type>mp:P_Quest_FinishedM</sys:Type>
+                <sys:Type>mp:P_Quest_Node_AddedM</sys:Type>
+                <sys:Type>mp:P_Quest_Node_PassedM</sys:Type>
+                <sys:Type>mp:P_Relation_HasM</sys:Type>
             </ComboBox>
             
             <Grid x:Name="gr_PredicateA" Grid.Row="2" Grid.ColumnSpan="3">
@@ -2155,7 +2156,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <DataTemplate DataType="{x:Type vmge:GE_Item_DropVM}">
         <controls:ComboBoxExt SelectedValue="{Binding Item, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Predicate_Item}"
+                                          Tag="{DynamicResource String_Tag_Predicate_Item}"
                                           ItemsSource="{Binding ItemsCVS.View}"
                                           Filter="{Binding ItemsFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
@@ -2163,7 +2164,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <DataTemplate DataType="{x:Type vmge:GE_Item_PickUpVM}">
         <controls:ComboBoxExt SelectedValue="{Binding Item, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Predicate_Item}"
+                                          Tag="{DynamicResource String_Tag_Predicate_Item}"
                                           ItemsSource="{Binding ItemsCVS.View}"
                                           Filter="{Binding ItemsFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
@@ -2171,7 +2172,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <DataTemplate DataType="{x:Type vmge:GE_Quest_AddVM}">
         <controls:ComboBoxExt SelectedValue="{Binding Quest, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Predicate_Quest}"
+                                          Tag="{DynamicResource String_Tag_Predicate_Quest}"
                                           ItemsSource="{Binding QuestsCVS.View}"
                                           Filter="{Binding QuestsFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
@@ -2180,12 +2181,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <DataTemplate DataType="{x:Type vmge:GE_Quest_Node_AddVM}">
         <StackPanel Orientation="Vertical">
             <controls:ComboBoxExt x:Name="cmb_Quest" SelectedValue="{Binding Quest, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Predicate_Quest}"
+                                          Tag="{DynamicResource String_Tag_Predicate_Quest}"
                                           ItemsSource="{Binding QuestsCVS.View}"
                                           Filter="{Binding QuestsFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
             <controls:ComboBoxExt x:Name="cmb_Node" SelectedValue="{Binding Node, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Predicate_Node}"
+                                          Tag="{DynamicResource String_Tag_Predicate_Node}"
                                           ItemsSource="{Binding NodesCVS.View}"
                                           Filter="{Binding NodesFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
@@ -2200,12 +2201,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <DataTemplate DataType="{x:Type vmge:GE_Quest_Node_PassVM}">
         <StackPanel Orientation="Vertical">
             <controls:ComboBoxExt x:Name="cmb_Quest" SelectedValue="{Binding Quest, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Predicate_Quest}"
+                                          Tag="{DynamicResource String_Tag_Predicate_Quest}"
                                           ItemsSource="{Binding QuestsCVS.View}"
                                           Filter="{Binding QuestsFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
             <controls:ComboBoxExt x:Name="cmb_Node" SelectedValue="{Binding Node, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Predicate_Node}"
+                                          Tag="{DynamicResource String_Tag_Predicate_Node}"
                                           ItemsSource="{Binding NodesCVS.View}"
                                           Filter="{Binding NodesFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
@@ -2220,11 +2221,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <DataTemplate DataType="{x:Type vmge:GE_Relation_ChangeVM}">
         <StackPanel Orientation="Vertical">
             <controls:ComboBoxExt x:Name="cmb_Characters" SelectedValue="{Binding Character, UpdateSourceTrigger=PropertyChanged}"
-                                          Tag="{StaticResource String_Tag_Predicate_Character}"
+                                          Tag="{DynamicResource String_Tag_Predicate_Character}"
                                           ItemsSource="{Binding CharactersCVS.View}"
                                           Filter="{Binding CharactersFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
-            <GroupBox x:Name="gb_Compare" Header="{StaticResource String_Tag_Predicate_Compare}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
+            <GroupBox x:Name="gb_Compare" Header="{DynamicResource String_Tag_Predicate_Compare}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition></ColumnDefinition>
@@ -2245,10 +2246,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </DataTemplate.Triggers>
     </DataTemplate>
 
+    <x:Array x:Key="ARRAY_Languages"  Type="{x:Type sys:Byte}">
+        <x:Static Member="vmconfig:LANGUAGE.ENG"></x:Static>
+        <x:Static Member="vmconfig:LANGUAGE.RUS"></x:Static>
+    </x:Array>
+    
     <DataTemplate DataType="{x:Type config:ConfigVM}">
-        <GroupBox Header="{StaticResource String_Tag_Config_UserActions}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
-            <ItemsControl ItemsSource="{Binding UserActions}"></ItemsControl>
-        </GroupBox>
+        <StackPanel Orientation="Vertical">
+            <GroupBox Header="{DynamicResource String_Tag_Config_Language}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{DynamicResource String_Tag_Config_Language}"></TextBlock>
+                    <ComboBox Grid.Column="1" ItemsSource="{StaticResource ARRAY_Languages}" SelectedValue="{Binding Language, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="{DynamicResource String_Tag_Config_UserActions}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
+                <ItemsControl ItemsSource="{Binding UserActions}"></ItemsControl>
+            </GroupBox>
+        </StackPanel>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmn:PlayerIndicatorVM}">
@@ -2281,32 +2299,32 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </Grid>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.CREATE_NODE}">
-                <Setter TargetName="tb_UserActionName" Property="Text" Value="{StaticResource String_Tag_Config_UserActions_CreateNode}"></Setter>
+                <Setter TargetName="tb_UserActionName" Property="Text" Value="{DynamicResource String_Tag_Config_UserActions_CreateNode}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.DUPLICATE_NODE}">
-                <Setter TargetName="tb_UserActionName" Property="Text" Value="{StaticResource String_Tag_Config_UserActions_DuplicateNode}"></Setter>
+                <Setter TargetName="tb_UserActionName" Property="Text" Value="{DynamicResource String_Tag_Config_UserActions_DuplicateNode}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.LINK}">
-                <Setter TargetName="tb_UserActionName" Property="Text" Value="{StaticResource String_Tag_Config_UserActions_Link}"></Setter>
+                <Setter TargetName="tb_UserActionName" Property="Text" Value="{DynamicResource String_Tag_Config_UserActions_Link}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.DRAG_AND_SCROLL}">
-                <Setter TargetName="tb_UserActionName" Property="Text" Value="{StaticResource String_Tag_Config_UserActions_DragAndScroll}"></Setter>
+                <Setter TargetName="tb_UserActionName" Property="Text" Value="{DynamicResource String_Tag_Config_UserActions_DragAndScroll}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.SELECTION_SIMPLE}">
-                <Setter TargetName="tb_UserActionName" Property="Text" Value="{StaticResource String_Tag_Config_UserActions_SelectionSimple}"></Setter>
+                <Setter TargetName="tb_UserActionName" Property="Text" Value="{DynamicResource String_Tag_Config_UserActions_SelectionSimple}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.SELECTION_ADDITIVE}">
-                <Setter TargetName="tb_UserActionName" Property="Text" Value="{StaticResource String_Tag_Config_UserActions_SelectionAdditive}"></Setter>
+                <Setter TargetName="tb_UserActionName" Property="Text" Value="{DynamicResource String_Tag_Config_UserActions_SelectionAdditive}"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.SELECTION_BOX}">
-                <Setter TargetName="tb_UserActionName" Property="Text" Value="{StaticResource String_Tag_Config_UserActions_SelectionBox}"></Setter>
+                <Setter TargetName="tb_UserActionName" Property="Text" Value="{DynamicResource String_Tag_Config_UserActions_SelectionBox}"></Setter>
             </DataTrigger>            
         </DataTemplate.Triggers>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:PlayerContext_ErrorVM}">
         <StackPanel Orientation="Vertical">
-            <TextBlock VerticalAlignment="Center" Text="{StaticResource String_Tag_Player_Error}" Style="{StaticResource S_TextBlock_Graph_Bold}" Foreground="{StaticResource Color_Player_Error}"></TextBlock>
+            <TextBlock VerticalAlignment="Center" Text="{DynamicResource String_Tag_Player_Error}" Style="{StaticResource S_TextBlock_Graph_Bold}" Foreground="{StaticResource Color_Player_Error}"></TextBlock>
             <TextBlock Style="{StaticResource S_TextBlock_Graph}" Foreground="{StaticResource Color_Player_Error}">
                 <Run Text="Дочерние вершины не подходят ни под одну из ситуаций:"></Run>
                 <LineBreak></LineBreak><LineBreak></LineBreak>
@@ -2345,7 +2363,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             MaxHeight="{StaticResource Double_Player_MaxHeight}"
             >
 
-            <TabItem Header="{StaticResource String_Tag_Player_Tab_Props}">
+            <TabItem Header="{DynamicResource String_Tag_Player_Tab_Props}">
                 <DockPanel>
                     <Grid DockPanel.Dock="Top" Grid.Row="2" Margin="{StaticResource Thickness_Margin_Underline_2x}">
                         <Grid.RowDefinitions>
@@ -2353,7 +2371,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
 
-                        <CheckBox IsChecked="{Binding FullMode}" Content="{StaticResource String_Tag_Player_FullMode}"></CheckBox>
+                        <CheckBox IsChecked="{Binding FullMode}" Content="{DynamicResource String_Tag_Player_FullMode}"></CheckBox>
 
                         <StackPanel Grid.Row="1" Orientation="Horizontal">
                             <Button VerticalAlignment="Center" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Stop}" ToolTip="{StaticResource String_Player_Stop_Tooltip}" Command="{Binding StopCommand}"></Button>
@@ -2362,13 +2380,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                 <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Play}" ToolTip="{StaticResource String_Player_Play_Tooltip}" Command="{Binding PlayCommand}"></Button>
                             </Grid>
                             <Button VerticalAlignment="Center" Style="{StaticResource S_Button_Gender}"></Button>
-                            <GroupBox Margin="{StaticResource Thickness_Margin_Underline_6x}" Header="{StaticResource String_Tag_Player_PlayRate}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Player}">
+                            <GroupBox Margin="{StaticResource Thickness_Margin_Underline_6x}" Header="{DynamicResource String_Tag_Player_PlayRate}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Player}">
                                 <controls:NumericUpDown_Float Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Value="{Binding PlayRate,UpdateSourceTrigger=PropertyChanged}"
                                             ButtonIncStyle="{StaticResource S_Button_Square_Auto}" ButtonIncContent="{StaticResource String_Icon_Plus}"
                                             ButtonDecStyle="{StaticResource S_Button_Square_Auto}" ButtonDecContent="{StaticResource String_Icon_Minus}"
                                             MinValue="1" MaxValue="1000" Step="1" MinWidth="{StaticResource Double_Node_MinWidth}"></controls:NumericUpDown_Float>
                             </GroupBox>
-                            <GroupBox Margin="{StaticResource Thickness_Margin_Underline_6x}" Header="{StaticResource String_Tag_Player_Duration}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Player}">
+                            <GroupBox Margin="{StaticResource Thickness_Margin_Underline_6x}" Header="{DynamicResource String_Tag_Player_Duration}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Player}">
                                 <controls:NumericUpDown_Float Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Value="{Binding Duration,UpdateSourceTrigger=PropertyChanged}"
                                             ButtonIncStyle="{StaticResource S_Button_Square_Auto}" ButtonIncContent="{StaticResource String_Icon_Plus}"
                                             ButtonDecStyle="{StaticResource S_Button_Square_Auto}" ButtonDecContent="{StaticResource String_Icon_Minus}"
@@ -2403,7 +2421,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <TextBlock
                                 Padding="{StaticResource Thickness_Padding_LeftRight}"
                                 VerticalAlignment="Center"
-                                Text="{StaticResource String_Tag_MainMenu_Characters}"
+                                Text="{DynamicResource String_Tag_MainMenu_Characters}"
                                 FontSize="{StaticResource FontSize_Small}"
                                 ></TextBlock>
                         </controls:ComboBoxExt.Tag>
@@ -2469,7 +2487,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <TextBlock
                                 Padding="{StaticResource Thickness_Padding_LeftRight}"
                                 VerticalAlignment="Center"
-                                Text="{StaticResource String_Tag_MainMenu_Items}"
+                                Text="{DynamicResource String_Tag_MainMenu_Items}"
                                 FontSize="{StaticResource FontSize_Small}"
                                 ></TextBlock>
                         </controls:ComboBoxExt.Tag>
@@ -2519,7 +2537,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <TextBlock
                                 Padding="{StaticResource Thickness_Padding_LeftRight}"
                                 VerticalAlignment="Center"
-                                Text="{StaticResource String_Tag_MainMenu_Journal}"
+                                Text="{DynamicResource String_Tag_MainMenu_Journal}"
                                 FontSize="{StaticResource FontSize_Small}"
                                 ></TextBlock>
                         </controls:ComboBoxExt.Tag>
@@ -2585,7 +2603,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                                         VerticalContentAlignment="Center"
                                                         Grid.Column="1"
                                                         IsChecked="{Binding IsPassed, UpdateSourceTrigger=PropertyChanged}"
-                                                        Content="{StaticResource String_Tag_Player_QuestNodeIsPassed}"
+                                                        Content="{DynamicResource String_Tag_Player_QuestNodeIsPassed}"
                                                         FontSize="{StaticResource FontSize_VerySmall}"
                                                         ></CheckBox>
                                                     
@@ -2622,7 +2640,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <TextBlock
                                 Padding="{StaticResource Thickness_Padding_LeftRight}"
                                 VerticalAlignment="Center"
-                                Text="{StaticResource String_Tag_MainMenu_DialogsAndReplicas}"
+                                Text="{DynamicResource String_Tag_MainMenu_DialogsAndReplicas}"
                                 FontSize="{StaticResource FontSize_Small}"
                                 ></TextBlock>
                         </controls:ComboBoxExt.Tag>

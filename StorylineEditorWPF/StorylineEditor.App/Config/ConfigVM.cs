@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.ViewModel;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Config;
 using System.Collections.Generic;
@@ -31,6 +32,22 @@ namespace StorylineEditor.App.Config
             foreach (var userAction in Model.UserActions)
             {
                 UserActions.Add(new UserActionVM(userAction));
+            }
+        }
+
+        public byte Language
+        {
+            get => Model.Language;
+            set
+            {
+                if (Model.Language != value)
+                {
+                    Model.Language = value;
+                    Notify(nameof(Language));
+
+                    ActiveContext.FileService.SaveConfig();
+                    ActiveContext.LocalizationService.SwitchLocalization(Model.Language);
+                }
             }
         }
 

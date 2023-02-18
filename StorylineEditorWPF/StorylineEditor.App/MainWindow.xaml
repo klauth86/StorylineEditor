@@ -44,7 +44,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <ContentControl VerticalAlignment="Bottom" Grid.Column="4" Content="{Binding UpdateSourceTrigger=PropertyChanged}" ContentTemplate="{StaticResource DT_StorylineVM_Tabs}"></ContentControl>
                         <Rectangle Grid.Column="5" Style="{StaticResource S_Rectangle_MainMenu}"></Rectangle>
                         <TextBox VerticalAlignment="Bottom" Grid.Column="6" Style="{StaticResource S_TextBox_Filter}" Text="{Binding Path=(vmc:Notifier.Filter), UpdateSourceTrigger=PropertyChanged}" MaxLength="128"></TextBox>
-                        <TextBox VerticalAlignment="Bottom" Grid.Column="6" x:Name="tb_FilterPlaceholder" Style="{StaticResource S_TextBox_Filter_ToolTip}" Text="{StaticResource String_Tag_GlobalFilter_Tooltip}" Visibility="Collapsed"></TextBox>
+                        <TextBox VerticalAlignment="Bottom" Grid.Column="6" x:Name="tb_FilterPlaceholder" Style="{StaticResource S_TextBox_Filter_ToolTip}" Text="{DynamicResource String_Tag_GlobalFilter_Tooltip}" Visibility="Collapsed"></TextBox>
                     </Grid>
                 </Border>
                 <ContentControl Content="{Binding UpdateSourceTrigger=PropertyChanged}" ContentTemplate="{StaticResource DT_StorylineVM_Selection}"></ContentControl>

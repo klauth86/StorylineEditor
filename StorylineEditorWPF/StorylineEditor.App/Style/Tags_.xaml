@@ -1,0 +1,317 @@
+﻿<!--
+StorylineEditor
+Copyright (C) 2023 Pentangle Studio
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <sys:Boolean x:Key="True">True</sys:Boolean>
+
+    <sys:Boolean x:Key="False">False</sys:Boolean>
+    
+    <!--COMMON-->
+  
+    <sys:String x:Key="String_Tag_IsDownloading">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_CompositionType_AND">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_CompositionType_OR">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_CompositionType_XOR">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_CompareType_Less">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_CompareType_LessOrEqual">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_CompareType_Equal">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_CompareType_EqualOrGreater">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_CompareType_Greater">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_ComboBoxExt_Filter_Tooltip">locerr</sys:String>
+
+    <!--STATS-->
+
+    <sys:String x:Key="String_Stats_Characters">locerr</sys:String>
+
+    <sys:String x:Key="String_Stats_Types">locerr</sys:String>
+
+    <sys:String x:Key="String_Stats_Node_StepM_TmpDescription">locerr</sys:String>
+
+    <sys:String x:Key="String_Stats_Node_AlternativeM_TmpDescription">locerr</sys:String>
+
+    <sys:String x:Key="String_Stats_Node_RandomM_TmpDescription">locerr</sys:String>
+
+    <sys:String x:Key="String_Stats_Node_TransitM_TmpDescription">locerr</sys:String>
+
+    <sys:String x:Key="String_Stats_Node_GateM_TmpDescription">locerr</sys:String>
+
+    <sys:String x:Key="String_Stats_Node_ExitM_TmpDescription">locerr</sys:String>
+
+    <sys:String x:Key="String_Stats_Node_DialogM_TmpDescription">locerr</sys:String>
+
+    <sys:String x:Key="String_Stats_Node_ReplicaM_TmpDescription">locerr</sys:String>
+
+    <!--CONFIG-->
+
+    <sys:String x:Key="String_Tag_Config_Title">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Config_Language">locerr</sys:String>
+  
+    <sys:String x:Key="String_Tag_Config_UserActions">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Config_UserActions_CreateNode">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Config_UserActions_DuplicateNode">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Config_UserActions_Link">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Config_UserActions_DragAndScroll">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Config_UserActions_SelectionSimple">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Config_UserActions_SelectionAdditive">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Config_UserActions_SelectionBox">locerr</sys:String>
+
+    <!--MAIN MENU-->
+
+    <sys:String x:Key="String_Tag_GlobalFilter_Tooltip">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_MainMenu_Locations">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_MainMenu_Characters">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_MainMenu_Items">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_MainMenu_Actors">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_MainMenu_Journal">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_MainMenu_Dialogs">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_MainMenu_Replicas">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_MainMenu_DialogsAndReplicas">locerr</sys:String>
+
+    <!--PROPS-->
+
+    <sys:String x:Key="String_Tag_Name">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Description">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_HasDescriptionFemale">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_DescriptionMale">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_DescriptionFemale">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Relation">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_RelationFemale">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_HasInternalDescription">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_HasInternalDescriptionFemale">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_InternalDescription">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_InternalDescriptionMale">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_InternalDescriptionFemale">locerr</sys:String>
+
+    <!--GRAPH-->
+
+    <sys:String x:Key="String_Tag_Graph_Tab_Props">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Graph_Tab_View">locerr</sys:String>
+
+    <!--JOURNAL NODES-->
+
+    <sys:String x:Key="String_Tag_Node_Step_Name">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Step_Description">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Step_Result">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Step_Type">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Alternative_Name">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Alternative_Description">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Alternative_Result">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Alternative_Type">locerr</sys:String>
+
+    <!--NODES-->
+
+    <sys:String x:Key="String_Tag_Node_Tab_Props">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Tab_Predicates">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Tab_GameEvents">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Random_Type">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Transit_Type">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Gate_Type">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Exit_Type">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Replica_Type">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Dialog_Type">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Dialog_DialogCharacter">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Dialog_DialogLocation">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Dialog_ReplicaLocation">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Regular_Character">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Gate_TargetDialog">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Gate_TargetExitNode">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Regular_OverrideName">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Regular_FileStorageType">locerr</sys:String>
+    
+    <sys:String x:Key="String_Tag_Node_Regular_FileHttpRef">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Node_Regular_ShortDescription">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_StorageType_GoogleDrive">locerr</sys:String>
+
+    <!--PREDICATES-->
+
+    <sys:String x:Key="String_Tag_Predicate_IsInversed">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_CompositeM_DisplayName">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_HasM_DisplayName">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_ActiveSession_CmpM_DisplayName">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_ActiveSessionM_DisplayName">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_PrevSessions_CmpM_DisplayName">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_PrevSessionsM_DisplayName">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Item_HasM_DisplayName">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_AddedM_DisplayName">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_FinishedM_DisplayName">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_Node_AddedM_DisplayName">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_Node_PassedM_DisplayName">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Relation_HasM_DisplayName">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_CompositeM_Title">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_HasM_Title">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_ActiveSession_CmpM_Title">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_ActiveSessionM_Title">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_PrevSessions_CmpM_Title">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_PrevSessionsM_Title">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Item_HasM_Title">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_AddedM_Title">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_FinishedM_Title">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_Node_AddedM_Title">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_Node_PassedM_Title">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_P_Relation_HasM_Title">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_Compare">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_DialogOrReplica">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_Node">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_Item">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_Quest">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_Character">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_PredicateA">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Predicate_PredicateB">locerr</sys:String>
+
+    <!--GAME EVENTS-->
+
+    <sys:String x:Key="String_Tag_GameEvent_IsExecutedOnLeave">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Item_DropM_DisplayName">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Item_PickUpM_DisplayName">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_AddM_DisplayName">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_AddM_DisplayName">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_PassM_DisplayName">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_DisplayName">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Item_DropM_Title">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Item_PickUpM_Title">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_AddM_Title">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_AddM_Title">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_PassM_Title">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_Title">locerr</sys:String>
+
+    <!--PLAYER-->
+
+    <sys:String x:Key="String_Tag_Player_Title">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Player_Tab_Props">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Player_FullMode">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Player_Error">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Player_PlayRate">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Player_Duration">locerr</sys:String>
+
+    <sys:String x:Key="String_Tag_Player_QuestNodeIsPassed">locerr</sys:String>
+
+</ResourceDictionary>
