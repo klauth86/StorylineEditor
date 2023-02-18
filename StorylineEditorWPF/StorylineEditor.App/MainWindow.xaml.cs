@@ -65,16 +65,16 @@ namespace StorylineEditor.App
 
             SetDataContext(new StorylineVM(storylineModel));
 
-            SetTitleForNewProject();
+            SetTitleForMainWindow();
         }
 
-        protected void SetTitleForNewProject()
+        protected void SetTitleForMainWindow()
         {
             var assemblyName = Assembly.GetExecutingAssembly().GetName();
             App.Current.Resources["String_MainWindow_Title"] = string.Format("{0} [{1}]", assemblyName.Name, ActiveContext.FileService.Path ?? GetLocalizedString("String_New_Storyline"));
         }
 
-        protected void SetTitleForDlg(string key)
+        protected void SetTitleForDlgWindow(string key)
         {
             App.Current.Resources["String_DlgWindow_Title"] = GetLocalizedString(key);
         }
@@ -115,8 +115,7 @@ namespace StorylineEditor.App
 
                         SetDataContext(new StorylineVM(model));
 
-                        var assemblyName = Assembly.GetExecutingAssembly().GetName();
-                        Title = string.Format("{0} [{1}]", assemblyName.Name, path);
+                        SetTitleForMainWindow();
                     }
                     catch (InvalidDataException idExc)
                     {
@@ -150,8 +149,7 @@ namespace StorylineEditor.App
                     FixUpNodesNames(storylineVM.Model.replicas, namesMapping);
                     FixUpNodesNames(storylineVM.Model.dialogs, namesMapping);
 
-                    var assemblyName = Assembly.GetExecutingAssembly().GetName();
-                    Title = string.Format("{0} [{1}]", assemblyName.Name, path);
+                    SetTitleForMainWindow();
                 }
             }
         }
@@ -240,7 +238,7 @@ namespace StorylineEditor.App
 
         private void btn_Config_Click(object sender, RoutedEventArgs e)
         {
-            SetTitleForDlg("String_Tag_Config_Title");
+            SetTitleForDlgWindow("String_Tag_Config_Title");
 
             new DlgWindow()
             {
@@ -344,7 +342,7 @@ namespace StorylineEditor.App
         {
             if (dataContext is HistoryVM)
             {
-                SetTitleForDlg("String_Tag_Player_Title");
+                SetTitleForDlgWindow("String_Tag_Player_Title");
 
                 new DlgWindow()
                 {
@@ -727,9 +725,9 @@ namespace StorylineEditor.App
 
             // Update main window title if it is new project
 
-            SetTitleForNewProject();
+            SetTitleForMainWindow();
 
-            SetTitleForDlg("String_Tag_Config_Title");
+            SetTitleForDlgWindow("String_Tag_Config_Title");
         }
 
         protected void SetWithSuffix(string key, string suffix)
