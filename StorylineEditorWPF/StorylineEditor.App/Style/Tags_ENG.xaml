@@ -278,7 +278,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_AddM_DisplayName_ENG">Quest: add step/alternative</sys:String>
 
-  <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_PassM_DisplayName_ENG">Quest: pass step[/alternative</sys:String>
+  <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_PassM_DisplayName_ENG">Quest: pass step/alternative</sys:String>
 
   <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_DisplayName_ENG">Relation: change</sys:String>
 
@@ -290,7 +290,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_AddM_Title_ENG">Quest: add step/alternative</sys:String>
 
-  <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_PassM_Title_ENG">Quest: pass step[/alternative</sys:String>
+  <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_PassM_Title_ENG">Quest: pass step/alternative</sys:String>
 
   <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_Title_ENG">Relation: change</sys:String>
 
