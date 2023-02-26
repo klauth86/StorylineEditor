@@ -52,6 +52,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Behaviors\LoadUnloadExtBehavior.cs" />
+    <Compile Include="Behaviors\DragDropBehavior.cs" />
     <Compile Include="Behaviors\NumericUpDownBehavior.cs" />
     <Compile Include="Behaviors\RenderSizeBehavior.cs" />
     <Compile Include="Behaviors\MouseExtBehavior.cs" />

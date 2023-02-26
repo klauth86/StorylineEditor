@@ -128,6 +128,13 @@ namespace StorylineEditor.ViewModel
 
         }, (folderM) => folderM != null));
 
+        private ICommand dropCommand;
+        public ICommand DropCommand => dropCommand ?? (dropCommand = new RelayCommand<object>((folderM) =>
+        {
+
+
+        }, (folderM) => folderM != null));
+
         private ICommand removeCommand;
         public ICommand RemoveCommand => removeCommand ?? (removeCommand = new RelayCommand(() =>
         {

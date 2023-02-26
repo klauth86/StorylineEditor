@@ -408,7 +408,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:FolderVM}">
-        <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}"
+        <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}" AllowDrop="true"
+                    bhvrs:DragDropBehavior.DropCommand="{Binding Path=DataContext.DropCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                    bhvrs:DragDropBehavior.DragEnabled="true"
                     bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
                     bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
             <Border.InputBindings>
@@ -438,6 +440,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <DataTemplate DataType="{x:Type vm:LocationVM}">
         <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}"
+                    bhvrs:DragDropBehavior.DragEnabled="true"
                     bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
                     bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
             <Border.InputBindings>
@@ -476,6 +479,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     
     <DataTemplate DataType="{x:Type vm:CharacterVM}">
         <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}"
+                    bhvrs:DragDropBehavior.DragEnabled="true"
                     bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
                     bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
             <Border.InputBindings>
@@ -697,6 +701,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <DataTemplate DataType="{x:Type vm:ActorVM}">
         <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}"
+                    bhvrs:DragDropBehavior.DragEnabled="true"
                     bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
                     bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
             <Border.InputBindings>
@@ -742,6 +747,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <DataTemplate DataType="{x:Type vm:ItemVM}">
         <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}"
+                    bhvrs:DragDropBehavior.DragEnabled="true"
                     bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
                     bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
             <Border.InputBindings>
@@ -810,6 +816,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <DataTemplate DataType="{x:Type vmg:QuestVM}">
         <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}"
+                    bhvrs:DragDropBehavior.DragEnabled="true"
                     bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
                     bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
             <Border.InputBindings>
@@ -920,6 +927,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <DataTemplate x:Key="Node_Journal_StepVM_ItemTemplate">
         <Grid>
             <Border Style="{StaticResource S_Border_Node}"
+                    bhvrs:DragDropBehavior.DragEnabled="true"
                     bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
                     bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
                 <ContentControl Content="{Binding}"></ContentControl>
@@ -1576,6 +1584,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     
     <DataTemplate DataType="{x:Type vmg:DialogVM}">
         <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}"
+                    bhvrs:DragDropBehavior.DragEnabled="true"
                     bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
                     bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
             <Border.InputBindings>
@@ -1708,6 +1717,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <DataTemplate DataType="{x:Type vmg:ReplicaVM}">
         <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}"
+                    bhvrs:DragDropBehavior.DragEnabled="true"
                     bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
                     bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
             <Border.InputBindings>
