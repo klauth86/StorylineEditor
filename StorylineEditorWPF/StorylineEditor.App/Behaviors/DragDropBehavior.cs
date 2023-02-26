@@ -94,26 +94,26 @@ namespace StorylineEditor.App.Behaviors
             }
         }
 
-        private static void OnDragOver(object sender, DragEventArgs e)
+        private static void OnDragOver(object sender, DragEventArgs args)
         {
-            e.Effects = DragDropEffects.None;
+            args.Effects = DragDropEffects.None;
 
             if (sender is FrameworkElement frameworkElement)
             {
-                if (e.Data != null && e.Data.GetData(typeof(object)) != null && e.Data.GetData(typeof(object)) != frameworkElement.DataContext)
+                if (args.Data != null && args.Data.GetData(typeof(object)) != null && args.Data.GetData(typeof(object)) != frameworkElement.DataContext)
                 {
-                    e.Effects = DragDropEffects.Move;
+                    args.Effects = DragDropEffects.Copy;
                 }
             }
 
-            e.Handled = true;
+            args.Handled = true;
         }
 
         private static void OnDrop(object sender, DragEventArgs args)
         {
-            if (sender is UIElement uIElement)
+            if (sender is FrameworkElement frameworkElement)
             {
-                GetDropCommand(uIElement)?.Execute(args.Data.GetData(typeof(object)));
+                GetDropCommand(frameworkElement)?.Execute(new Tuple<object, object>(frameworkElement.DataContext, args.Data.GetData(typeof(object))));
                 args.Handled = true;
             }
         }

@@ -71,7 +71,7 @@ namespace StorylineEditor.ViewModel
             Context = new ObservableCollection<FolderM>();
             Context.Add(new FolderM() { name = "root", content = inModel });
 
-            foreach (var model in Model) { Add(null, _vmCreator(model)); }
+            foreach (var model in Model) { Add(null, null, _vmCreator(model)); }
         }
 
         private ICommand addCommand;
@@ -80,7 +80,7 @@ namespace StorylineEditor.ViewModel
             BaseM model = _mCreator(isFolder ? typeof(FolderM) : null, null);
             Notifier viewModel = _vmCreator(model);
 
-            Add(model, viewModel);
+            Add(GetContext(model), model, viewModel);
 
             AddToSelection(viewModel, true);
         }));
@@ -121,7 +121,7 @@ namespace StorylineEditor.ViewModel
             {
                 Notifier viewModel = _vmCreator(model);
                 viewModel.IsCut = cutViewModels.Contains(viewModel.Id);
-                Add(null, viewModel);
+                Add(null, null, viewModel);
             }
 
             CommandManager.InvalidateRequerySuggested();
@@ -129,11 +129,31 @@ namespace StorylineEditor.ViewModel
         }, (folderM) => folderM != null));
 
         private ICommand dropCommand;
-        public ICommand DropCommand => dropCommand ?? (dropCommand = new RelayCommand<object>((folderM) =>
+        public ICommand DropCommand => dropCommand ?? (dropCommand = new RelayCommand<Tuple<object, object>>((tuple) =>
         {
+            if (tuple != null)
+            {
+                if (tuple.Item1 is FolderVM folderViewModel)
+                {
+                    if (tuple.Item2 is Notifier itemViewModel)
+                    {
+                        List<Notifier> prevSelection = new List<Notifier>();
+                        GetSelection(prevSelection);
 
+                        if (prevSelection.Contains(itemViewModel))
+                        {
+                            AddToSelection(null, true);
+                        }
 
-        }, (folderM) => folderM != null));
+                        FolderM folderModel = ((IWithModel)folderViewModel).GetModel<FolderM>();
+                        BaseM itemModel = ((IWithModel)itemViewModel).GetModel<BaseM>();
+
+                        Remove(itemViewModel, itemModel, GetContext(itemModel));
+                        Add(folderModel.content, itemModel, null);
+                    }
+                }
+            }
+        }));
 
         private ICommand removeCommand;
         public ICommand RemoveCommand => removeCommand ?? (removeCommand = new RelayCommand(() =>
@@ -181,7 +201,7 @@ namespace StorylineEditor.ViewModel
             foreach (var cutEntryVM in CutVMs)
             {
                 Remove(cutEntryVM.ViewModel, cutEntryVM.Model, cutEntryVM.Context);
-                Add(cutEntryVM.Model, cutEntryVM.ViewModel);
+                Add(GetContext(cutEntryVM.Model), cutEntryVM.Model, cutEntryVM.ViewModel);
 
                 cutEntryVM.ViewModel.IsCut = false;
             }

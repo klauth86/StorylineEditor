@@ -256,7 +256,7 @@ namespace StorylineEditor.ViewModel.Graphs
             viewModel.ToY = toY;
 
             LinksVMs.Add(model.id, viewModel);
-            Add(null, viewModel);
+            Add(null, null, viewModel);
 
             FromNodesLinks[fromId].Add(model.id);
             ToNodesLinks[toId].Add(model.id);
@@ -597,7 +597,7 @@ namespace StorylineEditor.ViewModel.Graphs
                                     model.fromNodeId = targetNodeViewModel.Id;
                                     model.toNodeId = toNodeViewModel.Id;
 
-                                    Add(model, null);
+                                    Add(GetContext(model), model, null);
 
                                     AddLinkVM(model,
                                         targetNodeViewModel.Id, targetNodeViewModel.PositionX, targetNodeViewModel.PositionY,
@@ -730,7 +730,7 @@ namespace StorylineEditor.ViewModel.Graphs
 
                 foreach (var linkModel in graphModelCopy.links)
                 {
-                    Add(linkModel, null);
+                    Add(GetContext(linkModel), linkModel, null);
 
                     INode fromNodeViewModel = NodesVMs[linkModel.fromNodeId] as INode;
                     INode toNodeViewModel = NodesVMs[linkModel.toNodeId] as INode;
@@ -785,14 +785,14 @@ namespace StorylineEditor.ViewModel.Graphs
 
         void AddNode(BaseM model, bool resetSelection)
         {
-            Add(model, null);
+            Add(GetContext(model), model, null);
 
             if (model is Node_ExitM) UpdateExitNames(model);
 
             Notifier viewModel = _vmCreator(model);
 
             NodesVMs.Add(model.id, viewModel);
-            Add(null, viewModel);
+            Add(null, null, viewModel);
 
             FromNodesLinks.Add(model.id, new HashSet<string>());
             ToNodesLinks.Add(model.id, new HashSet<string>());
@@ -1120,7 +1120,7 @@ namespace StorylineEditor.ViewModel.Graphs
                     viewModel.IsSelected = selection.Contains(model.id);
 
                     NodesVMs.Add(model.id, viewModel);
-                    Add(null, viewModel);
+                    Add(null, null, viewModel);
                 }
             }
 

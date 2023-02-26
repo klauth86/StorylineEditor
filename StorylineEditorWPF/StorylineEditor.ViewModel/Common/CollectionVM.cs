@@ -72,11 +72,12 @@ namespace StorylineEditor.ViewModel
 
         // pass null to one of params if want to add only model/only viewModel
         protected void Add(
-            BaseM model
+            IList context
+            , BaseM model
             , Notifier viewModel
             )
         {
-            if (model != null) GetContext(model).Add(model);
+            if (model != null && context != null) context.Add(model);
 
             if (viewModel != null) ItemVms.Add(viewModel);
         }
