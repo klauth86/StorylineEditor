@@ -26,5 +26,19 @@ namespace StorylineEditor.ViewModel
         public FolderVM(FolderM model, object parent) : base(model, parent) { }
 
         public override bool IsFolder => true;
+
+        protected bool isDragOver;
+        public bool IsDragOver
+        {
+            get => isDragOver;
+            set
+            {
+                if (value != isDragOver)
+                {
+                    isDragOver = value;
+                    Notify(nameof(IsDragOver));
+                }
+            }
+        }
     }
 }

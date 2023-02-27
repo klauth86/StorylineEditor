@@ -135,24 +135,38 @@ namespace StorylineEditor.ViewModel
             {
                 if (tuple.Item1 is FolderVM folderViewModel)
                 {
-                    if (tuple.Item2 is Notifier itemViewModel)
+                    folderViewModel.IsDragOver = false;
+
+                    if (tuple.Item2 is Notifier dragViewModel)
                     {
                         List<Notifier> prevSelection = new List<Notifier>();
                         GetSelection(prevSelection);
 
-                        if (prevSelection.Contains(itemViewModel))
+                        if (prevSelection.Contains(dragViewModel))
                         {
                             AddToSelection(null, true);
                         }
 
                         FolderM folderModel = ((IWithModel)folderViewModel).GetModel<FolderM>();
-                        BaseM itemModel = ((IWithModel)itemViewModel).GetModel<BaseM>();
+                        BaseM draggedModel = ((IWithModel)dragViewModel).GetModel<BaseM>();
 
-                        Remove(itemViewModel, itemModel, GetContext(itemModel));
-                        Add(folderModel.content, itemModel, null);
+                        Remove(dragViewModel, draggedModel, GetContext(draggedModel));
+                        Add(folderModel.content, draggedModel, null);
                     }
                 }
             }
+        }));
+
+        private ICommand dragEnterCommand;
+        public ICommand DragEnterCommand => dragEnterCommand ?? (dragEnterCommand = new RelayCommand<FolderVM>((folderViewModel) =>
+        {
+            folderViewModel.IsDragOver = true;
+        }));
+
+        private ICommand dragLeaveCommand;
+        public ICommand DragLeaveCommand => dragLeaveCommand ?? (dragLeaveCommand = new RelayCommand<FolderVM>((folderViewModel) =>
+        {
+            folderViewModel.IsDragOver = false;
         }));
 
         private ICommand removeCommand;

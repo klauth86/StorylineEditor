@@ -37,32 +37,90 @@ namespace StorylineEditor.App.Behaviors
 
         private static void DragEnabledPropertyChanged(DependencyObject dp, DependencyPropertyChangedEventArgs args)
         {
-            if (dp is UIElement uIElement)
+            if (dp is UIElement uiElement)
             {
                 if (args.NewValue is bool boolNewValue && boolNewValue)
                 {
-                    uIElement.MouseMove += OnMouseMove;
+                    uiElement.MouseMove += OnMouseMove;
                 }
                 else
                 {
-                    uIElement.MouseMove -= OnMouseMove;
+                    uiElement.MouseMove -= OnMouseMove;
                 }
             }
         }
+
+        private static bool IsPossibleDrag = false;
+
+        private static Point PossibleDragStart = new Point();
+
         private static void OnMouseMove(object sender, MouseEventArgs args)
         {
-            if (args.RightButton == MouseButtonState.Released && args.LeftButton == MouseButtonState.Pressed && args.MiddleButton == MouseButtonState.Released)
+            if (args.LeftButton == MouseButtonState.Pressed)
+            {
+                if (!IsPossibleDrag)
+                {
+                    IsPossibleDrag = true;
+                    PossibleDragStart = args.GetPosition(App.Current.MainWindow);
+                }
+                else
+                {
+                    if ((args.GetPosition(App.Current.MainWindow) - PossibleDragStart).LengthSquared > 4)
+                    {
+                        if (sender is FrameworkElement frameworkElement)
+                        {
+                            frameworkElement.QueryContinueDrag += OnQueryContinueDrag;
+
+                            IDataObject dataObject = new DataObject();
+                            dataObject.SetData(typeof(object), frameworkElement.DataContext);
+                            DragDrop.DoDragDrop(frameworkElement, dataObject, DragDropEffects.All);
+
+                            args.Handled = true;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                IsPossibleDrag = false;
+            }
+        }
+
+        private static void OnQueryContinueDrag(object sender, QueryContinueDragEventArgs args)
+        {
+            if (args.KeyStates != DragDropKeyStates.LeftMouseButton)
             {
                 if (sender is FrameworkElement frameworkElement)
                 {
-                    IDataObject dataObject = new DataObject();
-                    dataObject.SetData(typeof(object), frameworkElement.DataContext);
-                    DragDrop.DoDragDrop(frameworkElement, dataObject, DragDropEffects.All);
-
-                    args.Handled = true;
+                    frameworkElement.QueryContinueDrag -= OnQueryContinueDrag;
+                    args.Action = DragAction.Cancel;
                 }
             }
         }
+
+
+
+        private static readonly DependencyProperty DragEnterCommandProperty = DependencyProperty.RegisterAttached
+            (
+            "DragEnterCommand",
+            typeof(ICommand),
+            typeof(DragDropBehavior)
+            );
+
+        public static void SetDragEnterCommand(DependencyObject dp, ICommand value) { dp.SetValue(DragEnterCommandProperty, value); }
+        public static ICommand GetDragEnterCommand(DependencyObject dp) { return (ICommand)dp.GetValue(DragEnterCommandProperty); }
+
+
+
+        private static readonly DependencyProperty DragLeaveCommandProperty = DependencyProperty.RegisterAttached
+            (
+            "DragLeaveCommand",
+            typeof(ICommand),
+            typeof(DragDropBehavior)
+            );
+
+        public static void SetDragLeaveCommand(DependencyObject dp, ICommand value) { dp.SetValue(DragLeaveCommandProperty, value); }
+        public static ICommand GetDragLeaveCommand(DependencyObject dp) { return (ICommand)dp.GetValue(DragLeaveCommandProperty); }
 
 
 
@@ -79,33 +137,52 @@ namespace StorylineEditor.App.Behaviors
 
         private static void DropCommandPropertyChanged(DependencyObject dp, DependencyPropertyChangedEventArgs args)
         {
-            if (dp is UIElement uIElement)
+            if (dp is UIElement uiElement)
             {
                 if (args.NewValue == DependencyProperty.UnsetValue || args.NewValue == null)
                 {
-                    uIElement.Drop -= OnDrop;
-                    uIElement.DragOver -= OnDragOver;
+                    uiElement.Drop -= OnDrop;
+                    uiElement.DragLeave -= OnDragLeave;
+                    uiElement.DragOver -= OnDragOver;
+                    uiElement.DragEnter -= OnDragEnter;
                 }
                 else
                 {
-                    uIElement.DragOver += OnDragOver;
-                    uIElement.Drop += OnDrop;
+                    uiElement.DragEnter += OnDragEnter;
+                    uiElement.DragOver += OnDragOver;
+                    uiElement.DragLeave += OnDragLeave;
+                    uiElement.Drop += OnDrop;
                 }
             }
         }
 
+        private static bool CanDrop(object sender, DragEventArgs args)
+        {
+            return sender is FrameworkElement frameworkElement
+                && args.Data != null
+                && args.Data.GetData(typeof(object)) != null
+                && args.Data.GetData(typeof(object)) != frameworkElement.DataContext;
+        }
+
+        private static void OnDragEnter(object sender, DragEventArgs args)
+        {
+            bool canDrop = CanDrop(sender, args);
+            if (canDrop && sender is FrameworkElement frameworkElement) GetDragEnterCommand(frameworkElement)?.Execute(frameworkElement.DataContext);
+            args.Effects = canDrop ? DragDropEffects.Copy : DragDropEffects.None;
+            args.Handled = true;
+        }
+
         private static void OnDragOver(object sender, DragEventArgs args)
         {
-            args.Effects = DragDropEffects.None;
+            args.Effects = CanDrop(sender, args) ? DragDropEffects.Copy : DragDropEffects.None;
+            args.Handled = true;
+        }
 
-            if (sender is FrameworkElement frameworkElement)
-            {
-                if (args.Data != null && args.Data.GetData(typeof(object)) != null && args.Data.GetData(typeof(object)) != frameworkElement.DataContext)
-                {
-                    args.Effects = DragDropEffects.Copy;
-                }
-            }
-
+        private static void OnDragLeave(object sender, DragEventArgs args)
+        {
+            bool canDrop = CanDrop(sender, args);
+            if (canDrop && sender is FrameworkElement frameworkElement) GetDragLeaveCommand(frameworkElement)?.Execute(frameworkElement.DataContext);
+            args.Effects = canDrop ? DragDropEffects.Copy : DragDropEffects.None;
             args.Handled = true;
         }
 

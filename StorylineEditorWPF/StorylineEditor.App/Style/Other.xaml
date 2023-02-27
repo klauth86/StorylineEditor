@@ -66,6 +66,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <Setter Property="Background" Value="{StaticResource Color_Selection_Background}"></Setter>
                 <Setter Property="BorderBrush" Value="{StaticResource Color_Selection_Border}"></Setter>
             </DataTrigger>
+            <DataTrigger Binding="{Binding IsDragOver, UpdateSourceTrigger=PropertyChanged}" Value="true">
+                <Setter Property="Background" Value="{StaticResource Color_IsDragOver}"></Setter>
+            </DataTrigger>
         </Style.Triggers>
     </Style>
 
@@ -410,6 +413,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <DataTemplate DataType="{x:Type vm:FolderVM}">
         <Border x:Name="br_Main" Style="{StaticResource S_Border_Selector}" AllowDrop="true"
                     bhvrs:DragDropBehavior.DropCommand="{Binding Path=DataContext.DropCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                    bhvrs:DragDropBehavior.DragEnterCommand="{Binding Path=DataContext.DragEnterCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                    bhvrs:DragDropBehavior.DragLeaveCommand="{Binding Path=DataContext.DragLeaveCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
                     bhvrs:DragDropBehavior.DragEnabled="true"
                     bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
                     bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">

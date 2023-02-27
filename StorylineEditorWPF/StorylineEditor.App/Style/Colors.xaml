@@ -24,7 +24,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <SolidColorBrush x:Key="Color_Selection_Unselected" Color="Silver"/>
 
     <SolidColorBrush x:Key="Color_Selection_Border" Color="Goldenrod"/>
-    
+
+    <SolidColorBrush x:Key="Color_IsDragOver" Color="#5500ff00"/>
+
     <SolidColorBrush x:Key="Color_Selection_Background" Color="#22DAA520"/>
 
     <SolidColorBrush x:Key="Color_PreviewLink" Color="Goldenrod" />
