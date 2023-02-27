@@ -60,12 +60,6 @@
     <Compile Include="Controls\TextBlockWithSource.cs" />
     <Compile Include="Controls\RichTextBoxWithSource.cs" />
     <Compile Include="Controls\ComboBoxExt.cs" />
-    <Compile Include="Controls\NumericUpDown.xaml.cs">
-      <DependentUpon>NumericUpDown.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\NumericUpDown_Float.xaml.cs">
-      <DependentUpon>NumericUpDown_Float.xaml</DependentUpon>
-    </Compile>
     <Compile Include="DlgWindow.xaml.cs">
       <DependentUpon>DlgWindow.xaml</DependentUpon>
     </Compile>
@@ -75,14 +69,6 @@
     <Compile Include="Service\SoundPlayerService.cs" />
     <Compile Include="Service\StorageProvider\StorageProvider.cs" />
     <Compile Include="Service\TaskService.cs" />
-    <Page Include="Controls\NumericUpDown.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\NumericUpDown_Float.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="DlgWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

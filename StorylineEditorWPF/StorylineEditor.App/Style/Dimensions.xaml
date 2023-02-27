@@ -15,10 +15,28 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-    
+
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <sys:Double x:Key="Double_Duration_Min">1</sys:Double>
+
+    <sys:Double x:Key="Double_Duration_Max">60</sys:Double>
+    
+    <sys:Double x:Key="Double_PlayRate_Min">1</sys:Double>
+
+    <sys:Double x:Key="Double_PlayRate_Max">1000</sys:Double>
+    
+    <sys:Double x:Key="Double_Relation_Min">-10</sys:Double>
+
+    <sys:Double x:Key="Double_Relation_Max">10</sys:Double>
+
+    <sys:Double x:Key="Double_Relation_Tick">0.25</sys:Double>
+
+    <sys:Double x:Key="Double_RelationDelta_Min">-20</sys:Double>
+
+    <sys:Double x:Key="Double_RelationDelta_Max">20</sys:Double>
 
     <sys:Double x:Key="Double_Margin_1x">1</sys:Double>
 
@@ -65,9 +83,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:Double x:Key="Double_Size_8x">8</sys:Double>
     
     <sys:Double x:Key="Double_Size_8x-">-8</sys:Double>
-    
+
     <sys:Double x:Key="Double_Node_MinHeight">64</sys:Double>
 
+    <sys:Double x:Key="Double_Slider_Relation_MinWidth">640</sys:Double>
+    
     <sys:Double x:Key="Double_Node_MinWidth">96</sys:Double>
 
     <sys:Double x:Key="Double_Node_MaxWidth">256</sys:Double>
@@ -79,10 +99,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:Double x:Key="Double_Player_FullMode_MaxWidth">768</sys:Double>
 
     <sys:Double x:Key="Double_Player_FullMode_MaxHeight">768</sys:Double>
-    
-    <CornerRadius x:Key="CornerRadius_Common" TopLeft="2" TopRight="2" BottomRight="2" BottomLeft="2"></CornerRadius>
 
-    <GridLength x:Key="GridLength_NumericUpDown">32</GridLength>
+    <CornerRadius x:Key="CornerRadius_Common" TopLeft="2" TopRight="2" BottomRight="2" BottomLeft="2"></CornerRadius>
 
     <sys:Double x:Key="Double_TextBox_Graph_MinWidth">32</sys:Double>
     

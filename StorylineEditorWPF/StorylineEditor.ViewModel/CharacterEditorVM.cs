@@ -48,6 +48,7 @@ namespace StorylineEditor.ViewModel
                 {
                     Model.initialRelation = value;
                     OnModelChanged(Model, nameof(InitialRelation));
+                    Notify(nameof(InitialRelation)); // To refresh value within editor itself because Slider doesnt have own
                 }
             }
         }
@@ -61,6 +62,7 @@ namespace StorylineEditor.ViewModel
                 {
                     Model.initialRelationFemale = value;
                     OnModelChanged(Model, nameof(InitialRelationFemale));
+                    Notify(nameof(InitialRelationFemale)); // To refresh value within editor itself because Slider doesnt have own
                 }
             }
         }
