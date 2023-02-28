@@ -1444,5 +1444,13 @@ namespace StorylineEditor.ViewModel.Graphs
                 }
             }
         }
+
+        public override void OnEnter()
+        {
+            if (SelectionEditor != null)
+            {
+                SelectionEditor = _evmCreator(NodesVMs[selection.First()]); ////// TODO
+            }
+        }
     }
 }

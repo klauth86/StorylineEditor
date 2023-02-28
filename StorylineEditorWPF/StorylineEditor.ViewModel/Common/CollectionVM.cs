@@ -145,14 +145,30 @@ namespace StorylineEditor.ViewModel
 
         public void Refresh() { CollectionViewSource.GetDefaultView(ItemVms)?.Refresh(); }
 
-        public void OnEnter()
+        public virtual void OnEnter()
         {
+            if (SelectionEditor != null)
+            {
+                if (SelectionEditor is IPartiallyStored partiallyStoredEd)
+                {
+                    partiallyStoredEd.OnEnter();
+                }
+            }
+
             ActiveContext.ActiveGraph = SelectionEditor as IGraph;
         }
 
-        public void OnLeave()
+        public virtual void OnLeave()
         {
             ActiveContext.ActiveGraph = null;
+
+            if (SelectionEditor != null)
+            {
+                if (SelectionEditor is IPartiallyStored partiallyStoredEd)
+                {
+                    partiallyStoredEd.OnLeave();
+                }
+            }
         }
     }
 }
