@@ -20,7 +20,7 @@ namespace StorylineEditor.Model
 {
     public class CharacterM : ActorM
     {
-        public static readonly string PLAYER_ID = "PLAYER";
+        public static string PLAYER_ID => "PLAYER";
 
         public CharacterM(long additionalTicks) : base(additionalTicks)
         {

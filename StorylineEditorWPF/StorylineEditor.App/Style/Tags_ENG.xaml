@@ -118,9 +118,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <sys:String x:Key="String_Tag_DescriptionFemale_ENG">👩 Description</sys:String>
 
-  <sys:String x:Key="String_Tag_Relation_ENG">👨 Relation</sys:String>
+  <sys:String x:Key="String_Tag_Relation_ENG">👨 Initial Relation</sys:String>
 
-  <sys:String x:Key="String_Tag_RelationFemale_ENG">👩 Relation</sys:String>
+  <sys:String x:Key="String_Tag_RelationFemale_ENG">👩 Initial Relation</sys:String>
 
   <sys:String x:Key="String_Tag_HasInternalDescription_ENG">Has Internal description</sys:String>
 
@@ -294,6 +294,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_Title_ENG">Relation: change</sys:String>
 
+  <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_ENG">Change by</sys:String>    
+  
   <!--PLAYER-->
 
   <sys:String x:Key="String_Tag_Player_Title_ENG">▶ Player</sys:String>

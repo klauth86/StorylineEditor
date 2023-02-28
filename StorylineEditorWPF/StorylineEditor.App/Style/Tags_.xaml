@@ -304,6 +304,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_Title">locerr</sys:String>
 
+    <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM">locerr</sys:String>
+    
     <!--PLAYER-->
 
     <sys:String x:Key="String_Tag_Player_Tab_Props">locerr</sys:String>

@@ -311,7 +311,7 @@ namespace StorylineEditor.ViewModel
                 if (value != deltaRelation)
                 {
                     deltaRelation = value;
-                    
+                    Notify(nameof(DeltaRelation));
                     //Parent?.ShowAvailabilityAdorners();
                 }
             }

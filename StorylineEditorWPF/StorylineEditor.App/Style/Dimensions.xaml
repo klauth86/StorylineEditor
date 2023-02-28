@@ -20,14 +20,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
+    <sys:Double x:Key="Double_Dialog_Node_Min">1</sys:Double>
+
+    <sys:Double x:Key="Double_Dialog_Node_Max">16</sys:Double>
+
+    <sys:Double x:Key="Double_Dialog_Node_Tick">1</sys:Double>
+
     <sys:Double x:Key="Double_Duration_Min">1</sys:Double>
 
     <sys:Double x:Key="Double_Duration_Max">60</sys:Double>
+
+    <sys:Double x:Key="Double_Duration_Tick">1</sys:Double>
     
     <sys:Double x:Key="Double_PlayRate_Min">1</sys:Double>
 
     <sys:Double x:Key="Double_PlayRate_Max">1000</sys:Double>
-    
+
+    <sys:Double x:Key="Double_PlayRate_Tick">1</sys:Double>
+
     <sys:Double x:Key="Double_Relation_Min">-10</sys:Double>
 
     <sys:Double x:Key="Double_Relation_Max">10</sys:Double>
@@ -86,7 +96,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <sys:Double x:Key="Double_Node_MinHeight">64</sys:Double>
 
-    <sys:Double x:Key="Double_Slider_Relation_MinWidth">640</sys:Double>
+    <sys:Double x:Key="Double_Slider_MaxWidth">480</sys:Double>
     
     <sys:Double x:Key="Double_Node_MinWidth">96</sys:Double>
 

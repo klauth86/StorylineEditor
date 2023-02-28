@@ -30,8 +30,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </Trigger>
         </Style.Triggers>
     </Style>
-    
-    
+
+    <Style TargetType="Slider">
+        <Setter Property="TickPlacement" Value="BottomRight"></Setter>
+        <Setter Property="IsSnapToTickEnabled" Value="True"></Setter>
+        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_1x}"></Setter>
+    </Style>
     
     <Style TargetType="TextBlock" x:Key="S_TextBlock">
         <Setter Property="TextWrapping" Value="Wrap"></Setter>

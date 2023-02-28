@@ -389,7 +389,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                 <ItemsControl BorderBrush="{StaticResource Color_Path}" BorderThickness="{StaticResource Thickness_Margin_1x}" Margin="{StaticResource Thickness_Margin_1x}" Grid.Row="1" ItemsPanel="{StaticResource IPT_WrapPanel}" ItemsSource="{Binding Context}"></ItemsControl>
 
-                <ScrollViewer Margin="{StaticResource Thickness_Margin_1x}" Grid.Row="2" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                <ScrollViewer Margin="{StaticResource Thickness_Margin_1x}" Grid.Row="2" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="auto">
                     <ItemsControl ItemsSource="{Binding ItemVms}">
                         <ItemsControl.ItemContainerStyle>
                             <Style>
@@ -681,58 +681,54 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </Grid>
 
             <GroupBox
+                x:Name="gb_Relation"
                 Style="{StaticResource S_GroupBox_Prop}"
                 Header="{DynamicResource String_Tag_Relation}"
                 HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition></ColumnDefinition>
-                        <ColumnDefinition></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <Slider
-                        AutoToolTipPlacement="TopLeft"
-                        AutoToolTipPrecision="2"
-                        MinWidth="{StaticResource Double_Slider_Relation_MinWidth}"
-                        Minimum="{StaticResource Double_Relation_Min}"
-                        Maximum="{StaticResource Double_Relation_Max}"
-                        Value="{Binding InitialRelation, UpdateSourceTrigger=PropertyChanged}"
-                        TickPlacement="BottomRight"
-                        TickFrequency="{StaticResource Double_Relation_Tick}"
-                        IsSnapToTickEnabled="True"
-                        ></Slider>
+                <Grid HorizontalAlignment="Left">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
                     <TextBlock
-                        Grid.Column="1"
+                        HorizontalAlignment="Center"
                         Text="{Binding InitialRelation, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
                         Style="{StaticResource S_TextBlock_Graph_Bold}"
                         ></TextBlock>
+                    <Slider
+                        Grid.Row="1"
+                        Width="{StaticResource Double_Slider_MaxWidth}"
+                        Value="{Binding InitialRelation, UpdateSourceTrigger=PropertyChanged}"
+                        Minimum="{StaticResource Double_Relation_Min}"
+                        Maximum="{StaticResource Double_Relation_Max}"
+                        TickFrequency="{StaticResource Double_Relation_Tick}"
+                        ></Slider>
                 </Grid>
             </GroupBox>
 
             <GroupBox
+                x:Name="gb_RelationFemale"
                 Style="{StaticResource S_GroupBox_Prop}"
                 Header="{DynamicResource String_Tag_RelationFemale}"
                 HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition></ColumnDefinition>
-                        <ColumnDefinition></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <Slider
-                        AutoToolTipPlacement="TopLeft"
-                        AutoToolTipPrecision="2"
-                        MinWidth="{StaticResource Double_Slider_Relation_MinWidth}"
-                        Minimum="{StaticResource Double_Relation_Min}"
-                        Maximum="{StaticResource Double_Relation_Max}"
-                        Value="{Binding InitialRelationFemale, UpdateSourceTrigger=PropertyChanged}"
-                        TickPlacement="BottomRight"
-                        TickFrequency="{StaticResource Double_Relation_Tick}"
-                        IsSnapToTickEnabled="True"
-                        ></Slider>
+                <Grid HorizontalAlignment="Left">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
                     <TextBlock
-                        Grid.Column="1"
+                        HorizontalAlignment="Center"
                         Text="{Binding InitialRelationFemale, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
                         Style="{StaticResource S_TextBlock_Graph_Bold}"
                         ></TextBlock>
+                    <Slider
+                        Grid.Row="1"
+                        Width="{StaticResource Double_Slider_MaxWidth}"
+                        Value="{Binding InitialRelationFemale, UpdateSourceTrigger=PropertyChanged}"
+                        Minimum="{StaticResource Double_Relation_Min}"
+                        Maximum="{StaticResource Double_Relation_Max}"
+                        TickFrequency="{StaticResource Double_Relation_Tick}"
+                        ></Slider>
                 </Grid>
             </GroupBox>
         </StackPanel>
@@ -741,6 +737,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <Setter TargetName="gb_Description" Property="Header" Value="{DynamicResource String_Tag_DescriptionMale}"></Setter>
                 <Setter TargetName="cd_DescriptionFemale" Property="Width" Value="*"></Setter>
             </Trigger>
+            <DataTrigger Binding="{Binding Id, Mode=OneTime}" Value="{x:Static m:CharacterM.PLAYER_ID}">
+                <Setter TargetName="gb_Relation" Property="Visibility" Value="Collapsed"></Setter>
+                <Setter TargetName="gb_RelationFemale" Property="Visibility" Value="Collapsed"></Setter>
+            </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
 
@@ -2004,12 +2004,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <GroupBox x:Name="gb_Compare" Header="{DynamicResource String_Tag_Predicate_Compare}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
                         <ColumnDefinition></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <ContentControl Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Content="{Binding}" Template="{StaticResource CT_ContentControl_Comparer_List}"></ContentControl>
-                    <Slider Margin="{StaticResource Thickness_Margin_1x}" Grid.Column="1" Minimum="0" Maximum="64" Value="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
-                        TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True"></Slider>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <ContentControl Grid.RowSpan="2" Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Content="{Binding}" Template="{StaticResource CT_ContentControl_Comparer_List}"></ContentControl>
+                    <TextBlock Grid.Column="2" VerticalAlignment="Bottom" HorizontalAlignment="Center" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                    <Slider
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Value="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
+                        Minimum="{StaticResource Double_Dialog_Node_Min}"
+                        Maximum="{StaticResource Double_Dialog_Node_Max}"
+                        TickFrequency="{StaticResource Double_Dialog_Node_Tick}"
+                        VerticalAlignment="Top"
+                        ></Slider>
                 </Grid>
             </GroupBox>
         </StackPanel>
@@ -2034,12 +2046,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <GroupBox x:Name="gb_Compare" Header="{DynamicResource String_Tag_Predicate_Compare}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
                         <ColumnDefinition></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <ContentControl Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Content="{Binding}" Template="{StaticResource CT_ContentControl_Comparer_List}"></ContentControl>
-                    <Slider Margin="{StaticResource Thickness_Margin_1x}" Grid.Column="1" Minimum="0" Maximum="64" Value="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
-                        TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True"></Slider>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <ContentControl Grid.RowSpan="2" Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Content="{Binding}" Template="{StaticResource CT_ContentControl_Comparer_List}"></ContentControl>
+                    <TextBlock Grid.Column="2" VerticalAlignment="Bottom" HorizontalAlignment="Center" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                    <Slider
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Value="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
+                        Minimum="{StaticResource Double_Dialog_Node_Min}"
+                        Maximum="{StaticResource Double_Dialog_Node_Max}"
+                        TickFrequency="{StaticResource Double_Dialog_Node_Tick}"
+                        VerticalAlignment="Top"
+                        ></Slider>
                 </Grid>
             </GroupBox>
         </StackPanel>
@@ -2084,12 +2108,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <GroupBox x:Name="gb_Compare" Header="{DynamicResource String_Tag_Predicate_Compare}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
                         <ColumnDefinition></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <ContentControl Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Content="{Binding}" Template="{StaticResource CT_ContentControl_Comparer_List}"></ContentControl>
-                    <Slider Margin="{StaticResource Thickness_Margin_1x}" Grid.Column="1" Minimum="{StaticResource Double_Relation_Min}" Maximum="{StaticResource Double_Relation_Max}" Value="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
-                        TickPlacement="BottomRight" TickFrequency="{StaticResource Double_Relation_Tick}" IsSnapToTickEnabled="True"></Slider>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <ContentControl Grid.RowSpan="2" Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Content="{Binding}" Template="{StaticResource CT_ContentControl_Comparer_List}"></ContentControl>
+                    <TextBlock Grid.Column="2" VerticalAlignment="Bottom" HorizontalAlignment="Center" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBlock>
+                    <Slider
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Value="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
+                        Minimum="{StaticResource Double_Relation_Min}"
+                        Maximum="{StaticResource Double_Relation_Max}"
+                        TickFrequency="{StaticResource Double_Relation_Tick}"
+                        VerticalAlignment="Top"
+                        ></Slider>
                 </Grid>
             </GroupBox>
         </StackPanel>
@@ -2274,15 +2310,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                           ItemsSource="{Binding CharactersCVS.View}"
                                           Filter="{Binding CharactersFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
-            <GroupBox x:Name="gb_Compare" Header="{DynamicResource String_Tag_Predicate_Compare}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
+            <GroupBox x:Name="gb_Compare" Header="{DynamicResource String_Tag_GameEvent_GE_Relation_ChangeM}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition></ColumnDefinition>
-                        <ColumnDefinition></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <ContentControl Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Content="{Binding}" Template="{StaticResource CT_ContentControl_Comparer_List}"></ContentControl>
-                    <Slider Margin="{StaticResource Thickness_Margin_1x}" Grid.Column="1" Minimum="{StaticResource Double_RelationDelta_Min}" Maximum="{StaticResource Double_RelationDelta_Max}" Value="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
-                        TickPlacement="BottomRight" TickFrequency="{StaticResource Double_Relation_Tick}" IsSnapToTickEnabled="True"></Slider>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock HorizontalAlignment="Center" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBlock>
+                    <Slider
+                        Grid.Row="1"
+                        Value="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
+                        Minimum="{StaticResource Double_RelationDelta_Min}"
+                        Maximum="{StaticResource Double_RelationDelta_Max}"
+                        TickFrequency="{StaticResource Double_Relation_Tick}"
+                        ></Slider>
                 </Grid>
             </GroupBox>
         </StackPanel>
@@ -2429,10 +2470,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <Grid.RowDefinitions>
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
-
+                        
                         <CheckBox IsChecked="{Binding FullMode}" Content="{DynamicResource String_Tag_Player_FullMode}"></CheckBox>
-
+                        
                         <StackPanel Grid.Row="1" Orientation="Horizontal">
                             <Button VerticalAlignment="Center" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Stop}" ToolTip="{DynamicResource String_Player_Stop_Tooltip}" Command="{Binding StopCommand}"></Button>
                             <Grid VerticalAlignment="Center">
@@ -2440,22 +2483,48 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                 <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Play}" ToolTip="{DynamicResource String_Player_Play_Tooltip}" Command="{Binding PlayCommand}"></Button>
                             </Grid>
                             <Button VerticalAlignment="Center" Style="{StaticResource S_Button_Gender}"></Button>
-                            <GroupBox Margin="{StaticResource Thickness_Margin_Underline_6x}" Header="{DynamicResource String_Tag_Player_PlayRate}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Player}">
-                                <Slider Margin="{StaticResource Thickness_Margin_1x}" Minimum="{StaticResource Double_PlayRate_Min}" Maximum="{StaticResource Double_PlayRate_Max}" Value="{Binding PlayRate, UpdateSourceTrigger=PropertyChanged}"
-                                        TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True"></Slider>
-                            </GroupBox>
-                            <GroupBox Margin="{StaticResource Thickness_Margin_Underline_6x}" Header="{DynamicResource String_Tag_Player_Duration}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Player}">
-                                <Slider Margin="{StaticResource Thickness_Margin_1x}" Minimum="{StaticResource Double_Duration_Min}" Maximum="{StaticResource Double_Duration_Max}" Value="{Binding Duration, UpdateSourceTrigger=PropertyChanged}"
-                                        TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True"></Slider>
-                            </GroupBox>
                             <Grid>
                                 <TextBlock x:Name="tb_TimeLeft" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="{StaticResource Thickness_Padding_LeftRight}" Style="{StaticResource S_TextBlock_Graph_Bold}" Text="{Binding TimeLeft, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
                                 <ContentControl x:Name="cc_IsDownloading" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource S_ContentControl_Indicator_IsDownloading}" Visibility="Hidden"></ContentControl>
                             </Grid>
                         </StackPanel>
+                        
+                        <GroupBox Grid.Row="2" Margin="{StaticResource Thickness_Margin_Underline_6x}" Header="{DynamicResource String_Tag_Player_PlayRate}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Player}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <TextBlock HorizontalAlignment="Center" Text="{Binding PlayRate, UpdateSourceTrigger=PropertyChanged}" FontSize="{StaticResource FontSize_VerySmall}"></TextBlock>
+                                <Slider
+                                        Grid.Row="1"
+                                        Value="{Binding PlayRate, UpdateSourceTrigger=PropertyChanged}"
+                                        Minimum="{StaticResource Double_PlayRate_Min}"
+                                        Maximum="{StaticResource Double_PlayRate_Max}"
+                                        TickFrequency="{StaticResource Double_PlayRate_Tick}"
+                                        ></Slider>
+                            </Grid>
+                        </GroupBox>
+
+                        <GroupBox Grid.Row="3" Margin="{StaticResource Thickness_Margin_Underline_6x}" Header="{DynamicResource String_Tag_Player_Duration}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Player}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <TextBlock HorizontalAlignment="Center" Text="{Binding Duration, UpdateSourceTrigger=PropertyChanged}" FontSize="{StaticResource FontSize_VerySmall}"></TextBlock>
+                                <Slider
+                                        Grid.Row="1"
+                                        Value="{Binding Duration, UpdateSourceTrigger=PropertyChanged}"
+                                        Minimum="{StaticResource Double_Duration_Min}"
+                                        Maximum="{StaticResource Double_Duration_Max}"
+                                        TickFrequency="{StaticResource Double_Duration_Tick}"
+                                        ></Slider>
+                            </Grid>
+                        </GroupBox>
                     </Grid>
 
-                    <ContentControl Grid.Row="1"
+                    <ContentControl Grid.Row="4"
                                     Margin="{StaticResource Thickness_Margin_2x}"
                                     Content="{Binding PlayerContext, UpdateSourceTrigger=PropertyChanged}">
                     </ContentControl>
@@ -2493,24 +2562,34 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                     Margin="{StaticResource Thickness_Margin_Underline_4x}"
                                     >
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"></ColumnDefinition>
                                         <ColumnDefinition Width="auto"></ColumnDefinition>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
                                         <ColumnDefinition Width="auto"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
                                     <ContentControl
+                                        VerticalAlignment="Center"
                                         Content="{Binding Model}"
                                         ></ContentControl>
-                                    <Slider
+                                    
+                                    <Grid
                                         Grid.Column="1"
-                                        Margin="{StaticResource Thickness_Margin_1x}"
+                                        VerticalAlignment="Center">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition></RowDefinition>
+                                            <RowDefinition></RowDefinition>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock HorizontalAlignment="Center" Text="{Binding DeltaRelation, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" FontSize="{StaticResource FontSize_VerySmall}"></TextBlock>
+                                        <Slider
+                                        Grid.Row="1"
+                                        Value="{Binding DeltaRelation, UpdateSourceTrigger=PropertyChanged}"
                                         Minimum="{StaticResource Double_RelationDelta_Min}"
                                         Maximum="{StaticResource Double_RelationDelta_Max}"
-                                        Value="{Binding DeltaRelation, UpdateSourceTrigger=PropertyChanged}"
-                                        TickPlacement="BottomRight"
                                         TickFrequency="{StaticResource Double_Relation_Tick}"
-                                        IsSnapToTickEnabled="True"
                                         ></Slider>
+                                    </Grid>
+                                    
                                     <Button
+                                        VerticalAlignment="Center"
                                         Grid.Column="2"
                                         Style="{StaticResource S_Button_Remove}"
                                         Margin="{StaticResource Thickness_Margin_1x}"

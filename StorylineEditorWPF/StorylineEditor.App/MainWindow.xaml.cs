@@ -659,6 +659,8 @@ namespace StorylineEditor.App
 
             SetWithSuffix("String_Tag_GameEvent_GE_Relation_ChangeM_Title", suffix);
 
+            SetWithSuffix("String_Tag_GameEvent_GE_Relation_ChangeM", suffix);
+
             SetWithSuffix("String_Tag_Player_Tab_Props", suffix);
 
             SetWithSuffix("String_Tag_Player_FullMode", suffix);

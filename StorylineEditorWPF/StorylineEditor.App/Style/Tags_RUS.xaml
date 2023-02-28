@@ -118,9 +118,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <sys:String x:Key="String_Tag_DescriptionFemale_RUS">👩 Описание</sys:String>
 
-    <sys:String x:Key="String_Tag_Relation_RUS">👨 Отношение</sys:String>
+    <sys:String x:Key="String_Tag_Relation_RUS">👨 Начальное отношение</sys:String>
 
-    <sys:String x:Key="String_Tag_RelationFemale_RUS">👩 Отношение</sys:String>
+    <sys:String x:Key="String_Tag_RelationFemale_RUS">👩 Начальное отношение</sys:String>
 
     <sys:String x:Key="String_Tag_HasInternalDescription_RUS">Имеет внутреннее описание</sys:String>
 
@@ -293,6 +293,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_PassM_Title_RUS">Квест: выполнить шаг/альтернативу</sys:String>
 
     <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_Title_RUS">Отношение: изменить</sys:String>
+
+    <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_RUS">Изменить на</sys:String>
 
     <!--PLAYER-->
 
