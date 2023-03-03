@@ -320,4 +320,66 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <sys:String x:Key="String_Tag_Player_QuestNodeIsPassed">locerr</sys:String>
 
+    <!--MainMenu-->
+
+    <sys:String x:Key="String_MainMenu_Open_Tooltip">locerr</sys:String>
+
+    <sys:String x:Key="String_MainMenu_Save_Tooltip">locerr</sys:String>
+
+    <sys:String x:Key="String_MainMenu_Condig_Tooltip">locerr</sys:String>
+
+    <!--TabMenu-->
+
+    <sys:String x:Key="String_TabMenu_Up_Tooltip">locerr</sys:String>
+
+    <sys:String x:Key="String_TabMenu_Add_Tooltip">locerr</sys:String>
+
+    <sys:String x:Key="String_TabMenu_AddFolder_Tooltip">locerr</sys:String>
+
+    <sys:String x:Key="String_TabMenu_Remove_Tooltip">locerr</sys:String>
+
+    <sys:String x:Key="String_TabMenu_Cut_Tooltip">locerr</sys:String>
+
+    <sys:String x:Key="String_TabMenu_Paste_Tooltip">locerr</sys:String>
+
+    <!--GraphMenu-->
+
+    <sys:String x:Key="String_GraphMenu_PrevRootNode_Tooltip">locerr</sys:String>
+
+    <sys:String x:Key="String_GraphMenu_NextRootNode_Tooltip">locerr</sys:String>
+
+    <sys:String x:Key="String_GraphMenu_ResetScale_Tooltip">locerr</sys:String>
+
+    <sys:String x:Key="String_GraphMenu_GoToOrigin_Tooltip">locerr</sys:String>
+
+    <sys:String x:Key="String_GraphMenu_Play_Tooltip">locerr</sys:String>
+
+    <sys:String x:Key="String_HasPredicates_Tooltip">locerr</sys:String>
+
+    <sys:String x:Key="String_HasGameEvents_Tooltip">locerr</sys:String>
+
+    <!--Player-->
+
+    <sys:String x:Key="String_Player_Stop_Tooltip">locerr</sys:String>
+
+    <sys:String x:Key="String_Player_Pause_Tooltip">locerr</sys:String>
+
+    <sys:String x:Key="String_Player_Play_Tooltip">locerr</sys:String>
+
+    <!--Other-->
+
+    <sys:String x:Key="String_Bold_Tooltip">locerr</sys:String>
+
+    <sys:String x:Key="String_Italic_Tooltip">locerr</sys:String>
+
+    <sys:String x:Key="String_Underline_Tooltip">locerr</sys:String>
+
+    <sys:String x:Key="String_Error_Line1">locerr</sys:String>
+
+    <sys:String x:Key="String_Error_Line2">locerr</sys:String>
+
+    <sys:String x:Key="String_Error_Line3">locerr</sys:String>
+
+    <sys:String x:Key="String_Error_Line4">locerr</sys:String>
+
 </ResourceDictionary>
