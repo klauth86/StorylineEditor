@@ -409,22 +409,6 @@ namespace StorylineEditor.App
 
             SetWithSuffix("String_Tag_IsDownloading", suffix);
 
-            SetWithSuffix("String_Tag_CompositionType_AND", suffix);
-
-            SetWithSuffix("String_Tag_CompositionType_OR", suffix);
-
-            SetWithSuffix("String_Tag_CompositionType_XOR", suffix);
-
-            SetWithSuffix("String_Tag_CompareType_Less", suffix);
-
-            SetWithSuffix("String_Tag_CompareType_LessOrEqual", suffix);
-
-            SetWithSuffix("String_Tag_CompareType_Equal", suffix);
-
-            SetWithSuffix("String_Tag_CompareType_EqualOrGreater", suffix);
-
-            SetWithSuffix("String_Tag_CompareType_Greater", suffix);
-
             SetWithSuffix("String_Tag_ComboBoxExt_Filter_Tooltip", suffix);
 
             SetWithSuffix("String_Stats_Characters", suffix);

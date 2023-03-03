@@ -24,22 +24,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <sys:String x:Key="String_Tag_IsDownloading_ENG">🡇</sys:String>
 
-  <sys:String x:Key="String_Tag_CompositionType_AND_ENG">AND</sys:String>
-
-  <sys:String x:Key="String_Tag_CompositionType_OR_ENG">OR</sys:String>
-
-  <sys:String x:Key="String_Tag_CompositionType_XOR_ENG">XOR</sys:String>
-
-  <sys:String x:Key="String_Tag_CompareType_Less_ENG">Less</sys:String>
-
-  <sys:String x:Key="String_Tag_CompareType_LessOrEqual_ENG">Less or equal</sys:String>
-
-  <sys:String x:Key="String_Tag_CompareType_Equal_ENG">Equal</sys:String>
-
-  <sys:String x:Key="String_Tag_CompareType_EqualOrGreater_ENG">Greater or equal</sys:String>
-
-  <sys:String x:Key="String_Tag_CompareType_Greater_ENG">Greater</sys:String>
-
   <sys:String x:Key="String_Tag_ComboBoxExt_Filter_Tooltip_ENG">Search by ...</sys:String>
 
   <!--STATS-->

@@ -24,22 +24,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <sys:String x:Key="String_Tag_IsDownloading_RUS">🡇</sys:String>
 
-    <sys:String x:Key="String_Tag_CompositionType_AND_RUS">И</sys:String>
-
-    <sys:String x:Key="String_Tag_CompositionType_OR_RUS">ИЛИ</sys:String>
-
-    <sys:String x:Key="String_Tag_CompositionType_XOR_RUS">Исключающее ИЛИ</sys:String>
-
-    <sys:String x:Key="String_Tag_CompareType_Less_RUS">Меньше</sys:String>
-
-    <sys:String x:Key="String_Tag_CompareType_LessOrEqual_RUS">Меньше или равно</sys:String>
-
-    <sys:String x:Key="String_Tag_CompareType_Equal_RUS">Равно</sys:String>
-
-    <sys:String x:Key="String_Tag_CompareType_EqualOrGreater_RUS">Больше или равно</sys:String>
-
-    <sys:String x:Key="String_Tag_CompareType_Greater_RUS">Больше</sys:String>
-
     <sys:String x:Key="String_Tag_ComboBoxExt_Filter_Tooltip_RUS">Искать по ...</sys:String>
 
     <!--STATS-->

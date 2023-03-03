@@ -72,7 +72,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </Style>
 
     <DataTemplate x:Key="DT_ListBoxItem_CompareType">
-        <TextBlock x:Name="tb_Main"></TextBlock>
+        <TextBlock x:Name="tb_Main" FontSize="{StaticResource FontSize_Large}"></TextBlock>
         <DataTemplate.Triggers>
             <Trigger SourceName="tb_Main" Property="DataContext" Value="{x:Static m:COMPARE_TYPE.LESS}">
                 <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_CompareType_Less}"></Setter>

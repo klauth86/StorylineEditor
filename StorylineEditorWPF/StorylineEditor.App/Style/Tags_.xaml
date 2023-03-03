@@ -36,21 +36,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   
     <sys:String x:Key="String_Tag_IsDownloading">locerr</sys:String>
 
-    <sys:String x:Key="String_Tag_CompositionType_AND">locerr</sys:String>
+    <sys:String x:Key="String_Tag_CompositionType_AND">AND</sys:String>
 
-    <sys:String x:Key="String_Tag_CompositionType_OR">locerr</sys:String>
+    <sys:String x:Key="String_Tag_CompositionType_OR">OR</sys:String>
 
-    <sys:String x:Key="String_Tag_CompositionType_XOR">locerr</sys:String>
+    <sys:String x:Key="String_Tag_CompositionType_XOR">XOR</sys:String>
 
-    <sys:String x:Key="String_Tag_CompareType_Less">locerr</sys:String>
+    <sys:String x:Key="String_Tag_CompareType_Less">&lt;</sys:String>
 
-    <sys:String x:Key="String_Tag_CompareType_LessOrEqual">locerr</sys:String>
+    <sys:String x:Key="String_Tag_CompareType_LessOrEqual">≤</sys:String>
 
-    <sys:String x:Key="String_Tag_CompareType_Equal">locerr</sys:String>
+    <sys:String x:Key="String_Tag_CompareType_Equal">=</sys:String>
 
-    <sys:String x:Key="String_Tag_CompareType_EqualOrGreater">locerr</sys:String>
+    <sys:String x:Key="String_Tag_CompareType_EqualOrGreater">≥</sys:String>
 
-    <sys:String x:Key="String_Tag_CompareType_Greater">locerr</sys:String>
+    <sys:String x:Key="String_Tag_CompareType_Greater">&gt;</sys:String>
 
     <sys:String x:Key="String_Tag_ComboBoxExt_Filter_Tooltip">locerr</sys:String>
 
