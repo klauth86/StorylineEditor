@@ -18,10 +18,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using StorylineEditor.Model;
 using StorylineEditor.Model.Predicates;
+using StorylineEditor.ViewModel.Common;
 using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Predicates
 {
@@ -75,6 +77,9 @@ namespace StorylineEditor.ViewModel.Predicates
                 }
             }
         }
+
+        protected ICommand compareTypeCommand;
+        public ICommand CompareTypeCommand => compareTypeCommand ?? (compareTypeCommand = new RelayCommand<byte>((compareType) => CompareType = compareType));
 
         public byte CompareType
         {
