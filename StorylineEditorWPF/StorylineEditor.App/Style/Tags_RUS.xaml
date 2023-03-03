@@ -120,7 +120,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <sys:String x:Key="String_Tag_Relation_RUS">👨 Начальное отношение</sys:String>
 
-    <sys:String x:Key="String_Tag_RelationFemale_RUS">👩 Начальное отношение</sys:String>
+    <sys:String x:Key="String_Tag_RelationFemale_RUS">👩 Изначальное отношение</sys:String>
 
     <sys:String x:Key="String_Tag_HasInternalDescription_RUS">Имеет внутреннее описание</sys:String>
 
