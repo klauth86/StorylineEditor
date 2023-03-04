@@ -148,14 +148,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </Setter>
     </Style>
 
-    <ControlTemplate TargetType="ContentControl" x:Key="CT_ContentControl_Comparer_List">
-        <ItemsControl FontSize="{StaticResource FontSize_VeryLarge}" Margin="{StaticResource Thickness_Margin_2x}">
-            <CheckBox VerticalContentAlignment="Center" x:Name="chb_less" Content="{DynamicResource String_Tag_CompareType_Less}" Command="{Binding CompareTypeCommand}" CommandParameter="{x:Static m:COMPARE_TYPE.LESS}"></CheckBox>
-            <CheckBox VerticalContentAlignment="Center" x:Name="chb_lessequal" Content="{DynamicResource String_Tag_CompareType_LessOrEqual}" Command="{Binding CompareTypeCommand}" CommandParameter="{x:Static m:COMPARE_TYPE.LESS_OR_EQUAL}"></CheckBox>
-            <CheckBox VerticalContentAlignment="Center" x:Name="chb_equal" Content="{DynamicResource String_Tag_CompareType_Equal}" Command="{Binding CompareTypeCommand}" CommandParameter="{x:Static m:COMPARE_TYPE.EQUAL}"></CheckBox>
-            <CheckBox VerticalContentAlignment="Center" x:Name="chb_greaterequal" Content="{DynamicResource String_Tag_CompareType_EqualOrGreater}" Command="{Binding CompareTypeCommand}" CommandParameter="{x:Static m:COMPARE_TYPE.EQUAL_OR_GREATER}"></CheckBox>
-            <CheckBox VerticalContentAlignment="Center" x:Name="chb_greater" Content="{DynamicResource String_Tag_CompareType_Greater}" Command="{Binding CompareTypeCommand}" CommandParameter="{x:Static m:COMPARE_TYPE.GREATER}"></CheckBox>
-        </ItemsControl>
+    <Style TargetType="CheckBox" x:Key="S_CheckBox_CompareType">
+        <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+        <Setter Property="FontSize" Value="{StaticResource FontSize_VeryLarge}"></Setter>
+        <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+        <Setter Property="Command" Value="{Binding CompareTypeCommand}"></Setter>
+    </Style>
+    
+    <ControlTemplate TargetType="ContentControl" x:Key="CT_ContentControl_CompareType">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <CheckBox Style="{StaticResource S_CheckBox_CompareType}" Grid.Column="0" x:Name="chb_less" Content="{DynamicResource String_Tag_CompareType_Less}" CommandParameter="{x:Static m:COMPARE_TYPE.LESS}"></CheckBox>
+            <CheckBox Style="{StaticResource S_CheckBox_CompareType}" Grid.Column="1" x:Name="chb_lessequal" Content="{DynamicResource String_Tag_CompareType_LessOrEqual}" CommandParameter="{x:Static m:COMPARE_TYPE.LESS_OR_EQUAL}"></CheckBox>
+            <CheckBox Style="{StaticResource S_CheckBox_CompareType}" Grid.Column="2" x:Name="chb_equal" Content="{DynamicResource String_Tag_CompareType_Equal}" CommandParameter="{x:Static m:COMPARE_TYPE.EQUAL}"></CheckBox>
+            <CheckBox Style="{StaticResource S_CheckBox_CompareType}" Grid.Column="3" x:Name="chb_greaterequal" Content="{DynamicResource String_Tag_CompareType_EqualOrGreater}" CommandParameter="{x:Static m:COMPARE_TYPE.EQUAL_OR_GREATER}"></CheckBox>
+            <CheckBox Style="{StaticResource S_CheckBox_CompareType}" Grid.Column="4" x:Name="chb_greater" Content="{DynamicResource String_Tag_CompareType_Greater}" CommandParameter="{x:Static m:COMPARE_TYPE.GREATER}"></CheckBox>
+        </Grid>
         <ControlTemplate.Triggers>
             <DataTrigger Binding="{Binding CompareType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Static m:COMPARE_TYPE.LESS}">
                 <Setter TargetName="chb_less" Property="IsChecked" Value="true"></Setter>

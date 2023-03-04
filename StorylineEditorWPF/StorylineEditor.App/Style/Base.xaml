@@ -34,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <Style TargetType="Slider">
         <Setter Property="TickPlacement" Value="BottomRight"></Setter>
         <Setter Property="IsSnapToTickEnabled" Value="True"></Setter>
-        <Setter Property="Margin" Value="{StaticResource Thickness_Margin_1x}"></Setter>
+        <Setter Property="Margin" Value="{StaticResource Thickness_Padding_LeftRight}"></Setter>
     </Style>
     
     <Style TargetType="TextBlock" x:Key="S_TextBlock">

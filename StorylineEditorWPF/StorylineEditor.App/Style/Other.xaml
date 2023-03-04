@@ -2003,24 +2003,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
             <GroupBox x:Name="gb_Compare" Header="{DynamicResource String_Tag_Predicate_Compare}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"></ColumnDefinition>
-                        <ColumnDefinition></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <ContentControl Grid.RowSpan="2" Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Content="{Binding}" Template="{StaticResource CT_ContentControl_Comparer_List}"></ContentControl>
-                    <TextBlock Grid.Column="2" VerticalAlignment="Bottom" HorizontalAlignment="Center" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                    <ContentControl Margin="{StaticResource Thickness_Margin_1x}" Content="{Binding}" Template="{StaticResource CT_ContentControl_CompareType}"></ContentControl>
+                    <TextBlock Grid.Row="1" HorizontalAlignment="Center" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
                     <Slider
-                        Grid.Row="1"
-                        Grid.Column="2"
+                        Grid.Row="2"
                         Value="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
                         Minimum="{StaticResource Double_Dialog_Node_Min}"
                         Maximum="{StaticResource Double_Dialog_Node_Max}"
                         TickFrequency="{StaticResource Double_Dialog_Node_Tick}"
-                        VerticalAlignment="Top"
                         ></Slider>
                 </Grid>
             </GroupBox>
@@ -2045,24 +2040,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
             <GroupBox x:Name="gb_Compare" Header="{DynamicResource String_Tag_Predicate_Compare}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"></ColumnDefinition>
-                        <ColumnDefinition></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <ContentControl Grid.RowSpan="2" Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Content="{Binding}" Template="{StaticResource CT_ContentControl_Comparer_List}"></ContentControl>
-                    <TextBlock Grid.Column="2" VerticalAlignment="Bottom" HorizontalAlignment="Center" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                    <ContentControl Margin="{StaticResource Thickness_Margin_1x}" Content="{Binding}" Template="{StaticResource CT_ContentControl_CompareType}"></ContentControl>
+                    <TextBlock Grid.Row="1" HorizontalAlignment="Center" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
                     <Slider
-                        Grid.Row="1"
-                        Grid.Column="2"
+                        Grid.Row="2"
                         Value="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
                         Minimum="{StaticResource Double_Dialog_Node_Min}"
                         Maximum="{StaticResource Double_Dialog_Node_Max}"
                         TickFrequency="{StaticResource Double_Dialog_Node_Tick}"
-                        VerticalAlignment="Top"
                         ></Slider>
                 </Grid>
             </GroupBox>
@@ -2107,24 +2097,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
             <GroupBox x:Name="gb_Compare" Header="{DynamicResource String_Tag_Predicate_Compare}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"></ColumnDefinition>
-                        <ColumnDefinition></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <ContentControl Grid.RowSpan="2" Margin="{StaticResource Thickness_Margin_1x}" VerticalAlignment="Center" Content="{Binding}" Template="{StaticResource CT_ContentControl_Comparer_List}"></ContentControl>
-                    <TextBlock Grid.Column="2" VerticalAlignment="Bottom" HorizontalAlignment="Center" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBlock>
+                    <ContentControl Margin="{StaticResource Thickness_Margin_1x}" Content="{Binding}" Template="{StaticResource CT_ContentControl_CompareType}"></ContentControl>
+                    <TextBlock Grid.Row="1" HorizontalAlignment="Center" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBlock>
                     <Slider
-                        Grid.Row="1"
-                        Grid.Column="2"
+                        Grid.Row="2"
                         Value="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
                         Minimum="{StaticResource Double_Relation_Min}"
                         Maximum="{StaticResource Double_Relation_Max}"
                         TickFrequency="{StaticResource Double_Relation_Tick}"
-                        VerticalAlignment="Top"
                         ></Slider>
                 </Grid>
             </GroupBox>
