@@ -61,7 +61,7 @@ namespace StorylineEditor.App
             InitLocalization();
 
             StorylineM storylineModel = new StorylineM();
-            storylineModel.characters.Add(new CharacterM() { id = CharacterM.PLAYER_ID, name = GetLocalizedString("String_Player") });
+            storylineModel.characters.Add(new CharacterM() { id = CharacterM.PLAYER_ID, name = GetLocalizedString("String_Player") }); ////// TODO Think if can switch with common logic
 
             SetDataContext(new StorylineVM(storylineModel));
 
@@ -76,6 +76,8 @@ namespace StorylineEditor.App
 
         protected void SetTitleForDlgWindow(string key)
         {
+            ////// TODO Think if can switch with common logic
+            
             App.Current.Resources["String_DlgWindow_Title"] = GetLocalizedString(key);
         }
 
@@ -238,6 +240,8 @@ namespace StorylineEditor.App
 
         private void btn_Config_Click(object sender, RoutedEventArgs e)
         {
+            ////// TODO Think if can switch with common logic
+            
             SetTitleForDlgWindow("String_Tag_Config_Title");
 
             new DlgWindow()
@@ -342,7 +346,7 @@ namespace StorylineEditor.App
         {
             if (dataContext is HistoryVM)
             {
-                SetTitleForDlgWindow("String_Tag_Player_Title");
+                SetTitleForDlgWindow("String_Tag_Player_Title"); ////// TODO Think if can switch with common logic
 
                 new DlgWindow()
                 {
@@ -418,306 +422,168 @@ namespace StorylineEditor.App
             string suffix = GetLocalizationSuffix(language);
 
             SetWithSuffix("String_Tag_IsDownloading", suffix);
-
             SetWithSuffix("String_Tag_ComboBoxExt_Filter_Tooltip", suffix);
-
             SetWithSuffix("String_Stats_Characters", suffix);
-
             SetWithSuffix("String_Stats_Types", suffix);
-
             SetWithSuffix("String_Stats_Node_StepM_TmpDescription", suffix);
-
             SetWithSuffix("String_Stats_Node_AlternativeM_TmpDescription", suffix);
-
             SetWithSuffix("String_Stats_Node_RandomM_TmpDescription", suffix);
-
             SetWithSuffix("String_Stats_Node_TransitM_TmpDescription", suffix);
-
             SetWithSuffix("String_Stats_Node_GateM_TmpDescription", suffix);
-
             SetWithSuffix("String_Stats_Node_ExitM_TmpDescription", suffix);
-
             SetWithSuffix("String_Stats_Node_DialogM_TmpDescription", suffix);
-
             SetWithSuffix("String_Stats_Node_ReplicaM_TmpDescription", suffix);
-
             SetWithSuffix("String_Tag_Config_Language", suffix);
-
             SetWithSuffix("String_Tag_Config_UserActions", suffix);
-
             SetWithSuffix("String_Tag_Config_UserActions_CreateNode", suffix);
-
             SetWithSuffix("String_Tag_Config_UserActions_DuplicateNode", suffix);
-
             SetWithSuffix("String_Tag_Config_UserActions_Link", suffix);
-
             SetWithSuffix("String_Tag_Config_UserActions_DragAndScroll", suffix);
-
             SetWithSuffix("String_Tag_Config_UserActions_SelectionSimple", suffix);
-
             SetWithSuffix("String_Tag_Config_UserActions_SelectionAdditive", suffix);
-
             SetWithSuffix("String_Tag_Config_UserActions_SelectionBox", suffix);
-
             SetWithSuffix("String_Tag_GlobalFilter_Tooltip", suffix);
-
             SetWithSuffix("String_Tag_MainMenu_Locations", suffix);
-
             SetWithSuffix("String_Tag_MainMenu_Characters", suffix);
-
             SetWithSuffix("String_Tag_MainMenu_Items", suffix);
-
             SetWithSuffix("String_Tag_MainMenu_Actors", suffix);
-
             SetWithSuffix("String_Tag_MainMenu_Journal", suffix);
-
             SetWithSuffix("String_Tag_MainMenu_Dialogs", suffix);
-
             SetWithSuffix("String_Tag_MainMenu_Replicas", suffix);
-
             SetWithSuffix("String_Tag_MainMenu_DialogsAndReplicas", suffix);
-
             SetWithSuffix("String_Tag_Name", suffix);
-
             SetWithSuffix("String_Tag_Description", suffix);
-
             SetWithSuffix("String_Tag_HasDescriptionFemale", suffix);
-
             SetWithSuffix("String_Tag_DescriptionMale", suffix);
-
             SetWithSuffix("String_Tag_DescriptionFemale", suffix);
-
             SetWithSuffix("String_Tag_Relation", suffix);
-
             SetWithSuffix("String_Tag_RelationFemale", suffix);
-
             SetWithSuffix("String_Tag_HasInternalDescription", suffix);
-
             SetWithSuffix("String_Tag_HasInternalDescriptionFemale", suffix);
-
             SetWithSuffix("String_Tag_InternalDescription", suffix);
-
             SetWithSuffix("String_Tag_InternalDescriptionMale", suffix);
-
             SetWithSuffix("String_Tag_InternalDescriptionFemale", suffix);
-
             SetWithSuffix("String_Tag_Graph_Tab_Props", suffix);
-
             SetWithSuffix("String_Tag_Graph_Tab_View", suffix);
-
             SetWithSuffix("String_Tag_Node_Step_Name", suffix);
-
             SetWithSuffix("String_Tag_Node_Step_Description", suffix);
-
             SetWithSuffix("String_Tag_Node_Step_Result", suffix);
-
             SetWithSuffix("String_Tag_Node_Step_Type", suffix);
-
             SetWithSuffix("String_Tag_Node_Alternative_Name", suffix);
-
             SetWithSuffix("String_Tag_Node_Alternative_Description", suffix);
-
             SetWithSuffix("String_Tag_Node_Alternative_Result", suffix);
-
             SetWithSuffix("String_Tag_Node_Alternative_Type", suffix);
-
             SetWithSuffix("String_Tag_Node_Tab_Props", suffix);
-
             SetWithSuffix("String_Tag_Node_Tab_Predicates", suffix);
-
             SetWithSuffix("String_Tag_Node_Tab_GameEvents", suffix);
-
             SetWithSuffix("String_Tag_Node_Random_Type", suffix);
-
             SetWithSuffix("String_Tag_Node_Transit_Type", suffix);
-
             SetWithSuffix("String_Tag_Node_Gate_Type", suffix);
-
             SetWithSuffix("String_Tag_Node_Exit_Type", suffix);
-
             SetWithSuffix("String_Tag_Node_Replica_Type", suffix);
-
             SetWithSuffix("String_Tag_Node_Dialog_Type", suffix);
-
             SetWithSuffix("String_Tag_Dialog_DialogCharacter", suffix);
-
             SetWithSuffix("String_Tag_Dialog_DialogLocation", suffix);
-
             SetWithSuffix("String_Tag_Dialog_ReplicaLocation", suffix);
-
             SetWithSuffix("String_Tag_Node_Regular_Character", suffix);
-
             SetWithSuffix("String_Tag_Node_Gate_TargetDialog", suffix);
-
             SetWithSuffix("String_Tag_Node_Gate_TargetExitNode", suffix);
-
             SetWithSuffix("String_Tag_Node_Regular_OverrideName", suffix);
-
             SetWithSuffix("String_Tag_Node_Regular_FileStorageType", suffix);
-
             SetWithSuffix("String_Tag_Node_Regular_FileHttpRef", suffix);
-
             SetWithSuffix("String_Tag_Node_Regular_ShortDescription", suffix);
-
             SetWithSuffix("String_Tag_StorageType_GoogleDrive", suffix);
-
             SetWithSuffix("String_Tag_Predicate_IsInversed", suffix);
-
             SetWithSuffix("String_Tag_Predicate_P_CompositeM_DisplayName", suffix);
-
             SetWithSuffix("String_Tag_Predicate_P_Dialog_HasM_DisplayName", suffix);
-
             SetWithSuffix("String_Tag_Predicate_P_Dialog_Node_Has_ActiveSession_CmpM_DisplayName", suffix);
-
             SetWithSuffix("String_Tag_Predicate_P_Dialog_Node_Has_ActiveSessionM_DisplayName", suffix);
-
             SetWithSuffix("String_Tag_Predicate_P_Dialog_Node_Has_PrevSessions_CmpM_DisplayName", suffix);
-
             SetWithSuffix("String_Tag_Predicate_P_Dialog_Node_Has_PrevSessionsM_DisplayName", suffix);
-
             SetWithSuffix("String_Tag_Predicate_P_Item_HasM_DisplayName", suffix);
-
             SetWithSuffix("String_Tag_Predicate_P_Quest_AddedM_DisplayName", suffix);
-
             SetWithSuffix("String_Tag_Predicate_P_Quest_FinishedM_DisplayName", suffix);
-
             SetWithSuffix("String_Tag_Predicate_P_Quest_Node_AddedM_DisplayName", suffix);
-
             SetWithSuffix("String_Tag_Predicate_P_Quest_Node_PassedM_DisplayName", suffix);
-
             SetWithSuffix("String_Tag_Predicate_P_Relation_HasM_DisplayName", suffix);
-
             SetWithSuffix("String_Tag_Predicate_P_CompositeM_Title", suffix);
-
             SetWithSuffix("String_Tag_Predicate_P_Dialog_HasM_Title", suffix);
-
             SetWithSuffix("String_Tag_Predicate_P_Dialog_Node_Has_ActiveSession_CmpM_Title", suffix);
-
             SetWithSuffix("String_Tag_Predicate_P_Dialog_Node_Has_ActiveSessionM_Title", suffix);
-
             SetWithSuffix("String_Tag_Predicate_P_Dialog_Node_Has_PrevSessions_CmpM_Title", suffix);
-
             SetWithSuffix("String_Tag_Predicate_P_Dialog_Node_Has_PrevSessionsM_Title", suffix);
-
             SetWithSuffix("String_Tag_Predicate_P_Item_HasM_Title", suffix);
-
             SetWithSuffix("String_Tag_Predicate_P_Quest_AddedM_Title", suffix);
-
             SetWithSuffix("String_Tag_Predicate_P_Quest_FinishedM_Title", suffix);
-
             SetWithSuffix("String_Tag_Predicate_P_Quest_Node_AddedM_Title", suffix);
-
             SetWithSuffix("String_Tag_Predicate_P_Quest_Node_PassedM_Title", suffix);
-
             SetWithSuffix("String_Tag_Predicate_P_Relation_HasM_Title", suffix);
-
             SetWithSuffix("String_Tag_Predicate_Compare", suffix);
-
             SetWithSuffix("String_Tag_Predicate_DialogOrReplica", suffix);
-
             SetWithSuffix("String_Tag_Predicate_Node", suffix);
-
             SetWithSuffix("String_Tag_Predicate_Item", suffix);
-
             SetWithSuffix("String_Tag_Predicate_Quest", suffix);
-
             SetWithSuffix("String_Tag_Predicate_Character", suffix);
-
             SetWithSuffix("String_Tag_Predicate_PredicateA", suffix);
-
             SetWithSuffix("String_Tag_Predicate_PredicateB", suffix);
-
             SetWithSuffix("String_Tag_GameEvent_IsExecutedOnLeave", suffix);
-
             SetWithSuffix("String_Tag_GameEvent_GE_Item_DropM_DisplayName", suffix);
-
             SetWithSuffix("String_Tag_GameEvent_GE_Item_PickUpM_DisplayName", suffix);
-
             SetWithSuffix("String_Tag_GameEvent_GE_Quest_AddM_DisplayName", suffix);
-
             SetWithSuffix("String_Tag_GameEvent_GE_Quest_Node_AddM_DisplayName", suffix);
-
             SetWithSuffix("String_Tag_GameEvent_GE_Quest_Node_PassM_DisplayName", suffix);
-
             SetWithSuffix("String_Tag_GameEvent_GE_Relation_ChangeM_DisplayName", suffix);
-
             SetWithSuffix("String_Tag_GameEvent_GE_Item_DropM_Title", suffix);
-
             SetWithSuffix("String_Tag_GameEvent_GE_Item_PickUpM_Title", suffix);
-
             SetWithSuffix("String_Tag_GameEvent_GE_Quest_AddM_Title", suffix);
-
             SetWithSuffix("String_Tag_GameEvent_GE_Quest_Node_AddM_Title", suffix);
-
             SetWithSuffix("String_Tag_GameEvent_GE_Quest_Node_PassM_Title", suffix);
-
             SetWithSuffix("String_Tag_GameEvent_GE_Relation_ChangeM_Title", suffix);
-
             SetWithSuffix("String_Tag_GameEvent_GE_Relation_ChangeM", suffix);
-
             SetWithSuffix("String_Tag_Player_Tab_Props", suffix);
-
             SetWithSuffix("String_Tag_Player_FullMode", suffix);
-
             SetWithSuffix("String_Tag_Player_Error", suffix);
-
             SetWithSuffix("String_Tag_Player_PlayRate", suffix);
-
             SetWithSuffix("String_Tag_Player_Duration", suffix);
-
             SetWithSuffix("String_Tag_Player_QuestNodeIsPassed", suffix);
-
             SetWithSuffix("String_MainMenu_Open_Tooltip", suffix);
-
             SetWithSuffix("String_MainMenu_Save_Tooltip", suffix);
-
             SetWithSuffix("String_MainMenu_Condig_Tooltip", suffix);
-
             SetWithSuffix("String_TabMenu_Up_Tooltip", suffix);
-
             SetWithSuffix("String_TabMenu_Add_Tooltip", suffix);
-
             SetWithSuffix("String_TabMenu_AddFolder_Tooltip", suffix);
-
             SetWithSuffix("String_TabMenu_Remove_Tooltip", suffix);
-
             SetWithSuffix("String_TabMenu_Cut_Tooltip", suffix);
-
             SetWithSuffix("String_TabMenu_Paste_Tooltip", suffix);
-
             SetWithSuffix("String_GraphMenu_PrevRootNode_Tooltip", suffix);
-
             SetWithSuffix("String_GraphMenu_NextRootNode_Tooltip", suffix);
-
             SetWithSuffix("String_GraphMenu_ResetScale_Tooltip", suffix);
-
             SetWithSuffix("String_GraphMenu_GoToOrigin_Tooltip", suffix);
-
             SetWithSuffix("String_GraphMenu_Play_Tooltip", suffix);
-
             SetWithSuffix("String_HasPredicates_Tooltip", suffix);
-
             SetWithSuffix("String_HasGameEvents_Tooltip", suffix);
-
             SetWithSuffix("String_Player_Stop_Tooltip", suffix);
-
             SetWithSuffix("String_Player_Pause_Tooltip", suffix);
-
             SetWithSuffix("String_Player_Play_Tooltip", suffix);
-
             SetWithSuffix("String_Bold_Tooltip", suffix);
-
             SetWithSuffix("String_Italic_Tooltip", suffix);
-
             SetWithSuffix("String_Underline_Tooltip", suffix);
-
             SetWithSuffix("String_Error_Line1", suffix);
-
             SetWithSuffix("String_Error_Line2", suffix);
-
             SetWithSuffix("String_Error_Line3", suffix);
-
             SetWithSuffix("String_Error_Line4", suffix);
+            SetWithSuffix("String_Tag_Config_Title", suffix);
+            SetWithSuffix("String_Tag_Player_Title", suffix);
+            SetWithSuffix("String_New_Storyline", suffix);
+            SetWithSuffix("String_Player", suffix);
+            SetWithSuffix("String_New_Folder", suffix);
+            SetWithSuffix("String_New_Location", suffix);
+            SetWithSuffix("String_New_Character", suffix);
+            SetWithSuffix("String_New_Item", suffix);
+            SetWithSuffix("String_New_Actor", suffix);
+            SetWithSuffix("String_New_Quest", suffix);
+            SetWithSuffix("String_New_Dialog", suffix);
+            SetWithSuffix("String_New_Replica", suffix);
 
             // Update main window title if it is new project
 

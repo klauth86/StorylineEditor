@@ -20,280 +20,168 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-  <!--COMMON-->
-
-  <sys:String x:Key="String_Tag_IsDownloading_ENG">🡇</sys:String>
-
-  <sys:String x:Key="String_Tag_ComboBoxExt_Filter_Tooltip_ENG">Search by ...</sys:String>
-
-  <!--STATS-->
-
-  <sys:String x:Key="String_Stats_Characters_ENG">BY CHARACTERS:</sys:String>
-
-  <sys:String x:Key="String_Stats_Types_ENG">BY TYPES:</sys:String>
-
-  <sys:String x:Key="String_Stats_Node_StepM_TmpDescription_ENG">✔ Step</sys:String>
-
-  <sys:String x:Key="String_Stats_Node_AlternativeM_TmpDescription_ENG">💡 Alternative</sys:String>
-
-  <sys:String x:Key="String_Stats_Node_RandomM_TmpDescription_ENG">⇝ Random</sys:String>
-
-  <sys:String x:Key="String_Stats_Node_TransitM_TmpDescription_ENG">⇴ Transit</sys:String>
-
-  <sys:String x:Key="String_Stats_Node_GateM_TmpDescription_ENG">⎆ Entry</sys:String>
-
-  <sys:String x:Key="String_Stats_Node_ExitM_TmpDescription_ENG">🚪 Exit</sys:String>
-
-  <sys:String x:Key="String_Stats_Node_DialogM_TmpDescription_ENG">💬 Dialog</sys:String>
-
-  <sys:String x:Key="String_Stats_Node_ReplicaM_TmpDescription_ENG">🗣 Replica</sys:String>
-
-  <!--CONFIG-->
-
-  <sys:String x:Key="String_Tag_Config_Title_ENG">⚙ Settings</sys:String>
-
-  <sys:String x:Key="String_Tag_Config_Language_ENG">Language</sys:String>
-
-  <sys:String x:Key="String_Tag_Config_UserActions_ENG">Keyboard and mouse</sys:String>
-
-  <sys:String x:Key="String_Tag_Config_UserActions_CreateNode_ENG">Create nodes</sys:String>
-
-  <sys:String x:Key="String_Tag_Config_UserActions_DuplicateNode_ENG">Copy nodes</sys:String>
-
-  <sys:String x:Key="String_Tag_Config_UserActions_Link_ENG">Link nodes</sys:String>
-
-  <sys:String x:Key="String_Tag_Config_UserActions_DragAndScroll_ENG">Drag/scroll</sys:String>
-
-  <sys:String x:Key="String_Tag_Config_UserActions_SelectionSimple_ENG">Simple selection</sys:String>
-
-  <sys:String x:Key="String_Tag_Config_UserActions_SelectionAdditive_ENG">Multiple selection</sys:String>
-
-  <sys:String x:Key="String_Tag_Config_UserActions_SelectionBox_ENG">Box selection</sys:String>
-
-  <!--MAIN MENU-->
-
-  <sys:String x:Key="String_Tag_GlobalFilter_Tooltip_ENG">Filter by ...</sys:String>
-
-  <sys:String x:Key="String_Tag_MainMenu_Locations_ENG">Locations</sys:String>
-
-  <sys:String x:Key="String_Tag_MainMenu_Characters_ENG">Characters</sys:String>
-
-  <sys:String x:Key="String_Tag_MainMenu_Items_ENG">Items</sys:String>
-
-  <sys:String x:Key="String_Tag_MainMenu_Actors_ENG">Actors</sys:String>
-
-  <sys:String x:Key="String_Tag_MainMenu_Journal_ENG">Journal</sys:String>
-
-  <sys:String x:Key="String_Tag_MainMenu_Dialogs_ENG">Dialogs</sys:String>
-
-  <sys:String x:Key="String_Tag_MainMenu_Replicas_ENG">Replicas</sys:String>
-
-  <sys:String x:Key="String_Tag_MainMenu_DialogsAndReplicas_ENG">Dialogs and replicas</sys:String>
-
-  <!--PROPS-->
-
-  <sys:String x:Key="String_Tag_Name_ENG">Name</sys:String>
-
-  <sys:String x:Key="String_Tag_Description_ENG">Description</sys:String>
-
-  <sys:String x:Key="String_Tag_HasDescriptionFemale_ENG">Description by Gender</sys:String>
-
-  <sys:String x:Key="String_Tag_DescriptionMale_ENG">👨 Description</sys:String>
-
-  <sys:String x:Key="String_Tag_DescriptionFemale_ENG">👩 Description</sys:String>
-
-  <sys:String x:Key="String_Tag_Relation_ENG">👨 Initial Relation</sys:String>
-
-  <sys:String x:Key="String_Tag_RelationFemale_ENG">👩 Initial Relation</sys:String>
-
-  <sys:String x:Key="String_Tag_HasInternalDescription_ENG">Has Internal description</sys:String>
-
-  <sys:String x:Key="String_Tag_HasInternalDescriptionFemale_ENG">Internal description by Gender</sys:String>
-
-  <sys:String x:Key="String_Tag_InternalDescription_ENG">Internal description</sys:String>
-
-  <sys:String x:Key="String_Tag_InternalDescriptionMale_ENG">👨 Internal description</sys:String>
-
-  <sys:String x:Key="String_Tag_InternalDescriptionFemale_ENG">👩 Internal description</sys:String>
-
-  <!--GRAPH-->
-
-  <sys:String x:Key="String_Tag_Graph_Tab_Props_ENG">Properties</sys:String>
-
-  <sys:String x:Key="String_Tag_Graph_Tab_View_ENG">Nodes</sys:String>
-
-  <!--JOURNAL NODES-->
-
-  <sys:String x:Key="String_Tag_Node_Step_Name_ENG">Step name</sys:String>
-
-  <sys:String x:Key="String_Tag_Node_Step_Description_ENG">Step description</sys:String>
-
-  <sys:String x:Key="String_Tag_Node_Step_Result_ENG">Result</sys:String>
-
-  <sys:String x:Key="String_Tag_Node_Step_Type_ENG">Step</sys:String>
-
-  <sys:String x:Key="String_Tag_Node_Alternative_Name_ENG">Alternative name</sys:String>
-
-  <sys:String x:Key="String_Tag_Node_Alternative_Description_ENG">Alternative description</sys:String>
-
-  <sys:String x:Key="String_Tag_Node_Alternative_Result_ENG">Result</sys:String>
-
-  <sys:String x:Key="String_Tag_Node_Alternative_Type_ENG">Alternative</sys:String>
-
-  <!--NODES-->
-
-  <sys:String x:Key="String_Tag_Node_Tab_Props_ENG">Properties</sys:String>
-
-  <sys:String x:Key="String_Tag_Node_Tab_Predicates_ENG">Predicates</sys:String>
-
-  <sys:String x:Key="String_Tag_Node_Tab_GameEvents_ENG">Game events</sys:String>
-
-  <sys:String x:Key="String_Tag_Node_Random_Type_ENG">Random</sys:String>
-
-  <sys:String x:Key="String_Tag_Node_Transit_Type_ENG">Transit</sys:String>
-
-  <sys:String x:Key="String_Tag_Node_Gate_Type_ENG">Entry</sys:String>
-
-  <sys:String x:Key="String_Tag_Node_Exit_Type_ENG">Exit</sys:String>
-
-  <sys:String x:Key="String_Tag_Node_Replica_Type_ENG">Replica</sys:String>
-
-  <sys:String x:Key="String_Tag_Node_Dialog_Type_ENG">Dialog</sys:String>
-
-  <sys:String x:Key="String_Tag_Dialog_DialogCharacter_ENG">Character</sys:String>
-
-  <sys:String x:Key="String_Tag_Dialog_DialogLocation_ENG">Location</sys:String>
-
-  <sys:String x:Key="String_Tag_Dialog_ReplicaLocation_ENG">Location</sys:String>
-
-  <sys:String x:Key="String_Tag_Node_Regular_Character_ENG">Owner</sys:String>
-
-  <sys:String x:Key="String_Tag_Node_Gate_TargetDialog_ENG">Dialog</sys:String>
-
-  <sys:String x:Key="String_Tag_Node_Gate_TargetExitNode_ENG">Exit</sys:String>
-
-  <sys:String x:Key="String_Tag_Node_Regular_OverrideName_ENG">Override Name</sys:String>
-
-  <sys:String x:Key="String_Tag_Node_Regular_FileStorageType_ENG">Storage type</sys:String>
-
-  <sys:String x:Key="String_Tag_Node_Regular_FileHttpRef_ENG">Audio source</sys:String>
-
-  <sys:String x:Key="String_Tag_Node_Regular_ShortDescription_ENG">Short description</sys:String>
-
-  <sys:String x:Key="String_Tag_StorageType_GoogleDrive_ENG">Google Drive</sys:String>
-
-  <!--PREDICATES-->
-
-  <sys:String x:Key="String_Tag_Predicate_IsInversed_ENG">Invert</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_P_CompositeM_DisplayName_ENG">Composite</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_P_Dialog_HasM_DisplayName_ENG">Dialogs and replicas: has</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_ActiveSession_CmpM_DisplayName_ENG">Dialogs and replicas: has node in active session &lt;&gt;</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_ActiveSessionM_DisplayName_ENG">Dialogs and replicas: has node in active session</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_PrevSessions_CmpM_DisplayName_ENG">Dialogs and replicas: has node in prev session &lt;&gt;</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_PrevSessionsM_DisplayName_ENG">Dialogs and replicas: has node in prev session</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_P_Item_HasM_DisplayName_ENG">Item: has</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_P_Quest_AddedM_DisplayName_ENG">Quest: added</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_P_Quest_FinishedM_DisplayName_ENG">Quest: completed</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_P_Quest_Node_AddedM_DisplayName_ENG">Quest: step/alternative added</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_P_Quest_Node_PassedM_DisplayName_ENG">Quest: step/alternative passed</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_P_Relation_HasM_DisplayName_ENG">Relation: has</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_P_CompositeM_Title_ENG">Composite</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_P_Dialog_HasM_Title_ENG">Dialogs and replicas: has</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_ActiveSession_CmpM_Title_ENG">Dialogs and replicas: has node in active session &lt;&gt;</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_ActiveSessionM_Title_ENG">Dialogs and replicas: has node in active session</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_PrevSessions_CmpM_Title_ENG">Dialogs and replicas: has node in prev session &lt;&gt;</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_PrevSessionsM_Title_ENG">Dialogs and replicas: has node in prev session</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_P_Item_HasM_Title_ENG">Item: has</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_P_Quest_AddedM_Title_ENG">Quest: added</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_P_Quest_FinishedM_Title_ENG">Quest: completed</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_P_Quest_Node_AddedM_Title_ENG">Quest: step/alternative added</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_P_Quest_Node_PassedM_Title_ENG">Quest: step/alternative passed</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_P_Relation_HasM_Title_ENG">Relation: has</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_Compare_ENG">Conditions</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_DialogOrReplica_ENG">Dialog or replica</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_Node_ENG">Node</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_Item_ENG">Item</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_Quest_ENG">Quest</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_Character_ENG">Character</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_PredicateA_ENG">Predicate A</sys:String>
-
-  <sys:String x:Key="String_Tag_Predicate_PredicateB_ENG">Predicate B</sys:String>
-
-  <!--GAME EVENTS-->
-
-  <sys:String x:Key="String_Tag_GameEvent_IsExecutedOnLeave_ENG">Execute on leave</sys:String>
-
-  <sys:String x:Key="String_Tag_GameEvent_GE_Item_DropM_DisplayName_ENG">Item: drop</sys:String>
-
-  <sys:String x:Key="String_Tag_GameEvent_GE_Item_PickUpM_DisplayName_ENG">Item: pickup</sys:String>
-
-  <sys:String x:Key="String_Tag_GameEvent_GE_Quest_AddM_DisplayName_ENG">Quest: add</sys:String>
-
-  <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_AddM_DisplayName_ENG">Quest: add step/alternative</sys:String>
-
-  <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_PassM_DisplayName_ENG">Quest: pass step/alternative</sys:String>
-
-  <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_DisplayName_ENG">Relation: change</sys:String>
-
-  <sys:String x:Key="String_Tag_GameEvent_GE_Item_DropM_Title_ENG">Item: drop</sys:String>
-
-  <sys:String x:Key="String_Tag_GameEvent_GE_Item_PickUpM_Title_ENG">Item: pickup</sys:String>
-
-  <sys:String x:Key="String_Tag_GameEvent_GE_Quest_AddM_Title_ENG">Quest: add</sys:String>
-
-  <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_AddM_Title_ENG">Quest: add step/alternative</sys:String>
-
-  <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_PassM_Title_ENG">Quest: pass step/alternative</sys:String>
-
-  <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_Title_ENG">Relation: change</sys:String>
-
-  <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_ENG">Change by</sys:String>    
-  
-  <!--PLAYER-->
-
-  <sys:String x:Key="String_Tag_Player_Title_ENG">▶ Player</sys:String>
-
-  <sys:String x:Key="String_Tag_Player_Tab_Props_ENG">Main</sys:String>
-
-  <sys:String x:Key="String_Tag_Player_FullMode_ENG">Full mode</sys:String>
-
-  <sys:String x:Key="String_Tag_Player_Error_ENG">ERROR</sys:String>
-
-  <sys:String x:Key="String_Tag_Player_PlayRate_ENG">Play rate, %</sys:String>
-
-  <sys:String x:Key="String_Tag_Player_Duration_ENG">Node duration, sec</sys:String>
-
-  <sys:String x:Key="String_Tag_Player_QuestNodeIsPassed_ENG">Step/alternative passed</sys:String>
+    <sys:String x:Key="String_Tag_IsDownloading_ENG">🡇</sys:String>
+    <sys:String x:Key="String_Tag_ComboBoxExt_Filter_Tooltip_ENG">Search by ...</sys:String>
+    <sys:String x:Key="String_Stats_Characters_ENG">BY CHARACTERS:</sys:String>
+    <sys:String x:Key="String_Stats_Types_ENG">BY TYPES:</sys:String>
+    <sys:String x:Key="String_Stats_Node_StepM_TmpDescription_ENG">✔ Step</sys:String>
+    <sys:String x:Key="String_Stats_Node_AlternativeM_TmpDescription_ENG">💡 Alternative</sys:String>
+    <sys:String x:Key="String_Stats_Node_RandomM_TmpDescription_ENG">⇝ Random</sys:String>
+    <sys:String x:Key="String_Stats_Node_TransitM_TmpDescription_ENG">⇴ Transit</sys:String>
+    <sys:String x:Key="String_Stats_Node_GateM_TmpDescription_ENG">⎆ Entry</sys:String>
+    <sys:String x:Key="String_Stats_Node_ExitM_TmpDescription_ENG">🚪 Exit</sys:String>
+    <sys:String x:Key="String_Stats_Node_DialogM_TmpDescription_ENG">💬 Dialog</sys:String>
+    <sys:String x:Key="String_Stats_Node_ReplicaM_TmpDescription_ENG">🗣 Replica</sys:String>
+    <sys:String x:Key="String_Tag_Config_Language_ENG">Language</sys:String>
+    <sys:String x:Key="String_Tag_Config_UserActions_ENG">Keyboard and mouse</sys:String>
+    <sys:String x:Key="String_Tag_Config_UserActions_CreateNode_ENG">Create nodes</sys:String>
+    <sys:String x:Key="String_Tag_Config_UserActions_DuplicateNode_ENG">Copy nodes</sys:String>
+    <sys:String x:Key="String_Tag_Config_UserActions_Link_ENG">Link nodes</sys:String>
+    <sys:String x:Key="String_Tag_Config_UserActions_DragAndScroll_ENG">Drag/scroll</sys:String>
+    <sys:String x:Key="String_Tag_Config_UserActions_SelectionSimple_ENG">Simple selection</sys:String>
+    <sys:String x:Key="String_Tag_Config_UserActions_SelectionAdditive_ENG">Multiple selection</sys:String>
+    <sys:String x:Key="String_Tag_Config_UserActions_SelectionBox_ENG">Box selection</sys:String>
+    <sys:String x:Key="String_Tag_GlobalFilter_Tooltip_ENG">Filter by ...</sys:String>
+    <sys:String x:Key="String_Tag_MainMenu_Locations_ENG">Locations</sys:String>
+    <sys:String x:Key="String_Tag_MainMenu_Characters_ENG">Characters</sys:String>
+    <sys:String x:Key="String_Tag_MainMenu_Items_ENG">Items</sys:String>
+    <sys:String x:Key="String_Tag_MainMenu_Actors_ENG">Actors</sys:String>
+    <sys:String x:Key="String_Tag_MainMenu_Journal_ENG">Journal</sys:String>
+    <sys:String x:Key="String_Tag_MainMenu_Dialogs_ENG">Dialogs</sys:String>
+    <sys:String x:Key="String_Tag_MainMenu_Replicas_ENG">Replicas</sys:String>
+    <sys:String x:Key="String_Tag_MainMenu_DialogsAndReplicas_ENG">Dialogs and replicas</sys:String>
+    <sys:String x:Key="String_Tag_Name_ENG">Name</sys:String>
+    <sys:String x:Key="String_Tag_Description_ENG">Description</sys:String>
+    <sys:String x:Key="String_Tag_HasDescriptionFemale_ENG">Description by Gender</sys:String>
+    <sys:String x:Key="String_Tag_DescriptionMale_ENG">👨 Description</sys:String>
+    <sys:String x:Key="String_Tag_DescriptionFemale_ENG">👩 Description</sys:String>
+    <sys:String x:Key="String_Tag_Relation_ENG">👨 Initial Relation</sys:String>
+    <sys:String x:Key="String_Tag_RelationFemale_ENG">👩 Initial Relation</sys:String>
+    <sys:String x:Key="String_Tag_HasInternalDescription_ENG">Has Internal description</sys:String>
+    <sys:String x:Key="String_Tag_HasInternalDescriptionFemale_ENG">Internal description by Gender</sys:String>
+    <sys:String x:Key="String_Tag_InternalDescription_ENG">Internal description</sys:String>
+    <sys:String x:Key="String_Tag_InternalDescriptionMale_ENG">👨 Internal description</sys:String>
+    <sys:String x:Key="String_Tag_InternalDescriptionFemale_ENG">👩 Internal description</sys:String>
+    <sys:String x:Key="String_Tag_Graph_Tab_Props_ENG">Properties</sys:String>
+    <sys:String x:Key="String_Tag_Graph_Tab_View_ENG">Nodes</sys:String>
+    <sys:String x:Key="String_Tag_Node_Step_Name_ENG">Step name</sys:String>
+    <sys:String x:Key="String_Tag_Node_Step_Description_ENG">Step description</sys:String>
+    <sys:String x:Key="String_Tag_Node_Step_Result_ENG">Result</sys:String>
+    <sys:String x:Key="String_Tag_Node_Step_Type_ENG">Step</sys:String>
+    <sys:String x:Key="String_Tag_Node_Alternative_Name_ENG">Alternative name</sys:String>
+    <sys:String x:Key="String_Tag_Node_Alternative_Description_ENG">Alternative description</sys:String>
+    <sys:String x:Key="String_Tag_Node_Alternative_Result_ENG">Result</sys:String>
+    <sys:String x:Key="String_Tag_Node_Alternative_Type_ENG">Alternative</sys:String>
+    <sys:String x:Key="String_Tag_Node_Tab_Props_ENG">Properties</sys:String>
+    <sys:String x:Key="String_Tag_Node_Tab_Predicates_ENG">Predicates</sys:String>
+    <sys:String x:Key="String_Tag_Node_Tab_GameEvents_ENG">Game events</sys:String>
+    <sys:String x:Key="String_Tag_Node_Random_Type_ENG">Random</sys:String>
+    <sys:String x:Key="String_Tag_Node_Transit_Type_ENG">Transit</sys:String>
+    <sys:String x:Key="String_Tag_Node_Gate_Type_ENG">Entry</sys:String>
+    <sys:String x:Key="String_Tag_Node_Exit_Type_ENG">Exit</sys:String>
+    <sys:String x:Key="String_Tag_Node_Replica_Type_ENG">Replica</sys:String>
+    <sys:String x:Key="String_Tag_Node_Dialog_Type_ENG">Dialog</sys:String>
+    <sys:String x:Key="String_Tag_Dialog_DialogCharacter_ENG">Character</sys:String>
+    <sys:String x:Key="String_Tag_Dialog_DialogLocation_ENG">Location</sys:String>
+    <sys:String x:Key="String_Tag_Dialog_ReplicaLocation_ENG">Location</sys:String>
+    <sys:String x:Key="String_Tag_Node_Regular_Character_ENG">Owner</sys:String>
+    <sys:String x:Key="String_Tag_Node_Gate_TargetDialog_ENG">Dialog</sys:String>
+    <sys:String x:Key="String_Tag_Node_Gate_TargetExitNode_ENG">Exit</sys:String>
+    <sys:String x:Key="String_Tag_Node_Regular_OverrideName_ENG">Override Name</sys:String>
+    <sys:String x:Key="String_Tag_Node_Regular_FileStorageType_ENG">Storage type</sys:String>
+    <sys:String x:Key="String_Tag_Node_Regular_FileHttpRef_ENG">Audio source</sys:String>
+    <sys:String x:Key="String_Tag_Node_Regular_ShortDescription_ENG">Short description</sys:String>
+    <sys:String x:Key="String_Tag_StorageType_GoogleDrive_ENG">Google Drive</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_IsInversed_ENG">Invert</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_P_CompositeM_DisplayName_ENG">Composite</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_HasM_DisplayName_ENG">Dialogs and replicas: has</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_ActiveSession_CmpM_DisplayName_ENG">Dialogs and replicas: has node in active session &lt;&gt;</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_ActiveSessionM_DisplayName_ENG">Dialogs and replicas: has node in active session</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_PrevSessions_CmpM_DisplayName_ENG">Dialogs and replicas: has node in prev session &lt;&gt;</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_PrevSessionsM_DisplayName_ENG">Dialogs and replicas: has node in prev session</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_P_Item_HasM_DisplayName_ENG">Item: has</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_AddedM_DisplayName_ENG">Quest: added</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_FinishedM_DisplayName_ENG">Quest: completed</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_Node_AddedM_DisplayName_ENG">Quest: step/alternative added</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_Node_PassedM_DisplayName_ENG">Quest: step/alternative passed</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_P_Relation_HasM_DisplayName_ENG">Relation: has</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_P_CompositeM_Title_ENG">Composite</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_HasM_Title_ENG">Dialogs and replicas: has</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_ActiveSession_CmpM_Title_ENG">Dialogs and replicas: has node in active session &lt;&gt;</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_ActiveSessionM_Title_ENG">Dialogs and replicas: has node in active session</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_PrevSessions_CmpM_Title_ENG">Dialogs and replicas: has node in prev session &lt;&gt;</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_P_Dialog_Node_Has_PrevSessionsM_Title_ENG">Dialogs and replicas: has node in prev session</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_P_Item_HasM_Title_ENG">Item: has</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_AddedM_Title_ENG">Quest: added</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_FinishedM_Title_ENG">Quest: completed</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_Node_AddedM_Title_ENG">Quest: step/alternative added</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_P_Quest_Node_PassedM_Title_ENG">Quest: step/alternative passed</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_P_Relation_HasM_Title_ENG">Relation: has</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_Compare_ENG">Conditions</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_DialogOrReplica_ENG">Dialog or replica</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_Node_ENG">Node</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_Item_ENG">Item</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_Quest_ENG">Quest</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_Character_ENG">Character</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_PredicateA_ENG">Predicate A</sys:String>
+    <sys:String x:Key="String_Tag_Predicate_PredicateB_ENG">Predicate B</sys:String>
+    <sys:String x:Key="String_Tag_GameEvent_IsExecutedOnLeave_ENG">Execute on leave</sys:String>
+    <sys:String x:Key="String_Tag_GameEvent_GE_Item_DropM_DisplayName_ENG">Item: drop</sys:String>
+    <sys:String x:Key="String_Tag_GameEvent_GE_Item_PickUpM_DisplayName_ENG">Item: pickup</sys:String>
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_AddM_DisplayName_ENG">Quest: add</sys:String>
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_AddM_DisplayName_ENG">Quest: add step/alternative</sys:String>
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_PassM_DisplayName_ENG">Quest: pass step/alternative</sys:String>
+    <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_DisplayName_ENG">Relation: change</sys:String>
+    <sys:String x:Key="String_Tag_GameEvent_GE_Item_DropM_Title_ENG">Item: drop</sys:String>
+    <sys:String x:Key="String_Tag_GameEvent_GE_Item_PickUpM_Title_ENG">Item: pickup</sys:String>
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_AddM_Title_ENG">Quest: add</sys:String>
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_AddM_Title_ENG">Quest: add step/alternative</sys:String>
+    <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_PassM_Title_ENG">Quest: pass step/alternative</sys:String>
+    <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_Title_ENG">Relation: change</sys:String>
+    <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_ENG">Change by</sys:String>
+    <sys:String x:Key="String_Tag_Player_Tab_Props_ENG">Main</sys:String>
+    <sys:String x:Key="String_Tag_Player_FullMode_ENG">Full mode</sys:String>
+    <sys:String x:Key="String_Tag_Player_Error_ENG">ERROR</sys:String>
+    <sys:String x:Key="String_Tag_Player_PlayRate_ENG">Play rate, %</sys:String>
+    <sys:String x:Key="String_Tag_Player_Duration_ENG">Node duration, sec</sys:String>
+    <sys:String x:Key="String_Tag_Player_QuestNodeIsPassed_ENG">Step/alternative passed</sys:String>
+    <sys:String x:Key="String_MainMenu_Open_Tooltip_ENG">Open</sys:String>
+    <sys:String x:Key="String_MainMenu_Save_Tooltip_ENG">Save</sys:String>
+    <sys:String x:Key="String_MainMenu_Condig_Tooltip_ENG">Settings</sys:String>
+    <sys:String x:Key="String_TabMenu_Up_Tooltip_ENG">Up</sys:String>
+    <sys:String x:Key="String_TabMenu_Add_Tooltip_ENG">Create</sys:String>
+    <sys:String x:Key="String_TabMenu_AddFolder_Tooltip_ENG">Create folder</sys:String>
+    <sys:String x:Key="String_TabMenu_Remove_Tooltip_ENG">Remove</sys:String>
+    <sys:String x:Key="String_TabMenu_Cut_Tooltip_ENG">Cut</sys:String>
+    <sys:String x:Key="String_TabMenu_Paste_Tooltip_ENG">Paste</sys:String>
+    <sys:String x:Key="String_GraphMenu_PrevRootNode_Tooltip_ENG">To previous root</sys:String>
+    <sys:String x:Key="String_GraphMenu_NextRootNode_Tooltip_ENG">To next root</sys:String>
+    <sys:String x:Key="String_GraphMenu_ResetScale_Tooltip_ENG">Reset scale</sys:String>
+    <sys:String x:Key="String_GraphMenu_GoToOrigin_Tooltip_ENG">To origin</sys:String>
+    <sys:String x:Key="String_GraphMenu_Play_Tooltip_ENG">Play</sys:String>
+    <sys:String x:Key="String_HasPredicates_Tooltip_ENG">Has predicates</sys:String>
+    <sys:String x:Key="String_HasGameEvents_Tooltip_ENG">Has game events</sys:String>
+    <sys:String x:Key="String_Player_Stop_Tooltip_ENG">Stop</sys:String>
+    <sys:String x:Key="String_Player_Pause_Tooltip_ENG">Pause</sys:String>
+    <sys:String x:Key="String_Player_Play_Tooltip_ENG">Start</sys:String>
+    <sys:String x:Key="String_Bold_Tooltip_ENG">Bold</sys:String>
+    <sys:String x:Key="String_Italic_Tooltip_ENG">Italic</sys:String>
+    <sys:String x:Key="String_Underline_Tooltip_ENG">Underline</sys:String>
+    <sys:String x:Key="String_Error_Line1_ENG">Child nodes dont met any of supported cases:</sys:String>
+    <sys:String x:Key="String_Error_Line2_ENG">- After Random node (⇝) any child nodes collection is valid...</sys:String>
+    <sys:String x:Key="String_Error_Line3_ENG">- If non-Random node (💬, ⇴) has only one actual child node (i.e. successfully passed by Predicates and Gender in current context), then this child node can be any except Transit node (⇴) with several actual child nodes...</sys:String>
+    <sys:String x:Key="String_Error_Line4_ENG">- If non-Random node (💬, ⇴) has several actual child nodes (i.e. successfully passed by Predicates and Gender in current context), then these child nodes can be Main Character nodes (i.e. owned by Main Character) or Transit nodes, through which only Main Character nodes are accessible (MAIN CHARACTER CHOICE)...</sys:String>
+    <sys:String x:Key="String_Tag_Config_Title_ENG">⚙ Settings</sys:String>
+    <sys:String x:Key="String_Tag_Player_Title_ENG">▶ Player</sys:String>
+    <sys:String x:Key="String_New_Storyline_ENG">new project</sys:String>
+    <sys:String x:Key="String_Player_ENG">Main Character</sys:String>
+    <sys:String x:Key="String_New_Folder_ENG">New Folder</sys:String>
+    <sys:String x:Key="String_New_Location_ENG">New Location</sys:String>
+    <sys:String x:Key="String_New_Character_ENG">New Character</sys:String>
+    <sys:String x:Key="String_New_Item_ENG">New Item</sys:String>
+    <sys:String x:Key="String_New_Actor_ENG">New Actor</sys:String>
+    <sys:String x:Key="String_New_Quest_ENG">New Quest</sys:String>
+    <sys:String x:Key="String_New_Dialog_ENG">New Dialog</sys:String>
+    <sys:String x:Key="String_New_Replica_ENG">New Replica</sys:String>
 
 </ResourceDictionary>
