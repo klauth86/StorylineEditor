@@ -58,10 +58,10 @@ namespace StorylineEditor.App
             ActiveContext.DialogService = this;
             ActiveContext.LocalizationService = this;
 
-            InitLocalization();
+            InitializeLoc();
 
             StorylineM storylineModel = new StorylineM();
-            storylineModel.characters.Add(new CharacterM() { id = CharacterM.PLAYER_ID, name = GetLocalizedString("String_Player") }); ////// TODO Think if can switch with common logic
+            storylineModel.characters.Add(new CharacterM() { id = CharacterM.PLAYER_ID, name = App.Current.Resources["String_Player"]?.ToString() });
 
             SetDataContext(new StorylineVM(storylineModel));
 
@@ -72,13 +72,6 @@ namespace StorylineEditor.App
         {
             var assemblyName = Assembly.GetExecutingAssembly().GetName();
             App.Current.Resources["String_MainWindow_Title"] = string.Format("{0} [{1}]", assemblyName.Name, ActiveContext.FileService.Path ?? GetLocalizedString("String_New_Storyline"));
-        }
-
-        protected void SetTitleForDlgWindow(string key)
-        {
-            ////// TODO Think if can switch with common logic
-            
-            App.Current.Resources["String_DlgWindow_Title"] = GetLocalizedString(key);
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -240,9 +233,7 @@ namespace StorylineEditor.App
 
         private void btn_Config_Click(object sender, RoutedEventArgs e)
         {
-            ////// TODO Think if can switch with common logic
-            
-            SetTitleForDlgWindow("String_Tag_Config_Title");
+            App.Current.Resources["String_DlgWindow_Title"] = GetLocalizedString("String_Tag_Config_Title");
 
             new DlgWindow()
             {
@@ -346,7 +337,7 @@ namespace StorylineEditor.App
         {
             if (dataContext is HistoryVM)
             {
-                SetTitleForDlgWindow("String_Tag_Player_Title"); ////// TODO Think if can switch with common logic
+                App.Current.Resources["String_DlgWindow_Title"] = GetLocalizedString("String_Tag_Player_Title");
 
                 new DlgWindow()
                 {
@@ -374,7 +365,7 @@ namespace StorylineEditor.App
             }
         }
 
-        public void InitLocalization()
+        public void InitializeLoc()
         {
             if (ConfigM.Config.Language == LANGUAGE.UNSET)
             {
@@ -589,7 +580,7 @@ namespace StorylineEditor.App
 
             SetTitleForMainWindow();
 
-            SetTitleForDlgWindow("String_Tag_Config_Title");
+            App.Current.Resources["String_DlgWindow_Title"] = GetLocalizedString("String_Tag_Config_Title");
         }
 
         protected void SetWithSuffix(string key, string suffix)

@@ -20,7 +20,7 @@ namespace StorylineEditor.Service
 {
     public interface ILocalizationService
     {
-        void InitLocalization();
+        void InitializeLoc();
         void SwitchLocalization(byte language);
         string GetLocalizedString(string key);
     }
