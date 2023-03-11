@@ -2322,6 +2322,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <x:Array x:Key="ARRAY_Languages"  Type="{x:Type sys:Byte}">
         <x:Static Member="vmconfig:LANGUAGE.ENG"></x:Static>
         <x:Static Member="vmconfig:LANGUAGE.RUS"></x:Static>
+        <x:Static Member="vmconfig:LANGUAGE.UKR"></x:Static>
     </x:Array>
 
     <DataTemplate x:Key="DT_ListBoxItem_Language">
@@ -2332,7 +2333,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </Trigger>
             <Trigger SourceName="tb_Main" Property="DataContext" Value="{x:Static vmconfig:LANGUAGE.RUS}">
                 <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_RUS}"></Setter>
-            </Trigger>            
+            </Trigger>
+            <Trigger SourceName="tb_Main" Property="DataContext" Value="{x:Static vmconfig:LANGUAGE.UKR}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{StaticResource String_Tag_UKR}"></Setter>
+            </Trigger>
         </DataTemplate.Triggers>
     </DataTemplate>
     

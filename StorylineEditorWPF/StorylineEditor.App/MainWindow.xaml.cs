@@ -380,6 +380,12 @@ namespace StorylineEditor.App
                     ActiveContext.FileService.SaveConfig();
                     SwitchLocalization(LANGUAGE.RUS);
                 }
+                else if (CultureInfo.InstalledUICulture.ThreeLetterISOLanguageName == "ukr")
+                {
+                    ConfigM.Config.Language = LANGUAGE.UKR;
+                    ActiveContext.FileService.SaveConfig();
+                    SwitchLocalization(LANGUAGE.UKR);
+                }
                 else
                 {
                     ConfigM.Config.Language = LANGUAGE.ENG;
@@ -390,6 +396,10 @@ namespace StorylineEditor.App
             else if (ConfigM.Config.Language == LANGUAGE.RUS)
             {
                 SwitchLocalization(LANGUAGE.RUS);
+            }
+            else if (ConfigM.Config.Language == LANGUAGE.UKR)
+            {
+                SwitchLocalization(LANGUAGE.UKR);
             }
             else if (ConfigM.Config.Language == LANGUAGE.ENG)
             {
@@ -724,6 +734,8 @@ namespace StorylineEditor.App
         protected string GetLocalizationSuffix(byte language)
         {
             if (language == LANGUAGE.RUS) return "RUS";
+
+            if (language == LANGUAGE.UKR) return "UKR";
 
             return "ENG"; // English is default
         }

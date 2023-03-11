@@ -27,6 +27,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_ENG">English</sys:String>
 
     <sys:String x:Key="String_Tag_RUS">Русский</sys:String>
+
+    <sys:String x:Key="String_Tag_UKR">Україньска</sys:String>
     
     <sys:String x:Key="String_MainWindow_Title">locerr</sys:String>
     
