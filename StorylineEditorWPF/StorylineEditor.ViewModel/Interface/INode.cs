@@ -33,9 +33,6 @@ namespace StorylineEditor.ViewModel.Interface
         string Name { get; set; }
         byte Gender { get; }
         bool IsSelected { get; }
-
-        IEnumerable<IBehavior> Behaviors { get; }
-        IEnumerable<IGameEvent> GameEvents { get; }
     }
 
     public interface IRegularNode : INode

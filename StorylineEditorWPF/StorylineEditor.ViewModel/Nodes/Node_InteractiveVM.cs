@@ -21,17 +21,14 @@ using StorylineEditor.Model.GameEvents;
 using StorylineEditor.Model.Graphs;
 using StorylineEditor.Model.Nodes;
 using StorylineEditor.Model.Predicates;
-using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.GameEvents;
 using StorylineEditor.ViewModel.Interface;
 using StorylineEditor.ViewModel.Predicates;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
-using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Nodes
 {
@@ -42,11 +39,11 @@ namespace StorylineEditor.ViewModel.Nodes
     {
         public Node_InteractiveVM(T model, U parent) : base(model, parent)
         {
-            _predicates = new ObservableCollection<IPredicate>();
-            foreach (var predicateModel in Model.predicates) _predicates.Add(PredicatesHelper.CreatePredicateByModel(predicateModel, this));
+            Predicates = new ObservableCollection<IPredicate>();
+            foreach (var predicateModel in Model.predicates) Predicates.Add(PredicatesHelper.CreatePredicateByModel(predicateModel, this));
 
-            _gameEvents = new ObservableCollection<IGameEvent>();
-            foreach (var gameEventModel in Model.gameEvents) _gameEvents.Add(GameEventsHelper.CreateGameEventByModel(gameEventModel, this));
+            GameEvents = new ObservableCollection<IGameEvent>();
+            foreach (var gameEventModel in Model.gameEvents) GameEvents.Add(GameEventsHelper.CreateGameEventByModel(gameEventModel, this));
         }
 
         public Type SelectedPredicateType
@@ -58,7 +55,7 @@ namespace StorylineEditor.ViewModel.Nodes
                 {
                     IPredicate predicateViewModel = PredicatesHelper.CreatePredicateByType(value, this);
                     Model.predicates.Add(predicateViewModel.GetModel<P_BaseM>());
-                    _predicates.Add(predicateViewModel);
+                    Predicates.Add(predicateViewModel);
 
                     OnModelChanged(Model, nameof(HasPredicates));
                 }
@@ -66,9 +63,8 @@ namespace StorylineEditor.ViewModel.Nodes
                 Notify(nameof(SelectedPredicateType));
             }
         }
-        protected ObservableCollection<IPredicate> _predicates;
-        public override IEnumerable<IPredicate> Predicates { get => _predicates; }
-        public bool HasPredicates => Model.predicates.Count > 0;
+        public ObservableCollection<IPredicate> Predicates { get; }
+        public bool HasPredicates => Predicates.Count > 0;
 
         public Type SelectedGameEventType
         {
@@ -78,7 +74,7 @@ namespace StorylineEditor.ViewModel.Nodes
                 {
                     IGameEvent gameEventViewModel = GameEventsHelper.CreateGameEventByType(value, this);
                     Model.gameEvents.Add(gameEventViewModel.GetModel<GE_BaseM>());
-                    _gameEvents.Add(gameEventViewModel);
+                    GameEvents.Add(gameEventViewModel);
 
                     OnModelChanged(Model, nameof(HasGameEvents));
                 }
@@ -86,21 +82,20 @@ namespace StorylineEditor.ViewModel.Nodes
                 Notify(nameof(SelectedGameEventType));
             }
         }
-        protected ObservableCollection<IGameEvent> _gameEvents;
-        public override IEnumerable<IGameEvent> GameEvents { get => _gameEvents; }
-        public bool HasGameEvents => Model.gameEvents.Count > 0;
+        public ObservableCollection<IGameEvent> GameEvents { get; }
+        public bool HasGameEvents => GameEvents.Count > 0;
 
         protected override void RemoveElementInternal(IWithModel viewModel)
         {
             base.RemoveElementInternal(viewModel);
 
-            if (viewModel is IPredicate predicateViewModel && _predicates.Remove(predicateViewModel))
+            if (viewModel is IPredicate predicateViewModel && Predicates.Remove(predicateViewModel))
             {
                 Model.predicates.Remove(predicateViewModel.GetModel<P_BaseM>());
                 OnModelChanged(Model, nameof(HasPredicates));
             }
 
-            if (viewModel is IGameEvent gameEventViewModel && _gameEvents.Remove(gameEventViewModel))
+            if (viewModel is IGameEvent gameEventViewModel && GameEvents.Remove(gameEventViewModel))
             {
                 Model.gameEvents.Remove(gameEventViewModel.GetModel<GE_BaseM>());
                 OnModelChanged(Model, nameof(HasGameEvents));

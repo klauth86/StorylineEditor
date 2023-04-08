@@ -52,8 +52,8 @@ namespace StorylineEditor.ViewModel.Nodes
         {
             zIndex = 100;
 
-            _behaviors = new ObservableCollection<IBehavior>();
-            foreach (var behaviorModel in Model.behaviors) _behaviors.Add(BehaviorHelper.CreateBehaviorByModel(behaviorModel, this));
+            Behaviors = new ObservableCollection<IBehavior>();
+            foreach (var behaviorModel in Model.behaviors) Behaviors.Add(BehaviorHelper.CreateBehaviorByModel(behaviorModel, this));
         }
 
         public byte Gender
@@ -200,7 +200,7 @@ namespace StorylineEditor.ViewModel.Nodes
                 {
                     IBehavior behaviorViewModel = BehaviorHelper.CreateBehaviorByType(value, this);
                     Model.behaviors.Add(behaviorViewModel.GetModel<B_BaseM>());
-                    _behaviors.Add(behaviorViewModel);
+                    Behaviors.Add(behaviorViewModel);
 
                     OnModelChanged(Model, nameof(HasBehaviors));
                 }
@@ -208,12 +208,8 @@ namespace StorylineEditor.ViewModel.Nodes
                 Notify(nameof(SelectedBehaviorType));
             }
         }
-        protected ObservableCollection<IBehavior> _behaviors;
-        public IEnumerable<IBehavior> Behaviors { get => _behaviors; }
-        public bool HasBehaviors => Model.behaviors.Count > 0;
-
-        public virtual IEnumerable<IPredicate> Predicates { get => Enumerable.Empty<IPredicate>(); }
-        public virtual IEnumerable<IGameEvent> GameEvents { get => Enumerable.Empty<IGameEvent>(); }
+        public ObservableCollection<IBehavior> Behaviors { get; }
+        public bool HasBehaviors => Behaviors.Count > 0;
 
         protected ICommand removeElementCommand;
         public ICommand RemoveElementCommand => removeElementCommand ?? (removeElementCommand = new RelayCommand<IWithModel>((viewModel) =>
@@ -223,7 +219,7 @@ namespace StorylineEditor.ViewModel.Nodes
 
         protected virtual void RemoveElementInternal(IWithModel viewModel)
         {
-            if (viewModel is IBehavior behaviorViewModel && _behaviors.Remove(behaviorViewModel))
+            if (viewModel is IBehavior behaviorViewModel && Behaviors.Remove(behaviorViewModel))
             {
                 Model.behaviors.Remove(behaviorViewModel.GetModel<B_BaseM>());
                 OnModelChanged(Model, nameof(HasBehaviors));
