@@ -17,10 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 using StorylineEditor.Model;
-using StorylineEditor.Model.Graphs;
 using StorylineEditor.Model.Predicates;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Data;
 
 namespace StorylineEditor.ViewModel.Predicates
@@ -74,38 +72,6 @@ namespace StorylineEditor.ViewModel.Predicates
                     Notify(nameof(Quest));
                 }
             }
-        }
-
-        public override bool IsTrue()
-        {
-            if (Quest != null) ////// TODO SIMPLIFY
-            {
-                GraphM graph = (GraphM)Quest;
-
-                bool result = false;
-
-                QuestEntryVM questEntryVm = ActiveContext.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == Quest.id);
-                
-                if (questEntryVm != null)
-                {
-                    foreach (var knownNodeEntry in questEntryVm.KnownNodes)
-                    {
-                        if (knownNodeEntry.IsPassed)
-                        {
-                            if (graph.links.All((linkM) => linkM.fromNodeId != knownNodeEntry.Node.id))
-                            {
-                                result = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                if (IsInversed) result = !result;
-                return result;
-            }
-
-            return true;
         }
     }
 }

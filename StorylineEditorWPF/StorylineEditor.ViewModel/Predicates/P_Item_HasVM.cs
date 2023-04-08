@@ -73,18 +73,5 @@ namespace StorylineEditor.ViewModel.Predicates
                 }
             }
         }
-
-        public override bool IsTrue()
-        {
-            if (Item != null)
-            {
-                bool result = ActiveContext.History.Inventory.Contains(Item);
-
-                if (IsInversed) result = !result;
-                return result;
-            }
-
-            return true;
-        }
     }
 }

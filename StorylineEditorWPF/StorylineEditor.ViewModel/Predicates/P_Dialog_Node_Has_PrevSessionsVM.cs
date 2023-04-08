@@ -129,27 +129,5 @@ namespace StorylineEditor.ViewModel.Predicates
                 NodesCVS.View?.MoveCurrentTo(null);
             }
         }
-
-        public override bool IsTrue()
-        {
-            if (DialogOrReplica != null && Node != null)
-            {
-                var dialogEntryVms = ActiveContext.History.DialogEntries.Where((deVm) => deVm.Model.id == DialogOrReplica.id && deVm.Model.id != ActiveContext.History.ActiveDialogEntryId);
-
-                int count = 0;
-
-                foreach (var dialogEntryVm in dialogEntryVms)
-                {
-                    count += dialogEntryVm.Nodes.Count((node) => node.id == Node.id);
-                }
-
-                bool result = count > 0;
-
-                if (IsInversed) result = !result;
-                return result;
-            }
-
-            return true;
-        }
     }
 }

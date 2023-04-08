@@ -19,7 +19,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using StorylineEditor.Model;
 using StorylineEditor.Model.Predicates;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Data;
 
 namespace StorylineEditor.ViewModel.Predicates
@@ -72,20 +71,6 @@ namespace StorylineEditor.ViewModel.Predicates
                     Notify(nameof(DialogOrReplica));
                 }
             }
-        }
-
-        public override bool IsTrue()
-        {
-            if (DialogOrReplica != null)
-            {
-                bool result = ActiveContext.History.DialogEntries
-                    .Any((deVm) => deVm.Model.id == DialogOrReplica.id && deVm.Model.id != ActiveContext.History.ActiveDialogEntryId);
-
-                if (IsInversed) result = !result;
-                return result;
-            }
-
-            return true;
         }
     }
 }

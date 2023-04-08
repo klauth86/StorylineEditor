@@ -19,9 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using StorylineEditor.Model;
 using StorylineEditor.Model.Predicates;
 using StorylineEditor.ViewModel.Common;
-using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -105,52 +103,6 @@ namespace StorylineEditor.ViewModel.Predicates
                     Notify(nameof(Value));
                 }
             }
-        }
-
-        public override bool IsTrue()
-        {
-            if (Character != null)
-            {
-                CharacterM character = (CharacterM)Character;
-
-                float relation = ActiveContext.History.Gender == GENDER.MALE
-                    ? character.initialRelation
-                    : character.initialRelationFemale;
-                
-                CharacterEntryVM characterEntryVm = ActiveContext.History.CharacterEntries.FirstOrDefault((ceVm) => ceVm.Model.id == Character.id);
-                if (characterEntryVm != null)
-                {
-                    relation += characterEntryVm.DeltaRelation;
-                }
-
-                bool result = false;
-
-                switch (CompareType)
-                {
-                    case COMPARE_TYPE.LESS:
-                        result = relation < Value;
-                        break;
-                    case COMPARE_TYPE.LESS_OR_EQUAL:
-                        result = relation <= Value;
-                        break;
-                    case COMPARE_TYPE.EQUAL:
-                        result = relation == Value;
-                        break;
-                    case COMPARE_TYPE.EQUAL_OR_GREATER:
-                        result = relation >= Value;
-                        break;
-                    case COMPARE_TYPE.GREATER:
-                        result = relation > Value;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(CompareType));
-                }
-
-                if (IsInversed) result = !result;
-                return result;
-            }
-
-            return true;
         }
     }
 }

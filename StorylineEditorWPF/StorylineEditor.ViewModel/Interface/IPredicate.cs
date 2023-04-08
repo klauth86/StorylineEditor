@@ -18,8 +18,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace StorylineEditor.ViewModel.Interface
 {
-    public interface IPredicate : IWithModel
-    {
-        bool IsTrue();
-    }
+    public interface IPredicate : IWithModel { }
 }

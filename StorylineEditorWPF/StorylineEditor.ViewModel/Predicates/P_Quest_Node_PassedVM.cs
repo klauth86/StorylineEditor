@@ -129,25 +129,5 @@ namespace StorylineEditor.ViewModel.Predicates
                 NodesCVS.View?.MoveCurrentTo(null);
             }
         }
-
-        public override bool IsTrue()
-        {
-            if (Quest != null && Node != null)
-            {
-                bool result = false;
-
-                QuestEntryVM questEntryVm = ActiveContext.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == Quest.id);
-
-                if (questEntryVm != null)
-                {
-                    result = questEntryVm.GetKnownNodeIsPassed(Node);
-                }
-
-                if (IsInversed) result = !result;
-                return result;
-            }
-
-            return true;
-        }
     }
 }

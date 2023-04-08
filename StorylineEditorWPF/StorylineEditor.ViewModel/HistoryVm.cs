@@ -25,6 +25,7 @@ using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Config;
 using StorylineEditor.ViewModel.Interface;
 using StorylineEditor.ViewModel.Nodes;
+using StorylineEditor.ViewModel.Predicates;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -1141,13 +1142,17 @@ namespace StorylineEditor.ViewModel
 
                         if (fullMode)
                         {
-                            foreach (var predicate in node.Predicates) // Filtered by predicates
+                            Node_InteractiveM interactiveNodeModel = ((IWithModel)node).GetModel<Node_InteractiveM>();
+                            if (interactiveNodeModel != null)
                             {
-                                if (!predicate.IsTrue())
+                                foreach (var predicateModel in interactiveNodeModel.predicates) // Filtered by predicates
                                 {
-                                    pathsToRemove.Add(path);
-                                    shouldBeRemoved = true;
-                                    break;
+                                    if (!PredicatesHelper.IsTrue(predicateModel))
+                                    {
+                                        pathsToRemove.Add(path);
+                                        shouldBeRemoved = true;
+                                        break;
+                                    }
                                 }
                             }
                         }
