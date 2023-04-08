@@ -320,8 +320,6 @@ namespace StorylineEditor.ViewModel
 
     public class HistoryVM : Notifier, IDisposable
     {
-        public static readonly Random Random = new Random();
-
         public HistoryVM()
         {
             CharacterEntries = new ObservableCollection<CharacterEntryVM>();
@@ -1076,7 +1074,7 @@ namespace StorylineEditor.ViewModel
                 {
                     if (node is Node_RandomVM randomNode)
                     {
-                        PathIndex = Random.Next(Paths.Count);
+                        PathIndex = RandomHelper.Next(Paths.Count);
                     }
                     else if (Paths.All((path) => path.Last().CharacterId == CharacterM.PLAYER_ID))
                     {

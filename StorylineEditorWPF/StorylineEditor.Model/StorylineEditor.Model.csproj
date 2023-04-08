@@ -33,6 +33,8 @@
   <ItemGroup>
     <Compile Include="ActorM.cs" />
     <Compile Include="BaseM.cs" />
+    <Compile Include="Behaviors\B_OptionalM.cs" />
+    <Compile Include="Behaviors\B_BaseM.cs" />
     <Compile Include="CharacterM.cs" />
     <Compile Include="FolderM.cs" />
     <Compile Include="GameEvents\GE_BaseM.cs" />

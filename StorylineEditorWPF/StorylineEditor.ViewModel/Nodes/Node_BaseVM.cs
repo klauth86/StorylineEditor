@@ -16,11 +16,18 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Model.Behaviors;
 using StorylineEditor.Model.Nodes;
+using StorylineEditor.Model.Predicates;
 using StorylineEditor.Model.RichText;
+using StorylineEditor.ViewModel.Behaviors;
 using StorylineEditor.ViewModel.Common;
+using StorylineEditor.ViewModel.GameEvents;
 using StorylineEditor.ViewModel.Interface;
+using StorylineEditor.ViewModel.Predicates;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 
@@ -43,6 +50,9 @@ namespace StorylineEditor.ViewModel.Nodes
                   )
         {
             zIndex = 100;
+
+            _behaviors = new ObservableCollection<IBehavior>();
+            foreach (var behaviorModel in Model.behaviors) _behaviors.Add(BehaviorHelper.CreateBehaviorByModel(behaviorModel, this));
         }
 
         public byte Gender
@@ -179,6 +189,27 @@ namespace StorylineEditor.ViewModel.Nodes
             Model.rtDescription = textRangeModel;
             RtDescriptionVersion = (RtDescriptionVersion + 1) % TextRangeM.CYCLE;
         }
+
+        public Type SelectedBehaviorType
+        {
+            get => null;
+            set
+            {
+                if (value != null)
+                {
+                    IBehavior behaviorViewModel = BehaviorHelper.CreateBehaviorByType(value, this);
+                    Model.behaviors.Add(behaviorViewModel.GetModel<B_BaseM>());
+                    _behaviors.Add(behaviorViewModel);
+
+                    OnModelChanged(Model, nameof(HaBehaviors));
+                }
+
+                Notify(nameof(SelectedBehaviorType));
+            }
+        }
+        protected ObservableCollection<IBehavior> _behaviors;
+        public IEnumerable<IBehavior> Behaviors { get => _behaviors; }
+        public bool HaBehaviors => Model.behaviors.Count > 0;
 
         public virtual IEnumerable<IPredicate> Predicates { get => Enumerable.Empty<IPredicate>(); }
         public virtual IEnumerable<IGameEvent> GameEvents { get => Enumerable.Empty<IGameEvent>(); }

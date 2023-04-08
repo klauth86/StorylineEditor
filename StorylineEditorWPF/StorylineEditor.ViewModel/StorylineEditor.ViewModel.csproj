@@ -32,6 +32,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ActorEditorVM.cs" />
+    <Compile Include="Behaviors\BehaviorHelper.cs" />
+    <Compile Include="Behaviors\B_OptionalVM.cs" />
+    <Compile Include="Behaviors\B_BaseVM.cs" />
     <Compile Include="CharacterEditorVM.cs" />
     <Compile Include="Config\ConfigM.cs" />
     <Compile Include="Config\UserActionM.cs" />
@@ -49,6 +52,7 @@
     <Compile Include="Interface\INode.cs" />
     <Compile Include="Interface\IPartiallyStored.cs" />
     <Compile Include="Interface\IPositioned.cs" />
+    <Compile Include="Interface\IBehavior.cs" />
     <Compile Include="Interface\IPredicate.cs" />
     <Compile Include="Interface\IWithModel.cs" />
     <Compile Include="Interface\IRichTextSource.cs" />
@@ -101,6 +105,7 @@
     <Compile Include="Common\BaseVM.cs" />
     <Compile Include="Common\SimpleVM.cs" />
     <Compile Include="ListVM.cs" />
+    <Compile Include="RandomHelper.cs" />
     <Compile Include="StorylineVM.cs" />
   </ItemGroup>
   <ItemGroup>

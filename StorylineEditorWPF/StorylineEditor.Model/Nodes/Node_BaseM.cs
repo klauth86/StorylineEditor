@@ -16,7 +16,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using StorylineEditor.Model.Behaviors;
+using StorylineEditor.Model.GameEvents;
 using StorylineEditor.Model.RichText;
+using System.Collections.Generic;
 
 namespace StorylineEditor.Model.Nodes
 {
@@ -29,6 +32,7 @@ namespace StorylineEditor.Model.Nodes
             positionY = 0;
             rtDescriptionVersion = 0;
             rtDescription = new TextRangeM(0);
+            behaviors = new List<B_BaseM>();
         }
 
         public Node_BaseM() : this(0) { }
@@ -43,6 +47,11 @@ namespace StorylineEditor.Model.Nodes
                 casted.positionX = positionX;
                 casted.positionY = positionY;
                 casted.rtDescription = rtDescription;
+
+                for (int i = 0; i < behaviors.Count; i++)
+                {
+                    casted.behaviors.Add(behaviors[i].CloneAs<B_BaseM>(i));
+                }
             }
         }
 
@@ -58,6 +67,7 @@ namespace StorylineEditor.Model.Nodes
         public double positionY { get; set; }
         public int rtDescriptionVersion { get; set; }
         public TextRangeM rtDescription { get; set; }
+        public List<B_BaseM> behaviors { get; set; }
     }
 
     public class Node_DelayM : Node_BaseM
