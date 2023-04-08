@@ -21,6 +21,5 @@ namespace StorylineEditor.ViewModel.Interface
     public interface IGameEvent : IWithModel
     {
         bool IsExecutedOnLeave { get; }
-        void Execute();
     }
 }

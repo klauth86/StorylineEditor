@@ -129,22 +129,5 @@ namespace StorylineEditor.ViewModel.GameEvents
                 NodesCVS.View?.MoveCurrentTo(null);
             }
         }
-
-        public override void Execute()
-        {
-            if (Quest != null && Node != null)
-            {
-                QuestEntryVM questEntryVm = ActiveContext.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == Quest.id);
-
-                if (questEntryVm == null)
-                {
-                    ActiveContext.History.AddQuest(Quest);
-                }
-
-                questEntryVm = ActiveContext.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == Quest.id);
-
-                questEntryVm.AddKnownNode(Node);
-            }
-        }
     }
 }

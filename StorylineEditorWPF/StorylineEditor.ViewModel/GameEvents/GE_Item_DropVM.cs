@@ -73,13 +73,5 @@ namespace StorylineEditor.ViewModel.GameEvents
                 }
             }
         }
-
-        public override void Execute()
-        {
-            if (Item != null)
-            {
-                ActiveContext.History.DropItem(Item);
-            }
-        }
     }
 }

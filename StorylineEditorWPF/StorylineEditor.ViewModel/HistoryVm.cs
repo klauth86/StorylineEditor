@@ -23,6 +23,7 @@ using StorylineEditor.Service;
 using StorylineEditor.ViewModel.Behaviors;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Config;
+using StorylineEditor.ViewModel.GameEvents;
 using StorylineEditor.ViewModel.Interface;
 using StorylineEditor.ViewModel.Nodes;
 using StorylineEditor.ViewModel.Predicates;
@@ -894,11 +895,15 @@ namespace StorylineEditor.ViewModel
         {
             if (fullMode)
             {
-                foreach (var gameEvent in node.GameEvents)
+                Node_InteractiveM interactiveNodeModel = ((IWithModel)node).GetModel<Node_InteractiveM>();
+                if (interactiveNodeModel != null)
                 {
-                    if (gameEvent.IsExecutedOnLeave == isLeave)
+                    foreach (var gameEvent in interactiveNodeModel.gameEvents)
                     {
-                        gameEvent.Execute();
+                        if (isLeave && gameEvent.executionMode == EXECUTION_MODE.ON_LEAVE || !isLeave && gameEvent.executionMode == EXECUTION_MODE.ON_ENTER)
+                        {
+                            GameEventsHelper.Execute(gameEvent);
+                        }
                     }
                 }
             }

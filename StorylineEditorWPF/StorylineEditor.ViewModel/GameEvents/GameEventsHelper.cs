@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using StorylineEditor.Model.GameEvents;
 using StorylineEditor.ViewModel.Interface;
 using System;
+using System.Linq;
 
 namespace StorylineEditor.ViewModel.GameEvents
 {
@@ -46,6 +47,94 @@ namespace StorylineEditor.ViewModel.GameEvents
             if (model.GetType() == typeof(GE_Relation_ChangeM)) return new GE_Relation_ChangeVM((GE_Relation_ChangeM)model, node);
 
             throw new ArgumentOutOfRangeException(nameof(model));
+        }
+
+        public static void Execute(GE_BaseM gameEventModel)
+        {
+            if (gameEventModel is GE_Item_DropM dropItemGameEventModel)
+            {
+                if (dropItemGameEventModel.itemId != null)
+                {
+                    ////// TODO
+                    //////ActiveContext.History.DropItem(Item);
+                }
+            }
+
+            if (gameEventModel is GE_Item_PickUpM pickUpItemGameEventModel)
+            {
+                if (pickUpItemGameEventModel.itemId != null)
+                {
+                    ////// TODO
+                    //////ActiveContext.History.PickUpItem(Item);
+                }
+            }
+
+            if (gameEventModel is GE_Quest_AddM addQuestGameEventModel)
+            {
+                if (addQuestGameEventModel.questId != null)
+                {
+                    ////// TODO
+                    //////ActiveContext.History.AddQuest(Quest);
+                }
+            }
+
+            if (gameEventModel is GE_Quest_Node_AddM addNodeQuestGameEventModel)
+            {
+                if (addNodeQuestGameEventModel.questId != null && addNodeQuestGameEventModel.nodeId != null)
+                {
+                    QuestEntryVM questEntryVm = ActiveContext.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == addNodeQuestGameEventModel.questId);
+
+                    if (questEntryVm == null)
+                    {
+                        ////// TODO
+                        //////ActiveContext.History.AddQuest(Quest);
+                    }
+
+                    questEntryVm = ActiveContext.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == addNodeQuestGameEventModel.questId);
+
+                    //////questEntryVm.AddKnownNode(Node);
+                }
+            }
+
+            if (gameEventModel is GE_Quest_Node_PassM passNodeQuestGameEventModel)
+            {
+                if (passNodeQuestGameEventModel.questId != null && passNodeQuestGameEventModel.nodeId != null)
+                {
+                    QuestEntryVM questEntryVm = ActiveContext.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == passNodeQuestGameEventModel.questId);
+
+                    if (questEntryVm == null)
+                    {
+                        ////// TODO
+                        //////ActiveContext.History.AddQuest(Quest);
+                    }
+
+                    questEntryVm = ActiveContext.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == passNodeQuestGameEventModel.questId);
+
+                    //////if (!questEntryVm.HasKnownNode(Node))
+                    //////{
+                    //////    questEntryVm.AddKnownNode(Node);
+                    //////}
+
+                    //////questEntryVm.SetKnownNodeIsPassed(Node, true);
+                }
+            }
+
+            if (gameEventModel is GE_Relation_ChangeM changeRelationGameEventModel)
+            {
+                if (changeRelationGameEventModel.npcId != null)
+                {
+                    CharacterEntryVM characterEntryVm = ActiveContext.History.CharacterEntries.FirstOrDefault((ceVm) => ceVm.Model.id == changeRelationGameEventModel.npcId);
+
+                    if (characterEntryVm == null)
+                    {
+                        //////ActiveContext.History.AddCharacter(Character);
+                    }
+
+                    //////characterEntryVm = ActiveContext.History.CharacterEntries.FirstOrDefault((ceVm) => ceVm.Model.id == Character.id);
+
+                    //////characterEntryVm.DeltaRelation += Value;
+                }
+            }
         }
     }
 }

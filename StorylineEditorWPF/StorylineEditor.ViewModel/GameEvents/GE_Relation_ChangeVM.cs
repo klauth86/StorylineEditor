@@ -19,7 +19,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using StorylineEditor.Model;
 using StorylineEditor.Model.GameEvents;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Data;
 
 namespace StorylineEditor.ViewModel.GameEvents
@@ -85,23 +84,6 @@ namespace StorylineEditor.ViewModel.GameEvents
                     Model.value = value;
                     Notify(nameof(Value));
                 }
-            }
-        }
-
-        public override void Execute()
-        {
-            if (Character != null)
-            {
-                CharacterEntryVM characterEntryVm = ActiveContext.History.CharacterEntries.FirstOrDefault((ceVm) => ceVm.Model.id == Character.id);
-
-                if (characterEntryVm == null)
-                {
-                    ActiveContext.History.AddCharacter(Character);
-                }
-
-                characterEntryVm = ActiveContext.History.CharacterEntries.FirstOrDefault((ceVm) => ceVm.Model.id == Character.id);
-
-                characterEntryVm.DeltaRelation += Value;
             }
         }
     }
