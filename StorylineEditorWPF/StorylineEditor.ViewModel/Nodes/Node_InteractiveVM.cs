@@ -64,7 +64,7 @@ namespace StorylineEditor.ViewModel.Nodes
             }
         }
         public ObservableCollection<IPredicate> Predicates { get; }
-        public bool HasPredicates => Predicates.Count > 0;
+        public bool HasPredicates => Model.predicates.Count > 0;
 
         public Type SelectedGameEventType
         {
@@ -83,7 +83,7 @@ namespace StorylineEditor.ViewModel.Nodes
             }
         }
         public ObservableCollection<IGameEvent> GameEvents { get; }
-        public bool HasGameEvents => GameEvents.Count > 0;
+        public bool HasGameEvents => Model.gameEvents.Count > 0;
 
         protected override void RemoveElementInternal(IWithModel viewModel)
         {

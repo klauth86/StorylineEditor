@@ -83,12 +83,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <Thickness x:Key="Thickness_Margin_Underline_4x" Bottom="4"></Thickness>
 
     <Thickness x:Key="Thickness_Margin_Underline_6x" Bottom="6"></Thickness>
-    
+
     <Thickness x:Key="Thickness_Margin_Underline_8x" Bottom="8"></Thickness>
 
+    <Thickness x:Key="Thickness_Top_1x" Top="1"></Thickness>
+
+    <Thickness x:Key="Thickness_Top_2x" Top="2"></Thickness>
+
+    <Thickness x:Key="Thickness_Top_4x" Top="4"></Thickness>
+
+    <Thickness x:Key="Thickness_Top_6x" Top="6"></Thickness>
+
+    <Thickness x:Key="Thickness_Top_8x" Top="8"></Thickness>
+    
     <Thickness x:Key="Thickness_Padding_LeftRight" Left="4" Right="4"></Thickness>
 
-    <Thickness x:Key="Thickness_Padding_Left_24x" Left="24"></Thickness>
+    <Thickness x:Key="Thickness_Left_16x" Left="16"></Thickness>
     
     <sys:Double x:Key="Double_Size_32x">32</sys:Double>
 

@@ -2311,14 +2311,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmp:P_CompositeVM}">
-        <Grid Margin="{StaticResource Thickness_Padding_Left_24x}">
+        <Grid Margin="{StaticResource Thickness_Left_16x}">
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
 
-            <GroupBox Header="{StaticResource String_Icon_Composite_A}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
+            <GroupBox Margin="{StaticResource Thickness_Margin_2x}" Header="{StaticResource String_Icon_Composite_A}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
@@ -2349,7 +2349,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <x:Static Member="m:COMPOSITION_TYPE.XOR"></x:Static>
             </ComboBox>
 
-            <GroupBox Grid.Row="2" Header="{StaticResource String_Icon_Composite_B}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
+            <GroupBox Margin="{StaticResource Thickness_Margin_2x}" Grid.Row="2" Header="{StaticResource String_Icon_Composite_B}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>

@@ -209,7 +209,7 @@ namespace StorylineEditor.ViewModel.Nodes
             }
         }
         public ObservableCollection<IBehavior> Behaviors { get; }
-        public bool HasBehaviors => Behaviors.Count > 0;
+        public bool HasBehaviors => Model.behaviors.Count > 0;
 
         protected ICommand removeElementCommand;
         public ICommand RemoveElementCommand => removeElementCommand ?? (removeElementCommand = new RelayCommand<IWithModel>((viewModel) =>
@@ -240,6 +240,7 @@ namespace StorylineEditor.ViewModel.Nodes
                 {
                     Model.delay = value;
                     OnModelChanged(Model, nameof(Delay));
+                    Notify(nameof(Delay));
                 }
             }
         }
