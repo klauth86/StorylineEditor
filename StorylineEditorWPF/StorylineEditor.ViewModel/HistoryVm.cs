@@ -18,7 +18,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using StorylineEditor.Model;
 using StorylineEditor.Model.Graphs;
+using StorylineEditor.Model.Nodes;
 using StorylineEditor.Service;
+using StorylineEditor.ViewModel.Behaviors;
 using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Config;
 using StorylineEditor.ViewModel.Interface;
@@ -911,9 +913,9 @@ namespace StorylineEditor.ViewModel
         {
             bool isSkipped = false;
 
-            foreach (var behavior in node.Behaviors)
+            foreach (var behavior in ((IWithModel)node).GetModel<Node_BaseM>().behaviors)
             {
-                if (behavior.IsTrue())
+                if (BehaviorHelper.IsTrue(behavior))
                 {
                     isSkipped = true;
                     break;

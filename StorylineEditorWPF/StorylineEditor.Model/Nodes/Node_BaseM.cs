@@ -17,7 +17,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 using StorylineEditor.Model.Behaviors;
-using StorylineEditor.Model.GameEvents;
 using StorylineEditor.Model.RichText;
 using System.Collections.Generic;
 

@@ -36,7 +36,5 @@ namespace StorylineEditor.ViewModel.Behaviors
                 }
             }
         }
-
-        public override bool IsTrue() { return RandomHelper.NextDouble() * 100 < Model.skipChance; }
     }
 }

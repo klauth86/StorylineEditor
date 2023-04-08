@@ -37,5 +37,15 @@ namespace StorylineEditor.ViewModel.Behaviors
 
             throw new ArgumentOutOfRangeException(nameof(model));
         }
+
+        public static bool IsTrue(B_BaseM model)
+        {
+            if (model is B_OptionalM optionalBehaviorModel)
+            {
+                return RandomHelper.NextDouble() * 100 < optionalBehaviorModel.skipChance;
+            }
+
+            return false;
+        }
     }
 }

@@ -32,7 +32,5 @@ namespace StorylineEditor.ViewModel.Behaviors
         public B_BaseVM(T model, U parent) : base(model, parent) { }
 
         public Type BehaviorType => Model?.GetType();
-
-        public abstract bool IsTrue();
     }
 }
