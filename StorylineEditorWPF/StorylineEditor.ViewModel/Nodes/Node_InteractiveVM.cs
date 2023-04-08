@@ -90,22 +90,22 @@ namespace StorylineEditor.ViewModel.Nodes
         public override IEnumerable<IGameEvent> GameEvents { get => _gameEvents; }
         public bool HasGameEvents => Model.gameEvents.Count > 0;
 
-
-        protected ICommand removeElementCommand;
-        public ICommand RemoveElementCommand => removeElementCommand ?? (removeElementCommand = new RelayCommand<IWithModel>((viewModel) =>
+        protected override void RemoveElementInternal(IWithModel viewModel)
         {
+            base.RemoveElementInternal(viewModel);
+
             if (viewModel is IPredicate predicateViewModel && _predicates.Remove(predicateViewModel))
             {
                 Model.predicates.Remove(predicateViewModel.GetModel<P_BaseM>());
                 OnModelChanged(Model, nameof(HasPredicates));
             }
-            
+
             if (viewModel is IGameEvent gameEventViewModel && _gameEvents.Remove(gameEventViewModel))
             {
                 Model.gameEvents.Remove(gameEventViewModel.GetModel<GE_BaseM>());
                 OnModelChanged(Model, nameof(HasGameEvents));
             }
-        }));
+        }
     }
 
     public class Node_RandomVM : Node_InteractiveVM<Node_RandomM, object>

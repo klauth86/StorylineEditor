@@ -23,6 +23,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Icon_HasPredicates">P</sys:String>
 
     <sys:String x:Key="String_Icon_HasGameEvents">G</sys:String>
+
+    <sys:String x:Key="String_Icon_HasBehaviors">B</sys:String>
     
     <sys:String x:Key="String_Icon_Open">🗀</sys:String>
 

@@ -76,6 +76,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_Node_Tab_Props_ENG">Properties</sys:String>
     <sys:String x:Key="String_Tag_Node_Tab_Predicates_ENG">Predicates</sys:String>
     <sys:String x:Key="String_Tag_Node_Tab_GameEvents_ENG">Game events</sys:String>
+    <sys:String x:Key="String_Tag_Node_Tab_Behaviors_ENG">Behaviors</sys:String>
     <sys:String x:Key="String_Tag_Node_Random_Type_ENG">Random</sys:String>
     <sys:String x:Key="String_Tag_Node_Transit_Type_ENG">Transit</sys:String>
     <sys:String x:Key="String_Tag_Node_Gate_Type_ENG">Entry</sys:String>
@@ -142,6 +143,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_PassM_Title_ENG">Quest: pass step/alternative</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_Title_ENG">Relation: change</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_ENG">Change by</sys:String>
+    <sys:String x:Key="String_Tag_Behavior_B_OptionalM_Title_ENG">Optional</sys:String>
+    <sys:String x:Key="String_Tag_Behavior_B_OptionalM_DisplayName_ENG">Optional</sys:String>
     <sys:String x:Key="String_Tag_Player_Tab_Props_ENG">Main</sys:String>
     <sys:String x:Key="String_Tag_Player_FullMode_ENG">Full mode</sys:String>
     <sys:String x:Key="String_Tag_Player_Error_ENG">ERROR</sys:String>
@@ -164,6 +167,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_GraphMenu_Play_Tooltip_ENG">Play</sys:String>
     <sys:String x:Key="String_HasPredicates_Tooltip_ENG">Has predicates</sys:String>
     <sys:String x:Key="String_HasGameEvents_Tooltip_ENG">Has game events</sys:String>
+    <sys:String x:Key="String_HasBehaviors_Tooltip_ENG">Has behaviors</sys:String>
     <sys:String x:Key="String_Player_Stop_Tooltip_ENG">Stop</sys:String>
     <sys:String x:Key="String_Player_Pause_Tooltip_ENG">Pause</sys:String>
     <sys:String x:Key="String_Player_Play_Tooltip_ENG">Start</sys:String>

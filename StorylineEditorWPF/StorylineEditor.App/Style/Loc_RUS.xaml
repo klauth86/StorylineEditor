@@ -76,6 +76,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_Node_Tab_Props_RUS">Свойства</sys:String>
     <sys:String x:Key="String_Tag_Node_Tab_Predicates_RUS">Предикаты</sys:String>
     <sys:String x:Key="String_Tag_Node_Tab_GameEvents_RUS">События</sys:String>
+    <sys:String x:Key="String_Tag_Node_Tab_Behaviors_RUS">Поведения</sys:String>
     <sys:String x:Key="String_Tag_Node_Random_Type_RUS">Случайная</sys:String>
     <sys:String x:Key="String_Tag_Node_Transit_Type_RUS">Переход</sys:String>
     <sys:String x:Key="String_Tag_Node_Gate_Type_RUS">Вход</sys:String>
@@ -142,6 +143,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_PassM_Title_RUS">Квест: выполнить шаг/альтернативу</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_Title_RUS">Отношение: изменить</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_RUS">Изменить на</sys:String>
+    <sys:String x:Key="String_Tag_Behavior_B_OptionalM_Title_RUS">Необязательная</sys:String>
+    <sys:String x:Key="String_Tag_Behavior_B_OptionalM_DisplayName_RUS">Необязательная</sys:String>
     <sys:String x:Key="String_Tag_Player_Tab_Props_RUS">Основная</sys:String>
     <sys:String x:Key="String_Tag_Player_FullMode_RUS">Полный режим</sys:String>
     <sys:String x:Key="String_Tag_Player_Error_RUS">ОШИБКА</sys:String>
@@ -164,6 +167,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_GraphMenu_Play_Tooltip_RUS">Воспроизвести</sys:String>
     <sys:String x:Key="String_HasPredicates_Tooltip_RUS">Имеет предикаты</sys:String>
     <sys:String x:Key="String_HasGameEvents_Tooltip_RUS">Имеет события</sys:String>
+    <sys:String x:Key="String_HasBehaviors_Tooltip_RUS">Имеет поведения</sys:String>
     <sys:String x:Key="String_Player_Stop_Tooltip_RUS">Стоп</sys:String>
     <sys:String x:Key="String_Player_Pause_Tooltip_RUS">Пауза</sys:String>
     <sys:String x:Key="String_Player_Play_Tooltip_RUS">Старт</sys:String>

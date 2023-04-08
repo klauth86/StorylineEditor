@@ -17,6 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 using StorylineEditor.Model.Behaviors;
+using StorylineEditor.Model.GameEvents;
 using StorylineEditor.Model.Nodes;
 using StorylineEditor.Model.Predicates;
 using StorylineEditor.Model.RichText;
@@ -201,7 +202,7 @@ namespace StorylineEditor.ViewModel.Nodes
                     Model.behaviors.Add(behaviorViewModel.GetModel<B_BaseM>());
                     _behaviors.Add(behaviorViewModel);
 
-                    OnModelChanged(Model, nameof(HaBehaviors));
+                    OnModelChanged(Model, nameof(HasBehaviors));
                 }
 
                 Notify(nameof(SelectedBehaviorType));
@@ -209,10 +210,25 @@ namespace StorylineEditor.ViewModel.Nodes
         }
         protected ObservableCollection<IBehavior> _behaviors;
         public IEnumerable<IBehavior> Behaviors { get => _behaviors; }
-        public bool HaBehaviors => Model.behaviors.Count > 0;
+        public bool HasBehaviors => Model.behaviors.Count > 0;
 
         public virtual IEnumerable<IPredicate> Predicates { get => Enumerable.Empty<IPredicate>(); }
         public virtual IEnumerable<IGameEvent> GameEvents { get => Enumerable.Empty<IGameEvent>(); }
+
+        protected ICommand removeElementCommand;
+        public ICommand RemoveElementCommand => removeElementCommand ?? (removeElementCommand = new RelayCommand<IWithModel>((viewModel) =>
+        {
+            RemoveElementInternal(viewModel);
+        }));
+
+        protected virtual void RemoveElementInternal(IWithModel viewModel)
+        {
+            if (viewModel is IBehavior behaviorViewModel && _behaviors.Remove(behaviorViewModel))
+            {
+                Model.behaviors.Remove(behaviorViewModel.GetModel<B_BaseM>());
+                OnModelChanged(Model, nameof(HasBehaviors));
+            }
+        }
     }
 
     public class Node_DelayVM : Node_BaseVM<Node_DelayM, object>

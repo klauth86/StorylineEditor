@@ -60,6 +60,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <SolidColorBrush x:Key="Color_HasPredicates_Fill" Color="Purple" />
 
     <SolidColorBrush x:Key="Color_HasGameEvents_Fill" Color="Teal" />
+    
+    <SolidColorBrush x:Key="Color_HasBehaviors_Fill" Color="Orange" />
 
     <SolidColorBrush x:Key="Color_HasPredicates_Foreground" Color="White" />
 

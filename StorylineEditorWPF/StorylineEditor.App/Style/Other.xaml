@@ -33,7 +33,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     xmlns:mg="clr-namespace:StorylineEditor.Model.Graphs;assembly=StorylineEditor.Model"
                     xmlns:bhvrs="clr-namespace:StorylineEditor.App.Behaviors"
                     xmlns:controls="clr-namespace:StorylineEditor.App.Controls"
-                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:mb="clr-namespace:StorylineEditor.Model.Behaviors;assembly=StorylineEditor.Model">
 
     <!-- COLLECTION CONTEXT (FOLDERS AND PATH) -->
 
@@ -328,7 +329,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <TextBlock FontWeight="Bold" Foreground="{StaticResource Color_HasPredicates_Foreground}" FontSize="{StaticResource FontSize_Medium}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{StaticResource String_Icon_HasGameEvents}"></TextBlock>
         </Grid>
     </DataTemplate>
-    
+
     <DataTemplate x:Key="DT_HasGameEvents">
         <Grid Width="{StaticResource Double_Size_24x}" Height="{StaticResource Double_Size_24x}" ToolTip="{DynamicResource String_HasGameEvents_Tooltip}">
             <Ellipse Fill="{StaticResource Color_HasGameEvents_Fill}" StrokeThickness="{StaticResource Double_Margin_1x}" Stroke="{StaticResource Color_Separator}"></Ellipse>
@@ -341,6 +342,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </DataTemplate.Triggers>
     </DataTemplate>
 
+    <DataTemplate x:Key="DT_HasBehaviors_Mini">
+        <Grid Width="{StaticResource Double_Size_16x}" Height="{StaticResource Double_Size_16x}" ToolTip="{DynamicResource String_HasBehaviors_Tooltip}">
+            <Ellipse Fill="{StaticResource Color_HasBehaviors_Fill}" StrokeThickness="{StaticResource Double_Margin_1x}" Stroke="{StaticResource Color_Separator}"></Ellipse>
+            <TextBlock FontWeight="Bold" Foreground="{StaticResource Color_HasPredicates_Foreground}" FontSize="{StaticResource FontSize_Medium}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{StaticResource String_Icon_HasBehaviors}"></TextBlock>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="DT_HasBehaviors">
+        <Grid Width="{StaticResource Double_Size_24x}" Height="{StaticResource Double_Size_24x}" ToolTip="{DynamicResource String_HasBehaviors_Tooltip}">
+            <Ellipse Fill="{StaticResource Color_HasBehaviors_Fill}" StrokeThickness="{StaticResource Double_Margin_1x}" Stroke="{StaticResource Color_Separator}"></Ellipse>
+            <TextBlock FontWeight="Bold" Foreground="{StaticResource Color_HasPredicates_Foreground}" FontSize="{StaticResource FontSize_VeryLarge}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{StaticResource String_Icon_HasBehaviors}"></TextBlock>
+        </Grid>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding HasGameEvents, UpdateSourceTrigger=PropertyChanged}" Value="false">
+                <Setter Property="Visibility" Value="Hidden"></Setter>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+    
     <DataTemplate DataType="{x:Type m:FolderM}">
         <Button VerticalAlignment="Center" Template="{StaticResource CT_Button_Path}" Command="{Binding Path=DataContext.SetContextCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}">
             <TextBlock Foreground="{StaticResource Color_Path}" FontSize="{StaticResource FontSize_Small}"><Run Text="{Binding name}"></Run><Run Text="/"></Run></TextBlock>
@@ -1293,7 +1313,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </Trigger>
         </Style.Triggers>
     </Style>
-    
+
+    <Style TargetType="TextBlock" x:Key="S_TextBlock_Behavior_Title" BasedOn="{StaticResource S_TextBlock_InteractiveTitle}">
+        <Style.Triggers>
+            <Trigger Property="Tag" Value="{x:Type mb:B_OptionalM}">
+                <Setter Property="Text" Value="{DynamicResource String_Tag_Behavior_B_OptionalM_Title}"></Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <DataTemplate x:Key="DT_ContentControl_Predicates">
         <ScrollViewer>
             <ItemsControl ItemsSource="{Binding Predicates}">
@@ -1352,6 +1380,34 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </ScrollViewer>
     </DataTemplate>
 
+    <DataTemplate x:Key="DT_ContentControl_Behaviors">
+        <ScrollViewer>
+            <ItemsControl ItemsSource="{Binding Behaviors}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="{StaticResource ComboBox.Static.Border}" BorderThickness="{StaticResource Thickness_Margin_1x}"
+                                CornerRadius="{StaticResource CornerRadius_Common}">
+                            <Border.Margin>
+                                <Thickness Left="{StaticResource Double_Margin_2x}" Right="{StaticResource Double_Margin_2x}"
+                                           Top="{StaticResource Double_Margin_2x}" Bottom="{StaticResource Double_Size_8x}"></Thickness>
+                            </Border.Margin>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"></RowDefinition>
+                                    <RowDefinition Height="auto"></RowDefinition>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <TextBlock HorizontalAlignment="Center" Tag="{Binding BehaviorType}" Style="{StaticResource S_TextBlock_Behavior_Title}"></TextBlock>
+                                <ContentControl Grid.Row="2" Content="{Binding}"></ContentControl>
+                                <Button Grid.RowSpan="3" Style="{StaticResource S_Button_Remove}" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </DataTemplate>
+    
     <DataTemplate x:Key="DT_ComboBoxItem_Predicate">
         <TextBlock x:Name="tb_Main"></TextBlock>
         <DataTemplate.Triggers>
@@ -1457,6 +1513,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <sys:Type>mge:GE_Quest_Node_AddM</sys:Type>
             <sys:Type>mge:GE_Quest_Node_PassM</sys:Type>
             <sys:Type>mge:GE_Relation_ChangeM</sys:Type>
+        </controls:ComboBoxExt>
+    </DataTemplate>
+
+    <DataTemplate x:Key="DT_ComboBoxItem_Behavior">
+        <TextBlock x:Name="tb_Main"></TextBlock>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding}" Value="{x:Type mb:B_OptionalM}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_Behavior_B_OptionalM_DisplayName}"></Setter>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+    
+    <DataTemplate x:Key="DT_ContentControl_BehaviorsHeader">
+        <controls:ComboBoxExt SelectedValue="{Binding SelectedBehaviorType, UpdateSourceTrigger=PropertyChanged}"
+                              Style="{StaticResource S_ComboBoxExt_Prop_Popup}"  ItemTemplate="{StaticResource DT_ComboBoxItem_Behavior}">
+            <controls:ComboBoxExt.Tag>
+                <StackPanel Orientation="Horizontal">
+                    <ContentControl ContentTemplate="{StaticResource DT_HasBehaviors_Mini}"></ContentControl>
+                    <TextBlock Padding="{StaticResource Thickness_Padding_LeftRight}" VerticalAlignment="Center" Text="{DynamicResource String_Tag_Node_Tab_Behaviors}"></TextBlock>
+                </StackPanel>
+            </controls:ComboBoxExt.Tag>
+            <sys:Type>mb:B_OptionalM</sys:Type>
         </controls:ComboBoxExt>
     </DataTemplate>
     
@@ -1626,6 +1704,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </TabItem>
             <TabItem ContentTemplate="{StaticResource DT_ContentControl_Predicates}" Content="{Binding}" HeaderTemplate="{StaticResource DT_ContentControl_PredicatesHeader}" Header="{Binding}"></TabItem>
             <TabItem ContentTemplate="{StaticResource DT_ContentControl_GameEvents}" Content="{Binding}" HeaderTemplate="{StaticResource DT_ContentControl_GameEventsHeader}" Header="{Binding}"></TabItem>
+            <TabItem ContentTemplate="{StaticResource DT_ContentControl_Behaviors}" Content="{Binding}" HeaderTemplate="{StaticResource DT_ContentControl_BehaviorsHeader}" Header="{Binding}"></TabItem>
         </TabControl>
     </DataTemplate>
 
@@ -1685,6 +1764,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </TabItem>
             <TabItem ContentTemplate="{StaticResource DT_ContentControl_Predicates}" Content="{Binding}" HeaderTemplate="{StaticResource DT_ContentControl_PredicatesHeader}" Header="{Binding}"></TabItem>
             <TabItem ContentTemplate="{StaticResource DT_ContentControl_GameEvents}" Content="{Binding}" HeaderTemplate="{StaticResource DT_ContentControl_GameEventsHeader}" Header="{Binding}"></TabItem>
+            <TabItem ContentTemplate="{StaticResource DT_ContentControl_Behaviors}" Content="{Binding}" HeaderTemplate="{StaticResource DT_ContentControl_BehaviorsHeader}" Header="{Binding}"></TabItem>
         </TabControl>
     </DataTemplate>
     

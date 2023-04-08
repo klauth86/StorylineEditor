@@ -76,6 +76,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_Node_Tab_Props_UKR">Властивості</sys:String>
     <sys:String x:Key="String_Tag_Node_Tab_Predicates_UKR">Предикати</sys:String>
     <sys:String x:Key="String_Tag_Node_Tab_GameEvents_UKR">Події</sys:String>
+    <sys:String x:Key="String_Tag_Node_Tab_Behaviors_UKR">Поводження</sys:String>
     <sys:String x:Key="String_Tag_Node_Random_Type_UKR">Випадкова</sys:String>
     <sys:String x:Key="String_Tag_Node_Transit_Type_UKR">Перехід</sys:String>
     <sys:String x:Key="String_Tag_Node_Gate_Type_UKR">Вхід</sys:String>
@@ -142,6 +143,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_PassM_Title_UKR">Квест: виконати крок/альтернативу</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_Title_UKR">Стосунки: змінити</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_UKR">Змінити на:</sys:String>
+    <sys:String x:Key="String_Tag_Behavior_B_OptionalM_Title_UKR">Необов'язкова</sys:String>
+    <sys:String x:Key="String_Tag_Behavior_B_OptionalM_DisplayName_UKR">Необов'язкова</sys:String>
     <sys:String x:Key="String_Tag_Player_Tab_Props_UKR">Головна</sys:String>
     <sys:String x:Key="String_Tag_Player_FullMode_UKR">Повний режим</sys:String>
     <sys:String x:Key="String_Tag_Player_Error_UKR">ПОМИЛКА</sys:String>
@@ -164,6 +167,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_GraphMenu_Play_Tooltip_UKR">Відтворити</sys:String>
     <sys:String x:Key="String_HasPredicates_Tooltip_UKR">Має предікати</sys:String>
     <sys:String x:Key="String_HasGameEvents_Tooltip_UKR">Має події</sys:String>
+    <sys:String x:Key="String_HasBehaviors_Tooltip_UKR">Має поведінки</sys:String>
     <sys:String x:Key="String_Player_Stop_Tooltip_UKR">Стоп</sys:String>
     <sys:String x:Key="String_Player_Pause_Tooltip_UKR">Пауза</sys:String>
     <sys:String x:Key="String_Player_Play_Tooltip_UKR">Старт</sys:String>

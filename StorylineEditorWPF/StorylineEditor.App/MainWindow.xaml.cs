@@ -468,6 +468,7 @@ namespace StorylineEditor.App
             SetWithSuffix("String_Tag_Node_Tab_Props", suffix);
             SetWithSuffix("String_Tag_Node_Tab_Predicates", suffix);
             SetWithSuffix("String_Tag_Node_Tab_GameEvents", suffix);
+            SetWithSuffix("String_Tag_Node_Tab_Behaviors", suffix);
             SetWithSuffix("String_Tag_Node_Random_Type", suffix);
             SetWithSuffix("String_Tag_Node_Transit_Type", suffix);
             SetWithSuffix("String_Tag_Node_Gate_Type", suffix);
@@ -534,6 +535,8 @@ namespace StorylineEditor.App
             SetWithSuffix("String_Tag_GameEvent_GE_Quest_Node_PassM_Title", suffix);
             SetWithSuffix("String_Tag_GameEvent_GE_Relation_ChangeM_Title", suffix);
             SetWithSuffix("String_Tag_GameEvent_GE_Relation_ChangeM", suffix);
+            SetWithSuffix("String_Tag_Behavior_B_OptionalM_Title", suffix);
+            SetWithSuffix("String_Tag_Behavior_B_OptionalM_DisplayName", suffix);
             SetWithSuffix("String_Tag_Player_Tab_Props", suffix);
             SetWithSuffix("String_Tag_Player_FullMode", suffix);
             SetWithSuffix("String_Tag_Player_Error", suffix);
@@ -556,6 +559,7 @@ namespace StorylineEditor.App
             SetWithSuffix("String_GraphMenu_Play_Tooltip", suffix);
             SetWithSuffix("String_HasPredicates_Tooltip", suffix);
             SetWithSuffix("String_HasGameEvents_Tooltip", suffix);
+            SetWithSuffix("String_HasBehaviors_Tooltip", suffix);
             SetWithSuffix("String_Player_Stop_Tooltip", suffix);
             SetWithSuffix("String_Player_Pause_Tooltip", suffix);
             SetWithSuffix("String_Player_Play_Tooltip", suffix);

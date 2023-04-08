@@ -96,6 +96,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_Node_Tab_Props">locerr</sys:String>
     <sys:String x:Key="String_Tag_Node_Tab_Predicates">locerr</sys:String>
     <sys:String x:Key="String_Tag_Node_Tab_GameEvents">locerr</sys:String>
+    <sys:String x:Key="String_Tag_Node_Tab_Behaviors">locerr</sys:String>
     <sys:String x:Key="String_Tag_Node_Random_Type">locerr</sys:String>
     <sys:String x:Key="String_Tag_Node_Transit_Type">locerr</sys:String>
     <sys:String x:Key="String_Tag_Node_Gate_Type">locerr</sys:String>
@@ -162,6 +163,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_PassM_Title">locerr</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_Title">locerr</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM">locerr</sys:String>
+    <sys:String x:Key="String_Tag_Behavior_B_OptionalM_Title">locerr</sys:String>
+    <sys:String x:Key="String_Tag_Behavior_B_OptionalM_DisplayName">locerr</sys:String>
     <sys:String x:Key="String_Tag_Player_Tab_Props">locerr</sys:String>
     <sys:String x:Key="String_Tag_Player_FullMode">locerr</sys:String>
     <sys:String x:Key="String_Tag_Player_Error">locerr</sys:String>
@@ -184,6 +187,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_GraphMenu_Play_Tooltip">locerr</sys:String>
     <sys:String x:Key="String_HasPredicates_Tooltip">locerr</sys:String>
     <sys:String x:Key="String_HasGameEvents_Tooltip">locerr</sys:String>
+    <sys:String x:Key="String_HasBehaviors_Tooltip">locerr</sys:String>
     <sys:String x:Key="String_Player_Stop_Tooltip">locerr</sys:String>
     <sys:String x:Key="String_Player_Pause_Tooltip">locerr</sys:String>
     <sys:String x:Key="String_Player_Play_Tooltip">locerr</sys:String>
