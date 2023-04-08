@@ -1004,6 +1004,36 @@ namespace StorylineEditor.ViewModel
                         });
                 }
             }
+            else if (node is Node_DelayVM delayNode)
+            {
+                double startTimeMsec = DateTime.Now.TimeOfDay.TotalMilliseconds;
+                double finishTimeMsec = startTimeMsec + delayNode.Delay;
+
+                TimeLeft = delayNode.Delay;
+                
+                ActiveContext.TaskService.Start(
+                    delayNode.Delay * 1000,
+                    (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
+                    {
+                        ActiveContext.ActiveGraph.TickPlayer(inDeltaTimeMsec);
+                        
+                        TimeLeft -= inDeltaTimeMsec / 1000;
+                        return CustomStatus.Running;
+                    },
+                    (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec, customStatus) =>
+                    {
+                        if (customStatus == CustomStatus.RanToCompletion)
+                        {
+                            ActiveContext.ActiveGraph.TickPlayer(inDeltaTimeMsec);
+
+                            TimeLeft = 0;
+                            FinishPlayNode(node);
+                        }
+                        
+                        return customStatus;
+                    }
+                    , null);
+            }
             else
             {
                 FinishPlayNode(node);

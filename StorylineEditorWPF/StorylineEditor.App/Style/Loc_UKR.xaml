@@ -32,6 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Stats_Node_ExitM_TmpDescription_UKR">🚪 Вихід</sys:String>
     <sys:String x:Key="String_Stats_Node_DialogM_TmpDescription_UKR">💬 Діалог</sys:String>
     <sys:String x:Key="String_Stats_Node_ReplicaM_TmpDescription_UKR">🗣 Репліка</sys:String>
+    <sys:String x:Key="String_Stats_Node_DelayM_TmpDescription_UKR">🕑 Затримка</sys:String>
     <sys:String x:Key="String_Tag_Config_Language_UKR">Мова</sys:String>
     <sys:String x:Key="String_Tag_Config_UserActions_UKR">Гарячі клавіши та миша</sys:String>
     <sys:String x:Key="String_Tag_Config_UserActions_CreateNode_UKR">Створити вершини</sys:String>
@@ -81,12 +82,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_Node_Exit_Type_UKR">Вихід</sys:String>
     <sys:String x:Key="String_Tag_Node_Replica_Type_UKR">Репліка</sys:String>
     <sys:String x:Key="String_Tag_Node_Dialog_Type_UKR">Діалог</sys:String>
+    <sys:String x:Key="String_Tag_Node_Delay_Type_UKR">Затримка</sys:String>
     <sys:String x:Key="String_Tag_Dialog_DialogCharacter_UKR">Персонаж</sys:String>
     <sys:String x:Key="String_Tag_Dialog_DialogLocation_UKR">Локація</sys:String>
     <sys:String x:Key="String_Tag_Dialog_ReplicaLocation_UKR">Локація</sys:String>
     <sys:String x:Key="String_Tag_Node_Regular_Character_UKR">Власник</sys:String>
     <sys:String x:Key="String_Tag_Node_Gate_TargetDialog_UKR">Діалог</sys:String>
     <sys:String x:Key="String_Tag_Node_Gate_TargetExitNode_UKR">Вихід</sys:String>
+    <sys:String x:Key="String_Tag_Node_Delay_Delay_UKR">Затримка</sys:String>
     <sys:String x:Key="String_Tag_Node_Regular_OverrideName_UKR">Альтернативне ім'я</sys:String>
     <sys:String x:Key="String_Tag_Node_Regular_FileStorageType_UKR">Тип сховища</sys:String>
     <sys:String x:Key="String_Tag_Node_Regular_FileHttpRef_UKR">Посилання на аудіо</sys:String>

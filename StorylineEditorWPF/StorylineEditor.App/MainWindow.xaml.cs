@@ -424,6 +424,7 @@ namespace StorylineEditor.App
             SetWithSuffix("String_Stats_Node_ExitM_TmpDescription", suffix);
             SetWithSuffix("String_Stats_Node_DialogM_TmpDescription", suffix);
             SetWithSuffix("String_Stats_Node_ReplicaM_TmpDescription", suffix);
+            SetWithSuffix("String_Stats_Node_DelayM_TmpDescription", suffix);
             SetWithSuffix("String_Tag_Config_Language", suffix);
             SetWithSuffix("String_Tag_Config_UserActions", suffix);
             SetWithSuffix("String_Tag_Config_UserActions_CreateNode", suffix);
@@ -473,12 +474,14 @@ namespace StorylineEditor.App
             SetWithSuffix("String_Tag_Node_Exit_Type", suffix);
             SetWithSuffix("String_Tag_Node_Replica_Type", suffix);
             SetWithSuffix("String_Tag_Node_Dialog_Type", suffix);
+            SetWithSuffix("String_Tag_Node_Delay_Type", suffix);
             SetWithSuffix("String_Tag_Dialog_DialogCharacter", suffix);
             SetWithSuffix("String_Tag_Dialog_DialogLocation", suffix);
             SetWithSuffix("String_Tag_Dialog_ReplicaLocation", suffix);
             SetWithSuffix("String_Tag_Node_Regular_Character", suffix);
             SetWithSuffix("String_Tag_Node_Gate_TargetDialog", suffix);
             SetWithSuffix("String_Tag_Node_Gate_TargetExitNode", suffix);
+            SetWithSuffix("String_Tag_Node_Delay_Delay", suffix);
             SetWithSuffix("String_Tag_Node_Regular_OverrideName", suffix);
             SetWithSuffix("String_Tag_Node_Regular_FileStorageType", suffix);
             SetWithSuffix("String_Tag_Node_Regular_FileHttpRef", suffix);

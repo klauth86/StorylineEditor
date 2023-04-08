@@ -59,4 +59,33 @@ namespace StorylineEditor.Model.Nodes
         public int rtDescriptionVersion { get; set; }
         public TextRangeM rtDescription { get; set; }
     }
+
+    public class Node_DelayM : Node_BaseM
+    {
+        public Node_DelayM(long additionalTicks) : base(additionalTicks)
+        {
+            delay = 0.1;
+        }
+
+        public Node_DelayM() : this(0) { }
+
+        public override BaseM Clone(long additionalTicks)
+        {
+            Node_DelayM clone = new Node_DelayM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
+
+        protected override void CloneInternal(BaseM targetObject)
+        {
+            base.CloneInternal(targetObject);
+
+            if (targetObject is Node_DelayM casted)
+            {
+                casted.delay = delay;
+            }
+        }
+
+        public double delay { get; set; }
+    }
 }

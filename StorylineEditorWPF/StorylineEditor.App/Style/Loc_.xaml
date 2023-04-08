@@ -52,6 +52,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Stats_Node_ExitM_TmpDescription">locerr</sys:String>
     <sys:String x:Key="String_Stats_Node_DialogM_TmpDescription">locerr</sys:String>
     <sys:String x:Key="String_Stats_Node_ReplicaM_TmpDescription">locerr</sys:String>
+    <sys:String x:Key="String_Stats_Node_DelayM_TmpDescription">locerr</sys:String>
     <sys:String x:Key="String_Tag_Config_Language">locerr</sys:String>
     <sys:String x:Key="String_Tag_Config_UserActions">locerr</sys:String>
     <sys:String x:Key="String_Tag_Config_UserActions_CreateNode">locerr</sys:String>
@@ -101,12 +102,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_Node_Exit_Type">locerr</sys:String>
     <sys:String x:Key="String_Tag_Node_Replica_Type">locerr</sys:String>
     <sys:String x:Key="String_Tag_Node_Dialog_Type">locerr</sys:String>
+    <sys:String x:Key="String_Tag_Node_Delay_Type">locerr</sys:String>
     <sys:String x:Key="String_Tag_Dialog_DialogCharacter">locerr</sys:String>
     <sys:String x:Key="String_Tag_Dialog_DialogLocation">locerr</sys:String>
     <sys:String x:Key="String_Tag_Dialog_ReplicaLocation">locerr</sys:String>
     <sys:String x:Key="String_Tag_Node_Regular_Character">locerr</sys:String>
     <sys:String x:Key="String_Tag_Node_Gate_TargetDialog">locerr</sys:String>
     <sys:String x:Key="String_Tag_Node_Gate_TargetExitNode">locerr</sys:String>
+    <sys:String x:Key="String_Tag_Node_Delay_Delay">locerr</sys:String>
     <sys:String x:Key="String_Tag_Node_Regular_OverrideName">locerr</sys:String>
     <sys:String x:Key="String_Tag_Node_Regular_FileStorageType">locerr</sys:String>
     <sys:String x:Key="String_Tag_Node_Regular_FileHttpRef">locerr</sys:String>

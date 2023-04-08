@@ -32,6 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Stats_Node_ExitM_TmpDescription_ENG">🚪 Exit</sys:String>
     <sys:String x:Key="String_Stats_Node_DialogM_TmpDescription_ENG">💬 Dialog</sys:String>
     <sys:String x:Key="String_Stats_Node_ReplicaM_TmpDescription_ENG">🗣 Replica</sys:String>
+    <sys:String x:Key="String_Stats_Node_DelayM_TmpDescription_ENG">🕑 Delay</sys:String>
     <sys:String x:Key="String_Tag_Config_Language_ENG">Language</sys:String>
     <sys:String x:Key="String_Tag_Config_UserActions_ENG">Keyboard and mouse</sys:String>
     <sys:String x:Key="String_Tag_Config_UserActions_CreateNode_ENG">Create nodes</sys:String>
@@ -81,12 +82,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_Node_Exit_Type_ENG">Exit</sys:String>
     <sys:String x:Key="String_Tag_Node_Replica_Type_ENG">Replica</sys:String>
     <sys:String x:Key="String_Tag_Node_Dialog_Type_ENG">Dialog</sys:String>
+    <sys:String x:Key="String_Tag_Node_Delay_Type_ENG">Delay</sys:String>
     <sys:String x:Key="String_Tag_Dialog_DialogCharacter_ENG">Character</sys:String>
     <sys:String x:Key="String_Tag_Dialog_DialogLocation_ENG">Location</sys:String>
     <sys:String x:Key="String_Tag_Dialog_ReplicaLocation_ENG">Location</sys:String>
     <sys:String x:Key="String_Tag_Node_Regular_Character_ENG">Owner</sys:String>
     <sys:String x:Key="String_Tag_Node_Gate_TargetDialog_ENG">Dialog</sys:String>
     <sys:String x:Key="String_Tag_Node_Gate_TargetExitNode_ENG">Exit</sys:String>
+    <sys:String x:Key="String_Tag_Node_Delay_Delay_ENG">Delay</sys:String>
     <sys:String x:Key="String_Tag_Node_Regular_OverrideName_ENG">Override Name</sys:String>
     <sys:String x:Key="String_Tag_Node_Regular_FileStorageType_ENG">Storage type</sys:String>
     <sys:String x:Key="String_Tag_Node_Regular_FileHttpRef_ENG">Audio source</sys:String>

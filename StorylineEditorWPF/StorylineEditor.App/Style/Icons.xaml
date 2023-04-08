@@ -82,6 +82,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <sys:String x:Key="String_Icon_Node_Replica">🗣</sys:String>
 
+    <sys:String x:Key="String_Icon_Node_Delay">🕑</sys:String>
+    
     <sys:String x:Key="String_Icon_Dialog">💬</sys:String>
     
     <sys:String x:Key="String_Icon_Replica">🗣</sys:String>

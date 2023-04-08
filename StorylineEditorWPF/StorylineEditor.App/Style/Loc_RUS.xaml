@@ -32,6 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Stats_Node_ExitM_TmpDescription_RUS">🚪 Выход</sys:String>
     <sys:String x:Key="String_Stats_Node_DialogM_TmpDescription_RUS">💬 Диалог</sys:String>
     <sys:String x:Key="String_Stats_Node_ReplicaM_TmpDescription_RUS">🗣 Реплика</sys:String>
+    <sys:String x:Key="String_Stats_Node_DelayM_TmpDescription_RUS">🕑 Задержка</sys:String>
     <sys:String x:Key="String_Tag_Config_Language_RUS">Язык</sys:String>
     <sys:String x:Key="String_Tag_Config_UserActions_RUS">Горячие клавиши и мышь</sys:String>
     <sys:String x:Key="String_Tag_Config_UserActions_CreateNode_RUS">Создать вершины</sys:String>
@@ -81,12 +82,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_Node_Exit_Type_RUS">Выход</sys:String>
     <sys:String x:Key="String_Tag_Node_Replica_Type_RUS">Реплика</sys:String>
     <sys:String x:Key="String_Tag_Node_Dialog_Type_RUS">Диалог</sys:String>
+    <sys:String x:Key="String_Tag_Node_Delay_Type_RUS">Задержка</sys:String>
     <sys:String x:Key="String_Tag_Dialog_DialogCharacter_RUS">Персонаж</sys:String>
     <sys:String x:Key="String_Tag_Dialog_DialogLocation_RUS">Локация</sys:String>
     <sys:String x:Key="String_Tag_Dialog_ReplicaLocation_RUS">Локация</sys:String>
     <sys:String x:Key="String_Tag_Node_Regular_Character_RUS">Владелец</sys:String>
     <sys:String x:Key="String_Tag_Node_Gate_TargetDialog_RUS">Диалог</sys:String>
     <sys:String x:Key="String_Tag_Node_Gate_TargetExitNode_RUS">Выход</sys:String>
+    <sys:String x:Key="String_Tag_Node_Delay_Delay_RUS">Задержка</sys:String>
     <sys:String x:Key="String_Tag_Node_Regular_OverrideName_RUS">Иное отображаемое имя</sys:String>
     <sys:String x:Key="String_Tag_Node_Regular_FileStorageType_RUS">Тип хранилища</sys:String>
     <sys:String x:Key="String_Tag_Node_Regular_FileHttpRef_RUS">Ссылка на аудио</sys:String>

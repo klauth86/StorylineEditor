@@ -663,6 +663,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </Grid>
     </DataTemplate>
     
+    <DataTemplate DataType="{x:Type mn:Node_DelayM}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{StaticResource String_Icon_Node_Delay}" Style="{StaticResource S_TextBlock_Selector_Icon_Mini}"></TextBlock>
+            <TextBlock Grid.Column="1" Text="{Binding id, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Selector_Name_Mini}"></TextBlock>
+        </Grid>
+    </DataTemplate>
+    
     <DataTemplate DataType="{x:Type vm:CharacterEditorVM}">
         <StackPanel Orientation="Vertical">
             <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{DynamicResource String_Tag_Name}"></TextBox>
@@ -1106,6 +1117,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </Grid>
     </DataTemplate>
 
+    <DataTemplate x:Key="Node_DelayVM_ItemTemplate">
+        <Grid>
+            <Border Style="{StaticResource S_Border_Node}"
+                    bhvrs:LoadUnloadExtBehavior.LoadedCommand="{Binding RegisterCommand, UpdateSourceTrigger=PropertyChanged}"
+                    bhvrs:LoadUnloadExtBehavior.UnloadedCommand="{Binding UnregisterCommand, UpdateSourceTrigger=PropertyChanged}">
+                <ContentControl Content="{Binding}"></ContentControl>
+            </Border>
+
+            <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}">
+                <Button Style="{StaticResource S_Button_Remove}"></Button>
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+    
     <DataTemplate DataType="{x:Type vmn:Node_Journal_StepVM}">
         <Grid IsHitTestVisible="False">
             <Grid.ColumnDefinitions>
@@ -1499,6 +1524,42 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </DataTemplate.Triggers>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vmn:Node_DelayVM}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <TextBlock Style="{StaticResource S_TextBlock_Node_Icon_Large}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{StaticResource String_Icon_Node_Delay}"></TextBlock>
+
+            <TextBlock FontSize="{StaticResource FontSize_Medium}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Delay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBlock>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmn:Node_DelayEditorVM}">
+        <TabControl>
+            <TabItem Header="{DynamicResource String_Tag_Node_Tab_Props}">
+                <GroupBox Header="{DynamicResource String_Tag_Node_Delay_Delay}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"></RowDefinition>
+                            <RowDefinition Height="auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" HorizontalAlignment="Center" Text="{Binding ElementName=sl_Delay, Path=Value, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBlock>
+                        <Slider x:Name="sl_Delay"
+                        Grid.Row="1"
+                        Value="{Binding Delay, UpdateSourceTrigger=PropertyChanged}"
+                        Minimum="{StaticResource Double_Delay_Min}"
+                        Maximum="{StaticResource Double_Delay_Max}"
+                        TickFrequency="{StaticResource Double_Delay_Tick}"
+                        ></Slider>
+                    </Grid>
+                </GroupBox>
+            </TabItem>
+        </TabControl>
+    </DataTemplate>
+    
     <DataTemplate DataType="{x:Type vmn:Node_ExitVM}">
         <TextBlock Style="{StaticResource S_TextBlock_Node_Icon_Large}" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <Run Text="{StaticResource String_Icon_Node_Exit}"></Run>
@@ -1687,6 +1748,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <Button x:Name="btn_selectable_Transit" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Transit}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_TransitM}" ToolTip="{DynamicResource String_Tag_Node_Transit_Type}"></Button>
                             <Button x:Name="btn_selectable_Gate" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Gate}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_GateM}" ToolTip="{DynamicResource String_Tag_Node_Gate_Type}"></Button>
                             <Button x:Name="btn_selectable_Exit" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Exit}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_ExitM}" ToolTip="{DynamicResource String_Tag_Node_Exit_Type}"></Button>
+                            <Button x:Name="btn_selectable_Delay" Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Node_Delay}" Command="{Binding SelectNodeTypeCommand}" CommandParameter="{x:Type mn:Node_DelayM}" ToolTip="{DynamicResource String_Tag_Node_Delay_Type}"></Button>
                             <Rectangle Style="{StaticResource S_Rectangle_GraphMenu}"></Rectangle>
                             <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Bwd}" Command="{Binding PrevRootNodeCommand}" ToolTip="{DynamicResource String_GraphMenu_PrevRootNode_Tooltip}"></Button>
                             <Button Style="{StaticResource S_Button_Square_24x}" Content="{StaticResource String_Icon_Fwd}" Command="{Binding NextRootNodeCommand}" ToolTip="{DynamicResource String_GraphMenu_NextRootNode_Tooltip}"></Button>
@@ -1757,6 +1819,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <Setter TargetName="btn_selectable_Exit" Property="Style" Value="{StaticResource S_Button_24x_Selected}"></Setter>
                 <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{DynamicResource String_Tag_Node_Exit_Type}"></Setter>
             </DataTrigger>
+            <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_DelayM}">
+                <Setter TargetName="btn_selectable_Delay" Property="Style" Value="{StaticResource S_Button_24x_Selected}"></Setter>
+                <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{DynamicResource String_Tag_Node_Delay_Type}"></Setter>
+            </DataTrigger>            
         </DataTemplate.Triggers>
     </DataTemplate>
 

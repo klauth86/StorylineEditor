@@ -183,4 +183,27 @@ namespace StorylineEditor.ViewModel.Nodes
         public virtual IEnumerable<IPredicate> Predicates { get => Enumerable.Empty<IPredicate>(); }
         public virtual IEnumerable<IGameEvent> GameEvents { get => Enumerable.Empty<IGameEvent>(); }
     }
+
+    public class Node_DelayVM : Node_BaseVM<Node_DelayM, object>
+    {
+        public Node_DelayVM(Node_DelayM model, object parent) : base(model, parent) { }
+
+        public double Delay
+        {
+            get => Model.delay;
+            set
+            {
+                if (Model.delay != value)
+                {
+                    Model.delay = value;
+                    OnModelChanged(Model, nameof(Delay));
+                }
+            }
+        }
+    }
+
+    public class Node_DelayEditorVM : Node_DelayVM
+    {
+        public Node_DelayEditorVM(Node_DelayVM viewModel) : base(viewModel.Model, viewModel.Parent) { }
+    }
 }

@@ -38,6 +38,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <sys:Double x:Key="Double_PlayRate_Tick">1</sys:Double>
 
+    <sys:Double x:Key="Double_Delay_Min">0.1</sys:Double>
+
+    <sys:Double x:Key="Double_Delay_Max">16</sys:Double>
+
+    <sys:Double x:Key="Double_Delay_Tick">0.1</sys:Double>
+    
     <sys:Double x:Key="Double_Relation_Min">-10</sys:Double>
 
     <sys:Double x:Key="Double_Relation_Max">10</sys:Double>
