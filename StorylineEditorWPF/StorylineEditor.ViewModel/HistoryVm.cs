@@ -241,7 +241,7 @@ namespace StorylineEditor.ViewModel
 
         public bool GetKnownNodeIsPassed(string nodeId)
         {
-            BaseM node = ((QuestM)Model).nodes.FirstOrDefault((nodeModel) => nodeModel.id == nodeId);
+            BaseM node = Model.nodes.FirstOrDefault((nodeModel) => nodeModel.id == nodeId);
             if (_knownNodesDictionary.ContainsKey(node))
             {
                 return KnownNodes[_knownNodesDictionary[node]].IsPassed;
@@ -252,7 +252,7 @@ namespace StorylineEditor.ViewModel
 
         public void SetKnownNodeIsPassed(string nodeId, bool isPassed)
         {
-            BaseM node = ((QuestM)Model).nodes.FirstOrDefault((nodeModel) => nodeModel.id == nodeId);
+            BaseM node = Model.nodes.FirstOrDefault((nodeModel) => nodeModel.id == nodeId);
             if (_knownNodesDictionary.ContainsKey(node))
             {
                 KnownNodes[_knownNodesDictionary[node]].IsPassed = isPassed;
@@ -261,7 +261,7 @@ namespace StorylineEditor.ViewModel
 
         public bool HasKnownNode(string nodeId)
         {
-            BaseM node = ((QuestM)Model).nodes.FirstOrDefault((nodeModel) => nodeModel.id == nodeId);
+            BaseM node = Model.nodes.FirstOrDefault((nodeModel) => nodeModel.id == nodeId);
             return _knownNodesDictionary.ContainsKey(node);
         }
 
@@ -269,7 +269,7 @@ namespace StorylineEditor.ViewModel
         {
             if (_knownNodesCVSInit)
             {
-                BaseM nodeToAdd = node ?? ((QuestM)Model).nodes.FirstOrDefault((nodeModel) => nodeModel.id == nodeId);
+                BaseM nodeToAdd = node ?? Model.nodes.FirstOrDefault((nodeModel) => nodeModel.id == nodeId);
 
                 if (!_knownNodesDictionary.ContainsKey(nodeToAdd))
                 {

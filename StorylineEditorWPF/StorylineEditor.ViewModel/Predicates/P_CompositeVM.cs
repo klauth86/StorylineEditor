@@ -17,52 +17,46 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 using StorylineEditor.Model.Predicates;
-using StorylineEditor.ViewModel.Common;
 using StorylineEditor.ViewModel.Interface;
 using System;
-using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Predicates
 {
     public class P_CompositeVM : P_BaseVM<P_CompositeM, object>
     {
-        public P_CompositeVM(P_CompositeM model, object parent) : base(model, parent)
-        {
-            IsFirstSelected = true;
-        }
+        public P_CompositeVM(P_CompositeM model, object parent) : base(model, parent) { }
 
-        Type subType;
-        public Type SubType
+        public Type SubTypeA
         {
-            get => subType;
+            get => null;
             set
             {
-                if (subType != value)
+                if (value != null)
                 {
-                    subType = value;
-
-                    if (value != null)
-                    {
-                        if (IsFirstSelected)
-                        {
-                            PredicateA = PredicatesHelper.CreatePredicateByType(subType, Parent);
-                            Model.predicateA = PredicateA.GetModel<P_BaseM>();
-                            Notify(nameof(PredicateA));
-                        }
-                        else
-                        {
-                            PredicateB = PredicatesHelper.CreatePredicateByType(subType, Parent);
-                            Model.predicateB = PredicateB.GetModel<P_BaseM>();
-                            Notify(nameof(PredicateB));
-                        }
-                    }
+                    PredicateA = PredicatesHelper.CreatePredicateByType(value, Parent);
+                    Model.predicateA = PredicateA.GetModel<P_BaseM>();
+                    Notify(nameof(PredicateA));
                 }
+                Notify(nameof(SubTypeA));
             }
         }
 
-        public bool IsFirstSelected { get; set; }
-
         public IPredicate PredicateA { get; set; }
+
+        public Type SubTypeB
+        {
+            get => null;
+            set
+            {
+                if (value != null)
+                {
+                    PredicateB = PredicatesHelper.CreatePredicateByType(value, Parent);
+                    Model.predicateB = PredicateB.GetModel<P_BaseM>();
+                    Notify(nameof(PredicateB));
+                }
+                Notify(nameof(SubTypeB));
+            }
+        }
 
         public IPredicate PredicateB { get; set; }
 
@@ -78,16 +72,5 @@ namespace StorylineEditor.ViewModel.Predicates
                 }
             }
         }
-
-
-        ICommand selectCommand;
-        public ICommand SelectCommand => selectCommand ?? (selectCommand = new RelayCommand<bool>((isFirstSelected) =>
-        {
-            IsFirstSelected = isFirstSelected;
-            Notify(nameof(IsFirstSelected));
-
-            subType = IsFirstSelected ? Model.predicateA?.GetType() : Model.predicateB?.GetType();
-            Notify(nameof(SubType));
-        }));
     }
 }

@@ -88,6 +88,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <Thickness x:Key="Thickness_Padding_LeftRight" Left="4" Right="4"></Thickness>
 
+    <Thickness x:Key="Thickness_Padding_Left_24x" Left="24"></Thickness>
+    
     <sys:Double x:Key="Double_Size_32x">32</sys:Double>
 
     <sys:Double x:Key="Double_Size_24x">24</sys:Double>

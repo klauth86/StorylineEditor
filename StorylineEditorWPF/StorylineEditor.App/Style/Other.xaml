@@ -2311,66 +2311,69 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmp:P_CompositeVM}">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="auto"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
+        <Grid Margin="{StaticResource Thickness_Padding_Left_24x}">
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Button Grid.Row="0" Grid.Column="0" Content="{DynamicResource String_Tag_Predicate_PredicateA}" Command="{Binding SelectCommand}" CommandParameter="{StaticResource True}"></Button>
-            <ComboBox Grid.Row="0" Grid.Column="1" SelectedValue="{Binding CompositionType}" SelectedIndex="0" ItemTemplate="{StaticResource DT_ListBoxItem_CompositionType}">
+            <GroupBox Header="{StaticResource String_Icon_Composite_A}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <ComboBox x:Name="cmb_PredicateA" SelectedValue="{Binding SubTypeA, UpdateSourceTrigger=PropertyChanged}"  FontSize="{StaticResource FontSize_Small}"
+                      ItemTemplate="{StaticResource DT_ComboBoxItem_Predicate}">
+                        <sys:Type>mp:P_CompositeM</sys:Type>
+                        <sys:Type>mp:P_Dialog_HasM</sys:Type>
+                        <sys:Type>mp:P_Dialog_Node_Has_ActiveSession_CmpM</sys:Type>
+                        <sys:Type>mp:P_Dialog_Node_Has_ActiveSessionM</sys:Type>
+                        <sys:Type>mp:P_Dialog_Node_Has_PrevSessions_CmpM</sys:Type>
+                        <sys:Type>mp:P_Dialog_Node_Has_PrevSessionsM</sys:Type>
+                        <sys:Type>mp:P_Item_HasM</sys:Type>
+                        <sys:Type>mp:P_Quest_AddedM</sys:Type>
+                        <sys:Type>mp:P_Quest_FinishedM</sys:Type>
+                        <sys:Type>mp:P_Quest_Node_AddedM</sys:Type>
+                        <sys:Type>mp:P_Quest_Node_PassedM</sys:Type>
+                        <sys:Type>mp:P_Relation_HasM</sys:Type>
+                    </ComboBox>
+                    <ContentControl Grid.Row="1" Content="{Binding PredicateA, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+                </Grid>
+            </GroupBox>
+
+            <ComboBox Margin="{StaticResource Thickness_Margin_8x}" Grid.Row="1" SelectedValue="{Binding CompositionType}" SelectedIndex="0" ItemTemplate="{StaticResource DT_ListBoxItem_CompositionType}" FontSize="{StaticResource FontSize_Small}">
                 <x:Static Member="m:COMPOSITION_TYPE.AND"></x:Static>
                 <x:Static Member="m:COMPOSITION_TYPE.OR"></x:Static>
                 <x:Static Member="m:COMPOSITION_TYPE.XOR"></x:Static>
             </ComboBox>
-            <Button Grid.Row="0" Grid.Column="2" Content="{DynamicResource String_Tag_Predicate_PredicateB}" Command="{Binding SelectCommand}" CommandParameter="{StaticResource False}"></Button>
 
-            <ComboBox x:Name="cmb_PredicateA" Grid.Row="1" Grid.ColumnSpan="3" SelectedValue="{Binding SubType, UpdateSourceTrigger=PropertyChanged}"
+            <GroupBox Grid.Row="2" Header="{StaticResource String_Icon_Composite_B}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <ComboBox x:Name="cmb_PredicateB" SelectedValue="{Binding SubTypeB, UpdateSourceTrigger=PropertyChanged}"  FontSize="{StaticResource FontSize_Small}"
                       ItemTemplate="{StaticResource DT_ComboBoxItem_Predicate}">
-                <sys:Type>mp:P_CompositeM</sys:Type>
-                <sys:Type>mp:P_Dialog_HasM</sys:Type>
-                <sys:Type>mp:P_Dialog_Node_Has_ActiveSession_CmpM</sys:Type>
-                <sys:Type>mp:P_Dialog_Node_Has_ActiveSessionM</sys:Type>
-                <sys:Type>mp:P_Dialog_Node_Has_PrevSessions_CmpM</sys:Type>
-                <sys:Type>mp:P_Dialog_Node_Has_PrevSessionsM</sys:Type>
-                <sys:Type>mp:P_Item_HasM</sys:Type>
-                <sys:Type>mp:P_Quest_AddedM</sys:Type>
-                <sys:Type>mp:P_Quest_FinishedM</sys:Type>
-                <sys:Type>mp:P_Quest_Node_AddedM</sys:Type>
-                <sys:Type>mp:P_Quest_Node_PassedM</sys:Type>
-                <sys:Type>mp:P_Relation_HasM</sys:Type>
-            </ComboBox>
-            
-            <Grid x:Name="gr_PredicateA" Grid.Row="2" Grid.ColumnSpan="3">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"></RowDefinition>
-                    <RowDefinition Height="*"></RowDefinition>
-                </Grid.RowDefinitions>
-                <TextBlock HorizontalAlignment="Center" Tag="{Binding TypeA, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Predicate_Title}"></TextBlock>
-                <ContentControl Grid.Row="1" Content="{Binding PredicateA, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
-            </Grid>
-
-            <Grid x:Name="gr_PredicateB" Grid.Row="2" Grid.ColumnSpan="3" Visibility="Collapsed">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"></RowDefinition>
-                    <RowDefinition Height="*"></RowDefinition>
-                </Grid.RowDefinitions>
-                <TextBlock HorizontalAlignment="Center" Tag="{Binding TypeB, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBlock_Predicate_Title}"></TextBlock>
-                <ContentControl Grid.Row="1" Content="{Binding PredicateB, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
-            </Grid>
+                        <sys:Type>mp:P_CompositeM</sys:Type>
+                        <sys:Type>mp:P_Dialog_HasM</sys:Type>
+                        <sys:Type>mp:P_Dialog_Node_Has_ActiveSession_CmpM</sys:Type>
+                        <sys:Type>mp:P_Dialog_Node_Has_ActiveSessionM</sys:Type>
+                        <sys:Type>mp:P_Dialog_Node_Has_PrevSessions_CmpM</sys:Type>
+                        <sys:Type>mp:P_Dialog_Node_Has_PrevSessionsM</sys:Type>
+                        <sys:Type>mp:P_Item_HasM</sys:Type>
+                        <sys:Type>mp:P_Quest_AddedM</sys:Type>
+                        <sys:Type>mp:P_Quest_FinishedM</sys:Type>
+                        <sys:Type>mp:P_Quest_Node_AddedM</sys:Type>
+                        <sys:Type>mp:P_Quest_Node_PassedM</sys:Type>
+                        <sys:Type>mp:P_Relation_HasM</sys:Type>
+                    </ComboBox>
+                    <ContentControl Grid.Row="1" Content="{Binding PredicateB, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+                </Grid>
+            </GroupBox>
         </Grid>
-        <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding IsFirstSelected, UpdateSourceTrigger=PropertyChanged}" Value="false">
-                <Setter TargetName="gr_PredicateA" Property="Visibility" Value="Collapsed"></Setter>
-                <Setter TargetName="gr_PredicateB" Property="Visibility" Value="Visible"></Setter>
-            </DataTrigger>
-        </DataTemplate.Triggers>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmb:B_OptionalVM}">
