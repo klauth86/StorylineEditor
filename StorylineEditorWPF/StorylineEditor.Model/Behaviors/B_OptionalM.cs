@@ -20,12 +20,12 @@ namespace StorylineEditor.Model.Behaviors
 {
     public class B_OptionalM : B_BaseM
     {
-        public B_OptionalM(long additionalTicks) : base(additionalTicks) { }
-
-        public B_OptionalM() : this(0)
+        public B_OptionalM(long additionalTicks) : base(additionalTicks)
         {
-            skipChance = 0;
+            skipChance = 1;
         }
+
+        public B_OptionalM() : this(0) { }
 
         public override BaseM Clone(long additionalTicks)
         {
@@ -44,6 +44,6 @@ namespace StorylineEditor.Model.Behaviors
             }
         }
 
-        public double skipChance { get; set; }
+        public int skipChance { get; set; }
     }
 }

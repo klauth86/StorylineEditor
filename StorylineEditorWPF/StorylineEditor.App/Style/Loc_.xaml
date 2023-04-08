@@ -165,6 +165,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM">locerr</sys:String>
     <sys:String x:Key="String_Tag_Behavior_B_OptionalM_Title">locerr</sys:String>
     <sys:String x:Key="String_Tag_Behavior_B_OptionalM_DisplayName">locerr</sys:String>
+    <sys:String x:Key="String_Tag_Behavior_B_OptionalM_SkipChance">locerr</sys:String>
     <sys:String x:Key="String_Tag_Player_Tab_Props">locerr</sys:String>
     <sys:String x:Key="String_Tag_Player_FullMode">locerr</sys:String>
     <sys:String x:Key="String_Tag_Player_Error">locerr</sys:String>

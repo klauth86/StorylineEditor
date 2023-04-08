@@ -53,7 +53,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:Double x:Key="Double_RelationDelta_Min">-20</sys:Double>
 
     <sys:Double x:Key="Double_RelationDelta_Max">20</sys:Double>
+    
+    <sys:Double x:Key="Double_Behavior_OptionalM_SkipChance_Min">1</sys:Double>
 
+    <sys:Double x:Key="Double_Behavior_OptionalM_SkipChance_Max">100</sys:Double>
+
+    <sys:Double x:Key="Double_Behavior_OptionalM_SkipChance_Tick">1</sys:Double>
+    
     <sys:Double x:Key="Double_Margin_1x">1</sys:Double>
 
     <sys:Double x:Key="Double_Margin_2x">2</sys:Double>

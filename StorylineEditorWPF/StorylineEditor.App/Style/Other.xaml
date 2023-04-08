@@ -34,7 +34,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     xmlns:bhvrs="clr-namespace:StorylineEditor.App.Behaviors"
                     xmlns:controls="clr-namespace:StorylineEditor.App.Controls"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                    xmlns:mb="clr-namespace:StorylineEditor.Model.Behaviors;assembly=StorylineEditor.Model">
+                    xmlns:mb="clr-namespace:StorylineEditor.Model.Behaviors;assembly=StorylineEditor.Model"
+                    xmlns:vmb="clr-namespace:StorylineEditor.ViewModel.Behaviors;assembly=StorylineEditor.ViewModel">
 
     <!-- COLLECTION CONTEXT (FOLDERS AND PATH) -->
 
@@ -355,7 +356,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <TextBlock FontWeight="Bold" Foreground="{StaticResource Color_HasPredicates_Foreground}" FontSize="{StaticResource FontSize_VeryLarge}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{StaticResource String_Icon_HasBehaviors}"></TextBlock>
         </Grid>
         <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding HasGameEvents, UpdateSourceTrigger=PropertyChanged}" Value="false">
+            <DataTrigger Binding="{Binding HasBehaviors, UpdateSourceTrigger=PropertyChanged}" Value="false">
                 <Setter Property="Visibility" Value="Hidden"></Setter>
             </DataTrigger>
         </DataTemplate.Triggers>
@@ -1046,6 +1047,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}">
                 <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
                 <ContentControl ContentTemplate="{StaticResource DT_HasGameEvents}" Content="{Binding}"></ContentControl>
+                <ContentControl ContentTemplate="{StaticResource DT_HasBehaviors}" Content="{Binding}"></ContentControl>
                 <Button Style="{StaticResource S_Button_Remove}"></Button>
             </StackPanel>
         </Grid>
@@ -1064,6 +1066,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <StackPanel Style="{StaticResource S_StackPanel_Node_TopRightPanel}">
                 <ContentControl ContentTemplate="{StaticResource DT_HasPredicates}" Content="{Binding}"></ContentControl>
                 <ContentControl ContentTemplate="{StaticResource DT_HasGameEvents}" Content="{Binding}"></ContentControl>
+                <ContentControl ContentTemplate="{StaticResource DT_HasBehaviors}" Content="{Binding}"></ContentControl>
                 <Button Style="{StaticResource S_Button_Remove}"></Button>
             </StackPanel>
         </Grid>
@@ -2370,6 +2373,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </DataTemplate.Triggers>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vmb:B_OptionalVM}">
+        <GroupBox Header="{DynamicResource String_Tag_Behavior_B_OptionalM_SkipChance}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock HorizontalAlignment="Center" Text="{Binding SkipChance, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0}%}"></TextBlock>
+                <Slider x:Name="sl_"
+                        Grid.Row="1"
+                        Value="{Binding SkipChance, UpdateSourceTrigger=PropertyChanged}"
+                        Minimum="{StaticResource Double_Behavior_OptionalM_SkipChance_Min}"
+                        Maximum="{StaticResource Double_Behavior_OptionalM_SkipChance_Max}"
+                        TickFrequency="{StaticResource Double_Behavior_OptionalM_SkipChance_Tick}"
+                        ></Slider>
+            </Grid>
+        </GroupBox>
+    </DataTemplate>
+    
     <DataTemplate DataType="{x:Type vmge:GE_Item_DropVM}">
         <controls:ComboBoxExt SelectedValue="{Binding Item, UpdateSourceTrigger=PropertyChanged}"
                                           Tag="{DynamicResource String_Tag_Predicate_Item}"

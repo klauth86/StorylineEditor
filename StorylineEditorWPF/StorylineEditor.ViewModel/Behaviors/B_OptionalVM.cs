@@ -24,6 +24,19 @@ namespace StorylineEditor.ViewModel.Behaviors
     {
         public B_OptionalVM(B_OptionalM model, object parent) : base(model, parent) { }
 
+        public int SkipChance
+        {
+            get => Model.skipChance;
+            set
+            {
+                if (Model.skipChance != value)
+                {
+                    Model.skipChance = value;
+                    Notify(nameof(SkipChance));
+                }
+            }
+        }
+
         public override bool IsTrue() { return RandomHelper.NextDouble() * 100 < Model.skipChance; }
     }
 }

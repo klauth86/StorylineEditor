@@ -145,6 +145,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_RUS">Изменить на</sys:String>
     <sys:String x:Key="String_Tag_Behavior_B_OptionalM_Title_RUS">Необязательная</sys:String>
     <sys:String x:Key="String_Tag_Behavior_B_OptionalM_DisplayName_RUS">Необязательная</sys:String>
+    <sys:String x:Key="String_Tag_Behavior_B_OptionalM_SkipChance_RUS">Шанс пропуска</sys:String>
     <sys:String x:Key="String_Tag_Player_Tab_Props_RUS">Основная</sys:String>
     <sys:String x:Key="String_Tag_Player_FullMode_RUS">Полный режим</sys:String>
     <sys:String x:Key="String_Tag_Player_Error_RUS">ОШИБКА</sys:String>
