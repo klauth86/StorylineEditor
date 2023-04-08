@@ -1627,7 +1627,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <RowDefinition Height="auto"></RowDefinition>
                             <RowDefinition Height="auto"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" HorizontalAlignment="Center" Text="{Binding ElementName=sl_Delay, Path=Value, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"></TextBlock>
+                        <TextBlock Grid.Row="0" HorizontalAlignment="Center" Text="{Binding Delay, UpdateSourceTrigger=PropertyChanged, StringFormat=N1}"></TextBlock>
                         <Slider x:Name="sl_Delay"
                         Grid.Row="1"
                         Value="{Binding Delay, UpdateSourceTrigger=PropertyChanged}"

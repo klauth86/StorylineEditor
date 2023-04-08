@@ -34,6 +34,7 @@ namespace StorylineEditor.ViewModel.Interface
         byte Gender { get; }
         bool IsSelected { get; }
 
+        IEnumerable<IBehavior> Behaviors { get; }
         IEnumerable<IPredicate> Predicates { get; }
         IEnumerable<IGameEvent> GameEvents { get; }
     }

@@ -909,28 +909,130 @@ namespace StorylineEditor.ViewModel
 
         private void StartPlayNode(INode node, bool noAudioMode)
         {
-            ExecuteGameEvents(node, false); // Enter
+            bool isSkipped = false;
 
-            if (node is IRegularNode regularNode)
+            foreach (var behavior in node.Behaviors)
             {
-                byte storageType = regularNode.FileStorageType;
-                string fileUrl = regularNode.FileHttpRef;
+                if (behavior.IsTrue())
+                {
+                    isSkipped = true;
+                    break;
+                }
+            }
 
-                if (noAudioMode || string.IsNullOrEmpty(fileUrl) || storageType == STORAGE_TYPE.UNSET)
+            if (isSkipped)
+            {
+                FinishPlayNode(node, false);
+            }
+            else
+            {
+                ExecuteGameEvents(node, false); // Enter
+
+                if (node is IRegularNode regularNode)
+                {
+                    byte storageType = regularNode.FileStorageType;
+                    string fileUrl = regularNode.FileHttpRef;
+
+                    if (noAudioMode || string.IsNullOrEmpty(fileUrl) || storageType == STORAGE_TYPE.UNSET)
+                    {
+                        double startTimeMsec = DateTime.Now.TimeOfDay.TotalMilliseconds;
+                        double finishTimeMsec = startTimeMsec + Duration * 1000;
+
+                        TimeLeft = Duration;
+
+                        ActiveContext.TaskService.Start(
+                            Duration * 1000,
+                            (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
+                            {
+                                ActiveContext.ActiveGraph.TickPlayer(inDeltaTimeMsec);
+
+                                TimeLeft -= inDeltaTimeMsec / 1000;
+
+                                return CustomStatus.Running;
+                            },
+                            (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec, customStatus) =>
+                            {
+                                if (customStatus == CustomStatus.RanToCompletion)
+                                {
+                                    ActiveContext.ActiveGraph.TickPlayer(inDeltaTimeMsec);
+
+                                    TimeLeft = 0;
+
+                                    FinishPlayNode(node, true);
+                                }
+
+                                return customStatus;
+                            }
+                            , null);
+                    }
+                    else
+                    {
+                        TimeLeft = 0;
+                        IsDownloading = true;
+
+                        ActiveContext.FileService.GetFileFromStorage(
+                            node.Id
+                            , storageType
+                            , fileUrl
+                            , (sourceFilePath) =>
+                            {
+                                IsDownloading = false;
+
+                                ActiveContext.SoundPlayerService.Play(
+                                    sourceFilePath
+                                    , () =>
+                                    {
+                                        ActiveContext.TaskService.Start(
+                                            (double)TaskMode.DrivenByStatus
+                                            , (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
+                                            {
+                                                ActiveContext.ActiveGraph.TickPlayer(inDeltaTimeMsec);
+
+                                                return CustomStatus.Running;
+                                            }
+                                            , (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec, customStatus) => customStatus
+                                            , null
+                                            );
+                                    }
+                                    , () =>
+                                    {
+                                        ActiveContext.TaskService.Stop();
+                                    }
+                                    , (customStatus) =>
+                                    {
+                                        if (customStatus == CustomStatus.RanToCompletion)
+                                        {
+                                            FinishPlayNode(node, true);
+                                        }
+                                        else if (customStatus == CustomStatus.Faulted)
+                                        {
+                                            StartPlayNode(node, true);
+                                        }
+                                    }
+                                );
+                            }
+                            , () =>
+                            {
+                                IsDownloading = false;
+
+                                StartPlayNode(node, true);
+                            });
+                    }
+                }
+                else if (node is Node_DelayVM delayNode)
                 {
                     double startTimeMsec = DateTime.Now.TimeOfDay.TotalMilliseconds;
-                    double finishTimeMsec = startTimeMsec + Duration * 1000;
+                    double finishTimeMsec = startTimeMsec + delayNode.Delay;
 
-                    TimeLeft = Duration;
+                    TimeLeft = delayNode.Delay;
 
                     ActiveContext.TaskService.Start(
-                        Duration * 1000,
+                        delayNode.Delay * 1000,
                         (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
                         {
                             ActiveContext.ActiveGraph.TickPlayer(inDeltaTimeMsec);
 
                             TimeLeft -= inDeltaTimeMsec / 1000;
-
                             return CustomStatus.Running;
                         },
                         (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec, customStatus) =>
@@ -940,8 +1042,7 @@ namespace StorylineEditor.ViewModel
                                 ActiveContext.ActiveGraph.TickPlayer(inDeltaTimeMsec);
 
                                 TimeLeft = 0;
-
-                                FinishPlayNode(node);
+                                FinishPlayNode(node, true);
                             }
 
                             return customStatus;
@@ -950,97 +1051,14 @@ namespace StorylineEditor.ViewModel
                 }
                 else
                 {
-                    TimeLeft = 0;
-                    IsDownloading = true;
-
-                    ActiveContext.FileService.GetFileFromStorage(
-                        node.Id
-                        , storageType
-                        , fileUrl
-                        , (sourceFilePath) =>
-                        {
-                            IsDownloading = false;
-
-                            ActiveContext.SoundPlayerService.Play(
-                                sourceFilePath
-                                , () =>
-                                {
-                                    ActiveContext.TaskService.Start(
-                                        (double)TaskMode.DrivenByStatus
-                                        , (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
-                                        {
-                                            ActiveContext.ActiveGraph.TickPlayer(inDeltaTimeMsec);
-
-                                            return CustomStatus.Running;
-                                        }
-                                        , (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec, customStatus) => customStatus
-                                        , null
-                                        );
-                                }
-                                , () =>
-                                {
-                                    ActiveContext.TaskService.Stop();
-                                }
-                                , (customStatus) =>
-                                {
-                                    if (customStatus == CustomStatus.RanToCompletion)
-                                    {
-                                        FinishPlayNode(node);
-                                    }
-                                    else if (customStatus == CustomStatus.Faulted)
-                                    {
-                                        StartPlayNode(node, true);
-                                    }
-                                }
-                            );
-                        }
-                        , () =>
-                        {
-                            IsDownloading = false;
-
-                            StartPlayNode(node, true);
-                        });
+                    FinishPlayNode(node, true);
                 }
-            }
-            else if (node is Node_DelayVM delayNode)
-            {
-                double startTimeMsec = DateTime.Now.TimeOfDay.TotalMilliseconds;
-                double finishTimeMsec = startTimeMsec + delayNode.Delay;
-
-                TimeLeft = delayNode.Delay;
-                
-                ActiveContext.TaskService.Start(
-                    delayNode.Delay * 1000,
-                    (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec) =>
-                    {
-                        ActiveContext.ActiveGraph.TickPlayer(inDeltaTimeMsec);
-                        
-                        TimeLeft -= inDeltaTimeMsec / 1000;
-                        return CustomStatus.Running;
-                    },
-                    (inStartTimeMsec, inDurationMsec, inTimeMsec, inDeltaTimeMsec, customStatus) =>
-                    {
-                        if (customStatus == CustomStatus.RanToCompletion)
-                        {
-                            ActiveContext.ActiveGraph.TickPlayer(inDeltaTimeMsec);
-
-                            TimeLeft = 0;
-                            FinishPlayNode(node);
-                        }
-                        
-                        return customStatus;
-                    }
-                    , null);
-            }
-            else
-            {
-                FinishPlayNode(node);
             }
         }
 
-        private void FinishPlayNode(INode node)
+        private void FinishPlayNode(INode node, bool executeGameEvents)
         {
-            ExecuteGameEvents(node, true); // Leave
+            if (executeGameEvents) ExecuteGameEvents(node, true); // Leave
 
             if (node is Node_GateVM gateNode)
             {
