@@ -62,50 +62,38 @@ namespace StorylineEditor.ViewModel.Predicates
             throw new ArgumentOutOfRangeException(nameof(model));
         }
 
-        public static bool IsTrue(P_BaseM predicateModel)
+        public static bool IsTrue(P_BaseM pModel)
         {
             bool result = false;
 
-            if (predicateModel is P_CompositeM compositePredicateModel)
+            if (pModel is P_CompositeM compositePModel)
             {
-                if (compositePredicateModel.predicateA != null && compositePredicateModel.predicateB != null)
+                if (compositePModel.predicateA != null && compositePModel.predicateB != null)
                 {
-                    switch (compositePredicateModel.compositionType)
+                    switch (compositePModel.compositionType)
                     {
                         case COMPOSITION_TYPE.AND:
-                            result = IsTrue(compositePredicateModel.predicateA) && IsTrue(compositePredicateModel.predicateB);
+                            result = IsTrue(compositePModel.predicateA) && IsTrue(compositePModel.predicateB);
                             break;
                         case COMPOSITION_TYPE.OR:
-                            result = IsTrue(compositePredicateModel.predicateA) || IsTrue(compositePredicateModel.predicateB);
+                            result = IsTrue(compositePModel.predicateA) || IsTrue(compositePModel.predicateB);
                             break;
                         case COMPOSITION_TYPE.XOR:
-                            result = IsTrue(compositePredicateModel.predicateA) ^ IsTrue(compositePredicateModel.predicateB);
+                            result = IsTrue(compositePModel.predicateA) ^ IsTrue(compositePModel.predicateB);
                             break;
                         default:
-                            throw new ArgumentOutOfRangeException(nameof(compositePredicateModel.compositionType));
+                            throw new ArgumentOutOfRangeException(nameof(compositePModel.compositionType));
                     }
 
-                    if (predicateModel.isInversed) result = !result;
+                    if (pModel.isInversed) result = !result;
                 }
-                else if (compositePredicateModel.predicateA != null)
+                else if (compositePModel.predicateA != null)
                 {
-                    result = IsTrue(compositePredicateModel.predicateA);
+                    result = IsTrue(compositePModel.predicateA);
                 }
-                else if (compositePredicateModel.predicateB != null)
+                else if (compositePModel.predicateB != null)
                 {
-                    result |= IsTrue(compositePredicateModel.predicateB);
-                }
-                else
-                {
-                    result = true;
-                }
-            }
-
-            if (predicateModel is P_Dialog_HasM hasDialogPredicateModel)
-            {
-                if (hasDialogPredicateModel.dialogId != null)
-                {
-                    result = ActiveContext.History.DialogEntries.Any((deVm) => deVm.Model.id == hasDialogPredicateModel.dialogId && deVm.Model.id != ActiveContext.History.ActiveDialogEntryId);
+                    result = IsTrue(compositePModel.predicateB);
                 }
                 else
                 {
@@ -113,38 +101,50 @@ namespace StorylineEditor.ViewModel.Predicates
                 }
             }
 
-            if (predicateModel is P_Dialog_Node_Has_ActiveSession_CmpM hasNodeASCMPPredicateModel)
+            if (pModel is P_Dialog_HasM hasDialogPModel)
             {
-                if (hasNodeASCMPPredicateModel.dialogId != null && hasNodeASCMPPredicateModel.nodeId != null)
+                if (hasDialogPModel.dialogId != null)
                 {
-                    var dialogEntryVms = ActiveContext.History.DialogEntries.Where((deVm) => deVm.Model.id == hasNodeASCMPPredicateModel.dialogId && deVm.Model.id != ActiveContext.History.ActiveDialogEntryId);
+                    result = ActiveContext.History.DialogEntries.Any((dialogEntry) => dialogEntry.Model.id == hasDialogPModel.dialogId && dialogEntry.Model.id != ActiveContext.History.ActiveDialogEntryId);
+                }
+                else
+                {
+                    result = true;
+                }
+            }
+
+            if (pModel is P_Dialog_Node_Has_ActiveSession_CmpM hasNodeASCMPPModel)
+            {
+                if (hasNodeASCMPPModel.dialogId != null && hasNodeASCMPPModel.nodeId != null)
+                {
+                    var dialogEntries = ActiveContext.History.DialogEntries.Where((dialogEntry) => dialogEntry.Model.id == hasNodeASCMPPModel.dialogId && dialogEntry.Model.id == ActiveContext.History.ActiveDialogEntryId);
 
                     int count = 0;
 
-                    foreach (var dialogEntryVm in dialogEntryVms)
+                    foreach (var dialogEntry in dialogEntries)
                     {
-                        count += dialogEntryVm.Nodes.Count((node) => node.id == hasNodeASCMPPredicateModel.nodeId);
+                        count += dialogEntry.Nodes.Count((node) => node.id == hasNodeASCMPPModel.nodeId);
                     }
 
-                    switch (hasNodeASCMPPredicateModel.compareType)
+                    switch (hasNodeASCMPPModel.compareType)
                     {
                         case COMPARE_TYPE.LESS:
-                            result = count < hasNodeASCMPPredicateModel.value;
+                            result = count < hasNodeASCMPPModel.value;
                             break;
                         case COMPARE_TYPE.LESS_OR_EQUAL:
-                            result = count <= hasNodeASCMPPredicateModel.value;
+                            result = count <= hasNodeASCMPPModel.value;
                             break;
                         case COMPARE_TYPE.EQUAL:
-                            result = count == hasNodeASCMPPredicateModel.value;
+                            result = count == hasNodeASCMPPModel.value;
                             break;
                         case COMPARE_TYPE.EQUAL_OR_GREATER:
-                            result = count >= hasNodeASCMPPredicateModel.value;
+                            result = count >= hasNodeASCMPPModel.value;
                             break;
                         case COMPARE_TYPE.GREATER:
-                            result = count > hasNodeASCMPPredicateModel.value;
+                            result = count > hasNodeASCMPPModel.value;
                             break;
                         default:
-                            throw new ArgumentOutOfRangeException(nameof(hasNodeASCMPPredicateModel.compareType));
+                            throw new ArgumentOutOfRangeException(nameof(hasNodeASCMPPModel.compareType));
                     }
                 }
                 else
@@ -153,17 +153,17 @@ namespace StorylineEditor.ViewModel.Predicates
                 }
             }
 
-            if (predicateModel is P_Dialog_Node_Has_ActiveSessionM hasNodeASPredicateModel)
+            if (pModel is P_Dialog_Node_Has_ActiveSessionM hasNodeASPModel)
             {
-                if (hasNodeASPredicateModel.dialogId != null && hasNodeASPredicateModel.nodeId != null)
+                if (hasNodeASPModel.dialogId != null && hasNodeASPModel.nodeId != null)
                 {
-                    var dialogEntryVms = ActiveContext.History.DialogEntries.Where((deVm) => deVm.Model.id == hasNodeASPredicateModel.dialogId && deVm.Model.id != ActiveContext.History.ActiveDialogEntryId);
+                    var dialogEntries = ActiveContext.History.DialogEntries.Where((dialogEntry) => dialogEntry.Model.id == hasNodeASPModel.dialogId && dialogEntry.Model.id == ActiveContext.History.ActiveDialogEntryId);
 
                     int count = 0;
 
-                    foreach (var dialogEntryVm in dialogEntryVms)
+                    foreach (var dialogEntry in dialogEntries)
                     {
-                        count += dialogEntryVm.Nodes.Count((node) => node.id == hasNodeASPredicateModel.nodeId);
+                        count += dialogEntry.Nodes.Count((node) => node.id == hasNodeASPModel.nodeId);
                     }
 
                     result = count > 0;
@@ -174,38 +174,38 @@ namespace StorylineEditor.ViewModel.Predicates
                 }
             }
 
-            if (predicateModel is P_Dialog_Node_Has_PrevSessions_CmpM hasNodePSCMPPredicateModel)
+            if (pModel is P_Dialog_Node_Has_PrevSessions_CmpM hasNodePSCMPPModel)
             {
-                if (hasNodePSCMPPredicateModel.dialogId != null && hasNodePSCMPPredicateModel.nodeId != null)
+                if (hasNodePSCMPPModel.dialogId != null && hasNodePSCMPPModel.nodeId != null)
                 {
-                    var dialogEntryVms = ActiveContext.History.DialogEntries.Where((deVm) => deVm.Model.id == hasNodePSCMPPredicateModel.dialogId && deVm.Model.id != ActiveContext.History.ActiveDialogEntryId);
+                    var dialogEntries = ActiveContext.History.DialogEntries.Where((dialogEntry) => dialogEntry.Model.id == hasNodePSCMPPModel.dialogId && dialogEntry.Model.id != ActiveContext.History.ActiveDialogEntryId);
 
                     int count = 0;
 
-                    foreach (var dialogEntryVm in dialogEntryVms)
+                    foreach (var dialogEntry in dialogEntries)
                     {
-                        count += dialogEntryVm.Nodes.Count((node) => node.id == hasNodePSCMPPredicateModel.nodeId);
+                        count += dialogEntry.Nodes.Count((node) => node.id == hasNodePSCMPPModel.nodeId);
                     }
 
-                    switch (hasNodePSCMPPredicateModel.compareType)
+                    switch (hasNodePSCMPPModel.compareType)
                     {
                         case COMPARE_TYPE.LESS:
-                            result = count < hasNodePSCMPPredicateModel.value;
+                            result = count < hasNodePSCMPPModel.value;
                             break;
                         case COMPARE_TYPE.LESS_OR_EQUAL:
-                            result = count <= hasNodePSCMPPredicateModel.value;
+                            result = count <= hasNodePSCMPPModel.value;
                             break;
                         case COMPARE_TYPE.EQUAL:
-                            result = count == hasNodePSCMPPredicateModel.value;
+                            result = count == hasNodePSCMPPModel.value;
                             break;
                         case COMPARE_TYPE.EQUAL_OR_GREATER:
-                            result = count >= hasNodePSCMPPredicateModel.value;
+                            result = count >= hasNodePSCMPPModel.value;
                             break;
                         case COMPARE_TYPE.GREATER:
-                            result = count > hasNodePSCMPPredicateModel.value;
+                            result = count > hasNodePSCMPPModel.value;
                             break;
                         default:
-                            throw new ArgumentOutOfRangeException(nameof(hasNodePSCMPPredicateModel.compareType));
+                            throw new ArgumentOutOfRangeException(nameof(hasNodePSCMPPModel.compareType));
                     }
                 }
                 else
@@ -214,17 +214,17 @@ namespace StorylineEditor.ViewModel.Predicates
                 }
             }
 
-            if (predicateModel is P_Dialog_Node_Has_PrevSessionsM hasNodePSPredicateModel)
+            if (pModel is P_Dialog_Node_Has_PrevSessionsM hasNodePSPModel)
             {
-                if (hasNodePSPredicateModel.dialogId != null && hasNodePSPredicateModel.nodeId != null)
+                if (hasNodePSPModel.dialogId != null && hasNodePSPModel.nodeId != null)
                 {
-                    var dialogEntryVms = ActiveContext.History.DialogEntries.Where((deVm) => deVm.Model.id == hasNodePSPredicateModel.dialogId && deVm.Model.id != ActiveContext.History.ActiveDialogEntryId);
+                    var dialogEntries = ActiveContext.History.DialogEntries.Where((dialogEntry) => dialogEntry.Model.id == hasNodePSPModel.dialogId && dialogEntry.Model.id != ActiveContext.History.ActiveDialogEntryId);
 
                     int count = 0;
 
-                    foreach (var dialogEntryVm in dialogEntryVms)
+                    foreach (var dialogEntry in dialogEntries)
                     {
-                        count += dialogEntryVm.Nodes.Count((node) => node.id == hasNodePSPredicateModel.nodeId);
+                        count += dialogEntry.Nodes.Count((node) => node.id == hasNodePSPModel.nodeId);
                     }
 
                     result = count > 0;
@@ -235,11 +235,11 @@ namespace StorylineEditor.ViewModel.Predicates
                 }
             }
 
-            if (predicateModel is P_Item_HasM hasItemPredicateModel)
+            if (pModel is P_Item_HasM hasItemPModel)
             {
-                if (hasItemPredicateModel.itemId != null)
+                if (hasItemPModel.itemId != null)
                 {
-                    result = ActiveContext.History.Inventory.Any((itemModel) => itemModel.id == hasItemPredicateModel.itemId);
+                    result = ActiveContext.History.Inventory.Any((itemModel) => itemModel.id == hasItemPModel.itemId);
                 }
                 else
                 {
@@ -247,11 +247,11 @@ namespace StorylineEditor.ViewModel.Predicates
                 }
             }
 
-            if (predicateModel is P_Quest_AddedM addedQuestPredicateModel)
+            if (pModel is P_Quest_AddedM addedQuestPModel)
             {
-                if (addedQuestPredicateModel.questId != null)
+                if (addedQuestPModel.questId != null)
                 {
-                    result = ActiveContext.History.QuestEntries.Any((qeVm) => qeVm.Model.id == addedQuestPredicateModel.questId);
+                    result = ActiveContext.History.QuestEntries.Any((qeVm) => qeVm.Model.id == addedQuestPModel.questId);
                 }
                 else
                 {
@@ -259,24 +259,23 @@ namespace StorylineEditor.ViewModel.Predicates
                 }
             }
 
-            if (predicateModel is P_Quest_FinishedM finishedQuestPredicateModel)
+            if (pModel is P_Quest_FinishedM finishedQuestPModel)
             {
-                if (finishedQuestPredicateModel.questId != null) ////// TODO SIMPLIFY
+                if (finishedQuestPModel.questId != null) ////// TODO SIMPLIFY
                 {
-                    QuestEntryVM questEntryVm = ActiveContext.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == finishedQuestPredicateModel.questId);
+                    QuestEntryVM questEntry = ActiveContext.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == finishedQuestPModel.questId);
 
-                    if (questEntryVm != null)
+                    if (questEntry != null)
                     {
-                        foreach (var knownNodeEntry in questEntryVm.KnownNodes)
+                        foreach (var knownNodeEntry in questEntry.KnownNodes)
                         {
                             if (knownNodeEntry.IsPassed)
                             {
-                                ////// TODO
-                                //////if (graph.links.All((linkM) => linkM.fromNodeId != knownNodeEntry.Node.id))
-                                //////{
-                                //////    result = true;
-                                //////    break;
-                                //////}
+                                if (questEntry.Model.links.All((linkM) => linkM.fromNodeId != knownNodeEntry.Node.id))
+                                {
+                                    result = true;
+                                    break;
+                                }
                             }
                         }
                     }
@@ -287,16 +286,15 @@ namespace StorylineEditor.ViewModel.Predicates
                 }
             }
 
-            if (predicateModel is P_Quest_Node_AddedM addedNodePredicateModel)
+            if (pModel is P_Quest_Node_AddedM addedNodeForQuestPModel)
             {
-                if (addedNodePredicateModel.questId != null && addedNodePredicateModel.nodeId != null)
+                if (addedNodeForQuestPModel.questId != null && addedNodeForQuestPModel.nodeId != null)
                 {
-                    QuestEntryVM questEntryVm = ActiveContext.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == addedNodePredicateModel.questId);
+                    QuestEntryVM questEntry = ActiveContext.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == addedNodeForQuestPModel.questId);
 
-                    if (questEntryVm != null)
+                    if (questEntry != null)
                     {
-                        ////// TODO
-                        //////result = questEntryVm.HasKnownNode(Node);
+                        result = questEntry.HasKnownNode(addedNodeForQuestPModel.nodeId);
                     }
                 }
                 else
@@ -305,16 +303,15 @@ namespace StorylineEditor.ViewModel.Predicates
                 }
             }
 
-            if (predicateModel is P_Quest_Node_PassedM passedNodePredicateModel)
+            if (pModel is P_Quest_Node_PassedM passedNodeForQuestPModel)
             {
-                if (passedNodePredicateModel.questId != null && passedNodePredicateModel.nodeId != null)
+                if (passedNodeForQuestPModel.questId != null && passedNodeForQuestPModel.nodeId != null)
                 {
-                    QuestEntryVM questEntryVm = ActiveContext.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == passedNodePredicateModel.questId);
+                    QuestEntryVM questEntry = ActiveContext.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == passedNodeForQuestPModel.questId);
 
-                    if (questEntryVm != null)
+                    if (questEntry != null)
                     {
-                        ////// TODO
-                        //////result = questEntryVm.GetKnownNodeIsPassed(Node);
+                        result = questEntry.GetKnownNodeIsPassed(passedNodeForQuestPModel.nodeId);
                     }
                 }
                 else
@@ -323,44 +320,42 @@ namespace StorylineEditor.ViewModel.Predicates
                 }
             }
 
-            if (predicateModel is P_Relation_HasM hasRelationPredicateModel)
+            if (pModel is P_Relation_HasM hasRelationPModel)
             {
-                if (hasRelationPredicateModel.npcId != null)
+                if (hasRelationPModel.npcId != null)
                 {
-                    ////// TODO
-                    //////CharacterM character = (CharacterM)Character;
+                    CharacterM character = (CharacterM)ActiveContext.GetCharacter(hasRelationPModel.npcId);
 
-                    float relation = 0;
-                        ////ActiveContext.History.Gender == GENDER.MALE
-                        ////? character.initialRelation
-                        ////: character.initialRelationFemale;
+                    float relation = ActiveContext.History.Gender == GENDER.MALE
+                        ? character.initialRelation
+                        : character.initialRelationFemale;
 
-                    CharacterEntryVM characterEntryVm = ActiveContext.History.CharacterEntries.FirstOrDefault((ceVm) => ceVm.Model.id == hasRelationPredicateModel.npcId);
+                    CharacterEntryVM characterEntry = ActiveContext.History.CharacterEntries.FirstOrDefault((ceVm) => ceVm.Model.id == hasRelationPModel.npcId);
 
-                    if (characterEntryVm != null)
+                    if (characterEntry != null)
                     {
-                        relation += characterEntryVm.DeltaRelation;
+                        relation += characterEntry.DeltaRelation;
                     }
 
-                    switch (hasRelationPredicateModel.compareType)
+                    switch (hasRelationPModel.compareType)
                     {
                         case COMPARE_TYPE.LESS:
-                            result = relation < hasRelationPredicateModel.value;
+                            result = relation < hasRelationPModel.value;
                             break;
                         case COMPARE_TYPE.LESS_OR_EQUAL:
-                            result = relation <= hasRelationPredicateModel.value;
+                            result = relation <= hasRelationPModel.value;
                             break;
                         case COMPARE_TYPE.EQUAL:
-                            result = relation == hasRelationPredicateModel.value;
+                            result = relation == hasRelationPModel.value;
                             break;
                         case COMPARE_TYPE.EQUAL_OR_GREATER:
-                            result = relation >= hasRelationPredicateModel.value;
+                            result = relation >= hasRelationPModel.value;
                             break;
                         case COMPARE_TYPE.GREATER:
-                            result = relation > hasRelationPredicateModel.value;
+                            result = relation > hasRelationPModel.value;
                             break;
                         default:
-                            throw new ArgumentOutOfRangeException(nameof(hasRelationPredicateModel.compareType));
+                            throw new ArgumentOutOfRangeException(nameof(hasRelationPModel.compareType));
                     }
                 }
                 else
@@ -369,7 +364,7 @@ namespace StorylineEditor.ViewModel.Predicates
                 }
             }
 
-            if (predicateModel.isInversed) result = !result;
+            if (pModel.isInversed) result = !result;
 
             return result;
         }

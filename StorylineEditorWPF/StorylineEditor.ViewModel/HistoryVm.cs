@@ -72,14 +72,14 @@ namespace StorylineEditor.ViewModel
 
     public class PlayerContext_TransitionVM { }
 
-    public class HistoryItemVM : SimpleVM<BaseM, HistoryVM>
+    public class HistoryItemVM<T> : SimpleVM<T, HistoryVM> where T : BaseM
     {
-        public HistoryItemVM(BaseM model, HistoryVM parent) : base(model, parent) { }
+        public HistoryItemVM(T model, HistoryVM parent) : base(model, parent) { }
 
         public override string Id => throw new NotImplementedException();
     }
 
-    public class DialogEntryVM : HistoryItemVM
+    public class DialogEntryVM : HistoryItemVM<BaseM>
     {
         public DialogEntryVM(BaseM model, HistoryVM parent) : base(model, parent)
         {
@@ -177,9 +177,9 @@ namespace StorylineEditor.ViewModel
         public override string Id => throw new NotImplementedException();
     }
 
-    public class QuestEntryVM : HistoryItemVM
+    public class QuestEntryVM : HistoryItemVM<QuestM>
     {
-        public QuestEntryVM(BaseM model, HistoryVM parent) : base(model, parent)
+        public QuestEntryVM(QuestM model, HistoryVM parent) : base(model, parent)
         {
             _knownNodesDictionary = new Dictionary<BaseM, int>();
             KnownNodes = new  ObservableCollection<QuestNodeEntry>();
@@ -228,7 +228,7 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        public BaseM KnownNode { get => null; set => AddKnownNode(value); }
+        public BaseM KnownNode { get => null; set => AddKnownNode(value, null); }
 
         private bool OnKnownNodesFilter(object sender)
         {
@@ -239,35 +239,43 @@ namespace StorylineEditor.ViewModel
             return false;
         }
 
-        public bool GetKnownNodeIsPassed(BaseM knownNode)
+        public bool GetKnownNodeIsPassed(string nodeId)
         {
-            if (_knownNodesDictionary.ContainsKey(knownNode))
+            BaseM node = ((QuestM)Model).nodes.FirstOrDefault((nodeModel) => nodeModel.id == nodeId);
+            if (_knownNodesDictionary.ContainsKey(node))
             {
-                return KnownNodes[_knownNodesDictionary[knownNode]].IsPassed;
+                return KnownNodes[_knownNodesDictionary[node]].IsPassed;
             }
 
             return false;
         }
 
-        public void SetKnownNodeIsPassed(BaseM knownNode, bool isPassed)
+        public void SetKnownNodeIsPassed(string nodeId, bool isPassed)
         {
-            if (_knownNodesDictionary.ContainsKey(knownNode))
+            BaseM node = ((QuestM)Model).nodes.FirstOrDefault((nodeModel) => nodeModel.id == nodeId);
+            if (_knownNodesDictionary.ContainsKey(node))
             {
-                KnownNodes[_knownNodesDictionary[knownNode]].IsPassed = isPassed;
+                KnownNodes[_knownNodesDictionary[node]].IsPassed = isPassed;
             }
         }
 
-        public bool HasKnownNode(BaseM knownNode) { return _knownNodesDictionary.ContainsKey(knownNode); }
+        public bool HasKnownNode(string nodeId)
+        {
+            BaseM node = ((QuestM)Model).nodes.FirstOrDefault((nodeModel) => nodeModel.id == nodeId);
+            return _knownNodesDictionary.ContainsKey(node);
+        }
 
-        public void AddKnownNode(BaseM knownNode)
+        public void AddKnownNode(BaseM node, string nodeId)
         {
             if (_knownNodesCVSInit)
             {
-                if (!_knownNodesDictionary.ContainsKey(knownNode))
-                {
-                    _knownNodesDictionary.Add(knownNode, KnownNodes.Count);
+                BaseM nodeToAdd = node ?? ((QuestM)Model).nodes.FirstOrDefault((nodeModel) => nodeModel.id == nodeId);
 
-                    KnownNodes.Add(new QuestNodeEntry() { Node = knownNode, IsPassed = false });
+                if (!_knownNodesDictionary.ContainsKey(nodeToAdd))
+                {
+                    _knownNodesDictionary.Add(nodeToAdd, KnownNodes.Count);
+
+                    KnownNodes.Add(new QuestNodeEntry() { Node = nodeToAdd, IsPassed = false });
                     _knownNodesCVS.View.Refresh();
                     //ShowAvailabilityAdorners();
                 }
@@ -299,9 +307,9 @@ namespace StorylineEditor.ViewModel
         #endregion
     }
 
-    public class CharacterEntryVM : HistoryItemVM
+    public class CharacterEntryVM : HistoryItemVM<CharacterM>
     {
-        public CharacterEntryVM(BaseM model, HistoryVM parent) : base(model, parent)
+        public CharacterEntryVM(CharacterM model, HistoryVM parent) : base(model, parent)
         {
             DeltaRelation = 0;
         }
@@ -388,7 +396,7 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        public BaseM Character { get => null; set => AddCharacter_Internal(value); }
+        public BaseM Character { get => null; set { if (_charactersCVSInit) AddCharacter(value, null); } }
 
         private bool OnCharactersFilter(object sender)
         {
@@ -399,28 +407,21 @@ namespace StorylineEditor.ViewModel
             return false;
         }
 
-        public void AddCharacter(BaseM character)
+        public CharacterEntryVM AddCharacter(BaseM character, string characterId)
         {
+            BaseM characterToAdd = (character ?? ActiveContext.GetCharacter(characterId));
+
             foreach (var characterEntry in CharacterEntries)
             {
-                if (characterEntry.Model == character)
-                {
-                    return;
-                }
+                if (characterEntry.Model == characterToAdd) return characterEntry;
             }
 
-            CharacterEntries.Add(new CharacterEntryVM(character, this));
-
+            CharacterEntryVM newCharacterEntry = new CharacterEntryVM((CharacterM)characterToAdd, this);
+            CharacterEntries.Add(newCharacterEntry);
             _charactersCVS.View.Refresh();
-
             //ShowAvailabilityAdorners();
-        }
-        protected void AddCharacter_Internal(BaseM character)
-        {
-            if (_charactersCVSInit)
-            {
-                AddCharacter(character);
-            }
+
+            return newCharacterEntry;
         }
 
         public void RemoveCharacter(BaseM character)
@@ -492,7 +493,7 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        public BaseM Item { get => null; set => PickUpItem_Internal(value); }
+        public BaseM Item { get => null; set { if (_itemsCVSInit) PickUpItem(value, null); } }
 
         private bool OnItemsFilter(object sender)
         {
@@ -503,34 +504,28 @@ namespace StorylineEditor.ViewModel
             return false;
         }
 
-        public void PickUpItem(BaseM item)
+        public void PickUpItem(BaseM item, string itemId)
         {
-            Inventory.Add(item);
+            BaseM itemToPickUp = item ?? ActiveContext.GetItem(itemId);
 
+            Inventory.Add(itemToPickUp);
             ItemsCVS.View.Refresh();
-
             //ShowAvailabilityAdorners();
         }
-        protected void PickUpItem_Internal(BaseM item)
-        {
-            if (_itemsCVSInit)
-            {
-                PickUpItem(item);
-            }
-        }
 
-        public void DropItem(BaseM item)
+        public void DropItem(BaseM item, string itemId)
         {
-            if (Inventory.Remove(item))
+            BaseM itemToDrop = item ?? ActiveContext.GetItem(itemId);
+
+            if (Inventory.Remove(itemToDrop))
             {
                 ItemsCVS.View.Refresh();
-
                 //ShowAvailabilityAdorners();
             }
         }
 
         protected ICommand removeItemCommand;
-        public ICommand RemoveItemCommand => removeItemCommand ?? (removeItemCommand = new RelayCommand<BaseM>((item) => DropItem(item), (item) => item != null));
+        public ICommand RemoveItemCommand => removeItemCommand ?? (removeItemCommand = new RelayCommand<BaseM>((item) => DropItem(item, null), (item) => item != null));
 
         #endregion
 
@@ -573,7 +568,7 @@ namespace StorylineEditor.ViewModel
             }
         }
 
-        public BaseM Quest { get => null; set => AddQuest_Internal(value); }
+        public BaseM Quest { get => null; set { if (_questsCVSInit) AddQuest(value, null); } }
 
         private bool OnQuestsFilter(object sender)
         {
@@ -584,28 +579,21 @@ namespace StorylineEditor.ViewModel
             return false;
         }
 
-        public void AddQuest(BaseM quest)
+        public QuestEntryVM AddQuest(BaseM quest, string questId)
         {
+            BaseM questToAdd = quest ?? ActiveContext.GetQuest(questId);
+
             foreach (var questEntry in QuestEntries)
             {
-                if (questEntry.Model == quest)
-                {
-                    return;
-                }
+                if (questEntry.Model == questToAdd) return questEntry;
             }
 
-            QuestEntries.Add(new QuestEntryVM(quest, this));
-
+            QuestEntryVM newQuestEntry = new QuestEntryVM((QuestM)questToAdd, this);
+            QuestEntries.Add(newQuestEntry);
             _questsCVS.View.Refresh();
-
             //ShowAvailabilityAdorners();
-        }
-        public void AddQuest_Internal(BaseM quest)
-        {
-            if (_questsCVSInit)
-            {
-                AddQuest(quest);
-            }
+
+            return newQuestEntry;
         }
 
         public void RemoveQuest(BaseM quest)
@@ -628,7 +616,6 @@ namespace StorylineEditor.ViewModel
                 }
 
                 _questsCVS.View.Refresh();
-
                 //ShowAvailabilityAdorners();
             }
         }

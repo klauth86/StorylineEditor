@@ -19,7 +19,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using StorylineEditor.Model.GameEvents;
 using StorylineEditor.ViewModel.Interface;
 using System;
-using System.Linq;
 
 namespace StorylineEditor.ViewModel.GameEvents
 {
@@ -49,90 +48,62 @@ namespace StorylineEditor.ViewModel.GameEvents
             throw new ArgumentOutOfRangeException(nameof(model));
         }
 
-        public static void Execute(GE_BaseM gameEventModel)
+        public static void Execute(GE_BaseM geModel)
         {
-            if (gameEventModel is GE_Item_DropM dropItemGameEventModel)
+            if (geModel is GE_Item_DropM dropItemGeModel)
             {
-                if (dropItemGameEventModel.itemId != null)
+                if (dropItemGeModel.itemId != null)
                 {
-                    ////// TODO
-                    //////ActiveContext.History.DropItem(Item);
+                    ActiveContext.History.DropItem(null, dropItemGeModel.itemId);
                 }
             }
 
-            if (gameEventModel is GE_Item_PickUpM pickUpItemGameEventModel)
+            if (geModel is GE_Item_PickUpM pickUpItemGeModel)
             {
-                if (pickUpItemGameEventModel.itemId != null)
+                if (pickUpItemGeModel.itemId != null)
                 {
-                    ////// TODO
-                    //////ActiveContext.History.PickUpItem(Item);
+                    ActiveContext.History.PickUpItem(null, pickUpItemGeModel.itemId);
                 }
             }
 
-            if (gameEventModel is GE_Quest_AddM addQuestGameEventModel)
+            if (geModel is GE_Quest_AddM addQuestGeModel)
             {
-                if (addQuestGameEventModel.questId != null)
+                if (addQuestGeModel.questId != null)
                 {
-                    ////// TODO
-                    //////ActiveContext.History.AddQuest(Quest);
+                    ActiveContext.History.AddQuest(null, addQuestGeModel.questId);
                 }
             }
 
-            if (gameEventModel is GE_Quest_Node_AddM addNodeQuestGameEventModel)
+            if (geModel is GE_Quest_Node_AddM addNodeForQuestGeModel)
             {
-                if (addNodeQuestGameEventModel.questId != null && addNodeQuestGameEventModel.nodeId != null)
+                if (addNodeForQuestGeModel.questId != null && addNodeForQuestGeModel.nodeId != null)
                 {
-                    QuestEntryVM questEntryVm = ActiveContext.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == addNodeQuestGameEventModel.questId);
+                    QuestEntryVM questEntry = ActiveContext.History.AddQuest(null, addNodeForQuestGeModel.questId);
+                    questEntry.AddKnownNode(null, addNodeForQuestGeModel.nodeId);
+                }
+            }
 
-                    if (questEntryVm == null)
+            if (geModel is GE_Quest_Node_PassM passNodeForQuestGeModel)
+            {
+                if (passNodeForQuestGeModel.questId != null && passNodeForQuestGeModel.nodeId != null)
+                {
+                    QuestEntryVM questEntry = ActiveContext.History.AddQuest(null, passNodeForQuestGeModel.questId);
+
+                    if (!questEntry.HasKnownNode(passNodeForQuestGeModel.questId))
                     {
-                        ////// TODO
-                        //////ActiveContext.History.AddQuest(Quest);
+                        questEntry.AddKnownNode(null, passNodeForQuestGeModel.questId);
                     }
 
-                    questEntryVm = ActiveContext.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == addNodeQuestGameEventModel.questId);
-
-                    //////questEntryVm.AddKnownNode(Node);
+                    questEntry.SetKnownNodeIsPassed(passNodeForQuestGeModel.questId, true);
                 }
             }
 
-            if (gameEventModel is GE_Quest_Node_PassM passNodeQuestGameEventModel)
+            if (geModel is GE_Relation_ChangeM changeRelationGeModel)
             {
-                if (passNodeQuestGameEventModel.questId != null && passNodeQuestGameEventModel.nodeId != null)
+                if (changeRelationGeModel.npcId != null)
                 {
-                    QuestEntryVM questEntryVm = ActiveContext.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == passNodeQuestGameEventModel.questId);
-
-                    if (questEntryVm == null)
-                    {
-                        ////// TODO
-                        //////ActiveContext.History.AddQuest(Quest);
-                    }
-
-                    questEntryVm = ActiveContext.History.QuestEntries.FirstOrDefault((qeVm) => qeVm.Model.id == passNodeQuestGameEventModel.questId);
-
-                    //////if (!questEntryVm.HasKnownNode(Node))
-                    //////{
-                    //////    questEntryVm.AddKnownNode(Node);
-                    //////}
-
-                    //////questEntryVm.SetKnownNodeIsPassed(Node, true);
-                }
-            }
-
-            if (gameEventModel is GE_Relation_ChangeM changeRelationGameEventModel)
-            {
-                if (changeRelationGameEventModel.npcId != null)
-                {
-                    CharacterEntryVM characterEntryVm = ActiveContext.History.CharacterEntries.FirstOrDefault((ceVm) => ceVm.Model.id == changeRelationGameEventModel.npcId);
-
-                    if (characterEntryVm == null)
-                    {
-                        //////ActiveContext.History.AddCharacter(Character);
-                    }
-
-                    //////characterEntryVm = ActiveContext.History.CharacterEntries.FirstOrDefault((ceVm) => ceVm.Model.id == Character.id);
-
-                    //////characterEntryVm.DeltaRelation += Value;
+                    CharacterEntryVM characterEntryVm = ActiveContext.History.AddCharacter(null, changeRelationGeModel.npcId);
+                    characterEntryVm.DeltaRelation += changeRelationGeModel.value;
                 }
             }
         }
