@@ -73,7 +73,7 @@ namespace StorylineEditor.ViewModel.Nodes
         }
 
         const int N = 12;
-        public readonly double Step;        
+        public readonly double Step;
         public readonly double Cap;
         public readonly double Remove;
         private readonly double _cos30;

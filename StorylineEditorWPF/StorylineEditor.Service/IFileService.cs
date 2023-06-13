@@ -24,8 +24,8 @@ namespace StorylineEditor.Service
     {
         // Open Save logic
         string Path { get; }
-        string OpenFile(string filter, bool refreshPath); // открытие файла
-        string SaveFile(string filter, bool refreshPath);  // сохранение файла
+        string OpenFile(string filter, bool refreshPath);   // открытие файла
+        string SaveFile(string filter, bool refreshPath);   // сохранение файла
 
         // File Storage logic
         void GetFileFromStorage(string nodeId, byte storageType, string fileUrl, Action<string> successCallback, Action failureCallback);

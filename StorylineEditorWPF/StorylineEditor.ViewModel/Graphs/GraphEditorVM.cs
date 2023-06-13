@@ -984,27 +984,27 @@ namespace StorylineEditor.ViewModel.Graphs
 
         protected double FromLocalToAbsoluteX(double x)
         {
-            double result = x / Scale;     // Scale
-            result += OffsetX;              // Transaltion
+            double result = x / Scale;  // Scale
+            result += OffsetX;          // Transaltion
             return result;
         }
         protected double FromLocalToAbsoluteY(double y)
         {
-            double result = y / Scale;     // Scale
-            result += OffsetY;              // Transaltion
+            double result = y / Scale;  // Scale
+            result += OffsetY;          // Transaltion
             return result;
         }
 
         protected double FromAbsoluteToLocalX(double x)
         {
             double result = x - OffsetX;    // Transaltion
-            result *= Scale;               // Scale
+            result *= Scale;                // Scale
             return result;
         }
         protected double FromAbsoluteToLocalY(double y)
         {
             double result = y - OffsetY;    // Transaltion
-            result *= Scale;               // Scale
+            result *= Scale;                // Scale
             return result;
         }
 
