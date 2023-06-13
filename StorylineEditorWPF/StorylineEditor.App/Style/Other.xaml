@@ -1905,7 +1905,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             <DataTrigger Binding="{Binding SelectedNodeType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Type mn:Node_DelayM}">
                 <Setter TargetName="btn_selectable_Delay" Property="Style" Value="{StaticResource S_Button_24x_Selected}"></Setter>
                 <Setter TargetName="r_SelectedNodeType" Property="Text" Value="{DynamicResource String_Tag_Node_Delay_Type}"></Setter>
-            </DataTrigger>            
+            </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
 
@@ -2579,7 +2579,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             </DataTrigger>
             <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.SELECTION_BOX}">
                 <Setter TargetName="tb_UserActionName" Property="Text" Value="{DynamicResource String_Tag_Config_UserActions_SelectionBox}"></Setter>
-            </DataTrigger>            
+            </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
 
@@ -2884,7 +2884,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                                                         <ColumnDefinition Width="auto"></ColumnDefinition>
                                                         <ColumnDefinition Width="auto"></ColumnDefinition>
                                                     </Grid.ColumnDefinitions>
-                                                    
+
                                                     <ContentControl
                                                         Content="{Binding Node}"
                                                         ></ContentControl>
@@ -2897,7 +2897,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                                                         Content="{DynamicResource String_Tag_Player_QuestNodeIsPassed}"
                                                         FontSize="{StaticResource FontSize_VerySmall}"
                                                         ></CheckBox>
-                                                    
+
                                                     <Button
                                                         Grid.Column="2"
                                                         Style="{StaticResource S_Button_Remove}"
@@ -2907,7 +2907,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                                                         ></Button>
                                                 </Grid>
                                             </DataTemplate>
-                                        </ItemsControl.ItemTemplate>                                        
+                                        </ItemsControl.ItemTemplate>
                                     </ItemsControl>
                                 </Expander>
                             </DataTemplate>
