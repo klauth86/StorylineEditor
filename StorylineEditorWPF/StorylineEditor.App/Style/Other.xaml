@@ -1503,7 +1503,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     
     <DataTemplate x:Key="DT_ContentControl_GameEventsHeader">
         <controls:ComboBoxExt SelectedValue="{Binding SelectedGameEventType, UpdateSourceTrigger=PropertyChanged}"
-                              Style="{StaticResource S_ComboBoxExt_Prop_Popup}"  ItemTemplate="{StaticResource DT_ComboBoxItem_GameEvent}">
+                              Style="{StaticResource S_ComboBoxExt_Prop_Popup}" ItemTemplate="{StaticResource DT_ComboBoxItem_GameEvent}">
             <controls:ComboBoxExt.Tag>
                 <StackPanel Orientation="Horizontal">
                     <ContentControl ContentTemplate="{StaticResource DT_HasGameEvents_Mini}"></ContentControl>
@@ -1530,7 +1530,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     
     <DataTemplate x:Key="DT_ContentControl_BehaviorsHeader">
         <controls:ComboBoxExt SelectedValue="{Binding SelectedBehaviorType, UpdateSourceTrigger=PropertyChanged}"
-                              Style="{StaticResource S_ComboBoxExt_Prop_Popup}"  ItemTemplate="{StaticResource DT_ComboBoxItem_Behavior}">
+                              Style="{StaticResource S_ComboBoxExt_Prop_Popup}" ItemTemplate="{StaticResource DT_ComboBoxItem_Behavior}">
             <controls:ComboBoxExt.Tag>
                 <StackPanel Orientation="Horizontal">
                     <ContentControl ContentTemplate="{StaticResource DT_HasBehaviors_Mini}"></ContentControl>
@@ -2324,7 +2324,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <ComboBox x:Name="cmb_PredicateA" SelectedValue="{Binding SubTypeA, UpdateSourceTrigger=PropertyChanged}"  FontSize="{StaticResource FontSize_Small}"
+                    <ComboBox x:Name="cmb_PredicateA" SelectedValue="{Binding SubTypeA, UpdateSourceTrigger=PropertyChanged}" FontSize="{StaticResource FontSize_Small}"
                       ItemTemplate="{StaticResource DT_ComboBoxItem_Predicate}">
                         <sys:Type>mp:P_CompositeM</sys:Type>
                         <sys:Type>mp:P_Dialog_HasM</sys:Type>
@@ -2355,7 +2355,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <ComboBox x:Name="cmb_PredicateB" SelectedValue="{Binding SubTypeB, UpdateSourceTrigger=PropertyChanged}"  FontSize="{StaticResource FontSize_Small}"
+                    <ComboBox x:Name="cmb_PredicateB" SelectedValue="{Binding SubTypeB, UpdateSourceTrigger=PropertyChanged}" FontSize="{StaticResource FontSize_Small}"
                       ItemTemplate="{StaticResource DT_ComboBoxItem_Predicate}">
                         <sys:Type>mp:P_CompositeM</sys:Type>
                         <sys:Type>mp:P_Dialog_HasM</sys:Type>
@@ -2490,7 +2490,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         </DataTemplate.Triggers>
     </DataTemplate>
 
-    <x:Array x:Key="ARRAY_Languages"  Type="{x:Type sys:Byte}">
+    <x:Array x:Key="ARRAY_Languages" Type="{x:Type sys:Byte}">
         <x:Static Member="vmconfig:LANGUAGE.ENG"></x:Static>
         <x:Static Member="vmconfig:LANGUAGE.RUS"></x:Static>
         <x:Static Member="vmconfig:LANGUAGE.UKR"></x:Static>
@@ -2545,9 +2545,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                 <ColumnDefinition Width="auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <TextBlock FontSize="{StaticResource FontSize_Small}" x:Name="tb_UserActionName"  VerticalAlignment="Center"></TextBlock>
+            <TextBlock FontSize="{StaticResource FontSize_Small}" x:Name="tb_UserActionName" VerticalAlignment="Center"></TextBlock>
 
-            <ComboBox FontSize="{StaticResource FontSize_VerySmall}" Grid.Column="1" SelectedValue="{Binding MouseButton, UpdateSourceTrigger=PropertyChanged}"  VerticalAlignment="Center" Margin="{StaticResource Thickness_Padding_LeftRight}">
+            <ComboBox FontSize="{StaticResource FontSize_VerySmall}" Grid.Column="1" SelectedValue="{Binding MouseButton, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="{StaticResource Thickness_Padding_LeftRight}">
                 <x:Static Member="MouseButton.Left"></x:Static>
                 <x:Static Member="MouseButton.Right"></x:Static>
             </ComboBox>

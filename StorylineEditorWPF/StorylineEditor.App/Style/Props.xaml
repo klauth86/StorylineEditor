@@ -95,7 +95,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         </DataTemplate.Triggers>
     </DataTemplate>
 
-    <x:Array x:Key="ARRAY_StorageTypes"  Type="{x:Type sys:Byte}">
+    <x:Array x:Key="ARRAY_StorageTypes" Type="{x:Type sys:Byte}">
         <x:Static Member="m:STORAGE_TYPE.GOOGLE_DRIVE"></x:Static>
     </x:Array>
 
