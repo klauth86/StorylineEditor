@@ -427,7 +427,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
             <GridSplitter Grid.Column="1"></GridSplitter>
 
-            <ContentControl Grid.Column="2" Content="{Binding SelectionEditor, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+            <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <ContentControl Content="{Binding SelectionEditor, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+            </ScrollViewer>
         </Grid>
     </DataTemplate>
 
@@ -705,10 +707,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                     <ColumnDefinition x:Name="cd_DescriptionFemale" Width="0"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <GroupBox x:Name="gb_Description" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
-                    <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
+                    <controls:RichTextBoxWithSource VerticalScrollBarVisibility="Auto" MaxHeight="{StaticResource Double_RichTextBox_MaxHeight}" MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                 </GroupBox>
                 <GroupBox Grid.Column="1" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_DescriptionFemale}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
-                    <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescriptionFemale" RtVersion="{Binding RtDescriptionFemaleVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
+                    <controls:RichTextBoxWithSource VerticalScrollBarVisibility="Auto" MaxHeight="{StaticResource Double_RichTextBox_MaxHeight}" MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescriptionFemale" RtVersion="{Binding RtDescriptionFemaleVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                 </GroupBox>
             </Grid>
 
@@ -807,10 +809,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                     <ColumnDefinition x:Name="cd_DescriptionFemale" Width="0"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <GroupBox x:Name="gb_Description" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
-                    <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
+                    <controls:RichTextBoxWithSource VerticalScrollBarVisibility="Auto" MaxHeight="{StaticResource Double_RichTextBox_MaxHeight}" MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                 </GroupBox>
                 <GroupBox Grid.Column="1" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_DescriptionFemale}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
-                    <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescriptionFemale" RtVersion="{Binding RtDescriptionFemaleVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
+                    <controls:RichTextBoxWithSource VerticalScrollBarVisibility="Auto" MaxHeight="{StaticResource Double_RichTextBox_MaxHeight}" MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescriptionFemale" RtVersion="{Binding RtDescriptionFemaleVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                 </GroupBox>
             </Grid>
         </StackPanel>
@@ -853,10 +855,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                     <ColumnDefinition x:Name="cd_DescriptionFemale" Width="0"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <GroupBox x:Name="gb_Description" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
-                    <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
+                    <controls:RichTextBoxWithSource VerticalScrollBarVisibility="Auto" MaxHeight="{StaticResource Double_RichTextBox_MaxHeight}" MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                 </GroupBox>
                 <GroupBox Grid.Column="1" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_DescriptionFemale}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
-                    <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescriptionFemale" RtVersion="{Binding RtDescriptionFemaleVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
+                    <controls:RichTextBoxWithSource VerticalScrollBarVisibility="Auto" MaxHeight="{StaticResource Double_RichTextBox_MaxHeight}" MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescriptionFemale" RtVersion="{Binding RtDescriptionFemaleVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                 </GroupBox>
             </Grid>
 
@@ -868,10 +870,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                     <ColumnDefinition x:Name="cd_InternalDescriptionFemale" Width="0"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <GroupBox x:Name="gb_InternalDescription" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_InternalDescription}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
-                    <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtInternalDescription" RtVersion="{Binding RtInternalDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
+                    <controls:RichTextBoxWithSource VerticalScrollBarVisibility="Auto" MaxHeight="{StaticResource Double_RichTextBox_MaxHeight}" MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtInternalDescription" RtVersion="{Binding RtInternalDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                 </GroupBox>
                 <GroupBox Grid.Column="1" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_InternalDescriptionFemale}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
-                    <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtInternalDescriptionFemale" RtVersion="{Binding RtInternalDescriptionFemaleVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
+                    <controls:RichTextBoxWithSource VerticalScrollBarVisibility="Auto" MaxHeight="{StaticResource Double_RichTextBox_MaxHeight}" MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtInternalDescriptionFemale" RtVersion="{Binding RtInternalDescriptionFemaleVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                 </GroupBox>
             </Grid>
         </StackPanel>
@@ -1190,7 +1192,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                     </Grid.RowDefinitions>
                     <TextBox Style="{StaticResource S_TextBox_Prop}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Step_Name}"></TextBox>
                     <GroupBox Grid.Row="1" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_Node_Step_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
-                        <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
+                        <controls:RichTextBoxWithSource VerticalScrollBarVisibility="Auto" MaxHeight="{StaticResource Double_RichTextBox_MaxHeight}" MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                     </GroupBox>
                     <TextBox Grid.Row="2" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Step_Result}"></TextBox>
                 </Grid>
@@ -1234,7 +1236,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                     </Grid.RowDefinitions>
                     <TextBox Style="{StaticResource S_TextBox_Prop}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Alternative_Name}"></TextBox>
                     <GroupBox Grid.Row="1" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_Node_Alternative_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
-                        <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
+                        <controls:RichTextBoxWithSource VerticalScrollBarVisibility="Auto" MaxHeight="{StaticResource Double_RichTextBox_MaxHeight}" MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                     </GroupBox>
                     <TextBox Grid.Row="2" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Alternative_Result}"></TextBox>
                 </Grid>
@@ -1700,7 +1702,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                     <ContentControl Grid.Row="2" Style="{StaticResource S_ContentControl_Prop_StorageType}" Content="{Binding}" Tag="{DynamicResource String_Tag_Node_Regular_FileStorageType}"></ContentControl>
                     <TextBox Grid.Row="3" Style="{StaticResource S_TextBox_Prop}" Text="{Binding FileHttpRef, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Regular_FileHttpRef}"></TextBox>
                     <GroupBox Grid.Row="4" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
-                        <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
+                        <controls:RichTextBoxWithSource VerticalScrollBarVisibility="Auto" MaxHeight="{StaticResource Double_RichTextBox_MaxHeight}" MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                     </GroupBox>
                     <TextBox Grid.Row="5" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Regular_ShortDescription}"></TextBox>
                 </Grid>
@@ -1760,7 +1762,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                     <ContentControl Grid.Row="2" Style="{StaticResource S_ContentControl_Prop_StorageType}" Content="{Binding}" Tag="{DynamicResource String_Tag_Node_Regular_FileStorageType}"></ContentControl>
                     <TextBox Grid.Row="3" Style="{StaticResource S_TextBox_Prop}" Text="{Binding FileHttpRef, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Regular_FileHttpRef}"></TextBox>
                     <GroupBox Grid.Row="4" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
-                        <controls:RichTextBoxWithSource MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
+                        <controls:RichTextBoxWithSource VerticalScrollBarVisibility="Auto" MaxHeight="{StaticResource Double_RichTextBox_MaxHeight}" MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                     </GroupBox>
                     <TextBox Grid.Row="5" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Regular_ShortDescription}"></TextBox>
                 </Grid>

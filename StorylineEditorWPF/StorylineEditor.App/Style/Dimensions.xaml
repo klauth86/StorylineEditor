@@ -117,7 +117,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <sys:Double x:Key="Double_Size_8x">8</sys:Double>
     
     <sys:Double x:Key="Double_Size_8x-">-8</sys:Double>
-
+    
+    <sys:Double x:Key="Double_RichTextBox_MaxHeight">320</sys:Double>
+    
     <sys:Double x:Key="Double_Node_MinHeight">64</sys:Double>
 
     <sys:Double x:Key="Double_Slider_MaxWidth">480</sys:Double>
