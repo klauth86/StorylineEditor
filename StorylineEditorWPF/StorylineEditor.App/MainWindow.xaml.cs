@@ -273,51 +273,61 @@ namespace StorylineEditor.App
 
         private TextRangeM SimplifyRichText(TextRangeM textRangeModel)
         {
-            RemoveEmptySubRanges(textRangeModel);
-            CollapseSiblingSubRanges(textRangeModel);
+            RemoveEmptySubRanges(ref textRangeModel);
+            CollapseSiblingSubRanges(ref textRangeModel);
 
             return textRangeModel;
         }
 
-        private void RemoveEmptySubRanges(TextRangeM textRangeModel)
+        private void RemoveEmptySubRanges(ref TextRangeM textRangeModel)
         {
             if (textRangeModel.IsSubRanged)
             {
                 for (int i = textRangeModel.subRanges.Count - 1; i >= 0; i--)
                 {
-                    RemoveEmptySubRanges(textRangeModel.subRanges[i]);
+                    TextRangeM subTextRangeModel = textRangeModel.subRanges[i];
+                    RemoveEmptySubRanges(ref subTextRangeModel);
+                    textRangeModel.subRanges[i] = subTextRangeModel;
 
                     if (textRangeModel.subRanges[i].IsEmpty)
                     {
-                        textRangeModel.subRanges.Remove(textRangeModel.subRanges[i]);
+                        textRangeModel.subRanges.RemoveAt(i);
                     }
                 }
             }
         }
 
-        private void CollapseSiblingSubRanges(TextRangeM textRangeModel)
+        private void CollapseSiblingSubRanges(ref TextRangeM textRangeModel)
         {
             if (textRangeModel.IsSubRanged)
             {
-                foreach (var subTextRangeModel in textRangeModel.subRanges)
+                for (int i = textRangeModel.subRanges.Count - 1; i > 0; i--)
                 {
-                    CollapseSiblingSubRanges(subTextRangeModel);
+                    TextRangeM subTextRangeModel = textRangeModel.subRanges[i];
+                    CollapseSiblingSubRanges(ref subTextRangeModel);
+                    textRangeModel.subRanges[i] = subTextRangeModel;
                 }
 
                 for (int i = textRangeModel.subRanges.Count - 1; i > 0; i--)
                 {
                     if (textRangeModel.subRanges[i - 1] | textRangeModel.subRanges[i])
                     {
-                        MergeRanges(textRangeModel, textRangeModel.subRanges[i - 1], textRangeModel.subRanges[i]);
+                        TextRangeM textRangeModelA = textRangeModel.subRanges[i - 1];
+                        TextRangeM textRangeModelB = textRangeModel.subRanges[i];
+
+                        if (!textRangeModelB.isNewLine)
+                        {
+                            MergeRanges(ref textRangeModel, ref textRangeModelA, ref textRangeModelB);
+                            textRangeModel.subRanges[i - 1] = textRangeModelA;
+                            textRangeModel.subRanges.RemoveAt(i);
+                        }
                     }
                 }
             }
         }
 
-        private void MergeRanges(TextRangeM textRangeModel, TextRangeM A, TextRangeM B)
+        private void MergeRanges(ref TextRangeM textRangeModel, ref TextRangeM A, ref TextRangeM B)
         {
-            if (B.isNewLine) return;
-
             if (A.IsContent && B.IsContent)
             {
                 A.content += B.content;
@@ -337,8 +347,6 @@ namespace StorylineEditor.App
             {
                 A.subRanges.AddRange(B.subRanges);
             }
-
-            textRangeModel.subRanges.Remove(B);
         }
 
         private void ClearUpNodesNames(List<BaseM> items, Dictionary<string, string> namesMapping)
