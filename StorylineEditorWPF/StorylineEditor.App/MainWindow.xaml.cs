@@ -129,17 +129,48 @@ namespace StorylineEditor.App
         {
             if (DataContext is StorylineVM storylineVM)
             {
+                try
+                {
+                    Dictionary<string, string> beforeRtbMapping = new Dictionary<string, string>();
+                    Dictionary<string, string> afterRtbMapping = new Dictionary<string, string>();
+
+                    SimplifyRichText_Actors(storylineVM.Model.characters, beforeRtbMapping, afterRtbMapping);
+                    SimplifyRichText_Items(storylineVM.Model.items, beforeRtbMapping, afterRtbMapping);
+                    SimplifyRichText_Actors(storylineVM.Model.actors, beforeRtbMapping, afterRtbMapping);
+
+                    SimplifyRichText_Nodes(storylineVM.Model.journal, beforeRtbMapping, afterRtbMapping);
+                    SimplifyRichText_Nodes(storylineVM.Model.dialogs, beforeRtbMapping, afterRtbMapping);
+                    SimplifyRichText_Nodes(storylineVM.Model.replicas, beforeRtbMapping, afterRtbMapping);
+
+                    if (beforeRtbMapping.Count != afterRtbMapping.Count)
+                    {
+                        throw new InvalidDataException(string.Format("Data simplify fault! Simplified items count mismatch {0}/{1}!", beforeRtbMapping.Count, afterRtbMapping.Count));
+                    }
+                    else
+                    {
+                        foreach (var key in beforeRtbMapping.Keys)
+                        {
+                            if (!afterRtbMapping.ContainsKey(key))
+                            {
+                                throw new InvalidDataException(string.Format("Data simplify fault! Simplified item not found {0}!", key));
+                            }
+
+                            if (beforeRtbMapping[key] != afterRtbMapping[key])
+                            {
+                                throw new InvalidDataException(string.Format("Data simplify fault! Simplified item corrupted {0}[\n{1}\n=>\n{2}\n]!", key, beforeRtbMapping[key], afterRtbMapping[key]));
+                            }
+                        }
+                    }
+                }
+                catch (InvalidDataException idExc)
+                {
+                    MessageBox.Show(idExc.Message, "Error", MessageBoxButton.OK);
+                    return;
+                }
+
                 using (var fileStream = File.Open(path, FileMode.Create))
                 {
                     Dictionary<string, string> namesMapping = new Dictionary<string, string>();
-
-                    SimplifyRichText_Actors(storylineVM.Model.characters);
-                    SimplifyRichText_Items(storylineVM.Model.items);
-                    SimplifyRichText_Actors(storylineVM.Model.actors);
-
-                    SimplifyRichText_Nodes(storylineVM.Model.journal);
-                    SimplifyRichText_Nodes(storylineVM.Model.dialogs);
-                    SimplifyRichText_Nodes(storylineVM.Model.replicas);
 
                     // In fact we dont store any useful info in dialogs and replicas nodes name field
                     // It is generated during work and used in combobox search as string representation of item
@@ -158,18 +189,23 @@ namespace StorylineEditor.App
             }
         }
 
-        private void SimplifyRichText_Actors(List<BaseM> items)
+        private void SimplifyRichText_Actors(List<BaseM> items, Dictionary<string, string> beforeRtbMapping, Dictionary<string, string> afterRtbMapping)
         {
             foreach (var listItem in items)
             {
                 if (listItem is FolderM folder)
                 {
-                    SimplifyRichText_Actors(folder.content);
+                    SimplifyRichText_Actors(folder.content, beforeRtbMapping, afterRtbMapping);
                 }
                 else if (listItem is ActorM actor)
                 {
+                    beforeRtbMapping.Add(actor.id, actor.rtDescription.ToString());
                     actor.rtDescription = SimplifyRichText(actor.rtDescription);
+                    afterRtbMapping.Add(actor.id, actor.rtDescription.ToString());
+
+                    beforeRtbMapping.Add(actor.id + "F", actor.rtDescriptionFemale.ToString());
                     actor.rtDescriptionFemale = SimplifyRichText(actor.rtDescriptionFemale);
+                    afterRtbMapping.Add(actor.id + "F", actor.rtDescriptionFemale.ToString());
                 }
                 else
                 {
@@ -178,20 +214,31 @@ namespace StorylineEditor.App
             }
         }
 
-        private void SimplifyRichText_Items(List<BaseM> items)
+        private void SimplifyRichText_Items(List<BaseM> items, Dictionary<string, string> beforeRtbMapping, Dictionary<string, string> afterRtbMapping)
         {
             foreach (var listItem in items)
             {
                 if (listItem is FolderM folder)
                 {
-                    SimplifyRichText_Items(folder.content);
+                    SimplifyRichText_Items(folder.content, beforeRtbMapping, afterRtbMapping);
                 }
                 else if (listItem is ItemM item)
                 {
+                    beforeRtbMapping.Add(item.id, item.rtDescription.ToString());
                     item.rtDescription = SimplifyRichText(item.rtDescription);
+                    afterRtbMapping.Add(item.id, item.rtDescription.ToString());
+
+                    beforeRtbMapping.Add(item.id + "F", item.rtDescriptionFemale.ToString());
                     item.rtDescriptionFemale = SimplifyRichText(item.rtDescriptionFemale);
+                    afterRtbMapping.Add(item.id +"F", item.rtDescriptionFemale.ToString());
+
+                    beforeRtbMapping.Add(item.id + "I", item.rtInternalDescription.ToString());
                     item.rtInternalDescription = SimplifyRichText(item.rtInternalDescription);
+                    afterRtbMapping.Add(item.id + "I", item.rtInternalDescription.ToString());
+
+                    beforeRtbMapping.Add(item.id + "IF", item.rtInternalDescriptionFemale.ToString());
                     item.rtInternalDescriptionFemale = SimplifyRichText(item.rtInternalDescriptionFemale);
+                    afterRtbMapping.Add(item.id + "IF", item.rtInternalDescriptionFemale.ToString());
                 }
                 else
                 {
@@ -200,19 +247,21 @@ namespace StorylineEditor.App
             }
         }
 
-        private void SimplifyRichText_Nodes(List<BaseM> items)
+        private void SimplifyRichText_Nodes(List<BaseM> items, Dictionary<string, string> beforeRtbMapping, Dictionary<string, string> afterRtbMapping)
         {
             foreach (var listItem in items)
             {
                 if (listItem is FolderM folder)
                 {
-                    SimplifyRichText_Nodes(folder.content);
+                    SimplifyRichText_Nodes(folder.content, beforeRtbMapping, afterRtbMapping);
                 }
                 else if (listItem is GraphM graph)
                 {
                     foreach (var node in graph.nodes)
                     {
+                        beforeRtbMapping.Add(node.id, node.rtDescription.ToString());
                         node.rtDescription = SimplifyRichText(node.rtDescription);
+                        afterRtbMapping.Add(node.id, node.rtDescription.ToString());
                     }
                 }
                 else
