@@ -28,8 +28,6 @@ namespace StorylineEditor.Model.RichText
 
         public const int CYCLE = 10000;
 
-        public static TextRangeM EmptyTextRange = new TextRangeM(0);
-
         public TextRangeM(int dummy)
         {
             isNewLine = false;
@@ -88,6 +86,20 @@ namespace StorylineEditor.Model.RichText
             }
 
             return stringBuilder.ToString();
+        }
+
+        public bool IsEmpty => string.IsNullOrEmpty(content) && (subRanges == null || subRanges.Count == 0) && !isNewLine;
+
+        public bool IsContent => !string.IsNullOrEmpty(content) && (subRanges == null || subRanges.Count == 0);
+
+        public bool IsSubRanged => string.IsNullOrEmpty(content) && (subRanges != null && subRanges.Count != 0);
+
+        public static bool operator|(TextRangeM A, TextRangeM B)
+        {
+            return
+                A.isBold == B.isBold &&
+                A.isItalic == B.isItalic &&
+                A.isUnderline == B.isUnderline;
         }
     }
 }

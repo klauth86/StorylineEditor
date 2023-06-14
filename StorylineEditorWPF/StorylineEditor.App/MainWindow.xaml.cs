@@ -20,6 +20,7 @@ using StorylineEditor.App.Config;
 using StorylineEditor.Model;
 using StorylineEditor.Model.Graphs;
 using StorylineEditor.Model.Nodes;
+using StorylineEditor.Model.RichText;
 using StorylineEditor.Service;
 using StorylineEditor.ViewModel;
 using StorylineEditor.ViewModel.Config;
@@ -132,6 +133,14 @@ namespace StorylineEditor.App
                 {
                     Dictionary<string, string> namesMapping = new Dictionary<string, string>();
 
+                    SimplifyRichText_Actors(storylineVM.Model.characters);
+                    SimplifyRichText_Items(storylineVM.Model.items);
+                    SimplifyRichText_Actors(storylineVM.Model.actors);
+
+                    SimplifyRichText_Nodes(storylineVM.Model.journal);
+                    SimplifyRichText_Nodes(storylineVM.Model.dialogs);
+                    SimplifyRichText_Nodes(storylineVM.Model.replicas);
+
                     // In fact we dont store any useful info in dialogs and replicas nodes name field
                     // It is generated during work and used in combobox search as string representation of item
                     // So no need to save it - just clear them before save and fix up after save
@@ -147,6 +156,140 @@ namespace StorylineEditor.App
                     SetTitleForMainWindow();
                 }
             }
+        }
+
+        private void SimplifyRichText_Actors(List<BaseM> items)
+        {
+            foreach (var listItem in items)
+            {
+                if (listItem is FolderM folder)
+                {
+                    SimplifyRichText_Actors(folder.content);
+                }
+                else if (listItem is ActorM actor)
+                {
+                    actor.rtDescription = SimplifyRichText(actor.rtDescription);
+                    actor.rtDescriptionFemale = SimplifyRichText(actor.rtDescriptionFemale);
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException(nameof(listItem));
+                }
+            }
+        }
+
+        private void SimplifyRichText_Items(List<BaseM> items)
+        {
+            foreach (var listItem in items)
+            {
+                if (listItem is FolderM folder)
+                {
+                    SimplifyRichText_Items(folder.content);
+                }
+                else if (listItem is ItemM item)
+                {
+                    item.rtDescription = SimplifyRichText(item.rtDescription);
+                    item.rtDescriptionFemale = SimplifyRichText(item.rtDescriptionFemale);
+                    item.rtInternalDescription = SimplifyRichText(item.rtInternalDescription);
+                    item.rtInternalDescriptionFemale = SimplifyRichText(item.rtInternalDescriptionFemale);
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException(nameof(listItem));
+                }
+            }
+        }
+
+        private void SimplifyRichText_Nodes(List<BaseM> items)
+        {
+            foreach (var listItem in items)
+            {
+                if (listItem is FolderM folder)
+                {
+                    SimplifyRichText_Nodes(folder.content);
+                }
+                else if (listItem is GraphM graph)
+                {
+                    foreach (var node in graph.nodes)
+                    {
+                        node.rtDescription = SimplifyRichText(node.rtDescription);
+                    }
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException(nameof(listItem));
+                }
+            }
+        }
+
+        private TextRangeM SimplifyRichText(TextRangeM textRangeModel)
+        {
+            RemoveEmptySubRanges(textRangeModel);
+            CollapseSiblingSubRanges(textRangeModel);
+
+            return textRangeModel;
+        }
+
+        private void RemoveEmptySubRanges(TextRangeM textRangeModel)
+        {
+            if (textRangeModel.IsSubRanged)
+            {
+                for (int i = textRangeModel.subRanges.Count - 1; i >= 0; i--)
+                {
+                    RemoveEmptySubRanges(textRangeModel.subRanges[i]);
+
+                    if (textRangeModel.subRanges[i].IsEmpty)
+                    {
+                        textRangeModel.subRanges.Remove(textRangeModel.subRanges[i]);
+                    }
+                }
+            }
+        }
+
+        private void CollapseSiblingSubRanges(TextRangeM textRangeModel)
+        {
+            if (textRangeModel.IsSubRanged)
+            {
+                foreach (var subTextRangeModel in textRangeModel.subRanges)
+                {
+                    CollapseSiblingSubRanges(subTextRangeModel);
+                }
+
+                for (int i = textRangeModel.subRanges.Count - 1; i > 0; i--)
+                {
+                    if (textRangeModel.subRanges[i - 1] | textRangeModel.subRanges[i])
+                    {
+                        MergeRanges(textRangeModel, textRangeModel.subRanges[i - 1], textRangeModel.subRanges[i]);
+                    }
+                }
+            }
+        }
+
+        private void MergeRanges(TextRangeM textRangeModel, TextRangeM A, TextRangeM B)
+        {
+            if (B.isNewLine) return;
+
+            if (A.IsContent && B.IsContent)
+            {
+                A.content += B.content;
+            }
+            else if (A.IsContent && B.IsSubRanged)
+            {
+                A.subRanges.Add(new TextRangeM() { content = A.content });
+                A.subRanges.AddRange(B.subRanges);
+
+                A.content = string.Empty;
+            }
+            else if (A.IsSubRanged && B.IsContent)
+            {
+                A.subRanges.Add(new TextRangeM() { content = B.content });
+            }
+            else if (A.IsSubRanged && B.IsSubRanged)
+            {
+                A.subRanges.AddRange(B.subRanges);
+            }
+
+            textRangeModel.subRanges.Remove(B);
         }
 
         private void ClearUpNodesNames(List<BaseM> items, Dictionary<string, string> namesMapping)

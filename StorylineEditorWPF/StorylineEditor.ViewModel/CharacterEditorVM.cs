@@ -111,19 +111,22 @@ namespace StorylineEditor.ViewModel
 
         public void SetRichText(string propName, ref TextRangeM textRangeModel)
         {
-            if (propName == nameof(Model.rtDescription))
+            switch (propName)
             {
-                Model.rtDescription = textRangeModel;
-                RtDescriptionVersion = (RtDescriptionVersion + 1) % TextRangeM.CYCLE;
-            }
-            else if (propName == nameof(Model.rtDescriptionFemale))
-            {
-                Model.rtDescriptionFemale = textRangeModel;
-                RtDescriptionFemaleVersion = (RtDescriptionFemaleVersion + 1) % TextRangeM.CYCLE;
-            }
-            else
-            {
-                throw new ArgumentOutOfRangeException(nameof(propName));
+                case nameof(Model.rtDescription):
+                    {
+                        Model.rtDescription = textRangeModel;
+                        RtDescriptionVersion = (RtDescriptionVersion + 1) % TextRangeM.CYCLE;
+                    }
+                    break;
+                case nameof(Model.rtDescriptionFemale):
+                    {
+                        Model.rtDescriptionFemale = textRangeModel;
+                        RtDescriptionFemaleVersion = (RtDescriptionFemaleVersion + 1) % TextRangeM.CYCLE;
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(propName));
             }
         }
     }
