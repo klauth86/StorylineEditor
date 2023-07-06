@@ -1189,12 +1189,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <TextBox Style="{StaticResource S_TextBox_Prop}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Step_Name}"></TextBox>
-                    <GroupBox Grid.Row="1" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_Node_Step_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                    <TextBox IsReadOnly="True" Style="{StaticResource S_TextBox_Prop}" Text="{Binding Id, Mode=OneTime}" Tag="{DynamicResource String_Tag_Node_Id}"></TextBox>
+                    <TextBox Grid.Row="1" Style="{StaticResource S_TextBox_Prop}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Step_Name}"></TextBox>
+                    <GroupBox Grid.Row="2" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_Node_Step_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
                         <controls:RichTextBoxWithSource VerticalScrollBarVisibility="Auto" MaxHeight="{StaticResource Double_RichTextBox_MaxHeight}" MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                     </GroupBox>
-                    <TextBox Grid.Row="2" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Step_Result}"></TextBox>
+                    <TextBox Grid.Row="3" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Step_Result}"></TextBox>
                 </Grid>
             </TabItem>
         </TabControl>
@@ -1233,12 +1235,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <TextBox Style="{StaticResource S_TextBox_Prop}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Alternative_Name}"></TextBox>
-                    <GroupBox Grid.Row="1" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_Node_Alternative_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                    <TextBox IsReadOnly="True" Style="{StaticResource S_TextBox_Prop}" Text="{Binding Id, Mode=OneTime}" Tag="{DynamicResource String_Tag_Node_Id}"></TextBox>
+                    <TextBox Grid.Row="1" Style="{StaticResource S_TextBox_Prop}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Alternative_Name}"></TextBox>
+                    <GroupBox Grid.Row="2" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_Node_Alternative_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
                         <controls:RichTextBoxWithSource VerticalScrollBarVisibility="Auto" MaxHeight="{StaticResource Double_RichTextBox_MaxHeight}" MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                     </GroupBox>
-                    <TextBox Grid.Row="2" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Alternative_Result}"></TextBox>
+                    <TextBox Grid.Row="3" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Alternative_Result}"></TextBox>
                 </Grid>
             </TabItem>
         </TabControl>
@@ -1545,6 +1549,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     
     <DataTemplate DataType="{x:Type vmn:Node_RandomEditorVM}">
         <TabControl>
+            <TabItem Header="{DynamicResource String_Tag_Node_Tab_Props}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBox IsReadOnly="True" Style="{StaticResource S_TextBox_Prop}" Text="{Binding Id, Mode=OneTime}" Tag="{DynamicResource String_Tag_Node_Id}"></TextBox>
+                </Grid>
+            </TabItem>
             <TabItem ContentTemplate="{StaticResource DT_ContentControl_Predicates}" Content="{Binding}" HeaderTemplate="{StaticResource DT_ContentControl_PredicatesHeader}" Header="{Binding}"></TabItem>
             <TabItem ContentTemplate="{StaticResource DT_ContentControl_GameEvents}" Content="{Binding}" HeaderTemplate="{StaticResource DT_ContentControl_GameEventsHeader}" Header="{Binding}"></TabItem>
         </TabControl>
@@ -1556,6 +1568,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
     <DataTemplate DataType="{x:Type vmn:Node_TransitEditorVM}">
         <TabControl>
+            <TabItem Header="{DynamicResource String_Tag_Node_Tab_Props}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBox IsReadOnly="True" Style="{StaticResource S_TextBox_Prop}" Text="{Binding Id, Mode=OneTime}" Tag="{DynamicResource String_Tag_Node_Id}"></TextBox>
+                </Grid>
+            </TabItem>
             <TabItem ContentTemplate="{StaticResource DT_ContentControl_Predicates}" Content="{Binding}" HeaderTemplate="{StaticResource DT_ContentControl_PredicatesHeader}" Header="{Binding}"></TabItem>
             <TabItem ContentTemplate="{StaticResource DT_ContentControl_GameEvents}" Content="{Binding}" HeaderTemplate="{StaticResource DT_ContentControl_GameEventsHeader}" Header="{Binding}"></TabItem>
         </TabControl>
@@ -1584,13 +1604,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <controls:ComboBoxExt x:Name="cmb_TargetDialog" SelectedValue="{Binding TargetDialog, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox IsReadOnly="True" Style="{StaticResource S_TextBox_Prop}" Text="{Binding Id, Mode=OneTime}" Tag="{DynamicResource String_Tag_Node_Id}"></TextBox>
+                    <controls:ComboBoxExt x:Name="cmb_TargetDialog" Grid.Row="1" SelectedValue="{Binding TargetDialog, UpdateSourceTrigger=PropertyChanged}"
                                           Tag="{DynamicResource String_Tag_Node_Gate_TargetDialog}"
                                           ItemsSource="{Binding DialogsCVS.View}"
                                           Filter="{Binding TargetDialogFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
-                    <controls:ComboBoxExt x:Name="cmb_TargetExitNode" Grid.Row="1" SelectedValue="{Binding TargetExitNode, UpdateSourceTrigger=PropertyChanged}"
+                    <controls:ComboBoxExt x:Name="cmb_TargetExitNode" Grid.Row="2" SelectedValue="{Binding TargetExitNode, UpdateSourceTrigger=PropertyChanged}"
                                           Tag="{DynamicResource String_Tag_Node_Gate_TargetExitNode}"
                                           ItemsSource="{Binding NodesCVS.View}"
                                           Filter="{Binding NodesFilter, UpdateSourceTrigger=PropertyChanged}"
@@ -1628,10 +1650,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"></RowDefinition>
                             <RowDefinition Height="auto"></RowDefinition>
+                            <RowDefinition Height="auto"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" HorizontalAlignment="Center" Text="{Binding Delay, UpdateSourceTrigger=PropertyChanged, StringFormat=N1}"></TextBlock>
+                        <TextBox IsReadOnly="True" Style="{StaticResource S_TextBox_Prop}" Text="{Binding Id, Mode=OneTime}" Tag="{DynamicResource String_Tag_Node_Id}"></TextBox>
+                        <TextBlock Grid.Row="1" HorizontalAlignment="Center" Text="{Binding Delay, UpdateSourceTrigger=PropertyChanged, StringFormat=N1}"></TextBlock>
                         <Slider x:Name="sl_Delay"
-                        Grid.Row="1"
+                        Grid.Row="2"
                         Value="{Binding Delay, UpdateSourceTrigger=PropertyChanged}"
                         Minimum="{StaticResource Double_Delay_Min}"
                         Maximum="{StaticResource Double_Delay_Max}"
@@ -1651,6 +1675,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmn:Node_ExitEditorVM}">
+        <TabControl>
+            <TabItem Header="{DynamicResource String_Tag_Node_Tab_Props}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBox IsReadOnly="True" Style="{StaticResource S_TextBox_Prop}" Text="{Binding Id, Mode=OneTime}" Tag="{DynamicResource String_Tag_Node_Id}"></TextBox>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vmn:Node_ReplicaVM}">
@@ -1692,19 +1726,21 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <controls:ComboBoxExt SelectedValue="{Binding Character, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox IsReadOnly="True" Style="{StaticResource S_TextBox_Prop}" Text="{Binding Id, Mode=OneTime}" Tag="{DynamicResource String_Tag_Node_Id}"></TextBox>
+                    <controls:ComboBoxExt Grid.Row="1" SelectedValue="{Binding Character, UpdateSourceTrigger=PropertyChanged}"
                                           Tag="{DynamicResource String_Tag_Node_Regular_Character}"
                                           ItemsSource="{Binding FilteredCharacterCVS.View}"
                                           Filter="{Binding CharacterFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
-                    <TextBox Grid.Row="1" Style="{StaticResource S_TextBox_Prop}" Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Regular_OverrideName}"></TextBox>
-                    <ContentControl Grid.Row="2" Style="{StaticResource S_ContentControl_Prop_StorageType}" Content="{Binding}" Tag="{DynamicResource String_Tag_Node_Regular_FileStorageType}"></ContentControl>
-                    <TextBox Grid.Row="3" Style="{StaticResource S_TextBox_Prop}" Text="{Binding FileHttpRef, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Regular_FileHttpRef}"></TextBox>
-                    <GroupBox Grid.Row="4" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                    <TextBox Grid.Row="2" Style="{StaticResource S_TextBox_Prop}" Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Regular_OverrideName}"></TextBox>
+                    <ContentControl Grid.Row="3" Style="{StaticResource S_ContentControl_Prop_StorageType}" Content="{Binding}" Tag="{DynamicResource String_Tag_Node_Regular_FileStorageType}"></ContentControl>
+                    <TextBox Grid.Row="4" Style="{StaticResource S_TextBox_Prop}" Text="{Binding FileHttpRef, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Regular_FileHttpRef}"></TextBox>
+                    <GroupBox Grid.Row="5" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
                         <controls:RichTextBoxWithSource VerticalScrollBarVisibility="Auto" MaxHeight="{StaticResource Double_RichTextBox_MaxHeight}" MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                     </GroupBox>
-                    <TextBox Grid.Row="5" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Regular_ShortDescription}"></TextBox>
+                    <TextBox Grid.Row="6" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Regular_ShortDescription}"></TextBox>
                 </Grid>
             </TabItem>
             <TabItem ContentTemplate="{StaticResource DT_ContentControl_Predicates}" Content="{Binding}" HeaderTemplate="{StaticResource DT_ContentControl_PredicatesHeader}" Header="{Binding}"></TabItem>
@@ -1752,19 +1788,21 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <controls:ComboBoxExt SelectedValue="{Binding Character, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox IsReadOnly="True" Style="{StaticResource S_TextBox_Prop}" Text="{Binding Id, Mode=OneTime}" Tag="{DynamicResource String_Tag_Node_Id}"></TextBox>
+                    <controls:ComboBoxExt Grid.Row="1" SelectedValue="{Binding Character, UpdateSourceTrigger=PropertyChanged}"
                                           Tag="{DynamicResource String_Tag_Node_Regular_Character}"
                                           ItemsSource="{Binding FilteredCharacterCVS.View}"
                                           Filter="{Binding CharacterFilter, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource S_ComboBoxExt_Prop_Filter}"></controls:ComboBoxExt>
-                    <TextBox Grid.Row="1" Style="{StaticResource S_TextBox_Prop}" Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Regular_OverrideName}"></TextBox>
-                    <ContentControl Grid.Row="2" Style="{StaticResource S_ContentControl_Prop_StorageType}" Content="{Binding}" Tag="{DynamicResource String_Tag_Node_Regular_FileStorageType}"></ContentControl>
-                    <TextBox Grid.Row="3" Style="{StaticResource S_TextBox_Prop}" Text="{Binding FileHttpRef, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Regular_FileHttpRef}"></TextBox>
-                    <GroupBox Grid.Row="4" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                    <TextBox Grid.Row="2" Style="{StaticResource S_TextBox_Prop}" Text="{Binding OverrideName, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Regular_OverrideName}"></TextBox>
+                    <ContentControl Grid.Row="3" Style="{StaticResource S_ContentControl_Prop_StorageType}" Content="{Binding}" Tag="{DynamicResource String_Tag_Node_Regular_FileStorageType}"></ContentControl>
+                    <TextBox Grid.Row="4" Style="{StaticResource S_TextBox_Prop}" Text="{Binding FileHttpRef, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Regular_FileHttpRef}"></TextBox>
+                    <GroupBox Grid.Row="5" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
                         <controls:RichTextBoxWithSource VerticalScrollBarVisibility="Auto" MaxHeight="{StaticResource Double_RichTextBox_MaxHeight}" MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                     </GroupBox>
-                    <TextBox Grid.Row="5" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Regular_ShortDescription}"></TextBox>
+                    <TextBox Grid.Row="6" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding ShortDescription, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Regular_ShortDescription}"></TextBox>
                 </Grid>
             </TabItem>
             <TabItem ContentTemplate="{StaticResource DT_ContentControl_Predicates}" Content="{Binding}" HeaderTemplate="{StaticResource DT_ContentControl_PredicatesHeader}" Header="{Binding}"></TabItem>
