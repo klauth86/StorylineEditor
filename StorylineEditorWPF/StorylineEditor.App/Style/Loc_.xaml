@@ -72,6 +72,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_MainMenu_Replicas">locerr</sys:String>
     <sys:String x:Key="String_Tag_MainMenu_DialogsAndReplicas">locerr</sys:String>
     <sys:String x:Key="String_Tag_Name">locerr</sys:String>
+    <sys:String x:Key="String_Tag_CustomStringParam">locerr</sys:String>
     <sys:String x:Key="String_Tag_Description">locerr</sys:String>
     <sys:String x:Key="String_Tag_HasDescriptionFemale">locerr</sys:String>
     <sys:String x:Key="String_Tag_DescriptionMale">locerr</sys:String>
@@ -151,12 +152,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_Predicate_PredicateA">locerr</sys:String>
     <sys:String x:Key="String_Tag_Predicate_PredicateB">locerr</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_IsExecutedOnLeave">locerr</sys:String>
+    <sys:String x:Key="String_Tag_GameEvent_GE_CustomM_DisplayName">locerr</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Item_DropM_DisplayName">locerr</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Item_PickUpM_DisplayName">locerr</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Quest_AddM_DisplayName">locerr</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_AddM_DisplayName">locerr</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_PassM_DisplayName">locerr</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_DisplayName">locerr</sys:String>
+    <sys:String x:Key="String_Tag_GameEvent_GE_CustomM_Title">locerr</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Item_DropM_Title">locerr</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Item_PickUpM_Title">locerr</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Quest_AddM_Title">locerr</sys:String>

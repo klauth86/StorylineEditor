@@ -39,4 +39,32 @@ namespace StorylineEditor.Model.GameEvents
 
         public byte executionMode { get; set; }
     }
+
+    public class GE_CustomM : GE_BaseM
+    {
+        public GE_CustomM(long additionalTicks) : base(additionalTicks)
+        {
+            customStringParam = null;
+        }
+
+        public GE_CustomM() : this(0) { }
+
+        public override BaseM Clone(long additionalTicks)
+        {
+            GE_CustomM clone = new GE_CustomM(additionalTicks);
+            CloneInternal(clone);
+            return clone;
+        }
+        protected override void CloneInternal(BaseM targetObject)
+        {
+            base.CloneInternal(targetObject);
+
+            if (targetObject is GE_CustomM casted)
+            {
+                casted.customStringParam = customStringParam;
+            }
+        }
+
+        public string customStringParam { get; set; }
+    }
 }

@@ -26,6 +26,7 @@ namespace StorylineEditor.ViewModel.GameEvents
     {
         public static IGameEvent CreateGameEventByType(Type type, INode node)
         {
+            if (type == typeof(GE_CustomM)) return new GE_CustomVM(new GE_CustomM(0), node);
             if (type == typeof(GE_Item_DropM)) return new GE_Item_DropVM(new GE_Item_DropM(0), node);
             if (type == typeof(GE_Item_PickUpM)) return new GE_Item_PickUpVM(new GE_Item_PickUpM(0), node);
             if (type == typeof(GE_Quest_AddM)) return new GE_Quest_AddVM(new GE_Quest_AddM(0), node);
@@ -38,6 +39,7 @@ namespace StorylineEditor.ViewModel.GameEvents
 
         public static IGameEvent CreateGameEventByModel(GE_BaseM model, INode node)
         {
+            if (model.GetType() == typeof(GE_CustomM)) return new GE_CustomVM((GE_CustomM)model, node);
             if (model.GetType() == typeof(GE_Item_DropM)) return new GE_Item_DropVM((GE_Item_DropM)model, node);
             if (model.GetType() == typeof(GE_Item_PickUpM)) return new GE_Item_PickUpVM((GE_Item_PickUpM)model, node);
             if (model.GetType() == typeof(GE_Quest_AddM)) return new GE_Quest_AddVM((GE_Quest_AddM)model, node);

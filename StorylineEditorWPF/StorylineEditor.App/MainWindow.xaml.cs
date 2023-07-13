@@ -644,6 +644,7 @@ namespace StorylineEditor.App
             SetWithSuffix("String_Tag_MainMenu_Replicas", suffix);
             SetWithSuffix("String_Tag_MainMenu_DialogsAndReplicas", suffix);
             SetWithSuffix("String_Tag_Name", suffix);
+            SetWithSuffix("String_Tag_CustomStringParam", suffix);
             SetWithSuffix("String_Tag_Description", suffix);
             SetWithSuffix("String_Tag_HasDescriptionFemale", suffix);
             SetWithSuffix("String_Tag_DescriptionMale", suffix);
@@ -722,12 +723,14 @@ namespace StorylineEditor.App
             SetWithSuffix("String_Tag_Predicate_PredicateA", suffix);
             SetWithSuffix("String_Tag_Predicate_PredicateB", suffix);
             SetWithSuffix("String_Tag_GameEvent_IsExecutedOnLeave", suffix);
+            SetWithSuffix("String_Tag_GameEvent_GE_CustomM_DisplayName", suffix);
             SetWithSuffix("String_Tag_GameEvent_GE_Item_DropM_DisplayName", suffix);
             SetWithSuffix("String_Tag_GameEvent_GE_Item_PickUpM_DisplayName", suffix);
             SetWithSuffix("String_Tag_GameEvent_GE_Quest_AddM_DisplayName", suffix);
             SetWithSuffix("String_Tag_GameEvent_GE_Quest_Node_AddM_DisplayName", suffix);
             SetWithSuffix("String_Tag_GameEvent_GE_Quest_Node_PassM_DisplayName", suffix);
             SetWithSuffix("String_Tag_GameEvent_GE_Relation_ChangeM_DisplayName", suffix);
+            SetWithSuffix("String_Tag_GameEvent_GE_CustomM_Title", suffix);
             SetWithSuffix("String_Tag_GameEvent_GE_Item_DropM_Title", suffix);
             SetWithSuffix("String_Tag_GameEvent_GE_Item_PickUpM_Title", suffix);
             SetWithSuffix("String_Tag_GameEvent_GE_Quest_AddM_Title", suffix);

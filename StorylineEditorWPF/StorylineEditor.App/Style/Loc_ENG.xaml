@@ -52,6 +52,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_MainMenu_Replicas_ENG">Replicas</sys:String>
     <sys:String x:Key="String_Tag_MainMenu_DialogsAndReplicas_ENG">Dialogs and replicas</sys:String>
     <sys:String x:Key="String_Tag_Name_ENG">Name</sys:String>
+    <sys:String x:Key="String_Tag_CustomStringParam_ENG">String param</sys:String>
     <sys:String x:Key="String_Tag_Description_ENG">Description</sys:String>
     <sys:String x:Key="String_Tag_HasDescriptionFemale_ENG">Description by Gender</sys:String>
     <sys:String x:Key="String_Tag_DescriptionMale_ENG">👨 Description</sys:String>
@@ -130,12 +131,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_Predicate_PredicateA_ENG">Predicate A</sys:String>
     <sys:String x:Key="String_Tag_Predicate_PredicateB_ENG">Predicate B</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_IsExecutedOnLeave_ENG">Execute on leave</sys:String>
+    <sys:String x:Key="String_Tag_GameEvent_GE_CustomM_DisplayName_ENG">Custom</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Item_DropM_DisplayName_ENG">Item: drop</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Item_PickUpM_DisplayName_ENG">Item: pickup</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Quest_AddM_DisplayName_ENG">Quest: add</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_AddM_DisplayName_ENG">Quest: add step/alternative</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_PassM_DisplayName_ENG">Quest: pass step/alternative</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_DisplayName_ENG">Relation: change</sys:String>
+    <sys:String x:Key="String_Tag_GameEvent_GE_CustomM_Title_ENG">Custom</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Item_DropM_Title_ENG">Item: drop</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Item_PickUpM_Title_ENG">Item: pickup</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Quest_AddM_Title_ENG">Quest: add</sys:String>

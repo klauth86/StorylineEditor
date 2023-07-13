@@ -47,4 +47,22 @@ namespace StorylineEditor.ViewModel.GameEvents
             }
         }
     }
+
+    public class GE_CustomVM : GE_BaseVM<GE_CustomM, object>
+    {
+        public GE_CustomVM(GE_CustomM model, object parent) : base(model, parent) { }
+
+        public string CustomStringParam
+        {
+            get => Model.customStringParam;
+            set
+            {
+                if (value != Model.customStringParam)
+                {
+                    Model.customStringParam = value;
+                    Notify(nameof(CustomStringParam));
+                }
+            }
+        }
+    }
 }

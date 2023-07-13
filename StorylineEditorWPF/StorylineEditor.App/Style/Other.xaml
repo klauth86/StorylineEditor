@@ -1302,6 +1302,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
     <Style TargetType="TextBlock" x:Key="S_TextBlock_GameEvent_Title" BasedOn="{StaticResource S_TextBlock_InteractiveTitle}">
         <Style.Triggers>
+            <Trigger Property="Tag" Value="{x:Type mge:GE_CustomM}">
+                <Setter Property="Text" Value="{DynamicResource String_Tag_GameEvent_GE_CustomM_Title}"></Setter>
+            </Trigger>
             <Trigger Property="Tag" Value="{x:Type mge:GE_Item_DropM}">
                 <Setter Property="Text" Value="{DynamicResource String_Tag_GameEvent_GE_Item_DropM_Title}"></Setter>
             </Trigger>
@@ -1486,6 +1489,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <DataTemplate x:Key="DT_ComboBoxItem_GameEvent">
         <TextBlock x:Name="tb_Main"></TextBlock>
         <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding}" Value="{x:Type mge:GE_CustomM}">
+                <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_GameEvent_GE_CustomM_DisplayName}"></Setter>
+            </DataTrigger>
             <DataTrigger Binding="{Binding}" Value="{x:Type mge:GE_Item_DropM}">
                 <Setter TargetName="tb_Main" Property="Text" Value="{DynamicResource String_Tag_GameEvent_GE_Item_DropM_DisplayName}"></Setter>
             </DataTrigger>
@@ -1516,6 +1522,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                     <TextBlock Padding="{StaticResource Thickness_Padding_LeftRight}" VerticalAlignment="Center" Text="{DynamicResource String_Tag_Node_Tab_GameEvents}"></TextBlock>
                 </StackPanel>
             </controls:ComboBoxExt.Tag>
+            <sys:Type>mge:GE_CustomM</sys:Type>
             <sys:Type>mge:GE_Item_DropM</sys:Type>
             <sys:Type>mge:GE_Item_PickUpM</sys:Type>
             <sys:Type>mge:GE_Quest_AddM</sys:Type>
@@ -2433,6 +2440,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                         ></Slider>
             </Grid>
         </GroupBox>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmge:GE_CustomVM}">
+        <TextBox Text="{Binding CustomStringParam, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_TextBox_Prop}" Tag="{DynamicResource String_Tag_CustomStringParam}"></TextBox>
     </DataTemplate>
     
     <DataTemplate DataType="{x:Type vmge:GE_Item_DropVM}">

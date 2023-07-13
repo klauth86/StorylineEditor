@@ -52,6 +52,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_MainMenu_Replicas_UKR">Репліки</sys:String>
     <sys:String x:Key="String_Tag_MainMenu_DialogsAndReplicas_UKR">Діалоги та репліки</sys:String>
     <sys:String x:Key="String_Tag_Name_UKR">І'мя</sys:String>
+    <sys:String x:Key="String_Tag_CustomStringParam_UKR">Рядковий параметр</sys:String>
     <sys:String x:Key="String_Tag_Description_UKR">Опис</sys:String>
     <sys:String x:Key="String_Tag_HasDescriptionFemale_UKR">Опис залежить від статі</sys:String>
     <sys:String x:Key="String_Tag_DescriptionMale_UKR">👨 Опис</sys:String>
@@ -130,12 +131,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_Predicate_PredicateA_UKR">Предикат A</sys:String>
     <sys:String x:Key="String_Tag_Predicate_PredicateB_UKR">Предикат B</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_IsExecutedOnLeave_UKR">Виконати ПІСЛЯ вершини</sys:String>
+    <sys:String x:Key="String_Tag_GameEvent_GE_CustomM_DisplayName_UKR">Користувальницьке</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Item_DropM_DisplayName_UKR">Предмет: втратити</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Item_PickUpM_DisplayName_UKR">Предмет: отримати</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Quest_AddM_DisplayName_UKR">Квест: додати</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_AddM_DisplayName_UKR">Квест: додати крок/альтернативу</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_PassM_DisplayName_UKR">Квест: виконати крок/альтернативу</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_DisplayName_UKR">Стосунки: змінити</sys:String>
+    <sys:String x:Key="String_Tag_GameEvent_GE_CustomM_Title_UKR">Користувальницьке</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Item_DropM_Title_UKR">Предмет: втратити</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Item_PickUpM_Title_UKR">Предмет: отримати</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Quest_AddM_Title_UKR">Квест: додати</sys:String>
