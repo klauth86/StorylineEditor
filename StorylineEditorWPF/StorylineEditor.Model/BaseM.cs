@@ -17,6 +17,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 using System;
+using System.Xml.Serialization;
 
 namespace StorylineEditor.Model
 {
@@ -24,7 +25,7 @@ namespace StorylineEditor.Model
     {
         public BaseM(long additionalTicks)
         {
-            createdAt = DateTime.Now;
+            createdAt = DateTime.UtcNow;
             id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss}_{2}_{3}", GetType().Name, createdAt, createdAt.Ticks, additionalTicks);
             name = null;
             description = null;
@@ -47,7 +48,19 @@ namespace StorylineEditor.Model
                 ((description?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) ?? -1) >= 0);
         }
 
+        [XmlIgnore] ////// TODO Remove at 31.12.2023
         public DateTime createdAt { get; set; }
+
+        [XmlElement("createdAt")]
+        public DateTime createdAtf
+        {
+            get => createdAt.ToUniversalTime();
+            set
+            {
+                createdAt = value.ToUniversalTime();
+            }
+        }
+
         public string id { get; set; }
         public string name { get; set; }
         public string description { get; set; }

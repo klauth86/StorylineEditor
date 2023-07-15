@@ -72,5 +72,8 @@
     <Compile Include="RichText\TextRangeM.cs" />
     <Compile Include="StorylineM.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
