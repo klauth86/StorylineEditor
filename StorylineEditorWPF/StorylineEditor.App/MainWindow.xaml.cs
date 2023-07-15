@@ -32,6 +32,7 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Input;
 
 namespace StorylineEditor.App
 {
@@ -634,6 +635,8 @@ namespace StorylineEditor.App
             SetWithSuffix("String_Tag_Config_UserActions_SelectionSimple", suffix);
             SetWithSuffix("String_Tag_Config_UserActions_SelectionAdditive", suffix);
             SetWithSuffix("String_Tag_Config_UserActions_SelectionBox", suffix);
+            SetWithSuffix("String_Tag_Config_UserActions_AlignHor", suffix);
+            SetWithSuffix("String_Tag_Config_UserActions_AlignVer", suffix);
             SetWithSuffix("String_Tag_GlobalFilter_Tooltip", suffix);
             SetWithSuffix("String_Tag_MainMenu_Locations", suffix);
             SetWithSuffix("String_Tag_MainMenu_Characters", suffix);

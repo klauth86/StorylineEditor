@@ -17,6 +17,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Config
@@ -43,6 +44,10 @@ namespace StorylineEditor.ViewModel.Config
         public const byte SELECTION_SIMPLE = 101;
         public const byte SELECTION_ADDITIVE = 102;
         public const byte SELECTION_BOX = 103;
+
+        public const byte SCALE = 104;
+        public const byte ALIGN_HOR = 105;
+        public const byte ALIGN_VER = 106;
     }
 
     public class ConfigM
@@ -66,9 +71,31 @@ namespace StorylineEditor.ViewModel.Config
             Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.SELECTION_SIMPLE, MouseButton = MouseButton.Left });
             Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.SELECTION_ADDITIVE, MouseButton = MouseButton.Left, ModifierKeys = ModifierKeys.Control });
             Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.SELECTION_BOX, MouseButton = MouseButton.Left, ModifierKeys = ModifierKeys.Shift });
+            
+            Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.ALIGN_HOR, KeyboardButton = Key.H });
+            Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.ALIGN_VER, KeyboardButton = Key.V });
 
             Config.PlayRate = 100;
             Config.Duration = 4;
+        }
+
+        public static bool CompleteToDefaultConfig()
+        {
+            bool hasChanges = false;
+
+            if (!Config.UserActions.Any((userAction) => userAction.UserActionType == USER_ACTION_TYPE.ALIGN_HOR))
+            {
+                Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.ALIGN_HOR, KeyboardButton = Key.H });
+                hasChanges = true;
+            }
+
+            if (!Config.UserActions.Any((userAction) => userAction.UserActionType == USER_ACTION_TYPE.ALIGN_VER))
+            {
+                Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.ALIGN_VER, KeyboardButton = Key.V });
+                hasChanges = true;
+            }
+
+            return hasChanges;
         }
 
 

@@ -42,6 +42,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_Config_UserActions_SelectionSimple_RUS">Простое выделение</sys:String>
     <sys:String x:Key="String_Tag_Config_UserActions_SelectionAdditive_RUS">Аддитивное выделение</sys:String>
     <sys:String x:Key="String_Tag_Config_UserActions_SelectionBox_RUS">Выделение рамкой</sys:String>
+    <sys:String x:Key="String_Tag_Config_UserActions_AlignHor_RUS">Выровнять по горизонтали</sys:String>
+    <sys:String x:Key="String_Tag_Config_UserActions_AlignVer_RUS">Выровнять по вертикали</sys:String>
     <sys:String x:Key="String_Tag_GlobalFilter_Tooltip_RUS">Фильтровать по ...</sys:String>
     <sys:String x:Key="String_Tag_MainMenu_Locations_RUS">Локации</sys:String>
     <sys:String x:Key="String_Tag_MainMenu_Characters_RUS">Персонажи</sys:String>

@@ -183,6 +183,11 @@ namespace StorylineEditor.Service
                 {
                     ConfigM.Config = ActiveContext.SerializationService.Deserialize<ConfigM>(fileStream);
                 }
+
+                if (ConfigM.CompleteToDefaultConfig())
+                {
+                    SaveConfig();
+                }
             }
             else
             {

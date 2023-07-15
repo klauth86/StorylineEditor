@@ -2598,16 +2598,21 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
             <TextBlock FontSize="{StaticResource FontSize_Small}" x:Name="tb_UserActionName" VerticalAlignment="Center"></TextBlock>
 
-            <ComboBox FontSize="{StaticResource FontSize_VerySmall}" Grid.Column="1" SelectedValue="{Binding MouseButton, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="{StaticResource Thickness_Padding_LeftRight}">
+            <ComboBox x:Name="Cmb_MouseButton" FontSize="{StaticResource FontSize_VerySmall}" Grid.Column="1" SelectedValue="{Binding MouseButton, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="{StaticResource Thickness_Padding_LeftRight}">
                 <x:Static Member="MouseButton.Left"></x:Static>
                 <x:Static Member="MouseButton.Right"></x:Static>
             </ComboBox>
 
-            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+            <StackPanel x:Name="Sp_Modifiers"  Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
                 <CheckBox VerticalContentAlignment="Center" FontSize="{StaticResource FontSize_VerySmall}" IsChecked="{Binding IsAlt, UpdateSourceTrigger=PropertyChanged}">ALT</CheckBox>
                 <CheckBox VerticalContentAlignment="Center" FontSize="{StaticResource FontSize_VerySmall}" IsChecked="{Binding IsControl, UpdateSourceTrigger=PropertyChanged}">CONTROL</CheckBox>
                 <CheckBox VerticalContentAlignment="Center" FontSize="{StaticResource FontSize_VerySmall}" IsChecked="{Binding IsShift, UpdateSourceTrigger=PropertyChanged}">SHIFT</CheckBox>
             </StackPanel>
+
+            <ComboBox x:Name="Cmb_KeyboardButton" IsEnabled="false" FontSize="{StaticResource FontSize_VerySmall}" Grid.Column="1" SelectedValue="{Binding KeyboardButton, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="{StaticResource Thickness_Padding_LeftRight}" Visibility="Collapsed">
+                <x:Static Member="Key.H"></x:Static>
+                <x:Static Member="Key.V"></x:Static>
+            </ComboBox>
         </Grid>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.CREATE_NODE}">
@@ -2630,6 +2635,18 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             </DataTrigger>
             <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.SELECTION_BOX}">
                 <Setter TargetName="tb_UserActionName" Property="Text" Value="{DynamicResource String_Tag_Config_UserActions_SelectionBox}"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.ALIGN_HOR}">
+                <Setter TargetName="tb_UserActionName" Property="Text" Value="{DynamicResource String_Tag_Config_UserActions_AlignHor}"></Setter>
+                <Setter TargetName="Cmb_MouseButton" Property="Visibility" Value="Collapsed"></Setter>
+                <Setter TargetName="Sp_Modifiers" Property="Visibility" Value="Collapsed"></Setter>
+                <Setter TargetName="Cmb_KeyboardButton" Property="Visibility" Value="Visible"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.ALIGN_VER}">
+                <Setter TargetName="tb_UserActionName" Property="Text" Value="{DynamicResource String_Tag_Config_UserActions_AlignVer}"></Setter>
+                <Setter TargetName="Cmb_MouseButton" Property="Visibility" Value="Collapsed"></Setter>
+                <Setter TargetName="Sp_Modifiers" Property="Visibility" Value="Collapsed"></Setter>
+                <Setter TargetName="Cmb_KeyboardButton" Property="Visibility" Value="Visible"></Setter>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>

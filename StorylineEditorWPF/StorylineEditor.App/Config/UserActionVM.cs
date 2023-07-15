@@ -27,6 +27,21 @@ namespace StorylineEditor.App.Config
     {
         public UserActionVM(UserActionM model) : base(model, null) { }
 
+        public Key KeyboardButton
+        {
+            get => Model.KeyboardButton;
+            set
+            {
+                if (value != Model.KeyboardButton)
+                {
+                    Model.KeyboardButton = value;
+                    Notify(nameof(KeyboardButton));
+
+                    ActiveContext.FileService.SaveConfig();
+                }
+            }
+        }
+
         public MouseButton MouseButton
         {
             get => Model.MouseButton;

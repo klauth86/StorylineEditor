@@ -25,5 +25,6 @@ namespace StorylineEditor.ViewModel.Config
         public byte UserActionType { get; set; }
         public MouseButton MouseButton { get; set; }
         public ModifierKeys ModifierKeys { get; set; }
+        public Key KeyboardButton { get; set; }
     }
 }

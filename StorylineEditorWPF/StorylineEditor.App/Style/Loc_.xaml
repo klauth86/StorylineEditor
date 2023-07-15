@@ -62,6 +62,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_Config_UserActions_SelectionSimple">locerr</sys:String>
     <sys:String x:Key="String_Tag_Config_UserActions_SelectionAdditive">locerr</sys:String>
     <sys:String x:Key="String_Tag_Config_UserActions_SelectionBox">locerr</sys:String>
+    <sys:String x:Key="String_Tag_Config_UserActions_AlignHor">locerr</sys:String>
+    <sys:String x:Key="String_Tag_Config_UserActions_AlignVer">locerr</sys:String>
     <sys:String x:Key="String_Tag_GlobalFilter_Tooltip">locerr</sys:String>
     <sys:String x:Key="String_Tag_MainMenu_Locations">locerr</sys:String>
     <sys:String x:Key="String_Tag_MainMenu_Characters">locerr</sys:String>
