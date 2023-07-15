@@ -259,10 +259,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <Setter Property="ItemsSource" Value="{Binding ItemVms}"></Setter>
         <Setter Property="bhvrs:MouseExtBehavior.MouseEnterCommand" Value="{Binding RegisterContextCommand}"></Setter>
         <Setter Property="bhvrs:MouseExtBehavior.MouseLeaveCommand" Value="{Binding UnregisterContextCommand}"></Setter>
-        <Setter Property="bhvrs:MouseExtBehavior.MouseRightButtonDownCommand" Value="{Binding FacadeCommand}"></Setter>
-        <Setter Property="bhvrs:MouseExtBehavior.MouseRightButtonUpCommand" Value="{Binding FacadeCommand}"></Setter>
-        <Setter Property="bhvrs:MouseExtBehavior.MouseLeftButtonDownCommand" Value="{Binding FacadeCommand}"></Setter>
-        <Setter Property="bhvrs:MouseExtBehavior.MouseLeftButtonUpCommand" Value="{Binding FacadeCommand}"></Setter>
+        <Setter Property="bhvrs:MouseExtBehavior.MouseRightButtonDownCommand" Value="{Binding FacadeMouseCommand}"></Setter>
+        <Setter Property="bhvrs:MouseExtBehavior.MouseRightButtonUpCommand" Value="{Binding FacadeMouseCommand}"></Setter>
+        <Setter Property="bhvrs:MouseExtBehavior.MouseLeftButtonDownCommand" Value="{Binding FacadeMouseCommand}"></Setter>
+        <Setter Property="bhvrs:MouseExtBehavior.MouseLeftButtonUpCommand" Value="{Binding FacadeMouseCommand}"></Setter>
+        <Setter Property="bhvrs:KeyboardExtBehavior.KeyboardButtonDownCommand" Value="{Binding FacadeKeyboardCommand}"></Setter>
         <Setter Property="bhvrs:MouseExtBehavior.MouseMoveCommand" Value="{Binding MoveCommand}"></Setter>
         <Setter Property="bhvrs:MouseExtBehavior.MouseWheelCommand" Value="{Binding ScaleCommand}"></Setter>
         <Setter Property="bhvrs:LoadUnloadExtBehavior.LoadedCommand" Value="{Binding InitCommand}"></Setter>

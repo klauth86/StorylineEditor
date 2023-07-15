@@ -53,6 +53,7 @@
     </ApplicationDefinition>
     <Compile Include="Behaviors\LoadUnloadExtBehavior.cs" />
     <Compile Include="Behaviors\DragDropBehavior.cs" />
+    <Compile Include="Behaviors\KeyboardExtBehavior.cs" />
     <Compile Include="Behaviors\RenderSizeBehavior.cs" />
     <Compile Include="Behaviors\MouseExtBehavior.cs" />
     <Compile Include="Config\ConfigVM.cs" />

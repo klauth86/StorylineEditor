@@ -268,6 +268,11 @@ namespace StorylineEditor.App.Behaviors
         {
             if (sender is DependencyObject dp)
             {
+                if (sender is UIElement uiElement)
+                {
+                    Keyboard.Focus(uiElement);
+                }
+
                 GetMouseEnterCommand(dp)?.Execute(args);
                 args.Handled = true;
             }
@@ -304,6 +309,8 @@ namespace StorylineEditor.App.Behaviors
         {
             if (sender is DependencyObject dp)
             {
+                Keyboard.ClearFocus();
+
                 GetMouseLeaveCommand(dp)?.Execute(args);
                 args.Handled = true;
             }

@@ -462,8 +462,8 @@ namespace StorylineEditor.ViewModel.Graphs
             }
         }));
 
-        protected ICommand facadeCommand;
-        public ICommand FacadeCommand => facadeCommand ?? (facadeCommand = new RelayCommand<MouseButtonEventArgs>((args) =>
+        protected ICommand facadeMouseCommand;
+        public ICommand FacadeMouseCommand => facadeMouseCommand ?? (facadeMouseCommand = new RelayCommand<MouseButtonEventArgs>((args) =>
         {
             if (args.ButtonState == MouseButtonState.Pressed && UserAction == null)
             {
@@ -497,6 +497,76 @@ namespace StorylineEditor.ViewModel.Graphs
                 if (args.ChangedButton == UserAction.MouseButton) FinishUserAction(args);
             }
         }));
+
+        protected ICommand facadeKeyboardCommand;
+        public ICommand FacadeKeyboardCommand => facadeKeyboardCommand ?? (facadeKeyboardCommand = new RelayCommand<KeyEventArgs>((args) =>
+        {
+            List<UserActionM> possibleUserActions = ConfigM.Config.UserActions
+            .Where((userAction) => IsMatching(args, userAction))
+            .Where((userAction) => CanExec(args, userAction.UserActionType)).ToList();
+
+            if (possibleUserActions.Count > 0)
+            {
+                if (possibleUserActions.Count > 1)
+                {
+                    ////// TODO
+                }
+                else if (possibleUserActions[0] != null)
+                {
+                    switch (possibleUserActions[0].UserActionType)
+                    {
+                        case USER_ACTION_TYPE.ALIGN_HOR: AlignHorImpl(args); break;
+                        case USER_ACTION_TYPE.ALIGN_VER: AlignVerImpl(args); break;
+                    }
+                }
+            }
+        }));
+
+        private void AlignHorImpl(KeyEventArgs args)
+        {
+            List<INode> nodesToAlign = new List<INode>();
+            double centeredY = 0;
+
+            foreach (string selectedId in selection)
+            {
+                if (NodesVMs.ContainsKey(selectedId))
+                {
+                    if (NodesVMs[selectedId] is INode nodeViewModel)
+                    {
+                        nodesToAlign.Add(nodeViewModel);
+                        centeredY += nodeViewModel.PositionY;
+                    }
+                }
+            }
+
+            foreach (var node in nodesToAlign)
+            {
+                node.PositionY = centeredY / nodesToAlign.Count;
+            }
+        }
+
+        private void AlignVerImpl(KeyEventArgs args)
+        {
+            List<INode> nodesToAlign = new List<INode>();
+            double centeredX = 0;
+
+            foreach (string selectedId in selection)
+            {
+                if (NodesVMs.ContainsKey(selectedId))
+                {
+                    if (NodesVMs[selectedId] is INode nodeViewModel)
+                    {
+                        nodesToAlign.Add(nodeViewModel);
+                        centeredX += nodeViewModel.PositionX;
+                    }
+                }
+            }
+
+            foreach (var node in nodesToAlign)
+            {
+                node.PositionX = centeredX / nodesToAlign.Count;
+            }
+        }
 
         private void CreateNodeImpl(MouseButtonEventArgs args)
         {
@@ -633,6 +703,8 @@ namespace StorylineEditor.ViewModel.Graphs
 
         private bool IsMatching(MouseButtonEventArgs args, UserActionM userAction) { return args.ChangedButton == userAction.MouseButton && Keyboard.Modifiers == userAction.ModifierKeys; }
 
+        private bool IsMatching(KeyEventArgs args, UserActionM userAction) { return args.Key == userAction.KeyboardButton && Keyboard.GetKeyStates(args.Key) == KeyStates.Down; }
+
         private bool CanExec(MouseEventArgs args, byte userActiontype)
         {
             if (userActiontype == USER_ACTION_TYPE.CREATE_NODE) return !((args.OriginalSource as FrameworkElement)?.DataContext is INode) && args.Source is IInputElement && SelectedNodeType != null;
@@ -651,6 +723,8 @@ namespace StorylineEditor.ViewModel.Graphs
 
             return false;
         }
+
+        private bool CanExec(KeyEventArgs args, byte userActiontype) { return selection.Count > 1; }
 
         private bool HasActiveInput(UserActionM userAction)
         {
