@@ -68,6 +68,7 @@ namespace StorylineEditor.ViewModel.Nodes
 
         public Type SelectedGameEventType
         {
+            get => null;
             set
             {
                 if (value != null)
