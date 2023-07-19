@@ -24,11 +24,15 @@ namespace StorylineEditor.ViewModel.Predicates
 {
     public class P_CompositeVM : P_BaseVM<P_CompositeM, object>
     {
-        public P_CompositeVM(P_CompositeM model, object parent) : base(model, parent) { }
+        public P_CompositeVM(P_CompositeM model, object parent) : base(model, parent)
+        {
+            PredicateA = PredicatesHelper.CreatePredicateByModel(model.predicateA, Parent);
+            PredicateB = PredicatesHelper.CreatePredicateByModel(model.predicateB, Parent);
+        }
 
         public Type SubTypeA
         {
-            get => null;
+            get => Model.predicateA?.GetType();
             set
             {
                 if (value != null)
@@ -45,7 +49,7 @@ namespace StorylineEditor.ViewModel.Predicates
 
         public Type SubTypeB
         {
-            get => null;
+            get => Model.predicateB?.GetType();
             set
             {
                 if (value != null)
