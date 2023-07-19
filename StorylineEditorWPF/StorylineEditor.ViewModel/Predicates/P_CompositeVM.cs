@@ -26,8 +26,8 @@ namespace StorylineEditor.ViewModel.Predicates
     {
         public P_CompositeVM(P_CompositeM model, object parent) : base(model, parent)
         {
-            PredicateA = PredicatesHelper.CreatePredicateByModel(model.predicateA, Parent);
-            PredicateB = PredicatesHelper.CreatePredicateByModel(model.predicateB, Parent);
+            if (model.predicateA != null) PredicateA = PredicatesHelper.CreatePredicateByModel(model.predicateA, Parent);
+            if (model.predicateB != null) PredicateB = PredicatesHelper.CreatePredicateByModel(model.predicateB, Parent);
         }
 
         public Type SubTypeA
