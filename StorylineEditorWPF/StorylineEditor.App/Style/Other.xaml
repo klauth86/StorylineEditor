@@ -2391,7 +2391,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                 </Grid>
             </GroupBox>
 
-            <ComboBox Margin="{StaticResource Thickness_Margin_8x}" Grid.Row="1" SelectedValue="{Binding CompositionType}" SelectedIndex="0" ItemTemplate="{StaticResource DT_ListBoxItem_CompositionType}" FontSize="{StaticResource FontSize_Small}">
+            <ComboBox Margin="{StaticResource Thickness_Margin_8x}" Grid.Row="1" SelectedValue="{Binding CompositionType}" ItemTemplate="{StaticResource DT_ListBoxItem_CompositionType}" FontSize="{StaticResource FontSize_Small}">
                 <x:Static Member="m:COMPOSITION_TYPE.AND"></x:Static>
                 <x:Static Member="m:COMPOSITION_TYPE.OR"></x:Static>
                 <x:Static Member="m:COMPOSITION_TYPE.XOR"></x:Static>
