@@ -637,6 +637,10 @@ namespace StorylineEditor.App
             SetWithSuffix("String_Tag_Config_UserActions_SelectionBox", suffix);
             SetWithSuffix("String_Tag_Config_UserActions_AlignHor", suffix);
             SetWithSuffix("String_Tag_Config_UserActions_AlignVer", suffix);
+            SetWithSuffix("String_Tag_Config_UserActions_Copy", suffix);
+            SetWithSuffix("String_Tag_Config_UserActions_Paste", suffix);
+            SetWithSuffix("String_Tag_Config_UserActions_Cut", suffix);
+            SetWithSuffix("String_Tag_Config_UserActions_Delete", suffix);
             SetWithSuffix("String_Tag_GlobalFilter_Tooltip", suffix);
             SetWithSuffix("String_Tag_MainMenu_Locations", suffix);
             SetWithSuffix("String_Tag_MainMenu_Characters", suffix);

@@ -44,6 +44,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_Config_UserActions_SelectionBox_UKR">Відділити рамкою</sys:String>
     <sys:String x:Key="String_Tag_Config_UserActions_AlignHor_UKR">Align horizontally</sys:String>
     <sys:String x:Key="String_Tag_Config_UserActions_AlignVer_UKR">Align vertically</sys:String>
+    <sys:String x:Key="String_Tag_Config_UserActions_Copy_UKR">Копіювати</sys:String>
+    <sys:String x:Key="String_Tag_Config_UserActions_Paste_UKR">Вставити</sys:String>
+    <sys:String x:Key="String_Tag_Config_UserActions_Cut_UKR">Вирізати</sys:String>
+    <sys:String x:Key="String_Tag_Config_UserActions_Delete_UKR">Видалити</sys:String>
     <sys:String x:Key="String_Tag_GlobalFilter_Tooltip_UKR">Фільтрувати за</sys:String>
     <sys:String x:Key="String_Tag_MainMenu_Locations_UKR">Локації</sys:String>
     <sys:String x:Key="String_Tag_MainMenu_Characters_UKR">Персонажі</sys:String>

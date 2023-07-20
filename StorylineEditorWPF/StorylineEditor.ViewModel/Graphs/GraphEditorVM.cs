@@ -498,29 +498,30 @@ namespace StorylineEditor.ViewModel.Graphs
             }
         }));
 
-        protected ICommand facadeKeyboardCommand;
-        public ICommand FacadeKeyboardCommand => facadeKeyboardCommand ?? (facadeKeyboardCommand = new RelayCommand<KeyEventArgs>((args) =>
-        {
-            List<UserActionM> possibleUserActions = ConfigM.Config.UserActions
-            .Where((userAction) => IsMatching(args, userAction))
-            .Where((userAction) => CanExec(args, userAction.UserActionType)).ToList();
+        ////// TODO Customizable hotkeys if that will be needed
+        //////protected ICommand facadeKeyboardCommand;
+        //////public ICommand FacadeKeyboardCommand => facadeKeyboardCommand ?? (facadeKeyboardCommand = new RelayCommand<KeyEventArgs>((args) =>
+        //////{
+        //////    List<UserActionM> possibleUserActions = ConfigM.Config.UserActions
+        //////    .Where((userAction) => IsMatching(args, userAction))
+        //////    .Where((userAction) => CanExec(args, userAction.UserActionType)).ToList();
 
-            if (possibleUserActions.Count > 0)
-            {
-                if (possibleUserActions.Count > 1)
-                {
-                    ////// TODO
-                }
-                else if (possibleUserActions[0] != null)
-                {
-                    switch (possibleUserActions[0].UserActionType)
-                    {
-                        case USER_ACTION_TYPE.ALIGN_HOR: AlignHorImpl(args); break;
-                        case USER_ACTION_TYPE.ALIGN_VER: AlignVerImpl(args); break;
-                    }
-                }
-            }
-        }));
+        //////    if (possibleUserActions.Count > 0)
+        //////    {
+        //////        if (possibleUserActions.Count > 1)
+        //////        {
+        //////            ////// TODO
+        //////        }
+        //////        else if (possibleUserActions[0] != null)
+        //////        {
+        //////            switch (possibleUserActions[0].UserActionType)
+        //////            {
+        //////                case USER_ACTION_TYPE.ALIGN_HOR: AlignHorImpl(args); break;
+        //////                case USER_ACTION_TYPE.ALIGN_VER: AlignVerImpl(args); break;
+        //////            }
+        //////        }
+        //////    }
+        //////}));
 
         private void AlignHorImpl(KeyEventArgs args)
         {
@@ -736,6 +737,13 @@ namespace StorylineEditor.ViewModel.Graphs
 
         public SelectionType GetSelection<SelectionType>() where SelectionType : class { return SelectionNode as SelectionType; }
 
+        public string Cut()
+        {
+            string result = Copy();
+            Delete();
+            return result;
+        }
+
         public string Copy()
         {
             GraphM graphModel = new QuestM();
@@ -897,6 +905,52 @@ namespace StorylineEditor.ViewModel.Graphs
                         RemoveNode(nodeViewModel.Id);
                     }
                 }
+            }
+        }
+
+        public void AlignHor()
+        {
+            List<INode> nodesToAlign = new List<INode>();
+            double centeredY = 0;
+
+            foreach (string selectedId in selection)
+            {
+                if (NodesVMs.ContainsKey(selectedId))
+                {
+                    if (NodesVMs[selectedId] is INode nodeViewModel)
+                    {
+                        nodesToAlign.Add(nodeViewModel);
+                        centeredY += nodeViewModel.PositionY;
+                    }
+                }
+            }
+
+            foreach (var node in nodesToAlign)
+            {
+                node.PositionY = centeredY / nodesToAlign.Count;
+            }
+        }
+
+        public void AlignVer()
+        {
+            List<INode> nodesToAlign = new List<INode>();
+            double centeredX = 0;
+
+            foreach (string selectedId in selection)
+            {
+                if (NodesVMs.ContainsKey(selectedId))
+                {
+                    if (NodesVMs[selectedId] is INode nodeViewModel)
+                    {
+                        nodesToAlign.Add(nodeViewModel);
+                        centeredX += nodeViewModel.PositionX;
+                    }
+                }
+            }
+
+            foreach (var node in nodesToAlign)
+            {
+                node.PositionX = centeredX / nodesToAlign.Count;
             }
         }
 

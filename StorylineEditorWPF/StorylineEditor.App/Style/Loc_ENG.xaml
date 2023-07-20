@@ -44,6 +44,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_Config_UserActions_SelectionBox_ENG">Box selection</sys:String>
     <sys:String x:Key="String_Tag_Config_UserActions_AlignHor_ENG">Align horizontally</sys:String>
     <sys:String x:Key="String_Tag_Config_UserActions_AlignVer_ENG">Align vertically</sys:String>
+    <sys:String x:Key="String_Tag_Config_UserActions_Copy_ENG">Copy</sys:String>
+    <sys:String x:Key="String_Tag_Config_UserActions_Paste_ENG">Paste</sys:String>
+    <sys:String x:Key="String_Tag_Config_UserActions_Cut_ENG">Cut</sys:String>
+    <sys:String x:Key="String_Tag_Config_UserActions_Delete_ENG">Delete</sys:String>
     <sys:String x:Key="String_Tag_GlobalFilter_Tooltip_ENG">Filter by ...</sys:String>
     <sys:String x:Key="String_Tag_MainMenu_Locations_ENG">Locations</sys:String>
     <sys:String x:Key="String_Tag_MainMenu_Characters_ENG">Characters</sys:String>

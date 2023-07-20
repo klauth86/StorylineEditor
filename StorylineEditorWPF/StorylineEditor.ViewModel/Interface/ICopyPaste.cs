@@ -20,8 +20,11 @@ namespace StorylineEditor.ViewModel.Interface
 {
     public interface ICopyPaste
     {
+        string Cut();
         string Copy();
         void Paste(string clipboard);
         void Delete();
+        void AlignHor();
+        void AlignVer();
     }
 }

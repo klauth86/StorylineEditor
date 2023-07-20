@@ -44,6 +44,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_Config_UserActions_SelectionBox_RUS">Выделение рамкой</sys:String>
     <sys:String x:Key="String_Tag_Config_UserActions_AlignHor_RUS">Выровнять по горизонтали</sys:String>
     <sys:String x:Key="String_Tag_Config_UserActions_AlignVer_RUS">Выровнять по вертикали</sys:String>
+    <sys:String x:Key="String_Tag_Config_UserActions_Copy_RUS">Копировать</sys:String>
+    <sys:String x:Key="String_Tag_Config_UserActions_Paste_RUS">Вставить</sys:String>
+    <sys:String x:Key="String_Tag_Config_UserActions_Cut_RUS">Вырезать</sys:String>
+    <sys:String x:Key="String_Tag_Config_UserActions_Delete_RUS">Удалить</sys:String>
     <sys:String x:Key="String_Tag_GlobalFilter_Tooltip_RUS">Фильтровать по ...</sys:String>
     <sys:String x:Key="String_Tag_MainMenu_Locations_RUS">Локации</sys:String>
     <sys:String x:Key="String_Tag_MainMenu_Characters_RUS">Персонажи</sys:String>

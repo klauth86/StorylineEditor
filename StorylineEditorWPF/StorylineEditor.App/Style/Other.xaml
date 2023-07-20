@@ -263,7 +263,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <Setter Property="bhvrs:MouseExtBehavior.MouseRightButtonUpCommand" Value="{Binding FacadeMouseCommand}"></Setter>
         <Setter Property="bhvrs:MouseExtBehavior.MouseLeftButtonDownCommand" Value="{Binding FacadeMouseCommand}"></Setter>
         <Setter Property="bhvrs:MouseExtBehavior.MouseLeftButtonUpCommand" Value="{Binding FacadeMouseCommand}"></Setter>
-        <Setter Property="bhvrs:KeyboardExtBehavior.KeyboardButtonDownCommand" Value="{Binding FacadeKeyboardCommand}"></Setter>
         <Setter Property="bhvrs:MouseExtBehavior.MouseMoveCommand" Value="{Binding MoveCommand}"></Setter>
         <Setter Property="bhvrs:MouseExtBehavior.MouseWheelCommand" Value="{Binding ScaleCommand}"></Setter>
         <Setter Property="bhvrs:LoadUnloadExtBehavior.LoadedCommand" Value="{Binding InitCommand}"></Setter>
@@ -2613,6 +2612,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             <ComboBox x:Name="Cmb_KeyboardButton" IsEnabled="false" FontSize="{StaticResource FontSize_VerySmall}" Grid.Column="1" SelectedValue="{Binding KeyboardButton, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="{StaticResource Thickness_Padding_LeftRight}" Visibility="Collapsed">
                 <x:Static Member="Key.H"></x:Static>
                 <x:Static Member="Key.V"></x:Static>
+                <x:Static Member="Key.C"></x:Static>
+                <x:Static Member="Key.X"></x:Static>
+                <x:Static Member="Key.Delete"></x:Static>
             </ComboBox>
         </Grid>
         <DataTemplate.Triggers>
@@ -2645,6 +2647,30 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             </DataTrigger>
             <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.ALIGN_VER}">
                 <Setter TargetName="tb_UserActionName" Property="Text" Value="{DynamicResource String_Tag_Config_UserActions_AlignVer}"></Setter>
+                <Setter TargetName="Cmb_MouseButton" Property="Visibility" Value="Collapsed"></Setter>
+                <Setter TargetName="Sp_Modifiers" Property="Visibility" Value="Collapsed"></Setter>
+                <Setter TargetName="Cmb_KeyboardButton" Property="Visibility" Value="Visible"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.COPY}">
+                <Setter TargetName="tb_UserActionName" Property="Text" Value="{DynamicResource String_Tag_Config_UserActions_Copy}"></Setter>
+                <Setter TargetName="Cmb_MouseButton" Property="Visibility" Value="Collapsed"></Setter>
+                <Setter TargetName="Sp_Modifiers" Property="IsEnabled" Value="false"></Setter>
+                <Setter TargetName="Cmb_KeyboardButton" Property="Visibility" Value="Visible"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.PASTE}">
+                <Setter TargetName="tb_UserActionName" Property="Text" Value="{DynamicResource String_Tag_Config_UserActions_Paste}"></Setter>
+                <Setter TargetName="Cmb_MouseButton" Property="Visibility" Value="Collapsed"></Setter>
+                <Setter TargetName="Sp_Modifiers" Property="IsEnabled" Value="false"></Setter>
+                <Setter TargetName="Cmb_KeyboardButton" Property="Visibility" Value="Visible"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.CUT}">
+                <Setter TargetName="tb_UserActionName" Property="Text" Value="{DynamicResource String_Tag_Config_UserActions_Cut}"></Setter>
+                <Setter TargetName="Cmb_MouseButton" Property="Visibility" Value="Collapsed"></Setter>
+                <Setter TargetName="Sp_Modifiers" Property="IsEnabled" Value="false"></Setter>
+                <Setter TargetName="Cmb_KeyboardButton" Property="Visibility" Value="Visible"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.DELETE}">
+                <Setter TargetName="tb_UserActionName" Property="Text" Value="{DynamicResource String_Tag_Config_UserActions_Delete}"></Setter>
                 <Setter TargetName="Cmb_MouseButton" Property="Visibility" Value="Collapsed"></Setter>
                 <Setter TargetName="Sp_Modifiers" Property="Visibility" Value="Collapsed"></Setter>
                 <Setter TargetName="Cmb_KeyboardButton" Property="Visibility" Value="Visible"></Setter>

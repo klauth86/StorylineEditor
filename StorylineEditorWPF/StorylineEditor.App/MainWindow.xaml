@@ -64,5 +64,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <KeyBinding Key="C" Command="{Binding AbstractCopyCommand}" Modifiers="Ctrl"></KeyBinding>
         <KeyBinding Key="V" Command="{Binding AbstractPasteCommand}" Modifiers="Ctrl"></KeyBinding>
         <KeyBinding Key="Delete" Command="{Binding AbstractDeleteCommand}"></KeyBinding>
+        <KeyBinding Key="H" Command="{Binding AbstractAlignHorCommand}"></KeyBinding>
+        <KeyBinding Key="V" Command="{Binding AbstractAlignVerCommand}"></KeyBinding>
     </Window.InputBindings>
 </Window>

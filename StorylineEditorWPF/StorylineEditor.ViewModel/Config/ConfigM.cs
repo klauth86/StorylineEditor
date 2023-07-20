@@ -48,6 +48,11 @@ namespace StorylineEditor.ViewModel.Config
         public const byte SCALE = 104;
         public const byte ALIGN_HOR = 105;
         public const byte ALIGN_VER = 106;
+
+        public const byte COPY = 107;
+        public const byte PASTE = 108;
+        public const byte CUT = 109;
+        public const byte DELETE = 110;
     }
 
     public class ConfigM
@@ -75,6 +80,11 @@ namespace StorylineEditor.ViewModel.Config
             Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.ALIGN_HOR, KeyboardButton = Key.H });
             Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.ALIGN_VER, KeyboardButton = Key.V });
 
+            Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.COPY, KeyboardButton = Key.C, ModifierKeys = ModifierKeys.Control });
+            Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.PASTE, KeyboardButton = Key.V, ModifierKeys = ModifierKeys.Control });
+            Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.CUT, KeyboardButton = Key.X, ModifierKeys = ModifierKeys.Control });
+            Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.DELETE, KeyboardButton = Key.Delete });
+
             Config.PlayRate = 100;
             Config.Duration = 4;
         }
@@ -93,6 +103,26 @@ namespace StorylineEditor.ViewModel.Config
             {
                 Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.ALIGN_VER, KeyboardButton = Key.V });
                 hasChanges = true;
+            }
+
+            if (!Config.UserActions.Any((userAction) => userAction.UserActionType == USER_ACTION_TYPE.COPY))
+            {
+                Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.COPY, KeyboardButton = Key.C, ModifierKeys = ModifierKeys.Control });
+            }
+
+            if (!Config.UserActions.Any((userAction) => userAction.UserActionType == USER_ACTION_TYPE.PASTE))
+            {
+                Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.PASTE, KeyboardButton = Key.V, ModifierKeys = ModifierKeys.Control });
+            }
+
+            if (!Config.UserActions.Any((userAction) => userAction.UserActionType == USER_ACTION_TYPE.CUT))
+            {
+                Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.CUT, KeyboardButton = Key.X, ModifierKeys = ModifierKeys.Control });
+            }
+
+            if (!Config.UserActions.Any((userAction) => userAction.UserActionType == USER_ACTION_TYPE.DELETE))
+            {
+                Config.UserActions.Add(new UserActionM() { UserActionType = USER_ACTION_TYPE.DELETE, KeyboardButton = Key.Delete });
             }
 
             return hasChanges;

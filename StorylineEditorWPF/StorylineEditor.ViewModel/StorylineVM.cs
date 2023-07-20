@@ -234,25 +234,22 @@ namespace StorylineEditor.ViewModel
         }
 
         private ICommand abstractCutCommand;
-        public ICommand AbstractCutCommand => abstractCutCommand ?? (abstractCutCommand = new RelayCommand(() =>
-        {
-
-        }));
+        public ICommand AbstractCutCommand => abstractCutCommand ?? (abstractCutCommand = new RelayCommand(() => { Clipboard.SetText(ActiveContext.ActiveCopyPaste?.Cut()); }));
 
         private ICommand abstractCopyCommand;
-        public ICommand AbstractCopyCommand => abstractCopyCommand ?? (abstractCopyCommand = new RelayCommand(() =>
-        {
-            Clipboard.SetText(ActiveContext.ActiveCopyPaste?.Copy());
-        }));
+        public ICommand AbstractCopyCommand => abstractCopyCommand ?? (abstractCopyCommand = new RelayCommand(() => { Clipboard.SetText(ActiveContext.ActiveCopyPaste?.Copy()); }));
 
         private ICommand abstractPasteCommand;
-        public ICommand AbstractPasteCommand => abstractPasteCommand ?? (abstractPasteCommand = new RelayCommand(() =>
-        {
-            ActiveContext.ActiveCopyPaste?.Paste(Clipboard.GetText());
-        }));
+        public ICommand AbstractPasteCommand => abstractPasteCommand ?? (abstractPasteCommand = new RelayCommand(() => { ActiveContext.ActiveCopyPaste?.Paste(Clipboard.GetText()); }));
 
         private ICommand abstractDeleteCommand;
         public ICommand AbstractDeleteCommand => abstractDeleteCommand ?? (abstractDeleteCommand = new RelayCommand(() => { ActiveContext.ActiveCopyPaste?.Delete(); }));
+
+        private ICommand abstractAlignHorCommand;
+        public ICommand AbstractAlignHorCommand => abstractAlignHorCommand ?? (abstractAlignHorCommand = new RelayCommand(() => { ActiveContext.ActiveCopyPaste?.AlignHor(); }));
+
+        private ICommand abstractAlignVerCommand;
+        public ICommand AbstractAlignVerCommand => abstractAlignVerCommand ?? (abstractAlignVerCommand = new RelayCommand(() => { ActiveContext.ActiveCopyPaste?.AlignVer(); }));
 
         public override string Id => Model.id;
     }
