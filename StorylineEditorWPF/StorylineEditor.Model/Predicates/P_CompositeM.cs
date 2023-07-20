@@ -42,8 +42,8 @@ namespace StorylineEditor.Model.Predicates
             if (targetObject is P_CompositeM casted)
             {
                 casted.compositionType = compositionType;
-                casted.predicateA = predicateA.CloneAs<P_BaseM>(0);
-                casted.predicateB = predicateB.CloneAs<P_BaseM>(1);
+                casted.predicateA = predicateA.CloneAs<P_BaseM>(0 + additionalTicks);
+                casted.predicateB = predicateB.CloneAs<P_BaseM>(1 + additionalTicks);
             }
         }
 

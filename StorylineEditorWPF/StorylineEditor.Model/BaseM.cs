@@ -25,6 +25,7 @@ namespace StorylineEditor.Model
     {
         public BaseM(long additionalTicks)
         {
+            this.additionalTicks = additionalTicks;
             createdAt = DateTime.UtcNow;
             id = string.Format("{0}_{1:yyyy_MM_dd_HH_mm_ss}_{2}_{3}", GetType().Name, createdAt, createdAt.Ticks, additionalTicks);
             name = null;
@@ -47,6 +48,8 @@ namespace StorylineEditor.Model
                 ((name?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) ?? -1) >= 0) ||
                 ((description?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) ?? -1) >= 0);
         }
+
+        public long additionalTicks { get; set; }
 
         [XmlIgnore] ////// TODO Remove at 31.12.2023
         public DateTime createdAt { get; set; }

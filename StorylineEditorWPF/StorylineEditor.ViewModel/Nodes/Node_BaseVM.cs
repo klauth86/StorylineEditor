@@ -17,19 +17,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 using StorylineEditor.Model.Behaviors;
-using StorylineEditor.Model.GameEvents;
 using StorylineEditor.Model.Nodes;
-using StorylineEditor.Model.Predicates;
 using StorylineEditor.Model.RichText;
 using StorylineEditor.ViewModel.Behaviors;
 using StorylineEditor.ViewModel.Common;
-using StorylineEditor.ViewModel.GameEvents;
 using StorylineEditor.ViewModel.Interface;
-using StorylineEditor.ViewModel.Predicates;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows.Input;
 
 namespace StorylineEditor.ViewModel.Nodes

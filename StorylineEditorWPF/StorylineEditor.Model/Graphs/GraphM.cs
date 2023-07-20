@@ -41,13 +41,13 @@ namespace StorylineEditor.Model.Graphs
 
                 for (int i = 0; i < nodes.Count; i++)
                 {
-                    casted.nodes.Add(nodes[i].CloneAs<Node_BaseM>(i));
+                    casted.nodes.Add(nodes[i].CloneAs<Node_BaseM>(i + additionalTicks));
                     mapping.Add(nodes[i].id, casted.nodes[i].id);
                 }
 
                 for (int i = 0; i < links.Count; i++)
                 {
-                    casted.links.Add(links[i].CloneAs<LinkM>(i));
+                    casted.links.Add(links[i].CloneAs<LinkM>(i + additionalTicks));
                 }
 
                 foreach (var linkModel in casted.links)

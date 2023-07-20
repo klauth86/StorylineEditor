@@ -40,12 +40,12 @@ namespace StorylineEditor.Model.Nodes
             {
                 for (int i = 0; i < predicates.Count; i++)
                 {
-                    casted.predicates.Add(predicates[i].CloneAs<P_BaseM>(i));
+                    casted.predicates.Add(predicates[i].CloneAs<P_BaseM>(i + additionalTicks));
                 }
 
                 for (int i = 0; i < gameEvents.Count; i++)
                 {
-                    casted.gameEvents.Add(gameEvents[i].CloneAs<GE_BaseM>(i));
+                    casted.gameEvents.Add(gameEvents[i].CloneAs<GE_BaseM>(i + additionalTicks));
                 }
             }
         }

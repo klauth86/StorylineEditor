@@ -49,7 +49,7 @@ namespace StorylineEditor.Model.Nodes
 
                 for (int i = 0; i < behaviors.Count; i++)
                 {
-                    casted.behaviors.Add(behaviors[i].CloneAs<B_BaseM>(i));
+                    casted.behaviors.Add(behaviors[i].CloneAs<B_BaseM>(i + additionalTicks));
                 }
             }
         }
