@@ -2642,13 +2642,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.ALIGN_HOR}">
                 <Setter TargetName="tb_UserActionName" Property="Text" Value="{DynamicResource String_Tag_Config_UserActions_AlignHor}"></Setter>
                 <Setter TargetName="Cmb_MouseButton" Property="Visibility" Value="Collapsed"></Setter>
-                <Setter TargetName="Sp_Modifiers" Property="Visibility" Value="Collapsed"></Setter>
+                <Setter TargetName="Sp_Modifiers" Property="IsEnabled" Value="false"></Setter>
                 <Setter TargetName="Cmb_KeyboardButton" Property="Visibility" Value="Visible"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.ALIGN_VER}">
                 <Setter TargetName="tb_UserActionName" Property="Text" Value="{DynamicResource String_Tag_Config_UserActions_AlignVer}"></Setter>
                 <Setter TargetName="Cmb_MouseButton" Property="Visibility" Value="Collapsed"></Setter>
-                <Setter TargetName="Sp_Modifiers" Property="Visibility" Value="Collapsed"></Setter>
+                <Setter TargetName="Sp_Modifiers" Property="IsEnabled" Value="false"></Setter>
                 <Setter TargetName="Cmb_KeyboardButton" Property="Visibility" Value="Visible"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.COPY}">
@@ -2672,7 +2672,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             <DataTrigger Binding="{Binding Model.UserActionType, Mode=OneTime}" Value="{x:Static vmconfig:USER_ACTION_TYPE.DELETE}">
                 <Setter TargetName="tb_UserActionName" Property="Text" Value="{DynamicResource String_Tag_Config_UserActions_Delete}"></Setter>
                 <Setter TargetName="Cmb_MouseButton" Property="Visibility" Value="Collapsed"></Setter>
-                <Setter TargetName="Sp_Modifiers" Property="Visibility" Value="Collapsed"></Setter>
+                <Setter TargetName="Sp_Modifiers" Property="Visibility" Value="Hidden"></Setter>
                 <Setter TargetName="Cmb_KeyboardButton" Property="Visibility" Value="Visible"></Setter>
             </DataTrigger>
         </DataTemplate.Triggers>
