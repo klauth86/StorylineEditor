@@ -1236,13 +1236,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <TextBox IsReadOnly="True" Style="{StaticResource S_TextBox_Prop}" Text="{Binding Id, Mode=OneTime}" Tag="{DynamicResource String_Tag_Node_Id}"></TextBox>
-                    <TextBox Grid.Row="1" Style="{StaticResource S_TextBox_Prop}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Alternative_Name}"></TextBox>
-                    <GroupBox Grid.Row="2" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_Node_Alternative_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
+                    <CheckBox x:Name="cb_HasDescriptionFemale" IsChecked="{Binding IsHidden, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource S_CheckBox_Prop}" Tag="{DynamicResource String_Tag_Node_Alternative_IsHidden}"></CheckBox>
+                    <TextBox Grid.Row="1" IsReadOnly="True" Style="{StaticResource S_TextBox_Prop}" Text="{Binding Id, Mode=OneTime}" Tag="{DynamicResource String_Tag_Node_Id}"></TextBox>
+                    <TextBox Grid.Row="2" Style="{StaticResource S_TextBox_Prop}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Alternative_Name}"></TextBox>
+                    <GroupBox Grid.Row="3" Style="{StaticResource S_GroupBox_Prop}" Header="{DynamicResource String_Tag_Node_Alternative_Description}" HeaderTemplate="{StaticResource DT_GroupBox_HeaderTemplate_Prop_Rich}">
                         <controls:RichTextBoxWithSource VerticalScrollBarVisibility="Auto" MaxHeight="{StaticResource Double_RichTextBox_MaxHeight}" MinHeight="{StaticResource Double_Node_MinHeight}" x:Name="rtDescription" RtVersion="{Binding RtDescriptionVersion, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding}"></controls:RichTextBoxWithSource>
                     </GroupBox>
-                    <TextBox Grid.Row="3" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Alternative_Result}"></TextBox>
+                    <TextBox Grid.Row="4" Style="{StaticResource S_TextBox_Prop_Multiline}" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}" Tag="{DynamicResource String_Tag_Node_Alternative_Result}"></TextBox>
                 </Grid>
             </TabItem>
         </TabControl>

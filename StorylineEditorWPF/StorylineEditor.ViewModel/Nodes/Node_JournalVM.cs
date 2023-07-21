@@ -61,6 +61,19 @@ namespace StorylineEditor.ViewModel.Nodes
     public class Node_Journal_AlternativeVM : Node_JournalVM<Node_AlternativeM, object>
     {
         public Node_Journal_AlternativeVM(Node_AlternativeM model, object parent) : base(model, parent) { }
+
+        public bool IsHidden
+        {
+            get => Model.isHidden;
+            set
+            {
+                if (Model.isHidden != value)
+                {
+                    Model.isHidden = value;
+                    OnModelChanged(Model, nameof(IsHidden));
+                }
+            }
+        }
     }
 
     public class Node_Journal_AlternativeEditorVM : Node_Journal_AlternativeVM

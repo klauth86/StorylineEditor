@@ -98,6 +98,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_Node_Step_Type">locerr</sys:String>
     <sys:String x:Key="String_Tag_Node_Id">Id</sys:String>
     <sys:String x:Key="String_Tag_Node_Alternative_Name">locerr</sys:String>
+    <sys:String x:Key="String_Tag_Node_Alternative_IsHidden">locerr</sys:String>
     <sys:String x:Key="String_Tag_Node_Alternative_Description">locerr</sys:String>
     <sys:String x:Key="String_Tag_Node_Alternative_Result">locerr</sys:String>
     <sys:String x:Key="String_Tag_Node_Alternative_Type">locerr</sys:String>

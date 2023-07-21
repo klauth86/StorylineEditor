@@ -65,7 +65,10 @@ namespace StorylineEditor.Model.Nodes
 
     public class Node_AlternativeM : Node_JournalM
     {
-        public Node_AlternativeM(long additionalTicks) : base(additionalTicks) { }
+        public Node_AlternativeM(long additionalTicks) : base(additionalTicks)
+        {
+            isHidden = false;
+        }
 
         public Node_AlternativeM() : this(0) { }
 
@@ -75,5 +78,17 @@ namespace StorylineEditor.Model.Nodes
             CloneInternal(clone);
             return clone;
         }
+
+        protected override void CloneInternal(BaseM targetObject)
+        {
+            base.CloneInternal(targetObject);
+
+            if (targetObject is Node_AlternativeM casted)
+            {
+                casted.isHidden = isHidden;
+            }
+        }
+
+        public bool isHidden { get; set; }
     }
 }

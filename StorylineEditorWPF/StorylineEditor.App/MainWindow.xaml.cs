@@ -670,6 +670,7 @@ namespace StorylineEditor.App
             SetWithSuffix("String_Tag_Node_Step_Result", suffix);
             SetWithSuffix("String_Tag_Node_Step_Type", suffix);
             SetWithSuffix("String_Tag_Node_Alternative_Name", suffix);
+            SetWithSuffix("String_Tag_Node_Alternative_IsHidden", suffix);
             SetWithSuffix("String_Tag_Node_Alternative_Description", suffix);
             SetWithSuffix("String_Tag_Node_Alternative_Result", suffix);
             SetWithSuffix("String_Tag_Node_Alternative_Type", suffix);

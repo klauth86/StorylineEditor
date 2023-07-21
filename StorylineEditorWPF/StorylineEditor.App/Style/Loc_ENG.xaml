@@ -77,6 +77,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_Node_Step_Result_ENG">Result</sys:String>
     <sys:String x:Key="String_Tag_Node_Step_Type_ENG">Step</sys:String>
     <sys:String x:Key="String_Tag_Node_Alternative_Name_ENG">Alternative name</sys:String>
+    <sys:String x:Key="String_Tag_Node_Alternative_IsHidden_ENG">Is Hidden (show only Result)</sys:String>
     <sys:String x:Key="String_Tag_Node_Alternative_Description_ENG">Alternative description</sys:String>
     <sys:String x:Key="String_Tag_Node_Alternative_Result_ENG">Result</sys:String>
     <sys:String x:Key="String_Tag_Node_Alternative_Type_ENG">Alternative</sys:String>
