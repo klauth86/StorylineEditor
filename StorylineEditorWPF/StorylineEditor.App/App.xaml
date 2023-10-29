@@ -28,6 +28,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                 <ResourceDictionary Source="Style/Loc_ENG.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Style/Loc_RUS.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Style/Loc_UKR.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Style/Loc_ESP.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Style/Colors.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Style/Dimensions.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="Style/Fonts.xaml"></ResourceDictionary>

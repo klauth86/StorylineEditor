@@ -29,6 +29,7 @@ namespace StorylineEditor.ViewModel.Config
         public const byte ENG = 1;
         public const byte RUS = 2;
         public const byte UKR = 3;
+        public const byte ESP = 4;
     }
 
     public static class USER_ACTION_TYPE
