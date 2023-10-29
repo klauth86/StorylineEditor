@@ -42,8 +42,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_Config_UserActions_SelectionSimple_UKR">Просте виділення</sys:String>
     <sys:String x:Key="String_Tag_Config_UserActions_SelectionAdditive_UKR">Адитивне виділення</sys:String>
     <sys:String x:Key="String_Tag_Config_UserActions_SelectionBox_UKR">Відділити рамкою</sys:String>
-    <sys:String x:Key="String_Tag_Config_UserActions_AlignHor_UKR">Align horizontally</sys:String>
-    <sys:String x:Key="String_Tag_Config_UserActions_AlignVer_UKR">Align vertically</sys:String>
+    <sys:String x:Key="String_Tag_Config_UserActions_AlignHor_UKR">Вирівняти за горизонталлю</sys:String>
+    <sys:String x:Key="String_Tag_Config_UserActions_AlignVer_UKR">Вирівняти за вертикаллю</sys:String>
     <sys:String x:Key="String_Tag_Config_UserActions_Copy_UKR">Копіювати</sys:String>
     <sys:String x:Key="String_Tag_Config_UserActions_Paste_UKR">Вставити</sys:String>
     <sys:String x:Key="String_Tag_Config_UserActions_Cut_UKR">Вирізати</sys:String>
@@ -138,14 +138,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <sys:String x:Key="String_Tag_Predicate_PredicateA_UKR">Предикат A</sys:String>
     <sys:String x:Key="String_Tag_Predicate_PredicateB_UKR">Предикат B</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_IsExecutedOnLeave_UKR">Виконати ПІСЛЯ вершини</sys:String>
-    <sys:String x:Key="String_Tag_GameEvent_GE_CustomM_DisplayName_UKR">Користувацьке</sys:String>
+    <sys:String x:Key="String_Tag_GameEvent_GE_CustomM_DisplayName_UKR">Власне</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Item_DropM_DisplayName_UKR">Предмет: втратити</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Item_PickUpM_DisplayName_UKR">Предмет: отримати</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Quest_AddM_DisplayName_UKR">Квест: додати</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_AddM_DisplayName_UKR">Квест: додати крок/альтернативу</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Quest_Node_PassM_DisplayName_UKR">Квест: виконати крок/альтернативу</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Relation_ChangeM_DisplayName_UKR">Стосунки: змінити</sys:String>
-    <sys:String x:Key="String_Tag_GameEvent_GE_CustomM_Title_UKR">Користувацьке</sys:String>
+    <sys:String x:Key="String_Tag_GameEvent_GE_CustomM_Title_UKR">Власне</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Item_DropM_Title_UKR">Предмет: втратити</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Item_PickUpM_Title_UKR">Предмет: отримати</sys:String>
     <sys:String x:Key="String_Tag_GameEvent_GE_Quest_AddM_Title_UKR">Квест: додати</sys:String>
